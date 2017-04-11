@@ -1,8 +1,6 @@
 
 angular.module('marketplace')
 
-// cambiado por abel
-
   .run(function ($rootScope) {
     $rootScope.rsTitle = 'click suscribe | CompuSoluciones';
     $rootScope.rsVersion = '2.1.0';
