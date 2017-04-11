@@ -27,6 +27,7 @@
     <th ng-show="SessionCookie.IdTipoAcceso==1 "><b>Nombre solicitante</b></th>
     <th ng-show="SessionCookie.IdTipoAcceso==1 "><b>Correo electrónico</b></th>
     <th ng-show="SessionCookie.IdTipoAcceso==1 "><b>Nombre Empresa</b></th>
+    <th ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3 "><b>Estatus</b></th>
     <th ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3 "><b>Título </b></th>
     <th ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3 "><b>Descripción</b></th>
     <th ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3 "><b>Fecha de solicitud</b></th>
@@ -59,6 +60,14 @@
 
         <div class="form-group">
           <b><h5>{{soporte.NombreEmpresa}}</h5></b>
+        </div>
+
+      </td>
+
+      <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3 ">
+
+        <div class="form-group">
+          <b><h5>{{soporte.DescripcionEstatus}}</h5></b>
         </div>
 
       </td>
