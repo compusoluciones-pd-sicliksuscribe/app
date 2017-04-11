@@ -29,7 +29,7 @@
     factory.patchPaymentInformation = function (paymentResult)  {
       factory.refreshToken();
       return $http.patch($rootScope.API + 'orders/update-payment-details', paymentResult);
-    }
+    };
 
     return factory;
   };

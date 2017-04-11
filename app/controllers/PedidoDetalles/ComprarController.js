@@ -137,7 +137,6 @@
 
         PedidoDetallesFactory.getPrepararTarjetaCredito()
           .success(function (Datos) {
-            console.log(Datos.data["0"].pedidos);
             var expireDate = new Date();
             expireDate.setTime(expireDate.getTime() + 600 * 2000); /*20 minutos*/
             $cookieStore.put('pedidosAgrupados', Datos.data["0"].pedidosAgrupados, { 'expires': expireDate });
@@ -235,7 +234,6 @@
 
       if (datosTarjeta.PedidosAgrupados) {
         if (datosTarjeta.PedidosAgrupados[0].Renovacion) {
-          console.log(datosTarjeta);
           PedidosFactory.patchPaymentInformation(datosTarjeta)
             .success(function (compra) {
               $cookieStore.remove("pedidosAgrupados");

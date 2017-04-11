@@ -5,6 +5,17 @@
       <h2 style="float:left;">Monitor de pedidos por pagar</h2>
     </div>
   </div>
+  <div class="form-group row">
+    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+      <p style="float:left;">En este monitor puedes pagar los pedidos para que sean renovados en el siguiente periodo, puedes actualizar la cantidad
+        o cancelar las suscripciones que deseas renovar en el monitor de pedidos por cliente. Se creará la factura el día
+        de renovación respetando el tipo de cambio en que fue pagado el pedido.
+        <u>Una vez pagado el pedido, no se podrá cancelar o actualizar cantidades del mismo</u>, hasta el próximo periodo se
+        podrán realizar cambios. </p>
+
+    </div>
+  </div>
+  <hr>
   <div class="form-group row" ng-hide="DeshabilitarPagar">
     <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
       <label>Forma de pago: </label> Tarjeta
@@ -40,6 +51,8 @@
         <br>
         <label>Cliente:</label> {{PedidosObj[key].NombreEmpresa}}
         <br>
+        <label>Fecha límite de pago: </label> {{PedidosObj[key].FechaFin| date:'dd-MM-yyyy'}}
+        <br>
         <label>Precio renovación: </label> {{obtenerSubTotal(key) | currency}} pesos
         <a ng-click="mostrarDetalles(key) " style="text-decoration: none">ver detalles 
           <span class="glyphicon glyphicon-triangle-bottom " ng-show="!PedidosObj[key].Mostrar "></span>
@@ -65,14 +78,7 @@
             <div class="form-group col-xs-12 col-sm-12 col-md-3 col-lg-3 ">
               <label>Precio renovacion: </label> {{pedido.PrecioRenovacion | currency}} {{pedido.MonedaPrecio}}
             </div>
-            <!--<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2 ">
-              <label>Fecha inicio de suscripción: </label>
-              <br/> {{pedido.FechaInicio | date:'d/MM/yyyy'}}
-            </div>
-            <div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2 ">
-              <label>Fecha fin de suscripción: </label>
-              <br/> {{pedido.FechaFin| date:'d/MM/yyyy'}}
-            </div>-->
+
 
           </div>
         </td>

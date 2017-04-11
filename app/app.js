@@ -48,6 +48,26 @@
         }
       })
 
+      .when('/monitor-soporte', {
+        controller: 'SoporteReadController', templateUrl: 'app/views/Soporte/SoporteRead.html',
+        resolve: {
+          'check': function ($location, $cookieStore) {
+            var Session = $cookieStore.get('Session');
+            if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3 )) { $location.path('/404'); }
+          }
+        }
+      })
+
+       .when('/solicitar-soporte', {
+        controller: 'SoporteCreateController', templateUrl: 'app/views/Soporte/SoporteCreate.html',
+        resolve: {
+          'check': function ($location, $cookieStore) {
+            var Session = $cookieStore.get('Session');
+            if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3)) { $location.path('/404'); }
+          }
+        }
+      })
+
       .when('/Monitor', {
         controller: 'MonitorReadController', templateUrl: 'app/views/PedidoDetalles/MonitorRead.html',
         resolve: {
@@ -97,6 +117,8 @@
           }
         }
       })
+
+      
 
       .when('/Usuario', {
         controller: 'UsuariosCreateController', templateUrl: 'app/views/Usuarios/UsuariosCreate.html',

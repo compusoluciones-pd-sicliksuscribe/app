@@ -38,10 +38,14 @@
 	<link rel="apple-touch-icon" sizes="152x152" href="images/appIcon.png" />
 	<link rel="apple-touch-startup-image" href="images/appIcon.png" />
 	<link rel="apple-touch-startup-image" href="images/appIcon.png" media="screen and (max-device-width : 320px)" />
-	<link rel="apple-touch-startup-image" href="images/appIcon.png" media="(max-device-width : 480px) and (-webkit-min-device-pixel-ratio : 2)"/>
-	<link rel="apple-touch-startup-image" href="images/appIcon.png" media="(max-device-width : 548px) and (-webkit-min-device-pixel-ratio : 2)"/>
-	<link rel="apple-touch-startup-image" sizes="1024x748" href="images/appIcon.png" media="screen and (min-device-width : 481px) and (max-device-width : 1024px) and (orientation : landscape)"/>
-	<link rel="apple-touch-startup-image" sizes="768x1004" href="images/appIcon.png" media="screen and (min-device-width : 481px) and (max-device-width : 1024px) and (orientation : portrait)"/>
+	<link rel="apple-touch-startup-image" href="images/appIcon.png" media="(max-device-width : 480px) and (-webkit-min-device-pixel-ratio : 2)"
+	/>
+	<link rel="apple-touch-startup-image" href="images/appIcon.png" media="(max-device-width : 548px) and (-webkit-min-device-pixel-ratio : 2)"
+	/>
+	<link rel="apple-touch-startup-image" sizes="1024x748" href="images/appIcon.png" media="screen and (min-device-width : 481px) and (max-device-width : 1024px) and (orientation : landscape)"
+	/>
+	<link rel="apple-touch-startup-image" sizes="768x1004" href="images/appIcon.png" media="screen and (min-device-width : 481px) and (max-device-width : 1024px) and (orientation : portrait)"
+	/>
 	<link rel="apple-touch-icon" href="images/appIcon.png" />
 	<link rel="apple-touch-icon" sizes="72x72" href="images/appIcon.png" />
 	<link rel="apple-touch-icon" sizes="114x114" href="images/appIcon.png" />
@@ -50,17 +54,18 @@
 	<title class="ng-cloak" ng-cloak>click suscribe | CompuSoluciones</title>
 
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
+	 crossorigin="anonymous">
 
 	<link href="styles/bootstrap-tour.css" rel="stylesheet" />
-	
+
 	<link href="styles/css/style.css" rel="stylesheet" type="text/css" />
 	<link href="styles/css/landing.css" rel="stylesheet" type="text/css" />
 	<link href="styles/ngToast.css" rel="stylesheet" type="text/css" />
 
 	<link href="styles/animations.css" rel="stylesheet" type="text/css" />
 	<link href="styles/pulse.css" rel="stylesheet" type="text/css">
-	
+
 
 </head>
 
@@ -70,9 +75,9 @@
 		<div class="container-fluid">
 
 			<!--Menu general-->
- 			<div class="row" style="background:#4a7bab;" ng-hide="selectMenu()">
+			<div class="row" style="background:#4a7bab;" ng-hide="selectMenu()">
 				<div class="helpStart" ng-show="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 7) && (SessionCookie.LeyoTerminos == 1)"
-					ng-click="IniciarTour();"><i class="fa fa-question-circle"></i></div>
+				 ng-click="IniciarTour();"><i class="fa fa-question-circle"></i></div>
 				<div class="col-xs-0 col-sm-0 col-md-3 col-lg-3 hidden-xs hidden-sm" style="background:#fff;">
 					<div style="height:110px;">
 						<a href="#/"> <img src="images/LogoSVG.svg" class="img-responsive" style="width:100%; text-align:center;"> </a>
@@ -105,8 +110,10 @@
 									</div>
 									<ul class="nav navbar-nav navbar-right">
 
-										<li id="menuDistribuidores" class="gris" ng-show="SessionCookie.LeyoTerminos == 1 && SessionCookie.distribuidores.length > 1" dropdown>
-											<a dropdown-toggle><div class="text">Sitios</div> <b class="caret"></b></a>
+										<li id="menuDistribuidores" class="gris" ng-show="SessionCookie.LeyoTerminos == 1 && SessionCookie.distribuidores.length > 1"
+										 dropdown>
+											<a dropdown-toggle>
+												<div class="text">Sitios</div> <b class="caret"></b></a>
 											<ul class="dropdown-menu gris">
 												<li ng-repeat="Distribuidor in SessionCookie.distribuidores">
 													<a ng-click="cambiarDistribuidor(Distribuidor, true);">{{Distribuidor.NombreEmpresa}}</a>
@@ -145,13 +152,13 @@
 										</li>
 
 										<li id="menuEmpresa" class="yellow one" ng-show="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 4 || SessionCookie.IdTipoAcceso == 5 || SessionCookie.IdTipoAcceso == 6  || SessionCookie.IdTipoAcceso == 7) && (SessionCookie.LeyoTerminos == 1)"
-											dropdown>
+										 dropdown>
 											<a dropdown-toggle><span class="fa fa-building-o"></span><div class="text">{{ SessionCookie.NombreEmpresa | limitTo: 10}} {{SessionCookie.NombreEmpresa.length > 10 ? '...' : ''}}</div> <b class="caret"></b></a>
 											<ul class="dropdown-menu yellow">
 												<li ng-show="SessionCookie.IdTipoAcceso == 4"><a href="#/Empresa/{{SessionCookie.IdEmpresa}}">Actualizar {{ SessionCookie.NombreEmpresa }}</a></li>
 												<li ng-show="SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 7"><a ng-click="goToPage('Clientes');">Mis clientes</a></li>
 												<li><a ng-show="SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 4 || SessionCookie.IdTipoAcceso == 7"
-														ng-click="goToPage('Usuarios');">Mis colaboradores</a></li>
+													 ng-click="goToPage('Usuarios');">Mis colaboradores</a></li>
 												<li><a ng-click="goToPage('Monitor');">Monitor de pedidos por cliente</a></li>
 												<li id="monitorPagos" ng-show="SessionCookie.IdTipoAcceso == 2"><a ng-click="goToPage('MonitorPagos');">Monitor de pedidos por pagar</a></li>
 												<li id="activarMiSitio" ng-show="SessionCookie.IdTipoAcceso == 2"><a ng-click="goToPage('Configuracion');">Activar mi sitio</a></li>
@@ -170,14 +177,18 @@
 											</a>
 										</li>
 
+										<li class="yellow" ng-show="(SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
+											<a ng-click="goToPage('monitor-soporte');"><span class="fa fa-ticket" style="padding-right:5px;"></span> Soporte </a>
+										</li>
+
 										<li id="shoppingCartBG" class="navColor two" ng-show="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3) && (SessionCookie.LeyoTerminos == 1)"
-											dropdown>
+										 dropdown>
 											<a dropdown-toggle ng-click="goToPage('Carrito');">
 												<span id="shoppingCart" class="glyphicon glyphicon-shopping-cart"></span>
 												<b id="shoppingCartAmount">&nbsp;{{ProductosCarrito}}</b>
 												<b class="caret" ng-show="0"></b>
 											</a>
-											
+
 											<ul ng-show="0" class="dropdown-menu navColor white">
 												<li><a ng-click="goToPage('Carrito');">Mi carrito de compras</a></li>
 												<li><a ng-click="goToPage('Favoritos');">Mis favoritos</a></li>
@@ -190,7 +201,7 @@
 
 										<li class="green" ng-show="SessionCookie.Nombre == undefined">
 											<a ng-click="goToPage('Contacto');"><span class="fa fa-phone" style="padding-right:5px;"></span> Contacto </a>
-										</li>
+										</li>										
 
 										<li class="yellow" ng-show="(SessionCookie.Nombre == undefined) || (SessionCookie.IdTipoAcceso == 4 || SessionCookie.IdTipoAcceso == 5 || SessionCookie.IdTipoAcceso == 6)">
 											<a ng-click="goToPage('SoporteCSP');"><span class="fa fa-ticket" style="padding-right:5px;"></span> Soporte CSP</a>
@@ -272,9 +283,11 @@
 									<div class="distintivo pull-left">
 									</div>
 									<ul class="nav navbar-nav navbar-right">
-										
-										<li id="menuDistribuidores" class="gris" ng-show="SessionCookie.LeyoTerminos == 1 && SessionCookie.distribuidores.length > 1" dropdown>
-											<a dropdown-toggle><div class="text">Distribuidor</div> <b class="caret"></b></a>
+
+										<li id="menuDistribuidores" class="gris" ng-show="SessionCookie.LeyoTerminos == 1 && SessionCookie.distribuidores.length > 1"
+										 dropdown>
+											<a dropdown-toggle>
+												<div class="text">Distribuidor</div> <b class="caret"></b></a>
 											<ul class="dropdown-menu gris">
 												<li ng-repeat="Distribuidor in SessionCookie.distribuidores">
 													<a ng-click="cambiarDistribuidor(Distribuidor, true);">{{Distribuidor.NombreEmpresa}}</a>
@@ -300,7 +313,8 @@
 
 										<li class="gris" ng-show="SessionCookie.LeyoTerminos == 1">
 											<a href="#/Usuario/{{SessionCookie.IdUsuario}}"> <span class="glyphicon glyphicon-user"></span>
-												<div class="title">{{ SessionCookie.Nombre}} {{SessionCookie.ApellidoPaterno | limitTo: 5}} {{SessionCookie.ApellidoPaterno.length > 5 ? '...' : ''}}
+												<div class="title">{{ SessionCookie.Nombre}} {{SessionCookie.ApellidoPaterno | limitTo: 5}} {{SessionCookie.ApellidoPaterno.length
+													> 5 ? '...' : ''}}
 													<span ng-show="!SessionCookie.ApellidoPaterno">
 														.......
 													</span>
@@ -441,9 +455,12 @@
 	<script type="text/javascript" src="app/controllers/Empresas/EmpresasCreateController.js"></script>
 	<script type="text/javascript" src="app/controllers/Empresas/EmpresasReadController.js"></script>
 	<script type="text/javascript" src="app/controllers/Empresas/EmpresasUpdateController.js"></script>
+	<script type="text/javascript" src="app/controllers/Soporte/SoporteReadController.js"></script>
+	<script type="text/javascript" src="app/controllers/Soporte/SoporteCreateController.js"></script>
 	<script type="text/javascript" src="app/controllers/Empresas/EmpresasImportController.js"></script>
 	<script type="text/javascript" src="app/controllers/Empresas/EmpresasCompletarController.js"></script>
 	<script type="text/javascript" src="app/services/EmpresasFactory.js"></script>
+	<script type="text/javascript" src="app/services/SoporteFactory.js"></script>
 	<script type="text/javascript" src="app/controllers/ReportesController.js"></script>
 	<script type="text/javascript" src="app/services/ReportesFactory.js"></script>
 	<script type="text/javascript" src="app/services/UsuariosXEmpresasFactory.js"></script>
@@ -481,8 +498,8 @@
 	<script type="text/javascript" src="app/controllers/Descuentos/DescuentosUpdateController.js"></script>
 	<script type="text/javascript" src="app/services/DescuentosFactory.js"></script>
 	<script type="text/javascript" src="app/controllers/Niveles/NivelesReadController.js"></script>
-  <script type="text/javascript" src="app/controllers/Empresas/ConfiguracionUpdateController.js"></script>
-  <script type="text/javascript" src="app/controllers/Productos/MisProductosReadController.js"></script>
+	<script type="text/javascript" src="app/controllers/Empresas/ConfiguracionUpdateController.js"></script>
+	<script type="text/javascript" src="app/controllers/Productos/MisProductosReadController.js"></script>
 	<script type="text/javascript" src="app/services/NivelesDistribuidorFactory.js"></script>
 	<script type="text/javascript" src="app/services/ProductosXEmpresaFactory.js"></script>
 	<script type="text/javascript" src="app/services/ComprasUFFactory.js"></script>
@@ -497,8 +514,9 @@
 
 	<!-- Pruebas-->
 	<script src="https://secure.na.tnspayments.com/checkout/version/32/checkout.js" data-error="errorCallback" data-complete="completeCallback"
-		data-cancel="cancelCallback">
-    </script>
+	 data-cancel="cancelCallback">
+
+	</script>
 
 	<!-- Producción-->
 	<!--<script src="https://gateway-na.americanexpress.com/checkout/version/33/checkout.js" 
@@ -510,36 +528,31 @@
 	<div id="divComprar" ng-controller="ComprarController" style="display:none;"></div>
 
 	<script type="text/javascript">
-        
-            function errorCallback(error) 
-            {
-								console.log(error);
-                alert('No pudimos procesar tu solictud en este momento, por favor intenta de nuevo más tarde.');
-            }
-            
-            function cancelCallback() 
-            {
-                confirm('¿Desea cancelar?');
-            }
-            
-            function completeCallback(resultIndicator, sessionVersion)
-            {
-                angular.element(document.getElementById('divComprar')).scope().ComprarConTarjeta(resultIndicator, sessionVersion);   
-            }
-            
-    </script>
+		function errorCallback(error) {
+			console.log(error);
+			alert('No pudimos procesar tu solictud en este momento, por favor intenta de nuevo más tarde.');
+		}
+
+		function cancelCallback() {
+			confirm('¿Desea cancelar?');
+		}
+
+		function completeCallback(resultIndicator, sessionVersion) {
+			angular.element(document.getElementById('divComprar')).scope().ComprarConTarjeta(resultIndicator, sessionVersion);
+		}
+	</script>
 
 	<script>
-        
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+						(function (i, s, o, g, r, a, m) {						
+i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+							(i[r].q = i[r].q || []).push(arguments)
+						}, i[r].l = 1 * new Date(); a = s.createElement(o),
+							m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+						})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-        ga('create', 'UA-75218308-1', 'auto');
-        ga('send', 'pageview');
-        
-    </script>
+						ga('create', 'UA-75218308-1', 'auto');
+						ga('send', 'pageview');
+	</script>
 
 	<!--<script type="text/javascript" src="app/all.js"></script>-->
 

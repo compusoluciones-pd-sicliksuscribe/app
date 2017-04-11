@@ -23,7 +23,6 @@
             $scope.Total += Number(item.Total);
             return item;
           });
-          console.log($scope.Total);
           $scope.FechaActualizacion = usage.data[0].FechaActivo;
         })
         .error(function (data, status, headers, config) {

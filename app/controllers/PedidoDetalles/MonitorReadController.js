@@ -78,7 +78,6 @@
       PedidoDetallesFactory.postMonitor(Params)
         .success(function (result) {
           $scope.Pedidos = result.data[0];
-          console.log(result.data[0]);
           if ($scope.EmpresaSelect == null || $scope.EmpresaSelect == 0) {
             $scope.Vacio = 1;
           } else {
@@ -178,6 +177,7 @@
           IdEmpresaUsuarioFinal: Pedido.IdEmpresaUsuarioFinal,
           MonedaCosto: Pedido.MonedaPrecio,
           CantidadProxima: Pedido.CantidadProxima,
+          CargoRealizadoProximoPedido: Pedido.CargoRealizadoProximoPedido,
           IdEstatusPedido: 1
         };
 
@@ -247,10 +247,10 @@
       if (pedido.Cantidad !== pedido.CantidadProxima) {
         pedido.PorActualizarCantidad = 1;
       }
-      PedidoDetallesFactory.putPedidoDetalle(pedido)
+      PedidoDetallesFactory.putPedidoDetalle(pedido)      
         .success(function (result) {
           if (result.success == false) {
-            $scope.ShowToast(result.Message, 'danger');
+            $scope.ShowToast(result.message, 'danger');
           } else {
             $scope.ShowToast('Suscripción reanudada.', 'success');
           }

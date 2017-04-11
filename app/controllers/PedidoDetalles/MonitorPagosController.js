@@ -11,12 +11,12 @@
     $scope.todos = 0;
     function groupBy(array, f) {
       var groups = {};
-      array.forEach((o) => {
+      array.forEach(function (o) {
         var group = JSON.stringify(f(o));
         groups[group] = groups[group] || [];
         groups[group].push(o);
       });
-      return Object.keys(groups).map((group) => groups[group]);
+      return Object.keys(groups).map(function (group) { return groups[group]; });
     }
 
     $scope.init = function () {
@@ -25,9 +25,9 @@
         .success(function (ordersToPay) {
           $scope.Pedidos = ordersToPay.data;
           if (!ordersToPay.data || ordersToPay.data.length === 0) {
-            $scope.DeshabilitarPagar = true;
+            return $scope.DeshabilitarPagar = true;
           }
-          $scope.PedidosAgrupados = groupBy(ordersToPay.data, (item) => [item.IdPedido]);
+          $scope.PedidosAgrupados = groupBy(ordersToPay.data, function (item) { return [item.IdPedido]; });
           for (let x = 0; x < $scope.PedidosAgrupados.length; x++) {
             $scope.PedidosObj[$scope.PedidosAgrupados[x][0].IdPedido] = $scope.PedidosAgrupados[x][0];
           }
@@ -123,65 +123,65 @@
     };
 
     $scope.pagar = function () {
-      console.log($scope.PedidosSeleccionadosParaPagar);
-      PedidoDetallesFactory.payWidthCard({ Pedidos: $scope.PedidosSeleccionadosParaPagar })
-        .success(function (Datos) {
-          console.log(Datos);
-          var expireDate = new Date();
-          expireDate.setTime(expireDate.getTime() + 600 * 2000); /*20 minutos*/
-          Datos.data["0"].pedidosAgrupados[0].TipoCambio = $scope.TipoCambio;
-          $cookieStore.put('pedidosAgrupados', Datos.data["0"].pedidosAgrupados, { 'expires': expireDate });
-          if (Datos.success) {
-            if ($cookieStore.get('pedidosAgrupados')) {
+      if ($scope.PedidosSeleccionadosParaPagar.length > 0) {
+        PedidoDetallesFactory.payWidthCard({ Pedidos: $scope.PedidosSeleccionadosParaPagar })
+          .success(function (Datos) {
+            var expireDate = new Date();
+            expireDate.setTime(expireDate.getTime() + 600 * 2000); /*20 minutos*/
+            Datos.data["0"].pedidosAgrupados[0].TipoCambio = $scope.TipoCambio;
+            $cookieStore.put('pedidosAgrupados', Datos.data["0"].pedidosAgrupados, { 'expires': expireDate });
+            if (Datos.success) {
+              if ($cookieStore.get('pedidosAgrupados')) {
 
-              Checkout.configure({
-                merchant: Datos.data["0"].merchant,
-                session: { id: Datos.data["0"].session_id },
-                order:
-                {
-                  amount: function () {
-                    Datos.data["0"].total;
-                  },
-                  currency: Datos.data["0"].moneda,
-                  description: 'Pago tarjeta bancaria',
-                  id: Datos.data["0"].pedidos,
-                },
-                interaction:
-                {
-                  merchant:
+                Checkout.configure({
+                  merchant: Datos.data["0"].merchant,
+                  session: { id: Datos.data["0"].session_id },
+                  order:
                   {
-                    name: 'CompuSoluciones',
-                    address:
-                    {
-                      line1: 'CompuSoluciones y Asociados, S.A. de C.V.',
-                      line2: 'Av. Mariano Oterno No. 1105',
-                      line3: 'Col. Rinconada del Bosque C.P. 44530',
-                      line4: 'Guadalajara, Jalisco. México'
+                    amount: function () {
+                      Datos.data["0"].total;
                     },
-
-                    email: 'order@yourMerchantEmailAddress.com',
-                    phone: '+1 123 456 789 012',
+                    currency: Datos.data["0"].moneda,
+                    description: 'Pago tarjeta bancaria',
+                    id: Datos.data["0"].pedidos,
                   },
-                  displayControl: { billingAddress: 'HIDE', orderSummary: 'READ_ONLY' },
-                  locale: 'es_MX',
-                  theme: 'default'
-                }
-              });
+                  interaction:
+                  {
+                    merchant:
+                    {
+                      name: 'CompuSoluciones',
+                      address:
+                      {
+                        line1: 'CompuSoluciones y Asociados, S.A. de C.V.',
+                        line2: 'Av. Mariano Oterno No. 1105',
+                        line3: 'Col. Rinconada del Bosque C.P. 44530',
+                        line4: 'Guadalajara, Jalisco. México'
+                      },
 
-              Checkout.showLightbox();
+                      email: 'order@yourMerchantEmailAddress.com',
+                      phone: '+1 123 456 789 012',
+                    },
+                    displayControl: { billingAddress: 'HIDE', orderSummary: 'READ_ONLY' },
+                    locale: 'es_MX',
+                    theme: 'default'
+                  }
+                });
 
+                Checkout.showLightbox();
+
+              }
             }
-          }
-        })
-        .error(function (data, status, headers, config) {
-          console.log(data.error);
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          })
+          .error(function (data, status, headers, config) {
+            $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
-          $scope.ShowToast('No pudimos conectarnos con el banco, por favor intenta de nuevo más tarde.', 'danger');
+            $scope.ShowToast('No pudimos conectarnos con el banco, por favor intenta de nuevo más tarde.', 'danger');
 
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
-
+            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          });
+      } else {
+        $scope.ShowToast('Selecciona al menos un pedido para pagar.', 'danger');
+      }
     };
   };
   MonitorPagos.$inject = ['$scope', '$log', '$cookieStore', '$location', '$uibModal', '$filter', 'PedidoDetallesFactory'];

@@ -3,14 +3,13 @@
 
 	<div class="form-group row">
 		<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
-			<h2 style="float:left;">Monitor de suscripciones y servicios <i class="fa fa-question-circle tourButton" style="float:right; font-size:12px; margin-top:10px; margin-left:10px;"
-				 ng-click="IniciarTourMonitor();"></i></h2>
+			<h2 style="float:left;">Monitor de suscripciones y servicios <i class="fa fa-question-circle tourButton" style="float:right; font-size:12px; margin-top:10px; margin-left:10px;" ng-click="IniciarTourMonitor();"></i></h2>
 		</div>
 		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 			<br/>
 			<select id="IdEmpresaUsuarioFinal" name="IdEmpresaUsuarioFinal" class="form-control selectOption" ng-model="EmpresaSelect"
-			 ng-options="Empresa.IdEmpresa as Empresa.NombreEmpresa for Empresa in selectEmpresas" ng-change="ActualizarMonitor();"
-			 ng-show="SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 7">
+				ng-options="Empresa.IdEmpresa as Empresa.NombreEmpresa for Empresa in selectEmpresas" ng-change="ActualizarMonitor();"
+				ng-show="SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 7">
                 <option ng-selected="true" value="">Selecciona un cliente</option>
             </select>
 		</div>
@@ -20,8 +19,7 @@
 		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" ng-show="!(EmpresaSelect == '') || (SessionCookie.IdTipoAcceso === 4 || SessionCookie.IdTipoAcceso === 6)">
 			<label for="IdFabricante">Filtrar por:</label>
 			<div class="form-group has-feedback">
-				<select name="IdFabricante" class="form-control filterOption" ng-model="BuscarProductos.IdFabricante" ng-options="Fabricante.IdFabricante as Fabricante.Nombre for Fabricante in selectFabricantes"
-				 ng-change="ActualizarMonitor();">
+				<select name="IdFabricante" class="form-control filterOption" ng-model="BuscarProductos.IdFabricante" ng-options="Fabricante.IdFabricante as Fabricante.Nombre for Fabricante in selectFabricantes" ng-change="ActualizarMonitor();">
                 <option ng-selected="true" value="">Todos los fabricantes</option>
             </select>
 			</div>
@@ -94,14 +92,14 @@
 							<div ng-show="(pedido.Activo) && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 7)"><label for="">Estatus del pedido:</label> {{pedido.Estatus}}</div>
 							<br>
 							<div ng-show="(pedido.Activo) && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
-								<label ng-hide="pedido.Bloquear===1 || pedido.CargoRealizadoProximoPedido ===1 ">Próxima forma de pago:</label>
+								<label ng-hide="pedido.Bloquear===1">Próxima forma de pago:</label>
 							</div>
-							<form ng-hide="pedido.Bloquear===1 || pedido.CargoRealizadoProximoPedido ===1 ">
+							<form ng-hide="pedido.Bloquear===1 ">
 								<div class="row" ng-show="(pedido.Activo) && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
 									<div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
 										<div class="radio" style="margin-left:20px">
 											<div ng-hide="pedido.IdTipoProducto === 3">
-												<input type="radio" name="FormaPago" value="1" ng-model="pedido.IdFormaPagoProxima" ng-change="ActualizarPago(pedido)" ng-disabled="(pedido.MonedaPagoProxima === 'Dólares') || (pedido.IdEstatusPedido !== 3)">												Tarjeta
+												<input type="radio" name="FormaPago" value="1" ng-model="pedido.IdFormaPagoProxima" ng-change="ActualizarPago(pedido)" ng-disabled="(pedido.MonedaPagoProxima === 'Dólares') || (pedido.IdEstatusPedido !== 3)" >												Tarjeta
 											</div>
 											<div>
 												<input type="radio" name="FormaPago" value="2" ng-model="pedido.IdFormaPagoProxima" ng-change="ActualizarPago(pedido)" ng-disabled="(pedido.IdEstatusPedido !== 3)">												Crédito
@@ -112,11 +110,11 @@
 										<div class="radio" style="margin-left:20px">
 											<div>
 												<input type="radio" name="MonedaPago" value="Dólares" ng-model="pedido.MonedaPagoProxima" ng-change="ActualizarMoneda(pedido)"
-												 ng-disabled="(pedido.IdFormaPagoProxima == 1) || (pedido.IdEstatusPedido !== 3)"> Dólares
+													ng-disabled="(pedido.IdFormaPagoProxima == 1) || (pedido.IdEstatusPedido !== 3)"> Dólares
 											</div>
 											<div>
 												<input type="radio" name="MonedaPago" value="Pesos" ng-model="pedido.MonedaPagoProxima " ng-change="ActualizarMoneda(pedido)"
-												 ng-disabled="(pedido.IdEstatusPedido !== 3)"> Pesos
+													ng-disabled="(pedido.IdEstatusPedido !== 3)"> Pesos
 											</div>
 										</div>
 									</div>
@@ -129,28 +127,14 @@
 							<br/> {{pedido.PrecioUnitarioSinDescuento | currency}} {{pedido.MonedaPago}}
 							<br/> <a href="#/DetallesAzure/{{pedido.IdPedido}}">Ver detalles</a>
 						</div>
-						<div ng-show="pedido.IdTipoProducto==3 && (SessionCookie.IdTipoAcceso==4 || SessionCookie.IdTipoAcceso==6 || SessionCookie.IdTipoAcceso==7) "
-						 class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2 ">
-							<label>Bajo consumo </label>
+						<div ng-show="pedido.IdTipoProducto==3 && (SessionCookie.IdTipoAcceso==4 || SessionCookie.IdTipoAcceso==6 || SessionCookie.IdTipoAcceso==7) " class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2 ">
+							<label>Bajo consumo </label>							
 						</div>
 						<div ng-hide="pedido.IdTipoProducto==3 " class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2 ">
 							<label>Suscripciones: </label>
 							<br>
-
-							<div style="margin:0;padding0; " ng-show="(SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3) && pedido.CargoRealizadoProximoPedido ===1">{{pedido.Cantidad}}</div>
 							<div style="margin:0;padding0; " ng-show="!(SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3) || (pedido.Bloquear===1 && pedido.IdFabricante === 2)">{{pedido.Cantidad}}</div>
-							<div style="margin:0;padding0; " ng-show="(SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3) && pedido.CargoRealizadoProximoPedido ===1">
-								<br>
-								<label>Renovación</label>
-								<br>
-								<div ng-show="pedido.Activo">
-									{{pedido.CantidadProxima}}
-								</div>
-								<div ng-hide="pedido.Activo">
-									Por cancelar
-								</div>
-							</div>
-							<a ng-click="ActualizarCantidad(pedido.IdPedidoDetalle) " style="text-decoration: none" ng-hide="pedido.CargoRealizadoProximoPedido ===1 || !(SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3 ) || (pedido.Bloquear===1 && pedido.IdFabricante === 2) ">{{pedido.Cantidad}} &nbsp;
+							<a ng-click="ActualizarCantidad(pedido.IdPedidoDetalle) " style="text-decoration: none" ng-hide="!(SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3 ) || (pedido.Bloquear===1 && pedido.IdFabricante === 2)">{{pedido.Cantidad}} &nbsp;
                                 <span class="glyphicon glyphicon-triangle-bottom " ng-show="!pedido.MostrarCantidad " ></span>
                                 <span class="glyphicon glyphicon-triangle-top " ng-show="pedido.MostrarCantidad " ></span>
                             </a>
@@ -199,7 +183,8 @@
                                 <div style="font-style: italic; ">Error al procesar tu pedido, ponte en contacto con el equipo de soporte CompuSoluciones. <span class=" glyphicon glyphicon-remove" title="Procesando tu pedido... " ></span></div>
                             </b>
 						</div>
-						<div ng-hide="pedido.CargoRealizadoProximoPedido ===1 || (pedido.Bloquear===1 && pedido.IdFabricante === 2)|| pedido.ResultadoFabricante2==='FAILED' ">
+
+						<div ng-hide="(pedido.Bloquear===1 && pedido.IdFabricante === 2)|| pedido.ResultadoFabricante2==='FAILED' ">
 							<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2 " ng-show="pedido.PedidoAFabricante !=0 && (SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3 ) ">
 								<button class="btn btn-danger btn-block " ng-show="pedido.Activo " ng-disabled="form.habilitar" ng-click="Confirmar(pedido.IdPedidoDetalle) ">Cancelar <span class="glyphicon glyphicon-trash "></span></button>
 								<button class="btn btn-success btn-block " ng-show="!pedido.Activo " ng-disabled="form.habilitar" ng-click="Reanudar(pedido) ">Reanudar <span class="glyphicon glyphicon-circle-arrow-up "></span></button>
