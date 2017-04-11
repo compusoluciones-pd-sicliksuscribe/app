@@ -1,8 +1,6 @@
 
 angular.module('marketplace')
 
-// cambio para que lo vea el gus
-
   .run(function ($rootScope) {
     $rootScope.rsTitle = 'click suscribe | CompuSoluciones';
     $rootScope.rsVersion = '2.1.0';
