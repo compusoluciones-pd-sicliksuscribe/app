@@ -51,7 +51,9 @@
         <br>
         <label>Cliente:</label> {{PedidosObj[key].NombreEmpresa}}
         <br>
-        <label>Fecha límite de pago: </label> {{PedidosObj[key].FechaFin| date:'dd-MM-yyyy'}}
+        <label>Fecha límite de pago: </label> {{PedidosObj[key].FechaFin| date:'yyyy-MM-dd'}}
+        <br>
+        <label>Periodo a pagar: </label> {{PedidosObj[key].FechaFin| date:'yyyy-MM-dd'}} - {{PedidosObj[key].FechaFinProximo| date:'yyyy-MM-dd'}}
         <br>
         <label>Precio renovación: </label> {{obtenerSubTotal(key) | currency}} pesos
         <a ng-click="mostrarDetalles(key) " style="text-decoration: none">ver detalles 
