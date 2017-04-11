@@ -1,0 +1,157 @@
+<div class="container">
+    <h2>Mi Empresa</h2>
+    <br>
+    <form name="frm" ng-swipe-right="EmpresaCancel()">
+    <label>Empresa</label>
+    <hr>
+        <div class="form-group row">
+            <div class="form-group col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                <div class="pull-rigth">
+                    <label>Nombre de la Empresa *</label>
+                    <input name="NombreEmpresa" type="text" ng-model="Empresa.NombreEmpresa" class="form-control" placeholder="" size="255" ng-maxlength="255" required="" ng-disabled="true"/>
+                    <b style="color:red" ng-show="frm.NombreEmpresa.$invalid && !frm.NombreEmpresa.$pristine" class="help-block">El nombre de empresa es requerido.</b>
+                </div>
+            </div> 
+            
+            <div class="form-group col-xs-9 col-sm-2 col-md-2 col-lg-2">
+                <div class="pull-rigth">
+                    <label>Dominio Microsoft *</label>
+                    <input name="DominioMicrosoft" type="text" ng-model="Empresa.DominioMicrosoftUf" class="form-control" placeholder="" size="255" ng-maxlength="255" required="" ng-disabled="true" />
+                    <b style="color:red" ng-show="frm.DominioMicrosoft.$invalid && !frm.DominioMicrosoft.$pristine" class="help-block">Ingresa un dominio válido.</b>
+                </div>
+            </div>
+            <div class="form-group col-xs-3 col-sm-1 col-md-1 col-lg-1">
+                <br/><br/>
+                <p>.onmicrosoft.com</p>
+            </div>
+        
+    </div>
+            
+        
+        <div class="form-group row">
+            <div class="form-group col-xs-12 col-sm-4 col-md-4 col-lg-4">
+            
+                <div class="pull-rigth">
+                    <label>Dirección *</label>
+                    <input name="Direccion1" type="text" ng-model="Empresa.Direccion" class="form-control" placeholder="" size="255" ng-maxlength="255" required="" ng-disabled="true"/>
+                    <b style="color:red" ng-show="frm.Direccion1.$invalid && !frm.Direccion1.$pristine" class="help-block" ng-disabled="true">La dirección es requerida.</b>
+                </div>
+    
+            </div>  
+            <div class="form-group col-xs-12 col-sm-4 col-md-4 col-lg-4">
+            
+                <div class="pull-rigth">
+                    <label>RFC *</label>
+                    <input name="RFC" type="text" ng-model="Empresa.RFC" class="form-control" placeholder="" size="255" ng-maxlength="255" required="" ng-disabled="true" />
+                    <b style="color:red" ng-show="frm.RFC.$invalid && !frm.RFC.$pristine" class="help-block">EL RFC es requerido.</b>
+                </div>
+    
+            </div>         
+        </div>
+        
+        <div class="form-group row">
+            <div class="form-group col-xs-12 col-sm-4 col-md-4 col-lg-4">
+            
+                <div class="pull-rigth">
+                    <label>Ciudad *</label>
+                    <input name="Ciudad" type="text" ng-model="Empresa.Ciudad" class="form-control" placeholder="" size="255" ng-maxlength="255" required="" ng-disabled="true"/>
+                    <b style="color:red" ng-show="frm.Ciudad.$invalid && !frm.Ciudad.$pristine" class="help-block" ng-disabled="true">La ciudad es requerida.</b>
+                </div>
+    
+            </div>
+            <div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">            
+                <div class="pull-rigth">
+                    <label>Estado o provincia *</label>
+                    <select name="Estado" ng-model="Empresa.Estado" class="form-control" ng-disabled="true">
+                        <option ng-repeat="option in Combo.EstadoOptions" value="{{option.Abreviatura}}">{{option.Nombre}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
+            
+                <div class="pull-rigth">
+                    <label>Código postal *</label>
+                    <input name="Postal" type="text" ng-model="Empresa.CodigoPostal" class="form-control" placeholder="" size="255" ng-maxlength="5" ng-pattern="/^\d+$/" required=""/ ng-disabled="true">
+                    <b style="color:red" ng-show="frm.Postal.$invalid && !frm.Postal.$pristine" class="help-block">Ingresa un código postal válido.</b>
+                </div>
+    
+            </div>
+        </div>
+    <br/>
+    <label>Contacto principal</label>
+    <hr>
+        <div class="row">
+            <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+            
+                <div class="pull-rigth">
+                    <label>Nombre *</label>
+                    <input name="Nombre" type="text" ng-model="Empresa.NombreContacto" class="form-control" ng-pattern="/[a-zA-Z]$/" placeholder="" size="255" ng-maxlength="50" required="" ng-disabled="true"/>
+                    <b style="color:red" ng-show="frm.Nombre.$invalid && !frm.Nombre.$pristine" class="help-block">Ingresa un nombre.</b>
+                </div>
+    
+            </div>
+            <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">            
+                <div class="pull-rigth">
+                    <label>Apellidos *</label>
+                    <input name="Apellidos" type="text" ng-model="Empresa.ApellidosContacto" class="form-control" ng-pattern="/[a-zA-Z]$/" placeholder="" size="255" ng-maxlength="80" required="" ng-disabled="true"/>
+                    <b style="color:red" ng-show="frm.Apellidos.$invalid && !frm.Apellidos.$pristine" class="help-block">Ingresa los apellidos.</b>
+                </div>
+            </div>
+    
+        </div>
+        
+        <div class="row">
+            <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+            
+                <div class="pull-rigth">
+                    <label>Correo electrónico *</label>
+                    <input name="CorreoElectronico" type="mail" ng-model="Empresa.CorreoContacto" class="form-control" placeholder="" size="255" ng-maxlength="255" ng-pattern="/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/" required="" ng-disabled="true"/>
+                    <b style="color:red" ng-show="frm.CorreoElectronico.$invalid && !frm.CorreoElectronico.$pristine" class="help-block">Ingresa un correo electrónico válido.</b>
+                </div>
+    
+            </div>
+            <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">            
+                <div class="pull-rigth">
+                    <label>Número de celular </label>
+                </div>
+                <div class="form-group row">
+                    <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                        <div class="pull-rigth">
+                            <input name="Lada" ui-mask="+99" ui-mask-placeholder type="text" ng-model="Empresa.Lada"  class="form-control" placeholder="" size="255" ng-maxlength="255" ng-disabled="true"/>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-9 col-sm-9 col-md-9 col-lg-9">
+                        <div class="pull-rigth">
+                            <input name="Telefono" type="text" ng-model="Empresa.TelefonoContacto" ui-mask="(999) 999-9999" ui-mask-placeholder ui-mask-placeholder-char="_" class="form-control" placeholder="" size="255" ng-maxlength="255" ng-disabled="true"/>
+                            <b style="color:red" ng-show="frm.Telefono.$invalid && !frm.Telefono.$pristine" class="help-block">Ingresa un teléfono válido.</b>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="form-group col-xs-12 col-sm-12 col-md-8 col-lg-8">
+                <p>*Si requiere realizar modificaciones a sus datos, favor de contactar a su equipo de soporte.</p>
+            </div>       
+        </div>
+        <div class="form-group row">
+            <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+            </div>
+            <div class="col-xs-0 col-sm-0 col-md-2 col-lg-2">
+                <div class="form-group">
+                    <button type="submit" ng-click="EmpresaUpdate()" class="btn btn-primary btn-block"  ng-show="false">Aceptar</button>
+                </div>
+            </div>
+            <div class="col-xs-0 col-sm-0 col-md-2 col-lg-2">
+                <div class="form-group">
+                    <button type="button" ng-click="EmpresaCancel()" ng-disabled="Empresa.Formulario" class="btn btn-warning btn-block" ng-show="false">Cancelar</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group row">
+            <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
+            <div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div>
+        </div>
+    </form>
+</div>

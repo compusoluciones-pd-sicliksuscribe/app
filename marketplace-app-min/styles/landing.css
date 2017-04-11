@@ -1,0 +1,205 @@
+/*landing*/
+
+.allProductSecondary{
+    height:400px;
+    padding:80px 25px 10px 25px;
+    text-align:center;
+    margin-bottom:180px;
+   
+}
+
+.productSecundary{
+    background:#00549F;
+    background-size:cover;
+}
+
+.productSecundary a{
+    text-decoration: underline;
+    color:#fff;
+}
+
+.productSecundary .center h2{
+    color:#fff;
+    text-align:left;
+   font-size:24px;
+   margin-top:15px;
+}
+
+.productSecundary .center p{
+    text-align:left;
+    color:#fff;
+}
+
+
+.productSecundary .center button{
+
+    text-align:center;
+    color:#fff;
+    margin-top:20px;
+
+}
+
+
+.thirdProduct{
+    height:564px;
+    background:url(../images/backgroundSecondProduct.jpg) #45ace8;
+    background-position:left center;
+    background-attachment: fixed;
+    background-size:cover;
+
+
+}
+
+.thirdProduct h2{
+    font-size:4em;
+}
+
+.imageProductMicrosoft{
+    padding:10%;
+}
+
+.secondaryText {
+    padding: 10%;
+    color:#fff;
+}
+
+.secondaryText button{
+    background:#024b94;
+    padding:5px;
+    color:#fff;
+}
+
+
+.FourProduct .text{
+    color:#494949;
+    padding:10%;
+ 
+}
+
+.FourProduct .text h3{
+    font-size:3em;
+}
+
+.FourProduct button{
+    color:#fff;
+}
+
+.FifhtProduct{
+    background:#fff;
+    color:#494949;
+}
+
+.FifhtProduct .text{
+    padding:10%;
+}
+
+.FifhtProduct .img{
+    padding:10%;
+   text-align:center;
+}
+
+.FifhtProduct button{
+    background:#f1a31c;
+    color:#fff;
+}
+
+
+
+
+.FourProduct{
+    height:564px;
+    background:url(../images/backThirdSection.jpg);
+     background-size:cover;
+    background-attachment: fixed;
+     background-position:left center;
+   
+}
+
+.FifhtProduct{
+    background:#fff;
+    color:#494949;
+}
+
+/*slider*/
+
+
+.container-fluid .landingContainer{
+    margin:-15px; 
+}
+
+
+.principalProducts h4{
+    color:#4a4a4a;
+    text-align:left;
+    font-size:39px;
+    width:400px;
+}
+
+.principalProducts p{
+    width:50%;
+    text-align:left;
+    font-size: 18px;
+    color:#494949;    
+}
+
+
+.principalProducts button{
+    background: #6b9b39;
+    color:#fff;
+    float:left;
+   
+}
+
+.principalProducts .button-default:hover{
+    background-color: #6b9b39;
+}
+
+.carousel-inner{
+    height:400px;
+}
+
+
+.carousel-indicators{
+    bottom:-60px;
+}
+
+.carousel-control{
+    color:#434343;
+}
+
+.carousel-control.right{
+    background-image: none;
+}
+
+.carousel-control.left{
+    background-image: none;
+}
+
+.carousel-indicators li{
+    border:1px solid #434343;
+}
+
+.carousel-caption{
+    top:20px;
+}
+
+.brands{
+    text-align: right;
+    padding-top:3px;
+}
+
+.brands li{
+    display: inline;
+    list-style-type: none;
+    padding-right: 20px;
+}
+
+.sliderMessage{
+    width:200px;
+    color:#000;
+    text-align: left;
+    
+}
+
+
+

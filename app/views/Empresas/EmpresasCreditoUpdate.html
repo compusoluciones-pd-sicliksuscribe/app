@@ -1,0 +1,49 @@
+<div class="container">
+
+	<h2>Crédito </h2>
+	<br>
+
+	<form name="frm" ng-swipe-right="EmpresaCancel()">
+
+		<hr>
+		<br>
+		
+		<div class="form-group row">
+			<div class="col-xs-0 col-sm-0 col-md-4 col-lg-4">
+				<div class="form-group">
+					<label for="Credito">Crédito de {{Empresa.IdERP}}, {{ Empresa.NombreEmpresa }} en pesos MXN.</label>
+					<input 	name="Credito" type="number" class="form-control" ng-model="Empresa.Credito" 
+							max="999999999" 
+							min="000000000" 
+							ng-maxlength="9" size="9" 
+							ng-required="" required="">
+					<br>
+					
+					<p style="color:red" ng-show="frm.Credito.$error.required">Escribe una cantidad</p>
+					<p style="color:red" ng-show="frm.Credito.$error.maxlength">Tamaño excedido</p>
+                	
+				</div>
+			</div>
+			<div class="col-xs-0 col-sm-0 col-md-8 col-lg-8">
+
+			</div>
+		</div>
+
+		<div class="form-group row">
+			<div class="col-xs-0 col-sm-0 col-md-2 col-lg-2">
+				<div class="form-group">
+					<button type="submit" ng-click="EmpresaUpdate()" ng-disabled="!frm.$valid" class="btn btn-primary btn-block">Aceptar</button>
+				</div>
+			</div>
+			<div class="col-xs-0 col-sm-0 col-md-2 col-lg-2">
+				<div class="form-group">
+					<button type="button" ng-click="EmpresaCancel()" class="btn btn-warning btn-block">Cancelar</button>
+				</div>
+			</div>
+			<div class="col-xs-0 col-sm-0 col-md-8 col-lg-8">
+
+			</div>
+		</div>
+
+	</form>
+</div>

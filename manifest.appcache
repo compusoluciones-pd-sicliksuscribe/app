@@ -1,0 +1,192 @@
+CACHE MANIFEST
+
+# Version: V. X.X.XX
+# Última actualización: dd-mm-yyyy h:mm am/pm
+
+# A manifest file needs to be served with the correct media type, which is "text/cache-manifest". Must be configured on the web server.
+# Explicitly cached 'master entries'.
+
+CACHE:
+
+     index.html
+    
+     app/app.js
+     app/appSettings.js
+    
+     app/controllers/ContactoController.js
+     app/controllers/IndexController.js
+     app/controllers/LandingController.js
+     app/controllers/SoporteController.js
+     app/controllers/SugerenciasController.js
+    
+     app/controllers/Empresas/EmpresasCreateController.js
+     app/controllers/Empresas/EmpresasCreditoUpdateController.js
+     app/controllers/Empresas/EmpresasReadController.js
+     app/controllers/Empresas/EmpresasUpdateController.js
+    
+     app/controllers/EmpresasXEmpresas/EmpresasXEmpresasReadController.js
+    
+     app/controllers/PedidoDetalles/ComprarController.js
+     app/controllers/PedidoDetalles/MonitorReadController.js
+     app/controllers/PedidoDetalles/PedidoDetallesReadController.js
+    
+     app/controllers/ProductoGuardados/ProductoGuardadosReadController.js
+    
+     app/controllers/Productos/ProductosReadController.js
+    
+     app/controllers/Promocions/PromocionsCreateController.js
+     app/controllers/Promocions/PromocionsReadController.js
+     app/controllers/Promocions/PromocionsUpdateController.js
+    
+     app/controllers/Usuarios/TerminosReadController.js
+     app/controllers/Usuarios/UsuariosCreateController.js
+     app/controllers/Usuarios/UsuariosLoginController.js
+     app/controllers/Usuarios/UsuariosReadController.js
+     app/controllers/Usuarios/UsuariosRecuperarController.js
+     app/controllers/Usuarios/UsuariosUpdateController.js
+    
+     app/directives/loading.js
+    
+     app/services/EmpresasFactory.js
+     app/services/EmpresasXEmpresasFactory.js
+     app/services/EstadosFactory.js
+     app/services/FabricantesFactory.js
+     app/services/PedidoDetallesFactory.js
+     app/services/PedidosFactory.js
+     app/services/ProductoGuardadosFactory.js
+     app/services/ProductosFactory.js
+     app/services/PromocionsFactory.js
+     app/services/TipoCambioFactory.js
+     app/services/TiposAccesosFactory.js
+     app/services/TiposProductosFactory.js
+     app/services/UsuariosFactory.js
+     app/services/UsuariosXEmpresasFactory.js
+     app/services/AccesosAmazonFactory.js
+
+     app/views/error.html
+     app/views/Landing.html
+     app/views/mailing.html
+     app/views/offline.html
+     app/views/Soporte.html
+     app/views/Contacto.html
+     app/views/Sugerencias.html
+     app/views/Navegadores.html
+    
+     app/views/Empresas/EmpresasCreate.html
+     app/views/Empresas/EmpresasCreditoUpdate.html
+     app/views/Empresas/EmpresasRead.html
+     app/views/Empresas/EmpresasUpdate.html
+    
+     app/views/EmpresasXEmpresas/EmpresasXEmpresasRead.html
+    
+     app/views/PedidoDetalles/Comprar.html
+     app/views/PedidoDetalles/MonitorRead.html
+     app/views/PedidoDetalles/PedidoDetallesRead.html
+    
+     app/views/ProductoGuardados/ProductoGuardadosRead.html
+    
+     app/views/Productos/ProductosRead.html
+    
+     app/views/Promocions/PromocionsCreate.html
+     app/views/Promocions/PromocionsRead.html
+     app/views/Promocions/PromocionsUpdate.html
+    
+     app/views/Usuarios/TerminosRead.html
+     app/views/Usuarios/UsuariosCreate.html
+     app/views/Usuarios/UsuariosLogin.html
+     app/views/Usuarios/UsuariosRead.html
+     app/views/Usuarios/UsuariosRecuperar.html
+     app/views/Usuarios/UsuariosUpdate.html
+    
+     styles/animations.css
+     styles/fonts.css
+     styles/landing.css
+     styles/ngToast.css
+    
+     styles/css/fonts.css
+     styles/css/landing.css
+     styles/css/style.css
+     styles/css/fonts/icon.eot
+     styles/css/fonts/icon.svg
+     styles/css/fonts/icon.ttf
+     styles/css/fonts/icon.woff
+     styles/css/fonts/newsgotlb-webfont.eot
+     styles/css/fonts/newsgotlb-webfont.svg
+     styles/css/fonts/newsgotlb-webfont.ttf
+     styles/css/fonts/newsgotlb-webfont.woff
+     styles/css/fonts/newsgotlb-webfont.woff2
+    
+     scripts/angular-animate.min.js
+     scripts/angular-cookies.min.js
+     scripts/angular-file-upload.min.js
+     scripts/angular-file-upload.min.js.map
+     scripts/angular-filter.js
+     scripts/angular-locale_es-es.js
+     scripts/angular-parallax.js
+     scripts/angular-route.min.js
+     scripts/angular-sanitize.min.js
+     scripts/angular-touch.min.js
+     scripts/angular-ui-mask.js
+     scripts/angular.min.js
+     scripts/format-as-currency.js
+     scripts/jquery-2.2.0.min.js
+     scripts/ngToast.js
+     scripts/ui-bootstrap-tpls-0.14.3.min.js
+     scripts/ng-device-detector.min.js.js
+     scripts/re-tree.min.js
+    
+     images/5.jpg
+     images/appIcon.png
+     images/Aros.png
+     images/backArrow.png
+     images/backgroundSecondProduct.jpg
+     images/backThirdSection.jpg
+     images/box_azure.png
+     images/box_crm.png
+     images/box_ems.png
+     images/box_exchange.png
+     images/box_intune.png
+     images/box_office.png
+     images/box_onedrive.png
+     images/box_powerbi.png
+     images/box_project.png
+     images/box_skype.png
+     images/box_visio.png
+     images/box_yammer.png
+     images/default.jpg
+     images/defaultAutodesk.png
+     images/defaultConsumo.png
+     images/defaultServicios.png
+     images/distintivo.png
+     images/icon.png
+     images/iconSearch.png
+     images/imgSecondaryProduct.png
+     images/leftArrow.png
+     images/loading.gif
+     images/logo.jpg
+     images/logo.png
+     images/logoAzure.svg
+     images/logoFooter.svg
+     images/logoGde.png
+     images/logoMailing.png
+     images/logoProduct1.png
+     images/logoProduct3.png
+     images/LogoSVG.svg
+     images/Marketplace.png
+     images/office.png
+     images/officeImg.png
+     images/productSec01.png
+     images/productSec02.png
+     images/productSec03.png
+     images/rightArrow.png
+    
+     template/carousel/carousel.html
+     template/carousel/slide.html
+ 
+# offline.html will be displayed if the user is offline
+
+FALLBACK:
+/html/  app/views/offline.html
+
+ NETWORK:
+ *
