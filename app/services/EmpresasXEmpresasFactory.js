@@ -16,6 +16,11 @@
       return $http.get($rootScope.API + 'EmpresasXEmpresas');
     };
 
+    factory.getEmpresasXEmpresasByIdEmpresa = function (IdEmpresa) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'EmpresasXEmpresas/'+ IdEmpresa);
+    };
+
     factory.postEmpresasXEmpresa = function (EmpresasXEmpresa) {
       factory.refreshToken();
       return $http.post($rootScope.API + 'EmpresasXEmpresas', EmpresasXEmpresa);
