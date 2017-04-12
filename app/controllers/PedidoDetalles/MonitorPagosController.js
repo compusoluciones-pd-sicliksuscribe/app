@@ -27,6 +27,7 @@
           if (!ordersToPay.data || ordersToPay.data.length === 0) {
             return $scope.DeshabilitarPagar = true;
           }
+          console.log(ordersToPay.data);
           $scope.PedidosAgrupados = groupBy(ordersToPay.data, function (item) { return [item.IdPedido]; });
           for (let x = 0; x < $scope.PedidosAgrupados.length; x++) {
             $scope.PedidosObj[$scope.PedidosAgrupados[x][0].IdPedido] = $scope.PedidosAgrupados[x][0];
