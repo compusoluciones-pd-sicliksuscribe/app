@@ -2,9 +2,12 @@
   var EmpresasRPController = function ($scope, $log, $cookieStore, $location, $uibModal, $filter, EmpresasXEmpresasFactory, $routeParams) {
     $scope.MostrarMensajeError = false;
     $scope.init = function () {
-      EmpresasXEmpresasFactory.getEmpresasXEmpresasByIdEmpresa($routeParams.IdEmpresa)
+      EmpresasXEmpresasFactory.getExchangeRateByIdEmpresa($routeParams.IdEmpresa)
         .success(function (Empresas) {
-          $scope.Empresas = Empresas;
+          if (Empresas.data) {
+            $scope.Empresas = Empresas.data;
+          }
+
         })
         .error(function (data, status, headers, config) {
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
@@ -22,10 +25,40 @@
         Empresa.TipoCambioRP = $scope.RPTodos;
         return Empresa;
       });
+
+      EmpresasXEmpresasFactory.postExchangeRate({ Empresas: $scope.Empresas })
+        .success(function (result) {
+          $scope.ShowToast('Actualizado correctamente.', 'success');
+          $scope.Empresas = result;
+        })
+        .error(function (data, status, headers, config) {
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
     }
 
     $scope.ActualizarRP = function (Empresa) {
-      console.log(Empresa);
+      if (!(Empresa.TipoCambioRP > 0)) {
+        return $scope.Empresas.map(function (item) {
+          if (item.IdEmpresaUsuarioFinal === Empresa.IdEmpresaUsuarioFinal) {
+            item.MostrarMensajeError = true;
+          }
+          return item;
+        })
+      }
+      $scope.Empresas.map(function (item) {
+        if (item.IdEmpresaUsuarioFinal === Empresa.IdEmpresaUsuarioFinal) {
+          item.MostrarMensajeError = false;
+        }
+        return item;
+      })
+      EmpresasXEmpresasFactory.postExchangeRate({ Empresas: [Empresa] })
+        .success(function (result) {
+          $scope.ShowToast('Actualizado correctamente.', 'success');
+        })
+        .error(function (data, status, headers, config) {
+          $scope.ShowToast('Error al actualizar.', 'danger');
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
     }
 
   };

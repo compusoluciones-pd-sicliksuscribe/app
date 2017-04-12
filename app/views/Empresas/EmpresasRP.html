@@ -36,13 +36,13 @@
           <label labelfor="Cantidad" title="Tipo de cambio protegido.">Tipo de cambio protegido en pesos: </label>
           <div class="input-group">
             <span class="input-group-addon">$</span>
-            <input id="Cantidad" name="Cantidad" type="text" ng-model="RPTodos" class="form-control"
-              value="0" step="1000" placeholder="Tipo de cambio protegido." />
+            <input id="Cantidad" name="Cantidad" type="text" ng-model="RPTodos" class="form-control" value="0" step="1000" placeholder="Tipo de cambio protegido."
+            />
           </div>
           <br>
           <div ng-show="MostrarMensajeError">
             <p style="color:red">Ingresa una cantidad valida.</p>
-          </div>          
+          </div>
         </div>
       </div>
       <div class="col-xs-2 col-sm-2 col-md-1 col-lg-1" style="margin-top:13px;">
@@ -86,11 +86,13 @@
                       <label labelfor="Cantidad" title="Tipo de cambio protegido.">Tipo de cambio protegido en pesos: </label>
                       <div class="input-group">
                         <span class="input-group-addon">$</span>
-                        <input id="Cantidad" name="Cantidad" type="text"  ng-model="Empresa.TipoCambioRP" class="form-control"
-                          value="0" step="1000" placeholder="Tipo de cambio protegido."  maxlength="9" />                                                
+                        <input id="Cantidad" name="Cantidad" type="text" ng-model="Empresa.TipoCambioRP" class="form-control" value="0" step="1000"
+                          placeholder="Tipo de cambio protegido." maxlength="9" />
                       </div>
                       <br>
-                      <p style="color:red" ng-show="frmCantidad.Cantidad.$error.min">Mínimo 0</p>
+                      <div ng-show="Empresa.MostrarMensajeError">
+                        <p style="color:red">Ingresa una cantidad valida.</p>
+                      </div>
                     </div>
                   </div>
 
@@ -99,7 +101,7 @@
                       <div class="pull-left" ng-show="SessionCookie.IdTipoAcceso === 1">
                         <label labelfor="aActualizar"></label>
                         <h4>
-                          <a id="aActualizar" type="submit" title="Guardar" ng-click="ActualizarRP(Empresa);" ng-show="!frmCantidad.Cantidad.$error.max">
+                          <a id="aActualizar" type="submit" title="Guardar" ng-click="ActualizarRP(Empresa);">
                             <span class="fa fa-floppy-o" style="cursor:pointer"></span>
                           </a>
                         </h4>
