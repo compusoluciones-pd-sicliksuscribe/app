@@ -33,22 +33,7 @@
 
     factory.getSolicitud = function (idSolicitud) {
       factory.refreshToken();
-      var result = {
-        success: function (callback) {
-          var resolve = {
-            success: 1,
-            message: "ok",
-            data: {
-              Descripcion: "una descripcion",
-              DescripcionSolucion: "una descripcion de soluciones",
-              IdEstatus: "1",
-              Titulo: "un gran titutlo"
-            }
-          };
-          callback(resolve);
-        }
-      };
-      return result;
+      return $http.get($rootScope.API + 'support/'+ idSolicitud);
     }
 
     return factory;

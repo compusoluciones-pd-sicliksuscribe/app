@@ -7,7 +7,8 @@
       SoporteFactory.getSolicitud(idSoporte)
         .success(function (resultado) {
           if (resultado.success === 1) {
-            $scope.Soporte = resultado.data;
+            $scope.Soporte = resultado.data[0];
+            $scope.Soporte.IdEstatus = resultado.data[0].IdEstatus.toString();
           }
         })
       SoporteFactory.getStatus()
