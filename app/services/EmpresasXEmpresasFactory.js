@@ -22,6 +22,7 @@
     };
 
     factory.postExchangeRate = function (Empresas) {
+      console.log(Empresas);
       factory.refreshToken();
       return $http.post($rootScope.API + 'exchange-rate', Empresas);
     };

@@ -25,7 +25,7 @@
         Empresa.TipoCambioRP = $scope.RPTodos;
         return Empresa;
       });
-
+      
       EmpresasXEmpresasFactory.postExchangeRate({ Empresas: $scope.Empresas })
         .success(function (result) {
           $scope.ShowToast('Actualizado correctamente.', 'success');
