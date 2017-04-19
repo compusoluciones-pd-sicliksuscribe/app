@@ -23,14 +23,12 @@
       <div class="form-group col-xs-12 col-sm-6">
         <label>Descripción *</label>
         <textarea name="Descripcion" type="text" ng-model="Soporte.Descripcion" class="form-control" placeholder="" size="255" ng-maxlength="255"
-          required="" disabled/>
-        <b style="color:red" ng-show="frm.Descripcion.$invalid && !frm.Descripcion.$pristine" class="help-block">La Descripción es requerida ó ha sobrepasado el limite de caracteres..</b>
-      </div>
+          required="" disabled/></div>
       <div class="form-group col-xs-12 col-sm-6">
         <label>Solución *</label>
-        <textarea name="Descripcion" type="text" ng-model="Soporte.DescripcionSolucion" class="form-control" placeholder="" size="255"
-          ng-maxlength="255" required="" />
-        <b style="color:red" ng-show="frm.Descripcion.$invalid && !frm.Descripcion.$pristine" class="help-block">La Descripción es requerida ó ha sobrepasado el limite de caracteres..</b>
+        <textarea name="DescripcionSolucion" type="text" ng-model="Soporte.DescripcionSolucion" class="form-control" placeholder="Descripción de la solución"
+          size="255" ng-maxlength="255" required="" />
+        <b style="color:red" ng-show="frm.DescripcionSolucion.$invalid && !frm.DescripcionSolucion.$pristine" class="help-block">La Descripción es requerida ó ha sobrepasado el limite de caracteres...</b>
       </div>
     </div>
     <br>

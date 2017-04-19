@@ -2,7 +2,6 @@
   var SoporteUpdateController = function ($scope, $log, $cookieStore, $location, $uibModal, $filter, SoporteFactory, $routeParams) {
     var idSoporte = $routeParams.idSoporte;
     var combo = [];
-    console.log('entro');
     $scope.init = function () {
       SoporteFactory.getSolicitud(idSoporte)
         .success(function (resultado) {
@@ -29,18 +28,18 @@
     $scope.init();
     $scope.ActualizarSoporte = function () {
       if (!$scope.frm.$invalid) {
-        console.log($scope.Soporte)
         var soporte = {
           IdEstatus: $scope.Soporte.IdEstatus,
           DescripcionSolucion: $scope.Soporte.DescripcionSolucion
         };
-        console.log(soporte)
         SoporteFactory.patchSolicitud(idSoporte, soporte)
           .success(function (resultado) {
             if (resultado.success === 1) {
               $scope.ShowToast('Soporte actualizado.', 'success');
               $location.path('monitor-soporte');
-            }
+            }else {
+            $scope.ShowToast('Error al guardar los datos, verifica que los caracteres sean correctos.', 'danger');
+          }
           })
           .error(function (data, status, headers, config) {
             $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
