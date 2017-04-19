@@ -10,7 +10,11 @@
             $scope.Soporte = resultado.data[0];
             $scope.Soporte.IdEstatus = resultado.data[0].IdEstatus.toString();
           }
-        })
+        }).error(function (data, status, headers, config) {
+          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.ShowToast('No pudimos cargar los datos del detalle, por favor intenta de nuevo más tarde.', 'danger');
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
       SoporteFactory.getStatus()
         .success(function (resultado) {
           if (resultado.success === 1) {
