@@ -34,7 +34,7 @@
     factory.getSolicitud = function (idSolicitud) {
       factory.refreshToken();
       return $http.get($rootScope.API + 'support/'+ idSolicitud);
-    }
+    };
 
     return factory;
   };
