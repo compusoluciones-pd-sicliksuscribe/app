@@ -16,6 +16,17 @@
       return $http.get($rootScope.API + 'EmpresasXEmpresas');
     };
 
+    factory.getExchangeRateByIdEmpresa = function (IdEmpresa) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'exchange-rate/' + IdEmpresa);
+    };
+
+    factory.postExchangeRate = function (Empresas) {
+      console.log(Empresas);
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'exchange-rate', Empresas);
+    };
+
     factory.postEmpresasXEmpresa = function (EmpresasXEmpresa) {
       factory.refreshToken();
       return $http.post($rootScope.API + 'EmpresasXEmpresas', EmpresasXEmpresa);
