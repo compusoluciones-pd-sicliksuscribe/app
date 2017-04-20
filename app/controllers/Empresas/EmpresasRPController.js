@@ -34,7 +34,7 @@
         .error(function (data, status, headers, config) {
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
-    }
+    };
 
     $scope.ActualizarRP = function (Empresa) {
       if (!(Empresa.TipoCambioRP > 0)) {
@@ -43,14 +43,14 @@
             item.MostrarMensajeError = true;
           }
           return item;
-        })
+        });
       }
       $scope.Empresas.map(function (item) {
         if (item.IdEmpresaUsuarioFinal === Empresa.IdEmpresaUsuarioFinal) {
           item.MostrarMensajeError = false;
         }
         return item;
-      })
+      });
       EmpresasXEmpresasFactory.postExchangeRate({ Empresas: [Empresa] })
         .success(function (result) {
           $scope.ShowToast('Actualizado correctamente.', 'success');
@@ -59,7 +59,7 @@
           $scope.ShowToast('Error al actualizar.', 'danger');
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
-    }
+    };
 
   };
   EmpresasRPController.$inject = ['$scope', '$log', '$cookieStore', '$location', '$uibModal', '$filter', 'EmpresasXEmpresasFactory', '$routeParams'];
