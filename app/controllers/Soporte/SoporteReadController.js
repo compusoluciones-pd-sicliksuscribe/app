@@ -19,6 +19,11 @@
     $scope.NuevaSolicitud = function () {
       $location.path('solicitar-soporte');
     };
+    
+    $scope.EditarDetalle = function (id) {
+      console.log(id);
+      $location.path('actualizar-soporte/'+id);
+    };
   };
   SoporteReadController.$inject = ['$scope', '$log', '$cookieStore', '$location', '$uibModal', '$filter', 'SoporteFactory', '$routeParams'];
 
