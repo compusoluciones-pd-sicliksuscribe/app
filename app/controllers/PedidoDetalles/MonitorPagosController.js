@@ -17,7 +17,7 @@
         groups[group].push(o);
       });
       return Object.keys(groups).map(function (group) { return groups[group]; });
-    }
+    };
 
     $scope.init = function () {
       $location.path('/MonitorPagos');
@@ -45,8 +45,8 @@
     $scope.init();
 
     $scope.obtenerSubTotal = function (key) {
-      let subtotal = 0;
-      for (let x = 0; x < $scope.Pedidos.length; x++) {
+      var subtotal = 0;
+      for (var x = 0; x < $scope.Pedidos.length; x++) {
         if ($scope.Pedidos[x].IdPedido == key) {
           subtotal += $scope.Pedidos[x].PrecioRenovacion * $scope.Pedidos[x].CantidadProxima;
         }
@@ -55,7 +55,7 @@
     };
 
     $scope.seleccionarTodos = function () {
-      for (let x = 0; x < $scope.PedidosAgrupados.length; x++) {
+      for (var x = 0; x < $scope.PedidosAgrupados.length; x++) {
         if ($scope.PedidosObj[$scope.PedidosAgrupados[x][0].IdPedido].Check !== $scope.todos) {
           $scope.PedidosObj[$scope.PedidosAgrupados[x][0].IdPedido].Check = $scope.todos;
           $scope.pedidosPorPagar($scope.PedidosAgrupados[x][0].IdPedido);
@@ -64,13 +64,13 @@
     };
 
     $scope.pedidosPorPagar = function (key) {
-      for (let y = 0; y < $scope.Pedidos.length; y++) {
+      for (var y = 0; y < $scope.Pedidos.length; y++) {
         if ($scope.Pedidos[y].IdPedido == key) {
           if (!$scope.PedidosObj[key].Check) {
             if ($scope.todos) {
               $scope.todos = 0;
             }
-            for (let x = 0; x < $scope.PedidosSeleccionadosParaPagar.length; x++) {
+            for (var x = 0; x < $scope.PedidosSeleccionadosParaPagar.length; x++) {
               if (key == $scope.PedidosSeleccionadosParaPagar[x]) {
                 $scope.PedidosSeleccionadosParaPagar.splice(x, 1);
               }

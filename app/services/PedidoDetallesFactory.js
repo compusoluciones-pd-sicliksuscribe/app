@@ -78,12 +78,12 @@
 
     factory.getPendingOrdersToPay = function () {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'orders/get-pending-orders-to-pay');
+      return $http.get($rootScope.API + 'orders/get-pending-orders-to-pay/1');
     };
 
     factory.monitorCalculations = function (Pedidos) {
       factory.refreshToken();
-      return $http.post($rootScope.API + 'orders/pending-orders-monitor-calculations', Pedidos);
+      return $http.post($rootScope.API + 'orders/pending-orders-monitor-calculations/1', Pedidos);
     };
 
     factory.payWidthCard = function (Pedidos) {
