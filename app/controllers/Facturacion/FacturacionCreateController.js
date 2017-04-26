@@ -3,8 +3,7 @@
     $scope.InfoFactura = {};
     $scope.InfoFactura.nombre = $scope.SessionCookie.NombreEmpresa
     $scope.InfoFactura.IdEmpresa = $scope.SessionCookie.IdEmpresa
-    console.log($scope.SessionCookie, $scope.InfoFactura)
-
+    
     function isItReadyYet() {
       if (!$scope.InfoFactura.CSD_B64 || !$scope.InfoFactura.key_B64) {
         setTimeout(isItReadyYet, 100);
