@@ -1,5 +1,5 @@
 (function () {
-  var MonitorReadController = function ($scope, $log, $cookieStore, $location, EmpresasXEmpresasFactory, PedidoDetallesFactory, $uibModal, $filter, FabricantesFactory, PedidosFactory) {
+  var MonitorReadController = function ($scope, $log, $cookieStore, $location, EmpresasXEmpresasFactory, PedidoDetallesFactory, $uibModal, $filter, FabricantesFactory, PedidosFactory, EmpresasFactory) {
     $scope.EmpresaSelect = 0;
     var Params = {};
     $scope.form = {};
@@ -247,7 +247,7 @@
       if (pedido.Cantidad !== pedido.CantidadProxima) {
         pedido.PorActualizarCantidad = 1;
       }
-      PedidoDetallesFactory.putPedidoDetalle(pedido)      
+      PedidoDetallesFactory.putPedidoDetalle(pedido)
         .success(function (result) {
           if (result.success == false) {
             $scope.ShowToast(result.message, 'danger');
@@ -288,7 +288,7 @@
     };
   };
 
-  MonitorReadController.$inject = ['$scope', '$log', '$cookieStore', '$location', 'EmpresasXEmpresasFactory', 'PedidoDetallesFactory', '$uibModal', '$filter', 'FabricantesFactory', 'PedidosFactory'];
+  MonitorReadController.$inject = ['$scope', '$log', '$cookieStore', '$location', 'EmpresasXEmpresasFactory', 'PedidoDetallesFactory', '$uibModal', '$filter', 'FabricantesFactory', 'PedidosFactory', 'EmpresasFactory'];
 
   angular.module('marketplace').controller('MonitorReadController', MonitorReadController);
 }());
