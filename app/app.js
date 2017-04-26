@@ -78,6 +78,16 @@
         }
       })
 
+      .when('/power-bi', {
+        controller: 'PowerBIReadController', templateUrl: 'app/views/PowerBI/PowerBIRead.html',
+        resolve: {
+          'check': function ($location, $cookieStore) {
+            var Session = $cookieStore.get('Session');
+            if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); }
+          }
+        }
+      })
+
       .when('/ConfigurarRPs/:IdEmpresa', {
         controller: 'EmpresasRPController', templateUrl: 'app/views/Empresas/EmpresasRP.html',
         resolve: {
