@@ -78,6 +78,16 @@
         }
       })
 
+      .when('/actualizar-datos-facturacion', {
+        controller: 'FacturacionCreateController', templateUrl: 'app/views/Facturacion/FacturacionCreate.html',
+        resolve: {
+          'check': function ($location, $cookieStore) {
+            var Session = $cookieStore.get('Session');
+            if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 2)) { $location.path('/404'); }
+          }
+        }
+      })
+
       .when('/power-bi', {
         controller: 'PowerBIReadController', templateUrl: 'app/views/PowerBI/PowerBIRead.html',
         resolve: {
