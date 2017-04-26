@@ -113,10 +113,15 @@
       return $http.get($rootScope.API + 'ValidarCredito/' + IdEmpresaDistribuidor);
     };
 
+    factory.updateAutomaticPayment = function (RealizarCargoProximo) {
+      factory.refreshToken();
+      return $http.patch($rootScope.API + 'enterprise/update-automatic-payment/' + RealizarCargoProximo);
+    };
+
     return factory;
   };
 
   EmpresasFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
 
   angular.module('marketplace').factory('EmpresasFactory', EmpresasFactory);
-} ());
+}());
