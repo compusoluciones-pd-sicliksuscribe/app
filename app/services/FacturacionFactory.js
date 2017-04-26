@@ -13,11 +13,6 @@
 
     factory.postDarDeAlta = function (datos) {
       factory.refreshToken();
-      console.log(datos)
-      // return $http.post($rootScope.API + 'billing-to-third-parties/signup', datos, {
-      //       transformRequest: angular.identity,
-      //       headers: {'Content-Type': undefined}
-      //   });
       return $http({
         method: 'POST',
         url: $rootScope.API + 'billing-to-third-parties/signup',
@@ -27,7 +22,7 @@
         },
         data: datos
       });
-    }
+    };
     return factory;
   };
 

@@ -6,8 +6,9 @@
     console.log($scope.SessionCookie, $scope.InfoFactura)
 
     function isItReadyYet() {
-      if (!$scope.InfoFactura.CSD_B64 || !$scope.InfoFactura.key_B64)
+      if (!$scope.InfoFactura.CSD_B64 || !$scope.InfoFactura.key_B64) {
         setTimeout(isItReadyYet, 100);
+      }
     }
 
     $scope.DarDeAlta = function () {
@@ -27,7 +28,6 @@
           .success(function (resultado) {
             if (resultado.success === 1) {
               $scope.ShowToast('Datos confirmados.', 'success');
-              // $location.path('/');
             }
           })
           .error(function (data, status, headers, config) {
@@ -39,10 +39,6 @@
           });
       }
     };
-
-    // $scope.Cancelar = function () {
-    //   $location.path('/');
-    // };
   };
   FacturacionCreateController.$inject = ['$scope', '$log', '$cookieStore', '$location', '$uibModal', '$filter', 'FacturacionFactory', '$routeParams'];
 
