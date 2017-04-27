@@ -83,7 +83,7 @@
         resolve: {
           'check': function ($location, $cookieStore) {
             var Session = $cookieStore.get('Session');
-            if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 2)) { $location.path('/404'); }
+            if (!(Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 2)) { $location.path('/404'); }
           }
         }
       })
