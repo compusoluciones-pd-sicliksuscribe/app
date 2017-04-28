@@ -1,8 +1,9 @@
 (function () {
   var FacturacionCreateController = function ($scope, $log, $cookieStore, $location, $uibModal, $filter, FacturacionFactory, $routeParams) {
     $scope.InfoFactura = {};
-    $scope.InfoFactura.nombre = $scope.SessionCookie.NombreEmpresa
-    $scope.InfoFactura.IdEmpresa = $scope.SessionCookie.IdEmpresa
+    $scope.InfoFactura.nombre = $scope.SessionCookie.NombreEmpresa;
+    $scope.InfoFactura.IdEmpresa = $scope.SessionCookie.IdEmpresa;
+    $scope.InfoFactura.IdUsuario = $scope.SessionCookie.IdUsuario;
 
     function isItReadyYet() {
       if (!$scope.InfoFactura.CSD_B64 || !$scope.InfoFactura.key_B64) {
@@ -21,6 +22,7 @@
         formData.append('rfc', InfoFactura.rfc);
         formData.append('nombre', InfoFactura.nombre);
         formData.append('IdEmpresa', InfoFactura.IdEmpresa);
+        formData.append('IdUsuario', InfoFactura.IdUsuario);
         formData.append('contrasenaCSD', InfoFactura.contrasenaCSD);
         setTimeout(isItReadyYet, 100);
         FacturacionFactory.postDarDeAlta(formData)
