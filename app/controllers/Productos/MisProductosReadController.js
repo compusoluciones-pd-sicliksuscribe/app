@@ -5,13 +5,14 @@
     $scope.precioCalculado;
     $scope.porcentaje;
     porcentajeAnterior = null;
-
+    $scope.IdEmpresa = 1;
     $scope.init = function () {
       $scope.btnGuardar = true;
       $scope.porcentaje = porcentajeAnterior = null;
       $scope.CheckCookie();
       ProductosFactory.getMisProductos()
         .success(function (misProductos) {
+          console.log(misProductos)
           $scope.Productos = misProductos.data;
         })
         .error(function (data, status, headers, config) {

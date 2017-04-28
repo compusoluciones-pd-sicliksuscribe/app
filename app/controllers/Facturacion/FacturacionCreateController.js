@@ -3,7 +3,6 @@
     $scope.InfoFactura = {};
     $scope.InfoFactura.nombre = $scope.SessionCookie.NombreEmpresa;
     $scope.InfoFactura.IdEmpresa = $scope.SessionCookie.IdEmpresa;
-    $scope.InfoFactura.IdUsuario = $scope.SessionCookie.IdUsuario;
 
     function isItReadyYet() {
       if (!$scope.InfoFactura.CSD_B64 || !$scope.InfoFactura.key_B64) {
@@ -22,7 +21,6 @@
         formData.append('rfc', InfoFactura.rfc);
         formData.append('nombre', InfoFactura.nombre);
         formData.append('IdEmpresa', InfoFactura.IdEmpresa);
-        formData.append('IdUsuario', InfoFactura.IdUsuario);
         formData.append('contrasenaCSD', InfoFactura.contrasenaCSD);
         setTimeout(isItReadyYet, 100);
         FacturacionFactory.postDarDeAlta(formData)
@@ -37,7 +35,6 @@
                 $scope.Mensaje = 'No pudimos enviar tu solicitud, por favor verifica tus datos o intenta de nuevo más tarde.';
                 $scope.ShowToast('No pudimos enviar tu solicitud, por favor verifica tus datos o intenta de nuevo más tarde.', 'danger');
               }
-              $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
             }
           })
           .error(function (data, status, headers, config) {
