@@ -1,8 +1,8 @@
 (function () {
   var FacturacionCreateController = function ($scope, $log, $cookieStore, $location, $uibModal, $filter, FacturacionFactory, $routeParams) {
     $scope.InfoFactura = {};
-    $scope.InfoFactura.nombre = $scope.SessionCookie.NombreEmpresa
-    $scope.InfoFactura.IdEmpresa = $scope.SessionCookie.IdEmpresa
+    $scope.InfoFactura.nombre = $scope.SessionCookie.NombreEmpresa;
+    $scope.InfoFactura.IdEmpresa = $scope.SessionCookie.IdEmpresa;
 
     function isItReadyYet() {
       if (!$scope.InfoFactura.CSD_B64 || !$scope.InfoFactura.key_B64) {
@@ -35,7 +35,6 @@
                 $scope.Mensaje = 'No pudimos enviar tu solicitud, por favor verifica tus datos o intenta de nuevo más tarde.';
                 $scope.ShowToast('No pudimos enviar tu solicitud, por favor verifica tus datos o intenta de nuevo más tarde.', 'danger');
               }
-              $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
             }
           })
           .error(function (data, status, headers, config) {
