@@ -5,12 +5,12 @@
     $scope.precioCalculado;
     $scope.porcentaje;
     porcentajeAnterior = null;
-    $scope.IdEmpresa = 1;
+
     $scope.init = function () {
       $scope.btnGuardar = true;
       $scope.porcentaje = porcentajeAnterior = null;
       $scope.CheckCookie();
-      ProductosFactory.getMisProductos($scope.IdEmpresa)
+      ProductosFactory.getMisProductos()
         .success(function (misProductos) {
           $scope.Productos = misProductos.data;
         })
@@ -25,18 +25,6 @@
       $scope.sortBy = Atributo;
       $scope.reverse = !$scope.reverse;
     };
-
-    $scope.refrescarMisProductos = function (IdEmpresa) {
-      ProductosFactory.getMisProductos($scope.IdEmpresa)
-        .success(function (misProductos) {
-          $scope.Productos = misProductos.data;
-        })
-        .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
-          $scope.ShowToast('No pudimos cargar la lista de productos, por favor intenta de nuevo más tarde.', 'danger');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
-    }
 
     $scope.init();
 
