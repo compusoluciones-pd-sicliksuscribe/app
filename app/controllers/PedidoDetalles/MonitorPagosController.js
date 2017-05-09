@@ -1,5 +1,5 @@
 (function () {
-  var MonitorPagos = function ($scope, $log, $cookieStore, $location, $uibModal, $filter, PedidoDetallesFactory) {
+  var MonitorPagos = function ($scope, $log, $cookieStore, $location, $uibModal, $filter, PedidoDetallesFactory, EmpresasFactory) {
     $scope.PedidoSeleccionado = 0;
     $scope.PedidosSeleccionadosParaPagar = [];
     $scope.PedidosObj = {};
@@ -17,7 +17,7 @@
         groups[group].push(o);
       });
       return Object.keys(groups).map(function (group) { return groups[group]; });
-    }
+    };
 
     $scope.init = function () {
       $location.path('/MonitorPagos');
@@ -41,12 +41,43 @@
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
 
+      if ($cookieStore.get('Session').IdTipoAcceso == 2 || $cookieStore.get('Session').IdTipoAcceso == 3) {
+        EmpresasFactory.getEmpresa($cookieStore.get('Session').IdEmpresa)
+          .success(function (empresa) {
+            console.log(empresa);
+            $scope.infoEmpresa = empresa[0];
+          })
+          .error(function (data, status, headers, config) {
+            $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+
+            $scope.ShowToast('No pudimos cargar la información, por favor intenta de nuevo más tarde.', 'danger');
+
+            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          });
+      }
     };
     $scope.init();
 
+    $scope.ActualizarPagoAutomatico = function () {
+      console.log($scope.infoEmpresa.RealizarCargoAutomatico);
+      EmpresasFactory.updateAutomaticPayment($scope.infoEmpresa.RealizarCargoAutomatico)
+        .success(function (result) {
+          if (result.success === 1) {
+            $scope.ShowToast(result.message, 'success');
+          }
+        })
+        .error(function (data, status, headers, config) {
+          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+
+          $scope.ShowToast('No pudimos cargar la información, por favor intenta de nuevo más tarde.', 'danger');
+
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+    };
+
     $scope.obtenerSubTotal = function (key) {
-      let subtotal = 0;
-      for (let x = 0; x < $scope.Pedidos.length; x++) {
+      var subtotal = 0;
+      for (var x = 0; x < $scope.Pedidos.length; x++) {
         if ($scope.Pedidos[x].IdPedido == key) {
           subtotal += $scope.Pedidos[x].PrecioRenovacion * $scope.Pedidos[x].CantidadProxima;
         }
@@ -55,7 +86,7 @@
     };
 
     $scope.seleccionarTodos = function () {
-      for (let x = 0; x < $scope.PedidosAgrupados.length; x++) {
+      for (var x = 0; x < $scope.PedidosAgrupados.length; x++) {
         if ($scope.PedidosObj[$scope.PedidosAgrupados[x][0].IdPedido].Check !== $scope.todos) {
           $scope.PedidosObj[$scope.PedidosAgrupados[x][0].IdPedido].Check = $scope.todos;
           $scope.pedidosPorPagar($scope.PedidosAgrupados[x][0].IdPedido);
@@ -64,13 +95,13 @@
     };
 
     $scope.pedidosPorPagar = function (key) {
-      for (let y = 0; y < $scope.Pedidos.length; y++) {
+      for (var y = 0; y < $scope.Pedidos.length; y++) {
         if ($scope.Pedidos[y].IdPedido == key) {
           if (!$scope.PedidosObj[key].Check) {
             if ($scope.todos) {
               $scope.todos = 0;
             }
-            for (let x = 0; x < $scope.PedidosSeleccionadosParaPagar.length; x++) {
+            for (var x = 0; x < $scope.PedidosSeleccionadosParaPagar.length; x++) {
               if (key == $scope.PedidosSeleccionadosParaPagar[x]) {
                 $scope.PedidosSeleccionadosParaPagar.splice(x, 1);
               }
@@ -184,7 +215,7 @@
       }
     };
   };
-  MonitorPagos.$inject = ['$scope', '$log', '$cookieStore', '$location', '$uibModal', '$filter', 'PedidoDetallesFactory'];
+  MonitorPagos.$inject = ['$scope', '$log', '$cookieStore', '$location', '$uibModal', '$filter', 'PedidoDetallesFactory', 'EmpresasFactory'];
 
   angular.module('marketplace').controller('MonitorPagos', MonitorPagos);
 }());

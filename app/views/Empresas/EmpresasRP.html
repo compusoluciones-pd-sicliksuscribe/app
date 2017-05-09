@@ -1,0 +1,126 @@
+<div class="container" ng-swipe-right="" ng-swipe-left="">
+
+  <div class="form-group row">
+    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+      <h2 style="float:left;">Administrador de RPs</h2>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+      <label for="Busqueda">&nbsp;</label>
+      <div class="form-group has-feedback">
+        <input name="Busqueda" type="text" ng-model="EmpresaFilter" class="form-control" size="30" placeholder="Busca un cliente..."
+        />
+        <i class="form-control-feedback glyphicon glyphicon-search"></i>
+      </div>
+
+    </div>
+  </div>
+
+  <br>
+
+  <div ng-show="!(Empresas.length > 0)">
+    <h4>El distribuidor no tiene clientes...</h4>
+  </div>
+
+  <div ng-show="Empresas.length > 0">
+
+    <div class="form-group row">
+      <div class="col-xs-10 col-sm-10 col-md-2 col-lg-2 pesosCredit" style="margin-top:13px">
+      </div>
+      <div class="col-xs-10 col-sm-10 col-md-4 col-lg-4 pesosCredit" style="margin-top:13px">
+        <div class="form-group">
+          <b><h3 style="color:#00549F;">Aplicar para todos</h3></b>
+        </div>
+      </div>
+      <div class="col-xs-10 col-sm-10 col-md-3 col-lg-3 pesosCredit" style="margin-top:13px;">
+        <div class="form-group">
+          <label labelfor="Cantidad" title="Tipo de cambio protegido.">Tipo de cambio protegido en pesos: </label>
+          <div class="input-group">
+            <span class="input-group-addon">$</span>
+            <input id="Cantidad" name="Cantidad" type="text" ng-model="RPTodos" class="form-control" value="0" step="1000" placeholder="Tipo de cambio protegido."
+            />
+          </div>
+          <br>
+          <div ng-show="MostrarMensajeError">
+            <p style="color:red">Ingresa una cantidad valida.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-2 col-sm-2 col-md-1 col-lg-1" style="margin-top:13px;">
+        <div class="form-group">
+          <div class="pull-left" ng-show="SessionCookie.IdTipoAcceso === 1">
+            <label labelfor="aActualizar"></label>
+            <h4>
+              <a id="aActualizar" type="submit" title="Guardar" ng-click="ActualizarTodos();" ng-show="!frmCantidad.Cantidad.$error.max">
+                <span class="fa fa-floppy-o" style="cursor:pointer"></span>
+              </a>
+            </h4>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+        <table class="table table-hover table-responsive border-left-right-cero">
+
+          <th style="cursor:pointer" ng-click="OrdenarPor('NombreEmpresa')"><b>&nbsp;Nombre <span class="fa fa-sort"></span></b></th>
+
+          <tr ng-repeat="Empresa in Empresas | filter:EmpresaFilter | orderBy:sortBy:reverse" class="repeat-animation">
+            <td>
+              <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                  <div class="form-group">
+                    <b><h3 style="color:#00549F;">{{Empresa.NombreEmpresa}}</h3></b>
+                    <b>RFC:</b> {{Empresa.RFC}}
+                    <br>
+                    <b>Activo desde el:</b> {{Empresa.FechaActivo | date:'d/MM/yyyy hh:mm a'}}
+                  </div>
+                </div>
+
+
+                <form name="frmCantidad" id="frmCantidad">
+
+                  <div class="col-xs-10 col-sm-10 col-md-3 col-lg-3 pesosCredit" style="margin-top:13px;">
+                    <div class="form-group">
+                      <label labelfor="Cantidad" title="Tipo de cambio protegido.">Tipo de cambio protegido en pesos: </label>
+                      <div class="input-group">
+                        <span class="input-group-addon">$</span>
+                        <input id="Cantidad" name="Cantidad" type="text" ng-model="Empresa.TipoCambioRP" class="form-control" value="0" step="1000"
+                          placeholder="Tipo de cambio protegido." maxlength="9" />
+                      </div>
+                      <br>
+                      <div ng-show="Empresa.MostrarMensajeError">
+                        <p style="color:red">Ingresa una cantidad valida.</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-xs-2 col-sm-2 col-md-1 col-lg-1" style="margin-top:13px;">
+                    <div class="form-group">
+                      <div class="pull-left" ng-show="SessionCookie.IdTipoAcceso === 1">
+                        <label labelfor="aActualizar"></label>
+                        <h4>
+                          <a id="aActualizar" type="submit" title="Guardar" ng-click="ActualizarRP(Empresa);">
+                            <span class="fa fa-floppy-o" style="cursor:pointer"></span>
+                          </a>
+                        </h4>
+                      </div>
+                    </div>
+                  </div>
+
+                </form>
+
+              </div>
+            </td>
+          </tr>
+        </table>
+
+      </div>
+    </div>
+
+    <b>Número total de clientes:</b> {{ Empresas.length }}.
+
+  </div>
+
+</div>

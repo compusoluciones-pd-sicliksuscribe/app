@@ -53,17 +53,47 @@
         resolve: {
           'check': function ($location, $cookieStore) {
             var Session = $cookieStore.get('Session');
-            if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3 )) { $location.path('/404'); }
+            if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3)) { $location.path('/404'); }
           }
         }
       })
 
-       .when('/solicitar-soporte', {
+      .when('/solicitar-soporte', {
         controller: 'SoporteCreateController', templateUrl: 'app/views/Soporte/SoporteCreate.html',
         resolve: {
           'check': function ($location, $cookieStore) {
             var Session = $cookieStore.get('Session');
             if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3)) { $location.path('/404'); }
+          }
+        }
+      })
+
+      .when('/actualizar-soporte/:idSoporte', {
+        controller: 'SoporteUpdateController', templateUrl: 'app/views/Soporte/SoporteUpdate.html',
+        resolve: {
+          'check': function ($location, $cookieStore) {
+            var Session = $cookieStore.get('Session');
+            if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); }
+          }
+        }
+      })
+
+      .when('/power-bi', {
+        controller: 'PowerBIReadController', templateUrl: 'app/views/PowerBI/PowerBIRead.html',
+        resolve: {
+          'check': function ($location, $cookieStore) {
+            var Session = $cookieStore.get('Session');
+            if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); }
+          }
+        }
+      })
+
+      .when('/ConfigurarRPs/:IdEmpresa', {
+        controller: 'EmpresasRPController', templateUrl: 'app/views/Empresas/EmpresasRP.html',
+        resolve: {
+          'check': function ($location, $cookieStore) {
+            var Session = $cookieStore.get('Session');
+            if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); }
           }
         }
       })
@@ -103,7 +133,7 @@
         resolve: {
           'check': function ($location, $cookieStore) {
             var Session = $cookieStore.get('Session');
-            if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3 )) { $location.path('/404'); }
+            if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3)) { $location.path('/404'); }
           }
         }
       })
@@ -118,7 +148,7 @@
         }
       })
 
-      
+
 
       .when('/Usuario', {
         controller: 'UsuariosCreateController', templateUrl: 'app/views/Usuarios/UsuariosCreate.html',
