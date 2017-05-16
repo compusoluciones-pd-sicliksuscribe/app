@@ -97,7 +97,7 @@
               .success(function (UsuariosXEmpresas) {
                 if (UsuariosXEmpresas.length === 0) {
                   $scope.ShowToast('Agrega un administrador, para el distribuidor.', 'danger');
-                } else {
+                } else {         
                   var ObjMicrosoft = {
                     RFC: $scope.Empresa.RFC,
                     NombreEmpresa: DatosMicrosoft.company_name,
@@ -105,8 +105,8 @@
                     Ciudad: DatosMicrosoft.default_address.city,
                     Estado: DatosMicrosoft.default_address.region,
                     CodigoPostal: DatosMicrosoft.default_address.postal_code,
-                    NombreContacto: DatosMicrosoft.first_name,
-                    ApellidosContacto: DatosMicrosoft.last_name,
+                    NombreContacto: DatosMicrosoft.first_name || DatosMicrosoft.default_address.first_name,
+                    ApellidosContacto: DatosMicrosoft.last_name || DatosMicrosoft.default_address.last_name,
                     CorreoContacto: $scope.Empresa.CorreoContacto,
                     TelefonoContacto: DatosMicrosoft.default_address.phone_number,
                     ZonaImpuesto: 'Normal',
@@ -115,7 +115,7 @@
                     DominioMicrosoftUF: Dominio,
                     IdEmpresaDistribuidor: IdEmpresaDistribuidor,
                     IdUsuario: UsuariosXEmpresas[0].IdUsuario
-                  };
+                  };                  
                   EmpresasFactory.postEmpresaMicrosoft(ObjMicrosoft)
                     .success(function (result) {
                       $location.path("/Empresas");
