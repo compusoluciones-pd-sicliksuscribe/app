@@ -83,6 +83,16 @@
     };
     $scope.EmpresaImportar = function () {
       $scope.ValidarRFC();
+      if($scope.Empresa.MonedaPago !== 'Pesos' && $scope.Empresa.MonedaPago !== 'Dólares') {
+        return $scope.ShowToast('Selecciona una moneda de pago.', 'danger');
+      }
+      if($scope.Empresa.IdFormaPagoPredilecta != 1 && $scope.Empresa.IdFormaPagoPredilecta != 2) {
+        return $scope.ShowToast('Selecciona una forma de pago.', 'danger');
+      }
+      if($scope.Empresa.MonedaPago === 'Dólares' && $scope.Empresa.IdFormaPagoPredilecta == 1){
+        return $scope.ShowToast('Para pagar con tarjeta es necesario que la moneda sea Pesos.', 'danger');
+      }
+
       var ObjRFC = {
         RFC: $scope.Empresa.RFC
       };
@@ -114,7 +124,9 @@
                     IdMicrosoftUF: IdMicrosoft,
                     DominioMicrosoftUF: Dominio,
                     IdEmpresaDistribuidor: IdEmpresaDistribuidor,
-                    IdUsuario: UsuariosXEmpresas[0].IdUsuario
+                    IdUsuario: UsuariosXEmpresas[0].IdUsuario,
+                    MonedaPago: $scope.Empresa.MonedaPago,
+                    FormaPago: $scope.Empresa.IdFormaPagoPredilecta,
                   };                  
                   EmpresasFactory.postEmpresaMicrosoft(ObjMicrosoft)
                     .success(function (result) {
