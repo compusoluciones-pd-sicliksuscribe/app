@@ -1,1 +1,193 @@
-<div class="landingContainer"> <section class="principalProducts"> <div class="container-fluid"> <div> <div style="height:500px;"> <uib-carousel interval="5000" no-wrap="false"> <uib-slide ng-repeat="Promocion in Promociones | limitTo: 5" active="slide.active"> <div class="img-responsive"> <img class="imageBanner" ng-src="{{Promocion.Url}}" style="float:right; margin-right:10%; width:600px; height:400px;"> </div> <div class="carousel-caption" style="height:500px;"> <h4>{{Promocion.Nombre}}</h4> <p>{{Promocion.Descripcion}}</p> <button class="btn btn-success" ng-click="goToPage('Productos/{{Promocion.CodigoProducto}}');" ng-show="SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3">Comprar</button> <div class="sliderMessage" ng-show="!(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)"> Para comprar este producto, ponte en contacto con tu distribuidor </div> </div> </uib-slide> </uib-carousel> </div> </div> </div> </section> </div>
+<div class="landingContainer">
+
+	<!--<section class="home">
+
+		<div class="container">
+			<div class="col-md-12">
+				<div class="col-md-4">
+					<div class="center-block">
+						<img src="images/icon1.png">
+					</div>
+					<h1>SUSCRIPCIONES</h1>
+					<p>
+						La suscripción ofrece una experiencia de cliente simplificada, costos iniciales más bajos y la posibilidad de pagar por el
+						software durante el tiempo que sea más conveniente para usted.
+					</p>
+				</div>
+
+				<div class="col-md-4">
+					<div class="center-block">
+						<img src="images/icon2.png">
+					</div>
+					<h1>ELIGE EL TIEMPO</h1>
+					<p>
+						Tú decides el tiempo de tu suscripción, cancela la renovación suscripción o disminuye asientos con la facilidad de un click.
+					</p>
+				</div>
+
+				<div class="col-md-4">
+					<div class="center-block">
+						<img src="images/icon3.png">
+					</div>
+					<h1>FORMAS DE PAGO</h1>
+					<p>
+						Utiliza tu crédito CompuSoluciones o paga con tu tarjeta bancaria desde la comodidad de cualquier dispositivo móvil.
+					</p>
+				</div>
+
+			</div>
+
+		</div>
+
+	</section>-->
+
+	<!--<div class="separador">
+		<img src="images/separador.png">
+	</div>-->
+
+	<!--<section class="AutocadProducts">
+
+		<div class="col-md-6">
+
+			<div class="col-md-4">
+
+				<div class="image1" style="float:left;">
+					<img src="images/autocad1.png">
+				</div>
+
+			</div>
+
+			<div class="col-md-8">
+				<div class="productOne">
+					<h1>AUTOCAD</h1>
+					<p>
+						Diseñe y dé forma al mundo que lo rodea con poderosas herramientas de diseño conectadas en el software AutoCAD.
+					</p>
+					<button class="btn btn-success" ng-click="goToPage('Productos/Autocad');" ng-show="SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3">Comprar</button>
+					<div ng-show="!(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
+						Para comprar estos productos, ponte en contacto con tu distribuidor</div>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="col-md-6">
+			<div class="col-md-8">
+				<div class="productOne">
+					<h1>3D MAX</h1>
+					<p>
+						Dé vida a personajes y entornos en menos tiempo con el software 3D personalizado y de colaboración 3ds Max ®.
+					</p>
+					<button class="btn btn-success" ng-click="goToPage('Productos/3D');" ng-show="SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3">Comprar</button>
+					<div ng-show="!(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
+						Para comprar estos productos, ponte en contacto con tu distribuidor</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="image2" style="float:left;">
+					<img src="images/3dmaxImage.png">
+				</div>
+			</div>
+		</div>
+	</section>-->
+
+	<!--<div parallax-background parallax-ratio="0.1" class="thirdProduct">
+		<div class="container">
+			<div class="col-md-6 imageProductMicrosoft">
+				<img src="images/logoAzure.svg" />
+			</div>
+			<div class="col-md-6 secondaryText">
+				<h2>Microsoft Azure</h2>
+				<h3>Servicios en la Nube, Bajo Consumo / On Demand</h3>
+				<p>
+					Bajo este esquema el Partner/cliente cuenta con toda la flexibilidad de consumir los servicios de Azure de acuerdo a sus
+					necesidades. En este escenario, solo pagas de acuerdo a tu consumo. Esto se traduce en un importante ahorro, además
+					de seguridad y tranquilidad de saber que, si tu negocio crece, la tecnología que necesitas para operarla crece y está
+					a tu alcance en minutos.
+				</p>
+				<button class="btn btn-primary" ng-click="goToPage('Productos/Azure');" ng-show="SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3">Ver Productos</button>
+				<div ng-show="!(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">Para comprar este producto, ponte en contacto con tu distribuidor</div>
+			</div>
+		</div>
+
+
+
+	</div>-->
+
+	<section class="principalProducts">
+
+		<div class="container-fluid">
+			<div>
+				<!--<br><br><br>-->
+				<div style="height:500px;">
+					<uib-carousel interval="5000" no-wrap="false">
+
+						<uib-slide ng-repeat="Promocion in Promociones | limitTo: 5" active="slide.active">
+							<div class="img-responsive">
+								<img class="imageBanner" ng-src="{{Promocion.Url}}" style="float:right; margin-right:10%; width:600px; height:400px;">
+							</div>
+							<div class="carousel-caption" style="height:500px;">
+								<h4>{{Promocion.Nombre}}</h4>
+								<p>{{Promocion.Descripcion}}</p>
+
+								<button class="btn btn-success" ng-click="goToPage('Productos/{{Promocion.CodigoProducto}}');" ng-show="SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3">Comprar</button>
+
+								<div class="sliderMessage" ng-show="!(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
+									Para comprar este producto, ponte en contacto con tu distribuidor
+								</div>
+
+							</div>
+						</uib-slide>
+
+					</uib-carousel>
+				</div>
+
+			</div>
+
+		</div>
+
+	</section>
+
+	<!--<div parallax-background parallax-ratio="0.2" class="FourProduct">
+
+
+		<div class="col-md-6 text">
+			<h3>EMS</h3>
+			<p>
+				Es la única solución diseñada para administrar los dispositivos móviles y brindar seguridad para proteger a todo usuario,
+				dispositivo, aplicación y datos al ser una plataforma que permite compatibilidad con protección de datos para iOS, Android,
+				Windows, Windows Phone y más de 2500 aplicaciones SaaS populares.
+			</p>
+			<button class="btn btn-warning" ng-click="goToPage('Productos/Enterprise Mobility');" ng-show="SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3">Ver Productos</button>
+			<div ng-show="!(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">Para comprar este producto, ponte en contacto con tu distribuidor</div>
+		</div>
+
+
+
+	</div>
+
+	<div class="FifhtProduct">
+
+		<div class="col-md-6 img">
+			<img class="img-responsive" src="images/officeImg.png" />
+		</div>
+
+
+		<div class="col-md-6 text">
+			<h3>O365</h3>
+			<p>
+				O365 es sinónimo de negocio, conexión, colaboración y control con tecnología de nube que permite realizar tareas desde cualquier
+				lugar y desde cualquier dispositivo, trabajar de manera conjunta y de forma sencilla, acceder a tus aplicaciones y archivos
+				desde prácticamente cualquier PC, Mac y tableta; entre muchos otros beneficios.
+			</p>
+			<button class="btn btn-warning" ng-click="goToPage('Productos/365');" ng-show="SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3">Ver Productos</button>
+			<div ng-show="!(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">Para comprar este producto, ponte en contacto con tu distribuidor</div>
+		</div>
+
+
+
+
+
+	</div>-->
+
+</div>

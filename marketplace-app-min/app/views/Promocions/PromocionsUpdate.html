@@ -1,1 +1,71 @@
-<div class="container"> <h2>Promoción</h2> <form name="frm"> <hr> <div class="form-group row"> <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"> </div> <div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div> </div> <br> <div class="form-group row"> <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"> <div class="pull-rigth"> <label>Nombre Promoción* </label> <input name="Nombre" type="text" ng-model="Promocion.Nombre" class="form-control" placeholder="Nombre Promoción" size="255" ng-maxlength="45" required=""/> <b style="color:red" ng-show="frm.Nombre.$invalid && !frm.Nombre.$pristine" class="help-block">Capture un nombre de promoción válido.</b> </div> </div> <div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div> </div> <div class="form-group row"> <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"> <div class="pull-rigth"> <label>Código Producto* </label> <input name="CodigoProducto" type="text" ng-model="Promocion.CodigoProducto" class="form-control" placeholder="Código Producto" size="255" ng-maxlength="255" required=""/> <b style="color:red" ng-show="frm.CodigoProducto.$invalid && !frm.CodigoProducto.$pristine" class="help-block">El código del producto es requerido.</b> </div> </div> <div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div> </div> <div class="form-group row"> <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"> <div class="pull-rigth"> <label>Descripción Promoción </label> <textarea name="Descripcion" type="text" rows="4" cols="50" ng-model="Promocion.Descripcion" class="form-control" placeholder="Descripción Promoción" size="255" ng-maxlength="255"></textarea> <b style="color:red" ng-show="frm.Descripcion.$invalid && !frm.Descripcion.$pristine" class="help-block">Ha excedido el número de caracteres permitidos..</b> </div> </div> <div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div> </div> <div class="form-group row"> <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"> <div class="pull-rigth" ng-show = "Promocion.estatusImagen == 1" class="form-group row"> <img ng-src = "{{ Promocion.Url }}" class="img-thumbnail img.responsive"/><br> </div> </div> </div> <div class="form-group row"> <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"> <a ng-click="PromocionDelete()">Eliminar&nbsp;<span class="glyphicon glyphicon-trash"></span></a> </div> <div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div> </div> <div class="form-group row"> <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12"> </div> <div class="col-xs-0 col-sm-0 col-md-2 col-lg-2"> <div class="form-group"> <button type="submit" ng-click="PromocionUpdate()" class="btn btn-primary btn-block">Aceptar</button> </div> </div> <div class="col-xs-0 col-sm-0 col-md-2 col-lg-2"> <div class="form-group"> <button type="button" ng-click="PromocionCancel()" class="btn btn-warning btn-block">Cancelar</button> </div> </div> </div> </form> </div>
+<div class="container">
+    <h2>Promoción</h2>
+    <form name="frm">
+        <hr>
+        <div class="form-group row">
+            <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+            </div>
+            <div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div>
+        </div>
+        <br>
+        <div class="form-group row">
+            <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                <div class="pull-rigth">
+                    <label>Nombre Promoción* </label>
+                    <input name="Nombre" type="text" ng-model="Promocion.Nombre" class="form-control" placeholder="Nombre Promoción" size="255" ng-maxlength="45" required="" />
+                    <b style="color:red" ng-show="frm.Nombre.$invalid && !frm.Nombre.$pristine" class="help-block">Capture un nombre de promoción válido.</b>
+                </div>
+            </div>
+            <div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div>
+        </div>
+        <div class="form-group row">
+            <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                <div class="pull-rigth">
+                    <label>Código Producto* </label>
+                    <input name="CodigoProducto" type="text" ng-model="Promocion.CodigoProducto" class="form-control" placeholder="Código Producto" size="255" ng-maxlength="255" required="" />
+                    <b style="color:red" ng-show="frm.CodigoProducto.$invalid && !frm.CodigoProducto.$pristine" class="help-block">El código del producto es requerido.</b>
+                </div>
+            </div>
+            <div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div>
+        </div>
+        <div class="form-group row">
+            <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                <div class="pull-rigth">
+                    <label>Descripción Promoción </label>
+                    <textarea name="Descripcion" type="text" rows="4" cols="50" ng-model="Promocion.Descripcion" class="form-control" placeholder="Descripción Promoción"
+                    size="255" ng-maxlength="255"></textarea>
+                    <b style="color:red" ng-show="frm.Descripcion.$invalid && !frm.Descripcion.$pristine" class="help-block">Ha excedido el número de caracteres permitidos..</b>
+                </div>
+            </div>
+            <div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div>
+        </div>
+        <div class="form-group row">
+            <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                <div class="pull-rigth" ng-show = "Promocion.estatusImagen == 1" class="form-group row">
+                    <img ng-src = "{{ Promocion.Url }}" class="img-thumbnail img.responsive"/><br>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                <a ng-click="PromocionDelete()">Eliminar&nbsp;<span class="glyphicon glyphicon-trash"></span></a>
+            </div>
+            <div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div>
+        </div>
+        <div class="form-group row">
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            </div>
+            <div class="col-xs-0 col-sm-0 col-md-2 col-lg-2">
+                <div class="form-group">
+                    <button type="submit" ng-click="PromocionUpdate()" class="btn btn-primary btn-block">Aceptar</button>
+                </div>
+            </div>
+            <div class="col-xs-0 col-sm-0 col-md-2 col-lg-2">
+                <div class="form-group">
+                    <button type="button" ng-click="PromocionCancel()" class="btn btn-warning btn-block">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>

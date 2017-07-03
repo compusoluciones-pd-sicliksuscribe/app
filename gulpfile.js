@@ -4,6 +4,7 @@ var compressor = require('gulp-compressor');
 var notify = require('gulp-notify');
 var sass = require('gulp-sass');
 var browserSync = require('browser-sync').create();
+var htmlmin = require('gulp-htmlmin');
 
 gulp.task('browser-sync', function () {
   browserSync.init({
@@ -17,7 +18,7 @@ gulp.task('browser-sync', function () {
 gulp.task('html', function () {
   return gulp
     .src('./app/**/**/*.html')
-    .pipe(compressor())
+   // .pipe(htmlmin({collapseWhitespace: true}))
     .pipe(gulp.dest('./marketplace-app-min/app'));
 });
 
@@ -25,11 +26,11 @@ gulp.task('compress', function () {
   return gulp
     .src('./app/**/**/*.js')
     .pipe(concat('all.js'))
-    .pipe(compressor({
-      'executeOption': {
-        maxBuffer: 10000 * 1024
-      }
-    }))
+    // .pipe(compressor({
+    //   'executeOption': {
+    //     maxBuffer: 10000 * 1024
+    //   }
+    // }))
     .pipe(gulp.dest('./marketplace-app-min/app'));
 });
 

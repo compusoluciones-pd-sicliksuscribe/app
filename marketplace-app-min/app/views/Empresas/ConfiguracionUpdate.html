@@ -1,1 +1,69 @@
-<div class="container"> <h2>Mi sitio</h2> <form name="frm" ng-swipe-right="UsuarioCancel()"> <hr> <div class="form-group row"> <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"> <div class="pull-rigth"> <label>Subdominio próximamente *</label> {{miSitio.Subdominio}}.clicksuscribe.com <input name="Subdominio" type="text" ng-model="miSitio.Subdominio" class="form-control" placeholder="Subdominio"/> <b style="color:red" ng-show="frm.Subdominio.$invalid && !frm.Subdominio.$pristine" class="help-block">Escribe un subdominio válido.</b> </div> </div> <div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div> </div> <div class="form-group row"> <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"> <div class="pull-rigth"> <label>Distintivo para menú *</label> <a href="{{miSitio.UrlLogo}}" ng-show="miSitio.UrlLogo != null" target="_blanc">descargar</a> <br> Formato: jpg, png, jpeg, bmp, gif. ancho: 365px, alto: 124px <input type="file" id="fileUploadImagen" nv-file-select="" ng-model="miSitio.UrlLogo" uploader="uploader"/> </div> </div> <div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div> </div> <div class="form-group row"> <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"> <div class="pull-rigth"> <label><input id="SubdominioActivo" type="checkbox" ng-checked="miSitio.SubdominioActivo" ng-true-value="1" ng-false-value="0" ng-model="miSitio.SubdominioActivo"> Activar mi sitio para mis clientes.</label> </div> </div> <div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div> </div> <br> <div class="form-group row"> <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"> <div class="pull-rigth"> <a href="https://s3.amazonaws.com/marketplace.compusoluciones.com/TuClick.pdf" target="_blanc">Términos y condiciones</a> </div> </div> <div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div> </div> <div class="form-group row"> <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"> <div class="pull-rigth"> <label><b>Acepto expresamente el citado contrato, los términos y condiciones, manifestando bajo protesta de decir verdad que cuento con la capacidad suficiente para contratar y obligarme en términos de los mismos. Acuso de recibo el presente mensaje de datos, siendo de mi conocimiento que la información contenida en este, se mantendrá integra y será accesible a mi ulterior consulta.</b></label> <br> <label><input id="Activo" type="checkbox" ng-checked="miSitio.SubdominioAceptoTerminos" ng-true-value="1" ng-false-value="0" ng-model="miSitio.SubdominioAceptoTerminos"> Sí acepto.</label> </div> </div> <div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div> </div> <div class="form-group row"> <div class="col-xs-0 col-sm-0 col-md-2 col-lg-2"> <div class="form-group"> <button type="submit" ng-click="Guardar();" class="btn btn-primary btn-block">Guardar cambios</button> </div> </div> </div> </form> </div>
+<div class="container">
+	<h2>Mi sitio</h2>
+	<form name="frm" ng-swipe-right="UsuarioCancel()">
+		<hr>
+		<div class="form-group row">
+			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+				<div class="pull-rigth">
+					<label>Subdominio próximamente *</label> {{miSitio.Subdominio}}.clicksuscribe.com
+					<input name="Subdominio" type="text" ng-model="miSitio.Subdominio" class="form-control" placeholder="Subdominio" />
+					<b style="color:red" ng-show="frm.Subdominio.$invalid && !frm.Subdominio.$pristine" class="help-block">Escribe un subdominio válido.</b>
+				</div>
+			</div>
+			<div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div>
+		</div>
+
+		<div class="form-group row">
+			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+				<div class="pull-rigth">
+					<label>Distintivo para menú *</label> <a href="{{miSitio.UrlLogo}}" ng-show="miSitio.UrlLogo != null" target="_blanc">descargar</a>
+					<br>
+					Formato: jpg, png, jpeg, bmp, gif. ancho: 365px, alto: 124px 
+					<input type="file" id="fileUploadImagen" nv-file-select="" ng-model="miSitio.UrlLogo" uploader="uploader" />
+				</div>
+			</div>
+			<div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div>
+		</div>
+
+		<div class="form-group row">
+			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+				<div class="pull-rigth">
+					<label><input id="SubdominioActivo" type="checkbox" ng-checked="miSitio.SubdominioActivo" ng-true-value="1" ng-false-value="0" ng-model="miSitio.SubdominioActivo"> Activar mi sitio para mis clientes.</label>
+				</div>
+			</div>
+			<div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div>
+		</div>
+
+        <br>
+
+		<div class="form-group row">
+			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+				<div class="pull-rigth">
+					<a href="https://s3.amazonaws.com/marketplace.compusoluciones.com/TuClick.pdf" target="_blanc">Términos y condiciones</a>
+				</div>
+			</div>
+			<div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div>
+		</div>
+
+		<div class="form-group row">
+			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+				<div class="pull-rigth">
+					<label><b>Acepto expresamente el citado contrato, los términos y condiciones, manifestando bajo protesta de decir verdad que cuento con la capacidad suficiente para contratar y obligarme en términos de los mismos. Acuso de recibo el presente mensaje de datos, siendo de mi conocimiento que la información contenida en este, se mantendrá integra y será accesible a mi ulterior consulta.</b></label>
+					<br>
+                    <label><input id="Activo" type="checkbox" ng-checked="miSitio.SubdominioAceptoTerminos" ng-true-value="1" ng-false-value="0" ng-model="miSitio.SubdominioAceptoTerminos"> Sí acepto.</label>
+				</div>
+			</div>
+			<div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div>
+		</div>
+
+
+		<div class="form-group row">
+			<div class="col-xs-0 col-sm-0 col-md-2 col-lg-2">
+				<div class="form-group">
+					<button type="submit" ng-click="Guardar();" class="btn btn-primary btn-block">Guardar cambios</button>
+				</div>
+			</div>
+		</div>
+	</form>
+
+</div>

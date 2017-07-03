@@ -33,7 +33,7 @@
         resolve: {
           'check': function ($location, $cookieStore) {
             var Session = $cookieStore.get('Session');
-            if (!(Session.IdTipoAcceso === 2)) { $location.path('/404'); }
+            if (!(Session.IdTipoAcceso === 2 && Session.IdEmpresa == 214)) { $location.path('/404'); }
           }
         }
       })
@@ -43,7 +43,7 @@
         resolve: {
           'check': function ($location, $cookieStore) {
             var Session = $cookieStore.get('Session');
-            if (!(Session.IdTipoAcceso === 2)) { $location.path('/404'); }
+            if (!(Session.IdTipoAcceso === 2 && Session.IdEmpresa == 214)) { $location.path('/404'); }
           }
         }
       })

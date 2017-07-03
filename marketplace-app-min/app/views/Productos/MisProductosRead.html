@@ -1,1 +1,116 @@
-<div class="container login" ng-swipe-right="" ng-swipe-left=""> <div class="form-group row"> <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8"> <h2 style="float:left;">Mis productos<i class="fa fa-question-circle tourButton" style="cursor:help; float:right; font-size:12px; margin-left:10px; margin-top:10px;" ng-click="IniciarTourMisProductos();"></i></h2> </div> <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 searchOption"> <label for="Busqueda">&nbsp;</label> <div class="form-group has-feedback"> <input type="text" ng-model="ProductoFilter" class="form-control" size="30" placeholder="Busca productos..."/> <i class="form-control-feedback glyphicon glyphicon-search"></i> </div> </div> </div> <div class="form-group row"> <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" style="float:right;"> <div class="input-group"> <input type="number" min="0" class="form-control txtPercent" placeholder="Ingrese el porcentaje de utilidad deseada" ng-model="porcentaje" ng-change="calcularPrecioVenta();"/> <span class="input-group-btn"> <button class="btn btn-default btnReset" style="background: #68953B;" type="button" title="Restaurar" ng-click="init();"> <span class="glyphicon glyphicon-erase white"></span> </button> <button class="btn btn-default btnSaveAll" style="background: #00549F;" type="button" ng-model="btnGuardar" title="Guardar Todo" ng-disabled="btnGuardar" ng-click="guardarTodo();"> <span class="glyphicon glyphicon-floppy-disk white"></span> </button> </span> </div> <p style="margin-left: 5px; margin-top: 5px; text-align: justify; font-size: smaller;"> <b>Nota importante *</b> <br> Al presionar el botón "Guardar todo", se actualizarán también los productos que ya tienen un precio guardado, asi como los productos no visibles a causa del filtro.. En caso de no querer afectar precios guardados anteriormente o los productos no visibles por el filtro, se recomienda guardar individualmente.<br> **El calculo se realiza conforme el precio y tipo de cambio del proveedor.** </p> </div> </div> <br> <div><b>Nota*</b> Al activar un producto en "Vender producto", será visible para el usuario final. Si tu cliente cuenta con una suscripción activa de un producto y desactivas el check "Vender producto" se seguirá renovando dicho pedido hasta que se cancele su suscripción.</div> <table class="table table-hover table-responsive border-left-right-cero"> <th style="cursor:pointer" ng-click="OrdenarPor('Nombre')"><b> &nbsp;Nombre <span class="fa fa-sort"></span></b></th> <th>&nbsp;</th> <tr ng-repeat="Producto in Productos | filter:ProductoFilter | orderBy:sortBy:reverse" class="repeat-animation"> <div class="form-group row"> <td> <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 form-group"> <b>{{Producto.Fabricante}} {{Producto.Nombre}}</b> ({{Producto.TipoProducto}}) <br> <b>Id Artículo:</b> {{Producto.IdERP}} <br> <b>Precio CompuSoluciones:</b> {{Producto.PrecioNormal | currency}} {{Producto.MonedaPrecio}} </div> <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 form-group"> <div class="checkbox"> <label><input id="Activo" type="checkbox" ng-checked="Producto.Activo" ng-true-value="1" ng-false-value="0" ng-model="Producto.Activo" ng-click="Actualizar(Producto);"> Vender producto</label> </div> </div> <div ng-if="precioCalculado"> <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 form-group"> <input id="Precio" name="Precio" type="number" ng-model="Producto.Precio" class="form-control" step="1" placeholder="Precio de venta"/> </div> <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 form-group"> <div class="radio" style="margin-left:20px"> <input type="radio" name="Moneda{{Producto.IdProducto}}" value="Dólares" ng-model="Producto.Moneda" required> Dólares &nbsp; &nbsp; <input type="radio" name="Moneda{{Producto.IdProducto}}" value="Pesos" ng-model="Producto.Moneda" required> Pesos </div> </div> </div> <div ng-if="!precioCalculado"> <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 form-group"> <input id="Precio" name="Precio" type="number" ng-model="Producto.Precio" class="form-control" step="1" placeholder="Precio de venta"/> </div> <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 form-group"> <div class="radio" style="margin-left:20px"> <input type="radio" name="Moneda{{Producto.IdProducto}}" value="Dólares" ng-model="Producto.Moneda" required> Dólares &nbsp; &nbsp; <input type="radio" name="Moneda{{Producto.IdProducto}}" value="Pesos" ng-model="Producto.Moneda" required> Pesos </div> </div> </div> <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1 form-group"> <h4> <a id="aActualizar" type="submit" title="Guardar" ng-click="Actualizar(Producto);"> <span class="fa fa-floppy-o" style="cursor:pointer"></span> </a> </h4> </div> </td> </div> </tr> </table> <div class="form-group row"> <div class="pull-left"> <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"> Número de productos: {{ Productos.length }} </div> </div> </div> </div>
+<div class="container login" ng-swipe-right="" ng-swipe-left="">
+
+	<div class="form-group row">
+		<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+			<h2 style="float:left;">Mis productos<i class="fa fa-question-circle tourButton" style="cursor:help; float:right; font-size:12px; margin-left:10px; margin-top:10px;"
+                    ng-click="IniciarTourMisProductos();"></i></h2>
+		</div>
+
+		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 searchOption">
+			<label for="Busqueda">&nbsp;</label>
+			<div class="form-group has-feedback">
+				<input type="text" ng-model="ProductoFilter" class="form-control" size="30" placeholder="Busca productos..." />
+				<i class="form-control-feedback glyphicon glyphicon-search"></i>
+			</div>
+		</div>
+	</div>
+
+	<!--Div calculadora de precios-->
+	<div class="form-group row">
+		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" style="float:right;">
+			<div class="input-group">
+				<input type="number" min="0" class="form-control txtPercent" placeholder="Ingrese el porcentaje de utilidad deseada" ng-model="porcentaje" ng-change="calcularPrecioVenta();"/>
+				<span class="input-group-btn">
+					<button class="btn btn-default btnReset" style="background: #68953B;" type="button" title="Restaurar" ng-click="init();">
+						<span class="glyphicon glyphicon-erase white"></span>
+					</button>
+					<button class="btn btn-default btnSaveAll" style="background: #00549F;" type="button" ng-model="btnGuardar" title="Guardar Todo" ng-disabled="btnGuardar" ng-click="guardarTodo();">
+						<span class="glyphicon glyphicon-floppy-disk white"></span>
+					</button>
+				</span>
+			</div>
+			<p style="margin-left: 5px; margin-top: 5px; text-align: justify; font-size: smaller;">
+				<b>Nota importante *</b> <br> Al presionar el botón "Guardar todo", se actualizarán también los productos que ya tienen un precio guardado, asi como los productos no visibles a causa del filtro.. En caso de no querer afectar precios guardados anteriormente o los productos no visibles por el filtro, se recomienda guardar individualmente.<br>
+				**El calculo se realiza conforme el precio y tipo de cambio del proveedor.**
+			</p>
+		</div>
+	</div>
+	<br>
+	<div><b>Nota*</b> Al activar un producto en "Vender producto", será visible para el usuario final. Si tu cliente cuenta con una suscripción activa de un producto y desactivas el check "Vender producto" se seguirá renovando dicho pedido hasta que se cancele su suscripción.</div>
+	<table class="table table-hover table-responsive border-left-right-cero">
+
+		<th style="cursor:pointer" ng-click="OrdenarPor('Nombre')"><b> &nbsp;Nombre <span class="fa fa-sort"></span></b></th>
+		<th>&nbsp;</th>
+
+		<tr ng-repeat="Producto in Productos | filter:ProductoFilter | orderBy:sortBy:reverse" class="repeat-animation">
+			<div class="form-group row">
+				<td>
+					<div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 form-group">
+						<b>{{Producto.Fabricante}} {{Producto.Nombre}}</b> ({{Producto.TipoProducto}})
+						<br>
+						<b>Id Artículo:</b> {{Producto.IdERP}}
+						<br>
+						<b>Precio CompuSoluciones:</b> {{Producto.PrecioNormal | currency}} {{Producto.MonedaPrecio}}
+					</div>
+					<div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 form-group">
+						<div class="checkbox">
+							<label><input id="Activo" type="checkbox" ng-checked="Producto.Activo" ng-true-value="1" ng-false-value="0" ng-model="Producto.Activo" ng-click="Actualizar(Producto);"> Vender producto</label>
+						</div>
+					</div>
+
+					<!--Si es mayor a 0 despliega el calculo-->
+					<div ng-if="precioCalculado">
+
+						<div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 form-group">
+
+							<input id="Precio" name="Precio" type="number" ng-model="Producto.Precio" class="form-control" step="1" placeholder="Precio de venta"/>
+
+						</div>
+
+						<div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 form-group">
+
+							<div class="radio" style="margin-left:20px">
+									<input type="radio" name="Moneda{{Producto.IdProducto}}"  value="Dólares" ng-model="Producto.Moneda" required> Dólares &nbsp; &nbsp; 
+									<input type="radio" name="Moneda{{Producto.IdProducto}}" value="Pesos" ng-model="Producto.Moneda" required> Pesos
+							</div>
+
+						</div>
+					</div>
+
+					<!--Si es 0 o nulo permanece igual-->
+					<div ng-if="!precioCalculado">
+						<div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 form-group">
+							<input id="Precio" name="Precio" type="number" ng-model="Producto.Precio" class="form-control" step="1" placeholder="Precio de venta" />
+						</div>
+
+						<div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 form-group">
+							<div class="radio" style="margin-left:20px">
+									<input type="radio" name="Moneda{{Producto.IdProducto}}"  value="Dólares" ng-model="Producto.Moneda" required> Dólares &nbsp; &nbsp; 
+									<input type="radio" name="Moneda{{Producto.IdProducto}}" value="Pesos" ng-model="Producto.Moneda" required> Pesos
+							</div>
+						</div>
+
+					</div>
+					
+					<div class="col-xs-12 col-sm-12 col-md-1 col-lg-1 form-group">
+						<h4>
+							<a id="aActualizar" type="submit" title="Guardar" ng-click="Actualizar(Producto);">
+								<span class="fa fa-floppy-o" style="cursor:pointer"></span>
+							</a>
+						</h4>
+					</div>
+
+				</td>
+			</div>
+		</tr>
+	</table>
+
+	<div class="form-group row">
+		<div class="pull-left">
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				Número de productos: {{ Productos.length }}
+			</div>
+		</div>
+	</div>
+
+</div>

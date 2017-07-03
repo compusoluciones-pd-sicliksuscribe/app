@@ -1,1 +1,120 @@
-<div class="container"> <h2>Completar Información</h2> <br> <form name="frm"> <h3>{{Name}}</h3> <hr> <div class="form-group row"> <div class="form-group col-xs-12 col-sm-4 col-md-2 col-lg-2"> <div class="pull-rigth"> <label>Tipo RFC *</label> <select name="TipoRFC" ng-model="Empresa.TipoRFC" class="form-control" required="" ng-change="ComboRFC()"> <option ng-selected="true" value="">Selecciona uno ..</option> <option ng-repeat="option in Combo.TipoRFC" value="{{option.Nombre}}">{{option.Nombre}}</option> </select> </div> </div> <div class="form-group col-xs-12 col-sm-4 col-md-2 col-lg-2"> <div class="pull-rigth"> <label>RFC *</label> <input name="RFC" type="text" ng-model="Empresa.RFC" class="form-control" placeholder="" size="255" ng-maxlength="255" ng-model-onblur ng-model-options="{ updateOn: 'blur' }" required="" ng-change="ValidarRFC()"/> <b style="color:red" ng-show="frm.RFC.$invalid && !frm.RFC.$pristine" class="help-block">{{mensajerfc}}</b> </div> </div> <div class="form-group col-xs-1 col-sm-1 col-md-1 col-lg-1"> <div class="pull-rigth"> <label style="display:none">Lada *</label> <input name="Lada" ui-mask="+99" ui-mask-placeholder type="text" ng-model="Empresa.Lada" class="form-control" placeholder="" style="display:none" size="2" ng-maxlength="2" disabled/> </div> <b style="color:red" ng-show="frm.Lada.$invalid && !frm.Lada.$pristine" class="help-block">{{mensajeL}}</b> </div> </div> <div class="form-group row"> <div class="form-group col-xs-12 col-sm-4 col-md-3 col-lg-3" ng-show="MostrarCorreo"> <div class="pull-rigth"> <label>Correo Electrónico *</label> <input name="CorreoElectronico" type="mail" ng-model="Empresa.CorreoContacto" class="form-control" placeholder="" size="255" ng-maxlength="255" required=""/> <b style="color:red" ng-show="frm.CorreoElectronico.$invalid && !frm.CorreoElectronico.$pristine" class="help-block">Ingresa un correo válido.</b> <b style="color:red" ng-show="CorreoRepetido" class="help-block">El correo ya existe, ingresa un correo válido.</b> </div> </div> </div> <div class="form-group row"> <div class="col-xs-0 col-sm-0 col-md-2 col-lg-2"> <div class="form-group"> <button type="submit" ng-click="intentaImportar()" ng-show="direccionValidada" class="btn btn-primary btn-block">Aceptar</button> </div> </div> <div class="col-xs-0 col-sm-0 col-md-2 col-lg-2"> <div class="form-group"> <button type="button" ng-click="EmpresaCancel()" class="btn btn-warning btn-block">Cancelar</button> </div> </div> <div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"> </div> </div> </form> </div> </form> </div>
+<div class="container">
+    <h2>Completar Información</h2>
+    <br>
+    <form name="frm">
+        <h3>{{Name}}</h3>
+        <hr>
+
+        <div class="form-group row">
+            <div class="form-group col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                <label for="" class="">* Moneda para facturar en la renovación.</label>
+                <div class="radio" style="margin-left:20px">
+                    <div>
+                        <input type="radio" name="MonedaPago" value="Dólares" ng-model="Empresa.MonedaPago" required> Dólares
+                    </div>
+                    <div>
+                        <input type="radio" name="MonedaPago" value="Pesos" ng-model="Empresa.MonedaPago" required> Pesos
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                <label for="" class="">* Forma de pago de renovación.</label>
+                <div class="radio" style="margin-left:20px">
+					<div>
+						<input type="radio" name="TipoPago" value="2" checked="checked" ng-model="Empresa.IdFormaPagoPredilecta">Crédito CompuSoluciones
+					</div>
+					<div>
+						<input type="radio" name="TipoPago" value="1" ng-model="Empresa.IdFormaPagoPredilecta"> Tarjeta bancaria (Solo Pesos MXN)
+					</div>
+				</div>
+            </div>
+        </div>
+
+
+        <div class="form-group row">
+
+            <div class="form-group col-xs-12 col-sm-4 col-md-2 col-lg-2">
+
+                <div class="pull-rigth">
+                    <label>Tipo RFC *</label>
+                    <select name="TipoRFC" ng-model="Empresa.TipoRFC" class="form-control" required="" ng-change="ComboRFC()">
+                        <option ng-selected="true" value="">Selecciona uno ..</option>
+                        <option ng-repeat="option in Combo.TipoRFC" value="{{option.Nombre}}">{{option.Nombre}}</option>
+                    </select>
+
+                </div>
+
+            </div>
+            <div class="form-group col-xs-12 col-sm-4 col-md-2 col-lg-2">
+
+                <div class="pull-rigth">
+                    <label>RFC *</label>
+                    <input name="RFC" type="text" ng-model="Empresa.RFC" class="form-control" placeholder="" size="255" ng-maxlength="255" ng-model-onblur
+                        ng-model-options="{ updateOn: 'blur' }" required="" ng-change="ValidarRFC()" />
+                    <!--<b style="color:red" ng-show="valido" class="help-block">{{mensajerfc}}</b>-->
+                    <b style="color:red" ng-show="frm.RFC.$invalid && !frm.RFC.$pristine" class="help-block">{{mensajerfc}}</b>
+                </div>
+
+            </div>
+
+            <div class="form-group col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                <div class="pull-rigth">
+                    <label style="display:none">Lada *</label>
+                    <input name="Lada" ui-mask="+99" ui-mask-placeholder type="text" ng-model="Empresa.Lada" class="form-control" placeholder=""
+                        style="display:none" size="2" ng-maxlength="2" disabled />
+
+                </div>
+                <b style="color:red" ng-show="frm.Lada.$invalid && !frm.Lada.$pristine" class="help-block">{{mensajeL}}</b>
+            </div>
+
+        </div>
+
+        <div class="form-group row">
+            <div class="form-group col-xs-12 col-sm-4 col-md-3 col-lg-3" ng-show="MostrarCorreo">
+
+                <div class="pull-rigth">
+                    <label>Correo Electrónico *</label>
+                    <input name="CorreoElectronico" type="mail" ng-model="Empresa.CorreoContacto" class="form-control" placeholder="" size="255"
+                        ng-maxlength="255" required="" />
+                    <b style="color:red" ng-show="frm.CorreoElectronico.$invalid && !frm.CorreoElectronico.$pristine" class="help-block">Ingresa un correo válido.</b>
+                    <b style="color:red" ng-show="CorreoRepetido" class="help-block">El correo ya existe, ingresa un correo válido.</b>
+                    <!--ng-pattern="/^[a-z]+[a-z0-9._-]+@[a-z]+\.[a-z.]{2,5}$/"-->
+                </div>
+
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-xs-0 col-sm-0 col-md-2 col-lg-2">
+                <div class="form-group">
+                    <button type="submit" ng-click="intentaImportar()" ng-show="direccionValidada" class="btn btn-primary btn-block">Aceptar</button>
+                </div>
+            </div>
+            <div class="col-xs-0 col-sm-0 col-md-2 col-lg-2">
+                <div class="form-group">
+                    <button type="button" ng-click="EmpresaCancel()" class="btn btn-warning btn-block">Cancelar</button>
+                </div>
+            </div>
+            <div class="col-xs-0 col-sm-0 col-md-8 col-lg-8">
+
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</form>
+
+</div>

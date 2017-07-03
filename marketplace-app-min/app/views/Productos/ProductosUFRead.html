@@ -1,1 +1,289 @@
-<div class="container" ng-swipe-right="" ng-swipe-left=""> <div class="row"> <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6"> <h2 style="float:left;">Suscripciones </h2> </div> <div class="form-group col-xs-12 col-sm-12 col-md-3 col-lg-3"> <label for="IdFabricante">Filtrar por:</label> <select name="IdFabricante" class="form-control filterOption" ng-model="BuscarProductos.IdFabricante" ng-options="Fabricante.IdFabricante as Fabricante.Nombre for Fabricante in selectFabricantes" ng-change="BuscarProducto(true);"> <option ng-selected="true" value="">Todos los fabricantes</option> </select> </div> <div class="form-group col-xs-12 col-sm-12 col-md-3 col-lg-3"> <label for="IdTipoProducto">&nbsp;</label> <select name="IdTipoProducto" class="form-control typeOptions" ng-model="BuscarProductos.IdTipoProducto" ng-change="BuscarProducto(true);"> <option ng-selected="true" value="">Todos los tipos</option> <option ng-repeat="Tipo in selectTiposProductos" title="{{Tipo.Descripcion}}" value="{{Tipo.IdTipoProducto}}">{{Tipo.Tipo}}</option> </select> </div> </div> <div id="TopPage"></div> <br><br><br> <div ng-show="!(Productos.length> 0)"> <h4>{{Mensaje}}</h4> </div> <div ng-show="Productos.length> 0"> <div>Precios más IVA.</div> <br> <br> <table class="table table-hover table-responsive border-left-right-cero"> <th style="cursor:pointer" ng-click="OrdenarPor('Nombre')"> <div class="row"> <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6"> <b>&nbsp; Nombre <span class="fa fa-sort"></span></b> </div> <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6"> <div class="pull-right"> <b>Página {{Pagina + 1}}</b> </div> </div> </div> </th> <tr ng-repeat="Producto in Productos | filter:ProductoFilter | orderBy:sortBy:reverse" class="repeat-animation"> <td> <div class="hidden-xs hidden-sm"> <br> </div> <div class="row"> <div class="form-group col-xs-0 col-sm-0 col-md-2 col-lg-2"> <div class="text-center center-block"> <img ng-src="{{Producto.Imagen}}" style="width:150px;" width="150"> </div> </div> <div class="form-group col-xs-0 col-sm-0 col-md-6 col-lg-6"> <div> <h3><b>{{Producto.Nombre}}</b></h3> </div> <label for="">Descripción:</label> {{Producto.Descripcion}} <br> <label for="">Fabricante del producto:</label> {{Producto.Fabricante}} <br> <label for="">Tipo de producto:</label> {{Producto.Tipo}} <br> <label for="">Esquema de renovación:</label> {{Producto.EsquemaRenovacion}} <br> <label for="">Artículo Id:</label> {{Producto.IdERP}} <br> <label for="">Última actualización del producto:</label> {{Producto.FechaActualizado | date:'d/MM/yyyy hh:mm a'}} <div ng-show="Producto.IdTipoProducto == 2"> <label for="">Duración del periodo: </label> {{Producto.FechaInicioSuscripcion | date:'d/MM/yyyy'}} <b> - </b> {{Producto.FechaFinSuscripcion | date:'d/MM/yyyy'}} </div> <label for="" title=""> <div ng-show="Producto.IdTipoProducto == 1">Precio por servicio:</div> <div ng-show="Producto.IdTipoProducto == 2">Precio unitario:</div> <div ng-show="Producto.IdTipoProducto == 3">Precio de contratación:</div> </label> <span ng-show="Producto.PorcentajeDescuento == 0"> {{Producto.PrecioNormal | currency: "$" : 2}} {{Producto.MonedaPrecio}} </span> <span ng-show="Producto.PorcentajeDescuento> 0"> <del style="font-size:11px">{{Producto.PrecioNormal | currency: "$" : 2}} {{Producto.MonedaPrecio}}</del> {{Producto.PrecioDescuento | currency: "$" : 2}} {{Producto.MonedaPrecio}} <b style="color:#68953B;">{{Producto.PorcentajeDescuento}}% Desc.</b> </span> <div ng-show="Producto.IdTipoProducto == 2 && Producto.IdFabricante == 1"> <label for="" title="Precio prorrateado">Precio prorrateado del primer periodo:</label> {{Producto.PrecioProrrateo | currency}} {{Producto.MonedaPrecio}} </div> <div><label for="" title=""> Tipo de cambio: </label> {{TipoCambio | currency: "$":4}} MXN.</div> <br> </div> <div class="form-group col-xs-0 col-sm-0 col-md-4 col-lg-4 softBlue" style="margin:-7px; margin-bottom:10px;"> <div class="row"> <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12"> <div> <h4><b>Configura tus productos.</b></h4> </div> <br> <form name="frmCantidad" id="frmCantidad"> <div class="form-group"> <label for="Cantidad">* ¿Cuántos quieres?</label> a patir de {{Producto.CantidadMinima}} a {{Producto.CantidadMaxima}} <div class="input-group"> <span class="input-group-addon green white"> <span class="glyphicon glyphicon-shopping-cart"></span> </span> <input id="Cantidad" name="Cantidad" type="number" ng-model="Producto.Cantidad" class="form-control" placeholder="Escribe un número entre {{Producto.CantidadMinima}} y {{Producto.CantidadMaxima}}" max="{{Producto.CantidadMaxima}}" min="{{Producto.CantidadMinima}}" size="5" maxlength="5" title="Escribe un número entre {{Producto.CantidadMinima}} y {{Producto.CantidadMaxima}}" required/> </div> <br> <p style="color:red" ng-show="frmCantidad.Cantidad.$error.maxlength">Máximo 5 dígitos</p> <p style="color:red" ng-show="frmCantidad.Cantidad.$error.min">Mínimo {{Producto.CantidadMinima}}</p> <p style="color:red" ng-show="frmCantidad.Cantidad.$error.max">Máximo {{Producto.CantidadMaxima}}</p> <div ng-show="Producto.MostrarMensajeP" style="color:red;"> <label>* No cuentas con suscripciones para este producto.</label>&nbsp; <br> </div> <div ng-show="Producto.Mostrar"> <label for="IdEmpresaUsuarioFinal">* Elige un producto</label> &nbsp; <div class="input-group"> <span class="input-group-addon green white"> <span class="fa fa-puzzle-piece"></span> </span> <select id="IdProductoPadre" name="IdProductoPadre" class="form-control selectOption" ng-model="Producto.IdProductoPadre" ng-options="Producto.ResultadoFabricante1 as Producto.Nombre for Producto in selectProductos" ng-required="Producto.Required"> <option ng-selected="true" value="">Selecciona una suscripcion...</option> </select> </div> <br> </div> <label for="" class="">* ¿Con qué moneda quieres pagarlos?</label> <div class="radio" style="margin-left:20px"> <div> <input type="radio" name="MonedaCompra" value="Dólares" ng-model="Producto.MonedaCompra" required> Dólares </div> <div> <input type="radio" name="MonedaCompra" value="Pesos" ng-model="Producto.MonedaCompra" required> Pesos </div> </div> </div> <div style="float:right!important;"> <label for="" title="Cantidad por precio">Total:</label> <b> {{CalcularPrecioTotal(Producto.PrecioProrrateo, Producto.Cantidad, Producto.MonedaCompra, Producto.MonedaPrecio, TipoCambio) | currency}} {{Producto.MonedaCompra}} </b> </div> <div ng-show="false"> <label for="CodigoPromocion"> <a ng-if="!Producto.expanded" ng-click="Producto.expanded = true"> <span class="glyphicon glyphicon-menu-down"></span> Tengo un código de promoción </a> <a ng-if="Producto.expanded" ng-click="Producto.expanded = false"> <span class="glyphicon glyphicon-menu-up"></span> Tengo un código de promoción </a> </label> <div ng-if="Producto.expanded"> <br> <div class="input-group"> <span class="input-group-addon green white"> <span class="glyphicon glyphicon-gift"></span> </span> <input id="CodigoPromocion" name="CodigoPromocion" type="text" ng-model="Producto.CodigoPromocion" class="form-control" placeholder="Escribe tu código de promoción" max="255" min="255" size="255" maxlength="255" title="Escribe tu código de promoción"/> </div> </div> <br> </div> </div> </div> <div class="row"> <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12"> <div class="row"> <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6"> <button type="button" ng-show="0" ng-click="AgregarGuardados(Producto.IdProducto)" class="btn btn-link btn-block favoriteOption"><span class="glyphicon glyphicon-star"></span> Agregar a favoritos</span></button> </div> <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6" ng-show="SessionCookie.IdTipoAcceso === 1 || SessionCookie.IdTipoAcceso === 2 || SessionCookie.IdTipoAcceso === 3 || SessionCookie.IdTipoAcceso === 4"> <button class="btn btn-success btn-block addOption" ng-click="AgregarCarrito(Producto)" ng-disabled="!frmCantidad.$valid">Agregar al carrito</md-button> </div> </div> </div> </div> </form> </div> </div> </td> </tr> </table> <div class="form-group row"> <div class="text-center"> <div class="col-xs-0 col-sm-4 col-md-4 col-lg-4"> </div> <div class="col-xs-2 col-sm-1 col-md-1 col-lg-1"> <div ng-click="PaginadoInicio()" ng-show="Pagina> 0"> <b><div class="paginator"><img src="images/backArrow.png"></div></b> </div> </div> <div class="col-xs-2 col-sm-1 col-md-1 col-lg-1"> <div ng-click="PaginadoAtras()" ng-show="Pagina> 0"> <b><div class="paginator"><img src="images/leftArrow.png"></div></b> </div> </div> <div class="col-xs-4 col-sm-1 col-md-1 col-lg-1"> <b>Página {{Pagina + 1}}</b> </div> <div class="col-xs-2 col-sm-1 col-md-1 col-lg-1"> <div ng-click="PaginadoSiguiente()" ng-show="Productos.length !== 0"> <div class="paginator"><img src="images/rightArrow.png"></div> </div> </div> <div class="col-xs-0 col-sm-4 col-md-4 col-lg-4"> </div> </div> </div> </div> </div> </div>
+<div class="container" ng-swipe-right="" ng-swipe-left="">
+
+    <div class="row">
+
+        <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <h2 style="float:left;">Suscripciones </h2>
+        </div>
+
+        <div class="form-group col-xs-12 col-sm-12 col-md-3 col-lg-3">
+            <label for="IdFabricante">Filtrar por:</label>
+            <select name="IdFabricante" class="form-control filterOption" ng-model="BuscarProductos.IdFabricante" ng-options="Fabricante.IdFabricante as Fabricante.Nombre for Fabricante in selectFabricantes"
+                ng-change="BuscarProducto(true);">
+                <option ng-selected="true" value="">Todos los fabricantes</option>
+            </select>
+        </div>
+
+        <div class="form-group col-xs-12 col-sm-12 col-md-3 col-lg-3">
+            <label for="IdTipoProducto">&nbsp;</label>
+            <select name="IdTipoProducto" class="form-control typeOptions" ng-model="BuscarProductos.IdTipoProducto" ng-change="BuscarProducto(true);">
+                <option ng-selected="true" value="">Todos los tipos</option>
+                <option ng-repeat="Tipo in selectTiposProductos" title="{{Tipo.Descripcion}}" value="{{Tipo.IdTipoProducto}}">{{Tipo.Tipo}}</option>
+            </select>
+        </div>
+
+    </div>
+
+    <div id="TopPage"></div>
+
+    <br><br><br>
+
+    <div ng-show="!(Productos.length > 0)">
+        <h4>{{Mensaje}}</h4>
+    </div>
+
+    <div ng-show="Productos.length > 0">
+
+        <div>Precios más IVA.</div>
+        <br>
+        <br>
+
+        <table class="table table-hover table-responsive border-left-right-cero">
+            <th style="cursor:pointer" ng-click="OrdenarPor('Nombre')">
+
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <b>&nbsp; Nombre <span class="fa fa-sort"></span></b>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <div class="pull-right">
+                            <b>Página {{Pagina + 1}}</b>
+                        </div>
+                    </div>
+                </div>
+
+            </th>
+            <tr ng-repeat="Producto in Productos | filter:ProductoFilter | orderBy:sortBy:reverse" class="repeat-animation">
+                <td>
+
+                    <div class="hidden-xs hidden-sm">
+                        <br>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="form-group col-xs-0 col-sm-0 col-md-2 col-lg-2">
+                            <div class="text-center center-block">
+                                <img ng-src="{{Producto.Imagen}}" style="width:150px;" width="150">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-0 col-sm-0 col-md-6 col-lg-6">
+
+                            <div>
+                                <h3><b>{{Producto.Nombre}}</b></h3>
+                            </div>
+                            <label for="">Descripción:</label> {{Producto.Descripcion}}
+                            <br>
+                            <label for="">Fabricante del producto:</label> {{Producto.Fabricante}}
+                            <br>
+                            <label for="">Tipo de producto:</label> {{Producto.Tipo}}
+                            <br>
+                            <label for="">Esquema de renovación:</label> {{Producto.EsquemaRenovacion}}
+                            <br>
+                            <label for="">Artículo Id:</label> {{Producto.IdERP}}
+                            <br>
+                            <label for="">Última actualización del producto:</label> {{Producto.FechaActualizado | date:'d/MM/yyyy hh:mm a'}}
+
+                            <div ng-show="Producto.IdTipoProducto == 2">
+                                <label for="">Duración del periodo: </label> {{Producto.FechaInicioSuscripcion | date:'d/MM/yyyy'}}
+                                <b> - </b> {{Producto.FechaFinSuscripcion | date:'d/MM/yyyy'}}
+                            </div>
+
+                            <label for="" title="">
+                            <div ng-show="Producto.IdTipoProducto == 1">Precio por servicio:</div>
+                            <div ng-show="Producto.IdTipoProducto == 2">Precio unitario:</div>
+                            <div ng-show="Producto.IdTipoProducto == 3">Precio de contratación:</div>
+                            </label>
+                            <span ng-show="Producto.PorcentajeDescuento == 0">
+                                {{Producto.PrecioNormal | currency: "$" : 2}} {{Producto.MonedaPrecio}}                          
+                            </span>
+                            <span ng-show="Producto.PorcentajeDescuento > 0">
+                                <del style="font-size:11px">{{Producto.PrecioNormal | currency: "$" : 2}} {{Producto.MonedaPrecio}}</del>
+                                {{Producto.PrecioDescuento | currency: "$" : 2}} {{Producto.MonedaPrecio}}
+                                <b style="color:#68953B;">{{Producto.PorcentajeDescuento}}% Desc.</b>
+                            </span>
+
+                            <div ng-show="Producto.IdTipoProducto == 2 && Producto.IdFabricante == 1">
+                                <label for="" title="Precio prorrateado">Precio prorrateado del primer periodo:</label> {{Producto.PrecioProrrateo
+                                | currency}} {{Producto.MonedaPrecio}}
+                            </div>
+                            <div><label for="" title=""> Tipo de cambio: </label> {{TipoCambio | currency: "$":4}} MXN.</div>
+                            <!--<div ng-show="Producto.IdFabricante === 1"><label for="" title=""> Tipo de cambio Microsoft: </label> {{TipoCambioMs | currency: "$":4}} MXN.</div>-->
+                            <!--<div ng-show="Producto.IdFabricante !== 1"><label for="" title=""> Tipo de cambio: </label> {{TipoCambio | currency: "$":4}} MXN.</div>-->
+                            <br>
+                        </div>
+
+                        <div class="form-group col-xs-0 col-sm-0 col-md-4 col-lg-4 softBlue" style="margin:-7px; margin-bottom:10px;">
+
+                            <div class="row">
+                                <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <div>
+                                        <h4><b>Configura tus productos.</b></h4>
+                                    </div> <br>
+
+                                    <form name="frmCantidad" id="frmCantidad">
+
+                                        <div class="form-group">
+                                            <label for="Cantidad">* ¿Cuántos quieres?</label> a patir de {{Producto.CantidadMinima}} a {{Producto.CantidadMaxima}}
+
+                                            <div class="input-group">
+                                                <span class="input-group-addon green white">
+                                                <span class="glyphicon glyphicon-shopping-cart"></span>
+                                                </span>
+                                                <input id="Cantidad" name="Cantidad" type="number" ng-model="Producto.Cantidad" class="form-control" placeholder="Escribe un número entre {{Producto.CantidadMinima}} y {{Producto.CantidadMaxima}}"
+                                                    max="{{Producto.CantidadMaxima}}" min="{{Producto.CantidadMinima}}" size="5"
+                                                    maxlength="5" title="Escribe un número entre {{Producto.CantidadMinima}} y {{Producto.CantidadMaxima}}"
+                                                    required/>
+                                            </div>
+
+                                            <br>
+
+                                            <p style="color:red" ng-show="frmCantidad.Cantidad.$error.maxlength">Máximo 5 dígitos</p>
+                                            <p style="color:red" ng-show="frmCantidad.Cantidad.$error.min">Mínimo {{Producto.CantidadMinima}}</p>
+                                            <p style="color:red" ng-show="frmCantidad.Cantidad.$error.max">Máximo {{Producto.CantidadMaxima}}</p>
+
+                                            <div ng-show="Producto.MostrarMensajeP" style="color:red;">
+
+                                                <label>* No cuentas con suscripciones para este producto.</label>&nbsp;
+                                                <br>
+                                            </div>
+
+                                            <div ng-show="Producto.Mostrar">
+                                                <label for="IdEmpresaUsuarioFinal">* Elige un producto</label> &nbsp;
+
+                                                <div class="input-group">
+                                                    <span class="input-group-addon green white">
+                                                        <span class="fa fa-puzzle-piece"></span>
+                                                    </span>
+                                                    <select id="IdProductoPadre" name="IdProductoPadre" class="form-control selectOption" ng-model="Producto.IdProductoPadre"
+                                                        ng-options="Producto.ResultadoFabricante1 as Producto.Nombre for Producto in selectProductos"
+                                                        ng-required="Producto.Required">
+                                                        <option ng-selected="true" value="">Selecciona una suscripcion...</option>
+                                                    </select>
+                                                </div>
+
+                                                <br>
+                                            </div>
+
+                                            <label for="" class="">* ¿Con qué moneda quieres pagarlos?</label>
+
+                                            <div class="radio" style="margin-left:20px">
+                                                <div>
+                                                    <input type="radio" name="MonedaCompra" value="Dólares" ng-model="Producto.MonedaCompra" required>                                                    Dólares
+                                                </div>
+                                                <div>
+                                                    <input type="radio" name="MonedaCompra" value="Pesos" ng-model="Producto.MonedaCompra" required>                                                    Pesos
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div style="float:right!important;">
+                                            <label for="" title="Cantidad por precio">Total:</label>
+                                            <b> 
+                                                {{CalcularPrecioTotal(Producto.PrecioProrrateo, Producto.Cantidad, Producto.MonedaCompra, Producto.MonedaPrecio, TipoCambio) | currency}} {{Producto.MonedaCompra}} 
+                                            </b>
+                                            <!--<b ng-show="Producto.IdFabricante === 1 && Producto.PorcentajeDescuento == 0"> 
+                                                {{CalcularPrecioTotal(Producto.PrecioProrrateo, Producto.Cantidad, Producto.MonedaCompra, Producto.MonedaPrecio, TipoCambioMs) | currency}} {{Producto.MonedaCompra}} 
+                                            </b>-->
+                                            <!--<b ng-show="Producto.IdFabricante !== 1 && Producto.PorcentajeDescuento == 0"> 
+                                                {{CalcularPrecioTotal(Producto.PrecioProrrateo, Producto.Cantidad, Producto.MonedaCompra, Producto.MonedaPrecio, TipoCambio) | currency}} {{Producto.MonedaCompra}} 
+                                            </b>-->
+                                            <!--<b ng-show="Producto.IdFabricante === 1 && Producto.PorcentajeDescuento > 0"> 
+                                                {{CalcularPrecioTotal(Producto.PrecioDescuento, Producto.Cantidad, Producto.MonedaCompra, Producto.MonedaPrecio, TipoCambioMs) | currency}} {{Producto.MonedaCompra}} 
+                                            </b>-->
+                                            <!--<b ng-show="Producto.IdFabricante !== 1 && Producto.PorcentajeDescuento > 0"> 
+                                                {{CalcularPrecioTotal(Producto.PrecioDescuento, Producto.Cantidad, Producto.MonedaCompra, Producto.MonedaPrecio, TipoCambio) | currency}} {{Producto.MonedaCompra}} 
+                                            </b>-->
+                                        </div>
+
+                                        <div ng-show="false">
+                                            <label for="CodigoPromocion">
+                                                <a ng-if="!Producto.expanded" ng-click="Producto.expanded = true">
+                                                    <span class="glyphicon glyphicon-menu-down"></span>
+                                                    Tengo un código de promoción
+                                                </a>
+                                                <a ng-if="Producto.expanded" ng-click="Producto.expanded = false">
+                                                    <span class="glyphicon glyphicon-menu-up"></span>
+                                                    Tengo un código de promoción
+                                                </a>
+                                            </label>
+                                            <div ng-if="Producto.expanded">
+                                                <br>
+                                                <div class="input-group">
+                                                    <span class="input-group-addon green white">
+                                                    <span class="glyphicon glyphicon-gift"></span>
+                                                    </span>
+                                                    <input id="CodigoPromocion" name="CodigoPromocion" type="text" ng-model="Producto.CodigoPromocion" class="form-control" placeholder="Escribe tu código de promoción"
+                                                        max="255" min="255" size="255" maxlength="255" title="Escribe tu código de promoción"
+                                                    />
+                                                </div>
+                                            </div>
+                                            <br>
+                                        </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <div class="row">
+                                        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                            <button type="button" ng-show="0" ng-click="AgregarGuardados(Producto.IdProducto)" class="btn btn-link btn-block favoriteOption"><span class="glyphicon glyphicon-star"></span> Agregar a favoritos</span></button>
+                                        </div>
+                                        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6" ng-show="SessionCookie.IdTipoAcceso === 1 || SessionCookie.IdTipoAcceso === 2 || SessionCookie.IdTipoAcceso === 3 || SessionCookie.IdTipoAcceso === 4">
+                                            <button class="btn btn-success btn-block addOption" ng-click="AgregarCarrito(Producto)" ng-disabled="!frmCantidad.$valid">Agregar al carrito</md-button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                                    </form>
+
+                        </div>
+                    
+                </div>
+                
+            </td>
+        </tr>
+    </table>
+
+    <div class="form-group row">
+        <div class="text-center">
+
+            <div class="col-xs-0 col-sm-4 col-md-4 col-lg-4">
+            </div>
+
+            <div class="col-xs-2 col-sm-1 col-md-1 col-lg-1">
+                <div ng-click="PaginadoInicio()" ng-show="Pagina > 0">
+                    <b><div class="paginator"><img src="images/backArrow.png"></div></b>
+                </div>
+            </div>
+
+            <div class="col-xs-2 col-sm-1 col-md-1 col-lg-1">
+                <div ng-click="PaginadoAtras()" ng-show="Pagina > 0">
+                    <b><div class="paginator"><img src="images/leftArrow.png"></div></b>
+                </div>
+            </div>
+
+            <div class="col-xs-4 col-sm-1 col-md-1 col-lg-1">
+                <b>Página {{Pagina + 1}}</b>
+            </div>
+
+            <div class="col-xs-2 col-sm-1 col-md-1 col-lg-1">
+                <div ng-click="PaginadoSiguiente()" ng-show="Productos.length  !== 0">
+                   <div class="paginator"><img src="images/rightArrow.png"></div>
+                </div>
+            </div>
+
+            <div class="col-xs-0 col-sm-4 col-md-4 col-lg-4">
+            </div>
+
+        </div>
+    </div>
+    
+    </div>
+    
+</div>
+
+</div>

@@ -1,1 +1,52 @@
-<div class="container login" ng-swipe-right="" ng-swipe-left=""> <div class="form-group row"> <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8"> <h2 style="float:left;">Configurador de descuentos</h2> </div> <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 searchOption"></div> </div> <div class="form-group row"> <div class="pull-right"> <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"> <button ng-click="goToPage('Descuento');" class="btn btn-primary newColaborator">Nuevo descuento&nbsp;<span class="glyphicon glyphicon-plus"></span></button> </div> </div> </div> <table class="table table-hover table-responsive border-left-right-cero"> <th style="cursor:pointer" ng-click="OrdenarPor('Nivel')"><b> &nbsp;Nivel <span class="fa fa-sort"></span></b></th> <th>&nbsp;</th> <tr ng-repeat="Descuento in Descuentos | orderBy:sortBy:reverse" class="repeat-animation"> <div class="form-group row"> <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"> <td> <h4>¡<b>{{Descuento.PorcentajeDescuento}}%</b> de descuento en productos <b>{{Descuento.Especializacion}}</b> para niveles <b>{{Descuento.Nivel}}</b>!</h4> Descuento activo desde el {{Descuento.FechaActivo}} </td> <td> <div class="pull-right"> <h4> <a title="Editar descuento" href="#/Descuento/{{Descuento}}"><span class="glyphicon glyphicon-edit"></span></a> &nbsp;&nbsp; <a title="Eliminar descuento" ng-click="eliminarDescuento(Descuento);"><span class="glyphicon glyphicon-trash"></span></a> </h4> </div> </td> </div> </div> </tr> </table> <div class="form-group row"> <div class="pull-left"> <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"> Número de descuentos configurados: {{ Descuentos.length }} </div> </div> </div> </div>
+<div class="container login" ng-swipe-right="" ng-swipe-left="">
+
+	<div class="form-group row">
+		<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+			<h2 style="float:left;">Configurador de descuentos</h2>
+		</div>
+		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 searchOption"></div>
+	</div>
+
+	<div class="form-group row">
+		<div class="pull-right">
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				<button ng-click="goToPage('Descuento');" class="btn btn-primary newColaborator">Nuevo descuento&nbsp;<span class="glyphicon glyphicon-plus"></span></button>
+			</div>
+		</div>
+	</div>
+
+	<table class="table table-hover table-responsive border-left-right-cero">
+
+		<th style="cursor:pointer" ng-click="OrdenarPor('Nivel')"><b> &nbsp;Nivel <span class="fa fa-sort"></span></b></th>
+		<th>&nbsp;</th>
+
+		<tr ng-repeat="Descuento in Descuentos | orderBy:sortBy:reverse" class="repeat-animation">
+			<div class="form-group row">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+					<td>
+						<h4>¡<b>{{Descuento.PorcentajeDescuento}}%</b> de descuento en productos <b>{{Descuento.Especializacion}}</b> para niveles <b>{{Descuento.Nivel}}</b>!</h4>
+						Descuento activo desde el {{Descuento.FechaActivo}}
+					</td>
+					<td>
+						<div class="pull-right">
+							<h4>
+								<a title="Editar descuento" href="#/Descuento/{{Descuento}}"><span class="glyphicon glyphicon-edit"></span></a>
+								&nbsp;&nbsp;
+								<a title="Eliminar descuento" ng-click="eliminarDescuento(Descuento);"><span class="glyphicon glyphicon-trash"></span></a>
+							</h4>
+						</div>
+					</td>
+				</div>
+			</div>
+		</tr>
+	</table>
+
+	<div class="form-group row">
+		<div class="pull-left">
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				Número de descuentos configurados: {{ Descuentos.length }}
+			</div>
+		</div>
+	</div>
+
+</div>

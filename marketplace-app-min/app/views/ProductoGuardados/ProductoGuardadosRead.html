@@ -1,1 +1,83 @@
-<div class="container" ng-swipe-right="" ng-swipe-left=""> <div class="form-group row"> <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8"> <h2>Productos Favoritos</h2> </div> <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"> <div class=""> <label for="Buscar">&nbsp;</label> <div class="form-group has-feedback"> <input type="text" ng-model="ProductoGuardadoFilter" class="form-control" size="30" placeholder="Busca un producto favorito..."/> <i class="form-control-feedback glyphicon glyphicon-search"></i> </div> </div> </div> </div> <br> <div ng-show="!(ProductoGuardados.length> 0)"> <h4>No tienes productos favoritos...</h4> </div> <div ng-show="ProductoGuardados.length> 0"> <div class="form-group row"> <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"> <table class="table table-hover table-responsive border-left-right-cero"> <th ng-click="OrdenarPor('Nombre')"><b>&nbsp;Nombre <span class="fa fa-sort"></span></b></th> <th>&nbsp;</th> <tr ng-repeat="ProductoGuardado in ProductoGuardados | filter:ProductoGuardadoFilter | orderBy:sortBy:reverse" class="repeat-animation"> <td> <div class="form-group row"> <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9"> <div> <h4><b>{{ProductoGuardado.Nombre}}</b></h4></div> <label for="">Descripción:</label> {{ProductoGuardado.Descripcion}} <br> <label for="">Fabricante:</label> {{ProductoGuardado.Fabricante}} <br> <label for="">Tipo de producto:</label> {{ProductoGuardado.Tipo}} <br> <label for="">Artículo Id:</label> {{ProductoGuardado.IdERP}} <br> <label for="">Última actualización:</label> {{ProductoGuardado.FechaActualizado | date:'d/MM/yyyy hh:mm a'}} <br> <br> </div> <div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2"> <button type="button" ng-click="AgregarCarrito(ProductoGuardado)" class="btn btn-primary btn-block">Agregar al carrito</button> </div> <div class="form-group col-xs-12 col-sm-12 col-md-1 col-lg-1"> <h4> <a title="Quitar de la lista" ng-click="QuitarProducto(ProductoGuardado);"><span style="cursor:pointer" class="glyphicon glyphicon-trash"></span></a></h4> </div> </div> </td> </tr> </table> </div> </div> <div class="form-group row"> <div class="pull-left"> <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"> Productos favoritos: {{ ProductoGuardados.length }} </div> </div> </div> </div> </div>
+<div class="container" ng-swipe-right="" ng-swipe-left="" >
+     
+       
+    <div class="form-group row">
+        
+         <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+            <h2>Productos Favoritos</h2>
+        </div>
+        
+        
+        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+            <div class="">
+                <label for="Buscar">&nbsp;</label>
+                <div class="form-group has-feedback">
+                    <input type="text" ng-model="ProductoGuardadoFilter" class="form-control" size="30" placeholder="Busca un producto favorito..." />
+                    <i class="form-control-feedback glyphicon glyphicon-search"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+    <br>
+    
+    <div ng-show="!(ProductoGuardados.length > 0)">
+        <h4>No tienes productos favoritos...</h4>
+    </div>
+    
+    <div ng-show="ProductoGuardados.length > 0">
+    
+    <div class="form-group row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" >
+    
+     <table class="table table-hover table-responsive border-left-right-cero" >
+    
+                <th ng-click="OrdenarPor('Nombre')"><b>&nbsp;Nombre <span class="fa fa-sort"></span></b></th>
+                <th>&nbsp;</th>
+    
+                <tr ng-repeat="ProductoGuardado in ProductoGuardados | filter:ProductoGuardadoFilter | orderBy:sortBy:reverse" class="repeat-animation">
+                    <td>
+                        <div class="form-group row">
+                            <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+                                <div>
+                                    <h4><b>{{ProductoGuardado.Nombre}}</b></h4></div>
+                                <label for="">Descripción:</label> {{ProductoGuardado.Descripcion}}
+                                <br>
+                                <label for="">Fabricante:</label> {{ProductoGuardado.Fabricante}}
+                                <br>
+                                <label for="">Tipo de producto:</label> {{ProductoGuardado.Tipo}}
+                                <br>
+                                <label for="">Artículo Id:</label> {{ProductoGuardado.IdERP}}
+                                <br>
+                                <label for="">Última actualización:</label> {{ProductoGuardado.FechaActualizado | date:'d/MM/yyyy hh:mm a'}}
+                                <br>
+                                <br>
+                            </div>
+                    
+                            <div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                                <button type="button" ng-click="AgregarCarrito(ProductoGuardado)" class="btn btn-primary btn-block">Agregar al carrito</button>
+                            </div>
+                    
+                            <div  class="form-group col-xs-12 col-sm-12 col-md-1 col-lg-1">
+                                <h4> <a title="Quitar de la lista" ng-click="QuitarProducto(ProductoGuardado);" ><span style="cursor:pointer" class="glyphicon glyphicon-trash"></span></a></h4>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+    
+            </table>
+    
+        </div>
+    </div>
+    
+    <div class="form-group row">
+        <div class="pull-left">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                Productos favoritos: {{ ProductoGuardados.length }}
+            </div>
+        </div>
+    </div>
+    
+    </div>
+    
+ </div>

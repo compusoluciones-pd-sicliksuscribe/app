@@ -1,1 +1,60 @@
-<div class="container"> <h2>Nuevo descuento</h2> <form name="frm" ng-swipe-right="descuentoCancelar()"> <hr> <div class="form-group row"> <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"> <div class="pull-rigth"> <label>Nivel del distribuidor * </label> <select name="IdNivelDistribuidor" class="form-control" ng-model="Descuento.IdNivelDistribuidor" ng-options="Niveles.IdNivelDistribuidor as Niveles.Nivel for Niveles in selectNivelesDistribuidor" required=""> <option value="" ng-selected="true">Selecciona un nivel...</option> </select> <b style="color:red" ng-show="frm.IdNivelDistribuidor.$invalid && !frm.IdNivelDistribuidor.$pristine" class="help-block">Selecciona un nivel.</b> </div> </div> <div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div> </div> <div class="form-group row"> <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"> <div class="pull-rigth"> <label>Tipo de producto que aplica * </label> <select name="Especializacion" class="form-control" ng-model="Descuento.Especializacion" ng-options="Especializaciones.Especializacion as Especializaciones.Especializacion for Especializaciones in selectEspecializaciones" required=""> <option value="" ng-selected="true">Selecciona un tipo de producto...</option> </select> <b style="color:red" ng-show="frm.Especializacion.$invalid && !frm.Especializacion.$pristine" class="help-block">Selecciona un especialización.</b> </div> </div> <div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div> </div> <div class="form-group row"> <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"> <div class="pull-rigth"> <label>Porcentaje de descuento * </label> <input name="Porcentaje" type="number" ng-model="Descuento.PorcentajeDescuento" class="form-control" ng-pattern="/[0-9]$/" placeholder="Porcentaje" size="3" required="" min="1" max="100"/> <b style="color:red" ng-show="frm.Porcentaje.$invalid && !frm.Porcentaje.$pristine" class="help-block">Escriba un descuento válido.</b> </div> </div> <div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div> </div> <div class="form-group row"> <div class="col-xs-0 col-sm-0 col-md-2 col-lg-2"> <div class="form-group"> <button type="submit" ng-click="descuentoCrear()" class="btn btn-primary btn-block">Aceptar</button> </div> </div> <div class="col-xs-0 col-sm-0 col-md-2 col-lg-2"> <div class="form-group"> <button type="button" ng-click="descuentoCancelar()" class="btn btn-warning btn-block">Cancelar</button> </div> </div> </div> </form> </div>
+<div class="container">
+	<h2>Nuevo descuento</h2>
+	<form name="frm" ng-swipe-right="descuentoCancelar()">
+		<hr>
+
+		<div class="form-group row">
+			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+				<div class="pull-rigth">
+					<label>Nivel del distribuidor * </label>
+					  <select name="IdNivelDistribuidor" class="form-control" ng-model="Descuento.IdNivelDistribuidor"
+            ng-options="Niveles.IdNivelDistribuidor as Niveles.Nivel for Niveles in selectNivelesDistribuidor" required="">
+              <option value="" ng-selected="true">Selecciona un nivel...</option>
+            </select>
+					<b style="color:red" ng-show="frm.IdNivelDistribuidor.$invalid && !frm.IdNivelDistribuidor.$pristine" class="help-block">Selecciona un nivel.</b>
+				</div>
+			</div>
+			<div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div>
+		</div>
+
+		<div class="form-group row">
+			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+				<div class="pull-rigth">
+					<label>Tipo de producto que aplica * </label>
+            <select name="Especializacion" class="form-control" ng-model="Descuento.Especializacion"
+            ng-options="Especializaciones.Especializacion as Especializaciones.Especializacion for Especializaciones in selectEspecializaciones" required="">
+              <option value="" ng-selected="true">Selecciona un tipo de producto...</option>
+            </select>
+					<b style="color:red" ng-show="frm.Especializacion.$invalid && !frm.Especializacion.$pristine" class="help-block">Selecciona un especialización.</b>
+				</div>
+			</div>
+			<div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div>
+		</div>
+
+		<div class="form-group row">
+			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+				<div class="pull-rigth">
+					<label>Porcentaje de descuento * </label>
+					<input name="Porcentaje" type="number" ng-model="Descuento.PorcentajeDescuento" class="form-control" ng-pattern="/[0-9]$/" placeholder="Porcentaje"
+						size="3" required="" min="1" max="100" />
+					<b style="color:red" ng-show="frm.Porcentaje.$invalid && !frm.Porcentaje.$pristine" class="help-block">Escriba un descuento válido.</b>
+				</div>
+			</div>
+			<div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div>
+		</div>
+
+		<div class="form-group row">
+			<div class="col-xs-0 col-sm-0 col-md-2 col-lg-2">
+				<div class="form-group">
+					<button type="submit" ng-click="descuentoCrear()" class="btn btn-primary btn-block">Aceptar</button>
+				</div>
+			</div>
+			<div class="col-xs-0 col-sm-0 col-md-2 col-lg-2">
+				<div class="form-group">
+					<button type="button" ng-click="descuentoCancelar()" class="btn btn-warning btn-block">Cancelar</button>
+				</div>
+			</div>
+		</div>
+	</form>
+
+</div>
