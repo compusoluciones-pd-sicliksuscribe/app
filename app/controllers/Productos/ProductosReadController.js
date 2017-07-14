@@ -76,9 +76,9 @@
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
 
-      EmpresasXEmpresasFactory.getEmpresasXEmpresas()
+      EmpresasXEmpresasFactory.getClients()
         .success(function (Empresas) {
-          $scope.selectEmpresas = Empresas;
+          $scope.selectEmpresas = Empresas.data;
         })
         .error(function (data, status, headers, config) {
           $scope.ShowToast('No pudimos cargar la información de tus clientes, por favor intenta de nuevo más tarde.', 'danger');
