@@ -1,21 +1,27 @@
 <div class="container">
-  <!-- <div class="dropdown">
-    <button class="btn btn-primary dropdown-toggle" id="menu1" type="button" data-toggle="dropdown">Dropdown Example
-      <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-      <li ng-repeat="version in versiones" ng-selected="version.Id==4"><a style="color: black" 
-        href="#{{version.Version}}">{{version.Version}}</a></li>   
-    </ul>
-  </div> -->
 
-  <select name="Versiones" class="form-control" ng-model="value" ng-change="asignarNivel(Empresa, value)">
-    <option value="">{{versiones[0].Version}}</option>  
-    <option ng-repeat="version in versiones" value="{{version.Id}}" ng-show="version.Id!=versiones[0].Id">
-      {{version.Version}}</option>
-  </select>
-
-   <div>
-    <h1>"{{versiones[].Version}}"</h1>
-  </div> 
+  <div class=row>
+    <div class="col-sm-2">
+      <select name="Versiones" class="form-control" ng-model="value" ng-change="GetDetalle(value)">
+        <option value="">{{versiones[0].Version}}</option>  
+        <option ng-repeat="version in versiones" value="{{version.Id}}" ng-show="version.Id!=versiones[0].Id">
+          {{version.Version}}</option>
+      </select>
+      <hr />
+      <div>
+        <ul>
+          <li ng-repeat="detalle in detalleVersion">
+            {{detalle.Titulo}}
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-sm-10">
+      <h1>{{Titulo}}</h1>
+      <div ng-repeat="detalle in detalleVersion">
+        <h3>{{detalle.Titulo}}</h3>
+        <p>{{detalle.Descripcion}}</p>
+      </div>
+    </div> 
+  </div>
 </div>
