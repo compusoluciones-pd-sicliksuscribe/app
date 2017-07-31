@@ -1,0 +1,14 @@
+<div class="container" ng-swipe-right="" ng-swipe-left="">
+  <div class="dropdown">
+    <button class="btn btn-primary dropdown-toggle" id="menu1" type="button" data-toggle="dropdown">Dropdown Example
+      <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+      <li ng-repeat="version in versiones" ng-selected="version.Id==4"><a style="color: black" href="#{{version.Version}}">{{version.Version}}</a></li>   
+    </ul>
+  </div>
+
+  <div>
+    <h1>"{{versiones[].Version}}"</h1>
+  </div>
+</div>
