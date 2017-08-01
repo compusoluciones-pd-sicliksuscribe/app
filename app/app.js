@@ -88,6 +88,16 @@
         }
       })
 
+      .when('/migraciones', {
+        controller: 'MigracionController', templateUrl: 'app/views/Migracion/Migracion.html',
+        resolve: {
+          'check': function ($location, $cookieStore) {
+            var Session = $cookieStore.get('Session');
+            if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); }
+          }
+        }
+      })
+
       .when('/ConfigurarRPs/:IdEmpresa', {
         controller: 'EmpresasRPController', templateUrl: 'app/views/Empresas/EmpresasRP.html',
         resolve: {
