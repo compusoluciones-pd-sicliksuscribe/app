@@ -93,7 +93,17 @@
         resolve: {
           'check': function ($location, $cookieStore) {
             var Session = $cookieStore.get('Session');
-            if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); }
+            if (!(Session.IdTipoAcceso === 2)) { $location.path('/404'); }
+          }
+        }
+      })
+
+      .when('/migraciones/:idMigracion', {
+        controller: 'MigracionDetalleController', templateUrl: 'app/views/Migracion/MigracionDetalle.html',
+        resolve: {
+          'check': function ($location, $cookieStore) {
+            var Session = $cookieStore.get('Session');
+            if (!(Session.IdTipoAcceso === 2)) { $location.path('/404'); }
           }
         }
       })
