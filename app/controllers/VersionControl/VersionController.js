@@ -1,7 +1,8 @@
 (function(){
-  var VersionController = function ($scope, $log, $location, $cookieStore, $route, VersionFactory) {
+  var VersionController = function ($scope, $log, $location, $cookieStore, $route, VersionFactory, $anchorScroll) {
     $scope.versiones = [];
     $scope.currentPath = $location.path();
+    $anchorScroll.yOffset = 130;
 
     $scope.init = function () {
       if ($scope.currentPath === '/Version') {
@@ -18,7 +19,7 @@
         })
         .error(function (data, status, headers, config) {
             $scope.ShowToast('No pudimos traer las versiones.', 'danger');
-            $location.path('/uf/Carrito');
+            $location.path('/');
             $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
     };
@@ -32,7 +33,7 @@
       })
       .error(function (data, status, headers, config) {
           $scope.ShowToast('No pudimos traer el detalle de la versión.', 'danger');
-          $location.path('/uf/Carrito');
+          $location.path('/');
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
       });
     };
@@ -40,12 +41,16 @@
     $scope.init();
 
     $scope.GetDetalle = function (IdVersion, text) {
-      console.log(text);
       if(!IdVersion){
         IdVersion=4;
       }
       obtenerDetalle(IdVersion); 
     };
+
+    $scope.scrollTo = function(id) {
+      //$location.hash(id);
+      $anchorScroll(id);
+    }
 
     var SetTitulo = function (){
       var selectedIndex = document.getElementsByName("Versiones")[0].selectedIndex-1;
@@ -56,6 +61,6 @@
     };
   };
     
-  VersionController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$route', 'VersionFactory'];
+  VersionController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$route', 'VersionFactory','$anchorScroll', '$routeParams'];
   angular.module('marketplace').controller('VersionController', VersionController);
 }());

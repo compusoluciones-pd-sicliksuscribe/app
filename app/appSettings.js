@@ -1,7 +1,7 @@
 
 angular.module('marketplace')
 
-  .run(function ($rootScope) {
+  .run(function ($rootScope, $location, $anchorScroll, $routeParams) {
     $rootScope.rsTitle = 'click suscribe | CompuSoluciones';
     $rootScope.rsVersion = '2.1.1';
     $rootScope.API = 'http://localhost:8080/';
@@ -10,4 +10,5 @@ angular.module('marketplace')
     /* $rootScope.API = 'https://pruebas.compusoluciones.com/';
      $rootScope.MAPI = 'http://microsoft-api.us-east-1.elasticbeanstalk.com/';
      $rootScope.dominio = 'clicksuscribe';*/
+    
   });
