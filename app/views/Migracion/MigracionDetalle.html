@@ -1,0 +1,49 @@
+<div class="container">
+  <h2>Migracion</h2>
+  <div class="progress" style="margin-bottom: 30px">
+    <div class="progress-bar" ng-style="{ width: ((pasoActual / pasosDeMigracion.length) * 100) + '%' }">{{pasoActual}} / {{pasosDeMigracion.length}}</div>
+    <div class="progress-bar progress-bar-info" ng-style="{ width: ((1 / pasosDeMigracion.length) * 100) + '%' }" ng-click="setSelected(pasoActual)"
+      style="cursor: pointer">
+      {{pasosDeMigracion[pasoActual].nombreDePaso}}
+    </div>
+  </div>
+  <div class="row" style="font-size: 16px">
+    <div class="col-md-4">
+      <div class="list-group">
+        <a class="list-group-item" ng-class="{
+          'list-group-item-info': $index < pasoActual,
+          active: $index <= pasoSeleccionado }" ng-style="{ cursor: $index > pasoActual ? 'not-allowed' : ''}" ng-repeat="paso in pasosDeMigracion"
+          ng-click="setSelected($index)">
+          {{paso.nombreDePaso}}
+           <span class="badge" ng-if="$index < pasoActual">
+            <i class="fa fa-check"aria-hidden="true"></i>
+          </span> 
+          <span class="badge" ng-if="$index === pasoActual">
+            <i class="fa fa-wrench" aria-hidden="true"></i>
+          </span>
+        </a>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div ng-if="pasoSeleccionado === 0">
+        <div class="form-group">
+          <label for="nombre">Nombre</label>
+          <input type="text" class="form-control" id="nombre" placeholder="Nombre para identificar esta migración" name="nombre">
+        </div>
+        <div class="pull-right">
+          <button type="button" ng-click="completarPaso()" class="btn btn-default" style="min-width:0;padding-left:16px;padding-right:16px;height:inherit">
+            REGRESAR 
+            <!-- <i class="fa fa-arrow-left" aria-hidden="true" style="float: none; font-size: 16px;"></i>  -->
+          </button>
+          <button type="button" ng-click="completarPaso()" class="btn btn-primary" style="min-width:0;padding-left:16px;padding-right:16px;height:inherit">
+            SIGUIENTE
+            <!-- <i class="fa fa-arrow-right" aria-hidden="true" style="float: none; font-size: 16px;"></i> -->
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <button type="button" ng-click="regresar()" class="btn btn-warning pull-right">Regresar</button>
+    </div>
+  </div>
+</div>
