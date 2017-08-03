@@ -1,0 +1,50 @@
+(function () {
+  var MigracioneFactory = function ($http, $cookieStore, $rootScope) {
+    var factory = {};
+    var Session = {};
+
+    factory.refreshToken = function () {
+      Session = $cookieStore.get('Session');
+      if (!Session) { Session = { Token: 'no' }; }
+      $http.defaults.headers.common['token'] = Session.Token;
+    };
+
+    factory.refreshToken();
+
+    factory.getMigraciones = function () {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'migrations');
+    };
+
+    factory.getMigracion = function (IdMigracion) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'migrations/' + IdMigracion);
+    };
+
+    factory.postMigracion = function (migracion) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'migrations', migracion);
+    };
+
+    factory.getDominio = function ({ dominio, contexto }) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'migrations/customer/' + contexto + '/' + dominio);
+    };
+
+    factory.postUsuario = function (user) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'migrations/user', user);
+    };
+
+    factory.postCliente = function (cliente) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'migrations/customer', cliente);
+    };
+
+    return factory;
+  };
+
+  MigracioneFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
+
+  angular.module('marketplace').factory('MigracioneFactory', MigracioneFactory);
+}());
