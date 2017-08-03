@@ -1,6 +1,6 @@
 <div class="container">
   <h2>Migración<span ng-if="datosDeMigracion.NombreCliente !== ''"> de {{datosDeMigracion.NombreCliente}}</span></h2>
-  <div class="progress" style="margin-bottom: 30px">
+  <div class="progress" style="margin-bottom: 30px;">
     <div class="progress-bar" ng-style="{ width: ((pasoActual / pasosDeMigracion.length) * 100) + '%' }">{{pasoActual}} / {{pasosDeMigracion.length}}</div>
     <div class="progress-bar progress-bar-info" ng-style="{ width: ((1 / pasosDeMigracion.length) * 100) + '%' }" ng-click="setSelected(pasoActual)"
       style="cursor: pointer">
@@ -12,7 +12,8 @@
       <div class="list-group">
         <a class="list-group-item" ng-class="{
           'list-group-item-info': $index < pasoActual,
-          active: $index <= pasoSeleccionado }" ng-style="{ cursor: $index > pasoActual ? 'not-allowed' : ''}" ng-repeat="paso in pasosDeMigracion"
+          active: $index <= pasoSeleccionado }"
+          ng-style="{ cursor: $index > pasoActual ? 'not-allowed' : ''}" ng-repeat="paso in pasosDeMigracion"
           ng-click="setSelected($index)">
           {{paso.nombreDePaso}}
            <span class="badge" ng-if="$index < pasoActual">
@@ -30,7 +31,7 @@
     <div class="alert alert-info col-md-8" ng-if="pasoSeleccionado === 3" style="border-radius: 0">
       <strong>Info!</strong> Crea un usuario administrador para la consola del usuario final, con esto podras administrar los asientos.
     </div>
-    <div class="col-md-8" style="border: 1px solid #ddd;padding-top:15px;padding-bottom:15px;background:#f5f5f5">
+    <div class="col-md-8" style="border: 1px solid #ddd;padding-top:15px;padding-bottom:15px;background:#f5f5f5;border-radius:4px">
       <div ng-if="pasoSeleccionado === 0">
         <div class="row">
           <div class="form-group col-md-6">
