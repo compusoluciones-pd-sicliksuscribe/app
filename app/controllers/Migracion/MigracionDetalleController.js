@@ -16,8 +16,14 @@
       { llaveDePaso: 'CancelarSuscripciones', nombreDePaso: 'Cancelar suscripciones' },
       { llaveDePaso: 'AsignarAsientos', nombreDePaso: 'Asignar asientos' }
     ];
+    $scope.contextos = [
+      { IdContexto: 1, Contexto: 'sandbox' },
+      { IdContexto: 2, Contexto: 'produccion' }
+    ];
     $scope.datosDeMigracion = {
-      NombreCliente: 1,
+      NombreCliente: '',
+      Dominio: '',
+      IdContexto: 1,
       RelacionarMayorista: 1,
       CrearAdministrador: 1,
       ImportarDominio: 1,
@@ -35,11 +41,19 @@
     };
     $scope.completarPaso = function () {
       if ($scope.pasoActual > $scope.pasoSeleccionado) {
-        $scope.pasoSeleccionado = $scope.pasoActual;
+        $scope.pasoSeleccionado = $scope.pasoSeleccionado + 1;
       } else {
         $scope.pasoActual = $scope.pasoActual + 1;
         $scope.pasoSeleccionado = $scope.pasoActual;
       }
+    };
+    $scope.pasoAnterior = function () {
+      if ($scope.pasoSeleccionado > 0) {
+        $scope.pasoSeleccionado = $scope.pasoSeleccionado - 1;
+      }
+    };
+    $scope.debugSelect = function () {
+      console.log($scope.datosDeMigracion);
     };
   };
 
