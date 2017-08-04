@@ -4,13 +4,13 @@
     $scope.pasoSeleccionado = 0;
     $scope.pasoActual = 0;
     $scope.pasosDeMigracion = [
-      { llaveDePaso: 'NombreCliente', nombreDePaso: 'Nombre  migración' },
-      { llaveDePaso: 'RelacionarMayorista', nombreDePaso: 'Relacionar mayorista' },
-      { llaveDePaso: 'ImportarDominio', nombreDePaso: 'Crear cliente aplicación' },
-      { llaveDePaso: 'CrearAdministrador', nombreDePaso: 'Crear administrador' },
-      { llaveDePaso: 'OrdenarSuscripciones', nombreDePaso: 'Ordenar suscripciones' },
-      { llaveDePaso: 'CancelarSuscripciones', nombreDePaso: 'Cancelar suscripciones' },
-      { llaveDePaso: 'AsignarAsientos', nombreDePaso: 'Asignar asientos' }
+      { IdPaso: 0, llaveDePaso: 'NombreMigracion', nombreDePaso: 'Nombre  migración' },
+      { IdPaso: 1, llaveDePaso: 'RelacionarMayorista', nombreDePaso: 'Relacionar mayorista' },
+      { IdPaso: 2, llaveDePaso: 'ImportarDominio', nombreDePaso: 'Crear cliente aplicación' },
+      { IdPaso: 3, llaveDePaso: 'CrearAdministrador', nombreDePaso: 'Crear administrador' },
+      { IdPaso: 4, llaveDePaso: 'OrdenarSuscripciones', nombreDePaso: 'Ordenar suscripciones' },
+      { IdPaso: 5, llaveDePaso: 'CancelarSuscripciones', nombreDePaso: 'Cancelar suscripciones' },
+      { IdPaso: 6, llaveDePaso: 'AsignarAsientos', nombreDePaso: 'Asignar asientos' }
     ];
     $scope.contextos = [
       { IdContexto: 1, Contexto: 'sandbox' },
@@ -32,6 +32,11 @@
     };
 
     $scope.actualizarPasos = function () {
+      if ($scope.idMigracion === '0') {
+        $scope.pasoActual = 0;
+        $scope.pasoSeleccionado = 0;
+        return;
+      }
       if ($scope.datosDeMigracion.RelacionarMayorista === 0) {
         $scope.pasoActual = 1;
         $scope.pasoSeleccionado = 1;
@@ -62,6 +67,9 @@
         $scope.pasoSeleccionado = 6;
         return;
       }
+      $scope.pasoActual = 7;
+      $scope.pasoSeleccionado = 7;
+      return;
     };
 
     $scope.init = function () {
@@ -72,6 +80,7 @@
             $scope.actualizarPasos();
           });
       }
+      $scope.actualizarPasos();
     };
 
     $scope.init();
@@ -96,7 +105,24 @@
     };
 
     $scope.actualizarPasosEnBaseDeDatos = function () {
-
+      for (let x = 0; x < $scope.pasosDeMigracion.length; x++) {
+        if ($scope.pasoActual === $scope.pasosDeMigracion[x].IdPaso) {
+          $scope.nombrePorActualizar = $scope.pasosDeMigracion[x].llaveDePaso;
+        }
+      }
+      var objParaActualizar = {
+        IdMigracion: $scope.idMigracion
+      };
+      objParaActualizar[$scope.nombrePorActualizar] = 1;
+      MigracionFactory.patchMigracion(objParaActualizar)
+        .then(function (response) {
+          if (response.data.success) {
+            return $scope.ShowToast(response.data.message, 'success');
+          }
+          $scope.ShowToast(response.data.message, 'danger');
+          $scope.pasoActual--;
+          $scope.pasoSeleccionado = $scope.pasoActual;
+        });
     };
 
     $scope.setSelected = function (index) {
@@ -108,6 +134,7 @@
       $location.path('/migraciones');
     };
     $scope.completarPaso = function () {
+      $scope.actualizarPasosEnBaseDeDatos();
       if ($scope.pasoActual === 0) {
         $scope.crearMigracion();
       }
