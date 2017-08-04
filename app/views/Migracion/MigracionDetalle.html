@@ -43,12 +43,12 @@
             <div class="form-group col-md-6">
               <label for="nombre">Nombre</label>
               <input type="text" ng-model="datosDeMigracion.NombreMigracion" class="form-control" id="nombre" placeholder="Nombre para identificar esta migración"
-                name="nombre" maxlength="64">
+                name="nombre" maxlength="64" ng-disabled="datosDeMigracion.NombreMigracion !== ''">
             </div>
             <div class="form-group col-md-6">
               <label for="mySelect">Ambiente</label>
               <select name="mySelect" id="mySelect" class="form-control" ng-options="contexto.IdContexto as contexto.Contexto for contexto in contextos"
-                ng-model="datosDeMigracion.IdContexto" ng-change=""></select>
+                ng-model="datosDeMigracion.IdContexto" ng-change="" ng-disabled="datosDeMigracion.Contexto !== ''"></select>
             </div>
           </div>
         </div>
