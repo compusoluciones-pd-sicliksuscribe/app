@@ -54,61 +54,69 @@
         </div>
 
         <div ng-if="pasoSeleccionado === 1">
-          <!-- <h3 style="margin-top:0">Envía la siguiente liga de invitación a tu usuario</h3> -->
-
-            <div class="form-group">
-              <label>Envía la siguiente liga de invitación a tu usuario</label> 
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label>Envía la siguiente liga de invitación a tu usuario</label>
               <div class="input-group">
                 <input type="text" class="form-control" id="invite-url" value="https://portal.office.com/partner/partnersignup.aspx?type=ResellerRelationship&id=9e09e971-5b2c-47d3-acec-be60c2665bae&csp=1&msppid=0">
                 <span class="input-group-btn">
                   <button class="btn btn-primary" type="button" ng-click="copyToCipbard()"
                   style="min-width:0;padding-left:16px;padding-right:16px;height:inherit;padding-top: 9px;padding-bottom: 3px;"
                   data-toggle="popover" data-trigger="click" data-content="Copiado!"
-                  data-placement="top"><i class="fa fa-clipboard" aria-hidden="true"></i>&nbsp;</button>
+                  data-placement="right"><i class="fa fa-clipboard" aria-hidden="true"></i>&nbsp;</button>
                 </span>
-                <script>
-                $(document).ready(function(){
-                    $('[data-toggle="popover"]').popover();   
-                });
-                </script>
               </div>
             </div>
+          </div>
+          <script>
+            $(document).ready(function () {
+              $('[data-toggle="popover"]').popover();
+            });
+          </script>
         </div>
 
         <div ng-if="pasoSeleccionado === 2">
-          <div class="form-group">
-            <label for="dominio">Dominio</label>
-            <input type="text" ng-model="datosDeMigracion.Dominio" class="form-control" id="dominio" placeholder="Dominio Microsoft de la empresa"
-              name="nombre" maxlength="64">
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="dominio">Dominio</label>
+              <div class="input-group">
+                <input type="text" ng-model="datosDeMigracion.Dominio" class="form-control" id="dominio" placeholder="Dominio Microsoft de la empresa"
+                  maxlength="64">
+                <span class="input-group-btn">
+                <button class="btn btn-primary" type="button" ng-click=""
+                style="min-width:0;padding-left:16px;padding-right:16px;height:inherit;">VALIDAR</button>
+              </span>
+              </div>
+            </div>
           </div>
-          <button type="button" ng-click="completarPaso()" class="btn btn-primary" style="min-width:0;padding-left:16px;padding-right:16px;height:inherit">
-              VALIDAR
-          </button>
-          <button type="button" ng-click="completarPaso()" class="btn btn-primary" style="min-width:0;padding-left:16px;padding-right:16px;height:inherit">
-              IMPORTAR
-          </button>
         </div>
-
         <div ng-if="pasoSeleccionado === 3">
-          <div class="form-group">
-            <label for="dominio">Usuario</label>
-            <input type="text" ng-model="datosDeMigracion.Dominio" class="form-control" id="dominio" placeholder="@dominio.onmicrosoft.com"
-              name="nombre" maxlength="64">
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="dominio">Usuario</label>
+              <div class="input-group">
+                <input type="text" ng-model="datosDeMigracion.Usuario" class="form-control" id="dominio" placeholder="@dominio.onmicrosoft.com"
+                  maxlength="64">
+                <span class="input-group-addon">@{{datosDeMigracion.Dominio}}.onmicrosoft.com</span>
+              </div>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="dominio">Contraseña</label>
+              <input type="text" ng-model="datosDeMigracion.Dominio" class="form-control" id="dominio" placeholder="8 longitud, 1 mayuscula, 1 numero, 1 caracter especial"
+                name="nombre" maxlength="64">
+            </div>
           </div>
-          <div class="form-group">
-            <label for="dominio">Nombre</label>
-            <input type="text" ng-model="datosDeMigracion.Dominio" class="form-control" id="dominio" placeholder="Dominio Microsoft de la empresa"
-              name="nombre" maxlength="64">
-          </div>
-          <div class="form-group">
-            <label for="dominio">Apellidos</label>
-            <input type="text" ng-model="datosDeMigracion.Dominio" class="form-control" id="dominio" placeholder="Dominio Microsoft de la empresa"
-              name="nombre" maxlength="64">
-          </div>
-          <div class="form-group">
-            <label for="dominio">Contraseña</label>
-            <input type="text" ng-model="datosDeMigracion.Dominio" class="form-control" id="dominio" placeholder="8 caracteres, 1 mayuscula, 1 numero y 1 caracter especial"
-              name="nombre" maxlength="64">
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="dominio">Nombre</label>
+              <input type="text" ng-model="datosDeMigracion.Dominio" class="form-control" id="dominio" placeholder="Nombre del usuario de esta cuenta"
+                name="nombre" maxlength="64">
+            </div>
+            <div class="form-group col-md-6">
+              <label for="dominio">Apellidos</label>
+              <input type="text" ng-model="datosDeMigracion.Dominio" class="form-control" id="dominio" placeholder="Apellidos del usuario de esta cuenta"
+                name="nombre" maxlength="64">
+            </div>
           </div>
         </div>
         <div class="pull-right">
@@ -116,24 +124,24 @@
             margin-right:8px;background:#f5f5f5;color:#565696">
                 REGRESAR
             </button>
-          <button type="button" ng-click="pasoAnterior()" class="btn btn-default" ng-if="pasoSeleccionado > 0" 
-            style="min-width:0;padding-left:16px;padding-right:16px;height:inherit;margin-right:8px;
+          <button type="button" ng-click="pasoAnterior()" class="btn btn-default" ng-if="pasoSeleccionado > 0" style="min-width:0;padding-left:16px;padding-right:16px;height:inherit;margin-right:8px;
             border-color:#00549F;color:#00549F;background:white;">
                 ANTERIOR
             </button>
 
-          <button type="button" ng-click="completarPaso()" class="btn btn-primary"
-            ng-if="pasoSeleccionado === 0"
-            style="min-width:0;padding-left:16px;padding-right:16px;height:inherit">
+          <button type="button" ng-click="completarPaso()" class="btn btn-primary" ng-if="pasoSeleccionado === 0" style="min-width:0;padding-left:16px;padding-right:16px;height:inherit">
             CREAR
           </button>
 
-          <button type="button" ng-click="completarPaso()" class="btn btn-primary"
-            ng-if="pasoSeleccionado !== 0"
+          <button type="button" ng-click="completarPaso()" class="btn btn-primary" ng-if="pasoSeleccionado === 2" style="min-width:0;padding-left:16px;padding-right:16px;height:inherit">
+                IMPORTAR
+          </button>
+
+          <button type="button" ng-click="completarPaso()" class="btn btn-primary" ng-if="pasoSeleccionado !== 0 && pasoSeleccionado !== 2"
             style="min-width:0;padding-left:16px;padding-right:16px;height:inherit">
                 SIGUIENTE
           </button>
-            
+
         </div>
       </div>
     </div>
