@@ -17,23 +17,28 @@
       { IdContexto: 2, Contexto: 'produccion' }
     ];
 
-    $scope.init = function() {
-
+    $scope.init = function () {
+      if ($scope.idMigracion !== 0) {
+        MigracionFactory.getMigracion($scope.idMigracion)
+          .then(function (response) {
+            $scope.datosDeMigracion = response.data.data;
+          });
+      }
     };
 
     $scope.init();
 
-    $scope.datosDeMigracion = {
-      NombreCliente: '',
-      Dominio: '',
-      IdContexto: 1,
-      RelacionarMayorista: 1,
-      CrearAdministrador: 1,
-      ImportarDominio: 1,
-      OrdenarSuscripciones: 0,
-      CancelarSuscripciones: 0,
-      AsignarAsientos: 0
-    };
+    // $scope.datosDeMigracion = {
+    //   NombreCliente: '',
+    //   Dominio: '',
+    //   IdContexto: 1,
+    //   RelacionarMayorista: 1,
+    //   CrearAdministrador: 1,
+    //   ImportarDominio: 1,
+    //   OrdenarSuscripciones: 0,
+    //   CancelarSuscripciones: 0,
+    //   AsignarAsientos: 0
+    // };
     $scope.setSelected = function (index) {
       if (index <= $scope.pasoActual) {
         $scope.pasoSeleccionado = index;
