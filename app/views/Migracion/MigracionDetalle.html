@@ -1,5 +1,6 @@
 <div class="container">
   <h2>Migración<span ng-if="datosDeMigracion.NombreCliente !== ''"> de {{datosDeMigracion.NombreCliente}}</span></h2>
+  <!-- <div class="row"> -->
   <div class="progress" style="margin-bottom: 30px;">
     <div class="progress-bar" ng-style="{ width: ((pasoActual / pasosDeMigracion.length) * 100) + '%' }">{{pasoActual}} / {{pasosDeMigracion.length}}</div>
     <div class="progress-bar progress-bar-info" ng-style="{ width: ((1 / pasosDeMigracion.length) * 100) + '%' }" ng-click="setSelected(pasoActual)"
@@ -7,13 +8,13 @@
       {{pasosDeMigracion[pasoActual].nombreDePaso}}
     </div>
   </div>
+  <!-- </div> -->
   <div class="row" style="font-size: 16px">
     <div class="col-md-4">
       <div class="list-group">
         <a class="list-group-item" ng-class="{
           'list-group-item-info': $index < pasoActual,
-          active: $index <= pasoSeleccionado }"
-          ng-style="{ cursor: $index > pasoActual ? 'not-allowed' : ''}" ng-repeat="paso in pasosDeMigracion"
+          active: $index <= pasoSeleccionado }" ng-style="{ cursor: $index > pasoActual ? 'not-allowed' : ''}" ng-repeat="paso in pasosDeMigracion"
           ng-click="setSelected($index)">
           {{paso.nombreDePaso}}
            <span class="badge" ng-if="$index < pasoActual">
@@ -25,80 +26,88 @@
         </a>
       </div>
     </div>
-    <div class="alert alert-info col-md-8" ng-if="pasoSeleccionado === 2" style="border-radius: 0">
-      <strong>Info!</strong> Ingresa el dominio del cliente que ya acepto la invitación, una vez validado podras importarlo y con esto lo veras disponible en tu aplicación.
+    <div style="padding-left:40px">
+    <div class="alert alert-info col-md-8" ng-if="pasoSeleccionado === 2" style="border-radius:2px;margin-left:14px;">
+      <strong>Info!</strong> Ingresa el dominio del cliente que ya acepto la invitación, una vez validado podras importarlo
+      y con esto lo veras disponible en tu aplicación.
     </div>
-    <div class="alert alert-info col-md-8" ng-if="pasoSeleccionado === 3" style="border-radius: 0">
-      <strong>Info!</strong> Crea un usuario administrador para la consola del usuario final, con esto podras administrar los asientos.
-    </div>
-    <div class="col-md-8" style="border: 1px solid #ddd;padding-top:15px;padding-bottom:15px;background:#f5f5f5;border-radius:4px">
-      <div ng-if="pasoSeleccionado === 0">
-        <div class="row">
-          <div class="form-group col-md-6">
-            <label for="nombre">Nombre</label>
-            <input type="text" ng-model="datosDeMigracion.NombreCliente" class="form-control" id="nombre" placeholder="Nombre para identificar esta migración"
+    <div class="alert alert-info col-md-8" ng-if="pasoSeleccionado === 3" style="border-radius:2px;margin-left:14px;">
+      <strong>Info!</strong> Crea un usuario administrador para la consola del usuario final, con esto podras administrar
+      los asientos.
+    </div></div>
+    <div class="col-md-8">
+      <div style="border: 1px solid #ddd;padding:15px;padding-bottom:49px;background:#f5f5f5;border-radius:2px">
+        <div ng-if="pasoSeleccionado === 0">
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="nombre">Nombre</label>
+              <input type="text" ng-model="datosDeMigracion.NombreCliente" class="form-control" id="nombre" placeholder="Nombre para identificar esta migración"
+                name="nombre" maxlength="64">
+            </div>
+            <div class="form-group col-md-6">
+              <label for="mySelect">Ambiente</label>
+              <select name="mySelect" id="mySelect" class="form-control" ng-options="contexto.IdContexto as contexto.Contexto for contexto in contextos"
+                ng-model="datosDeMigracion.IdContexto" ng-change="debugSelect()"></select>
+            </div>
+          </div>
+        </div>
+
+        <div ng-if="pasoSeleccionado === 1">
+          <h3 style="margin-top:0">Envía la siguiente liga de invitación a tu usuario</h3>
+          <div class="form-group">
+            <input type="text" class="form-control" value="https://portal.office.com/partner/partnersignup.aspx?type=ResellerRelationship&id=9e09e971-5b2c-47d3-acec-be60c2665bae&csp=1&msppid=0">
+          </div>
+        </div>
+
+        <div ng-if="pasoSeleccionado === 2">
+          <div class="form-group">
+            <label for="dominio">Dominio</label>
+            <input type="text" ng-model="datosDeMigracion.Dominio" class="form-control" id="dominio" placeholder="Dominio Microsoft de la empresa"
               name="nombre" maxlength="64">
           </div>
-          <div class="form-group col-md-6">
-            <label for="mySelect">Ambiente</label>
-            <select name="mySelect" id="mySelect" class="form-control" ng-options="contexto.IdContexto as contexto.Contexto for contexto in contextos"
-              ng-model="datosDeMigracion.IdContexto" ng-change="debugSelect()"></select>
+          <button type="button" ng-click="completarPaso()" class="btn btn-primary" style="min-width:0;padding-left:16px;padding-right:16px;height:inherit">
+              VALIDAR
+          </button>
+          <button type="button" ng-click="completarPaso()" class="btn btn-primary" style="min-width:0;padding-left:16px;padding-right:16px;height:inherit">
+              IMPORTAR
+          </button>
+        </div>
+
+        <div ng-if="pasoSeleccionado === 3">
+          <div class="form-group">
+            <label for="dominio">Usuario</label>
+            <input type="text" ng-model="datosDeMigracion.Dominio" class="form-control" id="dominio" placeholder="@dominio.onmicrosoft.com"
+              name="nombre" maxlength="64">
+          </div>
+          <div class="form-group">
+            <label for="dominio">Nombre</label>
+            <input type="text" ng-model="datosDeMigracion.Dominio" class="form-control" id="dominio" placeholder="Dominio Microsoft de la empresa"
+              name="nombre" maxlength="64">
+          </div>
+          <div class="form-group">
+            <label for="dominio">Apellidos</label>
+            <input type="text" ng-model="datosDeMigracion.Dominio" class="form-control" id="dominio" placeholder="Dominio Microsoft de la empresa"
+              name="nombre" maxlength="64">
+          </div>
+          <div class="form-group">
+            <label for="dominio">Contraseña</label>
+            <input type="text" ng-model="datosDeMigracion.Dominio" class="form-control" id="dominio" placeholder="8 caracteres, 1 mayuscula, 1 numero y 1 caracter especial"
+              name="nombre" maxlength="64">
           </div>
         </div>
-      </div>
-      <div ng-if="pasoSeleccionado === 1">
-        <h3 style="margin-top:0">Envía la siguiente liga de invitación a tu usuario</h3>
-        <div class="form-group">
-          <input type="text" class="form-control" value="https://portal.office.com/partner/partnersignup.aspx?type=ResellerRelationship&id=9e09e971-5b2c-47d3-acec-be60c2665bae&csp=1&msppid=0">
+        <div class="pull-right">
+          <button type="button" ng-click="regresar()" class="btn btn-basic" style="min-width:0;padding-left:16px;padding-right:16px;height:inherit;
+            margin-right:8px;background:#f5f5f5;color:#565696">
+                REGRESAR
+            </button>
+          <button type="button" ng-click="pasoAnterior()" class="btn btn-default" ng-if="pasoSeleccionado > 0" style="min-width:0;padding-left:16px;padding-right:16px;height:inherit;margin-right:8px;
+            border-color:#00549F;color:#00549F;background:white;">
+                ANTERIOR
+            </button>
+          <button type="button" ng-click="completarPaso()" class="btn btn-primary" style="min-width:0;padding-left:16px;padding-right:16px;height:inherit">
+                SIGUIENTE
+              </button>
         </div>
-      </div>
-      <div ng-if="pasoSeleccionado === 2">
-        <div class="form-group">
-          <label for="dominio">Dominio</label>
-          <input type="text" ng-model="datosDeMigracion.Dominio" class="form-control" id="dominio" placeholder="Dominio Microsoft de la empresa"
-            name="nombre" maxlength="64">
-        </div>
-        <button type="button" ng-click="completarPaso()" class="btn btn-primary" style="min-width:0;padding-left:16px;padding-right:16px;height:inherit">
-            VALIDAR
-        </button>
-        <button type="button" ng-click="completarPaso()" class="btn btn-primary" style="min-width:0;padding-left:16px;padding-right:16px;height:inherit">
-            IMPORTAR
-        </button>
-      </div>
-      <div ng-if="pasoSeleccionado === 3">
-        <div class="form-group">
-          <label for="dominio">Usuario</label>
-          <input type="text" ng-model="datosDeMigracion.Dominio" class="form-control" id="dominio" placeholder="@dominio.onmicrosoft.com"
-            name="nombre" maxlength="64">
-        </div>
-          <div class="form-group">
-          <label for="dominio">Nombre</label>
-          <input type="text" ng-model="datosDeMigracion.Dominio" class="form-control" id="dominio" placeholder="Dominio Microsoft de la empresa"
-            name="nombre" maxlength="64">
-        </div>
-          <div class="form-group">
-          <label for="dominio">Apellidos</label>
-          <input type="text" ng-model="datosDeMigracion.Dominio" class="form-control" id="dominio" placeholder="Dominio Microsoft de la empresa"
-            name="nombre" maxlength="64">
-        </div>
-          <div class="form-group">
-          <label for="dominio">Contraseña</label>
-          <input type="text" ng-model="datosDeMigracion.Dominio" class="form-control" id="dominio" placeholder="8 caracteres, 1 mayuscula, 1 numero y 1 caracter especial"
-            name="nombre" maxlength="64">
-        </div>
-        </div>
-      <div class="pull-right">
-        <button type="button" ng-click="regresar()" class="btn btn-basic" style="min-width:0;padding-left:16px;padding-right:16px;height:inherit;
-        margin-right:8px;background:#f5f5f5;color:#565696">
-            REGRESAR
-        </button>
-        <button type="button" ng-click="pasoAnterior()" class="btn btn-default" ng-if="pasoSeleccionado > 0" style="min-width:0;padding-left:16px;padding-right:16px;height:inherit;margin-right:8px;
-        border-color:#00549F;color:#00549F;background:white;">
-            ANTERIOR
-        </button>
-        <button type="button" ng-click="completarPaso()" class="btn btn-primary" style="min-width:0;padding-left:16px;padding-right:16px;height:inherit">
-            SIGUIENTE
-          </button>
       </div>
     </div>
     <!-- <div class="col-md-12">
