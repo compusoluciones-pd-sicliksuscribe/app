@@ -21,25 +21,37 @@
       if ($scope.idMigracion !== 0) {
         MigracionFactory.getMigracion($scope.idMigracion)
           .then(function (response) {
-            $scope.datosDeMigracion = response.data.data;
+            $scope.datosDeMigracion = response.data.data[0];
           });
+      } else {
+        $scope.datosDeMigracion = {
+          NombreMigracion: '',
+          NombreCliente: '',
+          Dominio: '',
+          IdContexto: 1,
+          Contexto: 'sandox',
+          RelacionarMayorista: 0,
+          CrearAdministrador: 0,
+          ImportarDominio: 0,
+          OrdenarSuscripciones: 0,
+          CancelarSuscripciones: 0,
+          AsignarAsientos: 0
+        };
       }
     };
 
     $scope.init();
 
-    $scope.datosDeMigracion = {
-      NombreCliente: '',
-      Dominio: '',
-      Usuario: '',
-      IdContexto: 1,
-      RelacionarMayorista: 1,
-      CrearAdministrador: 1,
-      ImportarDominio: 1,
-      OrdenarSuscripciones: 0,
-      CancelarSuscripciones: 0,
-      AsignarAsientos: 0
+    $scope.crearMigracion = function () {
+      console.log($scope.datosDeMigracion);
+      var nuevaMigracion = {
+        NombreMigracion: $scope.datosDeMigracion,
+        IdContexto: $scope.datosDeMigracion.IdContexto
+      };
+      MigracionFactory.postMigracion(nuevaMigracion)
+        .then(console.log);
     };
+
     $scope.setSelected = function (index) {
       if (index <= $scope.pasoActual) {
         $scope.pasoSeleccionado = index;
@@ -49,6 +61,9 @@
       $location.path('/migraciones');
     };
     $scope.completarPaso = function () {
+      if ($scope.pasoActual === 0) {
+        $scope.crearMigracion();
+      }
       if ($scope.pasoActual > $scope.pasoSeleccionado) {
         $scope.pasoSeleccionado = $scope.pasoSeleccionado + 1;
       } else {
@@ -63,9 +78,10 @@
     };
     $scope.copyToCipbard = function () {
       var copyTextarea = document.querySelector('#invite-url');
+      console.log(copyTextarea)
       copyTextarea.select();
       document.execCommand('copy');
-      // $scope.ShowToast('Liga copia', 'danger');
+      console.log($scope.datosDeMigracion);
     };
   };
 
