@@ -83,7 +83,7 @@
                 <input type="text" ng-model="datosDeMigracion.Dominio" class="form-control" id="dominio" placeholder="Dominio Microsoft de la empresa"
                   maxlength="64">
                 <span class="input-group-btn">
-                <button class="btn btn-primary" type="button" ng-click=""
+                <button class="btn btn-primary" type="button" ng-click="validarDominio()"
                 style="min-width:0;padding-left:16px;padding-right:16px;height:inherit;">VALIDAR</button>
               </span>
               </div>
@@ -107,19 +107,19 @@
             </div>
             <div class="form-group col-md-6">
               <label for="dominio">Contraseña</label>
-              <input type="password" ng-model="" class="form-control" id="dominio" placeholder="8 longitud, 1 mayuscula, 1 numero, 1 caracter especial"
+              <input type="password" ng-model="datosDeMigracion.Secreto" class="form-control" id="dominio" placeholder="8 longitud, 1 mayuscula, 1 numero, 1 caracter especial"
                 name="nombre" maxlength="64">
             </div>
           </div>
           <div class="row">
             <div class="form-group col-md-6">
               <label for="dominio">Nombre</label>
-              <input type="text" ng-model="" class="form-control" id="dominio" placeholder="Nombre del usuario"
+              <input type="text" ng-model="datosDeMigracion.NombreUsuario" class="form-control" id="dominio" placeholder="Nombre del usuario"
                 name="nombre" maxlength="64">
             </div>
             <div class="form-group col-md-6">
               <label for="dominio">Apellidos</label>
-              <input type="text" ng-model="" class="form-control" id="dominio" placeholder="Apellidos del usuario"
+              <input type="text" ng-model="datosDeMigracion.ApellidosUsuario" class="form-control" id="dominio" placeholder="Apellidos del usuario"
                 name="nombre" maxlength="64">
             </div>
           </div>

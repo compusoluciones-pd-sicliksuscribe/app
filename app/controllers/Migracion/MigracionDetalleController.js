@@ -42,12 +42,12 @@
         $scope.pasoSeleccionado = 1;
         return;
       }
-      if ($scope.datosDeMigracion.CrearAdministrador === 0) {
+      if ($scope.datosDeMigracion.ImportarDominio === 0) {
         $scope.pasoActual = 2;
         $scope.pasoSeleccionado = 2;
         return;
       }
-      if ($scope.datosDeMigracion.ImportarDominio === 0) {
+      if ($scope.datosDeMigracion.CrearAdministrador === 0) {
         $scope.pasoActual = 3;
         $scope.pasoSeleccionado = 3;
         return;
@@ -86,22 +86,61 @@
     $scope.init();
 
     $scope.crearMigracion = function () {
-      console.log($scope.datosDeMigracion);
       var nuevaMigracion = {
         NombreMigracion: $scope.datosDeMigracion.NombreMigracion,
         IdContexto: $scope.datosDeMigracion.IdContexto
       };
-      MigracionFactory.postMigracion(nuevaMigracion)
-        .then(function (response) {
-          console.log(response, response.data.data.success);
-          if (response.data.success) {
-            $location.path('/migraciones/' + response.data.data.insertId);
-            return $scope.ShowToast(response.data.message, 'success');
-          }
-          $scope.ShowToast(response.data.message, 'danger');
-          $scope.pasoActual--;
-          $scope.pasoSeleccionado = $scope.pasoActual;
+      return MigracionFactory.postMigracion(nuevaMigracion);
+    };
+
+    $scope.validarDominio = function () {
+      if ($scope.datosDeMigracion.Dominio.trim() !== '') {
+        MigracionFactory.getDominio($scope.datosDeMigracion)
+          .then(function (response) {
+            if (response.data.success === 0) {
+              $scope.datosDeMigracion.NombreCliente = '';
+              return $scope.ShowToast(response.data.message, 'danger');
+            }
+            $scope.datosDeMigracion.NombreCliente = response.data.items[0].companyProfile.companyName;
+          });
+      }
+    };
+
+    $scope.importarDominio = function () {
+      if ($scope.datosDeMigracion.Dominio) {
+        if ($scope.datosDeMigracion.Dominio.trim()) {
+          let cliente = {
+            migration: {
+              IdMigracion: $scope.datosDeMigracion.IdMigracion
+            },
+            context: $scope.datosDeMigracion.Contexto,
+            domain: $scope.datosDeMigracion.Dominio
+          };
+          return MigracionFactory.postCliente(cliente);
+        }
+        return Promise.reject({
+          success: 0,
+          message: 'Ingresa el dominio de microsoft'
         });
+      }
+      return Promise.reject({
+        success: 0,
+        message: 'Ingresa el dominio de microsoft'
+      });
+    };
+
+    $scope.crearAdministrador = function () {
+      let usuario = {
+        IdMigracion: $scope.datosDeMigracion.IdMigracion,
+        userInfo: {
+          Usuario: $scope.datosDeMigracion.Usuario,
+          Nombre: $scope.datosDeMigracion.NombreUsuario,
+          Apellidos: $scope.datosDeMigracion.ApellidosUsuario,
+          Secreto: $scope.datosDeMigracion.Secreto
+        },
+        context: $scope.datosDeMigracion.Contexto
+      };
+      return MigracionFactory.postUsuario(usuario);
     };
 
     $scope.actualizarPasosEnBaseDeDatos = function () {
@@ -133,16 +172,56 @@
     $scope.regresar = function () {
       $location.path('/migraciones');
     };
-    $scope.completarPaso = function () {
+
+    $scope.actualizarSiguientePaso = function () {
       $scope.actualizarPasosEnBaseDeDatos();
-      if ($scope.pasoActual === 0) {
-        $scope.crearMigracion();
-      }
       if ($scope.pasoActual > $scope.pasoSeleccionado) {
         $scope.pasoSeleccionado = $scope.pasoSeleccionado + 1;
       } else {
         $scope.pasoActual = $scope.pasoActual + 1;
         $scope.pasoSeleccionado = $scope.pasoActual;
+      }
+    };
+
+    $scope.completarPaso = function () {
+      if ($scope.pasoActual === 0) {
+        $scope.crearMigracion()
+          .then(function (response) {
+            if (response.data.success) {
+              $location.path('/migraciones/' + response.data.data.insertId);
+              return $scope.ShowToast(response.data.message, 'success');
+            }
+            $scope.ShowToast(response.data.message, 'danger');
+            $scope.pasoActual--;
+            $scope.pasoSeleccionado = $scope.pasoActual;
+          });
+      }
+      if ($scope.pasoActual === 1) {
+        $scope.actualizarSiguientePaso();
+      }
+      if ($scope.pasoActual === 2) {
+        $scope.importarDominio()
+          .then(function (resultado) {
+            if (resultado.data.success === 0) {
+              return $scope.ShowToast(resultado.data.message, 'danger');
+            }
+            $scope.actualizarSiguientePaso();
+          })
+          .catch(function (err) {
+            if (err.success === 0) {
+              return $scope.ShowToast(err.message, 'danger');
+            }
+          });
+      }
+      if ($scope.pasoActual === 3) {
+        $scope.crearAdministrador()
+          .then(function (resultado) {
+            console.log(resultado);
+            if (resultado.data.success === 0) {
+              return $scope.ShowToast(resultado.data.message, 'danger');
+            }
+            $scope.actualizarSiguientePaso();
+          });
       }
     };
     $scope.pasoAnterior = function () {
