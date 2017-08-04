@@ -4,8 +4,8 @@
     $scope.pasoSeleccionado = 0;
     $scope.pasoActual = 0;
     $scope.pasosDeMigracion = [
-      { llaveDePaso: 'NombreCliente', nombreDePaso: 'Nombre' },
-      { llaveDePaso: 'RelacionarMayorista', nombreDePaso: 'Relacionar Mayorista' },
+      { llaveDePaso: 'NombreCliente', nombreDePaso: 'Nombre  migración' },
+      { llaveDePaso: 'RelacionarMayorista', nombreDePaso: 'Relacionar mayorista' },
       { llaveDePaso: 'ImportarDominio', nombreDePaso: 'Crear cliente aplicación' },
       { llaveDePaso: 'CrearAdministrador', nombreDePaso: 'Crear administrador' },
       { llaveDePaso: 'OrdenarSuscripciones', nombreDePaso: 'Ordenar suscripciones' },
@@ -93,6 +93,10 @@
           $scope.pasoActual--;
           $scope.pasoSeleccionado = $scope.pasoActual;
         });
+    };
+
+    $scope.actualizarPasosEnBaseDeDatos = function () {
+
     };
 
     $scope.setSelected = function (index) {
