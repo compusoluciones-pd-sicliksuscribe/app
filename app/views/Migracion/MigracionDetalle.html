@@ -88,6 +88,11 @@
               </span>
               </div>
             </div>
+            <div class="form-group col-md-6">
+              <label for="dominio">Empresa</label>
+                <input disabled type="text" ng-model="datosDeMigracion.NombreCliente" class="form-control" id="dominio" placeholder="Nombre de la empresa"
+                  maxlength="64">
+            </div>
           </div>
         </div>
         <div ng-if="pasoSeleccionado === 3">
@@ -95,26 +100,26 @@
             <div class="form-group col-md-6">
               <label for="dominio">Usuario</label>
               <div class="input-group">
-                <input type="text" ng-model="datosDeMigracion.Usuario" class="form-control" id="dominio" placeholder="@dominio.onmicrosoft.com"
+                <input type="text" ng-model="datosDeMigracion.Usuario" class="form-control" id="dominio" placeholder="Usuario de cuenta"
                   maxlength="64">
                 <span class="input-group-addon">@{{datosDeMigracion.Dominio}}.onmicrosoft.com</span>
               </div>
             </div>
             <div class="form-group col-md-6">
               <label for="dominio">Contraseña</label>
-              <input type="text" ng-model="datosDeMigracion.Dominio" class="form-control" id="dominio" placeholder="8 longitud, 1 mayuscula, 1 numero, 1 caracter especial"
+              <input type="password" ng-model="" class="form-control" id="dominio" placeholder="8 longitud, 1 mayuscula, 1 numero, 1 caracter especial"
                 name="nombre" maxlength="64">
             </div>
           </div>
           <div class="row">
             <div class="form-group col-md-6">
               <label for="dominio">Nombre</label>
-              <input type="text" ng-model="datosDeMigracion.Dominio" class="form-control" id="dominio" placeholder="Nombre del usuario de esta cuenta"
+              <input type="text" ng-model="" class="form-control" id="dominio" placeholder="Nombre del usuario"
                 name="nombre" maxlength="64">
             </div>
             <div class="form-group col-md-6">
               <label for="dominio">Apellidos</label>
-              <input type="text" ng-model="datosDeMigracion.Dominio" class="form-control" id="dominio" placeholder="Apellidos del usuario de esta cuenta"
+              <input type="text" ng-model="" class="form-control" id="dominio" placeholder="Apellidos del usuario"
                 name="nombre" maxlength="64">
             </div>
           </div>
