@@ -4,13 +4,13 @@
     $scope.pasoSeleccionado = 0;
     $scope.pasoActual = 0;
     $scope.pasosDeMigracion = [
-      { llaveDePaso: 'NombreCliente', nombreDePaso: 'Nombre  migración' },
-      { llaveDePaso: 'RelacionarMayorista', nombreDePaso: 'Relacionar mayorista' },
-      { llaveDePaso: 'ImportarDominio', nombreDePaso: 'Crear cliente aplicación' },
-      { llaveDePaso: 'CrearAdministrador', nombreDePaso: 'Crear administrador' },
-      { llaveDePaso: 'OrdenarSuscripciones', nombreDePaso: 'Ordenar suscripciones' },
-      { llaveDePaso: 'CancelarSuscripciones', nombreDePaso: 'Cancelar suscripciones' },
-      { llaveDePaso: 'AsignarAsientos', nombreDePaso: 'Asignar asientos' }
+      { IdPaso: 0, llaveDePaso: 'NombreMigracion', nombreDePaso: 'Nombre  migración' },
+      { IdPaso: 1, llaveDePaso: 'RelacionarMayorista', nombreDePaso: 'Relacionar mayorista' },
+      { IdPaso: 2, llaveDePaso: 'ImportarDominio', nombreDePaso: 'Crear cliente aplicación' },
+      { IdPaso: 3, llaveDePaso: 'CrearAdministrador', nombreDePaso: 'Crear administrador' },
+      { IdPaso: 4, llaveDePaso: 'OrdenarSuscripciones', nombreDePaso: 'Ordenar suscripciones' },
+      { IdPaso: 5, llaveDePaso: 'CancelarSuscripciones', nombreDePaso: 'Cancelar suscripciones' },
+      { IdPaso: 6, llaveDePaso: 'AsignarAsientos', nombreDePaso: 'Asignar asientos' }
     ];
     $scope.contextos = [
       { IdContexto: 1, Contexto: 'sandbox' },
@@ -95,8 +95,13 @@
         });
     };
 
-    $scope.actualizarPasosEnBaseDeDatos = function () {
-
+    $scope.actualizarPasosEnBaseDeDatos = function () {      
+      for (let x = 0; x < $scope.pasosDeMigracion.length; x++) {
+        if ($scope.pasoActual === $scope.pasosDeMigracion[x].IdPaso) {
+          $scope.nombrePasoActual = $scope.pasosDeMigracion[x].llaveDePaso;
+        }
+      }
+      console.log($scope.nombrePasoActual);
     };
 
     $scope.setSelected = function (index) {
@@ -108,6 +113,7 @@
       $location.path('/migraciones');
     };
     $scope.completarPaso = function () {
+      $scope.actualizarPasosEnBaseDeDatos();
       if ($scope.pasoActual === 0) {
         $scope.crearMigracion();
       }
