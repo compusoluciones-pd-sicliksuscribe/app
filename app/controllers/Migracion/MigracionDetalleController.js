@@ -1,9 +1,5 @@
 (function () {
-  var MigracionDetalleController = function ($scope, $log, $location, $cookieStore, $routeParams) {
-    var a = { Cliente: 'Cliente 1', Estatus: 'Orgasmo' };
-    var b = { Cliente: 'Cliente 2', Estatus: 'Orgasmos' };
-    var c = { Cliente: 'Cliente 3', Estatus: 'Orgasmoz' };
-    $scope.migraciones = [a, b, c];
+  var MigracionDetalleController = function ($scope, $log, $location, $cookieStore, $routeParams, MigracionFactory) {
     $scope.idMigracion = $routeParams.idMigracion;
     $scope.pasoSeleccionado = 0;
     $scope.pasoActual = 0;
@@ -20,6 +16,13 @@
       { IdContexto: 1, Contexto: 'sandbox' },
       { IdContexto: 2, Contexto: 'produccion' }
     ];
+
+    $scope.init = function() {
+
+    };
+
+    $scope.init();
+
     $scope.datosDeMigracion = {
       NombreCliente: '',
       Dominio: '',
@@ -57,7 +60,7 @@
     };
   };
 
-  MigracionDetalleController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$routeParams'];
+  MigracionDetalleController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$routeParams', 'MigracionFactory'];
 
   angular.module('marketplace').controller('MigracionDetalleController', MigracionDetalleController);
 }());
