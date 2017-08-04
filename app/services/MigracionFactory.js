@@ -26,6 +26,11 @@
       return $http.post($rootScope.API + 'migrations', migracion);
     };
 
+    factory.patchMigracion = function (migracion) {
+      factory.refreshToken();
+      return $http.patch($rootScope.API + 'migrations', migracion);
+    };
+
     factory.getDominio = function ({ dominio, contexto }) {
       factory.refreshToken();
       return $http.get($rootScope.API + 'migrations/customer/' + contexto + '/' + dominio);

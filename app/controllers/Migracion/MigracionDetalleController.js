@@ -32,6 +32,11 @@
     };
 
     $scope.actualizarPasos = function () {
+      if ($scope.idMigracion === '0') {
+        $scope.pasoActual = 0;
+        $scope.pasoSeleccionado = 0;
+        return;
+      }
       if ($scope.datosDeMigracion.RelacionarMayorista === 0) {
         $scope.pasoActual = 1;
         $scope.pasoSeleccionado = 1;
@@ -62,6 +67,9 @@
         $scope.pasoSeleccionado = 6;
         return;
       }
+      $scope.pasoActual = 7;
+      $scope.pasoSeleccionado = 7;
+      return;
     };
 
     $scope.init = function () {
@@ -72,6 +80,7 @@
             $scope.actualizarPasos();
           });
       }
+      $scope.actualizarPasos();
     };
 
     $scope.init();
@@ -95,13 +104,27 @@
         });
     };
 
-    $scope.actualizarPasosEnBaseDeDatos = function () {      
+    $scope.actualizarPasosEnBaseDeDatos = function () {
       for (let x = 0; x < $scope.pasosDeMigracion.length; x++) {
         if ($scope.pasoActual === $scope.pasosDeMigracion[x].IdPaso) {
-          $scope.nombrePasoActual = $scope.pasosDeMigracion[x].llaveDePaso;
+          $scope.nombrePorActualizar = $scope.pasosDeMigracion[x].llaveDePaso;
         }
       }
-      console.log($scope.nombrePasoActual);
+      var objParaActualizar = {
+        IdMigracion: $scope.idMigracion
+      };
+      objParaActualizar[$scope.nombrePorActualizar] = 1;
+      if ($scope.datosDeMigracion[$scope.nombrePorActualizar] != 1) {
+        MigracionFactory.patchMigracion(objParaActualizar)
+          .then(function (response) {
+            if (response.data.success) {
+              return $scope.ShowToast(response.data.message, 'success');
+            }
+            $scope.ShowToast(response.data.message, 'danger');
+            $scope.pasoActual--;
+            $scope.pasoSeleccionado = $scope.pasoActual;
+          });
+      }
     };
 
     $scope.setSelected = function (index) {
