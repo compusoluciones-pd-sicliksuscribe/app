@@ -1,5 +1,5 @@
 (function () {
-  var MigracioneFactory = function ($http, $cookieStore, $rootScope) {
+  var MigracionFactory = function ($http, $cookieStore, $rootScope) {
     var factory = {};
     var Session = {};
 
@@ -44,7 +44,7 @@
     return factory;
   };
 
-  MigracioneFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
+  MigracionFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
 
-  angular.module('marketplace').factory('MigracioneFactory', MigracioneFactory);
+  angular.module('marketplace').factory('MigracionFactory', MigracionFactory);
 }());
