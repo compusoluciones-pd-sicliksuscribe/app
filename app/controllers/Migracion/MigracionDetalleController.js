@@ -45,11 +45,11 @@
     $scope.crearMigracion = function () {
       console.log($scope.datosDeMigracion);
       var nuevaMigracion = {
-        NombreMigracion: $scope.datosDeMigracion;
-        
-      }
-      MigracionFactory.postMigracion($scope.datosDeMigracion)
-        .then()
+        NombreMigracion: $scope.datosDeMigracion,
+        IdContexto: $scope.datosDeMigracion.IdContexto
+      };
+      MigracionFactory.postMigracion(nuevaMigracion)
+        .then(console.log);
     };
 
     $scope.setSelected = function (index) {
@@ -61,6 +61,9 @@
       $location.path('/migraciones');
     };
     $scope.completarPaso = function () {
+      if ($scope.pasoActual === 0) {
+        $scope.crearMigracion();
+      }
       if ($scope.pasoActual > $scope.pasoSeleccionado) {
         $scope.pasoSeleccionado = $scope.pasoSeleccionado + 1;
       } else {
@@ -75,9 +78,10 @@
     };
     $scope.copyToCipbard = function () {
       var copyTextarea = document.querySelector('#invite-url');
+      console.log(copyTextarea)
       copyTextarea.select();
       document.execCommand('copy');
-      // $scope.ShowToast('Liga copia', 'danger');
+      console.log($scope.datosDeMigracion);
     };
   };
 
