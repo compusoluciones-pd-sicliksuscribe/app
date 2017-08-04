@@ -114,17 +114,15 @@
         IdMigracion: $scope.idMigracion
       };
       objParaActualizar[$scope.nombrePorActualizar] = 1;
-      if ($scope.datosDeMigracion[$scope.nombrePorActualizar] != 1) {
-        MigracionFactory.patchMigracion(objParaActualizar)
-          .then(function (response) {
-            if (response.data.success) {
-              return $scope.ShowToast(response.data.message, 'success');
-            }
-            $scope.ShowToast(response.data.message, 'danger');
-            $scope.pasoActual--;
-            $scope.pasoSeleccionado = $scope.pasoActual;
-          });
-      }
+      MigracionFactory.patchMigracion(objParaActualizar)
+        .then(function (response) {
+          if (response.data.success) {
+            return $scope.ShowToast(response.data.message, 'success');
+          }
+          $scope.ShowToast(response.data.message, 'danger');
+          $scope.pasoActual--;
+          $scope.pasoSeleccionado = $scope.pasoActual;
+        });
     };
 
     $scope.setSelected = function (index) {
