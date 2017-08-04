@@ -127,7 +127,6 @@
       var copyTextarea = document.querySelector('#invite-url');
       copyTextarea.select();
       document.execCommand('copy');
-      console.log($scope.datosDeMigracion);
     };
   };
 
