@@ -21,24 +21,37 @@
       if ($scope.idMigracion !== 0) {
         MigracionFactory.getMigracion($scope.idMigracion)
           .then(function (response) {
-            $scope.datosDeMigracion = response.data.data;
+            $scope.datosDeMigracion = response.data.data[0];
           });
+      } else {
+        $scope.datosDeMigracion = {
+          NombreMigracion: '',
+          NombreCliente: '',
+          Dominio: '',
+          IdContexto: 1,
+          Contexto: 'sandox',
+          RelacionarMayorista: 0,
+          CrearAdministrador: 0,
+          ImportarDominio: 0,
+          OrdenarSuscripciones: 0,
+          CancelarSuscripciones: 0,
+          AsignarAsientos: 0
+        };
       }
     };
 
     $scope.init();
 
-    // $scope.datosDeMigracion = {
-    //   NombreCliente: '',
-    //   Dominio: '',
-    //   IdContexto: 1,
-    //   RelacionarMayorista: 1,
-    //   CrearAdministrador: 1,
-    //   ImportarDominio: 1,
-    //   OrdenarSuscripciones: 0,
-    //   CancelarSuscripciones: 0,
-    //   AsignarAsientos: 0
-    // };
+    $scope.crearMigracion = function () {
+      console.log($scope.datosDeMigracion);
+      var nuevaMigracion = {
+        NombreMigracion: $scope.datosDeMigracion;
+        
+      }
+      MigracionFactory.postMigracion($scope.datosDeMigracion)
+        .then()
+    };
+
     $scope.setSelected = function (index) {
       if (index <= $scope.pasoActual) {
         $scope.pasoSeleccionado = index;
