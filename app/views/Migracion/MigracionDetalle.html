@@ -1,5 +1,5 @@
 <div class="container">
-  <h2>Migración<span ng-if="datosDeMigracion.NombreCliente !== ''"> de {{datosDeMigracion.NombreCliente}}</span></h2>
+  <h2>Migración<span ng-if="datosDeMigracion.NombreMigracion !== ''"> de {{datosDeMigracion.NombreMigracion}}</span></h2>
   <!-- <div class="row"> -->
   <div class="progress" style="margin-bottom: 30px;">
     <div class="progress-bar" ng-style="{ width: ((pasoActual / pasosDeMigracion.length) * 100) + '%' }">{{pasoActual}} / {{pasosDeMigracion.length}}</div>
@@ -42,7 +42,7 @@
           <div class="row">
             <div class="form-group col-md-6">
               <label for="nombre">Nombre</label>
-              <input type="text" ng-model="datosDeMigracion.NombreCliente" class="form-control" id="nombre" placeholder="Nombre para identificar esta migración"
+              <input type="text" ng-model="datosDeMigracion.NombreMigracion" class="form-control" id="nombre" placeholder="Nombre para identificar esta migración"
                 name="nombre" maxlength="64">
             </div>
             <div class="form-group col-md-6">
