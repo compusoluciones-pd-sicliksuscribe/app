@@ -1,9 +1,5 @@
 (function () {
-  var MigracionDetalleController = function ($scope, $log, $location, $cookieStore, $routeParams) {
-    var a = { Cliente: 'Cliente 1', Estatus: 'Orgasmo' };
-    var b = { Cliente: 'Cliente 2', Estatus: 'Orgasmos' };
-    var c = { Cliente: 'Cliente 3', Estatus: 'Orgasmoz' };
-    $scope.migraciones = [a, b, c];
+  var MigracionDetalleController = function ($scope, $log, $location, $cookieStore, $routeParams, MigracionFactory) {
     $scope.idMigracion = $routeParams.idMigracion;
     $scope.pasoSeleccionado = 0;
     $scope.pasoActual = 0;
@@ -20,17 +16,29 @@
       { IdContexto: 1, Contexto: 'sandbox' },
       { IdContexto: 2, Contexto: 'produccion' }
     ];
-    $scope.datosDeMigracion = {
-      NombreCliente: '',
-      Dominio: '',
-      IdContexto: 1,
-      RelacionarMayorista: 1,
-      CrearAdministrador: 1,
-      ImportarDominio: 1,
-      OrdenarSuscripciones: 0,
-      CancelarSuscripciones: 0,
-      AsignarAsientos: 0
+
+    $scope.init = function () {
+      if ($scope.idMigracion !== 0) {
+        MigracionFactory.getMigracion($scope.idMigracion)
+          .then(function (response) {
+            $scope.datosDeMigracion = response.data.data;
+          });
+      }
     };
+
+    $scope.init();
+
+    // $scope.datosDeMigracion = {
+    //   NombreCliente: '',
+    //   Dominio: '',
+    //   IdContexto: 1,
+    //   RelacionarMayorista: 1,
+    //   CrearAdministrador: 1,
+    //   ImportarDominio: 1,
+    //   OrdenarSuscripciones: 0,
+    //   CancelarSuscripciones: 0,
+    //   AsignarAsientos: 0
+    // };
     $scope.setSelected = function (index) {
       if (index <= $scope.pasoActual) {
         $scope.pasoSeleccionado = index;
@@ -60,7 +68,7 @@
     };
   };
 
-  MigracionDetalleController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$routeParams'];
+  MigracionDetalleController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$routeParams', 'MigracionFactory'];
 
   angular.module('marketplace').controller('MigracionDetalleController', MigracionDetalleController);
 }());
