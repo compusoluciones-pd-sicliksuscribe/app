@@ -62,8 +62,15 @@
                 <input type="text" class="form-control" id="invite-url" value="https://portal.office.com/partner/partnersignup.aspx?type=ResellerRelationship&id=9e09e971-5b2c-47d3-acec-be60c2665bae&csp=1&msppid=0">
                 <span class="input-group-btn">
                   <button class="btn btn-primary" type="button" ng-click="copyToCipbard()"
-                  style="min-width:0;padding-left:16px;padding-right:16px;height:inherit;margin-right:8px;"><i class="fa fa-clipboard" aria-hidden="true"></i></button>
+                  style="min-width:0;padding-left:16px;padding-right:16px;height:inherit;padding-top: 9px;padding-bottom: 3px;"
+                  data-toggle="popover" data-trigger="click" data-content="Copiado!"
+                  data-placement="top"><i class="fa fa-clipboard" aria-hidden="true"></i>&nbsp;</button>
                 </span>
+                <script>
+                $(document).ready(function(){
+                    $('[data-toggle="popover"]').popover();   
+                });
+                </script>
               </div>
             </div>
         </div>
@@ -109,13 +116,24 @@
             margin-right:8px;background:#f5f5f5;color:#565696">
                 REGRESAR
             </button>
-          <button type="button" ng-click="pasoAnterior()" class="btn btn-default" ng-if="pasoSeleccionado > 0" style="min-width:0;padding-left:16px;padding-right:16px;height:inherit;margin-right:8px;
+          <button type="button" ng-click="pasoAnterior()" class="btn btn-default" ng-if="pasoSeleccionado > 0" 
+            style="min-width:0;padding-left:16px;padding-right:16px;height:inherit;margin-right:8px;
             border-color:#00549F;color:#00549F;background:white;">
                 ANTERIOR
             </button>
-          <button type="button" ng-click="completarPaso()" class="btn btn-primary" style="min-width:0;padding-left:16px;padding-right:16px;height:inherit">
+
+          <button type="button" ng-click="completarPaso()" class="btn btn-primary"
+            ng-if="pasoSeleccionado === 0"
+            style="min-width:0;padding-left:16px;padding-right:16px;height:inherit">
+            CREAR
+          </button>
+
+          <button type="button" ng-click="completarPaso()" class="btn btn-primary"
+            ng-if="pasoSeleccionado !== 0"
+            style="min-width:0;padding-left:16px;padding-right:16px;height:inherit">
                 SIGUIENTE
-              </button>
+          </button>
+            
         </div>
       </div>
     </div>
