@@ -27,14 +27,15 @@
       </div>
     </div>
     <div style="padding-left:40px">
-    <div class="alert alert-info col-md-8" ng-if="pasoSeleccionado === 2" style="border-radius:2px;margin-left:14px;">
-      <strong>Info!</strong> Ingresa el dominio del cliente que ya acepto la invitación, una vez validado podras importarlo
-      y con esto lo veras disponible en tu aplicación.
+      <div class="alert alert-info col-md-8" ng-if="pasoSeleccionado === 2" style="border-radius:2px;margin-left:14px;">
+        <strong>Info!</strong> Ingresa el dominio del cliente que ya acepto la invitación, una vez validado podras importarlo
+        y con esto lo veras disponible en tu aplicación.
+      </div>
+      <div class="alert alert-info col-md-8" ng-if="pasoSeleccionado === 3" style="border-radius:2px;margin-left:14px;">
+        <strong>Info!</strong> Crea un usuario administrador para la consola del usuario final, con esto podras administrar
+        los asientos.
+      </div>
     </div>
-    <div class="alert alert-info col-md-8" ng-if="pasoSeleccionado === 3" style="border-radius:2px;margin-left:14px;">
-      <strong>Info!</strong> Crea un usuario administrador para la consola del usuario final, con esto podras administrar
-      los asientos.
-    </div></div>
     <div class="col-md-8">
       <div style="border: 1px solid #ddd;padding:15px;padding-bottom:49px;background:#f5f5f5;border-radius:2px">
         <div ng-if="pasoSeleccionado === 0">
@@ -47,16 +48,24 @@
             <div class="form-group col-md-6">
               <label for="mySelect">Ambiente</label>
               <select name="mySelect" id="mySelect" class="form-control" ng-options="contexto.IdContexto as contexto.Contexto for contexto in contextos"
-                ng-model="datosDeMigracion.IdContexto" ng-change="debugSelect()"></select>
+                ng-model="datosDeMigracion.IdContexto" ng-change=""></select>
             </div>
           </div>
         </div>
 
         <div ng-if="pasoSeleccionado === 1">
-          <h3 style="margin-top:0">Envía la siguiente liga de invitación a tu usuario</h3>
-          <div class="form-group">
-            <input type="text" class="form-control" value="https://portal.office.com/partner/partnersignup.aspx?type=ResellerRelationship&id=9e09e971-5b2c-47d3-acec-be60c2665bae&csp=1&msppid=0">
-          </div>
+          <!-- <h3 style="margin-top:0">Envía la siguiente liga de invitación a tu usuario</h3> -->
+
+            <div class="form-group">
+              <label>Envía la siguiente liga de invitación a tu usuario</label> 
+              <div class="input-group">
+                <input type="text" class="form-control" id="invite-url" value="https://portal.office.com/partner/partnersignup.aspx?type=ResellerRelationship&id=9e09e971-5b2c-47d3-acec-be60c2665bae&csp=1&msppid=0">
+                <span class="input-group-btn">
+                  <button class="btn btn-primary" type="button" ng-click="copyToCipbard()"
+                  style="min-width:0;padding-left:16px;padding-right:16px;height:inherit;margin-right:8px;"><i class="fa fa-clipboard" aria-hidden="true"></i></button>
+                </span>
+              </div>
+            </div>
         </div>
 
         <div ng-if="pasoSeleccionado === 2">

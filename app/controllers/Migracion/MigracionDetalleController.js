@@ -52,7 +52,11 @@
         $scope.pasoSeleccionado = $scope.pasoSeleccionado - 1;
       }
     };
-    $scope.debugSelect = function () {
+    $scope.copyToCipbard = function () {
+      var copyTextarea = document.querySelector('#invite-url');
+      console.log(copyTextarea)
+      copyTextarea.select();
+      document.execCommand('copy');
       console.log($scope.datosDeMigracion);
     };
   };
