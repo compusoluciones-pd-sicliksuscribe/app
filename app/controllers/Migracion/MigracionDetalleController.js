@@ -183,7 +183,19 @@
       }
     };
 
+    $scope.siguientePasoSinActualizar = function () {
+      if ($scope.pasoActual > $scope.pasoSeleccionado) {
+        $scope.pasoSeleccionado = $scope.pasoSeleccionado + 1;
+      } else {
+        $scope.pasoActual = $scope.pasoActual + 1;
+        $scope.pasoSeleccionado = $scope.pasoActual;
+      }
+    };
+
     $scope.completarPaso = function () {
+      if ($scope.pasoSeleccionado === 0 && $scope.datosDeMigracion.NombreMigracion !== '') {
+        $scope.siguientePasoSinActualizar();
+      }
       if ($scope.pasoActual === 0) {
         $scope.crearMigracion()
           .then(function (response) {
@@ -196,8 +208,14 @@
             $scope.pasoSeleccionado = $scope.pasoActual;
           });
       }
+      if ($scope.pasoSeleccionado === 1 && $scope.datosDeMigracion.RelacionarMayorista == '1') {
+        $scope.siguientePasoSinActualizar();
+      }
       if ($scope.pasoActual === 1) {
         $scope.actualizarSiguientePaso();
+      }
+      if ($scope.pasoSeleccionado === 2 && $scope.datosDeMigracion.Dominio !== '') {
+        $scope.siguientePasoSinActualizar();
       }
       if ($scope.pasoActual === 2) {
         $scope.importarDominio()
@@ -212,6 +230,9 @@
               return $scope.ShowToast(err.message, 'danger');
             }
           });
+      }
+      if ($scope.pasoSeleccionado === 3 && $scope.datosDeMigracion.Usuario !== '') {
+        $scope.siguientePasoSinActualizar();
       }
       if ($scope.pasoActual === 3) {
         $scope.crearAdministrador()
