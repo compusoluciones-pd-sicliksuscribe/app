@@ -11,7 +11,7 @@
       { IdPaso: 3, llaveDePaso: 'CrearAdministrador', nombreDePaso: 'Crear administrador' },
       { IdPaso: 4, llaveDePaso: 'OrdenarSuscripciones', nombreDePaso: 'Ordenar suscripciones' },
       { IdPaso: 5, llaveDePaso: 'CancelarSuscripciones', nombreDePaso: 'Cancelar suscripciones' },
-      { IdPaso: 6, llaveDePaso: 'AsignarAsientos', nombreDePaso: 'Asignar asientos' }
+      { IdPaso: 6, llaveDePaso: 'AsignarAsientos', nombreDePaso: 'Confirmación' }
     ];
     $scope.contextos = [
       { IdContexto: 1, Contexto: 'sandbox' },
@@ -218,6 +218,7 @@
       if ($scope.pasoActual === 2) {
         $scope.importarDominio()
           .then(function (resultado) {
+            console.log(resultado);
             if (resultado.data.success === 0) {
               return $scope.ShowToast(resultado.data.message, 'danger');
             }
@@ -239,6 +240,9 @@
             $scope.actualizarSiguientePaso();
           });
       }
+      if ($scope.pasoActual > 3) {
+        $scope.actualizarSiguientePaso();
+      }
     };
     $scope.pasoAnterior = function () {
       if ($scope.pasoSeleccionado > 0) {
@@ -249,6 +253,9 @@
       var copyTextarea = document.querySelector('#invite-url');
       copyTextarea.select();
       document.execCommand('copy');
+    };
+    $scope.hacerOtraMigracion = function () {
+      $location.path('/migraciones/0');
     };
   };
 

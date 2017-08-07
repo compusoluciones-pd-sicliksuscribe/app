@@ -42,12 +42,12 @@
           <div class="row">
             <div class="form-group col-md-6">
               <label for="nombre">Nombre</label>
-              <input type="text" ng-model="datosDeMigracion.NombreMigracion" class="form-control" id="nombre" placeholder="Nombre para identificar esta migración"
-                name="nombre" maxlength="64">
+              <input type="text" ng-disabled="pasoSeleccionado < pasoActual" ng-model="datosDeMigracion.NombreMigracion" class="form-control"
+                id="nombre" placeholder="Nombre para identificar esta migración" name="nombre" maxlength="64">
             </div>
             <div class="form-group col-md-6">
               <label for="mySelect">Ambiente</label>
-              <select name="mySelect" id="mySelect" class="form-control" ng-options="contexto.IdContexto as contexto.Contexto for contexto in contextos"
+              <select name="mySelect" ng-disabled="pasoSeleccionado < pasoActual" id="mySelect" class="form-control" ng-options="contexto.IdContexto as contexto.Contexto for contexto in contextos"
                 ng-model="datosDeMigracion.IdContexto" ng-change=""></select>
             </div>
           </div>
@@ -86,8 +86,8 @@
             <div class="form-group col-md-6">
               <label for="dominio">Dominio</label>
               <div class="input-group">
-                <input type="text" ng-model="datosDeMigracion.Dominio" class="form-control" id="dominio" placeholder="Dominio Microsoft de la empresa"
-                  maxlength="64">
+                <input type="text" ng-disabled="pasoSeleccionado < pasoActual" ng-model="datosDeMigracion.Dominio" class="form-control" id="dominio"
+                  placeholder="Dominio Microsoft de la empresa" maxlength="64">
                 <span class="input-group-btn">
                 <button class="btn btn-primary" type="button" ng-click="validarDominio()"
                 style="min-width:0;padding-left:16px;padding-right:16px;height:inherit;">VALIDAR</button>
@@ -106,27 +106,27 @@
             <div class="form-group col-md-6">
               <label for="dominio">Usuario</label>
               <div class="input-group">
-                <input type="text" ng-model="datosDeMigracion.Usuario" class="form-control" id="dominio" placeholder="Usuario de cuenta"
-                  maxlength="64">
+                <input type="text" ng-disabled="pasoSeleccionado < pasoActual" ng-model="datosDeMigracion.Usuario" class="form-control" id="dominio"
+                  placeholder="Usuario de cuenta" maxlength="64">
                 <span class="input-group-addon" style="border-radius: 0">@{{datosDeMigracion.Dominio}}.onmicrosoft.com</span>
               </div>
             </div>
             <div class="form-group col-md-6">
               <label for="dominio">Contraseña</label>
-              <input type="password" ng-model="datosDeMigracion.Secreto" class="form-control" id="dominio" placeholder="8 longitud, 1 mayuscula, 1 numero, 1 caracter especial"
-                name="nombre" maxlength="64">
+              <input type="password" ng-disabled="pasoSeleccionado < pasoActual" ng-model="datosDeMigracion.Secreto" class="form-control"
+                id="dominio" placeholder="8 longitud, 1 mayuscula, 1 numero, 1 caracter especial" name="nombre" maxlength="64">
             </div>
           </div>
           <div class="row">
             <div class="form-group col-md-6">
               <label for="dominio">Nombre</label>
-              <input type="text" ng-model="datosDeMigracion.NombreUsuario" class="form-control" id="dominio" placeholder="Nombre del usuario"
-                name="nombre" maxlength="64">
+              <input type="text" ng-disabled="pasoSeleccionado < pasoActual" ng-model="datosDeMigracion.NombreUsuario" class="form-control"
+                id="dominio" placeholder="Nombre del usuario" name="nombre" maxlength="64">
             </div>
             <div class="form-group col-md-6">
               <label for="dominio">Apellidos</label>
-              <input type="text" ng-model="datosDeMigracion.ApellidosUsuario" class="form-control" id="dominio" placeholder="Apellidos del usuario"
-                name="nombre" maxlength="64">
+              <input type="text" ng-disabled="pasoSeleccionado < pasoActual" ng-model="datosDeMigracion.ApellidosUsuario" class="form-control"
+                id="dominio" placeholder="Apellidos del usuario" name="nombre" maxlength="64">
             </div>
           </div>
         </div>
@@ -139,6 +139,11 @@
             se asignen de manera automática al solicitar la cancelación o sustitución de las licencias que se encuentran
             en el portal del cliente a través de otros esquemas
           </p>
+          <div class="form-group">
+            <div class="checkbox">
+              <label><input type="checkbox" ng-model="confirmoPasoActual.checked">He hecho la compra del producto por medio de la aplicación(API)</label>
+            </div>
+          </div>
         </div>
         <div ng-if="pasoSeleccionado === 5">
           <label>Cancelar suscripciones</label>
@@ -150,19 +155,33 @@
             las licencias de CSP adquiridas por medio de la aplicación(API), sustituirán a las que estaban anteriormente
             asignadas
           </p>
+          <div class="form-group">
+            <div class="checkbox">
+              <label><input type="checkbox" ng-model="confirmoPasoActual.checked">He realizado el proceso de cancelación con el otro mayorista</label>
+            </div>
+          </div>
         </div>
         <div ng-if="pasoSeleccionado === 6">
           <label>Confirmación</label>
           <p>Para concluir el proceso de migración ya solo se deberá de ingresar al portal de O365 del cliente en la sección
             de licencias y comprobar que los asientos adquiridos de CSP por medio de la aplicación(API), aparezcan en la
             columna de Asignadas, utilizando el usuario administrador creado anteriormente.</p>
+          <div class="form-group">
+            <div class="checkbox">
+              <label><input type="checkbox" ng-model="confirmoPasoActual.checked">He hecho la comprobacion de los asientos</label>
+            </div>
+          </div>
+        </div>
+        <div ng-if="pasoSeleccionado === 7">
+          <label>Proceso de migración terminado</label>
+          <p>Tu cliente ha sido migrado con éxito.</p>
         </div>
         <div class="pull-right">
           <button type="button" ng-click="regresar()" class="btn btn-basic" style="min-width:0;padding-left:16px;padding-right:16px;height:inherit;
             margin-right:8px;background:#f5f5f5;color:#565696">
                 REGRESAR
             </button>
-          <button type="button" ng-click="pasoAnterior()" class="btn btn-default" ng-if="pasoSeleccionado > 0" style="min-width:0;padding-left:16px;padding-right:16px;height:inherit;margin-right:8px;
+          <button type="button" ng-click="pasoAnterior()" class="btn btn-default" ng-if="pasoSeleccionado > 0 && pasoSeleccionado < 7" style="min-width:0;padding-left:16px;padding-right:16px;height:inherit;margin-right:8px;
             border-color:#00549F;color:#00549F;background:white;">
                 ANTERIOR
             </button>
@@ -175,19 +194,17 @@
                 {{ pasoActual === 2 ? 'IMPORTAR' : 'SIGUIENTE'}}
           </button>
 
-          <button type="button" ng-click="completarPaso()" class="btn btn-primary" ng-if="pasoSeleccionado !== 0 && pasoSeleccionado !== 2"
-            ng-disabled="pasoActual === 1 && !confirmoPasoActual.checked"
+          <button type="button" ng-click="hacerOtraMigracion()" class="btn btn-primary" ng-if="pasoSeleccionado === 7"
             style="min-width:0;padding-left:16px;padding-right:16px;height:inherit">
-                SIGUIENTE
+                HACER OTRA MIGRACION
           </button>
 
+          <button type="button" ng-click="completarPaso()" class="btn btn-primary" ng-if="pasoSeleccionado !== 0 && pasoSeleccionado !== 2 && pasoSeleccionado !== 7"
+            ng-disabled="(pasoActual === 1 || pasoActual === 4 || pasoActual === 5 || pasoActual === 6) && !confirmoPasoActual.checked" style="min-width:0;padding-left:16px;padding-right:16px;height:inherit">
+                SIGUIENTE
+          </button>
         </div>
       </div>
     </div>
-    <p>{{datosDeMigracion}}</p>
-    <p>{{confirmoPasoActual}}</p>
-    <!-- <div class="col-md-12">
-      <button type="button" ng-click="regresar()" class="btn btn-warning pull-right">Regresar</button>
-    </div> -->
   </div>
 </div>
