@@ -70,7 +70,7 @@
             <div class="form-group col-md-6">
               <label>Confirma con el usuario que acepto el cambio</label>
               <div class="checkbox">
-                <label><input type="checkbox" value="">El usuario ha aceptado el cambio</label>
+                <label><input type="checkbox" ng-model="confirmoPasoActual.checked">El usuario ha aceptado la invitación</label>
               </div>
             </div>
           </div>
@@ -168,14 +168,15 @@
             </button>
 
           <button type="button" ng-click="completarPaso()" class="btn btn-primary" ng-if="pasoSeleccionado === 0" style="min-width:0;padding-left:16px;padding-right:16px;height:inherit">
-            {{ idMigracion == 0 ? 'CREAR' : 'ACTUALIZAR'}}
+            {{ idMigracion == 0 ? 'CREAR' : 'SIGUIENTE'}}
           </button>
 
           <button type="button" ng-click="completarPaso()" class="btn btn-primary" ng-if="pasoSeleccionado === 2" style="min-width:0;padding-left:16px;padding-right:16px;height:inherit">
-                IMPORTAR
+                {{ pasoActual === 2 ? 'IMPORTAR' : 'SIGUIENTE'}}
           </button>
 
           <button type="button" ng-click="completarPaso()" class="btn btn-primary" ng-if="pasoSeleccionado !== 0 && pasoSeleccionado !== 2"
+            ng-disabled="pasoActual === 1 && !confirmoPasoActual.checked"
             style="min-width:0;padding-left:16px;padding-right:16px;height:inherit">
                 SIGUIENTE
           </button>
@@ -184,6 +185,7 @@
       </div>
     </div>
     <p>{{datosDeMigracion}}</p>
+    <p>{{confirmoPasoActual}}</p>
     <!-- <div class="col-md-12">
       <button type="button" ng-click="regresar()" class="btn btn-warning pull-right">Regresar</button>
     </div> -->

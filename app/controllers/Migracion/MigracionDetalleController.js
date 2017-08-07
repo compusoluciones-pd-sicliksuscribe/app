@@ -3,6 +3,7 @@
     $scope.idMigracion = $routeParams.idMigracion;
     $scope.pasoSeleccionado = 0;
     $scope.pasoActual = 0;
+    $scope.confirmoPasoActual = { checked: false };
     $scope.pasosDeMigracion = [
       { IdPaso: 0, llaveDePaso: 'NombreMigracion', nombreDePaso: 'Nombre  migración' },
       { IdPaso: 1, llaveDePaso: 'RelacionarMayorista', nombreDePaso: 'Relacionar mayorista' },
@@ -181,6 +182,7 @@
         $scope.pasoActual = $scope.pasoActual + 1;
         $scope.pasoSeleccionado = $scope.pasoActual;
       }
+      $scope.confirmoPasoActual.checked = false;
     };
 
     $scope.siguientePasoSinActualizar = function () {
@@ -193,8 +195,10 @@
     };
 
     $scope.completarPaso = function () {
-      if ($scope.pasoSeleccionado === 0 && $scope.datosDeMigracion.NombreMigracion !== '') {
+      console.log($scope.pasoSeleccionado, $scope.pasoActual, $scope.datosDeMigracion);
+      if ($scope.pasoSeleccionado < $scope.pasoActual) {
         $scope.siguientePasoSinActualizar();
+        return;
       }
       if ($scope.pasoActual === 0) {
         $scope.crearMigracion()
@@ -208,14 +212,8 @@
             $scope.pasoSeleccionado = $scope.pasoActual;
           });
       }
-      if ($scope.pasoSeleccionado === 1 && $scope.datosDeMigracion.RelacionarMayorista == '1') {
-        $scope.siguientePasoSinActualizar();
-      }
       if ($scope.pasoActual === 1) {
         $scope.actualizarSiguientePaso();
-      }
-      if ($scope.pasoSeleccionado === 2 && $scope.datosDeMigracion.Dominio !== '') {
-        $scope.siguientePasoSinActualizar();
       }
       if ($scope.pasoActual === 2) {
         $scope.importarDominio()
@@ -230,9 +228,6 @@
               return $scope.ShowToast(err.message, 'danger');
             }
           });
-      }
-      if ($scope.pasoSeleccionado === 3 && $scope.datosDeMigracion.Usuario !== '') {
-        $scope.siguientePasoSinActualizar();
       }
       if ($scope.pasoActual === 3) {
         $scope.crearAdministrador()
