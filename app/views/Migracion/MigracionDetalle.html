@@ -48,7 +48,7 @@
             <div class="form-group col-md-6">
               <label for="mySelect">Ambiente</label>
               <select name="mySelect" id="mySelect" class="form-control" ng-options="contexto.IdContexto as contexto.Contexto for contexto in contextos"
-                ng-model="datosDeMigracion.IdContexto" ng-change="" ></select>
+                ng-model="datosDeMigracion.IdContexto" ng-change=""></select>
             </div>
           </div>
         </div>
@@ -65,6 +65,12 @@
                   data-toggle="popover" data-trigger="click" data-content="Copiado!"
                   data-placement="right"><i class="fa fa-clipboard" aria-hidden="true"></i>&nbsp;</button>
                 </span>
+              </div>
+            </div>
+            <div class="form-group col-md-6">
+              <label>Confirma con el usuario que acepto el cambio</label>
+              <div class="checkbox">
+                <label><input type="checkbox" value="">El usuario ha aceptado el cambio</label>
               </div>
             </div>
           </div>
@@ -90,8 +96,8 @@
             </div>
             <div class="form-group col-md-6">
               <label for="dominio">Empresa</label>
-                <input disabled type="text" ng-model="datosDeMigracion.NombreCliente" class="form-control" id="dominio" placeholder="Nombre de la empresa"
-                  maxlength="64">
+              <input disabled type="text" ng-model="datosDeMigracion.NombreCliente" class="form-control" id="dominio" placeholder="Nombre de la empresa"
+                maxlength="64">
             </div>
           </div>
         </div>
@@ -126,18 +132,30 @@
         </div>
         <div ng-if="pasoSeleccionado === 4">
           <label>Ordenar suscripciones</label>
-          <p>Una vez teniendo confirmada la aceptación de los términos y condiciones por parte del cliente, se deberá hacer la compra del producto por medio de la aplicación(API), esto con el fin de que en la consola del cliente se pueda visualizar las licencias duplicadas, ya sea las que aparecen en esquemas como Open u Advisor, o que sean licencias de CSP a través de otro Mayorista.
-El objetivo de tener las licencias duplicadas en el portal es para que estas se asignen de manera automática al solicitar la cancelación o sustitución de las licencias que se encuentran en el portal del cliente a través de otros esquemas
-</p></div>
-<div ng-if="pasoSeleccionado === 5">
+          <p>Una vez teniendo confirmada la aceptación de los términos y condiciones por parte del cliente, se deberá hacer
+            la compra del producto por medio de la aplicación(API), esto con el fin de que en la consola del cliente se pueda
+            visualizar las licencias duplicadas, ya sea las que aparecen en esquemas como Open u Advisor, o que sean licencias
+            de CSP a través de otro Mayorista. El objetivo de tener las licencias duplicadas en el portal es para que estas
+            se asignen de manera automática al solicitar la cancelación o sustitución de las licencias que se encuentran
+            en el portal del cliente a través de otros esquemas
+          </p>
+        </div>
+        <div ng-if="pasoSeleccionado === 5">
           <label>Cancelar suscripciones</label>
-          <p>Para sustituir las licencias deberemos de revisar el estatus de las licencias existentes, podremos encontrar dos escenarios: licencias de CSP o de otros esquemas
-Si provienen de otros esquemas deberemos de adquirir los productos cuando la suscripción este por expirar, esto para que cuando el otro esquema finalice las de CSP puedan asignarse de manera automática
-En caso de pertenecer a otro mayorista y ser licencias de CSP se deberá pedir al otro mayorista que realice la cancelación de las licencias, una vez realizado el proceso de cancelación con el otro mayorista las licencias de CSP adquiridas por medio de la aplicación(API), sustituirán a las que estaban anteriormente asignadas
-</p></div>
-<div ng-if="pasoSeleccionado === 6">
+          <p>Para sustituir las licencias deberemos de revisar el estatus de las licencias existentes, podremos encontrar dos
+            escenarios: licencias de CSP o de otros esquemas Si provienen de otros esquemas deberemos de adquirir los productos
+            cuando la suscripción este por expirar, esto para que cuando el otro esquema finalice las de CSP puedan asignarse
+            de manera automática En caso de pertenecer a otro mayorista y ser licencias de CSP se deberá pedir al otro mayorista
+            que realice la cancelación de las licencias, una vez realizado el proceso de cancelación con el otro mayorista
+            las licencias de CSP adquiridas por medio de la aplicación(API), sustituirán a las que estaban anteriormente
+            asignadas
+          </p>
+        </div>
+        <div ng-if="pasoSeleccionado === 6">
           <label>Confirmación</label>
-          <p>Para concluir el proceso de migración ya solo se deberá de ingresar al portal de O365 del cliente en la sección de licencias y comprobar que los asientos adquiridos de CSP por medio de la aplicación(API), aparezcan en la columna de Asignadas, utilizando el usuario administrador creado anteriormente.</p>
+          <p>Para concluir el proceso de migración ya solo se deberá de ingresar al portal de O365 del cliente en la sección
+            de licencias y comprobar que los asientos adquiridos de CSP por medio de la aplicación(API), aparezcan en la
+            columna de Asignadas, utilizando el usuario administrador creado anteriormente.</p>
         </div>
         <div class="pull-right">
           <button type="button" ng-click="regresar()" class="btn btn-basic" style="min-width:0;padding-left:16px;padding-right:16px;height:inherit;
@@ -150,7 +168,7 @@ En caso de pertenecer a otro mayorista y ser licencias de CSP se deberá pedir a
             </button>
 
           <button type="button" ng-click="completarPaso()" class="btn btn-primary" ng-if="pasoSeleccionado === 0" style="min-width:0;padding-left:16px;padding-right:16px;height:inherit">
-            CREAR
+            {{ idMigracion == 0 ? 'CREAR' : 'ACTUALIZAR'}}
           </button>
 
           <button type="button" ng-click="completarPaso()" class="btn btn-primary" ng-if="pasoSeleccionado === 2" style="min-width:0;padding-left:16px;padding-right:16px;height:inherit">
@@ -165,6 +183,7 @@ En caso de pertenecer a otro mayorista y ser licencias de CSP se deberá pedir a
         </div>
       </div>
     </div>
+    <p>{{datosDeMigracion}}</p>
     <!-- <div class="col-md-12">
       <button type="button" ng-click="regresar()" class="btn btn-warning pull-right">Regresar</button>
     </div> -->
