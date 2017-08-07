@@ -213,12 +213,11 @@
           });
       }
       if ($scope.pasoActual === 1) {
-        $scope.actualizarSiguientePaso();
+        return $scope.actualizarSiguientePaso();
       }
       if ($scope.pasoActual === 2) {
         $scope.importarDominio()
           .then(function (resultado) {
-            console.log(resultado);
             if (resultado.data.success === 0) {
               return $scope.ShowToast(resultado.data.message, 'danger');
             }
