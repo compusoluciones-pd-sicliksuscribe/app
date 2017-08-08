@@ -18,6 +18,9 @@
           <th>Migración</th>
           <th>Empresa</th>
           <th>Dominio</th>
+          <th>Ambiente</th>
+          <th>Paso actual</th>
+          <th>Fecha</th>
         </tr>
       </thead>
       <tbody>
@@ -30,6 +33,15 @@
           </td>
            <td>
             {{migracion.Dominio}}
+          </td>
+          <td>
+            {{migracion.Contexto}}
+          </td>
+          <td>
+            {{migracion.PasoActual}}
+          </td>
+          <td>
+            {{migracion.FechaActivo}}
           </td>
           <td>
             <a ng-click="editarMigracion(migracion.IdMigracion)" style="font-size:21px;">

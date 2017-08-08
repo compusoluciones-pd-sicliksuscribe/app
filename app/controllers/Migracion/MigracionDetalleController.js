@@ -7,7 +7,7 @@
     $scope.pasosDeMigracion = [
       { IdPaso: 0, llaveDePaso: 'NombreMigracion', nombreDePaso: 'Nombre  migración' },
       { IdPaso: 1, llaveDePaso: 'RelacionarMayorista', nombreDePaso: 'Relacionar mayorista' },
-      { IdPaso: 2, llaveDePaso: 'ImportarDominio', nombreDePaso: 'Crear cliente aplicación' },
+      { IdPaso: 2, llaveDePaso: 'ImportarDominio', nombreDePaso: 'Importar cliente' },
       { IdPaso: 3, llaveDePaso: 'CrearAdministrador', nombreDePaso: 'Crear administrador' },
       { IdPaso: 4, llaveDePaso: 'OrdenarSuscripciones', nombreDePaso: 'Ordenar suscripciones' },
       { IdPaso: 5, llaveDePaso: 'CancelarSuscripciones', nombreDePaso: 'Cancelar suscripciones' },
