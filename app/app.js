@@ -88,12 +88,22 @@
         }
       })
 
+      .when('/aplicaciones', {
+        controller: 'AplicacionesReadController', templateUrl: 'app/views/Aplicaciones/AplicacionesRead.html',
+        resolve: {
+          'check': function ($location, $cookieStore) {
+            var Session = $cookieStore.get('Session');
+            if (!(Session.IdTipoAcceso === 2 && Session.IdEmpresa === 110)) { $location.path('/404'); }
+          }
+        }
+      })
+
       .when('/migraciones', {
         controller: 'MigracionController', templateUrl: 'app/views/Migracion/Migracion.html',
         resolve: {
           'check': function ($location, $cookieStore) {
             var Session = $cookieStore.get('Session');
-            if (!(Session.IdTipoAcceso === 2)) { $location.path('/404'); }
+            if (!(Session.IdTipoAcceso === 2 && Session.IdEmpresa === 110)) { $location.path('/404'); }
           }
         }
       })
@@ -103,7 +113,7 @@
         resolve: {
           'check': function ($location, $cookieStore) {
             var Session = $cookieStore.get('Session');
-            if (!(Session.IdTipoAcceso === 2)) { $location.path('/404'); }
+            if (!(Session.IdTipoAcceso === 2 && Session.IdEmpresa === 110)) { $location.path('/404'); }
           }
         }
       })
