@@ -92,7 +92,7 @@
                 <input type="text" ng-disabled="pasoSeleccionado < pasoActual" ng-model="datosDeMigracion.Dominio" class="form-control" id="dominio"
                   placeholder="Dominio Microsoft de la empresa" maxlength="64">
                 <span class="input-group-btn">
-                <button class="btn btn-primary" type="button" ng-click="validarDominio()"
+                <button ng-disabled="!datosDeMigracion.Dominio" class="btn btn-primary" type="button" ng-click="validarDominio()"
                 style="min-width:0;padding-left:16px;padding-right:16px;height:inherit;">VALIDAR</button>
               </span>
               </div>
@@ -203,7 +203,7 @@
             {{ idMigracion == 0 ? 'CREAR' : 'SIGUIENTE'}}
           </button>
 
-          <button type="button" ng-click="completarPaso()" class="btn btn-primary" ng-if="pasoSeleccionado === 2" style="min-width:0;padding-left:16px;padding-right:16px;height:inherit">
+          <button type="button" ng-disabled="!datosDeMigracion.Dominio" ng-click="completarPaso()" class="btn btn-primary" ng-if="pasoSeleccionado === 2" style="min-width:0;padding-left:16px;padding-right:16px;height:inherit">
                 {{ pasoActual === 2 ? 'IMPORTAR' : 'SIGUIENTE'}}
           </button>
 

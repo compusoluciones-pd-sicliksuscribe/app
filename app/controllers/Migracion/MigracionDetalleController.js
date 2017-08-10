@@ -77,8 +77,13 @@
       if ($scope.idMigracion !== '0') {
         MigracionFactory.getMigracion($scope.idMigracion)
           .then(function (response) {
-            $scope.datosDeMigracion = response.data.data[0];
-            $scope.actualizarPasos();
+            if (response.data.data.length === 0) {
+              $location.path('/migraciones/0');
+              $scope.ShowToast(response.data.message, 'danger');
+            } else {
+              $scope.datosDeMigracion = response.data.data[0];
+              $scope.actualizarPasos();
+            }
           });
       }
       $scope.actualizarPasos();
