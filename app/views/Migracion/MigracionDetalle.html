@@ -199,7 +199,7 @@
                 ANTERIOR
             </button>
 
-          <button type="button" ng-click="completarPaso()" class="btn btn-primary" ng-if="pasoSeleccionado === 0" style="min-width:0;padding-left:16px;padding-right:16px;height:inherit">
+          <button type="button" ng-click="completarPaso()" class="btn btn-primary" ng-if="pasoSeleccionado === 0" ng-disabled="datosDeMigracion.NombreMigracion.length === 0" style="min-width:0;padding-left:16px;padding-right:16px;height:inherit">
             {{ idMigracion == 0 ? 'CREAR' : 'SIGUIENTE'}}
           </button>
 
