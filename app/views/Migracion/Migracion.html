@@ -3,7 +3,7 @@
     <div class="col-sm-4 col-sm-offset-8">
 
       <div class=" form-group has-feedback">
-        <input type="text" class="form-control" placeholder="Filtra migraciones..." size="255">
+        <input ng-model="filterMigraciones" type="text" class="form-control" placeholder="Filtra migraciones..." size="255">
         <i class="form-control-feedback glyphicon glyphicon-search"></i>
       </div>
     </div>
@@ -24,7 +24,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="migracion in migraciones">
+        <tr ng-repeat="migracion in migraciones | filter:filterMigraciones">
           <td>
             {{migracion.NombreMigracion}}
           </td>
