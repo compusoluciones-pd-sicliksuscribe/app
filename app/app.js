@@ -88,6 +88,36 @@
         }
       })
 
+      .when('/aplicaciones', {
+        controller: 'AplicacionesReadController', templateUrl: 'app/views/Aplicaciones/AplicacionesRead.html',
+        resolve: {
+          'check': function ($location, $cookieStore) {
+            var Session = $cookieStore.get('Session');
+            if (!(Session.IdTipoAcceso === 2 && Session.IdEmpresa === 110)) { $location.path('/404'); }
+          }
+        }
+      })
+
+      .when('/migraciones', {
+        controller: 'MigracionController', templateUrl: 'app/views/Migracion/Migracion.html',
+        resolve: {
+          'check': function ($location, $cookieStore) {
+            var Session = $cookieStore.get('Session');
+            if (!(Session.IdTipoAcceso === 2 && Session.IdEmpresa === 110)) { $location.path('/404'); }
+          }
+        }
+      })
+
+      .when('/migraciones/:idMigracion', {
+        controller: 'MigracionDetalleController', templateUrl: 'app/views/Migracion/MigracionDetalle.html',
+        resolve: {
+          'check': function ($location, $cookieStore) {
+            var Session = $cookieStore.get('Session');
+            if (!(Session.IdTipoAcceso === 2 && Session.IdEmpresa === 110)) { $location.path('/404'); }
+          }
+        }
+      })
+
       .when('/ConfigurarRPs/:IdEmpresa', {
         controller: 'EmpresasRPController', templateUrl: 'app/views/Empresas/EmpresasRP.html',
         resolve: {
