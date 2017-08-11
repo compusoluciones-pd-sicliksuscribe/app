@@ -1,0 +1,223 @@
+<div class="container">
+  <h2>Migración<span ng-if="datosDeMigracion.NombreMigracion !== ''"> de {{datosDeMigracion.NombreMigracion}}</span></h2>
+  <!-- <div class="row"> -->
+  <div class="progress" style="margin-bottom: 30px;">
+    <div class="progress-bar" ng-style="{ width: ((pasoActual / pasosDeMigracion.length) * 100) + '%' }">{{pasoActual}} / {{pasosDeMigracion.length}}</div>
+    <div class="progress-bar progress-bar-info" ng-style="{ width: ((1 / pasosDeMigracion.length) * 100) + '%' }" ng-click="setSelected(pasoActual)"
+      style="cursor: pointer">
+      {{pasosDeMigracion[pasoActual].nombreDePaso}}
+    </div>
+  </div>
+  <!-- </div> -->
+  <div class="row" style="font-size: 16px">
+    <div class="col-md-4">
+      <div class="list-group">
+        <a class="list-group-item" ng-class="{
+          'list-group-item-info': $index < pasoActual,
+          active: $index <= pasoSeleccionado }" ng-style="{ cursor: $index > pasoActual ? 'not-allowed' : ''}" ng-repeat="paso in pasosDeMigracion"
+          ng-click="setSelected($index)">
+          {{paso.nombreDePaso}}
+           <span class="badge" ng-if="$index < pasoActual">
+            <i class="fa fa-check"aria-hidden="true"></i>
+          </span> 
+          <span class="badge" ng-if="$index === pasoActual">
+            <i class="fa fa-wrench" aria-hidden="true"></i>
+          </span>
+        </a>
+      </div>
+    </div>
+    <div style="padding-left:40px">
+      <div class="alert alert-info col-md-8" ng-if="pasoSeleccionado === 2" style="border-radius:2px;margin-left:14px;">
+        <strong>Info!</strong> Ingresa el dominio del cliente que ya acepto la invitación, una vez validado podras importarlo
+        y con esto lo veras disponible en tu aplicación.
+      </div>
+      <div class="alert alert-info col-md-8" ng-if="pasoSeleccionado === 3" style="border-radius:2px;margin-left:14px;">
+        <strong>Info!</strong> Crea un usuario administrador para la consola del usuario final, con esto podras administrar
+        los asientos.
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div style="border: 1px solid #ddd;padding:15px;padding-bottom:49px;background:#f5f5f5;border-radius:2px">
+        <div ng-if="pasoSeleccionado === 0">
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="nombre">Nombre</label>
+              <input type="text" ng-disabled="pasoSeleccionado < pasoActual" ng-model="datosDeMigracion.NombreMigracion" class="form-control"
+                id="nombre" placeholder="Nombre para identificar esta migración" name="nombre" maxlength="64">
+            </div>
+            <div class="form-group col-md-6">
+              <label for="mySelect">Ambiente</label>
+              <select name="mySelect" ng-disabled="pasoSeleccionado < pasoActual" id="mySelect" class="form-control" ng-options="contexto.IdContexto as contexto.Contexto for contexto in contextos"
+                ng-model="datosDeMigracion.IdContexto" ng-change=""></select>
+            </div>
+          </div>
+        </div>
+
+        <div ng-if="pasoSeleccionado === 1">
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label>Envía la siguiente liga de invitación a tu usuario</label>
+              <div class="input-group">
+                <input type="text" class="form-control" id="invite-url" value="https://portal.office.com/partner/partnersignup.aspx?type=ResellerRelationship&id=9e09e971-5b2c-47d3-acec-be60c2665bae&csp=1&msppid=0">
+                <span class="input-group-btn">
+                  <button class="btn btn-primary" type="button" ng-click="copyToCipbard()"
+                  style="min-width:0;padding-left:16px;padding-right:16px;height:inherit;padding-top: 9px;padding-bottom: 3px;"
+                  data-toggle="popover" data-trigger="click" data-content="Copiado!"
+                  data-placement="right"><i class="fa fa-clipboard" aria-hidden="true"></i>&nbsp;</button>
+                </span>
+              </div>
+            </div>
+            <div class="form-group col-md-6">
+              <label>Confirma con el usuario que acepto el cambio</label>
+              <div class="checkbox" ng-if="pasoSeleccionado === pasoActual">
+                <label><input type="checkbox" ng-model="confirmoPasoActual.checked">El usuario ha aceptado la invitación</label>
+              </div>
+              <div class="checkbox" ng-if="pasoSeleccionado < pasoActual">
+                <label><input type="checkbox" checked disabled>El usuario ha aceptado la invitación</label>
+              </div>
+            </div>
+          </div>
+          <script>
+            $(document).ready(function () {
+              $('[data-toggle="popover"]').popover();
+            });
+          </script>
+        </div>
+
+        <div ng-if="pasoSeleccionado === 2">
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="dominio">Dominio</label>
+              <div class="input-group">
+                <input type="text" ng-disabled="pasoSeleccionado < pasoActual" ng-model="datosDeMigracion.Dominio" class="form-control" id="dominio"
+                  placeholder="Dominio Microsoft de la empresa" maxlength="64">
+                <span class="input-group-btn">
+                <button ng-disabled="!datosDeMigracion.Dominio" class="btn btn-primary" type="button" ng-click="validarDominio()"
+                style="min-width:0;padding-left:16px;padding-right:16px;height:inherit;">VALIDAR</button>
+              </span>
+              </div>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="dominio">Empresa</label>
+              <input disabled type="text" ng-model="datosDeMigracion.NombreCliente" class="form-control" id="dominio" placeholder="Nombre de la empresa"
+                maxlength="64">
+            </div>
+          </div>
+        </div>
+        <div ng-if="pasoSeleccionado === 3">
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="dominio">Usuario</label>
+              <div class="input-group">
+                <input type="text" ng-disabled="pasoSeleccionado < pasoActual" ng-model="datosDeMigracion.Usuario" class="form-control" id="dominio"
+                  placeholder="Usuario de cuenta" maxlength="64">
+                <span class="input-group-addon" style="border-radius: 0">@{{datosDeMigracion.Dominio}}.onmicrosoft.com</span>
+              </div>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="dominio">Contraseña</label>
+              <input type="password" ng-disabled="pasoSeleccionado < pasoActual" ng-model="datosDeMigracion.Secreto" class="form-control"
+                id="dominio" placeholder="8 longitud, 1 mayuscula, 1 numero, 1 caracter especial" name="nombre" maxlength="64">
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="dominio">Nombre</label>
+              <input type="text" ng-disabled="pasoSeleccionado < pasoActual" ng-model="datosDeMigracion.NombreUsuario" class="form-control"
+                id="dominio" placeholder="Nombre del usuario" name="nombre" maxlength="64">
+            </div>
+            <div class="form-group col-md-6">
+              <label for="dominio">Apellidos</label>
+              <input type="text" ng-disabled="pasoSeleccionado < pasoActual" ng-model="datosDeMigracion.ApellidosUsuario" class="form-control"
+                id="dominio" placeholder="Apellidos del usuario" name="nombre" maxlength="64">
+            </div>
+          </div>
+        </div>
+        <div ng-if="pasoSeleccionado === 4">
+          <label>Ordenar suscripciones</label>
+          <p>Una vez teniendo confirmada la aceptación de los términos y condiciones por parte del cliente, se deberá hacer
+            la compra del producto por medio de la aplicación(API), esto con el fin de que en la consola del cliente se pueda
+            visualizar las licencias duplicadas, ya sea las que aparecen en esquemas como Open u Advisor, o que sean licencias
+            de CSP a través de otro Mayorista. El objetivo de tener las licencias duplicadas en el portal es para que estas
+            se asignen de manera automática al solicitar la cancelación o sustitución de las licencias que se encuentran
+            en el portal del cliente a través de otros esquemas
+          </p>
+          <div class="form-group">
+            <div class="checkbox" ng-if="pasoSeleccionado === pasoActual">
+              <label><input type="checkbox" ng-model="confirmoPasoActual.checked">He hecho la compra del producto por medio de la aplicación(API)</label>
+            </div>
+            <div class="checkbox" ng-if="pasoSeleccionado < pasoActual">
+              <label><input type="checkbox" checked disabled>He hecho la compra del producto por medio de la aplicación(API)</label>
+            </div>
+          </div>
+        </div>
+        <div ng-if="pasoSeleccionado === 5">
+          <label>Cancelar suscripciones</label>
+          <p>Para sustituir las licencias deberemos de revisar el estatus de las licencias existentes, podremos encontrar dos
+            escenarios: licencias de CSP o de otros esquemas Si provienen de otros esquemas deberemos de adquirir los productos
+            cuando la suscripción este por expirar, esto para que cuando el otro esquema finalice las de CSP puedan asignarse
+            de manera automática En caso de pertenecer a otro mayorista y ser licencias de CSP se deberá pedir al otro mayorista
+            que realice la cancelación de las licencias, una vez realizado el proceso de cancelación con el otro mayorista
+            las licencias de CSP adquiridas por medio de la aplicación(API), sustituirán a las que estaban anteriormente
+            asignadas
+          </p>
+          <div class="form-group">
+            <div class="checkbox" ng-if="pasoSeleccionado === pasoActual">
+              <label><input type="checkbox" ng-model="confirmoPasoActual.checked">He realizado el proceso de cancelación con el otro mayorista</label>
+            </div>
+            <div class="checkbox" ng-if="pasoSeleccionado < pasoActual">
+              <label><input type="checkbox" checked disabled>He realizado el proceso de cancelación con el otro mayorista</label>
+            </div>
+          </div>
+        </div>
+        <div ng-if="pasoSeleccionado === 6">
+          <label>Confirmación</label>
+          <p>Para concluir el proceso de migración ya solo se deberá de ingresar al portal de O365 del cliente en la sección
+            de licencias y comprobar que los asientos adquiridos de CSP por medio de la aplicación(API), aparezcan en la
+            columna de Asignadas, utilizando el usuario administrador creado anteriormente.</p>
+          <div class="form-group">
+            <div class="checkbox" ng-if="pasoSeleccionado === pasoActual">
+              <label><input type="checkbox" ng-model="confirmoPasoActual.checked">He hecho la comprobacion de los asientos</label>
+            </div>
+            <div class="checkbox" ng-if="pasoSeleccionado < pasoActual">
+              <label><input type="checkbox" checked disabled>He hecho la comprobacion de los asientos</label>
+            </div>
+          </div>
+        </div>
+        <div ng-if="pasoSeleccionado === 7">
+          <label>Proceso de migración terminado</label>
+          <p>Tu cliente ha sido migrado con éxito.</p>
+        </div>
+        <div class="pull-right">
+          <button type="button" ng-click="regresar()" class="btn btn-basic" style="min-width:0;padding-left:16px;padding-right:16px;height:inherit;
+            margin-right:8px;background:#f5f5f5;color:#565696">
+                REGRESAR
+            </button>
+          <button type="button" ng-click="pasoAnterior()" class="btn btn-default" ng-if="pasoSeleccionado > 0 && pasoSeleccionado < 7"
+            style="min-width:0;padding-left:16px;padding-right:16px;height:inherit;margin-right:8px;
+            border-color:#00549F;color:#00549F;background:white;">
+                ANTERIOR
+            </button>
+
+          <button type="button" ng-click="completarPaso()" class="btn btn-primary" ng-if="pasoSeleccionado === 0" ng-disabled="datosDeMigracion.NombreMigracion.length === 0" style="min-width:0;padding-left:16px;padding-right:16px;height:inherit">
+            {{ idMigracion == 0 ? 'CREAR' : 'SIGUIENTE'}}
+          </button>
+
+          <button type="button" ng-disabled="!datosDeMigracion.Dominio" ng-click="completarPaso()" class="btn btn-primary" ng-if="pasoSeleccionado === 2" style="min-width:0;padding-left:16px;padding-right:16px;height:inherit">
+                {{ pasoActual === 2 ? 'IMPORTAR' : 'SIGUIENTE'}}
+          </button>
+
+          <button type="button" ng-click="hacerOtraMigracion()" class="btn btn-primary" ng-if="pasoSeleccionado === 7" style="min-width:0;padding-left:16px;padding-right:16px;height:inherit">
+                HACER OTRA MIGRACION
+          </button>
+
+          <button type="button" ng-click="completarPaso()" class="btn btn-primary" ng-if="pasoSeleccionado !== 0 && pasoSeleccionado !== 2 && pasoSeleccionado !== 7"
+            ng-disabled="(pasoActual === 1 || pasoActual === 4 || pasoActual === 5 || pasoActual === 6) && !confirmoPasoActual.checked"
+            style="min-width:0;padding-left:16px;padding-right:16px;height:inherit">
+                SIGUIENTE
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
