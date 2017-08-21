@@ -65,6 +65,11 @@
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
     };
+    
+    $scope.configurarNivel = function (nivel) {
+      var path = '/Niveles/' + nivel.IdNivelDistribuidor + '/Productos';
+      $location.path(path);
+    };
   };
 
   NivelesReadController.$inject = ['$scope', '$log', '$location', '$cookieStore', 'NivelesDistribuidorFactory'];
