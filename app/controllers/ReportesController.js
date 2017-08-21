@@ -1,6 +1,8 @@
 (function () {
   var ReportesController = function ($scope, $log, $location, $cookieStore, ReportesFactory) {
 
+    $scope.perfil = $cookieStore.get('Session');
+
     $scope.reportesSel = '';
 
     $scope.init = function () {

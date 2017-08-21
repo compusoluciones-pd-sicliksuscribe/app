@@ -24,6 +24,10 @@
             $scope.Productos = Productos.data[0];
             if ($scope.Productos == '') {
               $scope.Mensaje = 'No encontramos resultados de tu búsqueda...';
+              if ($scope.Pagina > 0) {
+                $scope.ShowToast('No encontramos más resultados de esta busqueda, regresaremos a la página anterior.', 'danger');
+                $scope.PaginadoAtras();
+              }
             }
           } else {
             $scope.Mensaje = Productos.message;
@@ -154,7 +158,7 @@
       if (MonedaPago === 'Dólares' && MonedaProducto === 'Pesos') {
         Precio = Precio / TipoCambio;
       }
-  
+
       total = Precio * Cantidad;
       if (!total) { total = 0.00; }
       return total;
@@ -175,6 +179,16 @@
       PedidoDetallesFactory.postPedidoDetalle(NuevoProducto)
         .success(function (PedidoDetalleResult) {
           if (PedidoDetalleResult.success === 1) {
+            if (NuevoProducto.IdFabricante === 2 && Producto.Accion === 'asiento') {
+              ProductosFactory.getBaseSubscription(NuevoProducto.IdProducto)
+                .then(function (result) {
+                  $scope.suscripciones = result.data.data;
+                  if (result.data.data.length >= 1) {
+                    $location.path("/autodesk/productos/" + NuevoProducto.IdProducto + "/detalle/" + PedidoDetalleResult.data.insertId);
+                  }
+                })
+                .catch(console.log);
+            }
             $scope.ShowToast(PedidoDetalleResult.message, 'success');
             $scope.ActualizarMenu();
             $scope.addPulseCart();

@@ -11,24 +11,45 @@
 
     factory.refreshToken();
 
+    // Agregar al carrito
     factory.postPedidoDetalle = function (PedidoDetalle) {
       factory.refreshToken();
-      return $http.post($rootScope.API + 'PedidoDetalles', PedidoDetalle);
+      return $http.post($rootScope.API + 'shopping-cart', PedidoDetalle);
     };
 
+    // Obtener productos del carrito
     factory.getPedidoDetalles = function () {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'PedidoDetalles');
+      return $http.get($rootScope.API + 'shopping-cart');
+    };
+
+    // Preparar productos del carrito
+    factory.getPrepararCompra = function (commission) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'shopping-cart/prepare-purchase/' + commission);
+    };
+
+    // Eliminar productos del carrito
+    factory.deletePedidoDetalles = function (IdPedidoDetalle) {
+      factory.refreshToken();
+      return $http.delete($rootScope.API + 'shopping-cart/' + IdPedidoDetalle);
+    };
+
+    // Comprar productos
+    factory.getComprar = function () {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'shopping-cart/buy');
+    };
+
+    // Valida el credito de los clientes
+    factory.getValidarCarrito = function () {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'shopping-cart/validate-cart');
     };
 
     factory.postPedidoDetallesAddOns = function (Producto) {
       factory.refreshToken();
       return $http.post($rootScope.API + 'PedidoDetalles/AddOns', Producto);
-    };
-
-    factory.deletePedidoDetalles = function (IdPedidoDetalle) {
-      factory.refreshToken();
-      return $http.delete($rootScope.API + 'PedidoDetalles/' + IdPedidoDetalle);
     };
 
     factory.postMonitor = function (IdEmpresaUsuarioFinal) {
@@ -41,29 +62,14 @@
       return $http.put($rootScope.API + 'PedidoDetalles', PedidoDetalle);
     };
 
-    factory.getPrepararCompra = function (enCheckout) {
-      factory.refreshToken();
-      return $http.get($rootScope.API + 'PedidoDetalles/PrepararCompra/' + enCheckout);
-    };
-
     factory.getContarProductos = function () {
       factory.refreshToken();
       return $http.get($rootScope.API + 'PedidoDetalles/ContarProductos');
     };
 
-    factory.getComprar = function () {
-      factory.refreshToken();
-      return $http.get($rootScope.API + 'PedidoDetalles/Comprar');
-    };
-
     factory.postWarningCredito = function (params) {
       factory.refreshToken();
       return $http.post($rootScope.API + 'warningCredito', params);
-    };
-
-    factory.getValidarCarrito = function () {
-      factory.refreshToken();
-      return $http.get($rootScope.API + 'PedidoDetalles/validarCarrito');
     };
 
     factory.getPrepararTarjetaCredito = function () {
