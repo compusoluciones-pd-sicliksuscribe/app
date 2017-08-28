@@ -81,14 +81,24 @@
 				<!--ng-checked="Producto.Activo"    ng-disabled="!Producto.Precio"-->
 				<div class="checkbox col-xs-12 col-md-1">
 					<label>
-						<input id="Activo" type="checkbox" ng-checked="Producto.PorcentajeDescuento" ng-true-value="1" ng-false-value="0" ng-model="Producto.Activo" ng-click="Producto.PorcentajeDescuento = ''">
+						<input id="Activo" type="checkbox" ng-true-value="1" ng-false-value="0" ng-model="Producto.Activo" ng-change="resetDiscount(Producto)">
 						Descuento
 					</label>
 				</div>
 
 				<div class="col-xs-12 col-md-2">
 					<div class="input-group">
-						<input id="Precio" name="Precio" type="number" ng-model="Producto.PorcentajeDescuento" ng-change="calcularDescuento(Producto)" class="form-control" step="1" placeholder="Descuento" min="1" max="100" />
+						<input
+							id="Precio"
+							name="Precio" 
+							type="number" 
+							ng-model="Producto.PorcentajeDescuento"
+							ng-change="calcularDescuento(Producto)" 
+							class="form-control" step="1"
+							placeholder="Descuento"
+							min="1" max="100"
+							ng-disabled="!Producto.Activo"
+						/>
 						<div class="input-group-addon">%</div>
 					</div>
 				</div>
