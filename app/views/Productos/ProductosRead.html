@@ -166,6 +166,18 @@
                                                     <option ng-selected="true" value="">Selecciona un cliente...</option>
                                                 </select>
                                             </div>
+                                            <br>
+                                            <label for="contacto" ng-if="Producto.IdEmpresaUsuarioFinal">* Contacto</label>
+                                            <div class="input-group" ng-if="Producto.IdEmpresaUsuarioFinal">
+                                                <span class="input-group-addon green white">
+                                                    <span class="glyphicon glyphicon-user"></span>
+                                                </span>
+                                                <select id="contacto" name="IdEmpresaUsuarioFinal" class="form-control selectOption ufs" ng-model="Producto.IdUsuarioContacto"
+                                                    ng-options="usuario.IdEmpresaUsuarioFinal as usuario.Nombre + ' ('+ usuario.CorreoElectronico +')' for usuario in Producto.usuariosContacto"
+                                                    required>
+                                                    <option ng-selected="true" value="">Selecciona un contacto...</option>
+                                                </select>
+                                            </div>
 
                                             <br>
                                             <div ng-show="Producto.MostrarMensajeP" style="color:red;">

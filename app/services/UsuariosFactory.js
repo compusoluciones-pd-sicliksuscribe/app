@@ -61,6 +61,11 @@
       return $http.get($rootScope.API + 'Usuarios/ConfirmarCuenta/' + encryptedObject);
     };
 
+    factory.getUsuariosContacto = function (idEmpresaUsuarioFinal) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'users/' + idEmpresaUsuarioFinal);
+    };
+
     return factory;
   };
 
