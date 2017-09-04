@@ -42,7 +42,13 @@
 
     const updateDiscounts = function (levels) {
       return NivelesDistribuidorFactory.createLevelDiscount(levels)
-        .then(function (result) { $scope.ShowToast(result.data.message, 'success'); })
+        .then(function (result) {
+          if (result.data.success === 1) {
+            $scope.ShowToast(result.data.message, 'success');
+          } else {
+            $scope.ShowToast('No se pudo actualizar el descuento, reviza que la cantidad sea un numero entero.', 'danger');
+          }
+        })
         .catch(function (result) { error(result.data); });
     };
 
@@ -53,6 +59,15 @@
       });
       updateDiscounts(discounts)
         .then(function () { $scope.getProducts(); });
+    };
+
+    $scope.isNumber = function (evt) {
+      evt = evt || window.event;
+      var charCode = (evt.which) ? evt.which : evt.keyCode;
+      if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+      }
+      return true;
     };
 
     $scope.getProducts = function () {
@@ -143,6 +158,8 @@
     };
 
     $scope.calcularPrecioVenta = function (discount) {
+      discount = discount || 100;
+      $scope.porcentaje = Number(discount.toString().replace(/[^0-9]+/g, ''));
       filteredProducts.forEach(function (product) {
         product.PorcentajeDescuento = discount;
         product.PrecioFinal = product.PrecioNormal - (product.PrecioNormal * ((product.PorcentajeDescuento || 0) * 0.01));
