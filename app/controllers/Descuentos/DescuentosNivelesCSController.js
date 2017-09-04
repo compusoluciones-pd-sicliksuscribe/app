@@ -80,6 +80,7 @@
           } else {
             const produtosConPrecioFinal = response.data.map(function (producto) {
               producto.PrecioFinal = Number(((producto.PrecioNormal * (100 - producto.PorcentajeDescuento)) / 100).toFixed(2));
+              producto.Activo = producto.PorcentajeDescuento ? 1 : 0;
               return producto;
             });
             $scope.Productos = produtosConPrecioFinal;
@@ -120,16 +121,13 @@
       if (product.PorcentajeDescuento && (product.PorcentajeDescuento > 0 && product.PorcentajeDescuento < 101)) {
         product.PrecioFinal = product.PrecioNormal - (product.PrecioNormal * ((product.PorcentajeDescuento || 0) * 0.01));
         product.PrecioFinal = Number(product.PrecioFinal.toFixed(4));
-        product.Activo = 1;
-      } else {
-        product.PrecioFinal = '';
-        product.Activo = 0;
-      }
+      } else product.PrecioFinal = '';
     };
 
     $scope.Actualizar = function (product) {
       const Activo = product.PorcentajeDescuento > 0 && product.PorcentajeDescuento < 101;
-      if (Activo || product.Activo) {
+      if (!Activo && product.Activo) $scope.ShowToast('El descuento debe ser en un rango entre 1 y 100', 'danger');
+      else {
         const PorcentajeDescuento = (!product.PorcentajeDescuento || product.PorcentajeDescuento === '') ? null : product.PorcentajeDescuento;
         const request = {
           IdNivelCS,
@@ -140,7 +138,14 @@
           }]
         };
         updateDiscounts(request);
-      } else $scope.ShowToast('El descuento debe ser en un rango entre 1 y 100', 'danger');
+      }
+    };
+
+    $scope.resetDiscount = function (product) {
+      if (!product.Activo) {
+        product.PorcentajeDescuento = '';
+        product.PrecioFinal = '';
+      }
     };
 
     $scope.guardarTodo = function (levels) {
@@ -164,6 +169,7 @@
         product.PorcentajeDescuento = discount;
         product.PrecioFinal = product.PrecioNormal - (product.PrecioNormal * ((product.PorcentajeDescuento || 0) * 0.01));
         product.PrecioFinal = Number(product.PrecioFinal.toFixed(4));
+        product.Activo = 1;
       });
     };
 
