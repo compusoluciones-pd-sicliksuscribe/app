@@ -167,8 +167,8 @@
                                                 </select>
                                             </div>
                                             <br>
-                                            <label for="contacto" ng-if="Producto.IdEmpresaUsuarioFinal">* Contacto</label>
-                                            <div class="input-group" ng-if="Producto.IdEmpresaUsuarioFinal">
+                                            <label for="contacto" ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2">* Contacto</label>
+                                            <div class="input-group" ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2">
                                                 <span class="input-group-addon green white">
                                                     <span class="glyphicon glyphicon-user"></span>
                                                 </span>

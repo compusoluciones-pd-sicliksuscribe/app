@@ -22,6 +22,7 @@
         .success(function (Productos) {
           if (Productos.success === 1) {
             $scope.Productos = Productos.data[0];
+            console.log($scope.Productos)
             if ($scope.Productos == '') {
               $scope.Mensaje = 'No encontramos resultados de tu búsqueda...';
               if ($scope.Pagina > 0) {
