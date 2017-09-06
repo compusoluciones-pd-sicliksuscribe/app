@@ -118,6 +118,11 @@
       return $http.patch($rootScope.API + 'enterprise/update-automatic-payment/' + RealizarCargoProximo);
     };
 
+    factory.getClientes = function () {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'enterprise/clients');
+    };
+
     return factory;
   };
 

@@ -66,6 +66,11 @@
       return $http.get($rootScope.API + 'users/' + idEmpresaUsuarioFinal);
     };
 
+    factory.getUsuariosPropios = function () {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'users');
+    };
+
     return factory;
   };
 
