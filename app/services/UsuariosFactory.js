@@ -31,6 +31,11 @@
       return $http.post($rootScope.API + 'Usuarios', Usuario);
     };
 
+    factory.postUsuarioCliente = function (Usuario) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'users', Usuario);
+    };
+
     factory.putUsuario = function (Usuario) {
       factory.refreshToken();
       return $http.put($rootScope.API + 'Usuarios', Usuario);
@@ -69,6 +74,11 @@
     factory.getUsuariosPropios = function () {
       factory.refreshToken();
       return $http.get($rootScope.API + 'users');
+    };
+
+    factory.getAccessosParaDistribuidor = function () {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'users-access');
     };
 
     return factory;
