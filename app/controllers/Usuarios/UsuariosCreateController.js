@@ -8,7 +8,7 @@
 
     $scope.init = function () {
       $scope.CheckCookie();
-      if (Session.IdTipoAcceso !== 1 && Session.IdTipoAcceso !== 2) {
+      if (Session.IdTipoAcceso !== 2) {
         TiposAccesosFactory.getTiposAccesos()
           .success(function (TiposAccesos) {
             $scope.selectTiposAccesos = TiposAccesos;
