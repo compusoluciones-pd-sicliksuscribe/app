@@ -108,7 +108,7 @@
 
     $scope.contractSetted = function (producto) {
       if (producto.IdPedidoContrato) {
-        producto.IdUsuarioContacto = '';
+        producto.IdUsuarioContacto = undefined;
       }
     };
 
