@@ -29,8 +29,10 @@
           });
       }
       if (Session.IdTipoAcceso === 2) {
+        console.log('Pide mis clientes');
         EmpresasFactory.getClientes()
           .success(function (Empresas) {
+            console.log(Empresas);
             $scope.selectEmpresas = Empresas.data;
             $scope.ObtenerUsuariosPropios();
           })
