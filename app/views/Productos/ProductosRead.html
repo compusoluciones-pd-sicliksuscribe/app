@@ -167,8 +167,20 @@
                                                 </select>
                                             </div>
                                             <br>
-                                            <label for="contacto" ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2">* Contacto</label>
+                                            <label for="contrato" ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2">* Contrato</label>
                                             <div class="input-group" ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2">
+                                                <span class="input-group-addon green white">
+                                                    <span class="glyphicon glyphicon-file"></span>
+                                                </span>
+                                                <select id="contrato" name="contrato" class="form-control selectOption ufs" ng-model="Producto.IdPedidoContrato"
+                                                    ng-options="contrato.IdPedido as contrato.ResultadoFabricante6 for contrato in Producto.contratos"
+                                                    ng-change="contractSetted(Producto)" required>
+                                                    <option ng-selected="true" value="">Nuevo contrato...</option>
+                                                </select>
+                                            </div>
+                                            <br>
+                                            <label for="contacto" ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2 && !Producto.IdPedidoContrato">* Contacto</label>
+                                            <div class="input-group" ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2 && !Producto.IdPedidoContrato">
                                                 <span class="input-group-addon green white">
                                                     <span class="glyphicon glyphicon-user"></span>
                                                 </span>
@@ -178,7 +190,6 @@
                                                     <option ng-selected="true" value="">Selecciona un contacto...</option>
                                                 </select>
                                             </div>
-
                                             <br>
                                             <div ng-show="Producto.MostrarMensajeP" style="color:red;">
 

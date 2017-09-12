@@ -22,7 +22,6 @@
         .success(function (Productos) {
           if (Productos.success === 1) {
             $scope.Productos = Productos.data[0];
-            console.log($scope.Productos)
             if ($scope.Productos == '') {
               $scope.Mensaje = 'No encontramos resultados de tu búsqueda...';
               if ($scope.Pagina > 0) {
@@ -107,8 +106,26 @@
 
     $scope.init();
 
+    $scope.contractSetted = function (producto) {
+      if (producto.IdPedidoContrato) {
+        producto.IdUsuarioContacto = '';
+      }
+    };
+
     $scope.revisarProducto = function (Producto) {
       var IdProducto = Producto.IdProducto;
+      var IdEmpresaUsuarioFinal = Producto.IdEmpresaUsuarioFinal;
+      ProductosFactory.getProductContracts(IdEmpresaUsuarioFinal, IdProducto)
+        .success(function (respuesta) {
+          if (respuesta.success === 1) {
+            Producto.contratos = respuesta.data;
+          } else {
+            $scope.ShowToast('No pudimos cargar la información de tus contratos, por favor intenta de nuevo más tarde.', 'danger');
+          }
+        })
+        .error(function () {
+          $scope.ShowToast('No pudimos cargar la información de tus contratos, por favor intenta de nuevo más tarde.', 'danger');
+        });
       UsuariosFactory.getUsuariosContacto(Producto.IdEmpresaUsuarioFinal)
         .success(function (respuesta) {
           if (respuesta.success === 1) {
