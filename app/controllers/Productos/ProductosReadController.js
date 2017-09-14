@@ -213,7 +213,6 @@
       } else if (Producto.IdUsuarioContacto) {
         NuevoProducto.IdAccionAutodesk = 1;
       }
-      console.log(NuevoProducto);
       PedidoDetallesFactory.postPedidoDetalle(NuevoProducto)
         .success(function (PedidoDetalleResult) {
           if (PedidoDetalleResult.success === 1) {

@@ -184,7 +184,7 @@
                                                     <span class="glyphicon glyphicon-user"></span>
                                                 </span>
                                                 <select id="contacto" name="IdEmpresaUsuarioFinal" class="form-control selectOption ufs" ng-model="Producto.IdUsuarioContacto"
-                                                    ng-options="usuario.IdEmpresaUsuarioFinal as usuario.Nombre + ' ('+ usuario.CorreoElectronico +')' for usuario in Producto.usuariosContacto"
+                                                    ng-options="usuario.IdUsuario as usuario.Nombre + ' ('+ usuario.CorreoElectronico +')' for usuario in Producto.usuariosContacto"
                                                     ng-required="!Producto.IdPedidoContrato">
                                                     <option ng-selected="true" value="">Selecciona un contacto...</option>
                                                 </select>
