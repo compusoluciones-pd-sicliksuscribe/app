@@ -205,6 +205,15 @@
         Especializacion: Producto.Especializacion,
         IdUsuarioContacto: Producto.IdUsuarioContacto
       };
+      if (!Producto.IdUsuarioContacto && Producto.IdFabricante === 2) {
+        const contrato = Producto.contratos
+          .filter(p => p.IdPedido === Producto.IdPedidoContrato)[0].ResultadoFabricante6;
+        NuevoProducto.ContratoBaseAutodesk = contrato;
+        NuevoProducto.IdAccionAutodesk = Producto.IdAccionProductoAutodesk === 1 ? 3 : 2;
+      } else if (Producto.IdUsuarioContacto) {
+        NuevoProducto.IdAccionAutodesk = 1;
+      }
+      console.log(NuevoProducto);
       PedidoDetallesFactory.postPedidoDetalle(NuevoProducto)
         .success(function (PedidoDetalleResult) {
           if (PedidoDetalleResult.success === 1) {
