@@ -203,16 +203,16 @@
         CodigoPromocion: Producto.CodigoPromocion,
         ResultadoFabricante2: Producto.IdProductoPadre,
         Especializacion: Producto.Especializacion,
-        IdUsuarioContacto: Producto.IdUsuarioContacto
+        IdUsuarioContacto: Producto.IdUsuarioContacto,
+        IdAccionAutodesk: Producto.IdAccionProductoAutodesk
       };
       if (!Producto.IdUsuarioContacto && Producto.IdFabricante === 2) {
         const contrato = Producto.contratos
           .filter(p => p.IdPedido === Producto.IdPedidoContrato)[0].ResultadoFabricante6;
-        NuevoProducto.ContratoBaseAutodesk = contrato;
-        NuevoProducto.IdAccionAutodesk = Producto.IdAccionProductoAutodesk === 1 ? 3 : 2;
-      } else if (Producto.IdUsuarioContacto) {
-        NuevoProducto.IdAccionAutodesk = 1;
+        NuevoProducto.ContratoBaseAutodesk = contrato.trim();
+        // NuevoProducto.IdAccionAutodesk = Producto.IdAccionProductoAutodesk === 1 ? 3 : 2;
       }
+      if (!NuevoProducto.IdAccionAutodesk) delete NuevoProducto.IdAccionAutodesk;
       PedidoDetallesFactory.postPedidoDetalle(NuevoProducto)
         .success(function (PedidoDetalleResult) {
           if (PedidoDetalleResult.success === 1) {
