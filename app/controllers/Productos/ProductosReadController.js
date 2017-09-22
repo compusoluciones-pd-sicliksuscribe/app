@@ -119,6 +119,8 @@
         .success(function (respuesta) {
           if (respuesta.success === 1) {
             Producto.contratos = respuesta.data;
+            if (Producto.IdAccionAutodesk === 2 && Producto.contratos.length === 0) Producto.contratos.unshift({ ResultadoFabricante6: 'No hay contratos relacionados' });
+            if (Producto.IdAccionAutodesk === 1) Producto.contratos.unshift({ ResultadoFabricante6: 'Nuevo contrato...' });
           } else {
             $scope.ShowToast('No pudimos cargar la información de tus contratos, por favor intenta de nuevo más tarde.', 'danger');
           }

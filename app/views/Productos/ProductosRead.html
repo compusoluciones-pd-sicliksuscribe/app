@@ -171,15 +171,16 @@
                                                 <span class="input-group-addon green white">
                                                     <span class="glyphicon glyphicon-file"></span>
                                                 </span>
-                                                <select id="contrato" name="contrato" class="form-control selectOption ufs" ng-model="Producto.IdPedidoContrato"
-                                                    ng-options="contrato.IdPedido as contrato.ResultadoFabricante6 for contrato in Producto.contratos"
-                                                    ng-change="contractSetted(Producto)">
-                                                    <option ng-selected="true" value="">Nuevo contrato...</option>
+																								<select id="contrato" name="contrato" class="form-control selectOption ufs" ng-model="Producto.IdPedidoContrato"
+																										ng-options="contrato.IdPedido as contrato.ResultadoFabricante6 for contrato in Producto.contratos"
+																										ng-change="contractSetted(Producto)"
+																										ng-required="contrato.ResultadoFabricante6 !== ''">
+                                                    <!-- <option ng-disabled="" ng-selected="true" value="">{{ contrato.ResultadoFabricante6 }}</option> -->
                                                 </select>
                                             </div>
                                             <br>
-                                            <label for="contacto" ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2 && !Producto.IdPedidoContrato">* Contacto</label>
-                                            <div class="input-group" ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2 && !Producto.IdPedidoContrato">
+                                            <label for="contacto" ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2 && !Producto.IdPedidoContrato && Producto.IdAccionAutodesk === 1">* Contacto</label>
+                                            <div class="input-group" ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2 && !Producto.IdPedidoContrato && Producto.IdAccionAutodesk === 1">
                                                 <span class="input-group-addon green white">
                                                     <span class="glyphicon glyphicon-user"></span>
                                                 </span>
