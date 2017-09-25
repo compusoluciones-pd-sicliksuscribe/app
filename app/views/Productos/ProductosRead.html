@@ -171,10 +171,10 @@
                                                 <span class="input-group-addon green white">
                                                     <span class="glyphicon glyphicon-file"></span>
                                                 </span>
-																								<select id="contrato" name="contrato" class="form-control selectOption ufs" ng-model="Producto.IdPedidoContrato"
-																										ng-options="contrato.IdPedido as contrato.ResultadoFabricante6 for contrato in Producto.contratos"
-																										ng-change="contractSetted(Producto)"
-																										ng-required="contrato.ResultadoFabricante6 !== ''">
+                                                <select id="contrato" name="contrato" class="form-control selectOption ufs" ng-model="Producto.IdPedidoContrato"
+                                                    ng-options="contrato.IdPedido as contrato.ResultadoFabricante6 for contrato in Producto.contratos"
+                                                    ng-change="contractSetted(Producto)"
+                                                    ng-required="contrato.ResultadoFabricante6 !== ''">
                                                     <!-- <option ng-disabled="" ng-selected="true" value="">{{ contrato.ResultadoFabricante6 }}</option> -->
                                                 </select>
                                             </div>
