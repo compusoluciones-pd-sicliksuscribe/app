@@ -206,7 +206,7 @@
         ResultadoFabricante2: Producto.IdProductoPadre,
         Especializacion: Producto.Especializacion,
         IdUsuarioContacto: Producto.IdUsuarioContacto,
-        IdAccionAutodesk: Producto.IdAccionProductoAutodesk
+        IdAccionAutodesk: Producto.IdAccionAutodesk
       };
       if (!Producto.IdUsuarioContacto && Producto.IdFabricante === 2) {
         const contrato = Producto.contratos
