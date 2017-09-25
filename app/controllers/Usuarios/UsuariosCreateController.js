@@ -97,20 +97,26 @@
         if (Session.IdTipoAcceso === 2) {
           if ($scope.Usuario.IdTipoAcceso === 4 || $scope.Usuario.IdTipoAcceso === 6) {
             $scope.Usuario.TipoUsuario = 'END_USER';
+            $scope.Usuario.IdTipoAcceso = $scope.Usuario.IdTipoAcceso.toString();
+            $scope.Usuario.Lada = $scope.Usuario.Lada.toString();
+            delete $scope.Usuario.Formulario;
+            delete $scope.Usuario.MuestraComboEmpresas;
             UsuariosFactory.postUsuarioCliente($scope.Usuario)
               .success(function (result) {
+                console.log(result);
                 if (result.success === 1) {
                   $location.path("/Usuarios");
                   $scope.ShowToast(result.message, 'success');
                 } else {
                   $scope.ShowToast(result.message, 'danger');
+                  return;
                 }
               })
               .error(function (data, status, headers, config) {
                 $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
               });
           }
-          if ($scope.Usuario.IdTipoAcceso !== 4 && $scope.Usuario.IdTipoAcceso !== 6) {
+          if ($scope.Usuario.IdTipoAcceso != 4 && $scope.Usuario.IdTipoAcceso != 6) {
             UsuariosFactory.postUsuario($scope.Usuario)
               .success(function (result) {
                 if (result[0].Success == true) {
