@@ -19,7 +19,7 @@
                 <div class="pull-rigth">
                     <label>Apellido Paterno </label>
                     <input name="ApellidoPaterno" type="text" ng-model="Usuario.ApellidoPaterno" class="form-control" ng-pattern="/[a-zA-Z]$/" placeholder="Apellido paterno" size="255" ng-maxlength="30" />
-                    <b style="color:red" ng-show="frm.ApellidoPaterno.$invalid && !frm.ApellidoPaterno.$pristine" class="help-block">Ha excedido el número de caracteres permitidos.</b>
+                    <b style="color:red" ng-show="frm.ApellidoPaterno.$invalid && !frm.ApellidoPaterno.$pristine" class="help-block">Revisa el número de caracteres (max: 30), los números no son permitidos</b>
                 </div>
                 
             </div>
@@ -31,7 +31,7 @@
                 <div class="pull-rigth">
                     <label>Apellido Materno </label>
                     <input name="ApellidoMaterno" type="text" ng-model="Usuario.ApellidoMaterno" class="form-control" ng-pattern="/[a-zA-Z]$/" placeholder="Apellido materno" size="255" ng-maxlength="30" />
-                    <b style="color:red" ng-show="frm.ApellidoMaterno.$invalid && !frm.ApellidoMaterno.$pristine" class="help-block">Ha excedido el número de caracteres permitidos.</b>
+                    <b style="color:red" ng-show="frm.ApellidoMaterno.$invalid && !frm.ApellidoMaterno.$pristine" class="help-block">Revisa el número de caracteres (max: 30), los números no son permitidos</b>
                 </div>  
             </div>
             <div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div>
