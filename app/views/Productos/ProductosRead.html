@@ -99,7 +99,7 @@
                             <div ng-show="Producto.IdTipoProducto == 1">Precio por servicio:</div>
                             <div ng-show="Producto.IdTipoProducto == 2">Precio unitario:</div>
                             <div ng-show="Producto.IdTipoProducto == 3">Precio de contratación:</div>
-                            </label> 
+                            </label>
                             <span ng-show="Producto.PorcentajeDescuento == 0">
                                 {{Producto.PrecioNormal | currency: "$" : 2}} {{Producto.MonedaPrecio}}                          
                             </span>
@@ -110,18 +110,19 @@
                             </span>
 
                             <div ng-show="Producto.IdTipoProducto == 2 && Producto.IdFabricante == 1">
-                                <label for="" title="Precio prorrateado">Precio prorrateado del primer periodo:</label> 
-                                {{Producto.PrecioProrrateo | currency}} {{Producto.MonedaPrecio}}
+                                <label for="" title="Precio prorrateado">Precio prorrateado del primer periodo:</label> {{Producto.PrecioProrrateo
+                                | currency}} {{Producto.MonedaPrecio}}
                             </div>
 
-                            <div ng-show="Producto.IdFabricante === 1"><label for="" title=""> Tipo de cambio Microsoft: </label> {{TipoCambioMs | currency: "$":4}} MXN.</div>
+                            <div ng-show="Producto.IdFabricante === 1"><label for="" title=""> Tipo de cambio Microsoft: </label> {{TipoCambioMs | currency: "$":4}}
+                                MXN.</div>
                             <div ng-show="Producto.IdFabricante !== 1"><label for="" title=""> Tipo de cambio: </label> {{TipoCambio | currency: "$":4}} MXN.</div>
                             <br>
                         </div>
 
                         <div class="form-group col-xs-0 col-sm-0 col-md-4 col-lg-4 softBlue" style="margin:-7px; margin-bottom:10px;">
 
-                            <div class="row" >
+                            <div class="row">
                                 <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                     <div>
                                         <h4><b>Configura tus productos.</b></h4>
@@ -149,7 +150,8 @@
                                             <p style="color:red" ng-show="frmCantidad.Cantidad.$error.min">Mínimo {{Producto.CantidadMinima}}</p>
                                             <p style="color:red" ng-show="frmCantidad.Cantidad.$error.max">Máximo {{Producto.CantidadMaxima}}</p>
 
-                                            <label for="IdEmpresaUsuarioFinal">* ¿Para quiénes son?</label> (Cliente usuario final) &nbsp;
+                                            <label for="IdEmpresaUsuarioFinal">* ¿Para quiénes son?</label> (Cliente usuario
+                                            final) &nbsp;
                                             <a href="#/Empresa" class="form-group" title="Nuevo cliente" ng-show="SessionCookie.IdTipoAcceso == 2">
                                                 <span class="glyphicon glyphicon-plus"></span>
                                             </a>
@@ -166,16 +168,16 @@
                                                 </select>
                                             </div>
                                             <br>
-                                            <label for="contrato" ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2">* Contrato</label>
-                                            <div class="input-group" ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2">
+                                            <p style="color:red" ng-hide="Producto.IdFabricante === 1 || TieneContrato">*No cuentas con un contrato para este producto.</p>
+                                            <label for="contrato" ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2 && TieneContrato">* Contrato</label>
+                                            <div class="input-group" ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2 && TieneContrato">
+                                                
                                                 <span class="input-group-addon green white">
                                                     <span class="glyphicon glyphicon-file"></span>
                                                 </span>
-                                                <select id="contrato" name="contrato" class="form-control selectOption ufs" ng-model="Producto.IdPedidoContrato"
-                                                    ng-options="contrato.IdPedido as contrato.ResultadoFabricante6 for contrato in Producto.contratos"
-                                                    ng-change="contractSetted(Producto)"
-                                                    ng-required="contrato.ResultadoFabricante6 !== ''">
-                                                    <!-- <option ng-disabled="" ng-selected="true" value="">{{ contrato.ResultadoFabricante6 }}</option> -->
+                                                <select id="contrato" name="contrato" class="form-control selectOption ufs" ng-model="Producto.IdPedidoContrato" ng-options="contrato.IdPedido as contrato.ResultadoFabricante6 for contrato in Producto.contratos"
+                                                    ng-change="contractSetted(Producto)" ng-required="contrato.ResultadoFabricante6 !== ''">
+                                                    <option ng-disabled="" ng-selected="true" value="0">Nuevo contrato...</option>
                                                 </select>
                                             </div>
                                             <br>
@@ -193,10 +195,10 @@
                                             <br>
                                             <div ng-show="Producto.MostrarMensajeP" style="color:red;">
 
-                                                    <label>* No cuentas con suscripciones para este producto.</label>&nbsp;
-                                                    <br>
+                                                <label>* No cuentas con suscripciones para este producto.</label>&nbsp;
+                                                <br>
                                             </div>
-                                                
+
                                             <div ng-show="Producto.Mostrar">
                                                 <label for="IdEmpresaUsuarioFinal">* Elige un producto</label> &nbsp;
 
@@ -205,7 +207,8 @@
                                                         <span class="fa fa-puzzle-piece"></span>
                                                     </span>
                                                     <select id="IdProductoPadre" name="IdProductoPadre" class="form-control selectOption" ng-model="Producto.IdProductoPadre"
-                                                        ng-options="Producto.ResultadoFabricante1 as Producto.Nombre for Producto in selectProductos" ng-required="Producto.Required">
+                                                        ng-options="Producto.ResultadoFabricante1 as Producto.Nombre for Producto in selectProductos"
+                                                        ng-required="Producto.Required">
                                                         <option ng-selected="true" value="">Selecciona una suscripcion...</option>
                                                     </select>
                                                 </div>

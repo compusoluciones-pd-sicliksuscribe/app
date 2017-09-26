@@ -9,6 +9,7 @@
     $scope.TipoCambioMs = 0;
     $scope.Mensaje = '...';
     $scope.selectProductos = {};
+    $scope.TieneContrato = true;
 
     $scope.BuscarProducto = function (ResetPaginado) {
       $scope.Mensaje = 'Buscando...';
@@ -21,7 +22,10 @@
       ProductosFactory.postBuscarProductos($scope.BuscarProductos)
         .success(function (Productos) {
           if (Productos.success === 1) {
-            $scope.Productos = Productos.data[0];
+            $scope.Productos = Productos.data[0].map(function (item) {
+              item.IdPedidoContrato = 0;
+              return item;
+            });
             if ($scope.Productos == '') {
               $scope.Mensaje = 'No encontramos resultados de tu búsqueda...';
               if ($scope.Pagina > 0) {
@@ -119,7 +123,9 @@
         .success(function (respuesta) {
           if (respuesta.success === 1) {
             Producto.contratos = respuesta.data;
-            if ((Producto.IdAccionAutodesk === 2 || !Producto.IdAccionAutodesk) && Producto.contratos.length === 0) Producto.contratos.unshift({ ResultadoFabricante6: 'No hay contratos relacionados' });
+            if ((Producto.IdAccionAutodesk === 2 || !Producto.IdAccionAutodesk) && Producto.contratos.length === 0) {
+              $scope.TieneContrato = false;
+            }
             if (Producto.IdAccionAutodesk === 1) Producto.contratos.unshift({ IdPedido: 0, ResultadoFabricante6: 'Nuevo contrato...' });
           } else {
             $scope.ShowToast('No pudimos cargar la información de tus contratos, por favor intenta de nuevo más tarde.', 'danger');
