@@ -55,40 +55,41 @@
 			</div>
 		</div>
 
-		<ul ng-repeat="(key, value) in PedidoDetalles | groupBy: 'IdPedido'" class="repeat-animation" style="padding: 0; list-style-type: none;">
+		<ul ng-repeat="pedido in PedidoDetalles" class="repeat-animation" style="padding: 0; list-style-type: none;">
 
 			<div class="form-group row" style="background-color:#f5f5f5; padding: 15px; margin-bottom:15px;">
 				<div class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
 					<div class="text-center form-group">
 						<div style="color:#00549F;">
 							<label>Pedido</label>
-							<h4>{{ key }}</h4>
+							<h4>{{ pedido.IdPedido }}</h4>
 							<br>
 						</div>
 					</div>
 				</div>
 				<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
 					<div class="form-group">
-						<label for="IdEmpresaUsuarioFinal">Usuario final:</label> {{value[0].NombreEmpresa}} <br>
-						<label>Marca de los productos:</label> {{value[0].NombreFabricante}} <br>
-						<label>Duración del periodo:</label> del {{value[0].FechaInicio}} al {{value[0].FechaFin}} <br>
-						<label>Renovación del periodo:</label> {{value[0].NombreEsquemaRenovacion}}
+						<label for="IdEmpresaUsuarioFinal">Usuario final:</label> {{ pedido.NombreEmpresa }} <br>
+						<label>Marca de los productos:</label> {{ pedido.NombreFabricante }} <br>
+						<label>Duración del periodo:</label> del {{ pedido.FechaInicio }} al {{ pedido.FechaFin }} <br>
+						<label>Renovación del periodo:</label> {{ pedido.NombreEsquemaRenovacion }} <br>
+						<div ng-if="pedido.IdFabricante === 2"><label>Contrato: </label> {{ pedido.ContratoBaseAutodesk || 'Nuevo' }} </div>
 					</div>
 				</div>
 				<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
 					<div class="form-group">
-						<label>Forma de pago:</label> {{value[0].Forma}} <br>
-						<label>Tipo de cambio:</label> {{value[0].TipoCambio | currency: "$":4 }} {{value[0].MonedaPago}}<br>
-						<label>Subtotal:</label> {{calcularSubTotal(key) | currency }} {{value[0].MonedaPago}} <br>
-						<label>IVA:</label> {{calcularIVA(key) | currency }} {{value[0].MonedaPago}}
+						<label>Forma de pago:</label> {{ pedido.Forma }} <br>
+						<label>Tipo de cambio:</label> {{ pedido.TipoCambio | currency: "$":4 }} {{ pedido.MonedaPago }}<br>
+						<label>Subtotal:</label> {{ calcularSubTotal(pedido.IdPedido) | currency }} {{ pedido.MonedaPago }} <br>
+						<label>IVA:</label> {{ calcularIVA(pedido.IdPedido) | currency }} {{ pedido.MonedaPago }}
 					</div>
 				</div>
-				<form name="frmCantidad" id="frmCantidad" ng-show="value[0].IdFabricante === 2">
+				<form name="frmCantidad" id="frmCantidad" ng-show="pedido.IdFabricante === 2">
 					<div class="col-xs-10 col-sm-10 col-md-2 col-lg-2 pesosCredit">
 						<div class="form-group">
 							<label>Código promoción:</label>
 							<div class="input-group">
-								<input id="CodigoPromocion" name="CodigoPromocion" type="text" ng-model="value[0].CodigoPromocion" class="form-control" placeholder="Escribe tu código"
+								<input id="CodigoPromocion" name="CodigoPromocion" type="text" ng-model="pedido.CodigoPromocion" class="form-control" placeholder="Escribe tu código"
 									max="255" min="255" size="255" maxlength="255" title="Escribe tu código de promoción" />
 							</div>
 						</div>
@@ -98,7 +99,7 @@
 							<div class="pull-left" ng-show="SessionCookie.IdTipoAcceso === 1 || SessionCookie.IdTipoAcceso === 2 || SessionCookie.IdTipoAcceso === 3 || SessionCookie.IdTipoAcceso === 4">
 								<label labelfor="aActualizar"></label>
 								<h4>
-									<a id="aActualizar" type="submit" title="Guardar" ng-click="ActualizarCodigo(value);" >
+									<a id="aActualizar" type="submit" title="Guardar" ng-click="ActualizarCodigo(pedido);" >
 										<span class="fa fa-floppy-o" style="cursor:pointer"></span>
 									</a>
 								</h4>
@@ -109,10 +110,10 @@
 				<div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 pull-right" >
 					<div class="form-group">
 						<label>Total del pedido:</label>
-						<h5>{{calcularTotal(key) | currency }} {{value[0].MonedaPago}} </h5>
+						<h5>{{ calcularTotal(pedido.IdPedido) | currency }} {{ pedido.MonedaPago }} </h5>
 						<br>
 
-						<div style="color:red;" ng-show="!value[0].TieneCredito">
+						<div style="color:red;" ng-show="!pedido.hasCredit">
 							<span class="glyphicon glyphicon-warning-sign"></span> <b>Cliente sin crédito suficiente.</b>
 							<br> * <a href="#/Clientes" class="form-group" title="Aumenta su crédito"> Aumenta su crédito </a>
 							<br> * Elimina productos de tu carrito.
@@ -121,51 +122,57 @@
 					</div>
 				</div>
 			</div>
-
-			<li ng-repeat="PedidoDetalle in value" style="list-style-type:none;">
+			
+			<li ng-repeat="producto in pedido.Productos" style="list-style-type:none;">
 				<div class="form-group row" style="padding: 15px; margin-bottom:15px;">
 					<div class="col-xs-11 col-sm-11 col-md-1 col-lg-1">
 						<div class="text-center form-group">
-							<img ng-src="{{PedidoDetalle.Imagen}}" style="width:45px;" width="45">
+							<img ng-src="{{ producto.Imagen }}" style="width:45px;" width="45">
 						</div>
 					</div>
 					<div class="form-group col-xs-12 col-sm-12 col-md-3 col-lg-3">
 						<div class="form-group">
-							<label for="">Id Artículo:</label> {{PedidoDetalle.IdERP}} <br>
-							<label for="">Nombre:</label> {{PedidoDetalle.NombreProducto}} <br>
-							<label for="">Tipo de producto:</label> {{PedidoDetalle.Tipo}}
+							<label for="">Id Artículo:</label> {{producto.IdERP}} <br>
+							<label for="">Nombre:</label> {{producto.NombreProducto}} <br>
+							<label for="">Tipo de producto:</label> {{producto.Tipo}} <br>
+							<label for="" ng-show="producto.Accion === 'asiento'">Contrato:</label> <a ng-click="modificarContratoBase(producto.IdProducto, producto.IdPedidoDetalle)">{{producto.ContratoBase}}</a>
 						</div>
 					</div>
 					<div class="form-group col-xs-12 col-sm-12 col-md-3 col-lg-3">
 						<div class="form-group">
-							<label for="">Cantidad:</label> {{PedidoDetalle.Cantidad}} <br>
-							<label for="">Precio unitario:</label> {{PedidoDetalle.PrecioUnitario | currency}} {{PedidoDetalle.MonedaPago}}
+							<label for="">Cantidad:</label> {{ producto.Cantidad }} <br>
+							<label for="">Precio unitario:</label> {{ producto.PrecioUnitarioReal | currency }} {{ pedido.MonedaPago }}
 							<br>
-							<label for="">Precio renovación:</label> {{PedidoDetalle.PrecioRenovacion | currency}} {{PedidoDetalle.MonedaPago}}
+							<label for="">Precio renovación:</label> {{ producto.PrecioRenovacion | currency}} {{ pedido.MonedaPago }}
 						</div>
 					</div>
 					<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
 						<div class="form-group">
 							<label for="">Total del producto:</label>
 							<br>
-							<span ng-show="PedidoDetalle.DescuentoAddSeatAutodesk">
-                                <del style="font-size:11px;">{{PedidoDetalle.PrecioRenovacion * PedidoDetalle.Cantidad | currency}} {{PedidoDetalle.MonedaPago}}</del>
-                                <b style="color:#68953B;"> 50% Desc. </b>
-                            </span>
-							<span ng-show="PedidoDetalle.PrimeraCompraMicrosoft">
-                                <del style="font-size:11px;">{{PedidoDetalle.PrecioUnitario * PedidoDetalle.Cantidad | currency}} {{PedidoDetalle.MonedaPago}}</del>
-                                <b style="color:#68953B;">GRATIS!</b>
-                            </span>
-							<span ng-show="!PedidoDetalle.PrimeraCompraMicrosoft">
-														      {{PedidoDetalle.PrecioUnitario * PedidoDetalle.Cantidad | currency}} {{PedidoDetalle.MonedaPago}} 
-                            </span>
+							<span ng-show="producto.DescuentoAddSeatAutodesk">
+									<del style="font-size:11px;">{{ producto.PrecioRenovacion * producto.Cantidad | currency }} {{ pedido.MonedaPago }}</del>
+									<b style="color:#68953B;"> 50% Desc. </b>
+							</span>
+							<span ng-show="producto.PrimeraCompraMicrosoft">
+									<del style="font-size:11px;">{{ producto.PrecioUnitario * producto.Cantidad | currency }} {{ pedido.MonedaPago }}</del>
+									<b style="color:#68953B;">GRATIS!</b>
+							</span>
+							<span ng-show="!producto.PrimeraCompraMicrosoft && !producto.DescuentoNivel">
+								{{ producto.PrecioUnitario * producto.Cantidad | currency }} {{ pedido.MonedaPago }} 
+							</span>
+							<span ng-show="producto.DescuentoNivel && !producto.PrimeraCompraMicrosoft">
+								<del style="font-size:11px;"> {{ producto.PrecioUnitarioReal * producto.Cantidad | currency }} {{ pedido.MonedaPago }} </del>
+								<b style="color:#68953B;"> {{ producto.DescuentoNivel }}% Descuento</b>
+								<p> {{ (producto.PrecioUnitario  * producto.Cantidad).toFixed(2) | currency }}	{{ pedido.MonedaPago }} </p>
+              </span>
 						</div>
 					</div>
 					<div class="col-xs-12 col-sm-12 col-md-1 col-lg-1 ">
 						<div class="form-group">
 							<label labelfor="aQuitarProducto"></label>
 							<h4>
-								<a id="aQuitarProducto" title="Eliminar" ng-click="QuitarProducto(PedidoDetalle);">
+								<a id="aQuitarProducto" title="Eliminar" ng-click="QuitarProducto(producto);">
 									<span class="glyphicon glyphicon-trash" style="cursor:pointer"></span>
 								</a>
 							</h4>
@@ -181,9 +188,9 @@
 			</div>
 			<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
 				<div class="">
-					<button id="btnSiguiente" type="button" ng-click="Siguiente();" class="btn btn-primary btn-block" ng-show="!( Distribuidor.IdFormaPagoPredilecta == undefined || Distribuidor.IdFormaPagoPredilecta == null || CreditoValido == 0 )">
-                        Siguiente
-                    </button>
+					<button id="btnSiguiente" type="button" ng-click="next();" class="btn btn-primary btn-block" ng-show="!( Distribuidor.IdFormaPagoPredilecta == undefined || Distribuidor.IdFormaPagoPredilecta == null || CreditoValido == 0 )">
+            Siguiente
+          </button>
 				</div>
 			</div>
 		</div>

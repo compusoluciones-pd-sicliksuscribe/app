@@ -47,6 +47,15 @@
           }
         }
       })
+      .when('/autodesk/productos/:IdProducto/detalle/:IdPedidoDetalle', {
+        controller: 'ConfigurarBaseController', templateUrl: 'app/views/Productos/ConfigurarBase.html',
+        resolve: {
+          'check': function ($location, $cookieStore) {
+            var Session = $cookieStore.get('Session');
+            if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3)) { $location.path('/404'); }
+          }
+        }
+      })
 
       .when('/monitor-soporte', {
         controller: 'SoporteReadController', templateUrl: 'app/views/Soporte/SoporteRead.html',
@@ -84,6 +93,36 @@
           'check': function ($location, $cookieStore) {
             var Session = $cookieStore.get('Session');
             if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); }
+          }
+        }
+      })
+
+      .when('/aplicaciones', {
+        controller: 'AplicacionesReadController', templateUrl: 'app/views/Aplicaciones/AplicacionesRead.html',
+        resolve: {
+          'check': function ($location, $cookieStore) {
+            var Session = $cookieStore.get('Session');
+            if (!(Session.IdTipoAcceso === 2 && Session.IdEmpresa === 110)) { $location.path('/404'); }
+          }
+        }
+      })
+
+      .when('/migraciones', {
+        controller: 'MigracionController', templateUrl: 'app/views/Migracion/Migracion.html',
+        resolve: {
+          'check': function ($location, $cookieStore) {
+            var Session = $cookieStore.get('Session');
+            if (!(Session.IdTipoAcceso === 2 && Session.IdEmpresa === 110)) { $location.path('/404'); }
+          }
+        }
+      })
+
+      .when('/migraciones/:idMigracion', {
+        controller: 'MigracionDetalleController', templateUrl: 'app/views/Migracion/MigracionDetalle.html',
+        resolve: {
+          'check': function ($location, $cookieStore) {
+            var Session = $cookieStore.get('Session');
+            if (!(Session.IdTipoAcceso === 2 && Session.IdEmpresa === 110)) { $location.path('/404'); }
           }
         }
       })
@@ -147,8 +186,6 @@
           }
         }
       })
-
-
 
       .when('/Usuario', {
         controller: 'UsuariosCreateController', templateUrl: 'app/views/Usuarios/UsuariosCreate.html',
@@ -272,7 +309,41 @@
 
       .when('/Niveles', {
         controller: 'NivelesReadController', templateUrl: 'app/views/Niveles/NivelesRead.html',
-        resolve: { 'check': function ($location, $cookieStore) { var Session = $cookieStore.get('Session'); if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); } } }
+        resolve: {
+          'check': function ($location, $cookieStore, jwtHelper) {
+            var Session = $cookieStore.get('Session');
+            var decoded = jwtHelper.decodeToken(Session.Token);
+            if (!(decoded.IdTipoAcceso === 1)) {
+              $location.path('/404');
+            }
+          }
+        }
+      })
+
+      .when('/Niveles/Distribuidor', {
+        controller: 'NivelesClienteFinalController', templateUrl: 'app/views/Niveles/NivelesClienteFinal.html',
+        resolve: { 'check': function ($location, $cookieStore, jwtHelper) {
+          var Session = $cookieStore.get('Session');
+          var decoded = jwtHelper.decodeToken(Session.Token);
+          if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3) || !decoded.Niveles) { $location.path('/404'); }
+        } }
+      })
+
+      .when('/Niveles/Distribuidor/:IdDescuento/Descuentos', {
+        controller: 'DescuentosNivelesController', templateUrl: 'app/views/Descuentos/DescuentosNiveles.html',
+        resolve: { 'check': function ($location, $cookieStore, jwtHelper) {
+          var Session = $cookieStore.get('Session');
+          var decoded = jwtHelper.decodeToken(Session.Token);
+          if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3) || !decoded.Niveles) { $location.path('/404'); }
+        } }
+      })
+
+      .when('/Niveles/:IdNivel/Productos', {
+        controller: 'DescuentosNivelesCSController', templateUrl: 'app/views/Descuentos/DescuentosNivelesCS.html',
+        resolve: { 'check': function ($location, $cookieStore, jwtHelper) {
+          var Session = $cookieStore.get('Session');
+          if (!Session.IdTipoAcceso === 1) { $location.path('/404'); }
+        } }
       })
 
       .when('/Descuentos', {

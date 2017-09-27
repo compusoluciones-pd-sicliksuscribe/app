@@ -19,7 +19,7 @@
                 <div class="pull-rigth">
                     <label>Apellido Paterno </label>
                     <input name="ApellidoPaterno" type="text" ng-model="Usuario.ApellidoPaterno" class="form-control" ng-pattern="/[a-zA-Z]$/" placeholder="Apellido paterno" size="255" ng-maxlength="30" />
-                    <b style="color:red" ng-show="frm.ApellidoPaterno.$invalid && !frm.ApellidoPaterno.$pristine" class="help-block">Ha excedido el número de caracteres permitidos.</b>
+                    <b style="color:red" ng-show="frm.ApellidoPaterno.$invalid && !frm.ApellidoPaterno.$pristine" class="help-block">Revisa el número de caracteres (max: 30), los números no son permitidos</b>
                 </div>
                 
             </div>
@@ -31,7 +31,7 @@
                 <div class="pull-rigth">
                     <label>Apellido Materno </label>
                     <input name="ApellidoMaterno" type="text" ng-model="Usuario.ApellidoMaterno" class="form-control" ng-pattern="/[a-zA-Z]$/" placeholder="Apellido materno" size="255" ng-maxlength="30" />
-                    <b style="color:red" ng-show="frm.ApellidoMaterno.$invalid && !frm.ApellidoMaterno.$pristine" class="help-block">Ha excedido el número de caracteres permitidos.</b>
+                    <b style="color:red" ng-show="frm.ApellidoMaterno.$invalid && !frm.ApellidoMaterno.$pristine" class="help-block">Revisa el número de caracteres (max: 30), los números no son permitidos</b>
                 </div>  
             </div>
             <div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div>
@@ -52,7 +52,7 @@
         <div class="form-group row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="pull-rigth">
-                    <label>Número de celular </label>
+                    <label>Número de celular* </label>
                 </div>
             </div>
             <div class="col-xs-3 col-sm-3 col-md-1 col-lg-1">
@@ -73,7 +73,7 @@
                 <div class="pull-rigth">
                     <label>Tipo Acceso* </label>
                     <select name="IdTipoAcceso" class="form-control" ng-model="Usuario.IdTipoAcceso" 
-                            ng-options="TiposAccesos.IdTipoAcceso as TiposAccesos.Tipo for TiposAccesos in selectTiposAccesos" required="">
+                            ng-options="TiposAccesos.IdTipoAcceso as TiposAccesos.Tipo for TiposAccesos in selectTiposAccesos" required="" ng-change="cambioDeAccesos()">
                         <option value="" ng-selected="true">Selecciona un tipo de acceso...</option>
                     </select>
                     <b style="color:red" ng-show="frm.IdTipoAcceso.$invalid && !frm.IdTipoAcceso.$pristine" class="help-block">El tipo de acceso es requerido.</b>
@@ -83,12 +83,12 @@
             <div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div>
         </div>
         
-        <div class="form-group row" ng-show="(Usuario.IdTipoAcceso == 2 || Usuario.IdTipoAcceso == 4) && Usuario.MuestraComboEmpresas == 1">
+        <div class="form-group row" ng-show="(Usuario.IdTipoAcceso == 2 || Usuario.IdTipoAcceso == 4 || Usuario.IdTipoAcceso == 6) && Usuario.MuestraComboEmpresas == 1">
             <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
                 <div class="pull-rigth">
                     <label>Empresa* </label>
                     <select name="IdEmpresa" class="form-control" ng-model="Usuario.IdEmpresa" 
-                            ng-options="Empresas.IdEmpresa as Empresas.IdERP + ', ' + Empresas.NombreEmpresa for Empresas in selectEmpresas">
+                            ng-options="Empresas.IdEmpresa as Empresas.IdERP || 'Cliente' + ', ' + Empresas.NombreEmpresa for Empresas in selectEmpresas">
                         <option value="" ng-selected="true">Selecciona una empresa...</option>
                         <b style="color:red" ng-show="frm.IdEmpresa.$invalid && !frm.IdEmpresa.$pristine" class="help-block">La empresa es requerida.</b>
                     </select>

@@ -2,281 +2,193 @@
   var PedidoDetallesReadController = function ($scope, $log, $location, $cookieStore, PedidoDetallesFactory, TipoCambioFactory, EmpresasXEmpresasFactory, EmpresasFactory, PedidosFactory, $routeParams) {
     $scope.CreditoValido = 1;
     $scope.Distribuidor = {};
-    var error = $routeParams.error;
 
-    $scope.validarCarrito = function () {
-      PedidoDetallesFactory.getValidarCarrito()
-        .success(function (validacion) {
-          if (validacion.success === 1) {
-            for (var j = 0; j < $scope.PedidoDetalles.length; j++) {
-              if ($scope.Distribuidor.IdFormaPagoPredilecta === 1 && $scope.PedidoDetalles[j].MonedaPago !== 'Pesos') {
+    const error = function (error) {
+      $scope.ShowToast(!error ? 'Ha ocurrido un error, intentelo mas tarde.' : error.message, 'danger');
+      $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+    };
+
+    const getEnterprises = function () {
+      return EmpresasFactory.getEmpresas()
+        .then(function (result) {
+          $scope.Distribuidor = result.data[0];
+        })
+        .catch(function (result) {
+          error(result.data);
+          $location.path('/Productos');
+        });
+    };
+
+    const getOrderDetails = function (validate) {
+      return PedidoDetallesFactory.getPedidoDetalles()
+        .then(function (result) {
+          if (result.data.success) {
+            $scope.PedidoDetalles = result.data.data;
+            if (!validate) $scope.ValidarFormaPago();
+          } else {
+            $scope.ShowToast(result.data.message, 'danger');
+            $location.path('/Productos');
+          }
+        })
+        .then(validarCarrito)
+        .catch(function (result) { error(result.data); });
+    };
+
+    const validarCarrito = function () {
+      return PedidoDetallesFactory.getValidarCarrito()
+        .then(function (result) {
+          if (result.data.success) {
+            $scope.PedidoDetalles.forEach(function (item) {
+              if ($scope.Distribuidor.IdFormaPagoPredilecta === 1 && item.MonedaPago !== 'Pesos') {
                 $scope.ShowToast('Para pagar con tarjeta bancaria es necesario que los pedidos estén en pesos MXN. Actualiza tu forma de pago o cambia de moneda en los pedidos agregándolos una vez más.', 'danger');
               }
-
               $scope.CreditoValido = 1;
-              $scope.PedidoDetalles[j].TieneCredito = 1;
-
-              for (var i = 0; i < validacion.data[0].length; i++) {
-                if ($scope.PedidoDetalles[j].IdEmpresaUsuarioFinal === validacion.data[0][i].IdEmpresaUsuarioFinal && validacion.data[0][i].TieneCredito === 0) {
+              item.hasCredit = 1;
+              result.data.data.forEach(function (user) {
+                if (item.IdEmpresaUsuarioFinal === user.IdEmpresaUsuarioFinal && !user.hasCredit) {
                   $scope.CreditoValido = 0;
-                  $scope.PedidoDetalles[j].TieneCredito = 0;
+                  item.hasCredit = 0;
                 }
-              }
-            }
+              });
+            });
           } else {
             $scope.ShowToast('No pudimos validar tu carrito de compras, por favor intenta de nuevo.', 'danger');
             $location.path('/Productos');
           }
         })
-        .error(function (data, status, headers, config) {
-          $scope.ShowToast('No pudimos validar tu carrito de compras, por favor intenta de nuevo.', 'danger');
+        .catch(function (result) {
+          error(result.data);
           $location.path('/Productos');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
     };
 
     $scope.init = function () {
       $scope.CheckCookie();
-      PedidoDetallesFactory.getPrepararCompra(false)
-        .success(function (PedidoDetalles) {
-          PedidoDetallesFactory.getPedidoDetalles()
-            .success(function (PedidoDetalles) {
-              if (PedidoDetalles.success === 1) {
-                $scope.PedidoDetalles = PedidoDetalles.data[0];
-                $scope.validarCarrito();
-                $scope.ValidarFormaPago();
-              } else {
-                $scope.ShowToast(PedidoDetalles.message, 'danger');
-                $location.path('/Productos');
-              }
-
-              EmpresasFactory.getEmpresas()
-                .success(function (data) {
-                  $scope.Distribuidor = data[0];
-                })
-                .error(function (data, status, headers, config) {
-                  $scope.ShowToast('No pudimos cargar los datos de tu empresa, por favor intenta de nuevo más tarde', 'danger');
-                  $location.path('/Productos');
-                  $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-                });
-            })
-            .error(function (data, status, headers, config) {
-              $scope.ShowToast('No pudimos cargar la información del pedido, por favor intenta de nuevo más tarde.', 'danger');
-              $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-            });
-        })
-        .error(function (data, status, headers, config) {
-          $scope.ShowToast('No pudimos preparar tu información, por favor intenta de nuevo más tarde.', 'danger');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
+      PedidoDetallesFactory.getPrepararCompra(0)
+        .then(getEnterprises)
+        .then(getOrderDetails)
+        .catch(function (result) { error(result.data); });
     };
 
     $scope.init();
 
     $scope.QuitarProducto = function (PedidoDetalle) {
-      $scope.PedidoDetalles.forEach(function (Elemento, Index) {
-        if (Elemento.IdPedidoDetalle === PedidoDetalle.IdPedidoDetalle) {
-          $scope.PedidoDetalles.splice(Index, 1);
-          $scope.validarCarrito();
-          return false;
-        }
+      $scope.PedidoDetalles.forEach(function (order, indexOrder) {
+        order.Productos.forEach(function (product, indexProduct) {
+          if (product.IdPedidoDetalle === PedidoDetalle.IdPedidoDetalle) {
+            $scope.PedidoDetalles[indexOrder].Productos.splice(indexProduct, 1);
+            validarCarrito();
+          }
+          if ($scope.PedidoDetalles[indexOrder].Productos.length === 0) $scope.PedidoDetalles.splice(indexOrder, 1);
+        });
       });
 
       PedidoDetallesFactory.deletePedidoDetalles(PedidoDetalle.IdPedidoDetalle)
         .success(function (PedidoDetalleResult) {
-          if (PedidoDetalleResult.success === 0) {
+          if (!PedidoDetalleResult.success) {
             $scope.ShowToast(PedidoDetalleResult.message, 'danger');
-            PedidoDetallesFactory.getPedidoDetalles()
-              .success(function (PedidoDetalles) {
-                if (PedidoDetalles.success === 1) {
-                  $scope.PedidoDetalles = PedidoDetalles.data[0];
-                  $scope.validarCarrito();
-                } else {
-                  $scope.ShowToast(PedidoDetalles.message, 'danger');
-                  $location.path('/Productos');
-                }
-              })
-              .error(function (data, status, headers, config) {
-                $scope.ShowToast('No pudimos cargar tu información, por favor intenta de nuevo más tarde.', 'danger');
-                $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-              });
+            getOrderDetails(true);
           } else {
             $scope.ActualizarMenu();
-            $scope.validarCarrito();
+            validarCarrito();
             $scope.ShowToast(PedidoDetalleResult.message, 'success');
           }
         })
         .error(function (data, status, headers, config) {
           $scope.ShowToast('No pudimos quitar el producto seleccionado. Intenta de nuevo más tarde.', 'danger');
-
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
     };
 
     $scope.ActualizarCodigo = function (value) {
-      PedidosFactory.putCodigoPromocion(value[0])
-        .success(function (resultado) {
+      const order = {
+        CodigoPromocion: value.CodigoPromocion,
+        IdPedido: value.IdPedido
+      };
+      PedidosFactory.putCodigoPromocion(order)
+        .then(function (result) {
           $scope.init();
-          $scope.ShowToast(resultado.message, 'success');
+          $scope.ShowToast(result.data.message, 'success');
         })
-        .error(function (data, status, headers, config) {
-          $scope.ShowToast('No pudimos cargar tu información, por favor intenta de nuevo más tarde.', 'danger');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
+        .catch(function (result) { error(result.data); });
     };
 
     $scope.ValidarFormaPago = function () {
-      var Disabled = false;
-
+      var disabled = false;
       if ($scope.PedidoDetalles) {
-        for (var i = 0; i < $scope.PedidoDetalles.length; i++) {
-          var producto = $scope.PedidoDetalles[i];
-
-          if (producto.IdTipoProducto === 3) {
-            Disabled = true;
-          }
-        }
+        $scope.PedidoDetalles.forEach(function (order) {
+          order.Productos.forEach(function (product) {
+            if (product.IdTipoProducto === 3) {
+              disabled = true;
+              $scope.Distribuidor.IdFormaPago = 2;
+            }
+          });
+        });
       }
-
-      if (Disabled === true) {
-        $scope.Distribuidor.IdFormaPago = 2;
-      }
-
-      return Disabled;
+      return disabled;
     };
 
     $scope.ActualizarFormaPago = function (IdFormaPago) {
-      var empresa = {
-        'IdFormaPagoPredilecta': IdFormaPago
-      };
-
+      var empresa = { IdFormaPagoPredilecta: IdFormaPago };
       EmpresasFactory.putEmpresaFormaPago(empresa)
-        .success(function (actualizacion) {
-          if (actualizacion.success === 1) {
-            $scope.ShowToast(actualizacion.message, 'success');
-
-            PedidoDetallesFactory.getPedidoDetalles()
-              .success(function (PedidoDetalles) {
-                if (PedidoDetalles.success === 1) {
-                  $scope.PedidoDetalles = PedidoDetalles.data[0];
-                  $scope.validarCarrito();
-                } else {
-                  $scope.ShowToast(PedidoDetalles.message, 'danger');
-                  $location.path('/Productos');
-                }
-              })
-              .error(function (data, status, headers, config) {
-                $scope.ShowToast('No pudimos cargar tu información, por favor intenta de nuevo más tarde.', 'danger');
-                $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-              });
-          } else {
-            $scope.ShowToast(actualizacion.message, 'danger');
-          }
+        .then(function (result) {
+          if (result.data.success) {
+            $scope.ShowToast(result.data.message, 'success');
+            getOrderDetails();
+          } else $scope.ShowToast(result.data.message, 'danger');
         })
-        .error(function (data, status, headers, config) {
-          $scope.ShowToast('No pudimos actualizar tu forma de pago. Intenta de nuevo más tarde.', 'danger');
+        .catch(function (result) { error(result.data); });
+    };
 
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
+    $scope.modificarContratoBase = function (IdProducto, IdPedidoDetalle) {
+      $location.path('/autodesk/productos/' + IdProducto + '/detalle/' + IdPedidoDetalle);
     };
 
     $scope.calcularSubTotal = function (IdPedido) {
-      var total = 0;
-
-      for (var i = 0; $scope.PedidoDetalles.length > i; i++) {
-        if ($scope.PedidoDetalles[i].IdPedido == IdPedido) {
-          if ($scope.PedidoDetalles[i].PrimeraCompraMicrosoft == 0) {
-            total = total + ($scope.PedidoDetalles[i].PrecioUnitario * $scope.PedidoDetalles[i].Cantidad);
-            
+      let total = 0;
+      $scope.PedidoDetalles.forEach(function (order) {
+        order.Productos.forEach(function (product) {
+          if (order.IdPedido === IdPedido && product.PrimeraCompraMicrosoft === 0) {
+            total = total + (product.PrecioUnitario * product.Cantidad);
           }
-        }
-      }
-      
+        });
+      });
       return total;
     };
 
     $scope.calcularIVA = function (IdPedido) {
-      var total = 0;
-
-      for (var i = 0; $scope.PedidoDetalles.length > i; i++) {
-        if ($scope.PedidoDetalles[i].IdPedido == IdPedido) {
-          if ($scope.PedidoDetalles[i].PrimeraCompraMicrosoft === 0) {
-            total = total + ($scope.PedidoDetalles[i].PrecioUnitario * $scope.PedidoDetalles[i].Cantidad);
-          }
-        }
-      }
-
-      if ($scope.Distribuidor.ZonaImpuesto == 'Normal') {
-        total = .16 * total;
-      }
-      if ($scope.Distribuidor.ZonaImpuesto == 'Nacional') {
-        total = .16 * total;
-      }
-      if ($scope.Distribuidor.ZonaImpuesto == 'Frontera') {
-        total = .11 * total;
-      }
-
+      let total = $scope.calcularSubTotal(IdPedido);
+      if ($scope.Distribuidor.ZonaImpuesto === 'Normal') total = 0.16 * total;
+      if ($scope.Distribuidor.ZonaImpuesto === 'Nacional') total = 0.16 * total;
+      if ($scope.Distribuidor.ZonaImpuesto === 'Frontera') total = 0.11 * total;
       return total;
     };
 
     $scope.calcularTotal = function (IdPedido) {
-      var total = 0;
-
-      for (var i = 0; $scope.PedidoDetalles.length > i; i++) {
-        if ($scope.PedidoDetalles[i].IdPedido == IdPedido) {
-          if ($scope.PedidoDetalles[i].PrimeraCompraMicrosoft === 0) {
-            total = total + ($scope.PedidoDetalles[i].PrecioUnitario * $scope.PedidoDetalles[i].Cantidad);
-          }
-        }
-      }
-
-      var iva = 0;
-
-      if ($scope.Distribuidor.ZonaImpuesto == 'Normal') {
-        iva = .16 * total;
-      }
-      if ($scope.Distribuidor.ZonaImpuesto == 'Nacional') {
-        iva = .16 * total;
-      }
-      if ($scope.Distribuidor.ZonaImpuesto == 'Frontera') {
-        iva = .11 * total;
-      }
-
+      let total = $scope.calcularSubTotal(IdPedido);
+      let iva = 0;
+      if ($scope.Distribuidor.ZonaImpuesto === 'Normal') iva = 0.16 * total;
+      if ($scope.Distribuidor.ZonaImpuesto === 'Nacional') iva = 0.16 * total;
+      if ($scope.Distribuidor.ZonaImpuesto === 'Frontera') iva = 0.11 * total;
       total = total + iva;
-
       return total;
     };
 
-    $scope.Siguiente = function () {
-      $scope.validarCarrito();
-
-      var IrSiguiente = true;
-
-      if ($scope.PedidoDetalles) {
-        if ($scope.PedidoDetalles.length === 0) {
-          IrSiguiente = false;
-        }
-
-        for (var i = 0; i < $scope.PedidoDetalles.length; i++) {
-          var pedido = $scope.PedidoDetalles[i];
-
-          if (pedido.Cantidad <= 0) {
-            IrSiguiente = false;
-          }
-
-          if (!pedido.IdEmpresaUsuarioFinal) {
-            IrSiguiente = false;
-          }
-        }
-      } else {
-        IrSiguiente = false;
+    $scope.next = function () {
+      validarCarrito();
+      let next = true;
+      if (!$scope.PedidoDetalles || $scope.PedidoDetalles.length === 0) next = false;
+      else {
+        $scope.PedidoDetalles.forEach(function (order) {
+          if (!order.IdEmpresaUsuarioFinal) next = false;
+          order.Productos.forEach(function (product) {
+            if (product.Cantidad <= 0) next = false;
+          });
+        });
       }
-
-      if (IrSiguiente === false) {
+      if (!next) {
         $scope.ShowToast('Revisa que tengas al menos un producto y que tenga un cliente seleccionado con crédito válido.', 'warning');
-      } else {
-        $location.path('/Comprar');
-      }
+      } else $location.path('/Comprar');
     };
 
     $scope.IniciarTourCarrito = function () {
@@ -287,7 +199,7 @@
           placement: 'rigth',
           title: 'Forma de pago del distribuidor',
           content: 'Selecciona la forma de pago predilecta para tu empresa, esta es una configuración única para toda la compañia. Si seleccionas pago con tarjeta bancaria tendrás que tener tus pedidos en pesos MXN, si requieres pagar en dolares USD podrás utilizar crédito CompuSoluciones.',
-          template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>",
+          template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>"
         }],
 
         backdrop: true,
@@ -302,4 +214,4 @@
   PedidoDetallesReadController.$inject = ['$scope', '$log', '$location', '$cookieStore', 'PedidoDetallesFactory', 'TipoCambioFactory', 'EmpresasXEmpresasFactory', 'EmpresasFactory', 'PedidosFactory', '$routeParams'];
 
   angular.module('marketplace').controller('PedidoDetallesReadController', PedidoDetallesReadController);
-} ());
+}());

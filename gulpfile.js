@@ -1,10 +1,10 @@
 var gulp = require('gulp');
 var concat = require('gulp-concat');
-var compressor = require('gulp-compressor');
-var notify = require('gulp-notify');
-var sass = require('gulp-sass');
+// var compressor = require('gulp-compressor');
+// var notify = require('gulp-notify');
+// var sass = require('gulp-sass');
 var browserSync = require('browser-sync').create();
-var htmlmin = require('gulp-htmlmin');
+// var htmlmin = require('gulp-htmlmin');
 
 gulp.task('browser-sync', function () {
   browserSync.init({
@@ -34,28 +34,28 @@ gulp.task('compress', function () {
     .pipe(gulp.dest('./marketplace-app-min/app'));
 });
 
-gulp.task('sass', function () {
-  return gulp
-    // Find all `.scss` files from the `stylesheets/` folder
-    .src('./styles/**/*.scss')
-    // Run Sass on those files
-    .pipe(sass())
-    // Write the resulting CSS in the output folder
-    .pipe(gulp.dest('./marketplace-app-min/styles'))
-    .pipe(notify({ message: 'Finished minifying sass' }));
-});
+// gulp.task('sass', function () {
+//   return gulp
+//     // Find all `.scss` files from the `stylesheets/` folder
+//     .src('./styles/**/*.scss')
+//     // Run Sass on those files
+//     .pipe(sass())
+//     // Write the resulting CSS in the output folder
+//     .pipe(gulp.dest('./marketplace-app-min/styles'))
+//     .pipe(notify({ message: 'Finished minifying sass' }));
+// });
 
-gulp.task('scss', function () {
-  return gulp
-    // Find all `.scss` files from the `stylesheets/` folder
-    .src('./styles/sass/*.scss')
-    // Run Sass on those files
-    .pipe(sass())
-    .pipe(compressor())
-    // Write the resulting CSS in the output folder
-    .pipe(gulp.dest('./styles/css'))
-    .pipe(browserSync.reload({ stream: true }));
-});
+// gulp.task('scss', function () {
+//   return gulp
+//     // Find all `.scss` files from the `stylesheets/` folder
+//     .src('./styles/sass/*.scss')
+//     // Run Sass on those files
+//     .pipe(sass())
+//     .pipe(compressor())
+//     // Write the resulting CSS in the output folder
+//     .pipe(gulp.dest('./styles/css'))
+//     .pipe(browserSync.reload({ stream: true }));
+// });
 
 gulp.task('watch_css', function () {
   return gulp

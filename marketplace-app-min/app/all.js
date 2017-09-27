@@ -88,6 +88,36 @@
         }
       })
 
+      .when('/aplicaciones', {
+        controller: 'AplicacionesReadController', templateUrl: 'app/views/Aplicaciones/AplicacionesRead.html',
+        resolve: {
+          'check': function ($location, $cookieStore) {
+            var Session = $cookieStore.get('Session');
+            if (!(Session.IdTipoAcceso === 2 && Session.IdEmpresa === 110)) { $location.path('/404'); }
+          }
+        }
+      })
+
+      .when('/migraciones', {
+        controller: 'MigracionController', templateUrl: 'app/views/Migracion/Migracion.html',
+        resolve: {
+          'check': function ($location, $cookieStore) {
+            var Session = $cookieStore.get('Session');
+            if (!(Session.IdTipoAcceso === 2 && Session.IdEmpresa === 110)) { $location.path('/404'); }
+          }
+        }
+      })
+
+      .when('/migraciones/:idMigracion', {
+        controller: 'MigracionDetalleController', templateUrl: 'app/views/Migracion/MigracionDetalle.html',
+        resolve: {
+          'check': function ($location, $cookieStore) {
+            var Session = $cookieStore.get('Session');
+            if (!(Session.IdTipoAcceso === 2 && Session.IdEmpresa === 110)) { $location.path('/404'); }
+          }
+        }
+      })
+
       .when('/ConfigurarRPs/:IdEmpresa', {
         controller: 'EmpresasRPController', templateUrl: 'app/views/Empresas/EmpresasRP.html',
         resolve: {
@@ -303,7 +333,7 @@ angular.module('marketplace')
     $rootScope.rsVersion = '2.1.1';
     /* $rootScope.API = 'http://localhost:8080/';
     $rootScope.MAPI = 'http://localhost:8083/';
-    $rootScope.dominio = 'localhost';*/
+    $rootScope.dominio = 'localhost'; */
     $rootScope.API = 'https://pruebas.compusoluciones.com/';
     $rootScope.MAPI = 'http://microsoft-api.us-east-1.elasticbeanstalk.com/';
     $rootScope.dominio = 'clicksuscribe';
@@ -1257,6 +1287,62 @@ angular.module('directives.loading', [])
 }());
 
 (function () {
+  var MigracionFactory = function ($http, $cookieStore, $rootScope) {
+    var factory = {};
+    var Session = {};
+
+    factory.refreshToken = function () {
+      Session = $cookieStore.get('Session');
+      if (!Session) { Session = { Token: 'no' }; }
+      $http.defaults.headers.common['token'] = Session.Token;
+    };
+
+    factory.refreshToken();
+
+    factory.getMigraciones = function () {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'migrations');
+    };
+
+    factory.getMigracion = function (IdMigracion) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'migrations/' + IdMigracion);
+    };
+
+    factory.postMigracion = function (migracion) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'migrations', migracion);
+    };
+
+    factory.patchMigracion = function (migracion) {
+      factory.refreshToken();
+      return $http.patch($rootScope.API + 'migrations', migracion);
+    };
+
+    factory.getDominio = function ({ Dominio, Contexto }) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'migrations/customer/' + Contexto + '/' + Dominio);
+    };
+
+    factory.postUsuario = function (user) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'migrations/user', user);
+    };
+
+    factory.postCliente = function (cliente) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'migrations/customer', cliente);
+    };
+
+    return factory;
+  };
+
+  MigracionFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
+
+  angular.module('marketplace').factory('MigracionFactory', MigracionFactory);
+}());
+
+(function () {
   var NivelesDistribuidorFactory = function ($http, $cookieStore, $rootScope) {
     var factory = {};
     var Session = {};
@@ -1878,6 +1964,24 @@ angular.module('directives.loading', [])
 }());
 
 (function () {
+  var AplicacionesReadController = function ($scope, $log, $location, $cookieStore, MigracionFactory) {
+    $scope.goToMigraciones = function () {
+      $location.path('/migraciones');
+    };
+
+    $scope.init = function () {
+     
+    };
+
+    $scope.init();
+  };
+
+  AplicacionesReadController.$inject = ['$scope', '$log', '$location', '$cookieStore', 'MigracionFactory'];
+
+  angular.module('marketplace').controller('AplicacionesReadController', AplicacionesReadController);
+}());
+
+(function () {
   var DescuentosCreateController = function ($scope, $log, $cookieStore, $location, DescuentosFactory, NivelesDistribuidorFactory) {
     var Session = {};
     Session = $cookieStore.get('Session');
@@ -2033,270 +2137,6 @@ angular.module('directives.loading', [])
   DescuentosUpdateController.$inject = ['$scope', '$log', '$cookieStore', '$location', 'DescuentosFactory', '$routeParams'];
 
   angular.module('marketplace').controller('DescuentosUpdateController', DescuentosUpdateController);
-}());
-
-(function () {
-  var EmpresasXEmpresasReadController = function ($scope, $log, $location, $cookieStore, EmpresasXEmpresasFactory, EmpresasFactory, PedidoDetallesFactory) {
-    $scope.sortBy = 'NombreEmpresa';
-    $scope.reverse = false;
-    $scope.CreditoDisponible = 0;
-    $scope.Cont = 0;
-    $scope.form = {};
-    $scope.form.habilitar = false;
-
-    String.prototype.splice = function (idx, rem, s) {
-      return (this.slice(0, idx) + s + this.slice(idx + Math.abs(rem)));
-    };
-
-    $scope.init = function () {
-      $scope.CheckCookie();
-
-      EmpresasXEmpresasFactory.getEmpresasXEmpresas()
-        .success(function (Empresas) {
-          if (Empresas) {
-            for (var i = 0; i < Empresas.length; i++) {
-              Empresas[i].WarningCredito = false;
-            }
-
-            $scope.Empresas = Empresas;
-
-            for (var w = 0; w < $scope.Empresas.length; w++) {
-              (function (index) {
-
-                var parametros = { IdEmpresaUsuarioFinal: $scope.Empresas[index].IdEmpresa };
-
-                PedidoDetallesFactory.postWarningCredito(parametros)
-                  .success(function (result) {
-                    if (result) {
-                      if (result.success === 0) {
-                        $scope.Empresas[index].WarningCredito = true;
-
-                        $scope.ShowToast(result.message, 'danger');
-                      }
-                      else {
-                        $scope.Empresas[index].WarningCredito = false;
-                      }
-                    }
-                  })
-                  .error(function (data, status, headers, config) {
-                    $scope.ShowToast('No pudimos cargar tu información, por favor intenta de nuevo más tarde.', 'danger');
-                    $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-                  });
-              }(w));
-            }
-          }
-        })
-        .error(function (data, status, headers, config) {
-          $scope.ShowToast('No pudimos cargar tus clientes, por favor intenta de nuevo más tarde', 'danger');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
-
-      EmpresasFactory.getEmpresas()
-        .success(function (data) {
-          $scope.CreditoDisponible = data[0].Credito;
-        })
-        .error(function (data, status, headers, config) {
-          $scope.ShowToast('No pudimos cargar los datos de tu empresa, por favor intenta de nuevo más tarde', 'danger');
-
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
-    };
-
-    $scope.init();
-
-
-    $scope.BajaEmpresa = function (Empresa) {
-      var EmpresaUpdate = {};
-      EmpresaUpdate = Empresa;
-      EmpresaUpdate.IdEmpresaUsuarioFinal = Empresa.IdEmpresa;
-      EmpresaUpdate.Activo = 0;
-
-      EmpresasXEmpresasFactory.putEmpresasXEmpresa(EmpresaUpdate)
-        .success(function (data) {
-          if (data[0].Success == true) {
-            $scope.ShowToast(data[0].Message, 'success');
-
-            $scope.init();
-          } else {
-            $scope.Confirmar(Empresa.IdEmpresa);
-            $scope.ShowToast(data[0].Message, 'danger');
-          }
-        })
-        .error(function (data, status, headers, config) {
-          $scope.ShowToast('No pudimos dar de baja a tu cliente, por favor intenta de nuevo más tarde', 'danger');
-
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
-    };
-
-    $scope.Confirmar = function (IdEmpresa) {
-      $scope.Empresas.forEach(function (Empresa) {
-        if (Empresa.IdEmpresa == IdEmpresa) {
-          Empresa.Mostrar = !Empresa.Mostrar;
-        }
-      }, this);
-    };
-
-    $scope.OrdenarPor = function (Atributo) {
-      $scope.sortBy = Atributo;
-      $scope.reverse = !$scope.reverse;
-    };
-
-    $scope.ActualizarCredito = function (Empresa) {
-      var total = 0;
-
-      if ($scope.Empresas !== undefined) {
-        for (var i = 0; i < $scope.Empresas.length; i++) {
-          var Empresas = $scope.Empresas[i];
-
-          if (Empresas.PorcentajeCredito != undefined && Empresas.PorcentajeCredito != null) {
-            if (Empresas.PorcentajeCredito < 0) {
-              $scope.ShowToast('Cantidad no válida', 'danger');
-              return;
-            } else {
-              total += Empresas.PorcentajeCredito;
-            }
-          } else {
-            Empresas.PorcentajeCredito = 0;
-          }
-        }
-      }
-
-      if (total > $scope.CreditoDisponible) {
-        $scope.ShowToast('No puedes exceder tu límite de crédito.', 'danger');
-        $scope.init();
-        return;
-      }
-
-      EmpresasXEmpresasFactory.putEmpresasXEmpresa(Empresa)
-        .success(function (data) {
-          if (data[0].Success == true) {
-            $scope.ShowToast(data[0].Message, 'success');
-
-            var parametros = { IdEmpresaUsuarioFinal: Empresa.IdEmpresa };
-
-            PedidoDetallesFactory.postWarningCredito(parametros)
-              .success(function (result) {
-                if (result) {
-                  var WarningCredito = false;
-
-                  if (result.success === 0) {
-                    WarningCredito = true;
-                    $scope.ShowToast(result.message, 'danger');
-                  } else {
-                    WarningCredito = false;
-                  }
-
-                  for (var e = 0; e < $scope.Empresas.length; e++) {
-                    if ($scope.Empresas[e].IdEmpresa === Empresa.IdEmpresa) {
-                      $scope.Empresas[e].WarningCredito = WarningCredito;
-                      break;
-                    }
-                  }
-                }
-              })
-              .error(function (data, status, headers, config) {
-                $scope.ShowToast('No pudimos cargar tu información, por favor intenta de nuevo más tarde.', 'danger');
-                $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-              });
-          } else {
-            $scope.ShowToast(data[0].Message, 'danger');
-
-            $scope.init();
-          }
-        })
-        .error(function (data, status, headers, config) {
-          $scope.ShowToast('No pudimos actualizar el crédito, por favor intenta de nuevo más tarde', 'danger');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
-    };
-
-    $scope.NuevaEmpresa = function () {
-      $location.path("/Empresa");
-    };
-
-    $scope.PosibilidadCredito = function () {
-      var totalAsignado = 0;
-      if ($scope.Empresas !== undefined) {
-        for (var i = 0; i < $scope.Empresas.length; i++) {
-          var Empresa = $scope.Empresas[i];
-          if (Empresa.PorcentajeCredito != undefined && Empresa.PorcentajeCredito != null) {
-            totalAsignado += Empresa.PorcentajeCredito;
-          }
-        }
-      }
-
-      return $scope.CreditoDisponible - totalAsignado;
-    };
-
-    $scope.CreditoRepartido = function () {
-      var totalAsignado = 0;
-
-      if ($scope.Empresas !== undefined) {
-        for (var i = 0; i < $scope.Empresas.length; i++) {
-          var Empresa = $scope.Empresas[i];
-
-          if (Empresa.PorcentajeCredito != undefined && Empresa.PorcentajeCredito != null) {
-            totalAsignado += Empresa.PorcentajeCredito;
-          }
-        }
-      }
-
-      return totalAsignado;
-    };
-
-    $scope.IniciarTourClients = function () {
-      $scope.Tour = new Tour({
-        steps: [
-          {
-            element: ".newClient",
-            placement: "bottom",
-            title: "Agrega nuevos clientes",
-            content: "Da de alta un nuevo cliente y asígnale crédito para Click suscribe.",
-            template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>"
-          },
-          {
-            element: ".totalCredit",
-            placement: "bottom",
-            title: "Crédito total",
-            content: "El crédito total que tienes en Click suscribe para hacer compras o renovar suscripciones.",
-            template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>"
-          },
-          {
-            element: ".asignCredit",
-            placement: "bottom",
-            title: "Crédito total asignado",
-            content: "Cantidad que ya se repartió entre tus clientes.",
-            template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>"
-          },
-          {
-            element: ".giveCredit",
-            placement: "bottom",
-            title: "Crédito por repartir",
-            content: "Cantidad disponible o pendiente por repartir entre tus clientes.",
-            template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>"
-          },
-          {
-            element: ".pesosCredit",
-            placement: "left",
-            title: "Asigna crédito",
-            content: "Asígnale crédito a cada cliente en base a tu monto total.",
-            template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>"
-          }
-        ],
-
-        backdrop: true,
-        storage: false
-      });
-
-      $scope.Tour.init();
-      $scope.Tour.start();
-    };
-  };
-
-  EmpresasXEmpresasReadController.$inject = ['$scope', '$log', '$location', '$cookieStore', 'EmpresasXEmpresasFactory', 'EmpresasFactory', 'PedidoDetallesFactory'];
-
-  angular.module('marketplace').controller('EmpresasXEmpresasReadController', EmpresasXEmpresasReadController);
 }());
 
 (function () {
@@ -3467,6 +3307,562 @@ angular.module('directives.loading', [])
   EmpresasUpdateController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$routeParams', 'EmpresasFactory', 'EmpresasXEmpresasFactory', 'EstadosFactory', 'UsuariosFactory'];
 
   angular.module('marketplace').controller('EmpresasUpdateController', EmpresasUpdateController);
+}());
+
+(function () {
+  var EmpresasXEmpresasReadController = function ($scope, $log, $location, $cookieStore, EmpresasXEmpresasFactory, EmpresasFactory, PedidoDetallesFactory) {
+    $scope.sortBy = 'NombreEmpresa';
+    $scope.reverse = false;
+    $scope.CreditoDisponible = 0;
+    $scope.Cont = 0;
+    $scope.form = {};
+    $scope.form.habilitar = false;
+
+    String.prototype.splice = function (idx, rem, s) {
+      return (this.slice(0, idx) + s + this.slice(idx + Math.abs(rem)));
+    };
+
+    $scope.init = function () {
+      $scope.CheckCookie();
+
+      EmpresasXEmpresasFactory.getEmpresasXEmpresas()
+        .success(function (Empresas) {
+          if (Empresas) {
+            for (var i = 0; i < Empresas.length; i++) {
+              Empresas[i].WarningCredito = false;
+            }
+
+            $scope.Empresas = Empresas;
+
+            for (var w = 0; w < $scope.Empresas.length; w++) {
+              (function (index) {
+
+                var parametros = { IdEmpresaUsuarioFinal: $scope.Empresas[index].IdEmpresa };
+
+                PedidoDetallesFactory.postWarningCredito(parametros)
+                  .success(function (result) {
+                    if (result) {
+                      if (result.success === 0) {
+                        $scope.Empresas[index].WarningCredito = true;
+
+                        $scope.ShowToast(result.message, 'danger');
+                      }
+                      else {
+                        $scope.Empresas[index].WarningCredito = false;
+                      }
+                    }
+                  })
+                  .error(function (data, status, headers, config) {
+                    $scope.ShowToast('No pudimos cargar tu información, por favor intenta de nuevo más tarde.', 'danger');
+                    $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+                  });
+              }(w));
+            }
+          }
+        })
+        .error(function (data, status, headers, config) {
+          $scope.ShowToast('No pudimos cargar tus clientes, por favor intenta de nuevo más tarde', 'danger');
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+
+      EmpresasFactory.getEmpresas()
+        .success(function (data) {
+          $scope.CreditoDisponible = data[0].Credito;
+        })
+        .error(function (data, status, headers, config) {
+          $scope.ShowToast('No pudimos cargar los datos de tu empresa, por favor intenta de nuevo más tarde', 'danger');
+
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+    };
+
+    $scope.init();
+
+
+    $scope.BajaEmpresa = function (Empresa) {
+      var EmpresaUpdate = {};
+      EmpresaUpdate = Empresa;
+      EmpresaUpdate.IdEmpresaUsuarioFinal = Empresa.IdEmpresa;
+      EmpresaUpdate.Activo = 0;
+
+      EmpresasXEmpresasFactory.putEmpresasXEmpresa(EmpresaUpdate)
+        .success(function (data) {
+          if (data[0].Success == true) {
+            $scope.ShowToast(data[0].Message, 'success');
+
+            $scope.init();
+          } else {
+            $scope.Confirmar(Empresa.IdEmpresa);
+            $scope.ShowToast(data[0].Message, 'danger');
+          }
+        })
+        .error(function (data, status, headers, config) {
+          $scope.ShowToast('No pudimos dar de baja a tu cliente, por favor intenta de nuevo más tarde', 'danger');
+
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+    };
+
+    $scope.Confirmar = function (IdEmpresa) {
+      $scope.Empresas.forEach(function (Empresa) {
+        if (Empresa.IdEmpresa == IdEmpresa) {
+          Empresa.Mostrar = !Empresa.Mostrar;
+        }
+      }, this);
+    };
+
+    $scope.OrdenarPor = function (Atributo) {
+      $scope.sortBy = Atributo;
+      $scope.reverse = !$scope.reverse;
+    };
+
+    $scope.ActualizarCredito = function (Empresa) {
+      var total = 0;
+
+      if ($scope.Empresas !== undefined) {
+        for (var i = 0; i < $scope.Empresas.length; i++) {
+          var Empresas = $scope.Empresas[i];
+
+          if (Empresas.PorcentajeCredito != undefined && Empresas.PorcentajeCredito != null) {
+            if (Empresas.PorcentajeCredito < 0) {
+              $scope.ShowToast('Cantidad no válida', 'danger');
+              return;
+            } else {
+              total += Empresas.PorcentajeCredito;
+            }
+          } else {
+            Empresas.PorcentajeCredito = 0;
+          }
+        }
+      }
+
+      if (total > $scope.CreditoDisponible) {
+        $scope.ShowToast('No puedes exceder tu límite de crédito.', 'danger');
+        $scope.init();
+        return;
+      }
+
+      EmpresasXEmpresasFactory.putEmpresasXEmpresa(Empresa)
+        .success(function (data) {
+          if (data[0].Success == true) {
+            $scope.ShowToast(data[0].Message, 'success');
+
+            var parametros = { IdEmpresaUsuarioFinal: Empresa.IdEmpresa };
+
+            PedidoDetallesFactory.postWarningCredito(parametros)
+              .success(function (result) {
+                if (result) {
+                  var WarningCredito = false;
+
+                  if (result.success === 0) {
+                    WarningCredito = true;
+                    $scope.ShowToast(result.message, 'danger');
+                  } else {
+                    WarningCredito = false;
+                  }
+
+                  for (var e = 0; e < $scope.Empresas.length; e++) {
+                    if ($scope.Empresas[e].IdEmpresa === Empresa.IdEmpresa) {
+                      $scope.Empresas[e].WarningCredito = WarningCredito;
+                      break;
+                    }
+                  }
+                }
+              })
+              .error(function (data, status, headers, config) {
+                $scope.ShowToast('No pudimos cargar tu información, por favor intenta de nuevo más tarde.', 'danger');
+                $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+              });
+          } else {
+            $scope.ShowToast(data[0].Message, 'danger');
+
+            $scope.init();
+          }
+        })
+        .error(function (data, status, headers, config) {
+          $scope.ShowToast('No pudimos actualizar el crédito, por favor intenta de nuevo más tarde', 'danger');
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+    };
+
+    $scope.NuevaEmpresa = function () {
+      $location.path("/Empresa");
+    };
+
+    $scope.PosibilidadCredito = function () {
+      var totalAsignado = 0;
+      if ($scope.Empresas !== undefined) {
+        for (var i = 0; i < $scope.Empresas.length; i++) {
+          var Empresa = $scope.Empresas[i];
+          if (Empresa.PorcentajeCredito != undefined && Empresa.PorcentajeCredito != null) {
+            totalAsignado += Empresa.PorcentajeCredito;
+          }
+        }
+      }
+
+      return $scope.CreditoDisponible - totalAsignado;
+    };
+
+    $scope.CreditoRepartido = function () {
+      var totalAsignado = 0;
+
+      if ($scope.Empresas !== undefined) {
+        for (var i = 0; i < $scope.Empresas.length; i++) {
+          var Empresa = $scope.Empresas[i];
+
+          if (Empresa.PorcentajeCredito != undefined && Empresa.PorcentajeCredito != null) {
+            totalAsignado += Empresa.PorcentajeCredito;
+          }
+        }
+      }
+
+      return totalAsignado;
+    };
+
+    $scope.IniciarTourClients = function () {
+      $scope.Tour = new Tour({
+        steps: [
+          {
+            element: ".newClient",
+            placement: "bottom",
+            title: "Agrega nuevos clientes",
+            content: "Da de alta un nuevo cliente y asígnale crédito para Click suscribe.",
+            template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>"
+          },
+          {
+            element: ".totalCredit",
+            placement: "bottom",
+            title: "Crédito total",
+            content: "El crédito total que tienes en Click suscribe para hacer compras o renovar suscripciones.",
+            template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>"
+          },
+          {
+            element: ".asignCredit",
+            placement: "bottom",
+            title: "Crédito total asignado",
+            content: "Cantidad que ya se repartió entre tus clientes.",
+            template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>"
+          },
+          {
+            element: ".giveCredit",
+            placement: "bottom",
+            title: "Crédito por repartir",
+            content: "Cantidad disponible o pendiente por repartir entre tus clientes.",
+            template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>"
+          },
+          {
+            element: ".pesosCredit",
+            placement: "left",
+            title: "Asigna crédito",
+            content: "Asígnale crédito a cada cliente en base a tu monto total.",
+            template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>"
+          }
+        ],
+
+        backdrop: true,
+        storage: false
+      });
+
+      $scope.Tour.init();
+      $scope.Tour.start();
+    };
+  };
+
+  EmpresasXEmpresasReadController.$inject = ['$scope', '$log', '$location', '$cookieStore', 'EmpresasXEmpresasFactory', 'EmpresasFactory', 'PedidoDetallesFactory'];
+
+  angular.module('marketplace').controller('EmpresasXEmpresasReadController', EmpresasXEmpresasReadController);
+}());
+
+(function () {
+  var MigracionController = function ($scope, $log, $location, $cookieStore, MigracionFactory) {
+    $scope.editarMigracion = function (id) {
+      $location.path('/migraciones/' + id);
+    };
+
+    $scope.init = function () {
+      MigracionFactory.getMigraciones()
+        .then(function (response) {
+          $scope.migraciones = response.data.Migraciones;
+        })
+        .catch(console.log);
+    };
+
+    $scope.init();
+  };
+
+  MigracionController.$inject = ['$scope', '$log', '$location', '$cookieStore', 'MigracionFactory'];
+
+  angular.module('marketplace').controller('MigracionController', MigracionController);
+}());
+
+(function () {
+  var MigracionDetalleController = function ($scope, $log, $location, $cookieStore, $routeParams, MigracionFactory) {
+    $scope.idMigracion = $routeParams.idMigracion;
+    $scope.pasoSeleccionado = 0;
+    $scope.pasoActual = 0;
+    $scope.confirmoPasoActual = { checked: false };
+    $scope.pasosDeMigracion = [
+      { IdPaso: 0, llaveDePaso: 'NombreMigracion', nombreDePaso: 'Nombre  migración' },
+      { IdPaso: 1, llaveDePaso: 'RelacionarMayorista', nombreDePaso: 'Relacionar mayorista' },
+      { IdPaso: 2, llaveDePaso: 'ImportarDominio', nombreDePaso: 'Importar cliente' },
+      { IdPaso: 3, llaveDePaso: 'CrearAdministrador', nombreDePaso: 'Crear administrador' },
+      { IdPaso: 4, llaveDePaso: 'OrdenarSuscripciones', nombreDePaso: 'Ordenar suscripciones' },
+      { IdPaso: 5, llaveDePaso: 'CancelarSuscripciones', nombreDePaso: 'Cancelar suscripciones' },
+      { IdPaso: 6, llaveDePaso: 'AsignarAsientos', nombreDePaso: 'Confirmación' }
+    ];
+    $scope.contextos = [
+      { IdContexto: 1, Contexto: 'sandbox' },
+      { IdContexto: 2, Contexto: 'produccion' }
+    ];
+
+    $scope.datosDeMigracion = {
+      NombreMigracion: '',
+      NombreCliente: '',
+      Dominio: '',
+      IdContexto: 1,
+      Contexto: 'sandox',
+      RelacionarMayorista: 0,
+      CrearAdministrador: 0,
+      ImportarDominio: 0,
+      OrdenarSuscripciones: 0,
+      CancelarSuscripciones: 0,
+      AsignarAsientos: 0
+    };
+
+    $scope.actualizarPasos = function () {
+      if ($scope.idMigracion === '0') {
+        $scope.pasoActual = 0;
+        $scope.pasoSeleccionado = 0;
+        return;
+      }
+      if ($scope.datosDeMigracion.RelacionarMayorista === 0) {
+        $scope.pasoActual = 1;
+        $scope.pasoSeleccionado = 1;
+        return;
+      }
+      if ($scope.datosDeMigracion.ImportarDominio === 0) {
+        $scope.pasoActual = 2;
+        $scope.pasoSeleccionado = 2;
+        return;
+      }
+      if ($scope.datosDeMigracion.CrearAdministrador === 0) {
+        $scope.pasoActual = 3;
+        $scope.pasoSeleccionado = 3;
+        return;
+      }
+      if ($scope.datosDeMigracion.OrdenarSuscripciones === 0) {
+        $scope.pasoActual = 4;
+        $scope.pasoSeleccionado = 4;
+        return;
+      }
+      if ($scope.datosDeMigracion.CancelarSuscripciones === 0) {
+        $scope.pasoActual = 5;
+        $scope.pasoSeleccionado = 5;
+        return;
+      }
+      if ($scope.datosDeMigracion.AsignarAsientos === 0) {
+        $scope.pasoActual = 6;
+        $scope.pasoSeleccionado = 6;
+        return;
+      }
+      $scope.pasoActual = 7;
+      $scope.pasoSeleccionado = 7;
+      return;
+    };
+
+    $scope.init = function () {
+      if ($scope.idMigracion !== '0') {
+        MigracionFactory.getMigracion($scope.idMigracion)
+          .then(function (response) {
+            if (response.data.data.length === 0) {
+              $location.path('/migraciones/0');
+              $scope.ShowToast(response.data.message, 'danger');
+            } else {
+              $scope.datosDeMigracion = response.data.data[0];
+              $scope.actualizarPasos();
+            }
+          });
+      }
+      $scope.actualizarPasos();
+    };
+
+    $scope.init();
+
+    $scope.crearMigracion = function () {
+      var nuevaMigracion = {
+        NombreMigracion: $scope.datosDeMigracion.NombreMigracion,
+        IdContexto: $scope.datosDeMigracion.IdContexto
+      };
+      return MigracionFactory.postMigracion(nuevaMigracion);
+    };
+
+    $scope.validarDominio = function () {
+      if ($scope.datosDeMigracion.Dominio.trim() !== '') {
+        MigracionFactory.getDominio($scope.datosDeMigracion)
+          .then(function (response) {
+            if (response.data.success === 0) {
+              $scope.datosDeMigracion.NombreCliente = '';
+              return $scope.ShowToast(response.data.message, 'danger');
+            }
+            $scope.datosDeMigracion.NombreCliente = response.data.items[0].companyProfile.companyName;
+          });
+      }
+    };
+
+    $scope.importarDominio = function () {
+      if ($scope.datosDeMigracion.Dominio) {
+        if ($scope.datosDeMigracion.Dominio.trim()) {
+          let cliente = {
+            migration: {
+              IdMigracion: $scope.datosDeMigracion.IdMigracion
+            },
+            context: $scope.datosDeMigracion.Contexto,
+            domain: $scope.datosDeMigracion.Dominio
+          };
+          return MigracionFactory.postCliente(cliente);
+        }
+        return Promise.reject({
+          success: 0,
+          message: 'Ingresa el dominio de microsoft'
+        });
+      }
+      return Promise.reject({
+        success: 0,
+        message: 'Ingresa el dominio de microsoft'
+      });
+    };
+
+    $scope.crearAdministrador = function () {
+      let usuario = {
+        IdMigracion: $scope.datosDeMigracion.IdMigracion,
+        userInfo: {
+          Usuario: $scope.datosDeMigracion.Usuario,
+          Nombre: $scope.datosDeMigracion.NombreUsuario,
+          Apellidos: $scope.datosDeMigracion.ApellidosUsuario,
+          Secreto: $scope.datosDeMigracion.Secreto
+        },
+        context: $scope.datosDeMigracion.Contexto
+      };
+      return MigracionFactory.postUsuario(usuario);
+    };
+
+    $scope.actualizarPasosEnBaseDeDatos = function () {
+      for (let x = 0; x < $scope.pasosDeMigracion.length; x++) {
+        if ($scope.pasoActual === $scope.pasosDeMigracion[x].IdPaso) {
+          $scope.nombrePorActualizar = $scope.pasosDeMigracion[x].llaveDePaso;
+        }
+      }
+      var objParaActualizar = {
+        IdMigracion: $scope.idMigracion
+      };
+      objParaActualizar[$scope.nombrePorActualizar] = 1;
+      MigracionFactory.patchMigracion(objParaActualizar)
+        .then(function (response) {
+          if (response.data.success) {
+            return $scope.ShowToast(response.data.message, 'success');
+          }
+          $scope.ShowToast(response.data.message, 'danger');
+          $scope.pasoActual--;
+          $scope.pasoSeleccionado = $scope.pasoActual;
+        });
+    };
+
+    $scope.setSelected = function (index) {
+      if (index <= $scope.pasoActual) {
+        $scope.pasoSeleccionado = index;
+      }
+    };
+    $scope.regresar = function () {
+      $location.path('/migraciones');
+    };
+
+    $scope.actualizarSiguientePaso = function () {
+      $scope.actualizarPasosEnBaseDeDatos();
+      if ($scope.pasoActual > $scope.pasoSeleccionado) {
+        $scope.pasoSeleccionado = $scope.pasoSeleccionado + 1;
+      } else {
+        $scope.pasoActual = $scope.pasoActual + 1;
+        $scope.pasoSeleccionado = $scope.pasoActual;
+      }
+      $scope.confirmoPasoActual.checked = false;
+    };
+
+    $scope.siguientePasoSinActualizar = function () {
+      if ($scope.pasoActual > $scope.pasoSeleccionado) {
+        $scope.pasoSeleccionado = $scope.pasoSeleccionado + 1;
+      } else {
+        $scope.pasoActual = $scope.pasoActual + 1;
+        $scope.pasoSeleccionado = $scope.pasoActual;
+      }
+    };
+
+    $scope.completarPaso = function () {
+      console.log($scope.pasoSeleccionado, $scope.pasoActual, $scope.datosDeMigracion);
+      if ($scope.pasoSeleccionado < $scope.pasoActual) {
+        $scope.siguientePasoSinActualizar();
+        return;
+      }
+      if ($scope.pasoActual === 0) {
+        $scope.crearMigracion()
+          .then(function (response) {
+            if (response.data.success) {
+              $location.path('/migraciones/' + response.data.data.insertId);
+              return $scope.ShowToast(response.data.message, 'success');
+            }
+            $scope.ShowToast(response.data.message, 'danger');
+            $scope.pasoActual--;
+            $scope.pasoSeleccionado = $scope.pasoActual;
+          });
+      }
+      if ($scope.pasoActual === 1) {
+        return $scope.actualizarSiguientePaso();
+      }
+      if ($scope.pasoActual === 2) {
+        $scope.importarDominio()
+          .then(function (resultado) {
+            if (resultado.data.success === 0) {
+              return $scope.ShowToast(resultado.data.message, 'danger');
+            }
+            $scope.actualizarSiguientePaso();
+          })
+          .catch(function (err) {
+            if (err.success === 0) {
+              return $scope.ShowToast(err.message, 'danger');
+            }
+          });
+      }
+      if ($scope.pasoActual === 3) {
+        $scope.crearAdministrador()
+          .then(function (resultado) {
+            console.log(resultado);
+            if (resultado.data.success === 0) {
+              return $scope.ShowToast(resultado.data.message, 'danger');
+            }
+            $scope.actualizarSiguientePaso();
+          });
+      }
+      if ($scope.pasoActual > 3) {
+        $scope.actualizarSiguientePaso();
+      }
+    };
+    $scope.pasoAnterior = function () {
+      if ($scope.pasoSeleccionado > 0) {
+        $scope.pasoSeleccionado = $scope.pasoSeleccionado - 1;
+      }
+    };
+    $scope.copyToCipbard = function () {
+      var copyTextarea = document.querySelector('#invite-url');
+      copyTextarea.select();
+      document.execCommand('copy');
+    };
+    $scope.hacerOtraMigracion = function () {
+      $location.path('/migraciones/0');
+    };
+  };
+
+  MigracionDetalleController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$routeParams', 'MigracionFactory'];
+
+  angular.module('marketplace').controller('MigracionDetalleController', MigracionDetalleController);
 }());
 
 (function () {
@@ -4881,20 +5277,6 @@ angular.module('directives.loading', [])
 }());
 
 (function () {
-  var PowerBIReadController = function ($scope, $log, $cookieStore, $location, $uibModal, $filter, PedidoDetallesFactory, $routeParams) {
-
-    $scope.init = function () {
-
-    };
-    $scope.init();
-  };
-
-  PowerBIReadController.$inject = ['$scope', '$log', '$cookieStore', '$location', '$uibModal', '$filter', 'PedidoDetallesFactory', '$routeParams'];
-
-  angular.module('marketplace').controller('PowerBIReadController', PowerBIReadController);
-}());
-
-(function () {
   var ProductoGuardadosReadController = function ($scope, $log, $location, $cookieStore, ProductoGuardadosFactory, PedidoDetallesFactory) {
 
     $scope.sortBy = 'Nombre';
@@ -4969,6 +5351,20 @@ angular.module('directives.loading', [])
   ProductoGuardadosReadController.$inject = ['$scope', '$log', '$location', '$cookieStore', 'ProductoGuardadosFactory', 'PedidoDetallesFactory'];
 
   angular.module('marketplace').controller('ProductoGuardadosReadController', ProductoGuardadosReadController);
+}());
+
+(function () {
+  var PowerBIReadController = function ($scope, $log, $cookieStore, $location, $uibModal, $filter, PedidoDetallesFactory, $routeParams) {
+
+    $scope.init = function () {
+
+    };
+    $scope.init();
+  };
+
+  PowerBIReadController.$inject = ['$scope', '$log', '$cookieStore', '$location', '$uibModal', '$filter', 'PedidoDetallesFactory', '$routeParams'];
+
+  angular.module('marketplace').controller('PowerBIReadController', PowerBIReadController);
 }());
 
 (function () {
