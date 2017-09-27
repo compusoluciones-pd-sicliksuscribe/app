@@ -10,6 +10,7 @@
     $scope.Mensaje = '...';
     $scope.selectProductos = {};
     $scope.TieneContrato = true;
+    $scope.IdPedidoContrato = 0;
 
     $scope.BuscarProducto = function (ResetPaginado) {
       $scope.Mensaje = 'Buscando...';
@@ -22,10 +23,7 @@
       ProductosFactory.postBuscarProductos($scope.BuscarProductos)
         .success(function (Productos) {
           if (Productos.success === 1) {
-            $scope.Productos = Productos.data[0].map(function (item) {
-              item.IdPedidoContrato = 0;
-              return item;
-            });
+            $scope.Productos = Productos.data[0];
             if ($scope.Productos == '') {
               $scope.Mensaje = 'No encontramos resultados de tu búsqueda...';
               if ($scope.Pagina > 0) {
@@ -123,8 +121,11 @@
         .success(function (respuesta) {
           if (respuesta.success === 1) {
             Producto.contratos = respuesta.data;
+            console.log(respuesta);
+            
             if (Producto.contratos.length > 1) {
               $scope.TieneContrato = true;
+              Producto.IdPedidoContrato = respuesta.data[0].IdPedido;
             }
             if ((Producto.IdAccionAutodesk === 2 || !Producto.IdAccionAutodesk) && Producto.contratos.length === 0) {
               $scope.TieneContrato = false;
@@ -203,7 +204,7 @@
       return total;
     };
 
-    $scope.AgregarCarrito = function (Producto, Cantidad) {
+    $scope.AgregarCarrito = function (Producto, Cantidad, IdPedidocontrato) {
       var NuevoProducto = {
         IdProducto: Producto.IdProducto,
         Cantidad: Cantidad,
@@ -219,7 +220,10 @@
       };
       if (!Producto.IdUsuarioContacto && Producto.IdFabricante === 2) {
         const contrato = Producto.contratos
-          .filter(p => p.IdPedido === Producto.IdPedidoContrato)[0].ResultadoFabricante6;
+          .filter(function (p) {
+            return Producto.IdPedidoContrato === p.IdPedido;
+          })[0].ResultadoFabricante6;
+        console.log(Producto.contratos, IdPedidocontrato, contrato);
         NuevoProducto.ContratoBaseAutodesk = contrato.trim();
         // NuevoProducto.IdAccionAutodesk = Producto.IdAccionProductoAutodesk === 1 ? 3 : 2;
       }
