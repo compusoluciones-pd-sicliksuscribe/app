@@ -123,7 +123,7 @@
             Producto.contratos = respuesta.data;
             console.log(respuesta);
             
-            if (Producto.contratos.length > 1) {
+            if (Producto.contratos.length >= 1) {
               $scope.TieneContrato = true;
               Producto.IdPedidoContrato = respuesta.data[0].IdPedido;
             }
