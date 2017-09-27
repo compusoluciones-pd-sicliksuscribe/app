@@ -1,7 +1,7 @@
 
 angular.module('marketplace')
 
-  .run(function ($rootScope) {
+  .run(function ($rootScope, $location, $anchorScroll, $routeParams) {
     $rootScope.rsTitle = 'click suscribe | CompuSoluciones';
     $rootScope.rsVersion = '2.1.1';
     $rootScope.API = 'http://localhost:8080/';
