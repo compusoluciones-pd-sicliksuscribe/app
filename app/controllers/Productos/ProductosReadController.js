@@ -123,6 +123,9 @@
         .success(function (respuesta) {
           if (respuesta.success === 1) {
             Producto.contratos = respuesta.data;
+            if (Producto.contratos.length > 1) {
+              $scope.TieneContrato = true;
+            }
             if ((Producto.IdAccionAutodesk === 2 || !Producto.IdAccionAutodesk) && Producto.contratos.length === 0) {
               $scope.TieneContrato = false;
             }
