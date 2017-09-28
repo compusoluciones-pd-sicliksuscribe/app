@@ -23,7 +23,10 @@
       ProductosFactory.postBuscarProductos($scope.BuscarProductos)
         .success(function (Productos) {
           if (Productos.success === 1) {
-            $scope.Productos = Productos.data[0];
+            $scope.Productos = Productos.data[0].map(function (item) {
+              item.IdPedidoContrato = 0;
+              return item;
+            });
             if ($scope.Productos == '') {
               $scope.Mensaje = 'No encontramos resultados de tu búsqueda...';
               if ($scope.Pagina > 0) {
@@ -122,7 +125,7 @@
           if (respuesta.success === 1) {
             Producto.contratos = respuesta.data;
             console.log(respuesta);
-            
+
             if (Producto.contratos.length >= 1) {
               $scope.TieneContrato = true;
               Producto.IdPedidoContrato = respuesta.data[0].IdPedido;
