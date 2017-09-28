@@ -127,7 +127,7 @@
             Producto.contratos = respuesta.data;
             console.log(respuesta);
             if (Producto.contratos.length >= 1) {
-              Producto.TieneContrato = true;              
+              Producto.TieneContrato = true;
               Producto.IdPedidoContrato = respuesta.data[0].IdPedido;
             }
             if ((Producto.IdAccionAutodesk === 2 || !Producto.IdAccionAutodesk) && Producto.contratos.length === 0) {
@@ -221,7 +221,7 @@
         IdUsuarioContacto: Producto.IdUsuarioContacto,
         IdAccionAutodesk: Producto.IdAccionAutodesk
       };
-      if (!Producto.IdUsuarioContacto && Producto.IdFabricante === 2) {
+      if (!Producto.IdUsuarioContacto && Producto.IdFabricante === 2 && Producto.TieneContrato) {
         const contrato = Producto.contratos
           .filter(function (p) {
             return Producto.IdPedidoContrato === p.IdPedido;
@@ -229,6 +229,9 @@
         console.log(Producto.contratos, IdPedidocontrato, contrato);
         NuevoProducto.ContratoBaseAutodesk = contrato.trim();
         // NuevoProducto.IdAccionAutodesk = Producto.IdAccionProductoAutodesk === 1 ? 3 : 2;
+      }
+      if (Producto.IdFabricante === 2 && Producto.IdAccionAutodesk === 2 && !Producto.TieneContrato) {
+        return $scope.ShowToast('No cuentas con un contrato para este producto.', 'danger');
       }
       if (!NuevoProducto.IdAccionAutodesk) delete NuevoProducto.IdAccionAutodesk;
       PedidoDetallesFactory.postPedidoDetalle(NuevoProducto)
@@ -244,6 +247,7 @@
                 })
                 .catch(console.log);
             }
+            console.log(PedidoDetalleResult);
             $scope.ShowToast(PedidoDetalleResult.message, 'success');
             $scope.ActualizarMenu();
             $scope.addPulseCart();
