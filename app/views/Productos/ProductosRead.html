@@ -170,8 +170,8 @@
                                             </div>
                                             <br>
                                             <p style="color:red" ng-hide="Producto.IdFabricante === 1 || Producto.TieneContrato">*No cuentas con un contrato para este producto.</p>
-                                            <label for="contrato" ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2 && TieneContrato">* Contrato</label>
-                                            <div class="input-group" ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2 && TieneContrato && Producto.IdAccionAutodesk === 1">
+                                            <label for="contrato" ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2 && Producto.TieneContrato">* Contrato</label>
+                                            <div class="input-group" ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2 && Producto.TieneContrato && Producto.IdAccionAutodesk === 1">
                                                 <span class="input-group-addon green white">
                                                     <span class="glyphicon glyphicon-file"></span>
                                                 </span>
@@ -180,7 +180,7 @@
                                                     <option ng-disabled="" ng-selected="true" ng-value="0">Nuevo contrato...</option>
                                                 </select>
                                             </div>
-                                            <div class="input-group" ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2 && TieneContrato && Producto.IdAccionAutodesk === 2">
+                                            <div class="input-group" ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2 && Producto.TieneContrato && Producto.IdAccionAutodesk === 2">
                                                 <span class="input-group-addon green white">
                                                         <span class="glyphicon glyphicon-file"></span>
                                                 </span>
