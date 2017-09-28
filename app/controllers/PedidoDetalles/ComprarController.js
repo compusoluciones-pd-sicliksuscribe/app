@@ -71,7 +71,7 @@
       let total = 0;
       $scope.PedidoDetalles.forEach(function (order) {
         order.Productos.forEach(function (product) {
-          if (order.IdPedido === IdPedido && product.PrimeraCompraMicrosoft === 0) {
+          if (order.IdPedido === IdPedido && !product.PrimeraCompraMicrosoft) {
             total = total + (product.PrecioUnitario * product.Cantidad);
           }
         });
