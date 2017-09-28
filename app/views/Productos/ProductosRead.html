@@ -169,7 +169,7 @@
                                                 </select>
                                             </div>
                                             <br>
-                                            <p style="color:red" ng-hide="Producto.IdFabricante === 1 || TieneContrato">*No cuentas con un contrato para este producto.</p>
+                                            <p style="color:red" ng-hide="Producto.IdFabricante === 1 || Producto.TieneContrato">*No cuentas con un contrato para este producto.</p>
                                             <label for="contrato" ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2 && TieneContrato">* Contrato</label>
                                             <div class="input-group" ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2 && TieneContrato && Producto.IdAccionAutodesk === 1">
                                                 <span class="input-group-addon green white">

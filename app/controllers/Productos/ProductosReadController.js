@@ -25,6 +25,7 @@
           if (Productos.success === 1) {
             $scope.Productos = Productos.data[0].map(function (item) {
               item.IdPedidoContrato = 0;
+              item.TieneContrato = true;
               return item;
             });
             if ($scope.Productos == '') {
@@ -125,13 +126,12 @@
           if (respuesta.success === 1) {
             Producto.contratos = respuesta.data;
             console.log(respuesta);
-
             if (Producto.contratos.length >= 1) {
-              $scope.TieneContrato = true;
+              Producto.TieneContrato = true;              
               Producto.IdPedidoContrato = respuesta.data[0].IdPedido;
             }
             if ((Producto.IdAccionAutodesk === 2 || !Producto.IdAccionAutodesk) && Producto.contratos.length === 0) {
-              $scope.TieneContrato = false;
+              Producto.TieneContrato = false;
             }
             if (Producto.IdAccionAutodesk === 1) Producto.contratos.unshift({ IdPedido: 0, ResultadoFabricante6: 'Nuevo contrato...' });
           } else {
