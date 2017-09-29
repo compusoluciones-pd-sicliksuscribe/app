@@ -22,7 +22,10 @@
       <div ng-repeat="detalle in detalleVersion">
         <h3 id="{{detalle.Titulo}}">{{detalle.Titulo}}</h3>
         <div ng-bind-html="detalle.Descripcion"></div>
-        <img ng-if="detalle.GIF" src="{{detalle.GIF}}" alt="{{detalle.GIF}}">
+        <video ng-if="detalle.GIF" autoplay preload="auto" style="max-width: 950px; max-height: 585px" loop muted timepdate-monitor="1">
+          <source src="{{detalle.GIF}}" type="video/mp4">
+        </video>
+        <hr />
       </div>
     </div>
   </div>
