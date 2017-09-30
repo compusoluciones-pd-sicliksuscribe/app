@@ -1,6 +1,7 @@
 (function () {
   var PedidoDetallesReadController = function ($scope, $log, $location, $cookieStore, PedidoDetallesFactory, TipoCambioFactory, EmpresasXEmpresasFactory, EmpresasFactory, PedidosFactory, $routeParams) {
     $scope.CreditoValido = 1;
+    $scope.error = false;
     $scope.Distribuidor = {};
 
     const error = function (error) {
@@ -24,6 +25,14 @@
         .then(function (result) {
           if (result.data.success) {
             $scope.PedidoDetalles = result.data.data;
+            $scope.PedidoDetalles.forEach(function (elem) {
+              elem.Productos.forEach(function (item) {
+                if (item.PrecioUnitario == null) $scope.error = true;
+              });
+            });
+            if ($scope.error) {
+              $scope.ShowToast('Ocurrio un error al procesar sus productos del carrito. Favor de contactar a soporte de CompuSoluciones.', 'danger');
+            }
             if (!validate) $scope.ValidarFormaPago();
           } else {
             $scope.ShowToast(result.data.message, 'danger');
@@ -148,7 +157,7 @@
       let total = 0;
       $scope.PedidoDetalles.forEach(function (order) {
         order.Productos.forEach(function (product) {
-          if (order.IdPedido === IdPedido && product.PrimeraCompraMicrosoft === 0) {
+          if (order.IdPedido === IdPedido && !product.PrimeraCompraMicrosoft) {
             total = total + (product.PrecioUnitario * product.Cantidad);
           }
         });
@@ -175,7 +184,7 @@
     };
 
     $scope.next = function () {
-      validarCarrito();
+      if ($scope.Distribuidor.IdFormaPagoPredilecta === 2) validarCarrito();
       let next = true;
       if (!$scope.PedidoDetalles || $scope.PedidoDetalles.length === 0) next = false;
       else {

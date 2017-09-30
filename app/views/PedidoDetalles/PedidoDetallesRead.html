@@ -72,7 +72,8 @@
 						<label for="IdEmpresaUsuarioFinal">Usuario final:</label> {{ pedido.NombreEmpresa }} <br>
 						<label>Marca de los productos:</label> {{ pedido.NombreFabricante }} <br>
 						<label>Duración del periodo:</label> del {{ pedido.FechaInicio }} al {{ pedido.FechaFin }} <br>
-						<label>Renovación del periodo:</label> {{ pedido.NombreEsquemaRenovacion }}
+						<label>Renovación del periodo:</label> {{ pedido.NombreEsquemaRenovacion }} <br>
+						<div ng-if="pedido.IdFabricante === 2"><label>Contrato: </label> {{ pedido.ContratoBaseAutodesk || 'Nuevo' }} </div>
 					</div>
 				</div>
 				<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
@@ -149,7 +150,7 @@
 						<div class="form-group">
 							<label for="">Total del producto:</label>
 							<br>
-							<span ng-show="producto.DescuentoAddSeatAutodesk">
+							<span ng-show="producto.DescuentoMonthAutodesk && !(producto.DescuentoNivel || producto.Descuento)">
 									<del style="font-size:11px;">{{ producto.PrecioRenovacion * producto.Cantidad | currency }} {{ pedido.MonedaPago }}</del>
 									<b style="color:#68953B;"> 50% Desc. </b>
 							</span>
@@ -160,9 +161,9 @@
 							<span ng-show="!producto.PrimeraCompraMicrosoft && !producto.DescuentoNivel">
 								{{ producto.PrecioUnitario * producto.Cantidad | currency }} {{ pedido.MonedaPago }} 
 							</span>
-							<span ng-show="producto.DescuentoNivel && !producto.PrimeraCompraMicrosoft">
+							<span ng-show="(producto.DescuentoNivel || producto.Descuento) && !producto.PrimeraCompraMicrosoft">
 								<del style="font-size:11px;"> {{ producto.PrecioUnitarioReal * producto.Cantidad | currency }} {{ pedido.MonedaPago }} </del>
-								<b style="color:#68953B;"> {{ producto.DescuentoNivel }}% Descuento</b>
+								<b style="color:#68953B;"> {{ producto.DescuentoNivel || producto.Descuento }}% Descuento</b>
 								<p> {{ (producto.PrecioUnitario  * producto.Cantidad).toFixed(2) | currency }}	{{ pedido.MonedaPago }} </p>
               </span>
 						</div>
@@ -187,7 +188,7 @@
 			</div>
 			<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
 				<div class="">
-					<button id="btnSiguiente" type="button" ng-click="next();" class="btn btn-primary btn-block" ng-show="!( Distribuidor.IdFormaPagoPredilecta == undefined || Distribuidor.IdFormaPagoPredilecta == null || CreditoValido == 0 )">
+					<button id="btnSiguiente" type="button" ng-click="next();" class="btn btn-primary btn-block" ng-if="!( Distribuidor.IdFormaPagoPredilecta == undefined || Distribuidor.IdFormaPagoPredilecta == null || CreditoValido == 0 || error === true )">
             Siguiente
           </button>
 				</div>

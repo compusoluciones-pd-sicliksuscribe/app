@@ -1,5 +1,5 @@
 (function () {
-  var ProductosReadController = function ($scope, $log, $location, $cookieStore, $routeParams, ProductosFactory, FabricantesFactory, TiposProductosFactory, PedidoDetallesFactory, TipoCambioFactory, ProductoGuardadosFactory, EmpresasXEmpresasFactory, $anchorScroll) {
+  var ProductosReadController = function ($scope, $log, $location, $cookieStore, $routeParams, ProductosFactory, FabricantesFactory, TiposProductosFactory, PedidoDetallesFactory, TipoCambioFactory, ProductoGuardadosFactory, EmpresasXEmpresasFactory, UsuariosFactory, $anchorScroll) {
     var BusquedaURL = $routeParams.Busqueda;
     $scope.BuscarProductos = {};
     $scope.Pagina = 0;
@@ -9,6 +9,8 @@
     $scope.TipoCambioMs = 0;
     $scope.Mensaje = '...';
     $scope.selectProductos = {};
+    $scope.TieneContrato = true;
+    $scope.IdPedidoContrato = 0;
 
     $scope.BuscarProducto = function (ResetPaginado) {
       $scope.Mensaje = 'Buscando...';
@@ -21,7 +23,11 @@
       ProductosFactory.postBuscarProductos($scope.BuscarProductos)
         .success(function (Productos) {
           if (Productos.success === 1) {
-            $scope.Productos = Productos.data[0];
+            $scope.Productos = Productos.data[0].map(function (item) {
+              item.IdPedidoContrato = 0;
+              item.TieneContrato = true;
+              return item;
+            });
             if ($scope.Productos == '') {
               $scope.Mensaje = 'No encontramos resultados de tu búsqueda...';
               if ($scope.Pagina > 0) {
@@ -106,11 +112,48 @@
 
     $scope.init();
 
+    $scope.contractSetted = function (producto) {
+      if (producto.IdPedidoContrato) {
+        producto.IdUsuarioContacto = undefined;
+      }
+    };
+
     $scope.revisarProducto = function (Producto) {
       var IdProducto = Producto.IdProducto;
+      var IdEmpresaUsuarioFinal = Producto.IdEmpresaUsuarioFinal;
+      ProductosFactory.getProductContracts(IdEmpresaUsuarioFinal, IdProducto)
+        .success(function (respuesta) {
+          if (respuesta.success === 1) {
+            Producto.contratos = respuesta.data;
+            console.log(respuesta);
+            if (Producto.contratos.length >= 1) {
+              Producto.TieneContrato = true;
+              Producto.IdPedidoContrato = respuesta.data[0].IdPedido;
+            }
+            if ((Producto.IdAccionAutodesk === 2 || !Producto.IdAccionAutodesk) && Producto.contratos.length === 0) {
+              Producto.TieneContrato = false;
+            }
+            if (Producto.IdAccionAutodesk === 1) Producto.contratos.unshift({ IdPedido: 0, ResultadoFabricante6: 'Nuevo contrato...' });
+          } else {
+            $scope.ShowToast('No pudimos cargar la información de tus contratos, por favor intenta de nuevo más tarde.', 'danger');
+          }
+        })
+        .error(function () {
+          $scope.ShowToast('No pudimos cargar la información de tus contratos, por favor intenta de nuevo más tarde.', 'danger');
+        });
+      UsuariosFactory.getUsuariosContacto(Producto.IdEmpresaUsuarioFinal)
+        .success(function (respuesta) {
+          if (respuesta.success === 1) {
+            Producto.usuariosContacto = respuesta.data;
+          } else {
+            $scope.ShowToast('No pudimos cargar la información de tus contactos, por favor intenta de nuevo más tarde.', 'danger');
+          }
+        })
+        .error(function () {
+          $scope.ShowToast('No pudimos cargar la información de tus contactos, por favor intenta de nuevo más tarde.', 'danger');
+        });
 
       if (Producto.IdTipoProducto === 4 && Producto.IdFabricante === 1) {
-
         ProductosFactory.postComplementos(Producto)
           .then(function (data) {
             var IdProductoFabricanteExtra = '';
@@ -164,7 +207,7 @@
       return total;
     };
 
-    $scope.AgregarCarrito = function (Producto, Cantidad) {
+    $scope.AgregarCarrito = function (Producto, Cantidad, IdPedidocontrato) {
       var NuevoProducto = {
         IdProducto: Producto.IdProducto,
         Cantidad: Cantidad,
@@ -174,8 +217,23 @@
         IdFabricante: Producto.IdFabricante,
         CodigoPromocion: Producto.CodigoPromocion,
         ResultadoFabricante2: Producto.IdProductoPadre,
-        Especializacion: Producto.Especializacion
+        Especializacion: Producto.Especializacion,
+        IdUsuarioContacto: Producto.IdUsuarioContacto,
+        IdAccionAutodesk: Producto.IdAccionAutodesk
       };
+      if (!Producto.IdUsuarioContacto && Producto.IdFabricante === 2 && Producto.TieneContrato) {
+        const contrato = Producto.contratos
+          .filter(function (p) {
+            return Producto.IdPedidoContrato === p.IdPedido;
+          })[0].ResultadoFabricante6;
+        console.log(Producto.contratos, IdPedidocontrato, contrato);
+        NuevoProducto.ContratoBaseAutodesk = contrato.trim();
+        // NuevoProducto.IdAccionAutodesk = Producto.IdAccionProductoAutodesk === 1 ? 3 : 2;
+      }
+      if (Producto.IdFabricante === 2 && Producto.IdAccionAutodesk === 2 && !Producto.TieneContrato) {
+        return $scope.ShowToast('No cuentas con un contrato para este producto.', 'danger');
+      }
+      if (!NuevoProducto.IdAccionAutodesk) delete NuevoProducto.IdAccionAutodesk;
       PedidoDetallesFactory.postPedidoDetalle(NuevoProducto)
         .success(function (PedidoDetalleResult) {
           if (PedidoDetalleResult.success === 1) {
@@ -189,6 +247,7 @@
                 })
                 .catch(console.log);
             }
+            console.log(PedidoDetalleResult);
             $scope.ShowToast(PedidoDetalleResult.message, 'success');
             $scope.ActualizarMenu();
             $scope.addPulseCart();
@@ -351,7 +410,7 @@
     };
   };
 
-  ProductosReadController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$routeParams', 'ProductosFactory', 'FabricantesFactory', 'TiposProductosFactory', 'PedidoDetallesFactory', 'TipoCambioFactory', 'ProductoGuardadosFactory', 'EmpresasXEmpresasFactory', '$anchorScroll'];
+  ProductosReadController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$routeParams', 'ProductosFactory', 'FabricantesFactory', 'TiposProductosFactory', 'PedidoDetallesFactory', 'TipoCambioFactory', 'ProductoGuardadosFactory', 'EmpresasXEmpresasFactory', 'UsuariosFactory', '$anchorScroll'];
 
   angular.module('marketplace').controller('ProductosReadController', ProductosReadController);
 }());

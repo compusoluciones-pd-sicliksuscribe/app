@@ -4,23 +4,40 @@
     $scope.sortBy = 'Nombre';
     $scope.reverse = false;
     $scope.empresaSel = '';
+    const Session = $cookieStore.get('Session');
+    if (Session.IdTipoAcceso === 1) {
+      $scope.empresaActual = 'CompuSoluciones';
+    }
+    if (Session.IdTipoAcceso === 2) {
+      $scope.empresaActual = Session.NombreEmpresa;
+    }
 
     $scope.init = function () {
       $scope.CheckCookie();
+      if (Session.IdTipoAcceso !== 2) {
+        EmpresasFactory.getEmpresas()
+          .success(function (Empresas) {
+            $scope.selectEmpresas = Empresas;
+            if ($scope.SessionCookie.IdTipoAcceso != 1) {
+              $scope.empresaSel = $scope.selectEmpresas[0].IdEmpresa;
+            }
 
-      EmpresasFactory.getEmpresas()
-        .success(function (Empresas) {
-          $scope.selectEmpresas = Empresas;
-
-          if ($scope.SessionCookie.IdTipoAcceso != 1) {
-            $scope.empresaSel = $scope.selectEmpresas[0].IdEmpresa;
-          }
-
-          $scope.MostrarUsuariosEmp(isNaN(parseInt($scope.empresaSel)) ? 0 : parseInt($scope.empresaSel));
-        })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
+            $scope.MostrarUsuariosEmp(isNaN(parseInt($scope.empresaSel)) ? 0 : parseInt($scope.empresaSel));
+          })
+          .error(function (data, status, headers, config) {
+            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          });
+      }
+      if (Session.IdTipoAcceso === 2) {
+        EmpresasFactory.getClientes()
+          .success(function (Empresas) {
+            $scope.selectEmpresas = Empresas.data;
+            $scope.ObtenerUsuariosPropios();
+          })
+          .error(function (data, status, headers, config) {
+            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          });
+      }
     };
 
     $scope.OrdenarPor = function (Atributo) {
@@ -28,16 +45,43 @@
       $scope.reverse = !$scope.reverse;
     };
 
-
-    $scope.MostrarUsuariosEmp = function (IdEmpresa) {
-
-      UsuariosXEmpresasFactory.getUsuariosXEmpresa(IdEmpresa)
+    $scope.ObtenerUsuariosPropios = function () {
+      UsuariosFactory.getUsuariosPropios()
         .success(function (UsuariosXEmpresas) {
-          $scope.Usuarios = UsuariosXEmpresas;
+          $scope.Usuarios = UsuariosXEmpresas.data;
+          console.log($scope.Usuarios);
         })
         .error(function (data, status, headers, config) {
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
+    };
+
+    $scope.ObtenerUsuariosPorCliente = function (IdEmpresa) {
+      UsuariosFactory.getUsuariosContacto(IdEmpresa)
+        .success(function (UsuariosXEmpresas) {
+          $scope.Usuarios = UsuariosXEmpresas.data;
+        })
+        .error(function (data, status, headers, config) {
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+    };
+
+    $scope.MostrarUsuariosEmp = function (IdEmpresa) {
+      if (Session.IdTipoAcceso === 2) {
+        if (IdEmpresa) {
+          $scope.ObtenerUsuariosPorCliente(IdEmpresa);
+        } else {
+          $scope.ObtenerUsuariosPropios();
+        }
+      } else {
+        UsuariosXEmpresasFactory.getUsuariosXEmpresa(IdEmpresa)
+          .success(function (UsuariosXEmpresas) {
+            $scope.Usuarios = UsuariosXEmpresas;
+          })
+          .error(function (data, status, headers, config) {
+            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          });
+      }
     };
 
     $scope.init();

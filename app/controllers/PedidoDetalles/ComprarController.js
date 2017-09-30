@@ -3,6 +3,7 @@
     $scope.currentPath = $location.path();
     $scope.PedidoDetalles = {};
     $scope.Distribuidor = {};
+    $scope.error = false;
 
     const error = function (message) {
       $scope.ShowToast(!message ? 'Ha ocurrido un error, intentelo mas tarde.' : message, 'danger');
@@ -13,7 +14,12 @@
       return PedidoDetallesFactory.getPedidoDetalles()
         .then(function (result) {
           if (result.data.success) $scope.PedidoDetalles = result.data.data;
-          else $scope.ShowToast(result.message, 'danger');
+          $scope.PedidoDetalles.forEach(function (elem) {
+            elem.Productos.forEach(function (item) {
+              if (item.PrecioUnitario == null) $scope.error = true;
+            });
+          });
+          if ($scope.error) $location.path('/Productos');
         })
         .catch(function (result) {
           $location.path('/Carrito/e');
@@ -71,7 +77,7 @@
       let total = 0;
       $scope.PedidoDetalles.forEach(function (order) {
         order.Productos.forEach(function (product) {
-          if (order.IdPedido === IdPedido && product.PrimeraCompraMicrosoft === 0) {
+          if (order.IdPedido === IdPedido && !product.PrimeraCompraMicrosoft) {
             total = total + (product.PrecioUnitario * product.Cantidad);
           }
         });
