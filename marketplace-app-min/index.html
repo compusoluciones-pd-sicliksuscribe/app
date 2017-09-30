@@ -56,7 +56,6 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
 	 crossorigin="anonymous">
-
 	<link href="styles/bootstrap-tour.css" rel="stylesheet" />
 
 	<link href="styles/css/style.css" rel="stylesheet" type="text/css" />
@@ -410,7 +409,11 @@
 					<div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4  hidden-xs hidden-sm pull-right" style="color:#fff;">
 						<div class="pull-right">
 							<label></label>
-							<p><a style="color:#fff;" href="http://www.compusoluciones.com/aviso-de-privacidad/">Aviso de privacidad</a> &nbsp; /
+							<p>
+								<a style="color:#fff" href="#/Version">Versiones</a>
+								&nbsp; / &nbsp;
+								<a style="color:#fff;" href="http://www.compusoluciones.com/aviso-de-privacidad/">Aviso de privacidad</a> 
+								&nbsp; /
 								&nbsp; Queremos Escucharte</p>
 						</div>
 					</div>
@@ -426,6 +429,7 @@
 	<!--scripts Angular JS Descargar en https://code.angularjs.org/1.4.6/-->
 	<script type="text/javascript" src="scripts/jquery-2.2.0.min.js"></script>
 	<script type="text/javascript" src="scripts/bootstrap-tour-standalone.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="scripts/angular.min.js"></script>
 	<script type="text/javascript" src="scripts/angular-route.min.js"></script>
 	<script type="text/javascript" src="scripts/angular-cookies.min.js"></script>
@@ -437,6 +441,88 @@
 	<script type="text/javascript" src="scripts/format-as-currency.js"></script>
 	<script type="text/javascript" src="scripts/ngToast.js"></script>
 	<script type="text/javascript" src="scripts/angular-ui-mask.js"></script>
+	<!-- <script type="text/javascript" src="app/directives/loading.js"></script>
+	<script type="text/javascript" src="app/app.js"></script>
+	<script type="text/javascript" src="app/appSettings.js"></script>
+	<script type="text/javascript" src="app/controllers/IndexController.js"></script>
+	<script type="text/javascript" src="app/services/TiposProductosFactory.js"></script>
+	<script type="text/javascript" src="app/services/TipoCambioFactory.js"></script>
+	<script type="text/javascript" src="app/controllers/LandingController.js"></script>
+	<script type="text/javascript" src="app/controllers/Usuarios/ConfirmarCuentaController.js"></script>
+	<script type="text/javascript" src="app/services/TiposAccesosFactory.js"></script>
+	<script type="text/javascript" src="app/services/EstadosFactory.js"></script>
+	<script type="text/javascript" src="app/controllers/Usuarios/TerminosReadController.js"></script>
+	<script type="text/javascript" src="app/controllers/Usuarios/UsuariosCreateController.js"></script>
+	<script type="text/javascript" src="app/controllers/Usuarios/UsuariosReadController.js"></script>
+	<script type="text/javascript" src="app/controllers/Usuarios/UsuariosUpdateController.js"></script>
+	<script type="text/javascript" src="app/services/UsuariosFactory.js"></script>
+	<script type="text/javascript" src="app/controllers/Empresas/EmpresasCreditoUpdateController.js"></script>
+	<script type="text/javascript" src="app/controllers/Empresas/EmpresasCreateController.js"></script>
+	<script type="text/javascript" src="app/controllers/Empresas/EmpresasReadController.js"></script>
+	<script type="text/javascript" src="app/controllers/Empresas/EmpresasUpdateController.js"></script>
+	<script type="text/javascript" src="app/controllers/Soporte/SoporteReadController.js"></script>
+	<script type="text/javascript" src="app/controllers/Soporte/SoporteCreateController.js"></script>
+	<script type="text/javascript" src="app/controllers/Soporte/SoporteUpdateController.js"></script>
+	<script type="text/javascript" src="app/controllers/Empresas/EmpresasImportController.js"></script>
+	<script type="text/javascript" src="app/controllers/Empresas/EmpresasCompletarController.js"></script>
+	<script type="text/javascript" src="app/controllers/PowerBI/PowerBIReadController.js"></script>
+	<script type="text/javascript" src="app/services/EmpresasFactory.js"></script>
+	<script type="text/javascript" src="app/services/SoporteFactory.js"></script>
+	<script type="text/javascript" src="app/controllers/ReportesController.js"></script>
+	<script type="text/javascript" src="app/services/ReportesFactory.js"></script>
+	<script type="text/javascript" src="app/services/UsuariosXEmpresasFactory.js"></script>
+	<script type="text/javascript" src="app/controllers/EmpresasXEmpresas/EmpresasXEmpresasReadController.js"></script>
+	<script type="text/javascript" src="app/services/EmpresasXEmpresasFactory.js"></script>
+	<script type="text/javascript" src="app/controllers/Productos/ProductosReadController.js"></script>
+	<script type="text/javascript" src="app/controllers/Productos/ProductosUFReadController.js"></script>
+	<script type="text/javascript" src="app/services/VersionFactory.js"></script>
+	<script type="text/javascript" src="app/controllers/VersionControl/VersionController.js"></script>
+	<script type="text/javascript" src="app/services/ProductosFactory.js"></script>
+	<script type="text/javascript" src="app/services/PedidosFactory.js"></script>
+	<script type="text/javascript" src="app/controllers/Migracion/MigracionController.js"></script>
+	<script type="text/javascript" src="app/controllers/Migracion/MigracionDetalleController.js"></script>
+	<script type="text/javascript" src="app/controllers/PedidoDetalles/ComprarController.js"></script>
+	<script type="text/javascript" src="app/controllers/PedidoDetalles/ComprarUFController.js"></script>
+	<script type="text/javascript" src="app/controllers/PedidoDetalles/PedidoDetallesReadController.js"></script>
+	<script type="text/javascript" src="app/controllers/PedidoDetalles/PedidoDetallesUFReadController.js"></script>
+	<script type="text/javascript" src="app/controllers/PedidoDetalles/MonitorReadController.js"></script>
+	<script type="text/javascript" src="app/controllers/PedidoDetalles/MonitorPagosController.js"></script>
+	<script type="text/javascript" src="app/controllers/PedidoDetalles/DetallesAzureController.js"></script>
+	<script type="text/javascript" src="app/services/PedidoDetallesFactory.js"></script>
+	<script type="text/javascript" src="app/services/FabricantesFactory.js"></script>
+	<script type="text/javascript" src="app/controllers/Promocions/PromocionsCreateController.js"></script>
+	<script type="text/javascript" src="app/controllers/Promocions/PromocionsReadController.js"></script>
+	<script type="text/javascript" src="app/controllers/Promocions/PromocionsUpdateController.js"></script>
+	<script type="text/javascript" src="app/services/PromocionsFactory.js"></script>
+	<script type="text/javascript" src="app/controllers/ProductoGuardados/ProductoGuardadosReadController.js"></script>
+	<script type="text/javascript" src="app/services/ProductoGuardadosFactory.js"></script>
+	<script type="text/javascript" src="app/controllers/Usuarios/UsuariosLoginController.js"></script>
+	<script type="text/javascript" src="app/controllers/Usuarios/DesbloquearCuentaController.js"></script>
+	<script type="text/javascript" src="app/controllers/Usuarios/UsuariosRecuperarController.js"></script>
+	<script type="text/javascript" src="app/controllers/ContactoController.js"></script>
+	<script type="text/javascript" src="app/controllers/SugerenciasController.js"></script>
+	<script type="text/javascript" src="app/controllers/SoporteController.js"></script>
+	<script type="text/javascript" src="app/controllers/NavegadoresController.js"></script>
+	<script type="text/javascript" src="app/services/AccesosAmazonFactory.js"></script>
+	<script type="text/javascript" src="app/controllers/Descuentos/DescuentosCreateController.js"></script>
+	<script type="text/javascript" src="app/controllers/Descuentos/DescuentosNivelesCSController.js"></script>
+	<script type="text/javascript" src="app/controllers/Descuentos/DescuentosReadController.js"></script>
+	<script type="text/javascript" src="app/controllers/Descuentos/DescuentosUpdateController.js"></script>
+	<script type="text/javascript" src="app/services/DescuentosFactory.js"></script>
+	<script type="text/javascript" src="app/services/MigracionFactory.js"></script>
+	<script type="text/javascript" src="app/controllers/Niveles/NivelesReadController.js"></script>
+	<script type="text/javascript" src="app/controllers/Niveles/NivelesClienteFinalController.js"></script>
+	<script type="text/javascript" src="app/controllers/Descuentos/DescuentosNivelesController.js"></script>
+	<script type="text/javascript" src="app/services/DescuentosNivelesFactory.js"></script>
+	<script type="text/javascript" src="app/services/NivelesClienteFinalFactory.js"></script>
+	<script type="text/javascript" src="app/controllers/Empresas/ConfiguracionUpdateController.js"></script>
+	<script type="text/javascript" src="app/controllers/Empresas/EmpresasRPController.js"></script>
+	<script type="text/javascript" src="app/controllers/Productos/MisProductosReadController.js"></script>
+	<script type="text/javascript" src="app/controllers/Productos/ConfigurarBaseController.js"></script>
+	<script type="text/javascript" src="app/controllers/Aplicaciones/AplicacionesReadController.js"></script>
+	<script type="text/javascript" src="app/services/NivelesDistribuidorFactory.js"></script>
+	<script type="text/javascript" src="app/services/ProductosXEmpresaFactory.js"></script>
+	<script type="text/javascript" src="app/services/ComprasUFFactory.js"></script> -->
 	<script type="text/javascript" src="scripts/ui-bootstrap-tpls-0.14.3.min.js"></script>
 	<script type="text/javascript" src="scripts/angular-parallax.js"></script>
 	<script type="text/javascript" src="https://cdn.rawgit.com/auth0/angular-jwt/master/dist/angular-jwt.js"></script>
@@ -447,17 +533,17 @@
 	<script type="text/javascript" src="scripts/classie.js"></script>
 
 	<!-- Pruebas-->
-	<!--<script src="https://secure.na.tnspayments.com/checkout/version/32/checkout.js" data-error="errorCallback" data-complete="completeCallback"
+	<!-- <script src="https://secure.na.tnspayments.com/checkout/version/32/checkout.js" data-error="errorCallback" data-complete="completeCallback"
 	 data-cancel="cancelCallback">
 
-	</script>-->
+	</script> -->
 
 	<!-- Producción-->
 	<script src="https://gateway-na.americanexpress.com/checkout/version/33/checkout.js" 
             data-error="errorCallback"
             data-complete="completeCallback"
             data-cancel="cancelCallback" >
-    </script> 
+    </script>
 
 	<div id="divComprar" ng-controller="ComprarController" style="display:none;"></div>
 

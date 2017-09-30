@@ -53,7 +53,7 @@
     };
 
     $scope.deleteDiscounts = function (product) {
-      const discounts = { IdNivelCS, Productos: [] };
+      const discounts = { IdNivelCS: IdNivelCS, Productos: [] };
       discounts.Productos = filteredProducts.map(function (product) {
         return { IdProducto: product.IdProducto, Activo: 0 };
       });
@@ -130,11 +130,11 @@
       else {
         const PorcentajeDescuento = (!product.PorcentajeDescuento || product.PorcentajeDescuento === '') ? null : product.PorcentajeDescuento;
         const request = {
-          IdNivelCS,
+          IdNivelCS: IdNivelCS,
           Productos: [{
             Activo: Activo ? 1 : 0,
             IdProducto: product.IdProducto,
-            PorcentajeDescuento
+            PorcentajeDescuento: PorcentajeDescuento
           }]
         };
         updateDiscounts(request);
@@ -149,7 +149,7 @@
     };
 
     $scope.guardarTodo = function (levels) {
-      var discounts = { IdNivelCS, Productos: [] };
+      var discounts = { IdNivelCS: IdNivelCS, Productos: [] };
       if (levels) {
         discounts.Productos = filteredProducts.map(function (product) {
           return {

@@ -7,7 +7,9 @@
                 <div class="pull-rigth">
                     <label>Nombre * </label> 
                     <input name="Nombre" type="text" ng-model="Usuario.Nombre" class="form-control" ng-pattern="/[a-zA-Z]$/" placeholder="Nombre" size="255" ng-maxlength="45" required=""/>
-                    <b style="color:red" ng-show="frm.Nombre.$invalid && !frm.Nombre.$pristine" class="help-block">Escriba un nombre válido.</b>
+                    <div ng-show="frm.$submitted || frm.Nombre.$touched">
+                        <b style="color:red" ng-show="frm.Nombre.$error.required || frm.Nombre.$error.pattern" class="help-block">Escriba un nombre válido.</b>
+                    </div>
                 </div>
                 
             </div>
@@ -18,8 +20,10 @@
             <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
                 <div class="pull-rigth">
                     <label>Apellido Paterno </label>
-                    <input name="ApellidoPaterno" type="text" ng-model="Usuario.ApellidoPaterno" class="form-control" ng-pattern="/[a-zA-Z]$/" placeholder="Apellido paterno" size="255" ng-maxlength="30" />
-                    <b style="color:red" ng-show="frm.ApellidoPaterno.$invalid && !frm.ApellidoPaterno.$pristine" class="help-block">Ha excedido el número de caracteres permitidos.</b>
+                    <input name="ApellidoPaterno" type="text" ng-model="Usuario.ApellidoPaterno" class="form-control" ng-pattern="/[a-zA-Z]$/" placeholder="Apellido paterno" size="255" ng-maxlength="30" ng-required="Usuario.IdTipoAcceso === 4" />
+                    <div ng-show="frm.$submitted || frm.Nombre.$touched">
+                            <b style="color:red" ng-show="frm.ApellidoPaterno.$error.required && Usuario.IdTipoAcceso === 4" class="help-block">Revisa el número de caracteres (max: 30), los números no son permitidos</b>
+                    </div>
                 </div>
                 
             </div>
@@ -31,7 +35,7 @@
                 <div class="pull-rigth">
                     <label>Apellido Materno </label>
                     <input name="ApellidoMaterno" type="text" ng-model="Usuario.ApellidoMaterno" class="form-control" ng-pattern="/[a-zA-Z]$/" placeholder="Apellido materno" size="255" ng-maxlength="30" />
-                    <b style="color:red" ng-show="frm.ApellidoMaterno.$invalid && !frm.ApellidoMaterno.$pristine" class="help-block">Ha excedido el número de caracteres permitidos.</b>
+                    <b style="color:red" ng-show="frm.ApellidoMaterno.$invalid && !frm.ApellidoMaterno.$pristine" class="help-block">Revisa el número de caracteres (max: 30), los números no son permitidos</b>
                 </div>  
             </div>
             <div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div>
@@ -41,8 +45,10 @@
             <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
                 <div class="pull-rigth">
                     <label>Correo Electrónico* </label>
-                    <input name="CorreoElectronico" type="email" ng-model="Usuario.CorreoElectronico" class="form-control" placeholder="Correo electrónico" size="255" ng-maxlength="50" required="" />
-                    <b style="color:red" ng-show="frm.CorreoElectronico.$invalid && !frm.CorreoElectronico.$pristine" class="help-block">Capture un correo electrónico válido.</b>
+                    <input name="CorreoElectronico" type="email" ng-model="Usuario.CorreoElectronico" class="form-control" placeholder="Correo electrónico" size="255" ng-maxlength="50" required="" ng-pattern="/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/" />
+                    <div ng-show="frm.$submitted || frm.CorreoElectronico.$touched">
+                        <b style="color:red" ng-show="frm.CorreoElectronico.$error.required || frm.CorreoElectronico.$error.pattern" class="help-block">Capture un correo electrónico válido.</b>
+                    </div>
                 </div>
                 
             </div>
@@ -52,7 +58,7 @@
         <div class="form-group row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="pull-rigth">
-                    <label>Número de celular </label>
+                    <label>Número de celular* </label>
                 </div>
             </div>
             <div class="col-xs-3 col-sm-3 col-md-1 col-lg-1">
@@ -62,7 +68,10 @@
             </div>    
             <div class="col-xs-9 col-sm-9 col-md-3 col-lg-3">
                 <div class="pull-rigth">
-                    <input name="Telefono" type="text" ng-model="Usuario.Telefono" ui-mask="(999) 999-9999" ui-mask-placeholder ui-mask-placeholder-char="_" class="form-control" placeholder="" size="255" ng-maxlength="255"/>
+                    <input name="Telefono" type="text" ng-model="Usuario.Telefono" ui-mask="(999) 999-9999" ui-mask-placeholder ui-mask-placeholder-char="_" class="form-control" placeholder="" size="255" ng-maxlength="255" required=""/>
+                    <div ng-show="frm.$submitted || frm.Telefono.$touched">
+                        <b style="color:red" ng-show="frm.Telefono.$error.required" class="help-block">Ingrese un número o valide que sea correcto.</b>
+                    </div>
                 </div>
             </div> 
             <div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div> 
@@ -72,26 +81,30 @@
             <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
                 <div class="pull-rigth">
                     <label>Tipo Acceso* </label>
-                    <select name="IdTipoAcceso" class="form-control" ng-model="Usuario.IdTipoAcceso" 
-                            ng-options="TiposAccesos.IdTipoAcceso as TiposAccesos.Tipo for TiposAccesos in selectTiposAccesos" required="">
-                        <option value="" ng-selected="true">Selecciona un tipo de acceso...</option>
+                    <select name="IdTipoAcceso" class="form-control" ng-model="Usuario.IdTipoAcceso" required=""
+                        ng-options="TiposAccesos.IdTipoAcceso as TiposAccesos.Tipo for TiposAccesos in selectTiposAccesos">
+                    <option value="" ng-selected="true">Selecciona un tipo de acceso...</option>
                     </select>
-                    <b style="color:red" ng-show="frm.IdTipoAcceso.$invalid && !frm.IdTipoAcceso.$pristine" class="help-block">El tipo de acceso es requerido.</b>
+                    <div ng-show="frm.$submitted || frm.IdTipoAcceso.$touched">
+                        <b style="color:red" ng-show="frm.IdTipoAcceso.$error.required" class="help-block">El tipo de acceso es requerido.</b>
+                    </div>
                 </div>
                 
             </div>
             <div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div>
         </div>
         
-        <div class="form-group row" ng-show="(Usuario.IdTipoAcceso == 2 || Usuario.IdTipoAcceso == 4) && Usuario.MuestraComboEmpresas == 1">
+        <div class="form-group row" ng-show="(Usuario.IdTipoAcceso == 2 || Usuario.IdTipoAcceso == 4 || Usuario.IdTipoAcceso == 6) && Usuario.IdTipoAcceso === 4">
             <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
                 <div class="pull-rigth">
                     <label>Empresa* </label>
-                    <select name="IdEmpresa" class="form-control" ng-model="Usuario.IdEmpresa" 
-                            ng-options="Empresas.IdEmpresa as Empresas.IdERP + ', ' + Empresas.NombreEmpresa for Empresas in selectEmpresas">
+                    <select name="IdEmpresa" class="form-control" ng-model="Usuario.IdEmpresa" required=""
+                            ng-options="Empresas.IdEmpresa as Empresas.IdERP || 'Cliente' + ', ' + Empresas.NombreEmpresa for Empresas in selectEmpresas">
                         <option value="" ng-selected="true">Selecciona una empresa...</option>
-                        <b style="color:red" ng-show="frm.IdEmpresa.$invalid && !frm.IdEmpresa.$pristine" class="help-block">La empresa es requerida.</b>
                     </select>
+                    <div ng-show="frm.$submitted || frm.IdEmpresa.$touched">
+                        <b style="color:red" ng-show="Usuario.IdTipoAcceso === 4 && frm.IdEmpresa.$error.required" class="help-block">La empresa es requerida.</b>
+                    </div>
                 </div>
                 
             </div>
