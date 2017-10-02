@@ -363,7 +363,7 @@
 
       .when('/Version', {
         controller: 'VersionController', templateUrl: 'app/views/VersionControl/VersionControl.html',
-        resolve: { 'check': function ($location, $cookieStore) { var Session = $cookieStore.get('Session'); if (!(Session.IdTipoAcceso === 2)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookieStore) { var Session = $cookieStore.get('Session'); if (!(Session.IdTipoAcceso === 2 && Session.IdTipoAcceso === 1)) { $location.path('/404'); } } }
       })
 
       /* .when('/:Subdominio', { controller: 'UsuariosLoginController', templateUrl: 'app/views/Usuarios/UsuariosLogin.html' }) */
