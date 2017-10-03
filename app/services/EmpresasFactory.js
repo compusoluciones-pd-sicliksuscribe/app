@@ -56,9 +56,9 @@
       return $http.put($rootScope.API + 'Empresas', Empresa);
     };
 
-    factory.revisarDominio = function (Empresa) {
+    factory.revisarDominio = function (dominio) {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'Empresa/Dominio/' + Empresa);
+      return $http.get($rootScope.MAPI + 'utilities/' + dominio);
     };
 
     factory.revisarRFC = function (ObjRFC) {
