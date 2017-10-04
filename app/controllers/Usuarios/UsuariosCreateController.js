@@ -13,10 +13,6 @@
         TiposAccesosFactory.getTiposAccesos()
           .success(function (TiposAccesos) {
             $scope.selectTiposAccesos = TiposAccesos;
-            if (Session.IdTipoAcceso == 2 || Session.IdTipoAcceso == 4)
-              $scope.Usuario.MuestraComboEmpresas = 0;
-            else
-              $scope.Usuario.MuestraComboEmpresas = 1;
           })
           .error(function (data, status, headers, config) {
             $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
