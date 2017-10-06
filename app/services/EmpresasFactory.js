@@ -18,7 +18,7 @@
 
     factory.getCliente = function (Id) {
       factory.refreshToken();
-      return $http.post($rootScope.API + 'Importar/', { IdMicrosoft: Id });
+      return $http.get($rootScope.MAPI + 'customer/' + Id);
     };
 
     factory.getEmpresas = function () {
