@@ -28,7 +28,7 @@
 
     factory.getEmpresasMicrosoft = function () {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'Empresa/Microsoft');
+      return $http.get($rootScope.MAPI + 'customer');
     };
 
     factory.getEmpresa = function (IdEmpresa) {
