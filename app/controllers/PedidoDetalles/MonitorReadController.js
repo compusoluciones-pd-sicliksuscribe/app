@@ -93,10 +93,11 @@
         });
     };
 
+
     $scope.ActualizarCantidad = function (IdPedidoDetalle) {
       $scope.Pedidos.forEach(function (Pedido) {
         if (Pedido.IdPedidoDetalle == IdPedidoDetalle) {
-          Pedido.MostrarCantidad = !Pedido.MostrarCantidad;
+          if (Pedido.IdTipoProducto !== 6) Pedido.MostrarCantidad = !Pedido.MostrarCantidad;
         }
       }, this);
     };
