@@ -28,7 +28,7 @@
 
     factory.putPromocion = function (Promocion) {
       factory.refreshToken();
-      return $http.put($rootScope.API + 'Promocions', Promocion);
+      return $http.put($rootScope.API + 'Promociones', Promocion);
     };
 
     return factory;

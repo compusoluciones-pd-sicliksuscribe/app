@@ -34,7 +34,7 @@
 
     uploader.onBeforeUploadItem = function (item) {
       var extension = item.file.name.split('.');
-      item.file.name = $scope.Promocion.IdPromocionNueva + '.' + extension[1];
+      item.file.name = $scope.Promocion.Url + '.' + extension[1];
     };
 
     uploader.onProgressItem = function (fileItem, progress) {
@@ -141,9 +141,11 @@
             PromocionsFactory.postPromocion($scope.Promocion)
               .success(function (result) {
                 if (result[0].Success == true) {
+                  console.log(result);
                   $scope.Promocion.IdPromocionNueva = result[0].Dato;
-                  $scope.Promocion.Url = result[0].Dato;
+                  $scope.Promocion.Url = result[0].fileName;
                   $scope.Promocion.IdPromocion = result[0].Dato;
+                  console.log($scope.Promocion);
                   uploader.queue[0].upload();
                 } else {
                   $scope.ShowToast(result[0].Message, 'danger');
