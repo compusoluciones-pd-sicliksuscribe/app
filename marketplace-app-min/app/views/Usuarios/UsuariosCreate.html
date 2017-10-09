@@ -21,8 +21,8 @@
                 <div class="pull-rigth">
                     <label>Apellido Paterno </label>
                     <input name="ApellidoPaterno" type="text" ng-model="Usuario.ApellidoPaterno" class="form-control" ng-pattern="/[a-zA-Z]$/" placeholder="Apellido paterno" size="255" ng-maxlength="30" ng-required="Usuario.IdTipoAcceso == 4 || Usuario.IdTipoAcceso == 2" />
-                    <div ng-show="frm.$submitted || frm.Nombre.$touched">
-                            <b style="color:red" ng-show="frm.ApellidoPaterno.$error.required && (Usuario.IdTipoAcceso == 2 && Session.IdTipoAcceso == 1) || (Usuario.IdTipoAcceso == 4 && Session.IdTipoAcceso == 2)" class="help-block">Revisa el número de caracteres (max: 30), los números no son permitidos</b>
+                    <div ng-show="frm.$submitted || frm.ApellidoPaterno.$touched">
+                            <b style="color:red" ng-show="frm.ApellidoPaterno.$error.required && ((Usuario.IdTipoAcceso == 2 && Session.IdTipoAcceso == 1) || (Usuario.IdTipoAcceso == 4 && Session.IdTipoAcceso == 2))" class="help-block">Revisa el número de caracteres (max: 30), los números no son permitidos</b>
                     </div>
                 </div>
                 
@@ -99,11 +99,11 @@
                 <div class="pull-rigth">
                     <label>Empresa* </label>
                     <select name="IdEmpresa" class="form-control" ng-model="Usuario.IdEmpresa" required=""
-                        ng-options="'Cliente' + ', ' + Empresas.NombreEmpresa for Empresas in selectEmpresas">
+                        ng-options="Empresas.IdEmpresa as Empresas.NombreEmpresa for Empresas in selectEmpresas">
                         <option value="" ng-selected="true">Selecciona una empresa...</option>
                     </select>
                     <div ng-show="frm.$submitted || frm.IdEmpresa.$touched">
-                        <b style="color:red" ng-show="(Usuario.IdTipoAcceso == 2 && Session.IdTipoAcceso == 1) || (Usuario.IdTipoAcceso == 4 && Session.IdTipoAcceso == 2) && frm.IdEmpresa.$error.required" class="help-block">La empresa es requerida.</b>
+                        <b style="color:red" ng-show="((Usuario.IdTipoAcceso == 2 && Session.IdTipoAcceso == 1) || (Usuario.IdTipoAcceso == 4 && Session.IdTipoAcceso == 2)) && frm.IdEmpresa.$error.required" class="help-block">La empresa es requerida.</b>
                     </div>
                 </div>
                 
