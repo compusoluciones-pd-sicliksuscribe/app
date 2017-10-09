@@ -545,7 +545,7 @@
             data-cancel="cancelCallback" >
     </script> -->
 
-	<!-- <div id="divComprar" ng-controller="ComprarController" style="display:none;"></div> -->
+	<div id="divComprar" ng-controller="ComprarController" style="display:none;"></div>
 
 	<script type="text/javascript">
 		function errorCallback(error) {
@@ -558,6 +558,8 @@
 		}
 
 		function completeCallback(resultIndicator, sessionVersion) {
+			console.log(angular.element(document.getElementById('divComprar')).scope());
+			console.log(angular.element(document.getElementById('divComprar')));
 			angular.element(document.getElementById('divComprar')).scope().ComprarConTarjeta(resultIndicator, sessionVersion);
 		}
 	</script>
