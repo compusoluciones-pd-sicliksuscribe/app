@@ -42,17 +42,32 @@
 
     const updateDiscounts = function (levels) {
       return NivelesDistribuidorFactory.createLevelDiscount(levels)
-        .then(function (result) { $scope.ShowToast(result.data.message, 'success'); })
+        .then(function (result) {
+          if (result.data.success === 1) {
+            $scope.ShowToast(result.data.message, 'success');
+          } else {
+            $scope.ShowToast('No se pudo actualizar el descuento, reviza que la cantidad sea un numero entero.', 'danger');
+          }
+        })
         .catch(function (result) { error(result.data); });
     };
 
     $scope.deleteDiscounts = function (product) {
-      const discounts = { IdNivelCS, Productos: [] };
+      const discounts = { IdNivelCS: IdNivelCS, Productos: [] };
       discounts.Productos = filteredProducts.map(function (product) {
         return { IdProducto: product.IdProducto, Activo: 0 };
       });
       updateDiscounts(discounts)
         .then(function () { $scope.getProducts(); });
+    };
+
+    $scope.isNumber = function (evt) {
+      evt = evt || window.event;
+      var charCode = (evt.which) ? evt.which : evt.keyCode;
+      if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+      }
+      return true;
     };
 
     $scope.getProducts = function () {
@@ -65,6 +80,7 @@
           } else {
             const produtosConPrecioFinal = response.data.map(function (producto) {
               producto.PrecioFinal = Number(((producto.PrecioNormal * (100 - producto.PorcentajeDescuento)) / 100).toFixed(2));
+              producto.Activo = producto.PorcentajeDescuento ? 1 : 0;
               return producto;
             });
             $scope.Productos = produtosConPrecioFinal;
@@ -105,31 +121,35 @@
       if (product.PorcentajeDescuento && (product.PorcentajeDescuento > 0 && product.PorcentajeDescuento < 101)) {
         product.PrecioFinal = product.PrecioNormal - (product.PrecioNormal * ((product.PorcentajeDescuento || 0) * 0.01));
         product.PrecioFinal = Number(product.PrecioFinal.toFixed(4));
-        product.Activo = 1;
-      } else {
-        product.PrecioFinal = '';
-        product.Activo = 0;
-      }
+      } else product.PrecioFinal = '';
     };
 
     $scope.Actualizar = function (product) {
       const Activo = product.PorcentajeDescuento > 0 && product.PorcentajeDescuento < 101;
-      if (Activo || product.Activo) {
+      if (!Activo && product.Activo) $scope.ShowToast('El descuento debe ser en un rango entre 1 y 100', 'danger');
+      else {
         const PorcentajeDescuento = (!product.PorcentajeDescuento || product.PorcentajeDescuento === '') ? null : product.PorcentajeDescuento;
         const request = {
-          IdNivelCS,
+          IdNivelCS: IdNivelCS,
           Productos: [{
             Activo: Activo ? 1 : 0,
             IdProducto: product.IdProducto,
-            PorcentajeDescuento
+            PorcentajeDescuento: PorcentajeDescuento
           }]
         };
         updateDiscounts(request);
-      } else $scope.ShowToast('El descuento debe ser en un rango entre 1 y 100', 'danger');
+      }
+    };
+
+    $scope.resetDiscount = function (product) {
+      if (!product.Activo) {
+        product.PorcentajeDescuento = '';
+        product.PrecioFinal = '';
+      }
     };
 
     $scope.guardarTodo = function (levels) {
-      var discounts = { IdNivelCS, Productos: [] };
+      var discounts = { IdNivelCS: IdNivelCS, Productos: [] };
       if (levels) {
         discounts.Productos = filteredProducts.map(function (product) {
           return {
@@ -143,10 +163,13 @@
     };
 
     $scope.calcularPrecioVenta = function (discount) {
+      discount = discount || 100;
+      $scope.porcentaje = Number(discount.toString().replace(/[^0-9]+/g, ''));
       filteredProducts.forEach(function (product) {
         product.PorcentajeDescuento = discount;
         product.PrecioFinal = product.PrecioNormal - (product.PrecioNormal * ((product.PorcentajeDescuento || 0) * 0.01));
         product.PrecioFinal = Number(product.PrecioFinal.toFixed(4));
+        product.Activo = 1;
       });
     };
 

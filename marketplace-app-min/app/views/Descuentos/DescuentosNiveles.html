@@ -10,14 +10,27 @@
 
 	<div class="row">
 
-		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
-
 		<div class="form-group col-xs-12 col-md-4">
 			<label for="Empresa">Mostrar productos de</label>
 			<select name="Empresa" ng-model="IdEmpresa" class="form-control" ng-change="refrescarMisProductos()">
       	<option ng-selected="true" value="1">Microsoft</option>
-        <!-- <option value="2">Autodesk</option> -->
+        <option value="2">Autodesk</option>
       </select>
+		</div>
+    
+		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+			<label for="Descuento">Descuento</label>
+			<div class="input-group">
+				<input type="number" min="1" max="100" class="form-control txtPercent" placeholder="Ingrese el porcentaje en descuento" ng-model="porcentaje" ng-change="calcularPrecioVenta(porcentaje);"/>
+				<span class="input-group-btn">
+					<button class="btn btn-default btnReset" style="background: #68953B;" type="button" title="Restaurar" ng-click="getProducts();">
+						<span class="glyphicon glyphicon-erase white"></span>
+					</button>
+					<button class="btn btn-default btnSaveAll" style="background: #00549F;" type="button" ng-model="btnGuardar" title="Guardar Todo" ng-disabled="btnGuardar" ng-click="guardarTodo(porcentaje);">
+						<span class="glyphicon glyphicon-floppy-disk white"></span>
+					</button>
+				</span>
+			</div>
 		</div>
 
 		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 searchOption">
@@ -30,37 +43,18 @@
 
 	</div>
 
-	<div class="alert alert-warning">
-		<strong>Nota *</strong> Al activar la casilla de "Descuento",
-		se aplicara el descuento establecido a todos los clientes que pertenezcan al nivel elegido. Si se desmarca la casilla y se
-		guardan los cambios, se borrara el descuento para el producto.
-	</div>
-
 	<div class="alert alert-danger">
 		<strong>Nota importante *</strong>
-		Al presionar el botón "Guardar todo" en "Descuento General", se actualizarán también los productos que ya tienen un descuento
+		Al presionar el botón "Guardar todo", se actualizarán también los productos que ya tienen un descuento
 		guardado, asi como los productos no visibles a causa del filtro..
 		En caso de no querer afectar descuentos guardados anteriormente o los productos no visibles por el filtro,
 		se recomienda guardar individualmente.
 	</div>
 
-	<div class="row">
-		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
-		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
-		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-			<label for="Descuento">Descuento General</label>
-			<div class="input-group">
-				<input type="number" min="1" max="100" class="form-control txtPercent" placeholder="Ingrese el porcentaje en descuento" ng-model="porcentaje" ng-change="calcularPrecioVenta(porcentaje);"/>
-				<span class="input-group-btn">
-					<button class="btn btn-default btnReset" style="background: #68953B;" type="button" title="Quitar todos los descuentos" ng-click="deleteDiscounts();">
-						<span class="glyphicon glyphicon-erase white"></span>
-					</button>
-					<button class="btn btn-default btnSaveAll" style="background: #00549F;" type="button" ng-model="btnGuardar" title="Guardar Todo" ng-disabled="btnGuardar" ng-click="guardarTodo(porcentaje);">
-						<span class="glyphicon glyphicon-floppy-disk white"></span>
-					</button>
-				</span>
-			</div>
-		</div>
+	<div class="alert alert-warning">
+		<strong>Nota *</strong> Al activar la casilla de "Descuento",
+		se aplicara el descuento establecido a todos los clientes que pertenezcan al nivel elegido. Si se desmarca la casilla y se
+		guardan los cambios, se borrara el descuento para el producto.
 	</div>
 
 	<br>
@@ -72,7 +66,7 @@
 		<tr ng-repeat="Producto in paginatedProducts[currentPage]" class="repeat-animation">
 			<td class="row">
 				<div class="col-xs-12 col-md-6">
-					<b>{{Producto.Nombre}}</b> ({{Producto.Tipo}})
+					<b>{{Producto.Nombre}}</b> ({{Producto.TipoProducto}})
 					<br>
 					<b>Id Artículo:</b> {{Producto.IdERP}}
 					<br>
@@ -81,24 +75,14 @@
 				<!--ng-checked="Producto.Activo"    ng-disabled="!Producto.Precio"-->
 				<div class="checkbox col-xs-12 col-md-1">
 					<label>
-						<input id="Activo" type="checkbox" ng-true-value="1" ng-false-value="0" ng-model="Producto.Activo" ng-change="resetDiscount(Producto)">
+						<input id="Activo" type="checkbox" ng-checked="Producto.PorcentajeDescuento" ng-true-value="1" ng-false-value="0" ng-model="Producto.Activo" ng-click="Producto.PorcentajeDescuento = ''">
 						Descuento
 					</label>
 				</div>
 
 				<div class="col-xs-12 col-md-2">
 					<div class="input-group">
-						<input
-							id="Precio"
-							name="Precio" 
-							type="number" 
-							ng-model="Producto.PorcentajeDescuento"
-							ng-change="calcularDescuento(Producto)" 
-							class="form-control" step="1"
-							placeholder="Descuento"
-							min="1" max="100"
-							ng-disabled="!Producto.Activo"
-						/>
+						<input id="Precio" name="Precio" type="number" ng-model="Producto.PorcentajeDescuento" ng-change="calcularDescuento(Producto)" class="form-control" step="1" placeholder="Descuento" min="1" max="100" />
 						<div class="input-group-addon">%</div>
 					</div>
 				</div>

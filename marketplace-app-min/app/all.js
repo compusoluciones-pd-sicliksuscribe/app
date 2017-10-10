@@ -47,6 +47,15 @@
           }
         }
       })
+      .when('/autodesk/productos/:IdProducto/detalle/:IdPedidoDetalle', {
+        controller: 'ConfigurarBaseController', templateUrl: 'app/views/Productos/ConfigurarBase.html',
+        resolve: {
+          'check': function ($location, $cookieStore) {
+            var Session = $cookieStore.get('Session');
+            if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3)) { $location.path('/404'); }
+          }
+        }
+      })
 
       .when('/monitor-soporte', {
         controller: 'SoporteReadController', templateUrl: 'app/views/Soporte/SoporteRead.html',
@@ -178,8 +187,6 @@
         }
       })
 
-
-
       .when('/Usuario', {
         controller: 'UsuariosCreateController', templateUrl: 'app/views/Usuarios/UsuariosCreate.html',
         resolve: { 'check': function ($location, $cookieStore) { var Session = $cookieStore.get('Session'); if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 6 || Session.IdTipoAcceso === 7)) { $location.path('/404'); } } }
@@ -302,7 +309,41 @@
 
       .when('/Niveles', {
         controller: 'NivelesReadController', templateUrl: 'app/views/Niveles/NivelesRead.html',
-        resolve: { 'check': function ($location, $cookieStore) { var Session = $cookieStore.get('Session'); if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); } } }
+        resolve: {
+          'check': function ($location, $cookieStore, jwtHelper) {
+            var Session = $cookieStore.get('Session');
+            var decoded = jwtHelper.decodeToken(Session.Token);
+            if (!(decoded.IdTipoAcceso === 1)) {
+              $location.path('/404');
+            }
+          }
+        }
+      })
+
+      .when('/Niveles/Distribuidor', {
+        controller: 'NivelesClienteFinalController', templateUrl: 'app/views/Niveles/NivelesClienteFinal.html',
+        resolve: { 'check': function ($location, $cookieStore, jwtHelper) {
+          var Session = $cookieStore.get('Session');
+          var decoded = jwtHelper.decodeToken(Session.Token);
+          if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3) || !decoded.Niveles) { $location.path('/404'); }
+        } }
+      })
+
+      .when('/Niveles/Distribuidor/:IdDescuento/Descuentos', {
+        controller: 'DescuentosNivelesController', templateUrl: 'app/views/Descuentos/DescuentosNiveles.html',
+        resolve: { 'check': function ($location, $cookieStore, jwtHelper) {
+          var Session = $cookieStore.get('Session');
+          var decoded = jwtHelper.decodeToken(Session.Token);
+          if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3) || !decoded.Niveles) { $location.path('/404'); }
+        } }
+      })
+
+      .when('/Niveles/:IdNivel/Productos', {
+        controller: 'DescuentosNivelesCSController', templateUrl: 'app/views/Descuentos/DescuentosNivelesCS.html',
+        resolve: { 'check': function ($location, $cookieStore, jwtHelper) {
+          var Session = $cookieStore.get('Session');
+          if (!Session.IdTipoAcceso === 1) { $location.path('/404'); }
+        } }
       })
 
       .when('/Descuentos', {
@@ -320,24 +361,50 @@
         resolve: { 'check': function ($location, $cookieStore) { var Session = $cookieStore.get('Session'); if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); } } }
       })
 
+      .when('/Version', {
+        controller: 'VersionController', templateUrl: 'app/views/VersionControl/VersionControl.html',
+        resolve: { 'check': function ($location, $cookieStore) { var Session = $cookieStore.get('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 1)) { $location.path('/404'); } } }
+      })
+
       /* .when('/:Subdominio', { controller: 'UsuariosLoginController', templateUrl: 'app/views/Usuarios/UsuariosLogin.html' }) */
 
       .otherwise({ redirectTo: '/404' });
   });
 }());
 
+
 angular.module('marketplace')
 
-  .run(function ($rootScope) {
+  .run(function ($rootScope, $location, $anchorScroll, $routeParams) {
     $rootScope.rsTitle = 'click suscribe | CompuSoluciones';
     $rootScope.rsVersion = '2.1.1';
-    /* $rootScope.API = 'http://localhost:8080/';
-    $rootScope.MAPI = 'http://localhost:8083/';
-    $rootScope.dominio = 'localhost'; */
+    // $rootScope.API = 'http://localhost:8080/';
+    // $rootScope.MAPI = 'http://localhost:8083/';
+    // $rootScope.dominio = 'localhost';
     $rootScope.API = 'https://pruebas.compusoluciones.com/';
     $rootScope.MAPI = 'http://microsoft-api.us-east-1.elasticbeanstalk.com/';
     $rootScope.dominio = 'clicksuscribe';
   });
+
+angular.module('directives.loading', [])
+  .directive('cargando', ['$http', function ($http) {
+    return {
+      restrict: 'A',
+      link: function (scope, elm, attrs) {
+        scope.isLoading = function () {
+          return $http.pendingRequests.length > 0;
+        };
+
+        scope.$watch(scope.isLoading, function (v) {
+          if (v) {
+            elm.show();
+          } else {
+            elm.hide();
+          }
+        });
+      }
+    };
+  }]);
 
 (function () {
   var ContactoController = function ($scope) {
@@ -754,6 +821,8 @@ angular.module('marketplace')
 (function () {
   var ReportesController = function ($scope, $log, $location, $cookieStore, ReportesFactory) {
 
+    $scope.perfil = $cookieStore.get('Session');
+
     $scope.reportesSel = '';
 
     $scope.init = function () {
@@ -896,26 +965,6 @@ angular.module('marketplace')
   angular.module('marketplace').controller('SugerenciasController', SugerenciasController);
 }());
 
-angular.module('directives.loading', [])
-  .directive('cargando', ['$http', function ($http) {
-    return {
-      restrict: 'A',
-      link: function (scope, elm, attrs) {
-        scope.isLoading = function () {
-          return $http.pendingRequests.length > 0;
-        };
-
-        scope.$watch(scope.isLoading, function (v) {
-          if (v) {
-            elm.show();
-          } else {
-            elm.hide();
-          }
-        });
-      }
-    };
-  }]);
-
 (function () {
   var AccesosAmazonFactory = function ($http, $cookieStore, $rootScope) {
     var factory = {};
@@ -1032,6 +1081,37 @@ angular.module('directives.loading', [])
   DescuentosFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
 
   angular.module('marketplace').factory('DescuentosFactory', DescuentosFactory);
+}());
+
+(function () {
+  var DescuentosNivelesFactory = function ($http, $cookieStore, $rootScope) {
+    var factory = {};
+    var Session = {};
+
+    factory.refreshToken = function () {
+      Session = $cookieStore.get('Session');
+      if (!Session) { Session = { Token: 'no' }; }
+      $http.defaults.headers.common['token'] = Session.Token;
+    };
+
+    factory.refreshToken();
+
+    factory.getDiscountLevels = function(levelId, enterpriseId) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'distributor/customer/' + levelId + '/discount-level/' + enterpriseId);
+    };
+
+    factory.addDiscountLevels = function(levelId, product) {
+      factory.refreshToken();
+      return $http.put($rootScope.API + 'distributor/customer/' + levelId + '/discount-level', product);
+    };
+
+    return factory;
+  };
+
+  DescuentosNivelesFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
+
+  angular.module('marketplace').factory('DescuentosNivelesFactory', DescuentosNivelesFactory);
 }());
 
 (function () {
@@ -1154,6 +1234,11 @@ angular.module('directives.loading', [])
       return $http.patch($rootScope.API + 'enterprise/update-automatic-payment/' + RealizarCargoProximo);
     };
 
+    factory.getClientes = function () {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'enterprise/clients');
+    };
+
     return factory;
   };
 
@@ -1186,7 +1271,6 @@ angular.module('directives.loading', [])
     };
 
     factory.postExchangeRate = function (Empresas) {
-      console.log(Empresas);
       factory.refreshToken();
       return $http.post($rootScope.API + 'exchange-rate', Empresas);
     };
@@ -1319,9 +1403,9 @@ angular.module('directives.loading', [])
       return $http.patch($rootScope.API + 'migrations', migracion);
     };
 
-    factory.getDominio = function ({ Dominio, Contexto }) {
+    factory.getDominio = function (obj) {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'migrations/customer/' + Contexto + '/' + Dominio);
+      return $http.get($rootScope.API + 'migrations/customer/' + obj.Contexto + '/' + obj.Dominio);
     };
 
     factory.postUsuario = function (user) {
@@ -1340,6 +1424,47 @@ angular.module('directives.loading', [])
   MigracionFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
 
   angular.module('marketplace').factory('MigracionFactory', MigracionFactory);
+}());
+
+(function () {
+  var NivelesClienteFinalFactory = function ($http, $cookieStore, $rootScope) {
+    var factory = {};
+    var Session = {};
+
+    factory.refreshToken = function () {
+      Session = $cookieStore.get('Session');
+      if (!Session) { Session = { Token: 'no' }; }
+      $http.defaults.headers.common['token'] = Session.Token;
+    };
+
+    factory.refreshToken();
+
+    factory.getMisProductos = function() {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'MisProductos');
+    };
+
+    factory.getLevels = function() {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'distributor/customer/level');
+    };
+
+    factory.deleteLevel = function(levelId) {
+      factory.refreshToken();
+      return $http.delete($rootScope.API + 'distributor/customer/' + levelId + '/level');
+    };
+
+    factory.addLevel = function(level) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'distributor/customer/level', level);
+    };
+
+    return factory;
+  };
+
+  NivelesClienteFinalFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
+
+  angular.module('marketplace').factory('NivelesClienteFinalFactory', NivelesClienteFinalFactory);
 }());
 
 (function () {
@@ -1375,6 +1500,26 @@ angular.module('directives.loading', [])
       return $http.get($rootScope.API + 'NivelDistribuidor');
     };
 
+    factory.getProductosPorNivel = function (idNivelCS) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'levels/' + idNivelCS + '/products');
+    };
+
+    factory.asignarNivel = function (nivel) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'levels/assign', nivel);
+    };
+
+    factory.createLevelDiscount = function (level) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'levels/discount', level);
+    };
+
+    factory.removerNivel = function (id) {
+      factory.refreshToken();
+      return $http.delete($rootScope.API + 'levels/' + id);
+    };
+
     return factory;
   };
 
@@ -1396,24 +1541,45 @@ angular.module('directives.loading', [])
 
     factory.refreshToken();
 
+    // Agregar al carrito
     factory.postPedidoDetalle = function (PedidoDetalle) {
       factory.refreshToken();
-      return $http.post($rootScope.API + 'PedidoDetalles', PedidoDetalle);
+      return $http.post($rootScope.API + 'shopping-cart', PedidoDetalle);
     };
 
+    // Obtener productos del carrito
     factory.getPedidoDetalles = function () {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'PedidoDetalles');
+      return $http.get($rootScope.API + 'shopping-cart');
+    };
+
+    // Preparar productos del carrito
+    factory.getPrepararCompra = function (commission) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'shopping-cart/prepare-purchase/' + commission);
+    };
+
+    // Eliminar productos del carrito
+    factory.deletePedidoDetalles = function (IdPedidoDetalle) {
+      factory.refreshToken();
+      return $http.delete($rootScope.API + 'shopping-cart/' + IdPedidoDetalle);
+    };
+
+    // Comprar productos
+    factory.getComprar = function () {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'shopping-cart/buy');
+    };
+
+    // Valida el credito de los clientes
+    factory.getValidarCarrito = function () {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'shopping-cart/validate-cart');
     };
 
     factory.postPedidoDetallesAddOns = function (Producto) {
       factory.refreshToken();
       return $http.post($rootScope.API + 'PedidoDetalles/AddOns', Producto);
-    };
-
-    factory.deletePedidoDetalles = function (IdPedidoDetalle) {
-      factory.refreshToken();
-      return $http.delete($rootScope.API + 'PedidoDetalles/' + IdPedidoDetalle);
     };
 
     factory.postMonitor = function (IdEmpresaUsuarioFinal) {
@@ -1426,29 +1592,14 @@ angular.module('directives.loading', [])
       return $http.put($rootScope.API + 'PedidoDetalles', PedidoDetalle);
     };
 
-    factory.getPrepararCompra = function (enCheckout) {
-      factory.refreshToken();
-      return $http.get($rootScope.API + 'PedidoDetalles/PrepararCompra/' + enCheckout);
-    };
-
     factory.getContarProductos = function () {
       factory.refreshToken();
       return $http.get($rootScope.API + 'PedidoDetalles/ContarProductos');
     };
 
-    factory.getComprar = function () {
-      factory.refreshToken();
-      return $http.get($rootScope.API + 'PedidoDetalles/Comprar');
-    };
-
     factory.postWarningCredito = function (params) {
       factory.refreshToken();
       return $http.post($rootScope.API + 'warningCredito', params);
-    };
-
-    factory.getValidarCarrito = function () {
-      factory.refreshToken();
-      return $http.get($rootScope.API + 'PedidoDetalles/validarCarrito');
     };
 
     factory.getPrepararTarjetaCredito = function () {
@@ -1607,6 +1758,21 @@ angular.module('directives.loading', [])
     factory.putMisProductos = function (productos) {
       factory.refreshToken();
       return $http.put($rootScope.API + 'ActualizarMisProductos', productos);
+    };
+
+    factory.getBaseSubscription = function (IdProducto) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'autodesk/subscription/base/' + IdProducto);
+    };
+
+    factory.putBaseSubscription = function (body) {
+      factory.refreshToken();
+      return $http.put($rootScope.API + 'autodesk/subscription/base', body);
+    };
+
+    factory.getProductContracts = function (idEmpresaUsuarioFinal, idProducto) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'autodesk/contacts/' + idEmpresaUsuarioFinal + '/contract/' + idProducto);
     };
 
     return factory;
@@ -1882,6 +2048,11 @@ angular.module('directives.loading', [])
       return $http.post($rootScope.API + 'Usuarios', Usuario);
     };
 
+    factory.postUsuarioCliente = function (Usuario) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'users', Usuario);
+    };
+
     factory.putUsuario = function (Usuario) {
       factory.refreshToken();
       return $http.put($rootScope.API + 'Usuarios', Usuario);
@@ -1910,6 +2081,21 @@ angular.module('directives.loading', [])
     factory.confirmarCuenta = function (encryptedObject) {
       factory.refreshToken();
       return $http.get($rootScope.API + 'Usuarios/ConfirmarCuenta/' + encryptedObject);
+    };
+
+    factory.getUsuariosContacto = function (idEmpresaUsuarioFinal) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'users/' + idEmpresaUsuarioFinal);
+    };
+
+    factory.getUsuariosPropios = function () {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'users');
+    };
+
+    factory.getAccessosParaDistribuidor = function () {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'users-access');
     };
 
     return factory;
@@ -1963,6 +2149,32 @@ angular.module('directives.loading', [])
   angular.module('marketplace').factory('UsuariosXEmpresasFactory', UsuariosXEmpresasFactory);
 }());
 
+(function () {
+  var VersionFactory = function ($http, $cookieStore, $rootScope) {
+    var factory = {};
+    var Session = {};
+
+    factory.refreshToken = function () {
+      Session = $cookieStore.get('Session');
+      if (!Session) { Session = { Token: 'no' }; }
+      $http.defaults.headers.common['token'] = Session.Token;
+    };
+
+    factory.getVersiones = function () {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'versions');
+    };
+
+    factory.getVersionDetalle = function (IdVersion) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'versions/'+IdVersion);
+    };
+
+    return factory;
+  };
+  VersionFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
+  angular.module('marketplace').factory('VersionFactory', VersionFactory);
+}());
 (function () {
   var AplicacionesReadController = function ($scope, $log, $location, $cookieStore, MigracionFactory) {
     $scope.goToMigraciones = function () {
@@ -2043,6 +2255,355 @@ angular.module('directives.loading', [])
   DescuentosCreateController.$inject = ['$scope', '$log', '$cookieStore', '$location', 'DescuentosFactory', 'NivelesDistribuidorFactory'];
 
   angular.module('marketplace').controller('DescuentosCreateController', DescuentosCreateController);
+}());
+
+(function () {
+  var DescuentosNivelesController = function ($scope, $location, $cookieStore, $routeParams, DescuentosNivelesFactory) {
+    $scope.sortBy = 'Nombre';
+    $scope.reverse = false;
+    $scope.Nivel = $cookieStore.get('nivel');
+    $scope.paginatedProducts = {};
+    $scope.getNumberOfPages = [1];
+    $scope.IdEmpresa = 1;
+    $scope.filter = '';
+    $scope.check;
+    $scope.currentPage = 0;
+    $scope.setCurrentPage = function (i) { $scope.currentPage = i; };
+    const productosEnCache = {};
+    let filteredProducts = [];
+    let searchTimeout;
+    const IdDescuento = $routeParams.IdDescuento;
+
+    const error = function (error) {
+      $scope.ShowToast(!error ? 'Ha ocurrido un error, intentelo mas tarde.' : error.message, 'danger');
+      $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+    };
+
+    const setPagination = function () {
+      const pages = Math.ceil(filteredProducts.length / 50);
+      $scope.paginatedProducts = {};
+      $scope.currentPage = 0;
+      $scope.getNumberOfPages = new Array(pages);
+      for (var i = 0; i < pages; i++) {
+        $scope.paginatedProducts[i] = filteredProducts.slice(i * 50, (i + 1) * 50);
+      }
+    };
+
+    const filterProducts = function () {
+      const filter = $scope.filter.toLowerCase();
+      filteredProducts = productosEnCache[$scope.IdEmpresa].filter(function (p) {
+        if (p.name.indexOf(filter) > -1) return true;
+        return false;
+      });
+      setPagination();
+      $scope.$apply();
+    };
+
+    const addDiscount = function (product) {
+      DescuentosNivelesFactory.addDiscountLevels(IdDescuento, product)
+        .then(function (result) {
+          if (result.data.success) $scope.ShowToast(result.data.message, 'success');
+          else $scope.ShowToast(result.data.message, 'danger');
+        })
+        .catch(function (result) { error(result.data); });
+    };
+
+    $scope.getProducts = function () {
+      $scope.porcentaje = '';
+      DescuentosNivelesFactory.getDiscountLevels(IdDescuento, $scope.IdEmpresa)
+        .then(function (result) {
+          const response = result.data;
+          if (!response.success) error(result.data);
+          else {
+            $scope.Productos = response.data;
+            $scope.getNumberOfPages = new Array(Math.ceil($scope.Productos.length / 50));
+            productosEnCache[$scope.IdEmpresa] = response.data.map(function (p) {
+              p.name = p.Nombre.toLowerCase();
+              return p;
+            });
+            filteredProducts = productosEnCache[$scope.IdEmpresa];
+            setPagination();
+          }
+        })
+        .catch(function (result) { error(result.data); });
+    };
+
+    $scope.refrescarMisProductos = function () {
+      $scope.filter = '';
+      if (productosEnCache[$scope.IdEmpresa]) {
+        filteredProducts = productosEnCache[$scope.IdEmpresa];
+        $scope.Productos = productosEnCache[$scope.IdEmpresa];
+        setPagination();
+        return;
+      }
+      $scope.getProducts();
+    };
+
+    $scope.search = function () {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(filterProducts, 150);
+    };
+
+    $scope.OrdenarPor = function (Atributo) {
+      $scope.sortBy = Atributo;
+      $scope.reverse = !$scope.reverse;
+    };
+
+    $scope.calcularDescuento = function (product) {
+      if (product.PorcentajeDescuento && (product.PorcentajeDescuento > 0 && product.PorcentajeDescuento < 101)) {
+        product.PrecioFinal = product.PrecioNormal - (product.PrecioNormal * Number('.' + product.PorcentajeDescuento || 0));
+        product.Activo = 1;
+      } else {
+        product.PrecioFinal = '';
+        product.Activo = 0;
+      }
+    };
+
+    $scope.Actualizar = function (product) {
+      product.Activo = !product.Activo ? 0 : 1;
+      const discount = { Productos: [{ IdProducto: product.IdProducto, Activo: product.Activo }] };
+      if (product.Activo && (product.PorcentajeDescuento > 0 && product.PorcentajeDescuento < 101)) {
+        discount.Productos[0].PorcentajeDescuento = product.PorcentajeDescuento;
+        addDiscount(discount);
+      } else if (!product.Activo) addDiscount(discount);
+      else $scope.ShowToast('El descuento debe ser en un rango entre 1 y 100', 'danger');
+    };
+
+    $scope.guardarTodo = function (discount) {
+      const discounts = { Productos: [] };
+      if (discount) {
+        discounts.Productos = filteredProducts.map(function (product) {
+          return {
+            IdProducto: product.IdProducto, Activo: product.Activo, PorcentajeDescuento: discount, Activo: 1,
+          }
+        });
+        addDiscount(discounts);
+      } else $scope.ShowToast('El descuento debe ser en un rango entre 1 y 100', 'danger');
+    };
+
+    $scope.calcularPrecioVenta = function (discount) {
+      filteredProducts.forEach(function (product) {
+        product.PorcentajeDescuento = discount;
+        product.PrecioFinal = product.PrecioNormal - (product.PrecioNormal * Number('.' + product.PorcentajeDescuento || 0));
+      });
+    };
+
+    $scope.init = function () {
+      $scope.CheckCookie();
+      $scope.refrescarMisProductos();
+    };
+
+    $scope.init();
+  };
+
+  DescuentosNivelesController.$inject = ['$scope', '$location', '$cookieStore', '$routeParams', 'DescuentosNivelesFactory'];
+
+  angular.module('marketplace').controller('DescuentosNivelesController', DescuentosNivelesController);
+}());
+
+(function () {
+  var DescuentosNivelesCSController = function ($scope, $location, $cookieStore, $routeParams, NivelesDistribuidorFactory, DescuentosNivelesFactory) {
+    var IdNivelCS = Number($routeParams.IdNivel);
+    $scope.sortBy = 'Nombre';
+    $scope.reverse = false;
+    $scope.Nivel = IdNivelCS;
+    $scope.paginatedProducts = {};
+    $scope.getNumberOfPages = [1];
+    $scope.IdEmpresa = 1;
+    $scope.filter = '';
+    $scope.check;
+    $scope.currentPage = 0;
+    $scope.setCurrentPage = function (i) { $scope.currentPage = i; };
+    var productosEnCache = {};
+    let filteredProducts = [];
+    let searchTimeout;
+
+    var error = function (error) {
+      $scope.ShowToast(!error ? 'Ha ocurrido un error, intentelo mas tarde.' : error.message, 'danger');
+      $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+    };
+
+    var setPagination = function () {
+      var pages = Math.ceil(filteredProducts.length / 50);
+      $scope.paginatedProducts = {};
+      $scope.currentPage = 0;
+      $scope.getNumberOfPages = new Array(pages);
+      for (var i = 0; i < pages; i++) {
+        $scope.paginatedProducts[i] = filteredProducts.slice(i * 50, (i + 1) * 50);
+      }
+    };
+
+    var filterProducts = function () {
+      var filter = $scope.filter.toLowerCase();
+      filteredProducts = productosEnCache[$scope.IdEmpresa].filter(function (p) {
+        if (p.name.indexOf(filter) > -1) return true;
+        return false;
+      });
+      setPagination();
+      $scope.$apply();
+    };
+
+    const updateDiscounts = function (levels) {
+      return NivelesDistribuidorFactory.createLevelDiscount(levels)
+        .then(function (result) {
+          if (result.data.success === 1) {
+            $scope.ShowToast(result.data.message, 'success');
+          } else {
+            $scope.ShowToast('No se pudo actualizar el descuento, reviza que la cantidad sea un numero entero.', 'danger');
+          }
+        })
+        .catch(function (result) { error(result.data); });
+    };
+
+    $scope.deleteDiscounts = function (product) {
+      const discounts = { IdNivelCS: IdNivelCS, Productos: [] };
+      discounts.Productos = filteredProducts.map(function (product) {
+        return { IdProducto: product.IdProducto, Activo: 0 };
+      });
+      updateDiscounts(discounts)
+        .then(function () { $scope.getProducts(); });
+    };
+
+    $scope.isNumber = function (evt) {
+      evt = evt || window.event;
+      var charCode = (evt.which) ? evt.which : evt.keyCode;
+      if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+      }
+      return true;
+    };
+
+    $scope.getProducts = function () {
+      $scope.porcentaje = '';
+      NivelesDistribuidorFactory.getProductosPorNivel(IdNivelCS)
+        .then(function (result) {
+          const response = result.data;
+          if (!response.success) {
+            error(result.data);
+          } else {
+            const produtosConPrecioFinal = response.data.map(function (producto) {
+              producto.PrecioFinal = Number(((producto.PrecioNormal * (100 - producto.PorcentajeDescuento)) / 100).toFixed(2));
+              producto.Activo = producto.PorcentajeDescuento ? 1 : 0;
+              return producto;
+            });
+            $scope.Productos = produtosConPrecioFinal;
+            $scope.getNumberOfPages = new Array(Math.ceil(produtosConPrecioFinal.length / 50));
+            productosEnCache[$scope.IdEmpresa] = response.data.map(function (p) {
+              p.name = p.Nombre.toLowerCase();
+              return p;
+            });
+            filteredProducts = productosEnCache[$scope.IdEmpresa];
+            setPagination();
+          }
+        })
+        .catch(function (result) { error(result.data); });
+    };
+
+    $scope.refrescarMisProductos = function () {
+      $scope.filter = '';
+      if (productosEnCache[$scope.IdEmpresa]) {
+        filteredProducts = productosEnCache[$scope.IdEmpresa];
+        $scope.Productos = productosEnCache[$scope.IdEmpresa];
+        setPagination();
+        return;
+      }
+      $scope.getProducts();
+    };
+
+    $scope.search = function () {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(filterProducts, 150);
+    };
+
+    $scope.OrdenarPor = function (Atributo) {
+      $scope.sortBy = Atributo;
+      $scope.reverse = !$scope.reverse;
+    };
+
+    $scope.calcularDescuento = function (product) {
+      if (product.PorcentajeDescuento && (product.PorcentajeDescuento > 0 && product.PorcentajeDescuento < 101)) {
+        product.PrecioFinal = product.PrecioNormal - (product.PrecioNormal * ((product.PorcentajeDescuento || 0) * 0.01));
+        product.PrecioFinal = Number(product.PrecioFinal.toFixed(4));
+      } else product.PrecioFinal = '';
+    };
+
+    $scope.Actualizar = function (product) {
+      const Activo = product.PorcentajeDescuento > 0 && product.PorcentajeDescuento < 101;
+      if (!Activo && product.Activo) $scope.ShowToast('El descuento debe ser en un rango entre 1 y 100', 'danger');
+      else {
+        const PorcentajeDescuento = (!product.PorcentajeDescuento || product.PorcentajeDescuento === '') ? null : product.PorcentajeDescuento;
+        const request = {
+          IdNivelCS: IdNivelCS,
+          Productos: [{
+            Activo: Activo ? 1 : 0,
+            IdProducto: product.IdProducto,
+            PorcentajeDescuento: PorcentajeDescuento
+          }]
+        };
+        updateDiscounts(request);
+      }
+    };
+
+    $scope.resetDiscount = function (product) {
+      if (!product.Activo) {
+        product.PorcentajeDescuento = '';
+        product.PrecioFinal = '';
+      }
+    };
+
+    $scope.guardarTodo = function (levels) {
+      var discounts = { IdNivelCS: IdNivelCS, Productos: [] };
+      if (levels) {
+        discounts.Productos = filteredProducts.map(function (product) {
+          return {
+            IdProducto: product.IdProducto,
+            Activo: 1,
+            PorcentajeDescuento: levels
+          };
+        });
+        updateDiscounts(discounts);
+      } else $scope.ShowToast('El descuento debe ser en un rango entre 1 y 100', 'danger');
+    };
+
+    $scope.calcularPrecioVenta = function (discount) {
+      discount = discount || 100;
+      $scope.porcentaje = Number(discount.toString().replace(/[^0-9]+/g, ''));
+      filteredProducts.forEach(function (product) {
+        product.PorcentajeDescuento = discount;
+        product.PrecioFinal = product.PrecioNormal - (product.PrecioNormal * ((product.PorcentajeDescuento || 0) * 0.01));
+        product.PrecioFinal = Number(product.PrecioFinal.toFixed(4));
+        product.Activo = 1;
+      });
+    };
+
+    var obtenerNivel = function () {
+      NivelesDistribuidorFactory.getNivelesDistribuidor()
+        .then(function (result) {
+          var response = result.data;
+          if (!response.success) {
+            error(result.data);
+          } else {
+            var nivel = response.data.filter(function (nivel) {
+              return nivel.IdNivelDistribuidor === IdNivelCS;
+            }).pop().Nivel;
+            $scope.Nivel = nivel;
+          }
+        })
+        .catch(function (result) { error(result.data); });
+    };
+
+    $scope.init = function () {
+      $scope.CheckCookie();
+      $scope.refrescarMisProductos();
+      obtenerNivel();
+    };
+
+    $scope.init();
+  };
+
+  DescuentosNivelesCSController.$inject = ['$scope', '$location', '$cookieStore', '$routeParams', 'NivelesDistribuidorFactory', 'DescuentosNivelesFactory'];
+
+  angular.module('marketplace').controller('DescuentosNivelesCSController', DescuentosNivelesCSController);
 }());
 
 (function () {
@@ -3135,70 +3696,153 @@ angular.module('directives.loading', [])
 }());
 
 (function () {
-  var EmpresasRPController = function ($scope, $log, $cookieStore, $location, $uibModal, $filter, EmpresasXEmpresasFactory, $routeParams) {
+  var EmpresasRPController = function ($scope, $log, $cookieStore, $location, $uibModal, $filter, EmpresasXEmpresasFactory, NivelesDistribuidorFactory, $routeParams) {
     $scope.MostrarMensajeError = false;
-    $scope.init = function () {
-      EmpresasXEmpresasFactory.getExchangeRateByIdEmpresa($routeParams.IdEmpresa)
-        .success(function (Empresas) {
-          if (Empresas.data) {
-            $scope.Empresas = Empresas.data;
-          }
+    $scope.Empresas = [];
+    $scope.Niveles = [];
 
-        })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
+    var error = function (error) {
+      $scope.ShowToast(!error ? 'Ha ocurrido un error, intentelo mas tarde.' : error.message, 'danger');
+      $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
     };
+
+    var obtenerEmpresas = function () {
+      EmpresasXEmpresasFactory.getExchangeRateByIdEmpresa($routeParams.IdEmpresa)
+        .then(function (respuesta) {
+          var data = respuesta.data;
+          var respuestaExitosa = data.success === 1;
+          var empresas = data.data;
+          if (respuestaExitosa) {
+            var empresasConFormato = empresas.map(function (empresa) {
+              empresa.FechaActivo = new Date(empresa.FechaActivo);
+              return empresa;
+            });
+            $scope.Empresas = empresasConFormato;
+          }
+        })
+        .catch(function (result) { error(result.data); });
+    };
+
+    var obtenerNiveles = function () {
+      NivelesDistribuidorFactory.getNivelesDistribuidor()
+        .then(function (result) {
+          var response = result.data;
+          if (!response.success) {
+            error(result.data);
+          } else {
+            $scope.Niveles = response.data;
+          }
+        })
+        .catch(function (result) { error(result.data); });
+    };
+
+    $scope.init = function () {
+      obtenerEmpresas();
+      obtenerNiveles();
+    };
+
     $scope.init();
 
-    $scope.ActualizarTodos = function () {
-      console.log($scope.RPTodos > 0);
-      if (!($scope.RPTodos > 0)) {
-        return $scope.MostrarMensajeError = true;
+    $scope.asignarNivel = function (Empresa, IdNivelCS) {
+      if (IdNivelCS === '') {
+        IdNivelCS = Empresa.IdNivelCS;
       }
-      $scope.MostrarMensajeError = false;
+      var IdEmpresasXEmpresa = Empresa.IdEmpresasXEmpresa;
+      var nivel = { IdEmpresasXEmpresa: IdEmpresasXEmpresa, IdNivelCS: IdNivelCS };
+      NivelesDistribuidorFactory.asignarNivel(nivel)
+        .then(function (result) {
+          var response = result.data;
+          if (!response.success) {
+            error(result.data);
+          } else {
+            $scope.init();
+            $scope.ShowToast('Nivel asignado.', 'success');
+          }
+        })
+        .catch(function (result) { error(result.data); });
+    };
+
+    $scope.removerNivel = function (id) {
+      NivelesDistribuidorFactory.removerNivel(id)
+        .then(function (result) {
+          var response = result.data;
+          if (!response.success) {
+            error(result.data);
+          } else {
+            $scope.init();
+            $scope.ShowToast('Nivel removido.', 'success');
+          }
+        })
+        .catch(function (result) { error(result.data); });
+    };
+
+    var tipoDeCambioValido = function (tipoDeCambio) {
+      return tipoDeCambio > 0;
+    };
+
+    var actualizaTipoDeCambioATodasLasEmpresas = function () {
       $scope.Empresas = $scope.Empresas.map(function (Empresa) {
         Empresa.TipoCambioRP = $scope.RPTodos;
         return Empresa;
       });
-      
-      EmpresasXEmpresasFactory.postExchangeRate({ Empresas: $scope.Empresas })
-        .success(function (result) {
-          $scope.ShowToast('Actualizado correctamente.', 'success');
-          $scope.Empresas = result;
+    };
+
+    var prepararDatosDePeticion = function (datos) {
+      var empresas;
+      if (typeof datos.map === 'function') {
+        empresas = datos.slice();
+      } else {
+        empresas = [datos];
+      }
+      return {
+        Empresas: empresas.map(function (Empresa) {
+          return Object.assign({}, { TipoCambioRP: Number(Empresa.TipoCambioRP), IdEmpresasXEmpresa: Empresa.IdEmpresasXEmpresa });
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
+      };
+    };
+
+    $scope.ActualizarTodos = function () {
+      if (tipoDeCambioValido($scope.RPTodos)) {
+        actualizaTipoDeCambioATodasLasEmpresas();
+        var datosDePeticion = prepararDatosDePeticion($scope.Empresas);
+        EmpresasXEmpresasFactory.postExchangeRate(datosDePeticion)
+          .then(function (respuesta) {
+            var data = respuesta.data;
+            var respuestaExitosa = data.success === 1;
+            if (respuestaExitosa) {
+              $scope.ShowToast('Actualizado correctamente.', 'success');
+            } else {
+              $scope.ShowToast('Error al actualizar el tipo de cambio.', 'danger');
+            }
+          })
+          .catch(function (result) { error(result.data); });
+        $scope.MostrarMensajeError = false;
+      } else {
+        $scope.MostrarMensajeError = true;
+      }
     };
 
     $scope.ActualizarRP = function (Empresa) {
-      if (!(Empresa.TipoCambioRP > 0)) {
-        return $scope.Empresas.map(function (item) {
-          if (item.IdEmpresaUsuarioFinal === Empresa.IdEmpresaUsuarioFinal) {
-            item.MostrarMensajeError = true;
-          }
-          return item;
-        });
+      if (tipoDeCambioValido(Empresa.TipoCambioRP)) {
+        var datosDePeticion = prepararDatosDePeticion(Empresa);
+        EmpresasXEmpresasFactory.postExchangeRate(datosDePeticion)
+          .then(function (respuesta) {
+            var data = respuesta.data;
+            var respuestaExitosa = data.success === 1;
+            if (respuestaExitosa) {
+              $scope.ShowToast('Actualizado correctamente.', 'success');
+            } else {
+              $scope.ShowToast('Error al actualizar el tipo de cambio.', 'danger');
+            }
+          })
+          .catch(function (result) { error(result.data); });
+        Empresa.MostrarMensajeError = false;
+      } else {
+        Empresa.MostrarMensajeError = true;
       }
-      $scope.Empresas.map(function (item) {
-        if (item.IdEmpresaUsuarioFinal === Empresa.IdEmpresaUsuarioFinal) {
-          item.MostrarMensajeError = false;
-        }
-        return item;
-      });
-      EmpresasXEmpresasFactory.postExchangeRate({ Empresas: [Empresa] })
-        .success(function (result) {
-          $scope.ShowToast('Actualizado correctamente.', 'success');
-        })
-        .error(function (data, status, headers, config) {
-          $scope.ShowToast('Error al actualizar.', 'danger');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
     };
-
   };
-  EmpresasRPController.$inject = ['$scope', '$log', '$cookieStore', '$location', '$uibModal', '$filter', 'EmpresasXEmpresasFactory', '$routeParams'];
+  EmpresasRPController.$inject = ['$scope', '$log', '$cookieStore', '$location', '$uibModal', '$filter', 'EmpresasXEmpresasFactory', 'NivelesDistribuidorFactory', '$routeParams'];
 
   angular.module('marketplace').controller('EmpresasRPController', EmpresasRPController);
 }());
@@ -3866,6 +4510,79 @@ angular.module('directives.loading', [])
 }());
 
 (function () {
+  var NivelesClienteFinalController = function ($scope, $location, $cookieStore, NivelesClienteFinalFactory) {
+    $scope.sortBy = 'Nivel';
+    $scope.reverse = false;
+    $scope.Nivel = {};
+    $scope.levels = [];
+    $scope.newLevel = "";
+    $scope.session = $cookieStore.get('Session');
+
+    const getLevels = function() {
+      NivelesClienteFinalFactory.getLevels()
+        .then(function(result) { 
+          $scope.levels = result.data.data;
+        })
+        .catch(function(result) {
+          $scope.ShowToast(!result.data ? 'Ha ocurrido un error, intentelo mas tarde.' : result.data.message, 'danger');
+        });
+    };
+
+    $scope.init = function() {
+      $scope.CheckCookie();
+      getLevels();
+    };
+
+    $scope.init();
+
+    $scope.OrdenarPor = function(Atributo) {
+      $scope.sortBy = Atributo;
+      $scope.reverse = !$scope.reverse;
+    };
+
+    $scope.deleteLevel = function(level) {
+      NivelesClienteFinalFactory.deleteLevel(level.IdNivelEmpresaUsuarioFinal)
+        .then(function(result) {
+          $scope.levels.forEach(function(property, index) {
+            if (property.IdNivelEmpresaUsuarioFinal === level.IdNivelEmpresaUsuarioFinal) {
+              $scope.levels.splice(index, 1);
+            }
+          });
+          return result;
+        })
+        .then(function(result) { $scope.ShowToast(result.data.message, 'success')})
+        .catch(function(result) {
+          $scope.ShowToast(!result.data ? 'Ha ocurrido un error, intentelo mas tarde.' : result.data.message, 'danger');
+        });
+    };
+
+    $scope.addLevel = function(level) {
+      const enterpriseId = $scope.session.IdEmpresa;
+      const newLevel = { IdEmpresaDistribuidor: enterpriseId, Nivel: level };
+      NivelesClienteFinalFactory.addLevel(newLevel)
+        .then(function(result) {
+          $scope.ShowToast(result.data.message, 'success');
+          $scope.newLevel = "";
+          $scope.init();
+        })
+        .catch(function(result) {
+          $scope.ShowToast(!data ? 'Ha ocurrido un error, intentelo mas tarde.' : result.data.message, 'danger');
+        });
+    }
+
+    $scope.addDiscount = function(level) {
+      $cookieStore.put('nivel', level.Nivel);
+      $location.path('/Niveles/Distribuidor/' + level.IdNivelEmpresaUsuarioFinal + '/Descuentos');
+    };
+    
+  };
+
+  NivelesClienteFinalController.$inject = ['$scope', '$location', '$cookieStore', 'NivelesClienteFinalFactory'];
+
+  angular.module('marketplace').controller('NivelesClienteFinalController', NivelesClienteFinalController);
+}());
+
+(function () {
   var NivelesReadController = function ($scope, $log, $location, $cookieStore, NivelesDistribuidorFactory) {
     $scope.sortBy = 'Nivel';
     $scope.reverse = false;
@@ -3932,6 +4649,11 @@ angular.module('directives.loading', [])
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
     };
+    
+    $scope.configurarNivel = function (nivel) {
+      var path = '/Niveles/' + nivel.IdNivelDistribuidor + '/Productos';
+      $location.path(path);
+    };
   };
 
   NivelesReadController.$inject = ['$scope', '$log', '$location', '$cookieStore', 'NivelesDistribuidorFactory'];
@@ -3944,52 +4666,58 @@ angular.module('directives.loading', [])
     $scope.currentPath = $location.path();
     $scope.PedidoDetalles = {};
     $scope.Distribuidor = {};
+    $scope.error = false;
 
-    $scope.prepararPedidos = function () {
-      PedidoDetallesFactory.getPrepararCompra(true)
-        .success(function (listo) {
-          if (listo.success === 1) {
-            PedidoDetallesFactory.getPedidoDetalles()
-              .success(function (PedidoDetalles) {
-                if (PedidoDetalles.success === 1) {
-                  $scope.PedidoDetalles = PedidoDetalles.data[0];
-                } else {
-                  $scope.ShowToast(PedidoDetalles.message, 'danger');
-                }
-              })
-              .error(function (data, status, headers, config) {
-                $location.path("/Carrito/e");
-                $scope.ShowToast('No pudimos cargar tu información, por favor intenta de nuevo más tarde.', 'danger');
-                $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-              });
+    const error = function (message) {
+      $scope.ShowToast(!message ? 'Ha ocurrido un error, intentelo mas tarde.' : message, 'danger');
+      $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+    };
 
-            EmpresasFactory.getEmpresas()
-              .success(function (data) {
-                $scope.Distribuidor = data[0];
-              })
-              .error(function (data, status, headers, config) {
-                $scope.ShowToast('No pudimos cargar los datos de tu empresa, por favor intenta de nuevo más tarde', 'danger');
-                $location.path("/Carrito/e");
-                $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-              });
-
-            $scope.ShowToast(listo.message, 'success');
-          } else {
-            $scope.ShowToast(listo.message, 'danger');
-            $location.path("/Carrito/e");
-          }
+    const getOrderDetails = function () {
+      return PedidoDetallesFactory.getPedidoDetalles()
+        .then(function (result) {
+          if (result.data.success) $scope.PedidoDetalles = result.data.data;
+          $scope.PedidoDetalles.forEach(function (elem) {
+            elem.Productos.forEach(function (item) {
+              if (item.PrecioUnitario == null) $scope.error = true;
+            });
+          });
+          if ($scope.error) $location.path('/Productos');
         })
-        .error(function (data, status, headers, config) {
-          $location.path("/Carrito/e");
-          $scope.ShowToast('No pudimos cargar tu información, por favor intenta de nuevo más tarde.', 'danger');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(function (result) {
+          $location.path('/Carrito/e');
+          error('No pudimos cargar tu información, por favor intenta de nuevo más tarde.');
         });
     };
 
-    $scope.init = function () {
-      if ($scope.currentPath == '/Comprar') {
-        $scope.CheckCookie();
+    const getEnterprises = function () {
+      return EmpresasFactory.getEmpresas()
+        .then(function (result) {
+          $scope.Distribuidor = result.data[0];
+        })
+        .catch(function (result) {
+          error('No pudimos cargar los datos de tu empresa, por favor intenta de nuevo más tarde');
+          $location.path('/Carrito/e');
+        });
+    };
 
+    $scope.prepararPedidos = function () {
+      PedidoDetallesFactory.getPrepararCompra(1)
+        .then(function (result) {
+          if (result.data.success) $scope.ShowToast(result.data.message, 'success');
+          else {
+            $scope.ShowToast(result.data.message, 'danger');
+            $location.path('/Carrito/e');
+          }
+        })
+        .then(getOrderDetails)
+        .then(getEnterprises)
+        .catch(function (result) { error(result.data.message); });
+    };
+
+    $scope.init = function () {
+      if ($scope.currentPath === '/Comprar') {
+        $scope.CheckCookie();
         $scope.prepararPedidos();
       }
     };
@@ -3997,108 +4725,73 @@ angular.module('directives.loading', [])
     $scope.init();
 
     $scope.ActualizarFormaPago = function (IdFormaPago) {
-      var empresa = { 'IdFormaPagoPredilecta': IdFormaPago };
-
+      var empresa = { IdFormaPagoPredilecta: IdFormaPago };
       EmpresasFactory.putEmpresaFormaPago(empresa)
-        .success(function (actualizacion) {
-
-          if (actualizacion.success === 1) {
-            $scope.ShowToast(actualizacion.message, 'success');
+        .then(function (result) {
+          if (result.data.success) {
+            $scope.ShowToast(result.data.message, 'success');
             $scope.init();
-          }
-          else {
-            $scope.ShowToast(PedidoDetalleResult.message, 'danger');
-          }
+          } else $scope.ShowToast(result.data.message, 'danger');
         })
-        .error(function (data, status, headers, config) {
-          $scope.ShowToast('No pudimos actualizar tu forma de pago. Intenta de nuevo más tarde.', 'danger');
-
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
+        .catch(function (result) { error(result.data); });
     };
 
     $scope.calcularSubTotal = function (IdPedido) {
-      var total = 0;
-
-      for (var i = 0; $scope.PedidoDetalles.length > i; i++) {
-        if ($scope.PedidoDetalles[i].IdPedido == IdPedido) {
-          if ($scope.PedidoDetalles[i].PrimeraCompraMicrosoft === 0)
-          { total = total + ($scope.PedidoDetalles[i].PrecioUnitario * $scope.PedidoDetalles[i].Cantidad); }
-        }
-      }
-
+      let total = 0;
+      $scope.PedidoDetalles.forEach(function (order) {
+        order.Productos.forEach(function (product) {
+          if (order.IdPedido === IdPedido && !product.PrimeraCompraMicrosoft) {
+            total = total + (product.PrecioUnitario * product.Cantidad);
+          }
+        });
+      });
       return total;
     };
 
     $scope.calcularIVA = function (IdPedido) {
-      var total = 0;
-
-      for (var i = 0; $scope.PedidoDetalles.length > i; i++) {
-        if ($scope.PedidoDetalles[i].IdPedido == IdPedido) {
-          if ($scope.PedidoDetalles[i].PrimeraCompraMicrosoft === 0)
-          { total = total + ($scope.PedidoDetalles[i].PrecioUnitario * $scope.PedidoDetalles[i].Cantidad); }
-        }
-      }
-
-      if ($scope.Distribuidor.ZonaImpuesto == 'Normal') { total = .16 * total; }
-      if ($scope.Distribuidor.ZonaImpuesto == 'Nacional') { total = .16 * total; }
-      if ($scope.Distribuidor.ZonaImpuesto == 'Frontera') { total = .11 * total; }
-
+      let total = $scope.calcularSubTotal(IdPedido);
+      if ($scope.Distribuidor.ZonaImpuesto === 'Normal') total = 0.16 * total;
+      if ($scope.Distribuidor.ZonaImpuesto === 'Nacional') total = 0.16 * total;
+      if ($scope.Distribuidor.ZonaImpuesto === 'Frontera') total = 0.11 * total;
       return total;
     };
 
     $scope.calcularTotal = function (IdPedido) {
-      var total = 0;
-
-      for (var i = 0; $scope.PedidoDetalles.length > i; i++) {
-        if ($scope.PedidoDetalles[i].IdPedido == IdPedido) {
-          if ($scope.PedidoDetalles[i].PrimeraCompraMicrosoft === 0) {
-            total = total + ($scope.PedidoDetalles[i].PrecioUnitario * $scope.PedidoDetalles[i].Cantidad);
-          }
-        }
-      }
-
-      var iva = 0;
-
-      if ($scope.Distribuidor.ZonaImpuesto == 'Normal') { iva = .16 * total; }
-      if ($scope.Distribuidor.ZonaImpuesto == 'Nacional') { iva = .16 * total; }
-      if ($scope.Distribuidor.ZonaImpuesto == 'Frontera') { iva = .11 * total; }
-
+      let total = $scope.calcularSubTotal(IdPedido);
+      let iva = 0;
+      if ($scope.Distribuidor.ZonaImpuesto === 'Normal') iva = 0.16 * total;
+      if ($scope.Distribuidor.ZonaImpuesto === 'Nacional') iva = 0.16 * total;
+      if ($scope.Distribuidor.ZonaImpuesto === 'Frontera') iva = 0.11 * total;
       total = total + iva;
-
       return total;
     };
 
-    $scope.Atras = function () {
-      $location.path("/Carrito");
+    $scope.back = function () {
+      $location.path('/Carrito');
     };
 
     $scope.PagarTarjeta = function () {
       if ($scope.Distribuidor.IdFormaPagoPredilecta === 1) {
-
         PedidoDetallesFactory.getPrepararTarjetaCredito()
           .success(function (Datos) {
             var expireDate = new Date();
-            expireDate.setTime(expireDate.getTime() + 600 * 2000); /*20 minutos*/
-            $cookieStore.put('pedidosAgrupados', Datos.data["0"].pedidosAgrupados, { 'expires': expireDate });
+            expireDate.setTime(expireDate.getTime() + 600 * 2000); /* 20 minutos */
+            $cookieStore.put('pedidosAgrupados', Datos.data['0'].pedidosAgrupados, { 'expires': expireDate });
 
-            if (Datos.data["0"].total > 0) {
-
+            if (Datos.data['0'].total > 0) {
               if (Datos.success) {
-
                 if ($cookieStore.get('pedidosAgrupados')) {
-
                   Checkout.configure({
-                    merchant: Datos.data["0"].merchant,
-                    session: { id: Datos.data["0"].session_id },
+                    merchant: Datos.data['0'].merchant,
+                    session: { id: Datos.data['0'].session_id },
                     order:
                     {
                       amount: function () {
-                        Datos.data["0"].total;
+                        Datos.data['0'].total;
                       },
-                      currency: Datos.data["0"].moneda,
+                      currency: Datos.data['0'].moneda,
                       description: 'Pago tarjeta bancaria',
-                      id: Datos.data["0"].pedidos,
+                      id: Datos.data['0'].pedidos
                     },
                     interaction:
                     {
@@ -4121,23 +4814,17 @@ angular.module('directives.loading', [])
                       theme: 'default'
                     }
                   });
-
                   Checkout.showLightbox();
-
                 } else {
                   $scope.ShowToast('No pudimos comenzar con tu proceso de pago, favor de intentarlo una vez más.', 'danger');
                 }
-
               } else {
                 $scope.ShowToast('Algo salio mal con el pago con tarjeta bancaria, favor de intentarlo una vez más.', 'danger');
               }
-            }
-            else {
-              $scope.pedidosAgrupados = Datos.data["0"].pedidosAgrupados;
-
+            } else {
+              $scope.pedidosAgrupados = Datos.data['0'].pedidosAgrupados;
               $scope.ComprarConTarjeta('Grátis', 'Grátis');
             }
-
           })
           .error(function (data, status, headers, config) {
             $scope.ShowToast('Error al obtener el tipo de cambio API Intelisis.', 'danger');
@@ -4156,10 +4843,10 @@ angular.module('directives.loading', [])
               $scope.ShowToast(compra.message, 'success');
 
               $scope.ActualizarMenu();
-              $location.path("/");
+              $location.path('/');
             }
             else {
-              $location.path("/Carrito");
+              $location.path('/Carrito');
               $scope.ShowToast(compra.message, 'danger');
             }
           })
@@ -4170,14 +4857,13 @@ angular.module('directives.loading', [])
     };
 
     $scope.ComprarConTarjeta = function (resultIndicator, sessionVersion) {
-
       var datosTarjeta = { 'TarjetaResultIndicator': resultIndicator, 'TarjetaSessionVersion': sessionVersion, 'PedidosAgrupados': $cookieStore.get('pedidosAgrupados') };
 
       if (datosTarjeta.PedidosAgrupados) {
         if (datosTarjeta.PedidosAgrupados[0].Renovacion) {
           PedidosFactory.patchPaymentInformation(datosTarjeta)
             .success(function (compra) {
-              $cookieStore.remove("pedidosAgrupados");
+              $cookieStore.remove('pedidosAgrupados');
               if (compra.success === 1) {
                 $scope.ShowToast(compra.message, 'success');
                 $location.path('/MonitorPagos/refrescar');
@@ -4189,7 +4875,7 @@ angular.module('directives.loading', [])
         } else {
           PedidosFactory.putPedido(datosTarjeta)
             .success(function (putPedidoResult) {
-              $cookieStore.remove("pedidosAgrupados");
+              $cookieStore.remove('pedidosAgrupados');
               if (putPedidoResult.success) {
                 PedidoDetallesFactory.getComprar()
                   .success(function (compra) {
@@ -4212,7 +4898,7 @@ angular.module('directives.loading', [])
               }
             })
             .error(function (data, status, headers, config) {
-              $cookieStore.remove("pedidosAgrupados");
+              $cookieStore.remove('pedidosAgrupados');
               $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
             });
         }
@@ -4885,282 +5571,203 @@ angular.module('directives.loading', [])
 (function () {
   var PedidoDetallesReadController = function ($scope, $log, $location, $cookieStore, PedidoDetallesFactory, TipoCambioFactory, EmpresasXEmpresasFactory, EmpresasFactory, PedidosFactory, $routeParams) {
     $scope.CreditoValido = 1;
+    $scope.error = false;
     $scope.Distribuidor = {};
-    var error = $routeParams.error;
 
-    $scope.validarCarrito = function () {
-      PedidoDetallesFactory.getValidarCarrito()
-        .success(function (validacion) {
-          if (validacion.success === 1) {
-            for (var j = 0; j < $scope.PedidoDetalles.length; j++) {
-              if ($scope.Distribuidor.IdFormaPagoPredilecta === 1 && $scope.PedidoDetalles[j].MonedaPago !== 'Pesos') {
+    const error = function (error) {
+      $scope.ShowToast(!error ? 'Ha ocurrido un error, intentelo mas tarde.' : error.message, 'danger');
+      $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+    };
+
+    const getEnterprises = function () {
+      return EmpresasFactory.getEmpresas()
+        .then(function (result) {
+          $scope.Distribuidor = result.data[0];
+        })
+        .catch(function (result) {
+          error(result.data);
+          $location.path('/Productos');
+        });
+    };
+
+    const getOrderDetails = function (validate) {
+      return PedidoDetallesFactory.getPedidoDetalles()
+        .then(function (result) {
+          if (result.data.success) {
+            $scope.PedidoDetalles = result.data.data;
+            $scope.PedidoDetalles.forEach(function (elem) {
+              elem.Productos.forEach(function (item) {
+                if (item.PrecioUnitario == null) $scope.error = true;
+              });
+            });
+            if ($scope.error) {
+              $scope.ShowToast('Ocurrio un error al procesar sus productos del carrito. Favor de contactar a soporte de CompuSoluciones.', 'danger');
+            }
+            if (!validate) $scope.ValidarFormaPago();
+          } else {
+            $scope.ShowToast(result.data.message, 'danger');
+            $location.path('/Productos');
+          }
+        })
+        .then(validarCarrito)
+        .catch(function (result) { error(result.data); });
+    };
+
+    const validarCarrito = function () {
+      return PedidoDetallesFactory.getValidarCarrito()
+        .then(function (result) {
+          if (result.data.success) {
+            $scope.PedidoDetalles.forEach(function (item) {
+              if ($scope.Distribuidor.IdFormaPagoPredilecta === 1 && item.MonedaPago !== 'Pesos') {
                 $scope.ShowToast('Para pagar con tarjeta bancaria es necesario que los pedidos estén en pesos MXN. Actualiza tu forma de pago o cambia de moneda en los pedidos agregándolos una vez más.', 'danger');
               }
-
               $scope.CreditoValido = 1;
-              $scope.PedidoDetalles[j].TieneCredito = 1;
-
-              for (var i = 0; i < validacion.data[0].length; i++) {
-                if ($scope.PedidoDetalles[j].IdEmpresaUsuarioFinal === validacion.data[0][i].IdEmpresaUsuarioFinal && validacion.data[0][i].TieneCredito === 0) {
+              item.hasCredit = 1;
+              result.data.data.forEach(function (user) {
+                if (item.IdEmpresaUsuarioFinal === user.IdEmpresaUsuarioFinal && !user.hasCredit) {
                   $scope.CreditoValido = 0;
-                  $scope.PedidoDetalles[j].TieneCredito = 0;
+                  item.hasCredit = 0;
                 }
-              }
-            }
+              });
+            });
           } else {
             $scope.ShowToast('No pudimos validar tu carrito de compras, por favor intenta de nuevo.', 'danger');
             $location.path('/Productos');
           }
         })
-        .error(function (data, status, headers, config) {
-          $scope.ShowToast('No pudimos validar tu carrito de compras, por favor intenta de nuevo.', 'danger');
+        .catch(function (result) {
+          error(result.data);
           $location.path('/Productos');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
     };
 
     $scope.init = function () {
       $scope.CheckCookie();
-      PedidoDetallesFactory.getPrepararCompra(false)
-        .success(function (PedidoDetalles) {
-          PedidoDetallesFactory.getPedidoDetalles()
-            .success(function (PedidoDetalles) {
-              if (PedidoDetalles.success === 1) {
-                $scope.PedidoDetalles = PedidoDetalles.data[0];
-                $scope.validarCarrito();
-                $scope.ValidarFormaPago();
-              } else {
-                $scope.ShowToast(PedidoDetalles.message, 'danger');
-                $location.path('/Productos');
-              }
-
-              EmpresasFactory.getEmpresas()
-                .success(function (data) {
-                  $scope.Distribuidor = data[0];
-                })
-                .error(function (data, status, headers, config) {
-                  $scope.ShowToast('No pudimos cargar los datos de tu empresa, por favor intenta de nuevo más tarde', 'danger');
-                  $location.path('/Productos');
-                  $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-                });
-            })
-            .error(function (data, status, headers, config) {
-              $scope.ShowToast('No pudimos cargar la información del pedido, por favor intenta de nuevo más tarde.', 'danger');
-              $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-            });
-        })
-        .error(function (data, status, headers, config) {
-          $scope.ShowToast('No pudimos preparar tu información, por favor intenta de nuevo más tarde.', 'danger');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
+      PedidoDetallesFactory.getPrepararCompra(0)
+        .then(getEnterprises)
+        .then(getOrderDetails)
+        .catch(function (result) { error(result.data); });
     };
 
     $scope.init();
 
     $scope.QuitarProducto = function (PedidoDetalle) {
-      $scope.PedidoDetalles.forEach(function (Elemento, Index) {
-        if (Elemento.IdPedidoDetalle === PedidoDetalle.IdPedidoDetalle) {
-          $scope.PedidoDetalles.splice(Index, 1);
-          $scope.validarCarrito();
-          return false;
-        }
+      $scope.PedidoDetalles.forEach(function (order, indexOrder) {
+        order.Productos.forEach(function (product, indexProduct) {
+          if (product.IdPedidoDetalle === PedidoDetalle.IdPedidoDetalle) {
+            $scope.PedidoDetalles[indexOrder].Productos.splice(indexProduct, 1);
+            validarCarrito();
+          }
+          if ($scope.PedidoDetalles[indexOrder].Productos.length === 0) $scope.PedidoDetalles.splice(indexOrder, 1);
+        });
       });
 
       PedidoDetallesFactory.deletePedidoDetalles(PedidoDetalle.IdPedidoDetalle)
         .success(function (PedidoDetalleResult) {
-          if (PedidoDetalleResult.success === 0) {
+          if (!PedidoDetalleResult.success) {
             $scope.ShowToast(PedidoDetalleResult.message, 'danger');
-            PedidoDetallesFactory.getPedidoDetalles()
-              .success(function (PedidoDetalles) {
-                if (PedidoDetalles.success === 1) {
-                  $scope.PedidoDetalles = PedidoDetalles.data[0];
-                  $scope.validarCarrito();
-                } else {
-                  $scope.ShowToast(PedidoDetalles.message, 'danger');
-                  $location.path('/Productos');
-                }
-              })
-              .error(function (data, status, headers, config) {
-                $scope.ShowToast('No pudimos cargar tu información, por favor intenta de nuevo más tarde.', 'danger');
-                $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-              });
+            getOrderDetails(true);
           } else {
             $scope.ActualizarMenu();
-            $scope.validarCarrito();
+            validarCarrito();
             $scope.ShowToast(PedidoDetalleResult.message, 'success');
           }
         })
         .error(function (data, status, headers, config) {
           $scope.ShowToast('No pudimos quitar el producto seleccionado. Intenta de nuevo más tarde.', 'danger');
-
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
     };
 
     $scope.ActualizarCodigo = function (value) {
-      PedidosFactory.putCodigoPromocion(value[0])
-        .success(function (resultado) {
+      const order = {
+        CodigoPromocion: value.CodigoPromocion,
+        IdPedido: value.IdPedido
+      };
+      PedidosFactory.putCodigoPromocion(order)
+        .then(function (result) {
           $scope.init();
-          $scope.ShowToast(resultado.message, 'success');
+          $scope.ShowToast(result.data.message, 'success');
         })
-        .error(function (data, status, headers, config) {
-          $scope.ShowToast('No pudimos cargar tu información, por favor intenta de nuevo más tarde.', 'danger');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
+        .catch(function (result) { error(result.data); });
     };
 
     $scope.ValidarFormaPago = function () {
-      var Disabled = false;
-
+      var disabled = false;
       if ($scope.PedidoDetalles) {
-        for (var i = 0; i < $scope.PedidoDetalles.length; i++) {
-          var producto = $scope.PedidoDetalles[i];
-
-          if (producto.IdTipoProducto === 3) {
-            Disabled = true;
-          }
-        }
+        $scope.PedidoDetalles.forEach(function (order) {
+          order.Productos.forEach(function (product) {
+            if (product.IdTipoProducto === 3) {
+              disabled = true;
+              $scope.Distribuidor.IdFormaPago = 2;
+            }
+          });
+        });
       }
-
-      if (Disabled === true) {
-        $scope.Distribuidor.IdFormaPago = 2;
-      }
-
-      return Disabled;
+      return disabled;
     };
 
     $scope.ActualizarFormaPago = function (IdFormaPago) {
-      var empresa = {
-        'IdFormaPagoPredilecta': IdFormaPago
-      };
-
+      var empresa = { IdFormaPagoPredilecta: IdFormaPago };
       EmpresasFactory.putEmpresaFormaPago(empresa)
-        .success(function (actualizacion) {
-          if (actualizacion.success === 1) {
-            $scope.ShowToast(actualizacion.message, 'success');
-
-            PedidoDetallesFactory.getPedidoDetalles()
-              .success(function (PedidoDetalles) {
-                if (PedidoDetalles.success === 1) {
-                  $scope.PedidoDetalles = PedidoDetalles.data[0];
-                  $scope.validarCarrito();
-                } else {
-                  $scope.ShowToast(PedidoDetalles.message, 'danger');
-                  $location.path('/Productos');
-                }
-              })
-              .error(function (data, status, headers, config) {
-                $scope.ShowToast('No pudimos cargar tu información, por favor intenta de nuevo más tarde.', 'danger');
-                $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-              });
-          } else {
-            $scope.ShowToast(actualizacion.message, 'danger');
-          }
+        .then(function (result) {
+          if (result.data.success) {
+            $scope.ShowToast(result.data.message, 'success');
+            getOrderDetails();
+          } else $scope.ShowToast(result.data.message, 'danger');
         })
-        .error(function (data, status, headers, config) {
-          $scope.ShowToast('No pudimos actualizar tu forma de pago. Intenta de nuevo más tarde.', 'danger');
+        .catch(function (result) { error(result.data); });
+    };
 
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
+    $scope.modificarContratoBase = function (IdProducto, IdPedidoDetalle) {
+      $location.path('/autodesk/productos/' + IdProducto + '/detalle/' + IdPedidoDetalle);
     };
 
     $scope.calcularSubTotal = function (IdPedido) {
-      var total = 0;
-
-      for (var i = 0; $scope.PedidoDetalles.length > i; i++) {
-        if ($scope.PedidoDetalles[i].IdPedido == IdPedido) {
-          if ($scope.PedidoDetalles[i].PrimeraCompraMicrosoft == 0) {
-            total = total + ($scope.PedidoDetalles[i].PrecioUnitario * $scope.PedidoDetalles[i].Cantidad);
-            
+      let total = 0;
+      $scope.PedidoDetalles.forEach(function (order) {
+        order.Productos.forEach(function (product) {
+          if (order.IdPedido === IdPedido && !product.PrimeraCompraMicrosoft) {
+            total = total + (product.PrecioUnitario * product.Cantidad);
           }
-        }
-      }
-      
+        });
+      });
       return total;
     };
 
     $scope.calcularIVA = function (IdPedido) {
-      var total = 0;
-
-      for (var i = 0; $scope.PedidoDetalles.length > i; i++) {
-        if ($scope.PedidoDetalles[i].IdPedido == IdPedido) {
-          if ($scope.PedidoDetalles[i].PrimeraCompraMicrosoft === 0) {
-            total = total + ($scope.PedidoDetalles[i].PrecioUnitario * $scope.PedidoDetalles[i].Cantidad);
-          }
-        }
-      }
-
-      if ($scope.Distribuidor.ZonaImpuesto == 'Normal') {
-        total = .16 * total;
-      }
-      if ($scope.Distribuidor.ZonaImpuesto == 'Nacional') {
-        total = .16 * total;
-      }
-      if ($scope.Distribuidor.ZonaImpuesto == 'Frontera') {
-        total = .11 * total;
-      }
-
+      let total = $scope.calcularSubTotal(IdPedido);
+      if ($scope.Distribuidor.ZonaImpuesto === 'Normal') total = 0.16 * total;
+      if ($scope.Distribuidor.ZonaImpuesto === 'Nacional') total = 0.16 * total;
+      if ($scope.Distribuidor.ZonaImpuesto === 'Frontera') total = 0.11 * total;
       return total;
     };
 
     $scope.calcularTotal = function (IdPedido) {
-      var total = 0;
-
-      for (var i = 0; $scope.PedidoDetalles.length > i; i++) {
-        if ($scope.PedidoDetalles[i].IdPedido == IdPedido) {
-          if ($scope.PedidoDetalles[i].PrimeraCompraMicrosoft === 0) {
-            total = total + ($scope.PedidoDetalles[i].PrecioUnitario * $scope.PedidoDetalles[i].Cantidad);
-          }
-        }
-      }
-
-      var iva = 0;
-
-      if ($scope.Distribuidor.ZonaImpuesto == 'Normal') {
-        iva = .16 * total;
-      }
-      if ($scope.Distribuidor.ZonaImpuesto == 'Nacional') {
-        iva = .16 * total;
-      }
-      if ($scope.Distribuidor.ZonaImpuesto == 'Frontera') {
-        iva = .11 * total;
-      }
-
+      let total = $scope.calcularSubTotal(IdPedido);
+      let iva = 0;
+      if ($scope.Distribuidor.ZonaImpuesto === 'Normal') iva = 0.16 * total;
+      if ($scope.Distribuidor.ZonaImpuesto === 'Nacional') iva = 0.16 * total;
+      if ($scope.Distribuidor.ZonaImpuesto === 'Frontera') iva = 0.11 * total;
       total = total + iva;
-
       return total;
     };
 
-    $scope.Siguiente = function () {
-      $scope.validarCarrito();
-
-      var IrSiguiente = true;
-
-      if ($scope.PedidoDetalles) {
-        if ($scope.PedidoDetalles.length === 0) {
-          IrSiguiente = false;
-        }
-
-        for (var i = 0; i < $scope.PedidoDetalles.length; i++) {
-          var pedido = $scope.PedidoDetalles[i];
-
-          if (pedido.Cantidad <= 0) {
-            IrSiguiente = false;
-          }
-
-          if (!pedido.IdEmpresaUsuarioFinal) {
-            IrSiguiente = false;
-          }
-        }
-      } else {
-        IrSiguiente = false;
+    $scope.next = function () {
+      if ($scope.Distribuidor.IdFormaPagoPredilecta === 2) validarCarrito();
+      let next = true;
+      if (!$scope.PedidoDetalles || $scope.PedidoDetalles.length === 0) next = false;
+      else {
+        $scope.PedidoDetalles.forEach(function (order) {
+          if (!order.IdEmpresaUsuarioFinal) next = false;
+          order.Productos.forEach(function (product) {
+            if (product.Cantidad <= 0) next = false;
+          });
+        });
       }
-
-      if (IrSiguiente === false) {
+      if (!next) {
         $scope.ShowToast('Revisa que tengas al menos un producto y que tenga un cliente seleccionado con crédito válido.', 'warning');
-      } else {
-        $location.path('/Comprar');
-      }
+      } else $location.path('/Comprar');
     };
 
     $scope.IniciarTourCarrito = function () {
@@ -5171,7 +5778,7 @@ angular.module('directives.loading', [])
           placement: 'rigth',
           title: 'Forma de pago del distribuidor',
           content: 'Selecciona la forma de pago predilecta para tu empresa, esta es una configuración única para toda la compañia. Si seleccionas pago con tarjeta bancaria tendrás que tener tus pedidos en pesos MXN, si requieres pagar en dolares USD podrás utilizar crédito CompuSoluciones.',
-          template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>",
+          template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>"
         }],
 
         backdrop: true,
@@ -5186,7 +5793,8 @@ angular.module('directives.loading', [])
   PedidoDetallesReadController.$inject = ['$scope', '$log', '$location', '$cookieStore', 'PedidoDetallesFactory', 'TipoCambioFactory', 'EmpresasXEmpresasFactory', 'EmpresasFactory', 'PedidosFactory', '$routeParams'];
 
   angular.module('marketplace').controller('PedidoDetallesReadController', PedidoDetallesReadController);
-} ());
+}());
+
 (function () {
   var PedidoDetallesUFReadController = function ($scope, $log, $location, $cookieStore, ComprasUFFactory, EmpresasFactory, $routeParams) {
     $scope.currentDistribuidor = $cookieStore.get('currentDistribuidor');
@@ -5277,6 +5885,20 @@ angular.module('directives.loading', [])
 }());
 
 (function () {
+  var PowerBIReadController = function ($scope, $log, $cookieStore, $location, $uibModal, $filter, PedidoDetallesFactory, $routeParams) {
+
+    $scope.init = function () {
+
+    };
+    $scope.init();
+  };
+
+  PowerBIReadController.$inject = ['$scope', '$log', '$cookieStore', '$location', '$uibModal', '$filter', 'PedidoDetallesFactory', '$routeParams'];
+
+  angular.module('marketplace').controller('PowerBIReadController', PowerBIReadController);
+}());
+
+(function () {
   var ProductoGuardadosReadController = function ($scope, $log, $location, $cookieStore, ProductoGuardadosFactory, PedidoDetallesFactory) {
 
     $scope.sortBy = 'Nombre';
@@ -5354,17 +5976,40 @@ angular.module('directives.loading', [])
 }());
 
 (function () {
-  var PowerBIReadController = function ($scope, $log, $cookieStore, $location, $uibModal, $filter, PedidoDetallesFactory, $routeParams) {
-
+  var ConfigurarBaseController = function ($scope, $log, $location, $cookieStore, $routeParams, ProductosFactory, FabricantesFactory, TiposProductosFactory, PedidoDetallesFactory, TipoCambioFactory, ProductoGuardadosFactory, EmpresasXEmpresasFactory) {
+    var IdProducto = $routeParams.IdProducto;
+    var IdPedidoDetalle = $routeParams.IdPedidoDetalle;
     $scope.init = function () {
-
+      ProductosFactory.getBaseSubscription(IdProducto)
+        .then(function (result) {
+          $scope.suscripciones = result.data.data;
+          console.log($scope.suscripciones);
+          console.log(result);
+        })
+        .catch(console.log);
     };
+
     $scope.init();
+
+    $scope.actualizarBase = function (IdPedidoDetalleBase) {
+      ProductosFactory.putBaseSubscription({ IdPedidoDetalle: IdPedidoDetalle, IdPedidoDetalleBase: IdPedidoDetalleBase })
+        .then(function (resultadoUpdate) {
+          if (resultadoUpdate.data.success) {
+            $scope.ShowToast(resultadoUpdate.data.message, 'success');
+            $location.path('/Carrito');
+          } else {
+            $scope.ShowToast(resultadoUpdate.data.message, 'danger');
+          }
+        })
+        .catch(console.log);
+    };
+
+
   };
 
-  PowerBIReadController.$inject = ['$scope', '$log', '$cookieStore', '$location', '$uibModal', '$filter', 'PedidoDetallesFactory', '$routeParams'];
+  ConfigurarBaseController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$routeParams', 'ProductosFactory', 'FabricantesFactory', 'TiposProductosFactory', 'PedidoDetallesFactory', 'TipoCambioFactory', 'ProductoGuardadosFactory', 'EmpresasXEmpresasFactory'];
 
-  angular.module('marketplace').controller('PowerBIReadController', PowerBIReadController);
+  angular.module('marketplace').controller('ConfigurarBaseController', ConfigurarBaseController);
 }());
 
 (function () {
@@ -5570,7 +6215,7 @@ angular.module('directives.loading', [])
 } ());
 
 (function () {
-  var ProductosReadController = function ($scope, $log, $location, $cookieStore, $routeParams, ProductosFactory, FabricantesFactory, TiposProductosFactory, PedidoDetallesFactory, TipoCambioFactory, ProductoGuardadosFactory, EmpresasXEmpresasFactory, $anchorScroll) {
+  var ProductosReadController = function ($scope, $log, $location, $cookieStore, $routeParams, ProductosFactory, FabricantesFactory, TiposProductosFactory, PedidoDetallesFactory, TipoCambioFactory, ProductoGuardadosFactory, EmpresasXEmpresasFactory, UsuariosFactory, $anchorScroll) {
     var BusquedaURL = $routeParams.Busqueda;
     $scope.BuscarProductos = {};
     $scope.Pagina = 0;
@@ -5580,6 +6225,8 @@ angular.module('directives.loading', [])
     $scope.TipoCambioMs = 0;
     $scope.Mensaje = '...';
     $scope.selectProductos = {};
+    $scope.TieneContrato = true;
+    $scope.IdPedidoContrato = 0;
 
     $scope.BuscarProducto = function (ResetPaginado) {
       $scope.Mensaje = 'Buscando...';
@@ -5592,9 +6239,17 @@ angular.module('directives.loading', [])
       ProductosFactory.postBuscarProductos($scope.BuscarProductos)
         .success(function (Productos) {
           if (Productos.success === 1) {
-            $scope.Productos = Productos.data[0];
+            $scope.Productos = Productos.data[0].map(function (item) {
+              item.IdPedidoContrato = 0;
+              item.TieneContrato = true;
+              return item;
+            });
             if ($scope.Productos == '') {
               $scope.Mensaje = 'No encontramos resultados de tu búsqueda...';
+              if ($scope.Pagina > 0) {
+                $scope.ShowToast('No encontramos más resultados de esta busqueda, regresaremos a la página anterior.', 'danger');
+                $scope.PaginadoAtras();
+              }
             }
           } else {
             $scope.Mensaje = Productos.message;
@@ -5673,11 +6328,48 @@ angular.module('directives.loading', [])
 
     $scope.init();
 
+    $scope.contractSetted = function (producto) {
+      if (producto.IdPedidoContrato) {
+        producto.IdUsuarioContacto = undefined;
+      }
+    };
+
     $scope.revisarProducto = function (Producto) {
       var IdProducto = Producto.IdProducto;
+      var IdEmpresaUsuarioFinal = Producto.IdEmpresaUsuarioFinal;
+      ProductosFactory.getProductContracts(IdEmpresaUsuarioFinal, IdProducto)
+        .success(function (respuesta) {
+          if (respuesta.success === 1) {
+            Producto.contratos = respuesta.data;
+            console.log(respuesta);
+            if (Producto.contratos.length >= 1) {
+              Producto.TieneContrato = true;
+              Producto.IdPedidoContrato = respuesta.data[0].IdPedido;
+            }
+            if ((Producto.IdAccionAutodesk === 2 || !Producto.IdAccionAutodesk) && Producto.contratos.length === 0) {
+              Producto.TieneContrato = false;
+            }
+            if (Producto.IdAccionAutodesk === 1) Producto.contratos.unshift({ IdPedido: 0, ResultadoFabricante6: 'Nuevo contrato...' });
+          } else {
+            $scope.ShowToast('No pudimos cargar la información de tus contratos, por favor intenta de nuevo más tarde.', 'danger');
+          }
+        })
+        .error(function () {
+          $scope.ShowToast('No pudimos cargar la información de tus contratos, por favor intenta de nuevo más tarde.', 'danger');
+        });
+      UsuariosFactory.getUsuariosContacto(Producto.IdEmpresaUsuarioFinal)
+        .success(function (respuesta) {
+          if (respuesta.success === 1) {
+            Producto.usuariosContacto = respuesta.data;
+          } else {
+            $scope.ShowToast('No pudimos cargar la información de tus contactos, por favor intenta de nuevo más tarde.', 'danger');
+          }
+        })
+        .error(function () {
+          $scope.ShowToast('No pudimos cargar la información de tus contactos, por favor intenta de nuevo más tarde.', 'danger');
+        });
 
       if (Producto.IdTipoProducto === 4 && Producto.IdFabricante === 1) {
-
         ProductosFactory.postComplementos(Producto)
           .then(function (data) {
             var IdProductoFabricanteExtra = '';
@@ -5725,13 +6417,13 @@ angular.module('directives.loading', [])
       if (MonedaPago === 'Dólares' && MonedaProducto === 'Pesos') {
         Precio = Precio / TipoCambio;
       }
-  
+
       total = Precio * Cantidad;
       if (!total) { total = 0.00; }
       return total;
     };
 
-    $scope.AgregarCarrito = function (Producto, Cantidad) {
+    $scope.AgregarCarrito = function (Producto, Cantidad, IdPedidocontrato) {
       var NuevoProducto = {
         IdProducto: Producto.IdProducto,
         Cantidad: Cantidad,
@@ -5741,11 +6433,37 @@ angular.module('directives.loading', [])
         IdFabricante: Producto.IdFabricante,
         CodigoPromocion: Producto.CodigoPromocion,
         ResultadoFabricante2: Producto.IdProductoPadre,
-        Especializacion: Producto.Especializacion
+        Especializacion: Producto.Especializacion,
+        IdUsuarioContacto: Producto.IdUsuarioContacto,
+        IdAccionAutodesk: Producto.IdAccionAutodesk
       };
+      if (!Producto.IdUsuarioContacto && Producto.IdFabricante === 2 && Producto.TieneContrato) {
+        const contrato = Producto.contratos
+          .filter(function (p) {
+            return Producto.IdPedidoContrato === p.IdPedido;
+          })[0].ResultadoFabricante6;
+        console.log(Producto.contratos, IdPedidocontrato, contrato);
+        NuevoProducto.ContratoBaseAutodesk = contrato.trim();
+        // NuevoProducto.IdAccionAutodesk = Producto.IdAccionProductoAutodesk === 1 ? 3 : 2;
+      }
+      if (Producto.IdFabricante === 2 && Producto.IdAccionAutodesk === 2 && !Producto.TieneContrato) {
+        return $scope.ShowToast('No cuentas con un contrato para este producto.', 'danger');
+      }
+      if (!NuevoProducto.IdAccionAutodesk) delete NuevoProducto.IdAccionAutodesk;
       PedidoDetallesFactory.postPedidoDetalle(NuevoProducto)
         .success(function (PedidoDetalleResult) {
           if (PedidoDetalleResult.success === 1) {
+            if (NuevoProducto.IdFabricante === 2 && Producto.Accion === 'asiento') {
+              ProductosFactory.getBaseSubscription(NuevoProducto.IdProducto)
+                .then(function (result) {
+                  $scope.suscripciones = result.data.data;
+                  if (result.data.data.length >= 1) {
+                    $location.path("/autodesk/productos/" + NuevoProducto.IdProducto + "/detalle/" + PedidoDetalleResult.data.insertId);
+                  }
+                })
+                .catch(console.log);
+            }
+            console.log(PedidoDetalleResult);
             $scope.ShowToast(PedidoDetalleResult.message, 'success');
             $scope.ActualizarMenu();
             $scope.addPulseCart();
@@ -5908,7 +6626,7 @@ angular.module('directives.loading', [])
     };
   };
 
-  ProductosReadController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$routeParams', 'ProductosFactory', 'FabricantesFactory', 'TiposProductosFactory', 'PedidoDetallesFactory', 'TipoCambioFactory', 'ProductoGuardadosFactory', 'EmpresasXEmpresasFactory', '$anchorScroll'];
+  ProductosReadController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$routeParams', 'ProductosFactory', 'FabricantesFactory', 'TiposProductosFactory', 'PedidoDetallesFactory', 'TipoCambioFactory', 'ProductoGuardadosFactory', 'EmpresasXEmpresasFactory', 'UsuariosFactory', '$anchorScroll'];
 
   angular.module('marketplace').controller('ProductosReadController', ProductosReadController);
 }());
@@ -6929,22 +7647,37 @@ angular.module('directives.loading', [])
     Session = $cookieStore.get('Session');
     $scope.Session = Session;
     $scope.Usuario = {};
+    $scope.empresa = 0;
     $scope.Usuario.Formulario = false;
 
     $scope.init = function () {
       $scope.CheckCookie();
+      if (Session.IdTipoAcceso !== 2) {
+        TiposAccesosFactory.getTiposAccesos()
+          .success(function (TiposAccesos) {
+            $scope.selectTiposAccesos = TiposAccesos;
+          })
+          .error(function (data, status, headers, config) {
+            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          });
+      };
 
-      TiposAccesosFactory.getTiposAccesos()
-        .success(function (TiposAccesos) {
-          $scope.selectTiposAccesos = TiposAccesos;
-          if (Session.IdTipoAcceso == 2 || Session.IdTipoAcceso == 4)
-            $scope.Usuario.MuestraComboEmpresas = 0;
-          else
-            $scope.Usuario.MuestraComboEmpresas = 1;
-        })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
+      if (Session.IdTipoAcceso === 2) {
+        UsuariosFactory.getAccessosParaDistribuidor()
+          .success(function (TiposAccesos) {
+            $scope.selectTiposAccesos = TiposAccesos.data;
+          })
+          .error(function (data, status, headers, config) {
+            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          });
+        EmpresasFactory.getClientes()
+          .success(function (Empresas) {
+            $scope.selectEmpresas = Empresas.data;
+          })
+          .error(function (data, status, headers, config) {
+            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          });
+      }
 
       $scope.Usuario.Lada = 52;
 
@@ -6962,32 +7695,60 @@ angular.module('directives.loading', [])
     $scope.init();
 
     $scope.UsuarioCreate = function () {
-      if (($scope.frm.$invalid)) {
-        if ($scope.frm.Nombre.$invalid == true) {
-          $scope.frm.Nombre.$pristine = false;
+      if ($scope.frm.$valid) {
+        delete $scope.Usuario.Formulario;
+        if (Session.IdTipoAcceso !== 2) {
+          UsuariosFactory.postUsuario($scope.Usuario)
+            .success(function (result) {
+              if (result[0].Success == true) {
+                $location.path("/Usuarios");
+                $scope.ShowToast(result[0].Message, 'success');
+              }
+              else {
+                $scope.ShowToast(result[0].Message, 'danger');
+              }
+            })
+            .error(function (data, status, headers, config) {
+              $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+            });
         }
-        if ($scope.frm.CorreoElectronico.$invalid == true) {
-          $scope.frm.CorreoElectronico.$pristine = false;
+        if (Session.IdTipoAcceso === 2) {
+          const user = Object.assign({}, $scope.Usuario);
+          if ($scope.Usuario.IdTipoAcceso === 4 || $scope.Usuario.IdTipoAcceso === 6) {
+            user.TipoUsuario = 'END_USER';
+            user.IdTipoAcceso = $scope.Usuario.IdTipoAcceso.toString();
+            user.Lada = $scope.Usuario.Lada.toString();
+            UsuariosFactory.postUsuarioCliente(user)
+              .success(function (result) {
+                if (result.success === 1) {
+                  $location.path("/Usuarios");
+                  $scope.ShowToast(result.message, 'success');
+                } else {
+                  $scope.ShowToast(result.message, 'danger');
+                  return;
+                }
+              })
+              .error(function (data, status, headers, config) {
+                $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+              });
+          }
+          if ($scope.Usuario.IdTipoAcceso != 4 && $scope.Usuario.IdTipoAcceso != 6) {
+            UsuariosFactory.postUsuario($scope.Usuario)
+              .success(function (result) {
+                if (result[0].Success == true) {
+                  $location.path("/Usuarios");
+                  $scope.ShowToast(result[0].Message, 'success');
+                }
+                else {
+                  $scope.ShowToast(result[0].Message, 'danger');
+                }
+              })
+              .error(function (data, status, headers, config) {
+                $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+              });
+          }
         }
-        if ($scope.frm.IdTipoAcceso.$invalid == true) {
-          $scope.frm.IdTipoAcceso.$pristine = false;
-        }
-        $scope.ShowToast("Datos inválidos, favor de verificar", 'danger');
-      } else {
-        UsuariosFactory.postUsuario($scope.Usuario)
-          .success(function (result) {
-            if (result[0].Success == true) {
-              $location.path("/Usuarios");
-              $scope.ShowToast(result[0].Message, 'success');
-            }
-            else {
-              $scope.ShowToast(result[0].Message, 'danger');
-            }
-          })
-          .error(function (data, status, headers, config) {
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-          });
-      }
+      } else $scope.ShowToast('Alguno de los campos es invalido', 'danger');
     };
 
     $scope.UsuarioCancel = function () {
@@ -7104,23 +7865,40 @@ angular.module('directives.loading', [])
     $scope.sortBy = 'Nombre';
     $scope.reverse = false;
     $scope.empresaSel = '';
+    const Session = $cookieStore.get('Session');
+    if (Session.IdTipoAcceso === 1) {
+      $scope.empresaActual = 'CompuSoluciones';
+    }
+    if (Session.IdTipoAcceso === 2) {
+      $scope.empresaActual = Session.NombreEmpresa;
+    }
 
     $scope.init = function () {
       $scope.CheckCookie();
+      if (Session.IdTipoAcceso !== 2) {
+        EmpresasFactory.getEmpresas()
+          .success(function (Empresas) {
+            $scope.selectEmpresas = Empresas;
+            if ($scope.SessionCookie.IdTipoAcceso != 1) {
+              $scope.empresaSel = $scope.selectEmpresas[0].IdEmpresa;
+            }
 
-      EmpresasFactory.getEmpresas()
-        .success(function (Empresas) {
-          $scope.selectEmpresas = Empresas;
-
-          if ($scope.SessionCookie.IdTipoAcceso != 1) {
-            $scope.empresaSel = $scope.selectEmpresas[0].IdEmpresa;
-          }
-
-          $scope.MostrarUsuariosEmp(isNaN(parseInt($scope.empresaSel)) ? 0 : parseInt($scope.empresaSel));
-        })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
+            $scope.MostrarUsuariosEmp(isNaN(parseInt($scope.empresaSel)) ? 0 : parseInt($scope.empresaSel));
+          })
+          .error(function (data, status, headers, config) {
+            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          });
+      }
+      if (Session.IdTipoAcceso === 2) {
+        EmpresasFactory.getClientes()
+          .success(function (Empresas) {
+            $scope.selectEmpresas = Empresas.data;
+            $scope.ObtenerUsuariosPropios();
+          })
+          .error(function (data, status, headers, config) {
+            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          });
+      }
     };
 
     $scope.OrdenarPor = function (Atributo) {
@@ -7128,16 +7906,42 @@ angular.module('directives.loading', [])
       $scope.reverse = !$scope.reverse;
     };
 
-
-    $scope.MostrarUsuariosEmp = function (IdEmpresa) {
-
-      UsuariosXEmpresasFactory.getUsuariosXEmpresa(IdEmpresa)
+    $scope.ObtenerUsuariosPropios = function () {
+      UsuariosFactory.getUsuariosPropios()
         .success(function (UsuariosXEmpresas) {
-          $scope.Usuarios = UsuariosXEmpresas;
+          $scope.Usuarios = UsuariosXEmpresas.data;
         })
         .error(function (data, status, headers, config) {
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
+    };
+
+    $scope.ObtenerUsuariosPorCliente = function (IdEmpresa) {
+      UsuariosFactory.getUsuariosContacto(IdEmpresa)
+        .success(function (UsuariosXEmpresas) {
+          $scope.Usuarios = UsuariosXEmpresas.data;
+        })
+        .error(function (data, status, headers, config) {
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+    };
+
+    $scope.MostrarUsuariosEmp = function (IdEmpresa) {
+      if (Session.IdTipoAcceso === 2) {
+        if (IdEmpresa) {
+          $scope.ObtenerUsuariosPorCliente(IdEmpresa);
+        } else {
+          $scope.ObtenerUsuariosPropios();
+        }
+      } else {
+        UsuariosXEmpresasFactory.getUsuariosXEmpresa(IdEmpresa)
+          .success(function (UsuariosXEmpresas) {
+            $scope.Usuarios = UsuariosXEmpresas;
+          })
+          .error(function (data, status, headers, config) {
+            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          });
+      }
     };
 
     $scope.init();
@@ -7415,4 +8219,72 @@ angular.module('directives.loading', [])
 
   UsuariosUpdateController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$routeParams', 'UsuariosFactory', 'jwtHelper', 'UsuariosXEmpresasFactory', 'TiposAccesosFactory'];
   angular.module('marketplace').controller('UsuariosUpdateController', UsuariosUpdateController);
+}());
+
+(function () {
+  var VersionController = function ($scope, $log, $location, $cookieStore, $route, VersionFactory, $anchorScroll) {
+    $scope.versiones = [];
+    $scope.currentPath = $location.path();
+    $anchorScroll.yOffset = 130;
+
+    $scope.init = function () {
+      if ($scope.currentPath === '/Version') {
+        $scope.CheckCookie();
+        $scope.obtenerVersiones();
+      }
+    };
+
+    $scope.obtenerVersiones = function () {
+      VersionFactory.getVersiones()
+        .success(function (versiones) {
+          $scope.versiones = versiones.data;
+          obtenerDetalle();
+        })
+        .error(function (data, status, headers, config) {
+          $scope.ShowToast('No pudimos traer las versiones.', 'danger');
+          $location.path('/');
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+    };
+
+    var obtenerDetalle = function (Id) {
+      var IdVersion = Id || $scope.versiones[0].IdVersion;
+      VersionFactory.getVersionDetalle(IdVersion)
+        .success(function (versiones) {
+          $scope.detalleVersion = versiones.data;
+          console.log(versiones);
+          SetTitulo();
+        })
+        .error(function (data, status, headers, config) {
+          $scope.ShowToast('No pudimos traer el detalle de la versión.', 'danger');
+          $location.path('/');
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+    };
+
+    $scope.init();
+
+    $scope.GetDetalle = function (IdVersion, text) {
+      if (!IdVersion) {
+        IdVersion = 4;
+      }
+      obtenerDetalle(IdVersion);
+    };
+
+    $scope.scrollTo = function (id) {
+      //$location.hash(id);
+      $anchorScroll(id);
+    }
+
+    var SetTitulo = function () {
+      var selectedIndex = document.getElementsByName("Versiones")[0].selectedIndex - 1;
+      if (selectedIndex < 0) {
+        selectedIndex = 0;
+      }
+      $scope.Titulo = $scope.versiones[selectedIndex].Version;
+    };
+  };
+
+  VersionController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$route', 'VersionFactory', '$anchorScroll', '$routeParams'];
+  angular.module('marketplace').controller('VersionController', VersionController);
 }());

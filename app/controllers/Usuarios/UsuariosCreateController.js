@@ -4,6 +4,7 @@
     Session = $cookieStore.get('Session');
     $scope.Session = Session;
     $scope.Usuario = {};
+    $scope.empresa = 0;
     $scope.Usuario.Formulario = false;
 
     $scope.init = function () {
@@ -12,10 +13,6 @@
         TiposAccesosFactory.getTiposAccesos()
           .success(function (TiposAccesos) {
             $scope.selectTiposAccesos = TiposAccesos;
-            if (Session.IdTipoAcceso == 2 || Session.IdTipoAcceso == 4)
-              $scope.Usuario.MuestraComboEmpresas = 0;
-            else
-              $scope.Usuario.MuestraComboEmpresas = 1;
           })
           .error(function (data, status, headers, config) {
             $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
@@ -54,31 +51,9 @@
 
     $scope.init();
 
-    $scope.cambioDeAccesos = function () {
-      console.log($scope.Usuario.IdTipoAcceso);
-      if (Session.IdTipoAcceso === 2 && ($scope.Usuario.IdTipoAcceso === 4 || $scope.Usuario.IdTipoAcceso === 6)) {
-        console.log('si');
-        $scope.Usuario.MuestraComboEmpresas = 1;
-      }
-      if (Session.IdTipoAcceso === 2 && ($scope.Usuario.IdTipoAcceso !== 4 && $scope.Usuario.IdTipoAcceso !== 6)) {
-        console.log('no');
-        $scope.Usuario.MuestraComboEmpresas = 0;
-      }
-    };
-
     $scope.UsuarioCreate = function () {
-      if (($scope.frm.$invalid)) {
-        if ($scope.frm.Nombre.$invalid == true) {
-          $scope.frm.Nombre.$pristine = false;
-        }
-        if ($scope.frm.CorreoElectronico.$invalid == true) {
-          $scope.frm.CorreoElectronico.$pristine = false;
-        }
-        if ($scope.frm.IdTipoAcceso.$invalid == true) {
-          $scope.frm.IdTipoAcceso.$pristine = false;
-        }
-        $scope.ShowToast("Datos inválidos, favor de verificar", 'danger');
-      } else {
+      if ($scope.frm.$valid) {
+        delete $scope.Usuario.Formulario;
         if (Session.IdTipoAcceso !== 2) {
           UsuariosFactory.postUsuario($scope.Usuario)
             .success(function (result) {
@@ -95,15 +70,13 @@
             });
         }
         if (Session.IdTipoAcceso === 2) {
+          const user = Object.assign({}, $scope.Usuario);
           if ($scope.Usuario.IdTipoAcceso === 4 || $scope.Usuario.IdTipoAcceso === 6) {
-            $scope.Usuario.TipoUsuario = 'END_USER';
-            $scope.Usuario.IdTipoAcceso = $scope.Usuario.IdTipoAcceso.toString();
-            $scope.Usuario.Lada = $scope.Usuario.Lada.toString();
-            delete $scope.Usuario.Formulario;
-            delete $scope.Usuario.MuestraComboEmpresas;
-            UsuariosFactory.postUsuarioCliente($scope.Usuario)
+            user.TipoUsuario = 'END_USER';
+            user.IdTipoAcceso = $scope.Usuario.IdTipoAcceso.toString();
+            user.Lada = $scope.Usuario.Lada.toString();
+            UsuariosFactory.postUsuarioCliente(user)
               .success(function (result) {
-                console.log(result);
                 if (result.success === 1) {
                   $location.path("/Usuarios");
                   $scope.ShowToast(result.message, 'success');
@@ -131,9 +104,8 @@
                 $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
               });
           }
-          console.log($scope.Usuario);
         }
-      }
+      } else $scope.ShowToast('Alguno de los campos es invalido', 'danger');
     };
 
     $scope.UsuarioCancel = function () {
