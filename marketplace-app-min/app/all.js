@@ -386,26 +386,6 @@ angular.module('marketplace')
     $rootScope.dominio = 'clicksuscribe';
   });
 
-angular.module('directives.loading', [])
-  .directive('cargando', ['$http', function ($http) {
-    return {
-      restrict: 'A',
-      link: function (scope, elm, attrs) {
-        scope.isLoading = function () {
-          return $http.pendingRequests.length > 0;
-        };
-
-        scope.$watch(scope.isLoading, function (v) {
-          if (v) {
-            elm.show();
-          } else {
-            elm.hide();
-          }
-        });
-      }
-    };
-  }]);
-
 (function () {
   var ContactoController = function ($scope) {
     $scope.init = function () {
@@ -964,6 +944,26 @@ angular.module('directives.loading', [])
 
   angular.module('marketplace').controller('SugerenciasController', SugerenciasController);
 }());
+
+angular.module('directives.loading', [])
+  .directive('cargando', ['$http', function ($http) {
+    return {
+      restrict: 'A',
+      link: function (scope, elm, attrs) {
+        scope.isLoading = function () {
+          return $http.pendingRequests.length > 0;
+        };
+
+        scope.$watch(scope.isLoading, function (v) {
+          if (v) {
+            elm.show();
+          } else {
+            elm.hide();
+          }
+        });
+      }
+    };
+  }]);
 
 (function () {
   var AccesosAmazonFactory = function ($http, $cookieStore, $rootScope) {
@@ -2176,24 +2176,6 @@ angular.module('directives.loading', [])
   angular.module('marketplace').factory('VersionFactory', VersionFactory);
 }());
 (function () {
-  var AplicacionesReadController = function ($scope, $log, $location, $cookieStore, MigracionFactory) {
-    $scope.goToMigraciones = function () {
-      $location.path('/migraciones');
-    };
-
-    $scope.init = function () {
-     
-    };
-
-    $scope.init();
-  };
-
-  AplicacionesReadController.$inject = ['$scope', '$log', '$location', '$cookieStore', 'MigracionFactory'];
-
-  angular.module('marketplace').controller('AplicacionesReadController', AplicacionesReadController);
-}());
-
-(function () {
   var DescuentosCreateController = function ($scope, $log, $cookieStore, $location, DescuentosFactory, NivelesDistribuidorFactory) {
     var Session = {};
     Session = $cookieStore.get('Session');
@@ -2698,6 +2680,24 @@ angular.module('directives.loading', [])
   DescuentosUpdateController.$inject = ['$scope', '$log', '$cookieStore', '$location', 'DescuentosFactory', '$routeParams'];
 
   angular.module('marketplace').controller('DescuentosUpdateController', DescuentosUpdateController);
+}());
+
+(function () {
+  var AplicacionesReadController = function ($scope, $log, $location, $cookieStore, MigracionFactory) {
+    $scope.goToMigraciones = function () {
+      $location.path('/migraciones');
+    };
+
+    $scope.init = function () {
+     
+    };
+
+    $scope.init();
+  };
+
+  AplicacionesReadController.$inject = ['$scope', '$log', '$location', '$cookieStore', 'MigracionFactory'];
+
+  angular.module('marketplace').controller('AplicacionesReadController', AplicacionesReadController);
 }());
 
 (function () {

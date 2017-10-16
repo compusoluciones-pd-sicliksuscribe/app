@@ -3,7 +3,7 @@ Para poder liberar hay que seguir los siguientes pasos:
 
 > git merge --no-ff branch-a-liberar
 
- Una ves borrado el branch es necesario borrar el branch.
+ Una vez que se realiza el merge es necesario borrar el branch.
 
 *  Actualizar el archivo **./app/appSettings.js** para que se apunte a las apis de producción. ejemplo: 
 
