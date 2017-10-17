@@ -1,5 +1,5 @@
 (function () {
-  var SoporteReadController = function ($scope, $log, $cookieStore, $location, $uibModal, $filter, SoporteFactory, $routeParams) {
+  var SoporteReadController = function ($scope, $log, $cookies, $location, $uibModal, $filter, SoporteFactory, $routeParams) {
 
     $scope.init = function () {
       SoporteFactory.getSolicitudes()
@@ -19,13 +19,13 @@
     $scope.NuevaSolicitud = function () {
       $location.path('solicitar-soporte');
     };
-    
+
     $scope.EditarDetalle = function (id) {
       console.log(id);
       $location.path('actualizar-soporte/'+id);
     };
   };
-  SoporteReadController.$inject = ['$scope', '$log', '$cookieStore', '$location', '$uibModal', '$filter', 'SoporteFactory', '$routeParams'];
+  SoporteReadController.$inject = ['$scope', '$log', '$cookies', '$location', '$uibModal', '$filter', 'SoporteFactory', '$routeParams'];
 
   angular.module('marketplace').controller('SoporteReadController', SoporteReadController);
 }());

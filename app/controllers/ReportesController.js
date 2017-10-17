@@ -1,7 +1,7 @@
 (function () {
-  var ReportesController = function ($scope, $log, $location, $cookieStore, ReportesFactory) {
+  var ReportesController = function ($scope, $log, $location, $cookies, ReportesFactory) {
 
-    $scope.perfil = $cookieStore.get('Session');
+    $scope.perfil = $cookies.getObject('Session');
 
     $scope.reportesSel = '';
 
@@ -111,7 +111,7 @@
     };
   };
 
-  ReportesController.$inject = ['$scope', '$log', '$location', '$cookieStore', 'ReportesFactory'];
+  ReportesController.$inject = ['$scope', '$log', '$location', '$cookies', 'ReportesFactory'];
 
   angular.module('marketplace').controller('ReportesController', ReportesController);
 }());

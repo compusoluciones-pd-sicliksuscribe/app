@@ -1,7 +1,7 @@
 (function () {
-  var DescuentosUpdateController = function ($scope, $log, $cookieStore, $location, DescuentosFactory, $routeParams) {
+  var DescuentosUpdateController = function ($scope, $log, $cookies, $location, DescuentosFactory, $routeParams) {
     var Session = {};
-    Session = $cookieStore.get('Session');
+    Session = $cookies.getObject('Session');
     $scope.Session = Session;
     $scope.Descuento = JSON.parse($routeParams.Descuento);
 
@@ -31,7 +31,7 @@
     };
   };
 
-  DescuentosUpdateController.$inject = ['$scope', '$log', '$cookieStore', '$location', 'DescuentosFactory', '$routeParams'];
+  DescuentosUpdateController.$inject = ['$scope', '$log', '$cookies', '$location', 'DescuentosFactory', '$routeParams'];
 
   angular.module('marketplace').controller('DescuentosUpdateController', DescuentosUpdateController);
 }());

@@ -1,5 +1,5 @@
 (function () {
-  var ProductoGuardadosReadController = function ($scope, $log, $location, $cookieStore, ProductoGuardadosFactory, PedidoDetallesFactory) {
+  var ProductoGuardadosReadController = function ($scope, $log, $location, $cookies, ProductoGuardadosFactory, PedidoDetallesFactory) {
 
     $scope.sortBy = 'Nombre';
     $scope.reverse = false;
@@ -24,7 +24,7 @@
     };
 
     $scope.AgregarCarrito = function (Producto) {
-      var ProductoGuardado = { IdPedido: $cookieStore.get('Pedido').IdPedidoActual, IdProducto: Producto.IdProducto, Cantidad: 1 };
+      var ProductoGuardado = { IdPedido: $cookies.getObject('Pedido').IdPedidoActual, IdProducto: Producto.IdProducto, Cantidad: 1 };
 
       PedidoDetallesFactory.postPedidoDetalle(ProductoGuardado)
         .success(function (PedidoDetalleResult) {
@@ -70,7 +70,7 @@
     };
   };
 
-  ProductoGuardadosReadController.$inject = ['$scope', '$log', '$location', '$cookieStore', 'ProductoGuardadosFactory', 'PedidoDetallesFactory'];
+  ProductoGuardadosReadController.$inject = ['$scope', '$log', '$location', '$cookies', 'ProductoGuardadosFactory', 'PedidoDetallesFactory'];
 
   angular.module('marketplace').controller('ProductoGuardadosReadController', ProductoGuardadosReadController);
 }());

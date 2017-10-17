@@ -1,10 +1,10 @@
 (function () {
-  var TipoCambioFactory = function ($http, $cookieStore, $rootScope) {
+  var TipoCambioFactory = function ($http, $cookies, $rootScope) {
     var factory = {};
     var Session = {};
 
     factory.refreshToken = function () {
-      Session = $cookieStore.get('Session');
+      Session = $cookies.getObject('Session');
       if (!Session) { Session = { Token: 'no' }; }
       $http.defaults.headers.common['token'] = Session.Token;
     };
@@ -19,7 +19,7 @@
     return factory;
   };
 
-  TipoCambioFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
+  TipoCambioFactory.$inject = ['$http', '$cookies', '$rootScope'];
 
   angular.module('marketplace').factory('TipoCambioFactory', TipoCambioFactory);
 }());

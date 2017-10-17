@@ -1,13 +1,13 @@
 (function () {
-  var EmpresasUpdateController = function ($scope, $log, $location, $cookieStore, $routeParams, EmpresasFactory, EmpresasXEmpresasFactory, EstadosFactory, UsuariosFactory) {
+  var EmpresasUpdateController = function ($scope, $rootScope, $log, $location, $cookies, $routeParams, EmpresasFactory, EmpresasXEmpresasFactory, EstadosFactory, UsuariosFactory) {
     var IdEmpresa = $routeParams.IdEmpresa;
     var Session = {};
-    Session = $cookieStore.get('Session');
+    Session = $cookies.getObject('Session');
     $scope.Empresa = {};
     $scope.Combo = {};
 
     $scope.init = function () {
-      Session = $cookieStore.get('Session');
+      Session = $cookies.getObject('Session');
       $scope.CheckCookie();
 
       EmpresasFactory.getEmpresas()
@@ -71,7 +71,7 @@
         .success(function (result) {
           if (result[0].Success == true) {
             Session.NombreEmpresa = $scope.Empresa.NombreEmpresa;
-            $cookieStore.put('Session', Session);
+            $cookies.putObject('Session', Session, { secure: $rootScope.secureCookie });
             $scope.ActualizarDatosSession();
             $location.path("/index");
             $scope.ShowToast("Empresa Actualizada", 'success');
@@ -99,7 +99,7 @@
     }
   };
 
-  EmpresasUpdateController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$routeParams', 'EmpresasFactory', 'EmpresasXEmpresasFactory', 'EstadosFactory', 'UsuariosFactory'];
+  EmpresasUpdateController.$inject = ['$scope', '$rootScope', '$log', '$location', '$cookies', '$routeParams', 'EmpresasFactory', 'EmpresasXEmpresasFactory', 'EstadosFactory', 'UsuariosFactory'];
 
   angular.module('marketplace').controller('EmpresasUpdateController', EmpresasUpdateController);
 }());

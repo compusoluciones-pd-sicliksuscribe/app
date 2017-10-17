@@ -1,5 +1,5 @@
 (function () {
-  var UsuariosLoginController = function ($scope, $log, $cookieStore, $location, UsuariosFactory, jwtHelper, $routeParams, EmpresasFactory) {
+  var UsuariosLoginController = function ($scope, $rootScope, $log, $cookies, $location, UsuariosFactory, jwtHelper, $routeParams, EmpresasFactory) {
     $scope.Subdominio = $routeParams.Subdominio;
     $scope.validarSubdominio = function () {
       if ($scope.Subdominio) {
@@ -9,8 +9,8 @@
               if (sitio.data[0]) {
                 var expireDate = new Date();
                 expireDate.setTime(expireDate.getTime() + 600 * 60000);
-                $cookieStore.put('currentDistribuidor', sitio.data[0], { 'expires': expireDate });
-                $scope.currentDistribuidor = $cookieStore.get('currentDistribuidor');
+                $cookies.putObject('currentDistribuidor', sitio.data[0], { 'expires': expireDate, secure: $rootScope.secureCookie });
+                $scope.currentDistribuidor = $cookies.getObject('currentDistribuidor');
               }
             }
           })
@@ -30,10 +30,11 @@
     $scope.init();
 
     $scope.IniciarSesion = function () {
-      $cookieStore.remove('Session');
-      $cookieStore.remove('Pedido');
+      console.log('doing login');
+      $cookies.remove('Session');
+      $cookies.remove('Pedido');
       $scope.Usuario.IdEmpresa = $scope.currentDistribuidor.IdEmpresa;
-      $cookieStore.remove('currentDistribuidor');
+      $cookies.remove('currentDistribuidor');
       $scope.SessionCookie = {};
       UsuariosFactory.postUsuarioIniciarSesion($scope.Usuario)
         .success(function (result) {
@@ -61,13 +62,14 @@
               distribuidores: tokenPayload.distribuidores,
               Expira: expireDate.getTime()
             };
-
-            $cookieStore.put('Session', Session, { 'expires': expireDate });
+            console.log('login succesfull');
+            console.log($cookies);
+            $cookies.putObject('Session', Session, { 'expires': expireDate, secure: $rootScope.secureCookie });
 
             if (Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === '4' ||
               Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === '5' ||
               Session.IdTipoAcceso === 6 || Session.IdTipoAcceso === '6') {
-              $cookieStore.put('currentDistribuidor', Session.distribuidores[0], { 'expires': expireDate });
+              $cookies.putObject('currentDistribuidor', Session.distribuidores[0], { 'expires': expireDate, secure: $rootScope.secureCookie });
             }
 
             $scope.detectarSitioActivoURL();
@@ -91,7 +93,7 @@
     };
   };
 
-  UsuariosLoginController.$inject = ['$scope', '$log', '$cookieStore', '$location', 'UsuariosFactory', 'jwtHelper', '$routeParams', 'EmpresasFactory'];
+  UsuariosLoginController.$inject = ['$scope', '$rootScope', '$log', '$cookies', '$location', 'UsuariosFactory', 'jwtHelper', '$routeParams', 'EmpresasFactory'];
 
   angular.module('marketplace').controller('UsuariosLoginController', UsuariosLoginController);
 } ());

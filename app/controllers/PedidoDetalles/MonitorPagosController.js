@@ -1,5 +1,5 @@
 (function () {
-  var MonitorPagos = function ($scope, $log, $cookieStore, $location, $uibModal, $filter, PedidoDetallesFactory, EmpresasFactory) {
+  var MonitorPagos = function ($scope, $log, $rootScope,  $cookies, $location, $uibModal, $filter, PedidoDetallesFactory, EmpresasFactory) {
     $scope.PedidoSeleccionado = 0;
     $scope.PedidosSeleccionadosParaPagar = [];
     $scope.PedidosObj = {};
@@ -41,8 +41,8 @@
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
 
-      if ($cookieStore.get('Session').IdTipoAcceso == 2 || $cookieStore.get('Session').IdTipoAcceso == 3) {
-        EmpresasFactory.getEmpresa($cookieStore.get('Session').IdEmpresa)
+      if ($cookies.getObject('Session').IdTipoAcceso == 2 || $cookies.getObject('Session').IdTipoAcceso == 3) {
+        EmpresasFactory.getEmpresa($cookies.getObject('Session').IdEmpresa)
           .success(function (empresa) {
             console.log(empresa);
             $scope.infoEmpresa = empresa[0];
@@ -160,9 +160,9 @@
             var expireDate = new Date();
             expireDate.setTime(expireDate.getTime() + 600 * 2000); /*20 minutos*/
             Datos.data["0"].pedidosAgrupados[0].TipoCambio = $scope.TipoCambio;
-            $cookieStore.put('pedidosAgrupados', Datos.data["0"].pedidosAgrupados, { 'expires': expireDate });
+            $cookies.putObject('pedidosAgrupados', Datos.data["0"].pedidosAgrupados, { 'expires': expireDate, secure: $rootScope.secureCookie });
             if (Datos.success) {
-              if ($cookieStore.get('pedidosAgrupados')) {
+              if ($cookies.get('pedidosAgrupados')) {
 
                 Checkout.configure({
                   merchant: Datos.data["0"].merchant,
@@ -215,7 +215,7 @@
       }
     };
   };
-  MonitorPagos.$inject = ['$scope', '$log', '$cookieStore', '$location', '$uibModal', '$filter', 'PedidoDetallesFactory', 'EmpresasFactory'];
+  MonitorPagos.$inject = ['$scope', '$log', '$rootScope', '$cookies', '$location', '$uibModal', '$filter', 'PedidoDetallesFactory', 'EmpresasFactory'];
 
   angular.module('marketplace').controller('MonitorPagos', MonitorPagos);
 }());

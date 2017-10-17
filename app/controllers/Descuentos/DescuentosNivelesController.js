@@ -1,8 +1,8 @@
 (function () {
-  var DescuentosNivelesController = function ($scope, $location, $cookieStore, $routeParams, DescuentosNivelesFactory) {
+  var DescuentosNivelesController = function ($scope, $location, $cookies, $routeParams, DescuentosNivelesFactory) {
     $scope.sortBy = 'Nombre';
     $scope.reverse = false;
-    $scope.Nivel = $cookieStore.get('nivel');
+    $scope.Nivel = $cookies.getObject('nivel');
     $scope.paginatedProducts = {};
     $scope.getNumberOfPages = [1];
     $scope.IdEmpresa = 1;
@@ -137,7 +137,7 @@
     $scope.init();
   };
 
-  DescuentosNivelesController.$inject = ['$scope', '$location', '$cookieStore', '$routeParams', 'DescuentosNivelesFactory'];
+  DescuentosNivelesController.$inject = ['$scope', '$location', '$cookies', '$routeParams', 'DescuentosNivelesFactory'];
 
   angular.module('marketplace').controller('DescuentosNivelesController', DescuentosNivelesController);
 }());

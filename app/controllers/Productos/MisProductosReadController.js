@@ -1,5 +1,5 @@
 (function () {
-  var MisProductosReadController = function ($scope, $log, $location, $cookieStore, $routeParams, ProductosFactory) {
+  var MisProductosReadController = function ($scope, $log, $location, $cookies, $routeParams, ProductosFactory) {
     $scope.sortBy = 'Nombre';
     $scope.reverse = false;
     $scope.precioCalculado;
@@ -116,7 +116,7 @@
       }
       else {
         $scope.porcentaje = porcentajeAnterior;
-      }       
+      }
     };
 
     $scope.guardarTodo = function () {
@@ -195,7 +195,7 @@
 
   };
 
-  MisProductosReadController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$routeParams', 'ProductosFactory'];
+  MisProductosReadController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'ProductosFactory'];
 
   angular.module('marketplace').controller('MisProductosReadController', MisProductosReadController);
 } ());

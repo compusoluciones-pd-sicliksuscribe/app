@@ -1,10 +1,10 @@
 (function () {
-  var EmpresasCreditoUpdateController = function ($scope, $log, $location, $cookieStore, $routeParams, EmpresasFactory) {
+  var EmpresasCreditoUpdateController = function ($scope, $log, $location, $cookies, $routeParams, EmpresasFactory) {
     var IdEmpresa = $routeParams.IdEmpresa;
 
     var Session = {};
 
-    Session = $cookieStore.get('Session');
+    Session = $cookies.getObject('Session');
 
     $scope.Empresa = {};
 
@@ -49,7 +49,7 @@
     };
   };
 
-  EmpresasCreditoUpdateController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$routeParams', 'EmpresasFactory'];
+  EmpresasCreditoUpdateController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'EmpresasFactory'];
 
   angular.module('marketplace').controller('EmpresasCreditoUpdateController', EmpresasCreditoUpdateController);
 }());

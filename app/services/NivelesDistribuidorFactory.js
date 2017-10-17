@@ -1,10 +1,10 @@
 (function () {
-  var NivelesDistribuidorFactory = function ($http, $cookieStore, $rootScope) {
+  var NivelesDistribuidorFactory = function ($http, $cookies, $rootScope) {
     var factory = {};
     var Session = {};
 
     factory.refreshToken = function () {
-      Session = $cookieStore.get('Session');
+      Session = $cookies.getObject('Session');
       if (!Session) { Session = { Token: 'no' }; }
       $http.defaults.headers.common['token'] = Session.Token;
     };
@@ -54,7 +54,7 @@
     return factory;
   };
 
-  NivelesDistribuidorFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
+  NivelesDistribuidorFactory.$inject = ['$http', '$cookies', '$rootScope'];
 
   angular.module('marketplace').factory('NivelesDistribuidorFactory', NivelesDistribuidorFactory);
 }());

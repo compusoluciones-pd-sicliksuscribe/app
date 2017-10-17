@@ -1,10 +1,10 @@
 (function () {
-  var UsuariosXEmpresasFactory = function ($http, $cookieStore, $rootScope) {
+  var UsuariosXEmpresasFactory = function ($http, $cookies, $rootScope) {
     var factory = {};
     var Session = {};
 
     factory.refreshToken = function () {
-      Session = $cookieStore.get('Session');
+      Session = $cookies.getObject('Session');
       if (!Session) { Session = { Token: 'no' }; }
       $http.defaults.headers.common['token'] = Session.Token;
     };
@@ -35,7 +35,7 @@
     return factory;
   };
 
-  UsuariosXEmpresasFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
+  UsuariosXEmpresasFactory.$inject = ['$http', '$cookies', '$rootScope'];
 
   angular.module('marketplace').factory('UsuariosXEmpresasFactory', UsuariosXEmpresasFactory);
 }());

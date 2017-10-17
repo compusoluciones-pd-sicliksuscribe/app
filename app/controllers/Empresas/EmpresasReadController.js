@@ -1,15 +1,15 @@
 (function () {
-  var EmpresasReadController = function ($scope, $log, $location, $cookieStore, EmpresasFactory, NivelesDistribuidorFactory) {
+  var EmpresasReadController = function ($scope, $log, $location, $cookies, EmpresasFactory, NivelesDistribuidorFactory) {
     var Session = {};
 
-    Session = $cookieStore.get('Session');
+    Session = $cookies.getObject('Session');
     $scope.sortBy = 'Nombre';
     $scope.reverse = false;
     $scope.TablaVisible = false;
     $scope.cambiaAgente = false;
 
     $scope.init = function () {
-      Session = $cookieStore.get('Session');
+      Session = $cookies.getObject('Session');
       $scope.CheckCookie();
       $scope.Empresas = null;
       $scope.TablaVisible = false;
@@ -152,7 +152,7 @@
     };
   };
 
-  EmpresasReadController.$inject = ['$scope', '$log', '$location', '$cookieStore', 'EmpresasFactory', 'NivelesDistribuidorFactory'];
+  EmpresasReadController.$inject = ['$scope', '$log', '$location', '$cookies', 'EmpresasFactory', 'NivelesDistribuidorFactory'];
 
   angular.module('marketplace').controller('EmpresasReadController', EmpresasReadController);
 }());

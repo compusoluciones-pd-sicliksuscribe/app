@@ -483,7 +483,7 @@ angular.module('directives.loading', [])
       if (Distribuidor) {
         var expireDate = new Date();
         expireDate.setTime(expireDate.getTime() + 600 * 60000);
-        $cookieStore.put('currentDistribuidor', Distribuidor, { 'expires': expireDate });
+        $cookieStore.put('currentDistribuidor', Distribuidor, { 'expires': expireDate, 'secure': true });
         if ($cookieStore.get('currentDistribuidor')) {
           $scope.currentDistribuidor = $cookieStore.get('currentDistribuidor');
         } else {
@@ -627,7 +627,7 @@ angular.module('directives.loading', [])
 
     $scope.selectMenu = function () {
       if ($scope.currentDistribuidor) {
-        if ((($scope.SessionCookie.IdTipoAcceso == 4 || $scope.SessionCookie.IdTipoAcceso == 5 || $scope.SessionCookie.IdTipoAcceso == 6) 
+        if ((($scope.SessionCookie.IdTipoAcceso == 4 || $scope.SessionCookie.IdTipoAcceso == 5 || $scope.SessionCookie.IdTipoAcceso == 6)
         && (($scope.currentDistribuidor.IdEmpresa != 0) && $scope.currentDistribuidor.IdEmpresa != null) && $scope.SessionCookie.IdTipoAcceso != 2)) {
           return true;
         }
@@ -680,9 +680,9 @@ angular.module('directives.loading', [])
 
         expireDate.setTime(expireDate.getTime() + 1);
 
-        $cookieStore.put('Session', Session, { 'expires': expireDate });
-        $cookieStore.put('currentDistribuidor', Session, { 'expires': expireDate });
-        $cookieStore.put('Pedido', Session, { 'expires': expireDate });
+        $cookieStore.put('Session', Session, { 'expires': expireDate, 'secure': true });
+        $cookieStore.put('currentDistribuidor', Session, { 'expires': expireDate, 'secure': true });
+        $cookieStore.put('Pedido', Session, { 'expires': expireDate, 'secure': true });
 
         $cookieStore.put('Session', null);
         $cookieStore.put('currentDistribuidor', null);
@@ -2182,7 +2182,7 @@ angular.module('directives.loading', [])
     };
 
     $scope.init = function () {
-     
+
     };
 
     $scope.init();
@@ -2925,7 +2925,7 @@ angular.module('directives.loading', [])
               .success(function (UsuariosXEmpresas) {
                 if (UsuariosXEmpresas.length === 0) {
                   $scope.ShowToast('Agrega un administrador, para el distribuidor.', 'danger');
-                } else {         
+                } else {
                   var ObjMicrosoft = {
                     RFC: $scope.Empresa.RFC,
                     NombreEmpresa: DatosMicrosoft.company_name,
@@ -2945,7 +2945,7 @@ angular.module('directives.loading', [])
                     IdUsuario: UsuariosXEmpresas[0].IdUsuario,
                     MonedaPago: $scope.Empresa.MonedaPago,
                     FormaPago: $scope.Empresa.IdFormaPagoPredilecta,
-                  };                  
+                  };
                   EmpresasFactory.postEmpresaMicrosoft(ObjMicrosoft)
                     .success(function (result) {
                       $location.path("/Empresas");
@@ -3920,7 +3920,7 @@ angular.module('directives.loading', [])
         .success(function (result) {
           if (result[0].Success == true) {
             Session.NombreEmpresa = $scope.Empresa.NombreEmpresa;
-            $cookieStore.put('Session', Session);
+            $cookieStore.put('Session', Session, { 'secure': true });
             $scope.ActualizarDatosSession();
             $location.path("/index");
             $scope.ShowToast("Empresa Actualizada", 'success');
@@ -4520,7 +4520,7 @@ angular.module('directives.loading', [])
 
     const getLevels = function() {
       NivelesClienteFinalFactory.getLevels()
-        .then(function(result) { 
+        .then(function(result) {
           $scope.levels = result.data.data;
         })
         .catch(function(result) {
@@ -4571,10 +4571,10 @@ angular.module('directives.loading', [])
     }
 
     $scope.addDiscount = function(level) {
-      $cookieStore.put('nivel', level.Nivel);
+      $cookieStore.put('nivel', level.Nivel, { 'secure': true });
       $location.path('/Niveles/Distribuidor/' + level.IdNivelEmpresaUsuarioFinal + '/Descuentos');
     };
-    
+
   };
 
   NivelesClienteFinalController.$inject = ['$scope', '$location', '$cookieStore', 'NivelesClienteFinalFactory'];
@@ -4649,7 +4649,7 @@ angular.module('directives.loading', [])
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
     };
-    
+
     $scope.configurarNivel = function (nivel) {
       var path = '/Niveles/' + nivel.IdNivelDistribuidor + '/Productos';
       $location.path(path);
@@ -4776,7 +4776,7 @@ angular.module('directives.loading', [])
           .success(function (Datos) {
             var expireDate = new Date();
             expireDate.setTime(expireDate.getTime() + 600 * 2000); /* 20 minutos */
-            $cookieStore.put('pedidosAgrupados', Datos.data['0'].pedidosAgrupados, { 'expires': expireDate });
+            $cookieStore.put('pedidosAgrupados', Datos.data['0'].pedidosAgrupados, { 'expires': expireDate, 'secure': true });
 
             if (Datos.data['0'].total > 0) {
               if (Datos.success) {
@@ -5213,7 +5213,7 @@ angular.module('directives.loading', [])
             var expireDate = new Date();
             expireDate.setTime(expireDate.getTime() + 600 * 2000); /*20 minutos*/
             Datos.data["0"].pedidosAgrupados[0].TipoCambio = $scope.TipoCambio;
-            $cookieStore.put('pedidosAgrupados', Datos.data["0"].pedidosAgrupados, { 'expires': expireDate });
+            $cookieStore.put('pedidosAgrupados', Datos.data["0"].pedidosAgrupados, { 'expires': expireDate, 'secure': true });
             if (Datos.success) {
               if ($cookieStore.get('pedidosAgrupados')) {
 
@@ -6130,7 +6130,7 @@ angular.module('directives.loading', [])
       }
       else {
         $scope.porcentaje = porcentajeAnterior;
-      }       
+      }
     };
 
     $scope.guardarTodo = function () {
@@ -7397,7 +7397,7 @@ angular.module('directives.loading', [])
     $scope.NuevaSolicitud = function () {
       $location.path('solicitar-soporte');
     };
-    
+
     $scope.EditarDetalle = function (id) {
       console.log(id);
       $location.path('actualizar-soporte/'+id);
@@ -7593,12 +7593,12 @@ angular.module('directives.loading', [])
                             Expira: expireDate.getTime()
                           };
 
-                        $cookieStore.put('Session', Session, { 'expires': expireDate });
+                        $cookieStore.put('Session', Session, { 'expires': expireDate, 'secure': true });
 
                         if (Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === '4' ||
                           Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === '5' ||
                           Session.IdTipoAcceso === 6 || Session.IdTipoAcceso === '6') {
-                          $cookieStore.put('currentDistribuidor', Session.distribuidores[0], { 'expires': expireDate });
+                          $cookieStore.put('currentDistribuidor', Session.distribuidores[0], { 'expires': expireDate, 'secure': true });
                         }
                         $scope.detectarSitioActivoURL();
                         $scope.ActualizarDatosSession();
@@ -7772,7 +7772,7 @@ angular.module('directives.loading', [])
               if (sitio.data[0]) {
                 var expireDate = new Date();
                 expireDate.setTime(expireDate.getTime() + 600 * 60000);
-                $cookieStore.put('currentDistribuidor', sitio.data[0], { 'expires': expireDate });
+                $cookieStore.put('currentDistribuidor', sitio.data[0], { 'expires': expireDate, 'secure': true });
                 $scope.currentDistribuidor = $cookieStore.get('currentDistribuidor');
               }
             }
@@ -7825,12 +7825,12 @@ angular.module('directives.loading', [])
               Expira: expireDate.getTime()
             };
 
-            $cookieStore.put('Session', Session, { 'expires': expireDate });
+            $cookieStore.put('Session', Session, { 'expires': expireDate, 'secure': true });
 
             if (Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === '4' ||
               Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === '5' ||
               Session.IdTipoAcceso === 6 || Session.IdTipoAcceso === '6') {
-              $cookieStore.put('currentDistribuidor', Session.distribuidores[0], { 'expires': expireDate });
+              $cookieStore.put('currentDistribuidor', Session.distribuidores[0], { 'expires': expireDate, 'secure': true });
             }
 
             $scope.detectarSitioActivoURL();
@@ -8126,7 +8126,7 @@ angular.module('directives.loading', [])
                               Expira: expireDate.getTime()
                             };
 
-                            $cookieStore.put('Session', Session, { 'expires': expireDate });
+                            $cookieStore.put('Session', Session, { 'expires': expireDate, 'secure': true });
 
                             $scope.detectarSitioActivoURL();
                             $scope.ActualizarDatosSession();

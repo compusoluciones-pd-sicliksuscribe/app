@@ -1,6 +1,6 @@
 (function () {
-  var PedidoDetallesUFReadController = function ($scope, $log, $location, $cookieStore, ComprasUFFactory, EmpresasFactory, $routeParams) {
-    $scope.currentDistribuidor = $cookieStore.get('currentDistribuidor');
+  var PedidoDetallesUFReadController = function ($scope, $log, $location, $cookies, ComprasUFFactory, EmpresasFactory, $routeParams) {
+    $scope.currentDistribuidor = $cookies.getObject('currentDistribuidor');
     $scope.TotalEnPesos = 0;
     $scope.SubtotalEnPesos = 0;
     $scope.IVA = 0;
@@ -82,7 +82,7 @@
     };
   };
 
-  PedidoDetallesUFReadController.$inject = ['$scope', '$log', '$location', '$cookieStore', 'ComprasUFFactory', 'EmpresasFactory', '$routeParams'];
+  PedidoDetallesUFReadController.$inject = ['$scope', '$log', '$location', '$cookies', 'ComprasUFFactory', 'EmpresasFactory', '$routeParams'];
 
   angular.module('marketplace').controller('PedidoDetallesUFReadController', PedidoDetallesUFReadController);
 }());

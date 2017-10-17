@@ -1,5 +1,5 @@
 (function () {
-  var ConfigurarBaseController = function ($scope, $log, $location, $cookieStore, $routeParams, ProductosFactory, FabricantesFactory, TiposProductosFactory, PedidoDetallesFactory, TipoCambioFactory, ProductoGuardadosFactory, EmpresasXEmpresasFactory) {
+  var ConfigurarBaseController = function ($scope, $log, $location, $cookies, $routeParams, ProductosFactory, FabricantesFactory, TiposProductosFactory, PedidoDetallesFactory, TipoCambioFactory, ProductoGuardadosFactory, EmpresasXEmpresasFactory) {
     var IdProducto = $routeParams.IdProducto;
     var IdPedidoDetalle = $routeParams.IdPedidoDetalle;
     $scope.init = function () {
@@ -30,7 +30,7 @@
 
   };
 
-  ConfigurarBaseController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$routeParams', 'ProductosFactory', 'FabricantesFactory', 'TiposProductosFactory', 'PedidoDetallesFactory', 'TipoCambioFactory', 'ProductoGuardadosFactory', 'EmpresasXEmpresasFactory'];
+  ConfigurarBaseController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'ProductosFactory', 'FabricantesFactory', 'TiposProductosFactory', 'PedidoDetallesFactory', 'TipoCambioFactory', 'ProductoGuardadosFactory', 'EmpresasXEmpresasFactory'];
 
   angular.module('marketplace').controller('ConfigurarBaseController', ConfigurarBaseController);
 }());

@@ -1,8 +1,8 @@
 (function () {
-  var TerminosReadController = function ($scope, $log, $location, $cookieStore, UsuariosFactory, jwtHelper) {
+  var TerminosReadController = function ($scope, $rootScope,  $log, $location, $cookies, UsuariosFactory, jwtHelper) {
     var Session = {};
 
-    Session = $cookieStore.get('Session');
+    Session = $cookies.getObject('Session');
 
     $scope.Usuario = {};
 
@@ -75,12 +75,12 @@
                             Expira: expireDate.getTime()
                           };
 
-                        $cookieStore.put('Session', Session, { 'expires': expireDate });
+                        $cookies.putObject('Session', Session, { 'expires': expireDate, secure: $rootScope.secureCookie });
 
                         if (Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === '4' ||
                           Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === '5' ||
                           Session.IdTipoAcceso === 6 || Session.IdTipoAcceso === '6') {
-                          $cookieStore.put('currentDistribuidor', Session.distribuidores[0], { 'expires': expireDate });
+                          $cookies.putObject('currentDistribuidor', Session.distribuidores[0], { 'expires': expireDate, secure: $rootScope.secureCookie });
                         }
                         $scope.detectarSitioActivoURL();
                         $scope.ActualizarDatosSession();
@@ -118,7 +118,7 @@
     $scope.init();
   };
 
-  TerminosReadController.$inject = ['$scope', '$log', '$location', '$cookieStore', 'UsuariosFactory', 'jwtHelper'];
+  TerminosReadController.$inject = ['$scope', '$rootScope', '$log', '$location', '$cookies', 'UsuariosFactory', 'jwtHelper'];
 
   angular.module('marketplace').controller('TerminosReadController', TerminosReadController);
 } ());
