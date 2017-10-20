@@ -188,21 +188,23 @@
 
     function eliminarImagen(data) {
       var Url = $scope.Promocion.Url;
-      var resultado = Url.split("/");
-      var picturePath = 'Anexos' + '/' + resultado[5];
-      var s3Client = new AWS.S3({
-        accessKeyId: data[0].AccessKey,
-        secretAccessKey: data[0].SecretAccess,
-        params: {
-          Bucket: data[0].Bucket,
-        },
-      });
-
-      s3Client.deleteObject({
-        Key: picturePath,
-      }, function (err, data) {
-
-      });
+      if (Url) {
+        var resultado = Url.split("/");
+        var picturePath = 'Anexos' + '/' + resultado[5];
+        var s3Client = new AWS.S3({
+          accessKeyId: data[0].AccessKey,
+          secretAccessKey: data[0].SecretAccess,
+          params: {
+            Bucket: data[0].Bucket,
+          },
+        });
+  
+        s3Client.deleteObject({
+          Key: picturePath,
+        }, function (err, data) {
+  
+        });
+      }
     };
   };
 
