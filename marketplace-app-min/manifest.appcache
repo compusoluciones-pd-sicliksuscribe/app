@@ -1,7 +1,7 @@
 CACHE MANIFEST
 
-# Version: V. 2.2.4
-# Ultima actualizacion: 20-10-2017 05:13 pm
+# Version: V. 2.2.5
+# Ultima actualizacion: 24-10-2017 09:47 am
 
 # A manifest file needs to be served with the correct media type, which is "text/cache-manifest". Must be configured on the web server.
 # Explicitly cached 'master entries'.
@@ -20,40 +20,40 @@ CACHE:
      # app/views/Soporte.html
      # app/views/Contacto.html
      # app/views/Sugerencias.html
-    
+
      # app/views/Empresas/EmpresasCompletar.html
      # app/views/Empresas/EmpresasCreate.html
      # app/views/Empresas/EmpresasCreditoUpdate.html
      # app/views/Empresas/EmpresasImport.html
      # app/views/Empresas/EmpresasRead.html
      # app/views/Empresas/EmpresasUpdate.html
-    
+
      # app/views/EmpresasXEmpresas/EmpresasXEmpresasRead.html
-    
+
      # app/views/PedidoDetalles/Comprar.html
      # app/views/PedidoDetalles/MonitorRead.html
      # app/views/PedidoDetalles/PedidoDetallesRead.html
-    
+
      # app/views/ProductoGuardados/ProductoGuardadosRead.html
-    
+
      # app/views/Productos/ProductosRead.html
-    
+
      # app/views/Promocions/PromocionsCreate.html
      # app/views/Promocions/PromocionsRead.html
      # app/views/Promocions/PromocionsUpdate.html
-    
+
      # app/views/Usuarios/TerminosRead.html
      # app/views/Usuarios/UsuariosCreate.html
      # app/views/Usuarios/UsuariosLogin.html
      # app/views/Usuarios/UsuariosRead.html
      # app/views/Usuarios/UsuariosRecuperar.html
      # app/views/Usuarios/UsuariosUpdate.html
-    
+
      styles/animations.css
      styles/fonts.css
      styles/landing.css
      styles/ngToast.css
-    
+
      styles/css/fonts.css
      styles/css/landing.css
      styles/css/style.css
@@ -66,7 +66,7 @@ CACHE:
      styles/css/fonts/newsgotlb-webfont.ttf
      styles/css/fonts/newsgotlb-webfont.woff
      styles/css/fonts/newsgotlb-webfont.woff2
-    
+
      scripts/angular-animate.min.js
      scripts/angular-cookies.min.js
      scripts/angular-file-upload.min.js
@@ -83,7 +83,7 @@ CACHE:
      scripts/jquery-2.2.0.min.js
      scripts/ngToast.js
      scripts/ui-bootstrap-tpls-0.14.3.min.js
-    
+
      images/5.jpg
      images/appIcon.png
      images/Aros.png
@@ -129,11 +129,11 @@ CACHE:
      images/productSec02.png
      images/productSec03.png
      images/rightArrow.png
-    
+
      template/carousel/carousel.html
      template/carousel/slide.html
 
- 
+
 # offline.html will be displayed if the user is offline
 
 FALLBACK:
