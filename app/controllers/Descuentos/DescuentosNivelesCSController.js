@@ -1,5 +1,5 @@
 (function () {
-  var DescuentosNivelesCSController = function ($scope, $location, $cookieStore, $routeParams, NivelesDistribuidorFactory, DescuentosNivelesFactory) {
+  var DescuentosNivelesCSController = function ($scope, $location, $cookies, $routeParams, NivelesDistribuidorFactory, DescuentosNivelesFactory) {
     var IdNivelCS = Number($routeParams.IdNivel);
     $scope.sortBy = 'Nombre';
     $scope.reverse = false;
@@ -198,7 +198,7 @@
     $scope.init();
   };
 
-  DescuentosNivelesCSController.$inject = ['$scope', '$location', '$cookieStore', '$routeParams', 'NivelesDistribuidorFactory', 'DescuentosNivelesFactory'];
+  DescuentosNivelesCSController.$inject = ['$scope', '$location', '$cookies', '$routeParams', 'NivelesDistribuidorFactory', 'DescuentosNivelesFactory'];
 
   angular.module('marketplace').controller('DescuentosNivelesCSController', DescuentosNivelesCSController);
 }());

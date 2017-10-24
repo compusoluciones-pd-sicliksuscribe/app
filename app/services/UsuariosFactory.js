@@ -1,10 +1,10 @@
 (function () {
-  var UsuariosFactory = function ($http, $cookieStore, $rootScope) {
+  var UsuariosFactory = function ($http, $cookies, $rootScope) {
     var factory = {};
     var Session = {};
 
     factory.refreshToken = function () {
-      Session = $cookieStore.get('Session');
+      Session = $cookies.getObject('Session');
       if (!Session) { Session = { Token: 'no' }; }
       $http.defaults.headers.common['token'] = Session.Token;
     };
@@ -84,8 +84,7 @@
     return factory;
   };
 
-  UsuariosFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
+  UsuariosFactory.$inject = ['$http', '$cookies', '$rootScope'];
 
   angular.module('marketplace').factory('UsuariosFactory', UsuariosFactory);
 }());
-

@@ -1,13 +1,13 @@
 (function () {
-  var UsuariosUpdateController = function ($scope, $log, $location, $cookieStore, $routeParams, UsuariosFactory, jwtHelper, UsuariosXEmpresasFactory, TiposAccesosFactory) {
+  var UsuariosUpdateController = function ($scope, $rootScope, $log, $location, $cookies, $routeParams, UsuariosFactory, jwtHelper, UsuariosXEmpresasFactory, TiposAccesosFactory) {
     var Session = {};
-    Session = $cookieStore.get('Session');
+    Session = $cookies.getObject('Session');
     var IdUsuario = $routeParams.IdUsuario;
     $scope.Usuario = {};
 
     $scope.init = function () {
       $scope.Usuario.MuestraCamposContrasenas = 0;
-      Session = $cookieStore.get('Session');
+      Session = $cookies.getObject('Session');
 
       $scope.CheckCookie();
 
@@ -117,7 +117,7 @@
                               Expira: expireDate.getTime()
                             };
 
-                            $cookieStore.put('Session', Session, { 'expires': expireDate });
+                            $cookies.putObject('Session', Session, { 'expires': expireDate, secure: $rootScope.secureCookie });
 
                             $scope.detectarSitioActivoURL();
                             $scope.ActualizarDatosSession();
@@ -208,6 +208,6 @@
     };
   };
 
-  UsuariosUpdateController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$routeParams', 'UsuariosFactory', 'jwtHelper', 'UsuariosXEmpresasFactory', 'TiposAccesosFactory'];
+  UsuariosUpdateController.$inject = ['$scope', '$rootScope', '$log', '$location', '$cookies', '$routeParams', 'UsuariosFactory', 'jwtHelper', 'UsuariosXEmpresasFactory', 'TiposAccesosFactory'];
   angular.module('marketplace').controller('UsuariosUpdateController', UsuariosUpdateController);
 }());

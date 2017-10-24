@@ -1,5 +1,5 @@
 (function () {
-  var PromocionsUpdateController = function ($scope, $log, $location, $cookieStore, $routeParams, PromocionsFactory, FileUploader, AccesosAmazonFactory) {
+  var PromocionsUpdateController = function ($scope, $log, $location, $cookies, $routeParams, PromocionsFactory, FileUploader, AccesosAmazonFactory) {
 
     var IdPromocion = $routeParams.IdPromocion;
     $scope.Promocion = {};
@@ -208,7 +208,7 @@
     };
   };
 
-  PromocionsUpdateController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$routeParams', 'PromocionsFactory', 'FileUploader', 'AccesosAmazonFactory'];
+  PromocionsUpdateController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'PromocionsFactory', 'FileUploader', 'AccesosAmazonFactory'];
 
   angular.module('marketplace').controller('PromocionsUpdateController', PromocionsUpdateController);
 }());

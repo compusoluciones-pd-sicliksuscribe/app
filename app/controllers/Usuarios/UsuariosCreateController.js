@@ -1,7 +1,7 @@
 (function () {
-  var UsuariosCreateController = function ($scope, $log, $cookieStore, $location, UsuariosFactory, TiposAccesosFactory, EmpresasFactory) {
+  var UsuariosCreateController = function ($scope, $log, $cookies, $location, UsuariosFactory, TiposAccesosFactory, EmpresasFactory) {
     var Session = {};
-    Session = $cookieStore.get('Session');
+    Session = $cookies.getObject('Session');
     $scope.Session = Session;
     $scope.Usuario = {};
     $scope.empresa = 0;
@@ -113,7 +113,7 @@
     };
   };
 
-  UsuariosCreateController.$inject = ['$scope', '$log', '$cookieStore', '$location', 'UsuariosFactory', 'TiposAccesosFactory', 'EmpresasFactory'];
+  UsuariosCreateController.$inject = ['$scope', '$log', '$cookies', '$location', 'UsuariosFactory', 'TiposAccesosFactory', 'EmpresasFactory'];
 
   angular.module('marketplace').controller('UsuariosCreateController', UsuariosCreateController);
 }());

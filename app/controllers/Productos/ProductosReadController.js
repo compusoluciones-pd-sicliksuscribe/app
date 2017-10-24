@@ -1,5 +1,5 @@
 (function () {
-  var ProductosReadController = function ($scope, $log, $location, $cookieStore, $routeParams, ProductosFactory, FabricantesFactory, TiposProductosFactory, PedidoDetallesFactory, TipoCambioFactory, ProductoGuardadosFactory, EmpresasXEmpresasFactory, UsuariosFactory, $anchorScroll) {
+  var ProductosReadController = function ($scope, $log, $location, $cookies, $routeParams, ProductosFactory, FabricantesFactory, TiposProductosFactory, PedidoDetallesFactory, TipoCambioFactory, ProductoGuardadosFactory, EmpresasXEmpresasFactory, UsuariosFactory, $anchorScroll) {
     var BusquedaURL = $routeParams.Busqueda;
     $scope.BuscarProductos = {};
     $scope.Pagina = 0;
@@ -410,7 +410,7 @@
     };
   };
 
-  ProductosReadController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$routeParams', 'ProductosFactory', 'FabricantesFactory', 'TiposProductosFactory', 'PedidoDetallesFactory', 'TipoCambioFactory', 'ProductoGuardadosFactory', 'EmpresasXEmpresasFactory', 'UsuariosFactory', '$anchorScroll'];
+  ProductosReadController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'ProductosFactory', 'FabricantesFactory', 'TiposProductosFactory', 'PedidoDetallesFactory', 'TipoCambioFactory', 'ProductoGuardadosFactory', 'EmpresasXEmpresasFactory', 'UsuariosFactory', '$anchorScroll'];
 
   angular.module('marketplace').controller('ProductosReadController', ProductosReadController);
 }());

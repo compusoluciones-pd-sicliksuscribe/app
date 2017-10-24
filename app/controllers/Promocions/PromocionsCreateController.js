@@ -1,5 +1,5 @@
 (function () {
-  var PromocionsCreateController = function ($scope, $log, $cookieStore, $location, PromocionsFactory, FileUploader, AccesosAmazonFactory) {
+  var PromocionsCreateController = function ($scope, $log, $cookies, $location, PromocionsFactory, FileUploader, AccesosAmazonFactory) {
     $scope.Promocion = {};
     $scope.IdPromocionNueva = 0;
     $scope.SubiendoArchivos = false;
@@ -193,7 +193,7 @@
     }
   };
 
-  PromocionsCreateController.$inject = ['$scope', '$log', '$cookieStore', '$location', 'PromocionsFactory', 'FileUploader', 'AccesosAmazonFactory'];
+  PromocionsCreateController.$inject = ['$scope', '$log', '$cookies', '$location', 'PromocionsFactory', 'FileUploader', 'AccesosAmazonFactory'];
 
   angular.module('marketplace').controller('PromocionsCreateController', PromocionsCreateController);
 }());

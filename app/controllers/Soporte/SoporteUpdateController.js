@@ -1,5 +1,5 @@
 (function () {
-  var SoporteUpdateController = function ($scope, $log, $cookieStore, $location, $uibModal, $filter, SoporteFactory, $routeParams) {
+  var SoporteUpdateController = function ($scope, $log, $cookies, $location, $uibModal, $filter, SoporteFactory, $routeParams) {
     var idSoporte = $routeParams.idSoporte;
     var combo = [];
     $scope.init = function () {
@@ -53,7 +53,7 @@
       $location.path('/monitor-soporte');
     };
   };
-  SoporteUpdateController.$inject = ['$scope', '$log', '$cookieStore', '$location', '$uibModal', '$filter', 'SoporteFactory', '$routeParams'];
+  SoporteUpdateController.$inject = ['$scope', '$log', '$cookies', '$location', '$uibModal', '$filter', 'SoporteFactory', '$routeParams'];
 
   angular.module('marketplace').controller('SoporteUpdateController', SoporteUpdateController);
 }());

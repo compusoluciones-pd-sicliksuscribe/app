@@ -1,8 +1,8 @@
 (function () {
-  var ComprarUFController = function ($scope, $log, $location, $cookieStore, $route, ComprasUFFactory, EmpresasFactory) {
+  var ComprarUFController = function ($scope, $log, $location, $cookies, $route, ComprasUFFactory, EmpresasFactory) {
     $scope.distribuidor = {};
     $scope.currentPath = $location.path();
-    $scope.currentDistribuidor = $cookieStore.get('currentDistribuidor');
+    $scope.currentDistribuidor = $cookies.getObject('currentDistribuidor');
     $scope.TotalEnPesos = 0;
     $scope.SubtotalEnPesos = 0;
     $scope.IVA = 0;
@@ -86,7 +86,7 @@
     };
   };
 
-  ComprarUFController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$route', 'ComprasUFFactory', 'EmpresasFactory'];
+  ComprarUFController.$inject = ['$scope', '$log', '$location', '$cookies', '$route', 'ComprasUFFactory', 'EmpresasFactory'];
 
   angular.module('marketplace').controller('ComprarUFController', ComprarUFController);
 }());

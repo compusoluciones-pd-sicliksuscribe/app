@@ -1,10 +1,10 @@
 (function () {
-  var ProductosXEmpresaFactory = function ($http, $cookieStore, $rootScope) {
+  var ProductosXEmpresaFactory = function ($http, $cookies, $rootScope) {
     var factory = {};
     var Session = {};
 
     factory.refreshToken = function () {
-      Session = $cookieStore.get('Session');
+      Session = $cookies.getObject('Session');
       if (!Session) { Session = { Token: 'no' }; }
       $http.defaults.headers.common['token'] = Session.Token;
     };
@@ -19,7 +19,7 @@
     return factory;
   };
 
-  ProductosXEmpresaFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
+  ProductosXEmpresaFactory.$inject = ['$http', '$cookies', '$rootScope'];
 
   angular.module('marketplace').factory('ProductosXEmpresaFactory', ProductosXEmpresaFactory);
 }());

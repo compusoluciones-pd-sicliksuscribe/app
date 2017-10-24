@@ -1,5 +1,5 @@
 (function () {
-  var MigracionController = function ($scope, $log, $location, $cookieStore, MigracionFactory) {
+  var MigracionController = function ($scope, $log, $location, $cookies, MigracionFactory) {
     $scope.editarMigracion = function (id) {
       $location.path('/migraciones/' + id);
     };
@@ -15,7 +15,7 @@
     $scope.init();
   };
 
-  MigracionController.$inject = ['$scope', '$log', '$location', '$cookieStore', 'MigracionFactory'];
+  MigracionController.$inject = ['$scope', '$log', '$location', '$cookies', 'MigracionFactory'];
 
   angular.module('marketplace').controller('MigracionController', MigracionController);
 }());

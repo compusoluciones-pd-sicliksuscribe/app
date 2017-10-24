@@ -1,5 +1,5 @@
 (function () {
-  var EmpresasCreateController = function ($scope, $log, $cookieStore, $location, EmpresasFactory, EstadosFactory, UsuariosFactory) {
+  var EmpresasCreateController = function ($scope, $log, $cookies, $location, EmpresasFactory, EstadosFactory, UsuariosFactory) {
     $scope.Empresa = {};
     $scope.AlertaDominio = '';
     $scope.Empresa.IdERP = null;
@@ -298,7 +298,7 @@
     };
   };
 
-  EmpresasCreateController.$inject = ['$scope', '$log', '$cookieStore', '$location', 'EmpresasFactory', 'EstadosFactory', 'UsuariosFactory'];
+  EmpresasCreateController.$inject = ['$scope', '$log', '$cookies', '$location', 'EmpresasFactory', 'EstadosFactory', 'UsuariosFactory'];
 
   angular.module('marketplace').controller('EmpresasCreateController', EmpresasCreateController);
 } ());

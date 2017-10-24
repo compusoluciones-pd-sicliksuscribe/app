@@ -1,5 +1,5 @@
 (function () {
-  var DescuentosReadController = function ($scope, $log, $location, $cookieStore, DescuentosFactory) {
+  var DescuentosReadController = function ($scope, $log, $location, $cookies, DescuentosFactory) {
     $scope.sortBy = 'Nivel';
     $scope.reverse = false;
 
@@ -49,7 +49,7 @@
     };
   };
 
-  DescuentosReadController.$inject = ['$scope', '$log', '$location', '$cookieStore', 'DescuentosFactory'];
+  DescuentosReadController.$inject = ['$scope', '$log', '$location', '$cookies', 'DescuentosFactory'];
 
   angular.module('marketplace').controller('DescuentosReadController', DescuentosReadController);
 }());

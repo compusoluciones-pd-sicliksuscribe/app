@@ -463,7 +463,7 @@ angular.module('marketplace')
       if (Distribuidor) {
         var expireDate = new Date();
         expireDate.setTime(expireDate.getTime() + 600 * 60000);
-        $cookieStore.put('currentDistribuidor', Distribuidor, { 'expires': expireDate });
+        $cookieStore.put('currentDistribuidor', Distribuidor, { 'expires': expireDate, 'secure': true });
         if ($cookieStore.get('currentDistribuidor')) {
           $scope.currentDistribuidor = $cookieStore.get('currentDistribuidor');
         } else {
@@ -607,7 +607,7 @@ angular.module('marketplace')
 
     $scope.selectMenu = function () {
       if ($scope.currentDistribuidor) {
-        if ((($scope.SessionCookie.IdTipoAcceso == 4 || $scope.SessionCookie.IdTipoAcceso == 5 || $scope.SessionCookie.IdTipoAcceso == 6) 
+        if ((($scope.SessionCookie.IdTipoAcceso == 4 || $scope.SessionCookie.IdTipoAcceso == 5 || $scope.SessionCookie.IdTipoAcceso == 6)
         && (($scope.currentDistribuidor.IdEmpresa != 0) && $scope.currentDistribuidor.IdEmpresa != null) && $scope.SessionCookie.IdTipoAcceso != 2)) {
           return true;
         }
@@ -660,9 +660,9 @@ angular.module('marketplace')
 
         expireDate.setTime(expireDate.getTime() + 1);
 
-        $cookieStore.put('Session', Session, { 'expires': expireDate });
-        $cookieStore.put('currentDistribuidor', Session, { 'expires': expireDate });
-        $cookieStore.put('Pedido', Session, { 'expires': expireDate });
+        $cookieStore.put('Session', Session, { 'expires': expireDate, 'secure': true });
+        $cookieStore.put('currentDistribuidor', Session, { 'expires': expireDate, 'secure': true });
+        $cookieStore.put('Pedido', Session, { 'expires': expireDate, 'secure': true });
 
         $cookieStore.put('Session', null);
         $cookieStore.put('currentDistribuidor', null);
@@ -2182,7 +2182,7 @@ angular.module('directives.loading', [])
     };
 
     $scope.init = function () {
-     
+
     };
 
     $scope.init();
@@ -2418,7 +2418,7 @@ angular.module('directives.loading', [])
               .success(function (UsuariosXEmpresas) {
                 if (UsuariosXEmpresas.length === 0) {
                   $scope.ShowToast('Agrega un administrador, para el distribuidor.', 'danger');
-                } else {         
+                } else {
                   var ObjMicrosoft = {
                     RFC: $scope.Empresa.RFC,
                     NombreEmpresa: DatosMicrosoft.company_name,
@@ -2438,7 +2438,7 @@ angular.module('directives.loading', [])
                     IdUsuario: UsuariosXEmpresas[0].IdUsuario,
                     MonedaPago: $scope.Empresa.MonedaPago,
                     FormaPago: $scope.Empresa.IdFormaPagoPredilecta,
-                  };                  
+                  };
                   EmpresasFactory.postEmpresaMicrosoft(ObjMicrosoft)
                     .success(function (result) {
                       $location.path("/Empresas");
@@ -3063,6 +3063,7 @@ angular.module('directives.loading', [])
       var Datos = { IdEmpresa: IdEmpresa, Activo: 0 };
       EmpresasFactory.validarBajaEmpresa(Datos)
         .success(function (result) {
+<<<<<<< HEAD
           if (result[0].Success == true) {
             $scope.Empresas.splice(index, 1);
             EmpresasFactory.putEmpresa(Datos)
@@ -3071,6 +3072,46 @@ angular.module('directives.loading', [])
                   $scope.ShowToast(result[0].Message, 'danger');
                 } else {
                   $scope.ShowToast('Empresa dada de baja', 'success');
+=======
+          if (result[0].Success === 1) {
+            $scope.frm.RFC.$invalid = true;
+            $scope.frm.RFC.$pristine = false;
+            $scope.mensajerfc = result[0].Message;
+          } else {
+            UsuariosXEmpresasFactory.getUsuariosXEmpresa(IdEmpresaDistribuidor)
+              .success(function (UsuariosXEmpresas) {
+                if (UsuariosXEmpresas.length === 0) {
+                  $scope.ShowToast('Agrega un administrador, para el distribuidor.', 'danger');
+                } else {
+                  var ObjMicrosoft = {
+                    RFC: $scope.Empresa.RFC,
+                    NombreEmpresa: DatosMicrosoft.company_name,
+                    Direccion: DatosMicrosoft.default_address.address_line1,
+                    Ciudad: DatosMicrosoft.default_address.city,
+                    Estado: DatosMicrosoft.default_address.region,
+                    CodigoPostal: DatosMicrosoft.default_address.postal_code,
+                    NombreContacto: DatosMicrosoft.first_name || DatosMicrosoft.default_address.first_name,
+                    ApellidosContacto: DatosMicrosoft.last_name || DatosMicrosoft.default_address.last_name,
+                    CorreoContacto: $scope.Empresa.CorreoContacto,
+                    TelefonoContacto: DatosMicrosoft.default_address.phone_number,
+                    ZonaImpuesto: 'Normal',
+                    Lada: '52',
+                    IdMicrosoftUF: IdMicrosoft,
+                    DominioMicrosoftUF: Dominio,
+                    IdEmpresaDistribuidor: IdEmpresaDistribuidor,
+                    IdUsuario: UsuariosXEmpresas[0].IdUsuario,
+                    MonedaPago: $scope.Empresa.MonedaPago,
+                    FormaPago: $scope.Empresa.IdFormaPagoPredilecta,
+                  };
+                  EmpresasFactory.postEmpresaMicrosoft(ObjMicrosoft)
+                    .success(function (result) {
+                      $location.path("/Empresas");
+                      $scope.ShowToast('Se esta importando la empresa, por favor espere ', 'success');
+                    })
+                    .error(function (data, status, headers, config) {
+                      $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+                    });
+>>>>>>> cookie-fix
                 }
               })
               .error(function (data, status, headers, config) {
@@ -3926,7 +3967,27 @@ angular.module('directives.loading', [])
       $scope.CheckCookie();
     };
 
+<<<<<<< HEAD
     $scope.init();
+=======
+    function ActualizarEmpresa() {
+      EmpresasFactory.putEmpresa($scope.Empresa)
+        .success(function (result) {
+          if (result[0].Success == true) {
+            Session.NombreEmpresa = $scope.Empresa.NombreEmpresa;
+            $cookieStore.put('Session', Session, { 'secure': true });
+            $scope.ActualizarDatosSession();
+            $location.path("/index");
+            $scope.ShowToast("Empresa Actualizada", 'success');
+          } else {
+            $scope.ShowToast(result[0].Message, 'danger');
+          }
+        })
+        .error(function (data, status, headers, config) {
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+    }
+>>>>>>> cookie-fix
 
     $scope.descuentoCancelar = function () {
       $location.path('/Descuentos');
@@ -4520,7 +4581,7 @@ angular.module('directives.loading', [])
 
     const getLevels = function() {
       NivelesClienteFinalFactory.getLevels()
-        .then(function(result) { 
+        .then(function(result) {
           $scope.levels = result.data.data;
         })
         .catch(function(result) {
@@ -4571,10 +4632,10 @@ angular.module('directives.loading', [])
     }
 
     $scope.addDiscount = function(level) {
-      $cookieStore.put('nivel', level.Nivel);
+      $cookieStore.put('nivel', level.Nivel, { 'secure': true });
       $location.path('/Niveles/Distribuidor/' + level.IdNivelEmpresaUsuarioFinal + '/Descuentos');
     };
-    
+
   };
 
   NivelesClienteFinalController.$inject = ['$scope', '$location', '$cookieStore', 'NivelesClienteFinalFactory'];
@@ -4649,7 +4710,7 @@ angular.module('directives.loading', [])
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
     };
-    
+
     $scope.configurarNivel = function (nivel) {
       var path = '/Niveles/' + nivel.IdNivelDistribuidor + '/Productos';
       $location.path(path);
@@ -4776,7 +4837,7 @@ angular.module('directives.loading', [])
           .success(function (Datos) {
             var expireDate = new Date();
             expireDate.setTime(expireDate.getTime() + 600 * 2000); /* 20 minutos */
-            $cookieStore.put('pedidosAgrupados', Datos.data['0'].pedidosAgrupados, { 'expires': expireDate });
+            $cookieStore.put('pedidosAgrupados', Datos.data['0'].pedidosAgrupados, { 'expires': expireDate, 'secure': true });
 
             if (Datos.data['0'].total > 0) {
               if (Datos.success) {
@@ -5213,7 +5274,7 @@ angular.module('directives.loading', [])
             var expireDate = new Date();
             expireDate.setTime(expireDate.getTime() + 600 * 2000); /*20 minutos*/
             Datos.data["0"].pedidosAgrupados[0].TipoCambio = $scope.TipoCambio;
-            $cookieStore.put('pedidosAgrupados', Datos.data["0"].pedidosAgrupados, { 'expires': expireDate });
+            $cookieStore.put('pedidosAgrupados', Datos.data["0"].pedidosAgrupados, { 'expires': expireDate, 'secure': true });
             if (Datos.success) {
               if ($cookieStore.get('pedidosAgrupados')) {
 
@@ -6130,7 +6191,7 @@ angular.module('directives.loading', [])
       }
       else {
         $scope.porcentaje = porcentajeAnterior;
-      }       
+      }
     };
 
     $scope.guardarTodo = function () {
@@ -7341,6 +7402,136 @@ angular.module('directives.loading', [])
 }());
 
 (function () {
+<<<<<<< HEAD
+=======
+  var SoporteCreateController = function ($scope, $log, $cookieStore, $location, $uibModal, $filter, SoporteFactory, $routeParams) {
+
+    $scope.init = function () {
+
+    };
+    $scope.init();
+
+    $scope.SolicitarSoporte = function () {
+      if (!$scope.frm.$invalid) {
+        SoporteFactory.postSolicitud({ Solicitud: $scope.Soporte })
+          .success(function (resultado) {
+            if (resultado.success === 1) {
+              $scope.ShowToast('Solicitud enviada.', 'success');
+              $location.path('monitor-soporte');
+            }
+          })
+          .error(function (data, status, headers, config) {
+            $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+
+            $scope.ShowToast('No pudimos enviar tu solicitud, por favor intenta de nuevo más tarde.', 'danger');
+
+            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          });
+      }
+    };
+
+    $scope.Cancelar = function () {
+      $location.path('/monitor-soporte');
+    };
+  };
+  SoporteCreateController.$inject = ['$scope', '$log', '$cookieStore', '$location', '$uibModal', '$filter', 'SoporteFactory', '$routeParams'];
+
+  angular.module('marketplace').controller('SoporteCreateController', SoporteCreateController);
+}());
+
+(function () {
+  var SoporteReadController = function ($scope, $log, $cookieStore, $location, $uibModal, $filter, SoporteFactory, $routeParams) {
+
+    $scope.init = function () {
+      SoporteFactory.getSolicitudes()
+        .success(function (Solicitudes) {
+          $scope.Solicitudes = Solicitudes.data;
+        })
+        .error(function (data, status, headers, config) {
+          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+
+          $scope.ShowToast('No pudimos cargar la lista de solicitudes, por favor intenta de nuevo más tarde.', 'danger');
+
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+    };
+    $scope.init();
+
+    $scope.NuevaSolicitud = function () {
+      $location.path('solicitar-soporte');
+    };
+
+    $scope.EditarDetalle = function (id) {
+      console.log(id);
+      $location.path('actualizar-soporte/'+id);
+    };
+  };
+  SoporteReadController.$inject = ['$scope', '$log', '$cookieStore', '$location', '$uibModal', '$filter', 'SoporteFactory', '$routeParams'];
+
+  angular.module('marketplace').controller('SoporteReadController', SoporteReadController);
+}());
+
+(function () {
+  var SoporteUpdateController = function ($scope, $log, $cookieStore, $location, $uibModal, $filter, SoporteFactory, $routeParams) {
+    var idSoporte = $routeParams.idSoporte;
+    var combo = [];
+    $scope.init = function () {
+      SoporteFactory.getSolicitud(idSoporte)
+        .success(function (resultado) {
+          if (resultado.success === 1) {
+            $scope.Soporte = resultado.data[0];
+            $scope.Soporte.IdEstatus = resultado.data[0].IdEstatus.toString();
+          }
+        }).error(function (data, status, headers, config) {
+          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.ShowToast('No pudimos cargar los datos del detalle, por favor intenta de nuevo más tarde.', 'danger');
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+      SoporteFactory.getStatus()
+        .success(function (resultado) {
+          if (resultado.success === 1) {
+            $scope.combo = resultado.data;
+          }
+        }).error(function (data, status, headers, config) {
+          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.ShowToast('No pudimos cargar la lista de status, por favor intenta de nuevo más tarde.', 'danger');
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+    };
+    $scope.init();
+    $scope.ActualizarSoporte = function () {
+      if (!$scope.frm.$invalid) {
+        var soporte = {
+          IdEstatus: $scope.Soporte.IdEstatus,
+          DescripcionSolucion: $scope.Soporte.DescripcionSolucion
+        };
+        SoporteFactory.patchSolicitud(idSoporte, soporte)
+          .success(function (resultado) {
+            if (resultado.success === 1) {
+              $scope.ShowToast('Soporte actualizado.', 'success');
+              $location.path('monitor-soporte');
+            }else {
+            $scope.ShowToast('Error al guardar los datos, verifica que los caracteres sean correctos.', 'danger');
+          }
+          })
+          .error(function (data, status, headers, config) {
+            $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+            $scope.ShowToast('No pudimos enviar tu solicitud, por favor intenta de nuevo más tarde.', 'danger');
+            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          });
+      }
+    };
+
+    $scope.Cancelar = function () {
+      $location.path('/monitor-soporte');
+    };
+  };
+  SoporteUpdateController.$inject = ['$scope', '$log', '$cookieStore', '$location', '$uibModal', '$filter', 'SoporteFactory', '$routeParams'];
+
+  angular.module('marketplace').controller('SoporteUpdateController', SoporteUpdateController);
+}());
+(function () {
+>>>>>>> cookie-fix
   var ConfirmarCuentaController = function ($scope, $routeParams, $log, $location, UsuariosFactory) {
     var encryptedObject = $routeParams.encryptedObject;
     $scope.result = {};
@@ -7466,12 +7657,12 @@ angular.module('directives.loading', [])
                             Expira: expireDate.getTime()
                           };
 
-                        $cookieStore.put('Session', Session, { 'expires': expireDate });
+                        $cookieStore.put('Session', Session, { 'expires': expireDate, 'secure': true });
 
                         if (Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === '4' ||
                           Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === '5' ||
                           Session.IdTipoAcceso === 6 || Session.IdTipoAcceso === '6') {
-                          $cookieStore.put('currentDistribuidor', Session.distribuidores[0], { 'expires': expireDate });
+                          $cookieStore.put('currentDistribuidor', Session.distribuidores[0], { 'expires': expireDate, 'secure': true });
                         }
                         $scope.detectarSitioActivoURL();
                         $scope.ActualizarDatosSession();
@@ -7645,7 +7836,7 @@ angular.module('directives.loading', [])
               if (sitio.data[0]) {
                 var expireDate = new Date();
                 expireDate.setTime(expireDate.getTime() + 600 * 60000);
-                $cookieStore.put('currentDistribuidor', sitio.data[0], { 'expires': expireDate });
+                $cookieStore.put('currentDistribuidor', sitio.data[0], { 'expires': expireDate, 'secure': true });
                 $scope.currentDistribuidor = $cookieStore.get('currentDistribuidor');
               }
             }
@@ -7698,12 +7889,12 @@ angular.module('directives.loading', [])
               Expira: expireDate.getTime()
             };
 
-            $cookieStore.put('Session', Session, { 'expires': expireDate });
+            $cookieStore.put('Session', Session, { 'expires': expireDate, 'secure': true });
 
             if (Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === '4' ||
               Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === '5' ||
               Session.IdTipoAcceso === 6 || Session.IdTipoAcceso === '6') {
-              $cookieStore.put('currentDistribuidor', Session.distribuidores[0], { 'expires': expireDate });
+              $cookieStore.put('currentDistribuidor', Session.distribuidores[0], { 'expires': expireDate, 'secure': true });
             }
 
             $scope.detectarSitioActivoURL();
@@ -7999,7 +8190,7 @@ angular.module('directives.loading', [])
                               Expira: expireDate.getTime()
                             };
 
-                            $cookieStore.put('Session', Session, { 'expires': expireDate });
+                            $cookieStore.put('Session', Session, { 'expires': expireDate, 'secure': true });
 
                             $scope.detectarSitioActivoURL();
                             $scope.ActualizarDatosSession();
@@ -8218,7 +8409,7 @@ angular.module('directives.loading', [])
     $scope.NuevaSolicitud = function () {
       $location.path('solicitar-soporte');
     };
-    
+
     $scope.EditarDetalle = function (id) {
       console.log(id);
       $location.path('actualizar-soporte/'+id);

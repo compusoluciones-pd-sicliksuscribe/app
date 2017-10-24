@@ -1,10 +1,10 @@
 (function () {
-  var AccesosAmazonFactory = function ($http, $cookieStore, $rootScope) {
+  var AccesosAmazonFactory = function ($http, $cookies, $rootScope) {
     var factory = {};
     var Session = {};
 
     factory.refreshToken = function () {
-      Session = $cookieStore.get('Session');
+      Session = $cookies.getObject('Session');
       if (!Session) { Session = { Token: 'no' }; }
       $http.defaults.headers.common['token'] = Session.Token;
     };
@@ -13,13 +13,13 @@
 
     factory.getAccesosAmazon = function () {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'AccesosAmazon');
+      return $http.getObject($rootScope.API + 'AccesosAmazon');
     };
 
     return factory;
   };
 
-  AccesosAmazonFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
+  AccesosAmazonFactory.$inject = ['$http', '$cookies', '$rootScope'];
 
   angular.module('marketplace').factory('AccesosAmazonFactory', AccesosAmazonFactory);
 }());
