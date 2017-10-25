@@ -21,6 +21,8 @@
 
     $scope.init();
 
+    var maxSize = 5900;
+
     $scope.GenerarReporte = function (params) {
       ReportesFactory.getGenerarReporte($scope.reporteSel)
         .success(function (result) {
@@ -30,7 +32,16 @@
                 var d = new Date();
                 var sDate = ('0' + d.getDate()).slice(-2) + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + d.getFullYear() + ' ' + ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
                 var NombreReporte = $scope.reportesSel[i].NombreReporte + '_' + sDate;
-                $scope.JSONToCSVConvertor(result.data[0], NombreReporte, true);
+
+                var repeat = Math.ceil(result.data[0].length / maxSize);
+                for (var j = 0; j < repeat; j++) {
+                  var start = j * maxSize;
+                  var end = start + maxSize;
+                  var parte = result.data[0].slice(start, end);
+                  var number = j + 1;
+                  NombreReporte = NombreReporte + '_' + number;
+                  $scope.JSONToCSVConvertor(parte, NombreReporte, true);
+                }
                 return;
               }
             }
