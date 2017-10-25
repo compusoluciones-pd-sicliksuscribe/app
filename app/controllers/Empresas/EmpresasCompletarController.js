@@ -32,7 +32,8 @@
 
       EmpresasFactory.getCliente(IdMicrosoft)
         .success(function (Empresa) {
-          if (!$scope.direccionValida(Empresa.default_address)) {
+          console.log(Empresa);
+          if (!$scope.direccionValida(Empresa.defaultAddress)) {
             $scope.ShowToast('El cliente no cuenta con toda la información para ser importado, actualiza sus datos entrando a partner center ', 'danger');
             return;
           }
@@ -54,8 +55,8 @@
     $scope.init();
 
     $scope.direccionValida = function (direccion) {
-      if (direccion.address_line1 && direccion.city && direccion.country && direccion.phone_number
-        && direccion.postal_code && direccion.region) return true;
+      if (direccion.addressLine1 && direccion.city && direccion.country && direccion.phoneNumber
+        && direccion.postalCode && direccion.state) return true;
       return false;
     };
 
@@ -110,15 +111,15 @@
                 } else {
                   var ObjMicrosoft = {
                     RFC: $scope.Empresa.RFC,
-                    NombreEmpresa: DatosMicrosoft.company_name,
-                    Direccion: DatosMicrosoft.default_address.address_line1,
-                    Ciudad: DatosMicrosoft.default_address.city,
-                    Estado: DatosMicrosoft.default_address.region,
-                    CodigoPostal: DatosMicrosoft.default_address.postal_code,
-                    NombreContacto: DatosMicrosoft.first_name || DatosMicrosoft.default_address.first_name,
-                    ApellidosContacto: DatosMicrosoft.last_name || DatosMicrosoft.default_address.last_name,
+                    NombreEmpresa: DatosMicrosoft.companyName,
+                    Direccion: DatosMicrosoft.defaultAddress.addressLine1,
+                    Ciudad: DatosMicrosoft.defaultAddress.city,
+                    Estado: DatosMicrosoft.defaultAddress.state,
+                    CodigoPostal: DatosMicrosoft.defaultAddress.postalCode,
+                    NombreContacto: DatosMicrosoft.firstName,
+                    ApellidosContacto: DatosMicrosoft.lastName,
                     CorreoContacto: $scope.Empresa.CorreoContacto,
-                    TelefonoContacto: DatosMicrosoft.default_address.phone_number,
+                    TelefonoContacto: DatosMicrosoft.defaultAddress.phoneNumber,
                     ZonaImpuesto: 'Normal',
                     Lada: '52',
                     IdMicrosoftUF: IdMicrosoft,

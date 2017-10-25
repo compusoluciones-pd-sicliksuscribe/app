@@ -31,17 +31,16 @@
             <tr ng-repeat="uf in EmpresasM | filter:EmpresaFilter" class="repeat-animation">
                 <td>
                     <div class="row">
-
                         <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                            <h4><b>{{uf.displayName}}</b></h4>
-                            <label for="">Microsoft ID: {{uf.customerContextId}}</label>
+                            <h4><b>{{uf.companyProfile.companyName}}</b></h4>
+                            <label for="">Microsoft ID: {{uf.id}}</label>
                             <br>
-                            <label for="">Dominio: {{uf.defaultDomainName}}</label>
+                            <label for="">Dominio: {{uf.companyProfile.domain}}</label>
                         </div>
 
                         <div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2 pull-right">
                             <div class="pull-right">
-                                <button class="btn btn-primary newClient" ng-click="ImportarEmpresa(IdEmpresaDistribuidor,uf.customerContextId,uf.defaultDomainName,uf.displayName)">Importar </button>
+                                <button class="btn btn-primary newClient" ng-click="ImportarEmpresa(IdEmpresaDistribuidor,uf.id,uf.companyProfile.domain,uf.companyProfile.companyName)">Importar </button>
                             </div>
                         </div>
 

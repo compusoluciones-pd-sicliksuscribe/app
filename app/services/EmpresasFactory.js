@@ -18,7 +18,7 @@
 
     factory.getCliente = function (Id) {
       factory.refreshToken();
-      return $http.post($rootScope.API + 'Importar/', { IdMicrosoft: Id });
+      return $http.get($rootScope.MAPI + 'customer/' + Id);
     };
 
     factory.getEmpresas = function () {
@@ -28,7 +28,7 @@
 
     factory.getEmpresasMicrosoft = function () {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'Empresa/Microsoft');
+      return $http.get($rootScope.MAPI + 'customer');
     };
 
     factory.getEmpresa = function (IdEmpresa) {
@@ -56,9 +56,9 @@
       return $http.put($rootScope.API + 'Empresas', Empresa);
     };
 
-    factory.revisarDominio = function (Empresa) {
+    factory.revisarDominio = function (dominio) {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'Empresa/Dominio/' + Empresa);
+      return $http.get($rootScope.MAPI + 'utilities/' + dominio);
     };
 
     factory.revisarRFC = function (ObjRFC) {
