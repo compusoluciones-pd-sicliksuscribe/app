@@ -1,7 +1,7 @@
 CACHE MANIFEST
 
-# Version: V. 2.2.5
-# Ultima actualizacion: 24-10-2017 09:47 am
+# Version: V. 2.3.0
+# Ultima actualizacion: 25-10-2017 04:16 pm
 
 # A manifest file needs to be served with the correct media type, which is "text/cache-manifest". Must be configured on the web server.
 # Explicitly cached 'master entries'.
@@ -9,7 +9,7 @@ CACHE MANIFEST
 CACHE:
 
      # index.html
-    
+
      # app/all.js
 
      # app/views/error.html
