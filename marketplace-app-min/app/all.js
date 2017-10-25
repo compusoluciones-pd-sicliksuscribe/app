@@ -21,8 +21,8 @@
       .when('/Usuario/:IdUsuario', {
         controller: 'UsuariosUpdateController', templateUrl: 'app/views/Usuarios/UsuariosUpdate.html',
         resolve: {
-          'check': function ($location, $cookieStore) {
-            var Session = $cookieStore.get('Session');
+          'check': function ($location, $cookies) {
+            var Session = $cookies.getObject('Session');
             if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6 || Session.IdTipoAcceso === 7)) { $location.path('/404'); }
           }
         }
@@ -31,8 +31,8 @@
       .when('/MisProductos', {
         controller: 'MisProductosReadController', templateUrl: 'app/views/Productos/MisProductosRead.html',
         resolve: {
-          'check': function ($location, $cookieStore) {
-            var Session = $cookieStore.get('Session');
+          'check': function ($location, $cookies) {
+            var Session = $cookies.getObject('Session');
             if (!(Session.IdTipoAcceso === 2 && Session.IdEmpresa == 214)) { $location.path('/404'); }
           }
         }
@@ -41,8 +41,8 @@
       .when('/Configuracion', {
         controller: 'ConfiguracionUpdateController', templateUrl: 'app/views/Empresas/ConfiguracionUpdate.html',
         resolve: {
-          'check': function ($location, $cookieStore) {
-            var Session = $cookieStore.get('Session');
+          'check': function ($location, $cookies) {
+            var Session = $cookies.getObject('Session');
             if (!(Session.IdTipoAcceso === 2 && Session.IdEmpresa == 214)) { $location.path('/404'); }
           }
         }
@@ -50,8 +50,8 @@
       .when('/autodesk/productos/:IdProducto/detalle/:IdPedidoDetalle', {
         controller: 'ConfigurarBaseController', templateUrl: 'app/views/Productos/ConfigurarBase.html',
         resolve: {
-          'check': function ($location, $cookieStore) {
-            var Session = $cookieStore.get('Session');
+          'check': function ($location, $cookies) {
+            var Session = $cookies.getObject('Session');
             if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3)) { $location.path('/404'); }
           }
         }
@@ -60,8 +60,8 @@
       .when('/monitor-soporte', {
         controller: 'SoporteReadController', templateUrl: 'app/views/Soporte/SoporteRead.html',
         resolve: {
-          'check': function ($location, $cookieStore) {
-            var Session = $cookieStore.get('Session');
+          'check': function ($location, $cookies) {
+            var Session = $cookies.getObject('Session');
             if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3)) { $location.path('/404'); }
           }
         }
@@ -70,8 +70,8 @@
       .when('/solicitar-soporte', {
         controller: 'SoporteCreateController', templateUrl: 'app/views/Soporte/SoporteCreate.html',
         resolve: {
-          'check': function ($location, $cookieStore) {
-            var Session = $cookieStore.get('Session');
+          'check': function ($location, $cookies) {
+            var Session = $cookies.getObject('Session');
             if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3)) { $location.path('/404'); }
           }
         }
@@ -80,8 +80,8 @@
       .when('/actualizar-soporte/:idSoporte', {
         controller: 'SoporteUpdateController', templateUrl: 'app/views/Soporte/SoporteUpdate.html',
         resolve: {
-          'check': function ($location, $cookieStore) {
-            var Session = $cookieStore.get('Session');
+          'check': function ($location, $cookies) {
+            var Session = $cookies.getObject('Session');
             if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); }
           }
         }
@@ -90,8 +90,8 @@
       .when('/power-bi', {
         controller: 'PowerBIReadController', templateUrl: 'app/views/PowerBI/PowerBIRead.html',
         resolve: {
-          'check': function ($location, $cookieStore) {
-            var Session = $cookieStore.get('Session');
+          'check': function ($location, $cookies) {
+            var Session = $cookies.getObject('Session');
             if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); }
           }
         }
@@ -100,8 +100,8 @@
       .when('/aplicaciones', {
         controller: 'AplicacionesReadController', templateUrl: 'app/views/Aplicaciones/AplicacionesRead.html',
         resolve: {
-          'check': function ($location, $cookieStore) {
-            var Session = $cookieStore.get('Session');
+          'check': function ($location, $cookies) {
+            var Session = $cookies.getObject('Session');
             if (!(Session.IdTipoAcceso === 2 && Session.IdEmpresa === 110)) { $location.path('/404'); }
           }
         }
@@ -110,8 +110,8 @@
       .when('/migraciones', {
         controller: 'MigracionController', templateUrl: 'app/views/Migracion/Migracion.html',
         resolve: {
-          'check': function ($location, $cookieStore) {
-            var Session = $cookieStore.get('Session');
+          'check': function ($location, $cookies) {
+            var Session = $cookies.getObject('Session');
             if (!(Session.IdTipoAcceso === 2 && Session.IdEmpresa === 110)) { $location.path('/404'); }
           }
         }
@@ -120,8 +120,8 @@
       .when('/migraciones/:idMigracion', {
         controller: 'MigracionDetalleController', templateUrl: 'app/views/Migracion/MigracionDetalle.html',
         resolve: {
-          'check': function ($location, $cookieStore) {
-            var Session = $cookieStore.get('Session');
+          'check': function ($location, $cookies) {
+            var Session = $cookies.getObject('Session');
             if (!(Session.IdTipoAcceso === 2 && Session.IdEmpresa === 110)) { $location.path('/404'); }
           }
         }
@@ -130,8 +130,8 @@
       .when('/ConfigurarRPs/:IdEmpresa', {
         controller: 'EmpresasRPController', templateUrl: 'app/views/Empresas/EmpresasRP.html',
         resolve: {
-          'check': function ($location, $cookieStore) {
-            var Session = $cookieStore.get('Session');
+          'check': function ($location, $cookies) {
+            var Session = $cookies.getObject('Session');
             if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); }
           }
         }
@@ -140,8 +140,8 @@
       .when('/Monitor', {
         controller: 'MonitorReadController', templateUrl: 'app/views/PedidoDetalles/MonitorRead.html',
         resolve: {
-          'check': function ($location, $cookieStore) {
-            var Session = $cookieStore.get('Session');
+          'check': function ($location, $cookies) {
+            var Session = $cookies.getObject('Session');
             if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6 || Session.IdTipoAcceso === 7)) { $location.path('/404'); }
           }
         }
@@ -150,8 +150,8 @@
       .when('/MonitorPagos', {
         controller: 'MonitorPagos', templateUrl: 'app/views/PedidoDetalles/MonitorPagos.html',
         resolve: {
-          'check': function ($location, $cookieStore) {
-            var Session = $cookieStore.get('Session');
+          'check': function ($location, $cookies) {
+            var Session = $cookies.getObject('Session');
             if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6 || Session.IdTipoAcceso === 7)) { $location.path('/404'); }
           }
         }
@@ -160,8 +160,8 @@
       .when('/MonitorPagos/refrescar', {
         controller: 'MonitorPagos', templateUrl: 'app/views/PedidoDetalles/MonitorPagos.html',
         resolve: {
-          'check': function ($location, $cookieStore) {
-            var Session = $cookieStore.get('Session');
+          'check': function ($location, $cookies) {
+            var Session = $cookies.getObject('Session');
             if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6 || Session.IdTipoAcceso === 7)) { $location.path('/404'); }
           }
         }
@@ -170,8 +170,8 @@
       .when('/DetallesAzure/:IdPedido', {
         controller: 'DetallesAzureController', templateUrl: 'app/views/PedidoDetalles/DetallesAzure.html',
         resolve: {
-          'check': function ($location, $cookieStore) {
-            var Session = $cookieStore.get('Session');
+          'check': function ($location, $cookies) {
+            var Session = $cookies.getObject('Session');
             if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3)) { $location.path('/404'); }
           }
         }
@@ -180,8 +180,8 @@
       .when('/TerminosCondiciones', {
         controller: 'TerminosReadController', templateUrl: 'app/views/Usuarios/TerminosRead.html',
         resolve: {
-          'check': function ($location, $cookieStore) {
-            var Session = $cookieStore.get('Session');
+          'check': function ($location, $cookies) {
+            var Session = $cookies.getObject('Session');
             if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6 || Session.IdTipoAcceso === 7)) { $location.path('/404'); }
           }
         }
@@ -189,129 +189,129 @@
 
       .when('/Usuario', {
         controller: 'UsuariosCreateController', templateUrl: 'app/views/Usuarios/UsuariosCreate.html',
-        resolve: { 'check': function ($location, $cookieStore) { var Session = $cookieStore.get('Session'); if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 6 || Session.IdTipoAcceso === 7)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 6 || Session.IdTipoAcceso === 7)) { $location.path('/404'); } } }
       })
 
       .when('/Usuarios', {
         controller: 'UsuariosReadController', templateUrl: 'app/views/Usuarios/UsuariosRead.html',
-        resolve: { 'check': function ($location, $cookieStore) { var Session = $cookieStore.get('Session'); if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 6 || Session.IdTipoAcceso === 7)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 6 || Session.IdTipoAcceso === 7)) { $location.path('/404'); } } }
       })
 
       .when('/Empresa', {
         controller: 'EmpresasCreateController', templateUrl: 'app/views/Empresas/EmpresasCreate.html',
-        resolve: { 'check': function ($location, $cookieStore) { var Session = $cookieStore.get('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 7)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 7)) { $location.path('/404'); } } }
       })
 
       .when('/Empresa/:IdEmpresa', {
         controller: 'EmpresasUpdateController', templateUrl: 'app/views/Empresas/EmpresasUpdate.html',
-        resolve: { 'check': function ($location, $cookieStore) { var Session = $cookieStore.get('Session'); if (!(Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 6)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 6)) { $location.path('/404'); } } }
       })
 
       .when('/Clientes', {
         controller: 'EmpresasXEmpresasReadController', templateUrl: 'app/views/EmpresasXEmpresas/EmpresasXEmpresasRead.html',
-        resolve: { 'check': function ($location, $cookieStore) { var Session = $cookieStore.get('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 7)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 7)) { $location.path('/404'); } } }
       })
 
       .when('/Productos/:Busqueda', {
         controller: 'ProductosReadController', templateUrl: 'app/views/Productos/ProductosRead.html',
-        resolve: { 'check': function ($location, $cookieStore) { var Session = $cookieStore.get('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 7)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 7)) { $location.path('/404'); } } }
       })
 
       .when('/Productos', {
         controller: 'ProductosReadController', templateUrl: 'app/views/Productos/ProductosRead.html',
-        resolve: { 'check': function ($location, $cookieStore) { var Session = $cookieStore.get('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 7)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 7)) { $location.path('/404'); } } }
       })
 
       .when('/Comprar', {
         controller: 'ComprarController', templateUrl: 'app/views/PedidoDetalles/Comprar.html',
-        resolve: { 'check': function ($location, $cookieStore) { var Session = $cookieStore.get('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3)) { $location.path('/404'); } } }
       })
 
       .when('/uf/Comprar', {
         controller: 'ComprarUFController', templateUrl: 'app/views/PedidoDetalles/ComprarUF.html',
-        resolve: { 'check': function ($location, $cookieStore) { var Session = $cookieStore.get('Session'); if (!(Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6)) { $location.path('/404'); } } }
       })
 
       .when('/Carrito', {
         controller: 'PedidoDetallesReadController', templateUrl: 'app/views/PedidoDetalles/PedidoDetallesRead.html',
-        resolve: { 'check': function ($location, $cookieStore) { var Session = $cookieStore.get('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3)) { $location.path('/404'); } } }
       })
 
       .when('/Carrito/:error', {
         controller: 'PedidoDetallesReadController', templateUrl: 'app/views/PedidoDetalles/PedidoDetallesRead.html',
-        resolve: { 'check': function ($location, $cookieStore) { var Session = $cookieStore.get('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3)) { $location.path('/404'); } } }
       })
 
       .when('/uf/Productos/:Busqueda', {
         controller: 'ProductosUFReadController', templateUrl: 'app/views/Productos/ProductosUFRead.html',
-        resolve: { 'check': function ($location, $cookieStore) { var Session = $cookieStore.get('Session'); if (!(Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6)) { $location.path('/404'); } } }
       })
 
       .when('/uf/Productos', {
         controller: 'ProductosUFReadController', templateUrl: 'app/views/Productos/ProductosUFRead.html',
-        resolve: { 'check': function ($location, $cookieStore) { var Session = $cookieStore.get('Session'); if (!(Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6)) { $location.path('/404'); } } }
       })
 
       .when('/uf/Carrito', {
         controller: 'PedidoDetallesUFReadController', templateUrl: 'app/views/PedidoDetalles/PedidoDetallesUFRead.html',
-        resolve: { 'check': function ($location, $cookieStore) { var Session = $cookieStore.get('Session'); if (!(Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6)) { $location.path('/404'); } } }
       })
 
       .when('/uf/Carrito/:error', {
         controller: 'PedidoDetallesUFReadController', templateUrl: 'app/views/PedidoDetalles/PedidoDetallesUFRead.html',
-        resolve: { 'check': function ($location, $cookieStore) { var Session = $cookieStore.get('Session'); if (!(Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6)) { $location.path('/404'); } } }
       })
 
       .when('/Favoritos', {
         controller: 'ProductoGuardadosReadController', templateUrl: 'app/views/ProductoGuardados/ProductoGuardadosRead.html',
-        resolve: { 'check': function ($location, $cookieStore) { var Session = $cookieStore.get('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3)) { $location.path('/404'); } } }
       })
 
       .when('/Empresas/Importar/:IdEmpresa', {
         controller: 'EmpresasImportController', templateUrl: 'app/views/Empresas/EmpresasImport.html',
-        resolve: { 'check': function ($location, $cookieStore) { var Session = $cookieStore.get('Session'); if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); } } }
       })
 
       .when('/Empresas/Importar/:IdEmpresa/:IdMicrosoft/:Dominio/:Name', {
         controller: 'EmpresasCompletarController', templateUrl: 'app/views/Empresas/EmpresasCompletar.html',
-        resolve: { 'check': function ($location, $cookieStore) { var Session = $cookieStore.get('Session'); if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); } } }
       })
 
       .when('/Empresas', {
         controller: 'EmpresasReadController', templateUrl: 'app/views/Empresas/EmpresasRead.html',
-        resolve: { 'check': function ($location, $cookieStore) { var Session = $cookieStore.get('Session'); if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); } } }
       })
 
       .when('/Credito/:IdEmpresa', {
         controller: 'EmpresasCreditoUpdateController', templateUrl: 'app/views/Empresas/EmpresasCreditoUpdate.html',
-        resolve: { 'check': function ($location, $cookieStore) { var Session = $cookieStore.get('Session'); if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); } } }
       })
 
       .when('/Promocion', {
         controller: 'PromocionsCreateController', templateUrl: 'app/views/Promocions/PromocionsCreate.html',
-        resolve: { 'check': function ($location, $cookieStore) { var Session = $cookieStore.get('Session'); if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); } } }
       })
 
       .when('/Promocions', {
         controller: 'PromocionsReadController', templateUrl: 'app/views/Promocions/PromocionsRead.html',
-        resolve: { 'check': function ($location, $cookieStore) { var Session = $cookieStore.get('Session'); if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); } } }
       })
 
       .when('/Promocion/:IdPromocion', {
         controller: 'PromocionsUpdateController', templateUrl: 'app/views/Promocions/PromocionsUpdate.html',
-        resolve: { 'check': function ($location, $cookieStore) { var Session = $cookieStore.get('Session'); if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); } } }
       })
 
       .when('/Reportes', {
         controller: 'ReportesController', templateUrl: 'app/views/Reportes.html',
-        resolve: { 'check': function ($location, $cookieStore) { var Session = $cookieStore.get('Session'); if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6 || Session.IdTipoAcceso === 7)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6 || Session.IdTipoAcceso === 7)) { $location.path('/404'); } } }
       })
 
       .when('/Niveles', {
         controller: 'NivelesReadController', templateUrl: 'app/views/Niveles/NivelesRead.html',
         resolve: {
-          'check': function ($location, $cookieStore, jwtHelper) {
-            var Session = $cookieStore.get('Session');
+          'check': function ($location, $cookies, jwtHelper) {
+            var Session = $cookies.getObject('Session');
             var decoded = jwtHelper.decodeToken(Session.Token);
             if (!(decoded.IdTipoAcceso === 1)) {
               $location.path('/404');
@@ -322,8 +322,8 @@
 
       .when('/Niveles/Distribuidor', {
         controller: 'NivelesClienteFinalController', templateUrl: 'app/views/Niveles/NivelesClienteFinal.html',
-        resolve: { 'check': function ($location, $cookieStore, jwtHelper) {
-          var Session = $cookieStore.get('Session');
+        resolve: { 'check': function ($location, $cookies, jwtHelper) {
+          var Session = $cookies.getObject('Session');
           var decoded = jwtHelper.decodeToken(Session.Token);
           if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3) || !decoded.Niveles) { $location.path('/404'); }
         } }
@@ -331,8 +331,8 @@
 
       .when('/Niveles/Distribuidor/:IdDescuento/Descuentos', {
         controller: 'DescuentosNivelesController', templateUrl: 'app/views/Descuentos/DescuentosNiveles.html',
-        resolve: { 'check': function ($location, $cookieStore, jwtHelper) {
-          var Session = $cookieStore.get('Session');
+        resolve: { 'check': function ($location, $cookies, jwtHelper) {
+          var Session = $cookies.getObject('Session');
           var decoded = jwtHelper.decodeToken(Session.Token);
           if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3) || !decoded.Niveles) { $location.path('/404'); }
         } }
@@ -340,30 +340,30 @@
 
       .when('/Niveles/:IdNivel/Productos', {
         controller: 'DescuentosNivelesCSController', templateUrl: 'app/views/Descuentos/DescuentosNivelesCS.html',
-        resolve: { 'check': function ($location, $cookieStore, jwtHelper) {
-          var Session = $cookieStore.get('Session');
+        resolve: { 'check': function ($location, $cookies, jwtHelper) {
+          var Session = $cookies.getObject('Session');
           if (!Session.IdTipoAcceso === 1) { $location.path('/404'); }
         } }
       })
 
       .when('/Descuentos', {
         controller: 'DescuentosReadController', templateUrl: 'app/views/Descuentos/DescuentosRead.html',
-        resolve: { 'check': function ($location, $cookieStore) { var Session = $cookieStore.get('Session'); if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); } } }
       })
 
       .when('/Descuento', {
         controller: 'DescuentosCreateController', templateUrl: 'app/views/Descuentos/DescuentosCreate.html',
-        resolve: { 'check': function ($location, $cookieStore) { var Session = $cookieStore.get('Session'); if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); } } }
       })
 
       .when('/Descuento/:Descuento', {
         controller: 'DescuentosUpdateController', templateUrl: 'app/views/Descuentos/DescuentosUpdate.html',
-        resolve: { 'check': function ($location, $cookieStore) { var Session = $cookieStore.get('Session'); if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); } } }
       })
 
       .when('/Version', {
         controller: 'VersionController', templateUrl: 'app/views/VersionControl/VersionControl.html',
-        resolve: { 'check': function ($location, $cookieStore) { var Session = $cookieStore.get('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 1)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 1)) { $location.path('/404'); } } }
       })
 
       /* .when('/:Subdominio', { controller: 'UsuariosLoginController', templateUrl: 'app/views/Usuarios/UsuariosLogin.html' }) */
@@ -380,11 +380,32 @@ angular.module('marketplace')
     $rootScope.rsVersion = '2.1.1';
     /* $rootScope.API = 'http://localhost:8080/';
     $rootScope.MAPI = 'http://localhost:8083/';
-    $rootScope.dominio = 'localhost';*/
+    $rootScope.dominio = 'localhost'; */
     $rootScope.API = 'https://pruebas.compusoluciones.com/';
     $rootScope.MAPI = 'http://microsoft-api.us-east-1.elasticbeanstalk.com/';
     $rootScope.dominio = 'clicksuscribe';
+    $rootScope.secureCookie = true;
   });
+
+angular.module('directives.loading', [])
+  .directive('cargando', ['$http', function ($http) {
+    return {
+      restrict: 'A',
+      link: function (scope, elm, attrs) {
+        scope.isLoading = function () {
+          return $http.pendingRequests.length > 0;
+        };
+
+        scope.$watch(scope.isLoading, function (v) {
+          if (v) {
+            elm.show();
+          } else {
+            elm.hide();
+          }
+        });
+      }
+    };
+  }]);
 
 (function () {
   var ContactoController = function ($scope) {
@@ -403,7 +424,7 @@ angular.module('marketplace')
 'use strict';
 
 (function () {
-  var IndexController = function ($scope, $log, $location, $cookieStore, $rootScope, PedidosFactory, PedidoDetallesFactory, ngToast, $uibModal, $window, UsuariosFactory, deviceDetector, ComprasUFFactory, EmpresasFactory) {
+  var IndexController = function ($scope, $log, $location, $cookies, $rootScope, PedidosFactory, PedidoDetallesFactory, ngToast, $uibModal, $window, UsuariosFactory, deviceDetector, ComprasUFFactory, EmpresasFactory) {
     $scope.indexBuscarProductos = {};
     $scope.SessionCookie = {};
     $scope.ProductosCarrito = 0;
@@ -463,9 +484,11 @@ angular.module('marketplace')
       if (Distribuidor) {
         var expireDate = new Date();
         expireDate.setTime(expireDate.getTime() + 600 * 60000);
-        $cookieStore.put('currentDistribuidor', Distribuidor, { 'expires': expireDate });
-        if ($cookieStore.get('currentDistribuidor')) {
-          $scope.currentDistribuidor = $cookieStore.get('currentDistribuidor');
+        console.log(Distribuidor);
+        console.log(typeof Distribuidor);
+        $cookies.putObject('currentDistribuidor', Distribuidor, { 'expires': expireDate, secure: $rootScope.secureCookie });
+        if ($cookies.getObject('currentDistribuidor')) {
+          $scope.currentDistribuidor = $cookies.getObjectObject('currentDistribuidor');
         } else {
           $scope.currentDistribuidor = {};
           $scope.currentDistribuidor.UrlLogo = 'images/LogoSVG.svg';
@@ -479,7 +502,7 @@ angular.module('marketplace')
     };
 
     $scope.detectarSitioActivoURL = function (){
-      var Session =  $cookieStore.get('Session');
+      var Session =  $cookies.getObject('Session');
       if ($scope.currentDistribuidor.IdEmpresa) {
         for (var i = 0; i < Session.distribuidores.length; i++) {
           if (Session.distribuidores[i]) {
@@ -504,13 +527,13 @@ angular.module('marketplace')
 
     $scope.ActualizarMenu = function (location) {
       $scope.navCollapsed = true;
-      if ($cookieStore.get('Session')) {
-        $scope.SessionCookie = $cookieStore.get('Session');
+      if ($cookies.getObject('Session')) {
+        $scope.SessionCookie = $cookies.getObject('Session');
         $scope.ContarProductosCarrito();
         if ($scope.SessionCookie.IdTipoAcceso === 4 || $scope.SessionCookie.IdTipoAcceso === '4' ||
           $scope.SessionCookie.IdTipoAcceso === 5 || $scope.SessionCookie.IdTipoAcceso === '5' ||
           $scope.SessionCookie.IdTipoAcceso === 6 || $scope.SessionCookie.IdTipoAcceso === '6') {
-          $scope.cambiarDistribuidor($cookieStore.get('currentDistribuidor'), false);
+          $scope.cambiarDistribuidor($cookies.getObject('currentDistribuidor'), false);
         }
       }
     };
@@ -531,15 +554,15 @@ angular.module('marketplace')
       } else {
         $scope.navCollapsed = true;
 
-        if ($cookieStore.get('Session') == '' || $cookieStore.get('Session') == undefined || $cookieStore.get('Session') == null) {
+        if ($cookies.getObject('Session') == '' || $cookies.getObject('Session') == undefined || $cookies.getObject('Session') == null) {
           $location.path('/Login');
         } else {
           var fecha = new Date();
 
-          if ($cookieStore.get('Session').Expira < fecha.getTime()) {
+          if ($cookies.getObject('Session').Expira < fecha.getTime()) {
             $scope.CerrarSesion();
           } else {
-            if ($cookieStore.get('Session').LeyoTerminos != 1) {
+            if ($cookies.getObject('Session').LeyoTerminos != 1) {
               $scope.ShowToast('Para usar el sitio necesitas aceptar los terminos y condiciones', 'danger');
               $location.path('/TerminosCondiciones');
             }
@@ -596,8 +619,8 @@ angular.module('marketplace')
           $scope.cambiarDistribuidor(empresa.data[0], false);
           $scope.ActualizarMenu();
         });
-        if ($cookieStore.get('currentDistribuidor')) {
-          $scope.currentDistribuidor = $cookieStore.get('currentDistribuidor');
+        if ($cookies.getObject('currentDistribuidor')) {
+          $scope.currentDistribuidor = $cookies.getObject('currentDistribuidor');
         } else {
           $scope.currentDistribuidor = {};
           $scope.currentDistribuidor.UrlLogo = 'images/LogoSVG.svg';
@@ -607,7 +630,7 @@ angular.module('marketplace')
 
     $scope.selectMenu = function () {
       if ($scope.currentDistribuidor) {
-        if ((($scope.SessionCookie.IdTipoAcceso == 4 || $scope.SessionCookie.IdTipoAcceso == 5 || $scope.SessionCookie.IdTipoAcceso == 6) 
+        if ((($scope.SessionCookie.IdTipoAcceso == 4 || $scope.SessionCookie.IdTipoAcceso == 5 || $scope.SessionCookie.IdTipoAcceso == 6)
         && (($scope.currentDistribuidor.IdEmpresa != 0) && $scope.currentDistribuidor.IdEmpresa != null) && $scope.SessionCookie.IdTipoAcceso != 2)) {
           return true;
         }
@@ -660,23 +683,15 @@ angular.module('marketplace')
 
         expireDate.setTime(expireDate.getTime() + 1);
 
-        $cookieStore.put('Session', Session, { 'expires': expireDate });
-        $cookieStore.put('currentDistribuidor', Session, { 'expires': expireDate });
-        $cookieStore.put('Pedido', Session, { 'expires': expireDate });
-
-        $cookieStore.put('Session', null);
-        $cookieStore.put('currentDistribuidor', null);
-        $cookieStore.put('Pedido', null);
-
-        $cookieStore.remove('Session');
-        $cookieStore.remove('Pedido');
-        $cookieStore.remove('currentDistribuidor');
+        $cookies.remove('Session');
+        $cookies.remove('Pedido');
+        $cookies.remove('currentDistribuidor');
 
         $scope.SessionCookie = {};
         $scope.currentDistribuidor = {};
 
-        angular.forEach($cookieStore, function (v, k) {
-          $cookieStore.remove(k);
+        angular.forEach($cookies, function (v, k) {
+          $cookies.remove(k);
         });
 
         $scope = $scope.$new(true);
@@ -700,9 +715,9 @@ angular.module('marketplace')
     };
 
     $scope.ActualizarDatosSession = function () {
-      $scope.SessionCookie = $cookieStore.get('Session');
+      $scope.SessionCookie = $cookies.getObject('Session');
       if ($scope.SessionCookie.IdTipoAcceso === 4 || $scope.SessionCookie.IdTipoAcceso === '4') {
-        $scope.cambiarDistribuidor($cookieStore.get('currentDistribuidor'), false);
+        $scope.cambiarDistribuidor($cookies.getObject('currentDistribuidor'), false);
       }
     };
 
@@ -756,13 +771,13 @@ angular.module('marketplace')
     };
   };
 
-  IndexController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$rootScope', 'PedidosFactory', 'PedidoDetallesFactory', 'ngToast', '$uibModal', '$window', 'UsuariosFactory', 'deviceDetector', 'ComprasUFFactory', 'EmpresasFactory'];
+  IndexController.$inject = ['$scope', '$log', '$location', '$cookies', '$rootScope', 'PedidosFactory', 'PedidoDetallesFactory', 'ngToast', '$uibModal', '$window', 'UsuariosFactory', 'deviceDetector', 'ComprasUFFactory', 'EmpresasFactory'];
 
   angular.module('marketplace').controller('IndexController', IndexController);
 }());
 
 (function () {
-  var LandingController = function ($scope, $log, $location, $cookieStore, PromocionsFactory, deviceDetector) {
+  var LandingController = function ($scope, $log, $location, $cookies, PromocionsFactory, deviceDetector) {
     $scope.Promociones = {};
 
     $scope.init = function () {
@@ -780,7 +795,7 @@ angular.module('marketplace')
     $scope.init();
   };
 
-  LandingController.$inject = ['$scope', '$log', '$location', '$cookieStore', 'PromocionsFactory', 'deviceDetector'];
+  LandingController.$inject = ['$scope', '$log', '$location', '$cookies', 'PromocionsFactory', 'deviceDetector'];
 
   angular.module('marketplace').controller('LandingController', LandingController);
 }());
@@ -799,9 +814,9 @@ angular.module('marketplace')
 }());
 
 (function () {
-  var ReportesController = function ($scope, $log, $location, $cookieStore, ReportesFactory) {
+  var ReportesController = function ($scope, $log, $location, $cookies, ReportesFactory) {
 
-    $scope.perfil = $cookieStore.get('Session');
+    $scope.perfil = $cookies.getObject('Session');
 
     $scope.reportesSel = '';
 
@@ -911,7 +926,7 @@ angular.module('marketplace')
     };
   };
 
-  ReportesController.$inject = ['$scope', '$log', '$location', '$cookieStore', 'ReportesFactory'];
+  ReportesController.$inject = ['$scope', '$log', '$location', '$cookies', 'ReportesFactory'];
 
   angular.module('marketplace').controller('ReportesController', ReportesController);
 }());
@@ -945,33 +960,13 @@ angular.module('marketplace')
   angular.module('marketplace').controller('SugerenciasController', SugerenciasController);
 }());
 
-angular.module('directives.loading', [])
-  .directive('cargando', ['$http', function ($http) {
-    return {
-      restrict: 'A',
-      link: function (scope, elm, attrs) {
-        scope.isLoading = function () {
-          return $http.pendingRequests.length > 0;
-        };
-
-        scope.$watch(scope.isLoading, function (v) {
-          if (v) {
-            elm.show();
-          } else {
-            elm.hide();
-          }
-        });
-      }
-    };
-  }]);
-
 (function () {
-  var AccesosAmazonFactory = function ($http, $cookieStore, $rootScope) {
+  var AccesosAmazonFactory = function ($http, $cookies, $rootScope) {
     var factory = {};
     var Session = {};
 
     factory.refreshToken = function () {
-      Session = $cookieStore.get('Session');
+      Session = $cookies.getObject('Session');
       if (!Session) { Session = { Token: 'no' }; }
       $http.defaults.headers.common['token'] = Session.Token;
     };
@@ -980,24 +975,24 @@ angular.module('directives.loading', [])
 
     factory.getAccesosAmazon = function () {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'AccesosAmazon');
+      return $http.getObject($rootScope.API + 'AccesosAmazon');
     };
 
     return factory;
   };
 
-  AccesosAmazonFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
+  AccesosAmazonFactory.$inject = ['$http', '$cookies', '$rootScope'];
 
   angular.module('marketplace').factory('AccesosAmazonFactory', AccesosAmazonFactory);
 }());
 
 (function () {
-  var ComprasUFFactory = function ($http, $cookieStore, $rootScope) {
+  var ComprasUFFactory = function ($http, $cookies, $rootScope) {
     var factory = {};
     var Session = {};
 
     factory.refreshToken = function () {
-      Session = $cookieStore.get('Session');
+      Session = $cookies.getObject('Session');
       if (!Session) { Session = { Token: 'no' }; }
       $http.defaults.headers.common['token'] = Session.Token;
     };
@@ -1032,18 +1027,18 @@ angular.module('directives.loading', [])
     return factory;
   };
 
-  ComprasUFFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
+  ComprasUFFactory.$inject = ['$http', '$cookies', '$rootScope'];
 
   angular.module('marketplace').factory('ComprasUFFactory', ComprasUFFactory);
 }());
 
 (function () {
-  var DescuentosFactory = function ($http, $cookieStore, $rootScope) {
+  var DescuentosFactory = function ($http, $cookies, $rootScope) {
     var factory = {};
     var Session = {};
 
     factory.refreshToken = function () {
-      Session = $cookieStore.get('Session');
+      Session = $cookies.getObject('Session');
       if (!Session) { Session = { Token: 'no' }; }
       $http.defaults.headers.common['token'] = Session.Token;
     };
@@ -1078,18 +1073,18 @@ angular.module('directives.loading', [])
     return factory;
   };
 
-  DescuentosFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
+  DescuentosFactory.$inject = ['$http', '$cookies', '$rootScope'];
 
   angular.module('marketplace').factory('DescuentosFactory', DescuentosFactory);
 }());
 
 (function () {
-  var DescuentosNivelesFactory = function ($http, $cookieStore, $rootScope) {
+  var DescuentosNivelesFactory = function ($http, $cookies, $rootScope) {
     var factory = {};
     var Session = {};
 
     factory.refreshToken = function () {
-      Session = $cookieStore.get('Session');
+      Session = $cookies.getObject('Session');
       if (!Session) { Session = { Token: 'no' }; }
       $http.defaults.headers.common['token'] = Session.Token;
     };
@@ -1109,18 +1104,18 @@ angular.module('directives.loading', [])
     return factory;
   };
 
-  DescuentosNivelesFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
+  DescuentosNivelesFactory.$inject = ['$http', '$cookies', '$rootScope'];
 
   angular.module('marketplace').factory('DescuentosNivelesFactory', DescuentosNivelesFactory);
 }());
 
 (function () {
-  var EmpresasFactory = function ($http, $cookieStore, $rootScope) {
+  var EmpresasFactory = function ($http, $cookies, $rootScope) {
     var factory = {};
     var Session = {};
 
     factory.refreshToken = function () {
-      Session = $cookieStore.get('Session');
+      Session = $cookies.getObject('Session');
       if (!Session) { Session = { Token: 'no' }; }
       $http.defaults.headers.common['token'] = Session.Token;
     };
@@ -1242,18 +1237,18 @@ angular.module('directives.loading', [])
     return factory;
   };
 
-  EmpresasFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
+  EmpresasFactory.$inject = ['$http', '$cookies', '$rootScope'];
 
   angular.module('marketplace').factory('EmpresasFactory', EmpresasFactory);
 }());
 
 (function () {
-  var EmpresasXEmpresasFactory = function ($http, $cookieStore, $rootScope) {
+  var EmpresasXEmpresasFactory = function ($http, $cookies, $rootScope) {
     var factory = {};
     var Session = {};
 
     factory.refreshToken = function () {
-      Session = $cookieStore.get('Session');
+      Session = $cookies.getObject('Session');
       if (!Session) { Session = { Token: 'no' }; }
       $http.defaults.headers.common['token'] = Session.Token;
     };
@@ -1293,18 +1288,18 @@ angular.module('directives.loading', [])
     return factory;
   };
 
-  EmpresasXEmpresasFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
+  EmpresasXEmpresasFactory.$inject = ['$http', '$cookies', '$rootScope'];
 
   angular.module('marketplace').factory('EmpresasXEmpresasFactory', EmpresasXEmpresasFactory);
 }());
 
 (function () {
-  var EstadosFactory = function ($http, $cookieStore, $rootScope) {
+  var EstadosFactory = function ($http, $cookies, $rootScope) {
     var factory = {};
     var Session = {};
 
     factory.refreshToken = function () {
-      Session = $cookieStore.get('Session');
+      Session = $cookies.getObject('Session');
       if (!Session) { Session = { Token: 'no' }; }
       $http.defaults.headers.common['token'] = Session.Token;
     };
@@ -1324,18 +1319,18 @@ angular.module('directives.loading', [])
     return factory;
   };
 
-  EstadosFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
+  EstadosFactory.$inject = ['$http', '$cookies', '$rootScope'];
 
   angular.module('marketplace').factory('EstadosFactory', EstadosFactory);
 }());
 
 (function () {
-  var FabricantesFactory = function ($http, $cookieStore, $rootScope) {
+  var FabricantesFactory = function ($http, $cookies, $rootScope) {
     var factory = {};
     var Session = {};
 
     factory.refreshToken = function () {
-      Session = $cookieStore.get('Session');
+      Session = $cookies.getObject('Session');
       if (!Session) { Session = { Token: 'no' }; }
       $http.defaults.headers.common['token'] = Session.Token;
     };
@@ -1365,18 +1360,18 @@ angular.module('directives.loading', [])
     return factory;
   };
 
-  FabricantesFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
+  FabricantesFactory.$inject = ['$http', '$cookies', '$rootScope'];
 
   angular.module('marketplace').factory('FabricantesFactory', FabricantesFactory);
 }());
 
 (function () {
-  var MigracionFactory = function ($http, $cookieStore, $rootScope) {
+  var MigracionFactory = function ($http, $cookies, $rootScope) {
     var factory = {};
     var Session = {};
 
     factory.refreshToken = function () {
-      Session = $cookieStore.get('Session');
+      Session = $cookies.getObject('Session');
       if (!Session) { Session = { Token: 'no' }; }
       $http.defaults.headers.common['token'] = Session.Token;
     };
@@ -1421,18 +1416,18 @@ angular.module('directives.loading', [])
     return factory;
   };
 
-  MigracionFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
+  MigracionFactory.$inject = ['$http', '$cookies', '$rootScope'];
 
   angular.module('marketplace').factory('MigracionFactory', MigracionFactory);
 }());
 
 (function () {
-  var NivelesClienteFinalFactory = function ($http, $cookieStore, $rootScope) {
+  var NivelesClienteFinalFactory = function ($http, $cookies, $rootScope) {
     var factory = {};
     var Session = {};
 
     factory.refreshToken = function () {
-      Session = $cookieStore.get('Session');
+      Session = $cookies.getObject('Session');
       if (!Session) { Session = { Token: 'no' }; }
       $http.defaults.headers.common['token'] = Session.Token;
     };
@@ -1462,18 +1457,18 @@ angular.module('directives.loading', [])
     return factory;
   };
 
-  NivelesClienteFinalFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
+  NivelesClienteFinalFactory.$inject = ['$http', '$cookies', '$rootScope'];
 
   angular.module('marketplace').factory('NivelesClienteFinalFactory', NivelesClienteFinalFactory);
 }());
 
 (function () {
-  var NivelesDistribuidorFactory = function ($http, $cookieStore, $rootScope) {
+  var NivelesDistribuidorFactory = function ($http, $cookies, $rootScope) {
     var factory = {};
     var Session = {};
 
     factory.refreshToken = function () {
-      Session = $cookieStore.get('Session');
+      Session = $cookies.getObject('Session');
       if (!Session) { Session = { Token: 'no' }; }
       $http.defaults.headers.common['token'] = Session.Token;
     };
@@ -1523,18 +1518,18 @@ angular.module('directives.loading', [])
     return factory;
   };
 
-  NivelesDistribuidorFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
+  NivelesDistribuidorFactory.$inject = ['$http', '$cookies', '$rootScope'];
 
   angular.module('marketplace').factory('NivelesDistribuidorFactory', NivelesDistribuidorFactory);
 }());
 
 (function () {
-  var PedidoDetallesFactory = function ($http, $cookieStore, $rootScope) {
+  var PedidoDetallesFactory = function ($http, $cookies, $rootScope) {
     var factory = {};
     var Session = {};
 
     factory.refreshToken = function () {
-      Session = $cookieStore.get('Session');
+      Session = $cookies.getObject('Session');
       if (!Session) { Session = { Token: 'no' }; }
       $http.defaults.headers.common['token'] = Session.Token;
     };
@@ -1630,18 +1625,18 @@ angular.module('directives.loading', [])
     return factory;
   };
 
-  PedidoDetallesFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
+  PedidoDetallesFactory.$inject = ['$http', '$cookies', '$rootScope'];
 
   angular.module('marketplace').factory('PedidoDetallesFactory', PedidoDetallesFactory);
 }());
 
 (function () {
-  var PedidosFactory = function ($http, $cookieStore, $rootScope) {
+  var PedidosFactory = function ($http, $cookies, $rootScope) {
     var factory = {};
     var Session = {};
 
     factory.refreshToken = function () {
-      Session = $cookieStore.get('Session');
+      Session = $cookies.getObject('Session');
       if (!Session) { Session = { Token: 'no' }; }
       $http.defaults.headers.common['token'] = Session.Token;
     };
@@ -1671,18 +1666,18 @@ angular.module('directives.loading', [])
     return factory;
   };
 
-  PedidosFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
+  PedidosFactory.$inject = ['$http', '$cookies', '$rootScope'];
 
   angular.module('marketplace').factory('PedidosFactory', PedidosFactory);
 }());
 
 (function () {
-  var ProductoGuardadosFactory = function ($http, $cookieStore, $rootScope) {
+  var ProductoGuardadosFactory = function ($http, $cookies, $rootScope) {
     var factory = {};
     var Session = {};
 
     factory.refreshToken = function () {
-      Session = $cookieStore.get('Session');
+      Session = $cookies.getObject('Session');
       if (!Session) { Session = { Token: 'no' }; }
       $http.defaults.headers.common['token'] = Session.Token;
     };
@@ -1712,18 +1707,18 @@ angular.module('directives.loading', [])
     return factory;
   };
 
-  ProductoGuardadosFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
+  ProductoGuardadosFactory.$inject = ['$http', '$cookies', '$rootScope'];
 
   angular.module('marketplace').factory('ProductoGuardadosFactory', ProductoGuardadosFactory);
 }());
 
 (function () {
-  var ProductosFactory = function ($http, $cookieStore, $rootScope) {
+  var ProductosFactory = function ($http, $cookies, $rootScope) {
     var factory = {};
     var Session = {};
 
     factory.refreshToken = function () {
-      Session = $cookieStore.get('Session');
+      Session = $cookies.getObject('Session');
       if (!Session) { Session = { Token: 'no' }; }
       $http.defaults.headers.common['token'] = Session.Token;
     };
@@ -1778,18 +1773,18 @@ angular.module('directives.loading', [])
     return factory;
   };
 
-  ProductosFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
+  ProductosFactory.$inject = ['$http', '$cookies', '$rootScope'];
 
   angular.module('marketplace').factory('ProductosFactory', ProductosFactory);
 }());
 
 (function () {
-  var ProductosXEmpresaFactory = function ($http, $cookieStore, $rootScope) {
+  var ProductosXEmpresaFactory = function ($http, $cookies, $rootScope) {
     var factory = {};
     var Session = {};
 
     factory.refreshToken = function () {
-      Session = $cookieStore.get('Session');
+      Session = $cookies.getObject('Session');
       if (!Session) { Session = { Token: 'no' }; }
       $http.defaults.headers.common['token'] = Session.Token;
     };
@@ -1804,18 +1799,18 @@ angular.module('directives.loading', [])
     return factory;
   };
 
-  ProductosXEmpresaFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
+  ProductosXEmpresaFactory.$inject = ['$http', '$cookies', '$rootScope'];
 
   angular.module('marketplace').factory('ProductosXEmpresaFactory', ProductosXEmpresaFactory);
 }());
 
 (function () {
-  var PromocionsFactory = function ($http, $cookieStore, $rootScope) {
+  var PromocionsFactory = function ($http, $cookies, $rootScope) {
     var factory = {};
     var Session = {};
 
     factory.refreshToken = function () {
-      Session = $cookieStore.get('Session');
+      Session = $cookies.getObject('Session');
       if (!Session) { Session = { Token: 'no' }; }
       $http.defaults.headers.common['token'] = Session.Token;
     };
@@ -1839,24 +1834,24 @@ angular.module('directives.loading', [])
 
     factory.putPromocion = function (Promocion) {
       factory.refreshToken();
-      return $http.put($rootScope.API + 'Promocions', Promocion);
+      return $http.put($rootScope.API + 'Promociones', Promocion);
     };
 
     return factory;
   };
 
-  PromocionsFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
+  PromocionsFactory.$inject = ['$http', '$cookies', '$rootScope'];
 
   angular.module('marketplace').factory('PromocionsFactory', PromocionsFactory);
 }());
 
 (function () {
-  var ReportesFactory = function ($http, $cookieStore, $rootScope) {
+  var ReportesFactory = function ($http, $cookies, $rootScope) {
     var factory = {};
     var Session = {};
 
     factory.refreshToken = function () {
-      Session = $cookieStore.get('Session');
+      Session = $cookies.getObject('Session');
       if (!Session) { Session = { Token: 'no' }; }
       $http.defaults.headers.common['token'] = Session.Token;
     };
@@ -1876,18 +1871,18 @@ angular.module('directives.loading', [])
     return factory;
   };
 
-  ReportesFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
+  ReportesFactory.$inject = ['$http', '$cookies', '$rootScope'];
 
   angular.module('marketplace').factory('ReportesFactory', ReportesFactory);
 }());
 
 (function () {
-  var SoporteFactory = function ($http, $cookieStore, $rootScope) {
+  var SoporteFactory = function ($http, $cookies, $rootScope) {
     var factory = {};
     var Session = {};
 
     factory.refreshToken = function () {
-      Session = $cookieStore.get('Session');
+      Session = $cookies.getObject('Session');
       if (!Session) { Session = { Token: 'no' }; }
       $http.defaults.headers.common['token'] = Session.Token;
     };
@@ -1922,18 +1917,18 @@ angular.module('directives.loading', [])
     return factory;
   };
 
-  SoporteFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
+  SoporteFactory.$inject = ['$http', '$cookies', '$rootScope'];
 
   angular.module('marketplace').factory('SoporteFactory', SoporteFactory);
 }());
 
 (function () {
-  var TipoCambioFactory = function ($http, $cookieStore, $rootScope) {
+  var TipoCambioFactory = function ($http, $cookies, $rootScope) {
     var factory = {};
     var Session = {};
 
     factory.refreshToken = function () {
-      Session = $cookieStore.get('Session');
+      Session = $cookies.getObject('Session');
       if (!Session) { Session = { Token: 'no' }; }
       $http.defaults.headers.common['token'] = Session.Token;
     };
@@ -1948,18 +1943,18 @@ angular.module('directives.loading', [])
     return factory;
   };
 
-  TipoCambioFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
+  TipoCambioFactory.$inject = ['$http', '$cookies', '$rootScope'];
 
   angular.module('marketplace').factory('TipoCambioFactory', TipoCambioFactory);
 }());
 
 (function () {
-  var TiposAccesosFactory = function ($http, $cookieStore, $rootScope) {
+  var TiposAccesosFactory = function ($http, $cookies, $rootScope) {
     var factory = {};
     var Session = {};
 
     factory.refreshToken = function () {
-      Session = $cookieStore.get('Session');
+      Session = $cookies.getObject('Session');
       if (!Session) { Session = { Token: 'no' }; }
       $http.defaults.headers.common['token'] = Session.Token;
     };
@@ -1979,18 +1974,18 @@ angular.module('directives.loading', [])
     return factory;
   };
 
-  TiposAccesosFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
+  TiposAccesosFactory.$inject = ['$http', '$cookies', '$rootScope'];
 
   angular.module('marketplace').factory('TiposAccesosFactory', TiposAccesosFactory);
 }());
 
 (function () {
-  var TiposProductosFactory = function ($http, $cookieStore, $rootScope) {
+  var TiposProductosFactory = function ($http, $cookies, $rootScope) {
     var factory = {};
     var Session = {};
 
     factory.refreshToken = function () {
-      Session = $cookieStore.get('Session');
+      Session = $cookies.getObject('Session');
       if (!Session) { Session = { Token: 'no' }; }
       $http.defaults.headers.common['token'] = Session.Token;
     };
@@ -2010,18 +2005,18 @@ angular.module('directives.loading', [])
     return factory;
   };
 
-  TiposProductosFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
+  TiposProductosFactory.$inject = ['$http', '$cookies', '$rootScope'];
 
   angular.module('marketplace').factory('TiposProductosFactory', TiposProductosFactory);
 }());
 
 (function () {
-  var UsuariosFactory = function ($http, $cookieStore, $rootScope) {
+  var UsuariosFactory = function ($http, $cookies, $rootScope) {
     var factory = {};
     var Session = {};
 
     factory.refreshToken = function () {
-      Session = $cookieStore.get('Session');
+      Session = $cookies.getObject('Session');
       if (!Session) { Session = { Token: 'no' }; }
       $http.defaults.headers.common['token'] = Session.Token;
     };
@@ -2101,19 +2096,18 @@ angular.module('directives.loading', [])
     return factory;
   };
 
-  UsuariosFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
+  UsuariosFactory.$inject = ['$http', '$cookies', '$rootScope'];
 
   angular.module('marketplace').factory('UsuariosFactory', UsuariosFactory);
 }());
 
-
 (function () {
-  var UsuariosXEmpresasFactory = function ($http, $cookieStore, $rootScope) {
+  var UsuariosXEmpresasFactory = function ($http, $cookies, $rootScope) {
     var factory = {};
     var Session = {};
 
     factory.refreshToken = function () {
-      Session = $cookieStore.get('Session');
+      Session = $cookies.getObject('Session');
       if (!Session) { Session = { Token: 'no' }; }
       $http.defaults.headers.common['token'] = Session.Token;
     };
@@ -2144,18 +2138,18 @@ angular.module('directives.loading', [])
     return factory;
   };
 
-  UsuariosXEmpresasFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
+  UsuariosXEmpresasFactory.$inject = ['$http', '$cookies', '$rootScope'];
 
   angular.module('marketplace').factory('UsuariosXEmpresasFactory', UsuariosXEmpresasFactory);
 }());
 
 (function () {
-  var VersionFactory = function ($http, $cookieStore, $rootScope) {
+  var VersionFactory = function ($http, $cookies, $rootScope) {
     var factory = {};
     var Session = {};
 
     factory.refreshToken = function () {
-      Session = $cookieStore.get('Session');
+      Session = $cookies.getObject('Session');
       if (!Session) { Session = { Token: 'no' }; }
       $http.defaults.headers.common['token'] = Session.Token;
     };
@@ -2172,31 +2166,32 @@ angular.module('directives.loading', [])
 
     return factory;
   };
-  VersionFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
+  VersionFactory.$inject = ['$http', '$cookies', '$rootScope'];
   angular.module('marketplace').factory('VersionFactory', VersionFactory);
 }());
+
 (function () {
-  var AplicacionesReadController = function ($scope, $log, $location, $cookieStore, MigracionFactory) {
+  var AplicacionesReadController = function ($scope, $log, $location, $cookies, MigracionFactory) {
     $scope.goToMigraciones = function () {
       $location.path('/migraciones');
     };
 
     $scope.init = function () {
-     
+
     };
 
     $scope.init();
   };
 
-  AplicacionesReadController.$inject = ['$scope', '$log', '$location', '$cookieStore', 'MigracionFactory'];
+  AplicacionesReadController.$inject = ['$scope', '$log', '$location', '$cookies', 'MigracionFactory'];
 
   angular.module('marketplace').controller('AplicacionesReadController', AplicacionesReadController);
 }());
 
 (function () {
-  var DescuentosCreateController = function ($scope, $log, $cookieStore, $location, DescuentosFactory, NivelesDistribuidorFactory) {
+  var DescuentosCreateController = function ($scope, $log, $cookies, $location, DescuentosFactory, NivelesDistribuidorFactory) {
     var Session = {};
-    Session = $cookieStore.get('Session');
+    Session = $cookies.getObject('Session');
     $scope.Session = Session;
     $scope.Descuento = {};
 
@@ -2252,16 +2247,16 @@ angular.module('directives.loading', [])
     };
   };
 
-  DescuentosCreateController.$inject = ['$scope', '$log', '$cookieStore', '$location', 'DescuentosFactory', 'NivelesDistribuidorFactory'];
+  DescuentosCreateController.$inject = ['$scope', '$log', '$cookies', '$location', 'DescuentosFactory', 'NivelesDistribuidorFactory'];
 
   angular.module('marketplace').controller('DescuentosCreateController', DescuentosCreateController);
 }());
 
 (function () {
-  var DescuentosNivelesController = function ($scope, $location, $cookieStore, $routeParams, DescuentosNivelesFactory) {
+  var DescuentosNivelesController = function ($scope, $location, $cookies, $routeParams, DescuentosNivelesFactory) {
     $scope.sortBy = 'Nombre';
     $scope.reverse = false;
-    $scope.Nivel = $cookieStore.get('nivel');
+    $scope.Nivel = $cookies.getObject('nivel');
     $scope.paginatedProducts = {};
     $scope.getNumberOfPages = [1];
     $scope.IdEmpresa = 1;
@@ -2396,13 +2391,13 @@ angular.module('directives.loading', [])
     $scope.init();
   };
 
-  DescuentosNivelesController.$inject = ['$scope', '$location', '$cookieStore', '$routeParams', 'DescuentosNivelesFactory'];
+  DescuentosNivelesController.$inject = ['$scope', '$location', '$cookies', '$routeParams', 'DescuentosNivelesFactory'];
 
   angular.module('marketplace').controller('DescuentosNivelesController', DescuentosNivelesController);
 }());
 
 (function () {
-  var DescuentosNivelesCSController = function ($scope, $location, $cookieStore, $routeParams, NivelesDistribuidorFactory, DescuentosNivelesFactory) {
+  var DescuentosNivelesCSController = function ($scope, $location, $cookies, $routeParams, NivelesDistribuidorFactory, DescuentosNivelesFactory) {
     var IdNivelCS = Number($routeParams.IdNivel);
     $scope.sortBy = 'Nombre';
     $scope.reverse = false;
@@ -2601,13 +2596,13 @@ angular.module('directives.loading', [])
     $scope.init();
   };
 
-  DescuentosNivelesCSController.$inject = ['$scope', '$location', '$cookieStore', '$routeParams', 'NivelesDistribuidorFactory', 'DescuentosNivelesFactory'];
+  DescuentosNivelesCSController.$inject = ['$scope', '$location', '$cookies', '$routeParams', 'NivelesDistribuidorFactory', 'DescuentosNivelesFactory'];
 
   angular.module('marketplace').controller('DescuentosNivelesCSController', DescuentosNivelesCSController);
 }());
 
 (function () {
-  var DescuentosReadController = function ($scope, $log, $location, $cookieStore, DescuentosFactory) {
+  var DescuentosReadController = function ($scope, $log, $location, $cookies, DescuentosFactory) {
     $scope.sortBy = 'Nivel';
     $scope.reverse = false;
 
@@ -2657,15 +2652,15 @@ angular.module('directives.loading', [])
     };
   };
 
-  DescuentosReadController.$inject = ['$scope', '$log', '$location', '$cookieStore', 'DescuentosFactory'];
+  DescuentosReadController.$inject = ['$scope', '$log', '$location', '$cookies', 'DescuentosFactory'];
 
   angular.module('marketplace').controller('DescuentosReadController', DescuentosReadController);
 }());
 
 (function () {
-  var DescuentosUpdateController = function ($scope, $log, $cookieStore, $location, DescuentosFactory, $routeParams) {
+  var DescuentosUpdateController = function ($scope, $log, $cookies, $location, DescuentosFactory, $routeParams) {
     var Session = {};
-    Session = $cookieStore.get('Session');
+    Session = $cookies.getObject('Session');
     $scope.Session = Session;
     $scope.Descuento = JSON.parse($routeParams.Descuento);
 
@@ -2695,17 +2690,17 @@ angular.module('directives.loading', [])
     };
   };
 
-  DescuentosUpdateController.$inject = ['$scope', '$log', '$cookieStore', '$location', 'DescuentosFactory', '$routeParams'];
+  DescuentosUpdateController.$inject = ['$scope', '$log', '$cookies', '$location', 'DescuentosFactory', '$routeParams'];
 
   angular.module('marketplace').controller('DescuentosUpdateController', DescuentosUpdateController);
 }());
 
 (function () {
-  var ConfiguracionUpdateController = function ($scope, $log, $location, $cookieStore, $routeParams, EmpresasFactory, FileUploader, AccesosAmazonFactory) {
+  var ConfiguracionUpdateController = function ($scope, $log, $location, $cookies, $routeParams, EmpresasFactory, FileUploader, AccesosAmazonFactory) {
 
     $scope.init = function () {
       $scope.CheckCookie();
-      var cookie = $cookieStore.get('Session');
+      var cookie = $cookies.getObject('Session');
       $scope.IdEmpresa = cookie.IdEmpresa;
       EmpresasFactory.getMiSitio()
         .success(function (miClickSuscribe) {
@@ -2811,13 +2806,13 @@ angular.module('directives.loading', [])
     };
   };
 
-  ConfiguracionUpdateController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$routeParams', 'EmpresasFactory', 'FileUploader', 'AccesosAmazonFactory'];
+  ConfiguracionUpdateController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'EmpresasFactory', 'FileUploader', 'AccesosAmazonFactory'];
 
   angular.module('marketplace').controller('ConfiguracionUpdateController', ConfiguracionUpdateController);
 }());
 
 (function () {
-  var EmpresasCompletarController = function ($scope, $log, $location, $cookieStore, $routeParams, EmpresasFactory, EmpresasXEmpresasFactory, EstadosFactory, UsuariosFactory, UsuariosXEmpresasFactory) {
+  var EmpresasCompletarController = function ($scope, $log, $location, $cookies, $routeParams, EmpresasFactory, EmpresasXEmpresasFactory, EstadosFactory, UsuariosFactory, UsuariosXEmpresasFactory) {
     var IdEmpresaDistribuidor = $routeParams.IdEmpresa;
     var IdMicrosoft = $routeParams.IdMicrosoft;
     var Dominio = $routeParams.Dominio;
@@ -2925,7 +2920,7 @@ angular.module('directives.loading', [])
               .success(function (UsuariosXEmpresas) {
                 if (UsuariosXEmpresas.length === 0) {
                   $scope.ShowToast('Agrega un administrador, para el distribuidor.', 'danger');
-                } else {         
+                } else {
                   var ObjMicrosoft = {
                     RFC: $scope.Empresa.RFC,
                     NombreEmpresa: DatosMicrosoft.company_name,
@@ -2945,7 +2940,7 @@ angular.module('directives.loading', [])
                     IdUsuario: UsuariosXEmpresas[0].IdUsuario,
                     MonedaPago: $scope.Empresa.MonedaPago,
                     FormaPago: $scope.Empresa.IdFormaPagoPredilecta,
-                  };                  
+                  };
                   EmpresasFactory.postEmpresaMicrosoft(ObjMicrosoft)
                     .success(function (result) {
                       $location.path("/Empresas");
@@ -3124,13 +3119,13 @@ angular.module('directives.loading', [])
     };
   };
 
-  EmpresasCompletarController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$routeParams', 'EmpresasFactory', 'EmpresasXEmpresasFactory', 'EstadosFactory', 'UsuariosFactory', 'UsuariosXEmpresasFactory'];
+  EmpresasCompletarController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'EmpresasFactory', 'EmpresasXEmpresasFactory', 'EstadosFactory', 'UsuariosFactory', 'UsuariosXEmpresasFactory'];
 
   angular.module('marketplace').controller('EmpresasCompletarController', EmpresasCompletarController);
 } ());
 
 (function () {
-  var EmpresasCreateController = function ($scope, $log, $cookieStore, $location, EmpresasFactory, EstadosFactory, UsuariosFactory) {
+  var EmpresasCreateController = function ($scope, $log, $cookies, $location, EmpresasFactory, EstadosFactory, UsuariosFactory) {
     $scope.Empresa = {};
     $scope.AlertaDominio = '';
     $scope.Empresa.IdERP = null;
@@ -3429,18 +3424,18 @@ angular.module('directives.loading', [])
     };
   };
 
-  EmpresasCreateController.$inject = ['$scope', '$log', '$cookieStore', '$location', 'EmpresasFactory', 'EstadosFactory', 'UsuariosFactory'];
+  EmpresasCreateController.$inject = ['$scope', '$log', '$cookies', '$location', 'EmpresasFactory', 'EstadosFactory', 'UsuariosFactory'];
 
   angular.module('marketplace').controller('EmpresasCreateController', EmpresasCreateController);
 } ());
 
 (function () {
-  var EmpresasCreditoUpdateController = function ($scope, $log, $location, $cookieStore, $routeParams, EmpresasFactory) {
+  var EmpresasCreditoUpdateController = function ($scope, $log, $location, $cookies, $routeParams, EmpresasFactory) {
     var IdEmpresa = $routeParams.IdEmpresa;
 
     var Session = {};
 
-    Session = $cookieStore.get('Session');
+    Session = $cookies.getObject('Session');
 
     $scope.Empresa = {};
 
@@ -3485,13 +3480,13 @@ angular.module('directives.loading', [])
     };
   };
 
-  EmpresasCreditoUpdateController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$routeParams', 'EmpresasFactory'];
+  EmpresasCreditoUpdateController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'EmpresasFactory'];
 
   angular.module('marketplace').controller('EmpresasCreditoUpdateController', EmpresasCreditoUpdateController);
 }());
 
 (function () {
-  var EmpresasImportController = function ($scope, $log, $location, $cookieStore, $routeParams, EmpresasFactory, EmpresasXEmpresasFactory, EstadosFactory, UsuariosFactory) {
+  var EmpresasImportController = function ($scope, $log, $location, $cookies, $routeParams, EmpresasFactory, EmpresasXEmpresasFactory, EstadosFactory, UsuariosFactory) {
 
     var IdEmpresa = $routeParams.IdEmpresa;
     $scope.IdEmpresaDistribuidor = IdEmpresa;
@@ -3531,23 +3526,23 @@ angular.module('directives.loading', [])
     };
   };
 
-  EmpresasImportController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$routeParams', 'EmpresasFactory', 'EmpresasXEmpresasFactory', 'EstadosFactory', 'UsuariosFactory'];
+  EmpresasImportController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'EmpresasFactory', 'EmpresasXEmpresasFactory', 'EstadosFactory', 'UsuariosFactory'];
 
   angular.module('marketplace').controller('EmpresasImportController', EmpresasImportController);
 }());
 
 (function () {
-  var EmpresasReadController = function ($scope, $log, $location, $cookieStore, EmpresasFactory, NivelesDistribuidorFactory) {
+  var EmpresasReadController = function ($scope, $log, $location, $cookies, EmpresasFactory, NivelesDistribuidorFactory) {
     var Session = {};
 
-    Session = $cookieStore.get('Session');
+    Session = $cookies.getObject('Session');
     $scope.sortBy = 'Nombre';
     $scope.reverse = false;
     $scope.TablaVisible = false;
     $scope.cambiaAgente = false;
 
     $scope.init = function () {
-      Session = $cookieStore.get('Session');
+      Session = $cookies.getObject('Session');
       $scope.CheckCookie();
       $scope.Empresas = null;
       $scope.TablaVisible = false;
@@ -3690,13 +3685,13 @@ angular.module('directives.loading', [])
     };
   };
 
-  EmpresasReadController.$inject = ['$scope', '$log', '$location', '$cookieStore', 'EmpresasFactory', 'NivelesDistribuidorFactory'];
+  EmpresasReadController.$inject = ['$scope', '$log', '$location', '$cookies', 'EmpresasFactory', 'NivelesDistribuidorFactory'];
 
   angular.module('marketplace').controller('EmpresasReadController', EmpresasReadController);
 }());
 
 (function () {
-  var EmpresasRPController = function ($scope, $log, $cookieStore, $location, $uibModal, $filter, EmpresasXEmpresasFactory, NivelesDistribuidorFactory, $routeParams) {
+  var EmpresasRPController = function ($scope, $log, $cookies, $location, $uibModal, $filter, EmpresasXEmpresasFactory, NivelesDistribuidorFactory, $routeParams) {
     $scope.MostrarMensajeError = false;
     $scope.Empresas = [];
     $scope.Niveles = [];
@@ -3842,21 +3837,21 @@ angular.module('directives.loading', [])
       }
     };
   };
-  EmpresasRPController.$inject = ['$scope', '$log', '$cookieStore', '$location', '$uibModal', '$filter', 'EmpresasXEmpresasFactory', 'NivelesDistribuidorFactory', '$routeParams'];
+  EmpresasRPController.$inject = ['$scope', '$log', '$cookies', '$location', '$uibModal', '$filter', 'EmpresasXEmpresasFactory', 'NivelesDistribuidorFactory', '$routeParams'];
 
   angular.module('marketplace').controller('EmpresasRPController', EmpresasRPController);
 }());
 
 (function () {
-  var EmpresasUpdateController = function ($scope, $log, $location, $cookieStore, $routeParams, EmpresasFactory, EmpresasXEmpresasFactory, EstadosFactory, UsuariosFactory) {
+  var EmpresasUpdateController = function ($scope, $rootScope, $log, $location, $cookies, $routeParams, EmpresasFactory, EmpresasXEmpresasFactory, EstadosFactory, UsuariosFactory) {
     var IdEmpresa = $routeParams.IdEmpresa;
     var Session = {};
-    Session = $cookieStore.get('Session');
+    Session = $cookies.getObject('Session');
     $scope.Empresa = {};
     $scope.Combo = {};
 
     $scope.init = function () {
-      Session = $cookieStore.get('Session');
+      Session = $cookies.getObject('Session');
       $scope.CheckCookie();
 
       EmpresasFactory.getEmpresas()
@@ -3920,7 +3915,7 @@ angular.module('directives.loading', [])
         .success(function (result) {
           if (result[0].Success == true) {
             Session.NombreEmpresa = $scope.Empresa.NombreEmpresa;
-            $cookieStore.put('Session', Session);
+            $cookies.putObject('Session', Session, { secure: $rootScope.secureCookie });
             $scope.ActualizarDatosSession();
             $location.path("/index");
             $scope.ShowToast("Empresa Actualizada", 'success');
@@ -3948,13 +3943,13 @@ angular.module('directives.loading', [])
     }
   };
 
-  EmpresasUpdateController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$routeParams', 'EmpresasFactory', 'EmpresasXEmpresasFactory', 'EstadosFactory', 'UsuariosFactory'];
+  EmpresasUpdateController.$inject = ['$scope', '$rootScope', '$log', '$location', '$cookies', '$routeParams', 'EmpresasFactory', 'EmpresasXEmpresasFactory', 'EstadosFactory', 'UsuariosFactory'];
 
   angular.module('marketplace').controller('EmpresasUpdateController', EmpresasUpdateController);
 }());
 
 (function () {
-  var EmpresasXEmpresasReadController = function ($scope, $log, $location, $cookieStore, EmpresasXEmpresasFactory, EmpresasFactory, PedidoDetallesFactory) {
+  var EmpresasXEmpresasReadController = function ($scope, $log, $location, $cookies, EmpresasXEmpresasFactory, EmpresasFactory, PedidoDetallesFactory) {
     $scope.sortBy = 'NombreEmpresa';
     $scope.reverse = false;
     $scope.CreditoDisponible = 0;
@@ -4212,13 +4207,13 @@ angular.module('directives.loading', [])
     };
   };
 
-  EmpresasXEmpresasReadController.$inject = ['$scope', '$log', '$location', '$cookieStore', 'EmpresasXEmpresasFactory', 'EmpresasFactory', 'PedidoDetallesFactory'];
+  EmpresasXEmpresasReadController.$inject = ['$scope', '$log', '$location', '$cookies', 'EmpresasXEmpresasFactory', 'EmpresasFactory', 'PedidoDetallesFactory'];
 
   angular.module('marketplace').controller('EmpresasXEmpresasReadController', EmpresasXEmpresasReadController);
 }());
 
 (function () {
-  var MigracionController = function ($scope, $log, $location, $cookieStore, MigracionFactory) {
+  var MigracionController = function ($scope, $log, $location, $cookies, MigracionFactory) {
     $scope.editarMigracion = function (id) {
       $location.path('/migraciones/' + id);
     };
@@ -4234,13 +4229,13 @@ angular.module('directives.loading', [])
     $scope.init();
   };
 
-  MigracionController.$inject = ['$scope', '$log', '$location', '$cookieStore', 'MigracionFactory'];
+  MigracionController.$inject = ['$scope', '$log', '$location', '$cookies', 'MigracionFactory'];
 
   angular.module('marketplace').controller('MigracionController', MigracionController);
 }());
 
 (function () {
-  var MigracionDetalleController = function ($scope, $log, $location, $cookieStore, $routeParams, MigracionFactory) {
+  var MigracionDetalleController = function ($scope, $log, $location, $cookies, $routeParams, MigracionFactory) {
     $scope.idMigracion = $routeParams.idMigracion;
     $scope.pasoSeleccionado = 0;
     $scope.pasoActual = 0;
@@ -4504,23 +4499,23 @@ angular.module('directives.loading', [])
     };
   };
 
-  MigracionDetalleController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$routeParams', 'MigracionFactory'];
+  MigracionDetalleController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'MigracionFactory'];
 
   angular.module('marketplace').controller('MigracionDetalleController', MigracionDetalleController);
 }());
 
 (function () {
-  var NivelesClienteFinalController = function ($scope, $location, $cookieStore, NivelesClienteFinalFactory) {
+  var NivelesClienteFinalController = function ($scope, $location, $cookies, NivelesClienteFinalFactory) {
     $scope.sortBy = 'Nivel';
     $scope.reverse = false;
     $scope.Nivel = {};
     $scope.levels = [];
     $scope.newLevel = "";
-    $scope.session = $cookieStore.get('Session');
+    $scope.session = $cookies.getObject('Session');
 
     const getLevels = function() {
       NivelesClienteFinalFactory.getLevels()
-        .then(function(result) { 
+        .then(function(result) {
           $scope.levels = result.data.data;
         })
         .catch(function(result) {
@@ -4571,19 +4566,21 @@ angular.module('directives.loading', [])
     }
 
     $scope.addDiscount = function(level) {
-      $cookieStore.put('nivel', level.Nivel);
+      console.log('level', typeof level);
+      console.log(level);
+      $cookies.putObject('nivel', level.Nivel);
       $location.path('/Niveles/Distribuidor/' + level.IdNivelEmpresaUsuarioFinal + '/Descuentos');
     };
-    
+
   };
 
-  NivelesClienteFinalController.$inject = ['$scope', '$location', '$cookieStore', 'NivelesClienteFinalFactory'];
+  NivelesClienteFinalController.$inject = ['$scope', '$location', '$cookies', 'NivelesClienteFinalFactory'];
 
   angular.module('marketplace').controller('NivelesClienteFinalController', NivelesClienteFinalController);
 }());
 
 (function () {
-  var NivelesReadController = function ($scope, $log, $location, $cookieStore, NivelesDistribuidorFactory) {
+  var NivelesReadController = function ($scope, $log, $location, $cookies, NivelesDistribuidorFactory) {
     $scope.sortBy = 'Nivel';
     $scope.reverse = false;
     $scope.Nivel = {};
@@ -4649,20 +4646,20 @@ angular.module('directives.loading', [])
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
     };
-    
+
     $scope.configurarNivel = function (nivel) {
       var path = '/Niveles/' + nivel.IdNivelDistribuidor + '/Productos';
       $location.path(path);
     };
   };
 
-  NivelesReadController.$inject = ['$scope', '$log', '$location', '$cookieStore', 'NivelesDistribuidorFactory'];
+  NivelesReadController.$inject = ['$scope', '$log', '$location', '$cookies', 'NivelesDistribuidorFactory'];
 
   angular.module('marketplace').controller('NivelesReadController', NivelesReadController);
 }());
 
 (function () {
-  var ComprarController = function ($scope, $log, $location, $cookieStore, PedidoDetallesFactory, TipoCambioFactory, PedidosFactory, EmpresasFactory, $route) {
+  var ComprarController = function ($scope, $log, $rootScope, $location, $cookies, PedidoDetallesFactory, TipoCambioFactory, PedidosFactory, EmpresasFactory, $route) {
     $scope.currentPath = $location.path();
     $scope.PedidoDetalles = {};
     $scope.Distribuidor = {};
@@ -4776,11 +4773,13 @@ angular.module('directives.loading', [])
           .success(function (Datos) {
             var expireDate = new Date();
             expireDate.setTime(expireDate.getTime() + 600 * 2000); /* 20 minutos */
-            $cookieStore.put('pedidosAgrupados', Datos.data['0'].pedidosAgrupados, { 'expires': expireDate });
+            console.log('pedidosAgrupados', typeof Datos.data['0'].pedidosAgrupados);
+            console.log(Datos.data['0'].pedidosAgrupados);
+            $cookies.putObject('pedidosAgrupados', Datos.data['0'].pedidosAgrupados, { 'expires': expireDate, secure: $rootScope.secureCookie });
 
             if (Datos.data['0'].total > 0) {
               if (Datos.success) {
-                if ($cookieStore.get('pedidosAgrupados')) {
+                if ($cookies.getObject('pedidosAgrupados')) {
                   Checkout.configure({
                     merchant: Datos.data['0'].merchant,
                     session: { id: Datos.data['0'].session_id },
@@ -4857,13 +4856,13 @@ angular.module('directives.loading', [])
     };
 
     $scope.ComprarConTarjeta = function (resultIndicator, sessionVersion) {
-      var datosTarjeta = { 'TarjetaResultIndicator': resultIndicator, 'TarjetaSessionVersion': sessionVersion, 'PedidosAgrupados': $cookieStore.get('pedidosAgrupados') };
+      var datosTarjeta = { 'TarjetaResultIndicator': resultIndicator, 'TarjetaSessionVersion': sessionVersion, 'PedidosAgrupados': $cookies.get('pedidosAgrupados') };
 
       if (datosTarjeta.PedidosAgrupados) {
         if (datosTarjeta.PedidosAgrupados[0].Renovacion) {
           PedidosFactory.patchPaymentInformation(datosTarjeta)
             .success(function (compra) {
-              $cookieStore.remove('pedidosAgrupados');
+              $cookies.remove('pedidosAgrupados');
               if (compra.success === 1) {
                 $scope.ShowToast(compra.message, 'success');
                 $location.path('/MonitorPagos/refrescar');
@@ -4875,7 +4874,7 @@ angular.module('directives.loading', [])
         } else {
           PedidosFactory.putPedido(datosTarjeta)
             .success(function (putPedidoResult) {
-              $cookieStore.remove('pedidosAgrupados');
+              $cookies.remove('pedidosAgrupados');
               if (putPedidoResult.success) {
                 PedidoDetallesFactory.getComprar()
                   .success(function (compra) {
@@ -4898,7 +4897,7 @@ angular.module('directives.loading', [])
               }
             })
             .error(function (data, status, headers, config) {
-              $cookieStore.remove('pedidosAgrupados');
+              $cookies.remove('pedidosAgrupados');
               $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
             });
         }
@@ -4909,16 +4908,16 @@ angular.module('directives.loading', [])
     };
   };
 
-  ComprarController.$inject = ['$scope', '$log', '$location', '$cookieStore', 'PedidoDetallesFactory', 'TipoCambioFactory', 'PedidosFactory', 'EmpresasFactory', '$route'];
+  ComprarController.$inject = ['$scope', '$log', '$rootScope', '$location', '$cookies', 'PedidoDetallesFactory', 'TipoCambioFactory', 'PedidosFactory', 'EmpresasFactory', '$route'];
 
   angular.module('marketplace').controller('ComprarController', ComprarController);
 }());
 
 (function () {
-  var ComprarUFController = function ($scope, $log, $location, $cookieStore, $route, ComprasUFFactory, EmpresasFactory) {
+  var ComprarUFController = function ($scope, $log, $location, $cookies, $route, ComprasUFFactory, EmpresasFactory) {
     $scope.distribuidor = {};
     $scope.currentPath = $location.path();
-    $scope.currentDistribuidor = $cookieStore.get('currentDistribuidor');
+    $scope.currentDistribuidor = $cookies.getObject('currentDistribuidor');
     $scope.TotalEnPesos = 0;
     $scope.SubtotalEnPesos = 0;
     $scope.IVA = 0;
@@ -5002,13 +5001,13 @@ angular.module('directives.loading', [])
     };
   };
 
-  ComprarUFController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$route', 'ComprasUFFactory', 'EmpresasFactory'];
+  ComprarUFController.$inject = ['$scope', '$log', '$location', '$cookies', '$route', 'ComprasUFFactory', 'EmpresasFactory'];
 
   angular.module('marketplace').controller('ComprarUFController', ComprarUFController);
 }());
 
 (function () {
-  var DetallesAzureController = function ($scope, $log, $cookieStore, $location, $uibModal, $filter, PedidoDetallesFactory, $routeParams) {
+  var DetallesAzureController = function ($scope, $log, $cookies, $location, $uibModal, $filter, PedidoDetallesFactory, $routeParams) {
     var IdPedido = $routeParams.IdPedido;
     $scope.Mostrar = false;
     $scope.MostrarMensaje = false;
@@ -5046,13 +5045,13 @@ angular.module('directives.loading', [])
     $scope.init();
 
   };
-  DetallesAzureController.$inject = ['$scope', '$log', '$cookieStore', '$location', '$uibModal', '$filter', 'PedidoDetallesFactory', '$routeParams'];
+  DetallesAzureController.$inject = ['$scope', '$log', '$cookies', '$location', '$uibModal', '$filter', 'PedidoDetallesFactory', '$routeParams'];
 
   angular.module('marketplace').controller('DetallesAzureController', DetallesAzureController);
 }());
 
 (function () {
-  var MonitorPagos = function ($scope, $log, $cookieStore, $location, $uibModal, $filter, PedidoDetallesFactory, EmpresasFactory) {
+  var MonitorPagos = function ($scope, $log, $rootScope,  $cookies, $location, $uibModal, $filter, PedidoDetallesFactory, EmpresasFactory) {
     $scope.PedidoSeleccionado = 0;
     $scope.PedidosSeleccionadosParaPagar = [];
     $scope.PedidosObj = {};
@@ -5094,8 +5093,8 @@ angular.module('directives.loading', [])
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
 
-      if ($cookieStore.get('Session').IdTipoAcceso == 2 || $cookieStore.get('Session').IdTipoAcceso == 3) {
-        EmpresasFactory.getEmpresa($cookieStore.get('Session').IdEmpresa)
+      if ($cookies.getObject('Session').IdTipoAcceso == 2 || $cookies.getObject('Session').IdTipoAcceso == 3) {
+        EmpresasFactory.getEmpresa($cookies.getObject('Session').IdEmpresa)
           .success(function (empresa) {
             console.log(empresa);
             $scope.infoEmpresa = empresa[0];
@@ -5213,9 +5212,9 @@ angular.module('directives.loading', [])
             var expireDate = new Date();
             expireDate.setTime(expireDate.getTime() + 600 * 2000); /*20 minutos*/
             Datos.data["0"].pedidosAgrupados[0].TipoCambio = $scope.TipoCambio;
-            $cookieStore.put('pedidosAgrupados', Datos.data["0"].pedidosAgrupados, { 'expires': expireDate });
+            $cookies.putObject('pedidosAgrupados', Datos.data["0"].pedidosAgrupados, { 'expires': expireDate, secure: $rootScope.secureCookie });
             if (Datos.success) {
-              if ($cookieStore.get('pedidosAgrupados')) {
+              if ($cookies.get('pedidosAgrupados')) {
 
                 Checkout.configure({
                   merchant: Datos.data["0"].merchant,
@@ -5268,13 +5267,13 @@ angular.module('directives.loading', [])
       }
     };
   };
-  MonitorPagos.$inject = ['$scope', '$log', '$cookieStore', '$location', '$uibModal', '$filter', 'PedidoDetallesFactory', 'EmpresasFactory'];
+  MonitorPagos.$inject = ['$scope', '$log', '$rootScope', '$cookies', '$location', '$uibModal', '$filter', 'PedidoDetallesFactory', 'EmpresasFactory'];
 
   angular.module('marketplace').controller('MonitorPagos', MonitorPagos);
 }());
 
 (function () {
-  var MonitorReadController = function ($scope, $log, $cookieStore, $location, EmpresasXEmpresasFactory, PedidoDetallesFactory, $uibModal, $filter, FabricantesFactory, PedidosFactory, EmpresasFactory) {
+  var MonitorReadController = function ($scope, $log, $cookies, $location, EmpresasXEmpresasFactory, PedidoDetallesFactory, $uibModal, $filter, FabricantesFactory, PedidosFactory, EmpresasFactory) {
     $scope.EmpresaSelect = 0;
     var Params = {};
     $scope.form = {};
@@ -5282,7 +5281,7 @@ angular.module('directives.loading', [])
     $scope.Vacio = 0;
     $scope.Pedidos = {};
     $scope.BuscarProductos = {};
-    $scope.SessionCookie = $cookieStore.get('Session');
+    $scope.SessionCookie = $cookies.getObject('Session');
 
     $scope.init = function () {
       $scope.CheckCookie();
@@ -5307,8 +5306,8 @@ angular.module('directives.loading', [])
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
 
-      if ($cookieStore.get('Session').IdTipoAcceso == 4 || $cookieStore.get('Session').IdTipoAcceso == 5 || $cookieStore.get('Session').IdTipoAcceso == 6) {
-        Params.IdEmpresaUsuarioFinal = $cookieStore.get('Session').IdEmpresa;
+      if ($cookies.getObject('Session').IdTipoAcceso == 4 || $cookies.getObject('Session').IdTipoAcceso == 5 || $cookies.getObject('Session').IdTipoAcceso == 6) {
+        Params.IdEmpresaUsuarioFinal = $cookies.getObject('Session').IdEmpresa;
         if (!$scope.BuscarProductos.IdFabricante) {
           $scope.BuscarProductos.IdFabricante = 0;
         }
@@ -5339,10 +5338,10 @@ angular.module('directives.loading', [])
       }
 
       Params.IdEmpresaUsuarioFinal = $scope.EmpresaSelect;
-      Params.IdEmpresaDistribuidor = $cookieStore.get('Session').IdEmpresa;
+      Params.IdEmpresaDistribuidor = $cookies.getObject('Session').IdEmpresa;
 
       if ($scope.EmpresaSelect === 0) {
-        Params.IdEmpresaUsuarioFinal = $cookieStore.get('Session').IdEmpresa;
+        Params.IdEmpresaUsuarioFinal = $cookies.getObject('Session').IdEmpresa;
         Params.IdEmpresaDistribuidor = null;
       }
       if (!$scope.BuscarProductos.IdFabricante) {
@@ -5563,13 +5562,13 @@ angular.module('directives.loading', [])
     };
   };
 
-  MonitorReadController.$inject = ['$scope', '$log', '$cookieStore', '$location', 'EmpresasXEmpresasFactory', 'PedidoDetallesFactory', '$uibModal', '$filter', 'FabricantesFactory', 'PedidosFactory', 'EmpresasFactory'];
+  MonitorReadController.$inject = ['$scope', '$log', '$cookies', '$location', 'EmpresasXEmpresasFactory', 'PedidoDetallesFactory', '$uibModal', '$filter', 'FabricantesFactory', 'PedidosFactory', 'EmpresasFactory'];
 
   angular.module('marketplace').controller('MonitorReadController', MonitorReadController);
 }());
 
 (function () {
-  var PedidoDetallesReadController = function ($scope, $log, $location, $cookieStore, PedidoDetallesFactory, TipoCambioFactory, EmpresasXEmpresasFactory, EmpresasFactory, PedidosFactory, $routeParams) {
+  var PedidoDetallesReadController = function ($scope, $log, $location, $cookies, PedidoDetallesFactory, TipoCambioFactory, EmpresasXEmpresasFactory, EmpresasFactory, PedidosFactory, $routeParams) {
     $scope.CreditoValido = 1;
     $scope.error = false;
     $scope.Distribuidor = {};
@@ -5790,14 +5789,14 @@ angular.module('directives.loading', [])
     };
   };
 
-  PedidoDetallesReadController.$inject = ['$scope', '$log', '$location', '$cookieStore', 'PedidoDetallesFactory', 'TipoCambioFactory', 'EmpresasXEmpresasFactory', 'EmpresasFactory', 'PedidosFactory', '$routeParams'];
+  PedidoDetallesReadController.$inject = ['$scope', '$log', '$location', '$cookies', 'PedidoDetallesFactory', 'TipoCambioFactory', 'EmpresasXEmpresasFactory', 'EmpresasFactory', 'PedidosFactory', '$routeParams'];
 
   angular.module('marketplace').controller('PedidoDetallesReadController', PedidoDetallesReadController);
 }());
 
 (function () {
-  var PedidoDetallesUFReadController = function ($scope, $log, $location, $cookieStore, ComprasUFFactory, EmpresasFactory, $routeParams) {
-    $scope.currentDistribuidor = $cookieStore.get('currentDistribuidor');
+  var PedidoDetallesUFReadController = function ($scope, $log, $location, $cookies, ComprasUFFactory, EmpresasFactory, $routeParams) {
+    $scope.currentDistribuidor = $cookies.getObject('currentDistribuidor');
     $scope.TotalEnPesos = 0;
     $scope.SubtotalEnPesos = 0;
     $scope.IVA = 0;
@@ -5879,13 +5878,13 @@ angular.module('directives.loading', [])
     };
   };
 
-  PedidoDetallesUFReadController.$inject = ['$scope', '$log', '$location', '$cookieStore', 'ComprasUFFactory', 'EmpresasFactory', '$routeParams'];
+  PedidoDetallesUFReadController.$inject = ['$scope', '$log', '$location', '$cookies', 'ComprasUFFactory', 'EmpresasFactory', '$routeParams'];
 
   angular.module('marketplace').controller('PedidoDetallesUFReadController', PedidoDetallesUFReadController);
 }());
 
 (function () {
-  var PowerBIReadController = function ($scope, $log, $cookieStore, $location, $uibModal, $filter, PedidoDetallesFactory, $routeParams) {
+  var PowerBIReadController = function ($scope, $log, $cookies, $location, $uibModal, $filter, PedidoDetallesFactory, $routeParams) {
 
     $scope.init = function () {
 
@@ -5893,13 +5892,13 @@ angular.module('directives.loading', [])
     $scope.init();
   };
 
-  PowerBIReadController.$inject = ['$scope', '$log', '$cookieStore', '$location', '$uibModal', '$filter', 'PedidoDetallesFactory', '$routeParams'];
+  PowerBIReadController.$inject = ['$scope', '$log', '$cookies', '$location', '$uibModal', '$filter', 'PedidoDetallesFactory', '$routeParams'];
 
   angular.module('marketplace').controller('PowerBIReadController', PowerBIReadController);
 }());
 
 (function () {
-  var ProductoGuardadosReadController = function ($scope, $log, $location, $cookieStore, ProductoGuardadosFactory, PedidoDetallesFactory) {
+  var ProductoGuardadosReadController = function ($scope, $log, $location, $cookies, ProductoGuardadosFactory, PedidoDetallesFactory) {
 
     $scope.sortBy = 'Nombre';
     $scope.reverse = false;
@@ -5924,7 +5923,7 @@ angular.module('directives.loading', [])
     };
 
     $scope.AgregarCarrito = function (Producto) {
-      var ProductoGuardado = { IdPedido: $cookieStore.get('Pedido').IdPedidoActual, IdProducto: Producto.IdProducto, Cantidad: 1 };
+      var ProductoGuardado = { IdPedido: $cookies.getObject('Pedido').IdPedidoActual, IdProducto: Producto.IdProducto, Cantidad: 1 };
 
       PedidoDetallesFactory.postPedidoDetalle(ProductoGuardado)
         .success(function (PedidoDetalleResult) {
@@ -5970,457 +5969,13 @@ angular.module('directives.loading', [])
     };
   };
 
-  ProductoGuardadosReadController.$inject = ['$scope', '$log', '$location', '$cookieStore', 'ProductoGuardadosFactory', 'PedidoDetallesFactory'];
+  ProductoGuardadosReadController.$inject = ['$scope', '$log', '$location', '$cookies', 'ProductoGuardadosFactory', 'PedidoDetallesFactory'];
 
   angular.module('marketplace').controller('ProductoGuardadosReadController', ProductoGuardadosReadController);
 }());
 
 (function () {
-  var PromocionsCreateController = function ($scope, $log, $cookieStore, $location, PromocionsFactory, FileUploader, AccesosAmazonFactory) {
-    $scope.Promocion = {};
-    $scope.IdPromocionNueva = 0;
-    $scope.SubiendoArchivos = false;
-
-    $scope.init = function () {
-      $scope.CheckCookie();
-    };
-
-    $scope.init();
-
-    var uploader = $scope.uploader = new FileUploader({
-    });
-    uploader.filters.push({
-      name: 'imageFilter',
-      fn: function (item /* {File|FileLikeObject}*/, options) {
-        var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
-        return this.queue.length < 1 && '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
-      }
-    });
-
-    uploader.onWhenAddingFileFailed = function (item /* {File|FileLikeObject}*/, filter, options) {
-
-    };
-
-    uploader.onAfterAddingFile = function (fileItem) {
-
-    };
-
-    uploader.onAfterAddingAll = function (addedFileItems) {
-
-    };
-
-    uploader.onBeforeUploadItem = function (item) {
-      var extension = item.file.name.split('.');
-      item.file.name = $scope.Promocion.IdPromocionNueva + '.' + extension[1];
-    };
-
-    uploader.onProgressItem = function (fileItem, progress) {
-
-    };
-
-    uploader.onProgressAll = function (progress) {
-
-    };
-
-    uploader.onSuccessItem = function (fileItem, response, status, headers) {
-
-    };
-
-    uploader.onErrorItem = function (fileItem, response, status, headers) {
-
-    };
-
-    uploader.onCancelItem = function (fileItem, response, status, headers) {
-
-    };
-
-    uploader.onCompleteItem = function (fileItem, response, status, headers) {
-      AccesosAmazonFactory.getAccesosAmazon()
-        .success(function (result) {
-          if (result[0].Success == true) {
-            subirImagen(fileItem, result);
-          } else {
-            $scope.ShowToast(result[0].Message, 'danger');
-          }
-        })
-        .error(function (data, status, headers, config) {
-          $scope.ShowToast('Error al intentar subir la imagen.', 'danger');
-        });
-    };
-
-    uploader.onCompleteAll = function () {
-
-    };
-
-    /* app.directive('ngThumb', ['$window', function ($window) {
-      var helper = {
-        support: !!($window.FileReader && $window.CanvasRenderingContext2D),
-        isFile: function (item) {
-          return angular.isObject(item) && item instanceof $window.File;
-        },
-        isImage: function (file) {
-          var type = '|' + file.type.slice(file.type.lastIndexOf('/') + 1) + '|';
-          return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
-        }
-      };
-
-      return {
-        restrict: 'A',
-        template: '<canvas/>',
-        link: function (scope, element, attributes) {
-          if (!helper.support) return;
-
-          var params = scope.$eval(attributes.ngThumb);
-
-          if (!helper.isFile(params.file)) return;
-          if (!helper.isImage(params.file)) return;
-
-          var canvas = element.find('canvas');
-          var reader = new FileReader();
-
-          reader.onload = onLoadFile;
-          reader.readAsDataURL(params.file);
-
-          function onLoadFile (event) {
-            var img = new Image();
-            img.onload = onLoadImage;
-            img.src = event.target.result;
-          }
-
-          function onLoadImage () {
-            var width = params.width || this.width / this.height * params.height;
-            var height = params.height || this.height / this.width * params.width;
-            canvas.attr({ width: width, height: height });
-            canvas[0].getContext('2d').drawImage(this, 0, 0, width, height);
-          }
-        }
-      };
-    }]);
-*/
-    $scope.PromocionCreate = function () {
-      if (($scope.frm.$invalid)) {
-        if ($scope.frm.Nombre.$invalid == true) {
-          $scope.frm.Nombre.$pristine = false;
-        }
-        if ($scope.frm.CodigoProducto.$invalid == true) {
-          $scope.frm.CodigoProducto.$pristine = false;
-        }
-        $scope.ShowToast('Datos inválidos, favor de verificar', 'danger');
-      } else {
-        $scope.SubiendoArchivos = true;
-        var fileChooser = document.getElementById('archivo_promocion');
-        var file = fileChooser.files[0];
-        if (file) {
-          if (!(/\.(jpeg|jpg|png)$/i.test(file.name))) {
-            $scope.SubiendoArchivos = false;
-            $scope.ShowToast('Extensión de archivo no válida', 'danger');
-          } else {
-            PromocionsFactory.postPromocion($scope.Promocion)
-              .success(function (result) {
-                if (result[0].Success == true) {
-                  $scope.Promocion.IdPromocionNueva = result[0].Dato;
-                  $scope.Promocion.Url = result[0].Dato;
-                  $scope.Promocion.IdPromocion = result[0].Dato;
-                  uploader.queue[0].upload();
-                } else {
-                  $scope.ShowToast(result[0].Message, 'danger');
-                }
-                $scope.SubiendoArchivos = false;
-              })
-              .error(function (data, status, headers, config) {
-                $scope.SubiendoArchivos = false;
-                $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-              });
-          }
-        } else {
-          $scope.SubiendoArchivos = false;
-          $scope.ShowToast('Debe adjuntar un archivo', 'danger');
-        }
-      }
-    };
-
-    $scope.PromocionCancel = function () {
-      $location.path('/Promocions');
-    };
-
-    function subirImagen(fileItem, data) {
-      var fileChooser = document.getElementById('archivo_promocion');
-      var file = fileChooser.files[0];
-      $scope.Promocion.Url = 'https://s3.amazonaws.com/marketplace.compusoluciones.com/Anexos/' + fileItem.file.name;
-      AWS.config.update({ accessKeyId: data[0].AccessKey, secretAccessKey: data[0].SecretAccess });
-      var bucketName = data[0].Bucket;
-      var bucket = new AWS.S3({ params: { Bucket: bucketName } });
-      var objKey = 'Anexos' + '/' + fileItem.file.name;
-      var params = { Key: objKey, ContentType: fileItem.type, Body: file, ACL: 'public-read' };
-      bucket.putObject(params, function (err, data) {
-        if (err) {
-          $scope.ShowToast(err, 'danger');
-        } else {
-          PromocionsFactory.putPromocion($scope.Promocion)
-            .success(function (result) {
-              if (result[0].Success == true) {
-                $location.path('/Promocions');
-                $scope.ShowToast('Promoción registrada', 'success');
-              } else {
-                $scope.ShowToast(result[0].Message, 'danger');
-              }
-            });
-        }
-      });
-    }
-  };
-
-  PromocionsCreateController.$inject = ['$scope', '$log', '$cookieStore', '$location', 'PromocionsFactory', 'FileUploader', 'AccesosAmazonFactory'];
-
-  angular.module('marketplace').controller('PromocionsCreateController', PromocionsCreateController);
-}());
-
-(function () {
-
-  var PromocionsReadController = function ($scope, $log, $location, $cookieStore, PromocionsFactory) {
-    $scope.sortBy = 'Nombre';
-    $scope.reverse = false;
-
-    $scope.init = function () {
-      $scope.CheckCookie();
-
-      PromocionsFactory.getPromocions()
-        .success(function (Promocions) {
-          $scope.Promocions = Promocions;
-        })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
-    };
-
-    $scope.init();
-
-    $scope.OrdenarPor = function (Atributo) {
-      $scope.sortBy = Atributo;
-      $scope.reverse = !$scope.reverse;
-    };
-  };
-
-  PromocionsReadController.$inject = ['$scope', '$log', '$location', '$cookieStore', 'PromocionsFactory'];
-
-  angular.module('marketplace').controller('PromocionsReadController', PromocionsReadController);
-}());
-
-(function () {
-  var PromocionsUpdateController = function ($scope, $log, $location, $cookieStore, $routeParams, PromocionsFactory, FileUploader, AccesosAmazonFactory) {
-
-    var IdPromocion = $routeParams.IdPromocion;
-    $scope.Promocion = {};
-    var uploader = $scope.uploader = new FileUploader({
-    });
-
-    uploader.filters.push({
-      name: 'imageFilter',
-      fn: function (item /*{File|FileLikeObject}*/, options) {
-        var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
-        return this.queue.length < 1 && '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
-      }
-    });
-
-    uploader.onWhenAddingFileFailed = function (item /*{File|FileLikeObject}*/, filter, options) {
-
-    };
-
-    uploader.onAfterAddingFile = function (fileItem) {
-
-    };
-
-    uploader.onAfterAddingAll = function (addedFileItems) {
-
-    };
-
-    uploader.onBeforeUploadItem = function (item) {
-
-    };
-
-    uploader.onProgressItem = function (fileItem, progress) {
-
-    };
-
-    uploader.onProgressAll = function (progress) {
-
-    };
-
-    uploader.onSuccessItem = function (fileItem, response, status, headers) {
-
-    };
-
-    uploader.onErrorItem = function (fileItem, response, status, headers) {
-
-    };
-
-    uploader.onCancelItem = function (fileItem, response, status, headers) {
-
-    };
-
-    uploader.onCompleteItem = function (fileItem, response, status, headers) {
-      $scope.Promocion.Url = 'uploads/' + fileItem.file.name;
-    };
-
-    uploader.onCompleteAll = function () {
-
-    };
-
-    /* app.directive('ngThumb', ['$window', function ($window) {
-      var helper = {
-        support: !!($window.FileReader && $window.CanvasRenderingContext2D),
-        isFile: function (item) {
-          return angular.isObject(item) && item instanceof $window.File;
-        },
-        isImage: function (file) {
-          var type = '|' + file.type.slice(file.type.lastIndexOf('/') + 1) + '|';
-          return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
-        }
-      };
-
-      return {
-        restrict: 'A',
-        template: '<canvas/>',
-        link: function (scope, element, attributes) {
-          if (!helper.support) return;
-
-          var params = scope.$eval(attributes.ngThumb);
-
-          if (!helper.isFile(params.file)) return;
-          if (!helper.isImage(params.file)) return;
-
-          var canvas = element.find('canvas');
-          var reader = new FileReader();
-
-          reader.onload = onLoadFile;
-          reader.readAsDataURL(params.file);
-
-          function onLoadFile(event) {
-            var img = new Image();
-            img.onload = onLoadImage;
-            img.src = event.target.result;
-          }
-
-          function onLoadImage() {
-            var width = params.width || this.width / this.height * params.height;
-            var height = params.height || this.height / this.width * params.width;
-            canvas.attr({ width: width, height: height });
-            canvas[0].getContext('2d').drawImage(this, 0, 0, width, height);
-          }
-        }
-      };
-    }]);
-*/
-    $scope.init = function () {
-      $scope.CheckCookie();
-
-      PromocionsFactory.getPromocion(IdPromocion)
-        .success(function (Promocion) {
-          $scope.Promocion = Promocion[0];
-          $scope.Promocion.estatusImagen = 1;
-        })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
-    };
-
-    $scope.init();
-
-
-    $scope.PromocionUpdate = function () {
-      if (($scope.frm.$invalid)) {
-        if ($scope.frm.Nombre.$invalid == true) {
-          $scope.frm.Nombre.$pristine = false;
-        }
-        if ($scope.frm.CodigoProducto.$invalid == true) {
-          $scope.frm.CodigoProducto.$pristine = false;
-        }
-        $scope.ShowToast("Datos inválidos, favor de verificar", 'danger');
-      }
-      else {
-        PromocionsFactory.putPromocion($scope.Promocion)
-          .success(function (result) {
-            if (result[0].Success == true) {
-              $location.path("/Promocions");
-              $scope.ShowToast(result[0].Message, 'success');
-            }
-            else {
-              $scope.ShowToast(result[0].Message, 'danger');
-            }
-          })
-          .error(function (data, status, headers, config) {
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-          });
-      }
-    };
-
-    $scope.PromocionDelete = function () {
-      $scope.Promocion.Activo = 0;
-      PromocionsFactory.putPromocion($scope.Promocion)
-        .success(function (result) {
-
-          if (result[0].Success == true) {
-            $location.path("/Promocions");
-            $scope.ShowToast("Promoción dada de baja", 'success');
-          }
-          else {
-            $scope.ShowToast(result[0].Message, 'danger');
-          }
-
-        })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
-
-      AccesosAmazonFactory.getAccesosAmazon()
-        .success(function (result) {
-          if (result[0].Success == true) {
-            eliminarImagen(result);
-          }
-          else {
-            $scope.ShowToast(result[0].Message, 'danger');
-          }
-        })
-        .error(function (data, status, headers, config) {
-          $scope.ShowToast(result[0].Message, 'danger');
-        });
-    };
-
-    $scope.PromocionCancel = function () {
-      $location.path("/Promocions");
-    };
-
-    $scope.ImagenDelete = function () {
-      $scope.Promocion.estatusImagen = 0;
-    };
-
-    function eliminarImagen(data) {
-      var Url = $scope.Promocion.Url;
-      var resultado = Url.split("/");
-      var picturePath = 'Anexos' + '/' + resultado[5];
-      var s3Client = new AWS.S3({
-        accessKeyId: data[0].AccessKey,
-        secretAccessKey: data[0].SecretAccess,
-        params: {
-          Bucket: data[0].Bucket,
-        },
-      });
-
-      s3Client.deleteObject({
-        Key: picturePath,
-      }, function (err, data) {
-
-      });
-    };
-  };
-
-  PromocionsUpdateController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$routeParams', 'PromocionsFactory', 'FileUploader', 'AccesosAmazonFactory'];
-
-  angular.module('marketplace').controller('PromocionsUpdateController', PromocionsUpdateController);
-}());
-
-(function () {
-  var ConfigurarBaseController = function ($scope, $log, $location, $cookieStore, $routeParams, ProductosFactory, FabricantesFactory, TiposProductosFactory, PedidoDetallesFactory, TipoCambioFactory, ProductoGuardadosFactory, EmpresasXEmpresasFactory) {
+  var ConfigurarBaseController = function ($scope, $log, $location, $cookies, $routeParams, ProductosFactory, FabricantesFactory, TiposProductosFactory, PedidoDetallesFactory, TipoCambioFactory, ProductoGuardadosFactory, EmpresasXEmpresasFactory) {
     var IdProducto = $routeParams.IdProducto;
     var IdPedidoDetalle = $routeParams.IdPedidoDetalle;
     $scope.init = function () {
@@ -6451,13 +6006,13 @@ angular.module('directives.loading', [])
 
   };
 
-  ConfigurarBaseController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$routeParams', 'ProductosFactory', 'FabricantesFactory', 'TiposProductosFactory', 'PedidoDetallesFactory', 'TipoCambioFactory', 'ProductoGuardadosFactory', 'EmpresasXEmpresasFactory'];
+  ConfigurarBaseController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'ProductosFactory', 'FabricantesFactory', 'TiposProductosFactory', 'PedidoDetallesFactory', 'TipoCambioFactory', 'ProductoGuardadosFactory', 'EmpresasXEmpresasFactory'];
 
   angular.module('marketplace').controller('ConfigurarBaseController', ConfigurarBaseController);
 }());
 
 (function () {
-  var MisProductosReadController = function ($scope, $log, $location, $cookieStore, $routeParams, ProductosFactory) {
+  var MisProductosReadController = function ($scope, $log, $location, $cookies, $routeParams, ProductosFactory) {
     $scope.sortBy = 'Nombre';
     $scope.reverse = false;
     $scope.precioCalculado;
@@ -6574,7 +6129,7 @@ angular.module('directives.loading', [])
       }
       else {
         $scope.porcentaje = porcentajeAnterior;
-      }       
+      }
     };
 
     $scope.guardarTodo = function () {
@@ -6653,13 +6208,13 @@ angular.module('directives.loading', [])
 
   };
 
-  MisProductosReadController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$routeParams', 'ProductosFactory'];
+  MisProductosReadController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'ProductosFactory'];
 
   angular.module('marketplace').controller('MisProductosReadController', MisProductosReadController);
 } ());
 
 (function () {
-  var ProductosReadController = function ($scope, $log, $location, $cookieStore, $routeParams, ProductosFactory, FabricantesFactory, TiposProductosFactory, PedidoDetallesFactory, TipoCambioFactory, ProductoGuardadosFactory, EmpresasXEmpresasFactory, UsuariosFactory, $anchorScroll) {
+  var ProductosReadController = function ($scope, $log, $location, $cookies, $routeParams, ProductosFactory, FabricantesFactory, TiposProductosFactory, PedidoDetallesFactory, TipoCambioFactory, ProductoGuardadosFactory, EmpresasXEmpresasFactory, UsuariosFactory, $anchorScroll) {
     var BusquedaURL = $routeParams.Busqueda;
     $scope.BuscarProductos = {};
     $scope.Pagina = 0;
@@ -7070,13 +6625,13 @@ angular.module('directives.loading', [])
     };
   };
 
-  ProductosReadController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$routeParams', 'ProductosFactory', 'FabricantesFactory', 'TiposProductosFactory', 'PedidoDetallesFactory', 'TipoCambioFactory', 'ProductoGuardadosFactory', 'EmpresasXEmpresasFactory', 'UsuariosFactory', '$anchorScroll'];
+  ProductosReadController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'ProductosFactory', 'FabricantesFactory', 'TiposProductosFactory', 'PedidoDetallesFactory', 'TipoCambioFactory', 'ProductoGuardadosFactory', 'EmpresasXEmpresasFactory', 'UsuariosFactory', '$anchorScroll'];
 
   angular.module('marketplace').controller('ProductosReadController', ProductosReadController);
 }());
 
 (function () {
-  var ProductosUFReadController = function ($scope, $log, $location, $cookieStore, $routeParams, ProductosXEmpresaFactory, FabricantesFactory, TiposProductosFactory, PedidoDetallesFactory, TipoCambioFactory, ProductoGuardadosFactory, EmpresasXEmpresasFactory, $anchorScroll, ProductosFactory, ComprasUFFactory) {
+  var ProductosUFReadController = function ($scope, $log, $location, $cookies, $routeParams, ProductosXEmpresaFactory, FabricantesFactory, TiposProductosFactory, PedidoDetallesFactory, TipoCambioFactory, ProductoGuardadosFactory, EmpresasXEmpresasFactory, $anchorScroll, ProductosFactory, ComprasUFFactory) {
     var BusquedaURL = $routeParams.Busqueda;
     $scope.BuscarProductos = {};
     $scope.Pagina = 0;
@@ -7335,13 +6890,459 @@ angular.module('directives.loading', [])
   };
 
   ProductosUFReadController.$inject =
-    ['$scope', '$log', '$location', '$cookieStore', '$routeParams', 'ProductosXEmpresaFactory', 'FabricantesFactory', 'TiposProductosFactory', 'PedidoDetallesFactory', 'TipoCambioFactory', 'ProductoGuardadosFactory', 'EmpresasXEmpresasFactory', '$anchorScroll', 'ProductosFactory', 'ComprasUFFactory'];
+    ['$scope', '$log', '$location', '$cookies', '$routeParams', 'ProductosXEmpresaFactory', 'FabricantesFactory', 'TiposProductosFactory', 'PedidoDetallesFactory', 'TipoCambioFactory', 'ProductoGuardadosFactory', 'EmpresasXEmpresasFactory', '$anchorScroll', 'ProductosFactory', 'ComprasUFFactory'];
 
   angular.module('marketplace').controller('ProductosUFReadController', ProductosUFReadController);
 }());
 
 (function () {
-  var SoporteCreateController = function ($scope, $log, $cookieStore, $location, $uibModal, $filter, SoporteFactory, $routeParams) {
+  var PromocionsCreateController = function ($scope, $log, $cookies, $location, PromocionsFactory, FileUploader, AccesosAmazonFactory) {
+    $scope.Promocion = {};
+    $scope.IdPromocionNueva = 0;
+    $scope.SubiendoArchivos = false;
+
+    $scope.init = function () {
+      $scope.CheckCookie();
+    };
+
+    $scope.init();
+
+    var uploader = $scope.uploader = new FileUploader({
+    });
+    uploader.filters.push({
+      name: 'imageFilter',
+      fn: function (item /* {File|FileLikeObject}*/, options) {
+        var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
+        return this.queue.length < 1 && '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
+      }
+    });
+
+    uploader.onWhenAddingFileFailed = function (item /* {File|FileLikeObject}*/, filter, options) {
+
+    };
+
+    uploader.onAfterAddingFile = function (fileItem) {
+
+    };
+
+    uploader.onAfterAddingAll = function (addedFileItems) {
+
+    };
+
+    uploader.onBeforeUploadItem = function (item) {
+      var extension = item.file.name.split('.');
+      item.file.name = $scope.Promocion.Url + '.' + extension[1];
+    };
+
+    uploader.onProgressItem = function (fileItem, progress) {
+
+    };
+
+    uploader.onProgressAll = function (progress) {
+
+    };
+
+    uploader.onSuccessItem = function (fileItem, response, status, headers) {
+
+    };
+
+    uploader.onErrorItem = function (fileItem, response, status, headers) {
+
+    };
+
+    uploader.onCancelItem = function (fileItem, response, status, headers) {
+
+    };
+
+    uploader.onCompleteItem = function (fileItem, response, status, headers) {
+      AccesosAmazonFactory.getAccesosAmazon()
+        .success(function (result) {
+          if (result[0].Success == true) {
+            subirImagen(fileItem, result);
+          } else {
+            $scope.ShowToast(result[0].Message, 'danger');
+          }
+        })
+        .error(function (data, status, headers, config) {
+          $scope.ShowToast('Error al intentar subir la imagen.', 'danger');
+        });
+    };
+
+    uploader.onCompleteAll = function () {
+
+    };
+
+    /* app.directive('ngThumb', ['$window', function ($window) {
+      var helper = {
+        support: !!($window.FileReader && $window.CanvasRenderingContext2D),
+        isFile: function (item) {
+          return angular.isObject(item) && item instanceof $window.File;
+        },
+        isImage: function (file) {
+          var type = '|' + file.type.slice(file.type.lastIndexOf('/') + 1) + '|';
+          return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
+        }
+      };
+
+      return {
+        restrict: 'A',
+        template: '<canvas/>',
+        link: function (scope, element, attributes) {
+          if (!helper.support) return;
+
+          var params = scope.$eval(attributes.ngThumb);
+
+          if (!helper.isFile(params.file)) return;
+          if (!helper.isImage(params.file)) return;
+
+          var canvas = element.find('canvas');
+          var reader = new FileReader();
+
+          reader.onload = onLoadFile;
+          reader.readAsDataURL(params.file);
+
+          function onLoadFile (event) {
+            var img = new Image();
+            img.onload = onLoadImage;
+            img.src = event.target.result;
+          }
+
+          function onLoadImage () {
+            var width = params.width || this.width / this.height * params.height;
+            var height = params.height || this.height / this.width * params.width;
+            canvas.attr({ width: width, height: height });
+            canvas[0].getContext('2d').drawImage(this, 0, 0, width, height);
+          }
+        }
+      };
+    }]);
+*/
+    $scope.PromocionCreate = function () {
+      if (($scope.frm.$invalid)) {
+        if ($scope.frm.Nombre.$invalid == true) {
+          $scope.frm.Nombre.$pristine = false;
+        }
+        if ($scope.frm.CodigoProducto.$invalid == true) {
+          $scope.frm.CodigoProducto.$pristine = false;
+        }
+        $scope.ShowToast('Datos inválidos, favor de verificar', 'danger');
+      } else {
+        $scope.SubiendoArchivos = true;
+        var fileChooser = document.getElementById('archivo_promocion');
+        var file = fileChooser.files[0];
+        if (file) {
+          if (!(/\.(jpeg|jpg|png)$/i.test(file.name))) {
+            $scope.SubiendoArchivos = false;
+            $scope.ShowToast('Extensión de archivo no válida', 'danger');
+          } else {
+            PromocionsFactory.postPromocion($scope.Promocion)
+              .success(function (result) {
+                if (result[0].Success == true) {
+                  $scope.Promocion.IdPromocionNueva = result[0].Dato;
+                  $scope.Promocion.Url = result[0].fileName;
+                  $scope.Promocion.IdPromocion = result[0].Dato;
+                  uploader.queue[0].upload();
+                } else {
+                  $scope.ShowToast(result[0].Message, 'danger');
+                }
+                $scope.SubiendoArchivos = false;
+              })
+              .error(function (data, status, headers, config) {
+                $scope.SubiendoArchivos = false;
+                $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+              });
+          }
+        } else {
+          $scope.SubiendoArchivos = false;
+          $scope.ShowToast('Debe adjuntar un archivo', 'danger');
+        }
+      }
+    };
+
+    $scope.PromocionCancel = function () {
+      $location.path('/Promocions');
+    };
+
+    function subirImagen(fileItem, data) {
+      var fileChooser = document.getElementById('archivo_promocion');
+      var file = fileChooser.files[0];
+      $scope.Promocion.Url = 'https://s3.amazonaws.com/marketplace.compusoluciones.com/Anexos/' + fileItem.file.name;
+      AWS.config.update({ accessKeyId: data[0].AccessKey, secretAccessKey: data[0].SecretAccess });
+      var bucketName = data[0].Bucket;
+      var bucket = new AWS.S3({ params: { Bucket: bucketName } });
+      var objKey = 'Anexos' + '/' + fileItem.file.name;
+      var params = { Key: objKey, ContentType: fileItem.type, Body: file, ACL: 'public-read' };
+      bucket.putObject(params, function (err, data) {
+        if (err) {
+          $scope.ShowToast(err, 'danger');
+        } else {
+          PromocionsFactory.putPromocion($scope.Promocion)
+            .success(function (result) {
+              if (result[0].Success == true) {
+                $location.path('/Promocions');
+                $scope.ShowToast('Promoción registrada', 'success');
+              } else {
+                $scope.ShowToast(result[0].Message, 'danger');
+              }
+            });
+        }
+      });
+    }
+  };
+
+  PromocionsCreateController.$inject = ['$scope', '$log', '$cookies', '$location', 'PromocionsFactory', 'FileUploader', 'AccesosAmazonFactory'];
+
+  angular.module('marketplace').controller('PromocionsCreateController', PromocionsCreateController);
+}());
+
+(function () {
+
+  var PromocionsReadController = function ($scope, $log, $location, $cookies, PromocionsFactory) {
+    $scope.sortBy = 'Nombre';
+    $scope.reverse = false;
+
+    $scope.init = function () {
+      $scope.CheckCookie();
+
+      PromocionsFactory.getPromocions()
+        .success(function (Promocions) {
+          $scope.Promocions = Promocions;
+        })
+        .error(function (data, status, headers, config) {
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+    };
+
+    $scope.init();
+
+    $scope.OrdenarPor = function (Atributo) {
+      $scope.sortBy = Atributo;
+      $scope.reverse = !$scope.reverse;
+    };
+  };
+
+  PromocionsReadController.$inject = ['$scope', '$log', '$location', '$cookies', 'PromocionsFactory'];
+
+  angular.module('marketplace').controller('PromocionsReadController', PromocionsReadController);
+}());
+
+(function () {
+  var PromocionsUpdateController = function ($scope, $log, $location, $cookies, $routeParams, PromocionsFactory, FileUploader, AccesosAmazonFactory) {
+
+    var IdPromocion = $routeParams.IdPromocion;
+    $scope.Promocion = {};
+    var uploader = $scope.uploader = new FileUploader({
+    });
+
+    uploader.filters.push({
+      name: 'imageFilter',
+      fn: function (item /*{File|FileLikeObject}*/, options) {
+        var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
+        return this.queue.length < 1 && '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
+      }
+    });
+
+    uploader.onWhenAddingFileFailed = function (item /*{File|FileLikeObject}*/, filter, options) {
+
+    };
+
+    uploader.onAfterAddingFile = function (fileItem) {
+
+    };
+
+    uploader.onAfterAddingAll = function (addedFileItems) {
+
+    };
+
+    uploader.onBeforeUploadItem = function (item) {
+
+    };
+
+    uploader.onProgressItem = function (fileItem, progress) {
+
+    };
+
+    uploader.onProgressAll = function (progress) {
+
+    };
+
+    uploader.onSuccessItem = function (fileItem, response, status, headers) {
+
+    };
+
+    uploader.onErrorItem = function (fileItem, response, status, headers) {
+
+    };
+
+    uploader.onCancelItem = function (fileItem, response, status, headers) {
+
+    };
+
+    uploader.onCompleteItem = function (fileItem, response, status, headers) {
+      $scope.Promocion.Url = 'uploads/' + fileItem.file.name;
+    };
+
+    uploader.onCompleteAll = function () {
+
+    };
+
+    /* app.directive('ngThumb', ['$window', function ($window) {
+      var helper = {
+        support: !!($window.FileReader && $window.CanvasRenderingContext2D),
+        isFile: function (item) {
+          return angular.isObject(item) && item instanceof $window.File;
+        },
+        isImage: function (file) {
+          var type = '|' + file.type.slice(file.type.lastIndexOf('/') + 1) + '|';
+          return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
+        }
+      };
+
+      return {
+        restrict: 'A',
+        template: '<canvas/>',
+        link: function (scope, element, attributes) {
+          if (!helper.support) return;
+
+          var params = scope.$eval(attributes.ngThumb);
+
+          if (!helper.isFile(params.file)) return;
+          if (!helper.isImage(params.file)) return;
+
+          var canvas = element.find('canvas');
+          var reader = new FileReader();
+
+          reader.onload = onLoadFile;
+          reader.readAsDataURL(params.file);
+
+          function onLoadFile(event) {
+            var img = new Image();
+            img.onload = onLoadImage;
+            img.src = event.target.result;
+          }
+
+          function onLoadImage() {
+            var width = params.width || this.width / this.height * params.height;
+            var height = params.height || this.height / this.width * params.width;
+            canvas.attr({ width: width, height: height });
+            canvas[0].getContext('2d').drawImage(this, 0, 0, width, height);
+          }
+        }
+      };
+    }]);
+*/
+    $scope.init = function () {
+      $scope.CheckCookie();
+
+      PromocionsFactory.getPromocion(IdPromocion)
+        .success(function (Promocion) {
+          $scope.Promocion = Promocion[0];
+          $scope.Promocion.estatusImagen = 1;
+        })
+        .error(function (data, status, headers, config) {
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+    };
+
+    $scope.init();
+
+
+    $scope.PromocionUpdate = function () {
+      if (($scope.frm.$invalid)) {
+        if ($scope.frm.Nombre.$invalid == true) {
+          $scope.frm.Nombre.$pristine = false;
+        }
+        if ($scope.frm.CodigoProducto.$invalid == true) {
+          $scope.frm.CodigoProducto.$pristine = false;
+        }
+        $scope.ShowToast("Datos inválidos, favor de verificar", 'danger');
+      }
+      else {
+        PromocionsFactory.putPromocion($scope.Promocion)
+          .success(function (result) {
+            if (result[0].Success == true) {
+              $location.path("/Promocions");
+              $scope.ShowToast(result[0].Message, 'success');
+            }
+            else {
+              $scope.ShowToast(result[0].Message, 'danger');
+            }
+          })
+          .error(function (data, status, headers, config) {
+            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          });
+      }
+    };
+
+    $scope.PromocionDelete = function () {
+      $scope.Promocion.Activo = 0;
+      PromocionsFactory.putPromocion($scope.Promocion)
+        .success(function (result) {
+
+          if (result[0].Success == true) {
+            $location.path("/Promocions");
+            $scope.ShowToast("Promoción dada de baja", 'success');
+          }
+          else {
+            $scope.ShowToast(result[0].Message, 'danger');
+          }
+
+        })
+        .error(function (data, status, headers, config) {
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+
+      AccesosAmazonFactory.getAccesosAmazon()
+        .success(function (result) {
+          if (result[0].Success == true) {
+            eliminarImagen(result);
+          }
+          else {
+            $scope.ShowToast(result[0].Message, 'danger');
+          }
+        })
+        .error(function (data, status, headers, config) {
+          $scope.ShowToast(result[0].Message, 'danger');
+        });
+    };
+
+    $scope.PromocionCancel = function () {
+      $location.path("/Promocions");
+    };
+
+    $scope.ImagenDelete = function () {
+      $scope.Promocion.estatusImagen = 0;
+    };
+
+    function eliminarImagen(data) {
+      var Url = $scope.Promocion.Url;
+      if (Url) {
+        var resultado = Url.split("/");
+        var picturePath = 'Anexos' + '/' + resultado[5];
+        var s3Client = new AWS.S3({
+          accessKeyId: data[0].AccessKey,
+          secretAccessKey: data[0].SecretAccess,
+          params: {
+            Bucket: data[0].Bucket,
+          },
+        });
+  
+        s3Client.deleteObject({
+          Key: picturePath,
+        }, function (err, data) {
+  
+        });
+      }
+    };
+  };
+
+  PromocionsUpdateController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'PromocionsFactory', 'FileUploader', 'AccesosAmazonFactory'];
+
+  angular.module('marketplace').controller('PromocionsUpdateController', PromocionsUpdateController);
+}());
+
+(function () {
+  var SoporteCreateController = function ($scope, $log, $cookies, $location, $uibModal, $filter, SoporteFactory, $routeParams) {
 
     $scope.init = function () {
 
@@ -7371,13 +7372,13 @@ angular.module('directives.loading', [])
       $location.path('/monitor-soporte');
     };
   };
-  SoporteCreateController.$inject = ['$scope', '$log', '$cookieStore', '$location', '$uibModal', '$filter', 'SoporteFactory', '$routeParams'];
+  SoporteCreateController.$inject = ['$scope', '$log', '$cookies', '$location', '$uibModal', '$filter', 'SoporteFactory', '$routeParams'];
 
   angular.module('marketplace').controller('SoporteCreateController', SoporteCreateController);
 }());
 
 (function () {
-  var SoporteReadController = function ($scope, $log, $cookieStore, $location, $uibModal, $filter, SoporteFactory, $routeParams) {
+  var SoporteReadController = function ($scope, $log, $cookies, $location, $uibModal, $filter, SoporteFactory, $routeParams) {
 
     $scope.init = function () {
       SoporteFactory.getSolicitudes()
@@ -7397,19 +7398,19 @@ angular.module('directives.loading', [])
     $scope.NuevaSolicitud = function () {
       $location.path('solicitar-soporte');
     };
-    
+
     $scope.EditarDetalle = function (id) {
       console.log(id);
       $location.path('actualizar-soporte/'+id);
     };
   };
-  SoporteReadController.$inject = ['$scope', '$log', '$cookieStore', '$location', '$uibModal', '$filter', 'SoporteFactory', '$routeParams'];
+  SoporteReadController.$inject = ['$scope', '$log', '$cookies', '$location', '$uibModal', '$filter', 'SoporteFactory', '$routeParams'];
 
   angular.module('marketplace').controller('SoporteReadController', SoporteReadController);
 }());
 
 (function () {
-  var SoporteUpdateController = function ($scope, $log, $cookieStore, $location, $uibModal, $filter, SoporteFactory, $routeParams) {
+  var SoporteUpdateController = function ($scope, $log, $cookies, $location, $uibModal, $filter, SoporteFactory, $routeParams) {
     var idSoporte = $routeParams.idSoporte;
     var combo = [];
     $scope.init = function () {
@@ -7463,10 +7464,11 @@ angular.module('directives.loading', [])
       $location.path('/monitor-soporte');
     };
   };
-  SoporteUpdateController.$inject = ['$scope', '$log', '$cookieStore', '$location', '$uibModal', '$filter', 'SoporteFactory', '$routeParams'];
+  SoporteUpdateController.$inject = ['$scope', '$log', '$cookies', '$location', '$uibModal', '$filter', 'SoporteFactory', '$routeParams'];
 
   angular.module('marketplace').controller('SoporteUpdateController', SoporteUpdateController);
 }());
+
 (function () {
   var ConfirmarCuentaController = function ($scope, $routeParams, $log, $location, UsuariosFactory) {
     var encryptedObject = $routeParams.encryptedObject;
@@ -7517,10 +7519,10 @@ angular.module('directives.loading', [])
 }());
 
 (function () {
-  var TerminosReadController = function ($scope, $log, $location, $cookieStore, UsuariosFactory, jwtHelper) {
+  var TerminosReadController = function ($scope, $rootScope,  $log, $location, $cookies, UsuariosFactory, jwtHelper) {
     var Session = {};
 
-    Session = $cookieStore.get('Session');
+    Session = $cookies.getObject('Session');
 
     $scope.Usuario = {};
 
@@ -7593,12 +7595,12 @@ angular.module('directives.loading', [])
                             Expira: expireDate.getTime()
                           };
 
-                        $cookieStore.put('Session', Session, { 'expires': expireDate });
+                        $cookies.putObject('Session', Session, { 'expires': expireDate, secure: $rootScope.secureCookie });
 
                         if (Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === '4' ||
                           Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === '5' ||
                           Session.IdTipoAcceso === 6 || Session.IdTipoAcceso === '6') {
-                          $cookieStore.put('currentDistribuidor', Session.distribuidores[0], { 'expires': expireDate });
+                          $cookies.putObject('currentDistribuidor', Session.distribuidores[0], { 'expires': expireDate, secure: $rootScope.secureCookie });
                         }
                         $scope.detectarSitioActivoURL();
                         $scope.ActualizarDatosSession();
@@ -7636,15 +7638,15 @@ angular.module('directives.loading', [])
     $scope.init();
   };
 
-  TerminosReadController.$inject = ['$scope', '$log', '$location', '$cookieStore', 'UsuariosFactory', 'jwtHelper'];
+  TerminosReadController.$inject = ['$scope', '$rootScope', '$log', '$location', '$cookies', 'UsuariosFactory', 'jwtHelper'];
 
   angular.module('marketplace').controller('TerminosReadController', TerminosReadController);
 } ());
 
 (function () {
-  var UsuariosCreateController = function ($scope, $log, $cookieStore, $location, UsuariosFactory, TiposAccesosFactory, EmpresasFactory) {
+  var UsuariosCreateController = function ($scope, $log, $cookies, $location, UsuariosFactory, TiposAccesosFactory, EmpresasFactory) {
     var Session = {};
-    Session = $cookieStore.get('Session');
+    Session = $cookies.getObject('Session');
     $scope.Session = Session;
     $scope.Usuario = {};
     $scope.empresa = 0;
@@ -7656,10 +7658,6 @@ angular.module('directives.loading', [])
         TiposAccesosFactory.getTiposAccesos()
           .success(function (TiposAccesos) {
             $scope.selectTiposAccesos = TiposAccesos;
-            if (Session.IdTipoAcceso == 2 || Session.IdTipoAcceso == 4)
-              $scope.Usuario.MuestraComboEmpresas = 0;
-            else
-              $scope.Usuario.MuestraComboEmpresas = 1;
           })
           .error(function (data, status, headers, config) {
             $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
@@ -7760,13 +7758,13 @@ angular.module('directives.loading', [])
     };
   };
 
-  UsuariosCreateController.$inject = ['$scope', '$log', '$cookieStore', '$location', 'UsuariosFactory', 'TiposAccesosFactory', 'EmpresasFactory'];
+  UsuariosCreateController.$inject = ['$scope', '$log', '$cookies', '$location', 'UsuariosFactory', 'TiposAccesosFactory', 'EmpresasFactory'];
 
   angular.module('marketplace').controller('UsuariosCreateController', UsuariosCreateController);
 }());
 
 (function () {
-  var UsuariosLoginController = function ($scope, $log, $cookieStore, $location, UsuariosFactory, jwtHelper, $routeParams, EmpresasFactory) {
+  var UsuariosLoginController = function ($scope, $rootScope, $log, $cookies, $location, UsuariosFactory, jwtHelper, $routeParams, EmpresasFactory) {
     $scope.Subdominio = $routeParams.Subdominio;
     $scope.validarSubdominio = function () {
       if ($scope.Subdominio) {
@@ -7776,8 +7774,8 @@ angular.module('directives.loading', [])
               if (sitio.data[0]) {
                 var expireDate = new Date();
                 expireDate.setTime(expireDate.getTime() + 600 * 60000);
-                $cookieStore.put('currentDistribuidor', sitio.data[0], { 'expires': expireDate });
-                $scope.currentDistribuidor = $cookieStore.get('currentDistribuidor');
+                $cookies.putObject('currentDistribuidor', sitio.data[0], { 'expires': expireDate, secure: $rootScope.secureCookie });
+                $scope.currentDistribuidor = $cookies.getObject('currentDistribuidor');
               }
             }
           })
@@ -7797,10 +7795,11 @@ angular.module('directives.loading', [])
     $scope.init();
 
     $scope.IniciarSesion = function () {
-      $cookieStore.remove('Session');
-      $cookieStore.remove('Pedido');
+      console.log('doing login');
+      $cookies.remove('Session');
+      $cookies.remove('Pedido');
       $scope.Usuario.IdEmpresa = $scope.currentDistribuidor.IdEmpresa;
-      $cookieStore.remove('currentDistribuidor');
+      $cookies.remove('currentDistribuidor');
       $scope.SessionCookie = {};
       UsuariosFactory.postUsuarioIniciarSesion($scope.Usuario)
         .success(function (result) {
@@ -7828,13 +7827,14 @@ angular.module('directives.loading', [])
               distribuidores: tokenPayload.distribuidores,
               Expira: expireDate.getTime()
             };
-
-            $cookieStore.put('Session', Session, { 'expires': expireDate });
+            console.log('login succesfull');
+            console.log($cookies);
+            $cookies.putObject('Session', Session, { 'expires': expireDate, secure: $rootScope.secureCookie });
 
             if (Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === '4' ||
               Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === '5' ||
               Session.IdTipoAcceso === 6 || Session.IdTipoAcceso === '6') {
-              $cookieStore.put('currentDistribuidor', Session.distribuidores[0], { 'expires': expireDate });
+              $cookies.putObject('currentDistribuidor', Session.distribuidores[0], { 'expires': expireDate, secure: $rootScope.secureCookie });
             }
 
             $scope.detectarSitioActivoURL();
@@ -7858,18 +7858,18 @@ angular.module('directives.loading', [])
     };
   };
 
-  UsuariosLoginController.$inject = ['$scope', '$log', '$cookieStore', '$location', 'UsuariosFactory', 'jwtHelper', '$routeParams', 'EmpresasFactory'];
+  UsuariosLoginController.$inject = ['$scope', '$rootScope', '$log', '$cookies', '$location', 'UsuariosFactory', 'jwtHelper', '$routeParams', 'EmpresasFactory'];
 
   angular.module('marketplace').controller('UsuariosLoginController', UsuariosLoginController);
 } ());
 
 (function () {
-  var UsuariosReadController = function ($scope, $log, $location, $cookieStore, UsuariosFactory, UsuariosXEmpresasFactory, EmpresasFactory) {
+  var UsuariosReadController = function ($scope, $log, $location, $cookies, UsuariosFactory, UsuariosXEmpresasFactory, EmpresasFactory) {
 
     $scope.sortBy = 'Nombre';
     $scope.reverse = false;
     $scope.empresaSel = '';
-    const Session = $cookieStore.get('Session');
+    const Session = $cookies.getObject('Session');
     if (Session.IdTipoAcceso === 1) {
       $scope.empresaActual = 'CompuSoluciones';
     }
@@ -7914,7 +7914,6 @@ angular.module('directives.loading', [])
       UsuariosFactory.getUsuariosPropios()
         .success(function (UsuariosXEmpresas) {
           $scope.Usuarios = UsuariosXEmpresas.data;
-          console.log($scope.Usuarios);
         })
         .error(function (data, status, headers, config) {
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
@@ -7979,7 +7978,7 @@ angular.module('directives.loading', [])
     };
   };
 
-  UsuariosReadController.$inject = ['$scope', '$log', '$location', '$cookieStore', 'UsuariosFactory', 'UsuariosXEmpresasFactory', 'EmpresasFactory'];
+  UsuariosReadController.$inject = ['$scope', '$log', '$location', '$cookies', 'UsuariosFactory', 'UsuariosXEmpresasFactory', 'EmpresasFactory'];
 
   angular.module('marketplace').controller('UsuariosReadController', UsuariosReadController);
 }());
@@ -8013,15 +8012,15 @@ angular.module('directives.loading', [])
 }());
 
 (function () {
-  var UsuariosUpdateController = function ($scope, $log, $location, $cookieStore, $routeParams, UsuariosFactory, jwtHelper, UsuariosXEmpresasFactory, TiposAccesosFactory) {
+  var UsuariosUpdateController = function ($scope, $rootScope, $log, $location, $cookies, $routeParams, UsuariosFactory, jwtHelper, UsuariosXEmpresasFactory, TiposAccesosFactory) {
     var Session = {};
-    Session = $cookieStore.get('Session');
+    Session = $cookies.getObject('Session');
     var IdUsuario = $routeParams.IdUsuario;
     $scope.Usuario = {};
 
     $scope.init = function () {
       $scope.Usuario.MuestraCamposContrasenas = 0;
-      Session = $cookieStore.get('Session');
+      Session = $cookies.getObject('Session');
 
       $scope.CheckCookie();
 
@@ -8131,7 +8130,7 @@ angular.module('directives.loading', [])
                               Expira: expireDate.getTime()
                             };
 
-                            $cookieStore.put('Session', Session, { 'expires': expireDate });
+                            $cookies.putObject('Session', Session, { 'expires': expireDate, secure: $rootScope.secureCookie });
 
                             $scope.detectarSitioActivoURL();
                             $scope.ActualizarDatosSession();
@@ -8222,12 +8221,12 @@ angular.module('directives.loading', [])
     };
   };
 
-  UsuariosUpdateController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$routeParams', 'UsuariosFactory', 'jwtHelper', 'UsuariosXEmpresasFactory', 'TiposAccesosFactory'];
+  UsuariosUpdateController.$inject = ['$scope', '$rootScope', '$log', '$location', '$cookies', '$routeParams', 'UsuariosFactory', 'jwtHelper', 'UsuariosXEmpresasFactory', 'TiposAccesosFactory'];
   angular.module('marketplace').controller('UsuariosUpdateController', UsuariosUpdateController);
 }());
 
 (function () {
-  var VersionController = function ($scope, $log, $location, $cookieStore, $route, VersionFactory, $anchorScroll) {
+  var VersionController = function ($scope, $log, $location, $cookies, $route, VersionFactory, $anchorScroll) {
     $scope.versiones = [];
     $scope.currentPath = $location.path();
     $anchorScroll.yOffset = 130;
@@ -8290,6 +8289,6 @@ angular.module('directives.loading', [])
     };
   };
 
-  VersionController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$route', 'VersionFactory', '$anchorScroll', '$routeParams'];
+  VersionController.$inject = ['$scope', '$log', '$location', '$cookies', '$route', 'VersionFactory', '$anchorScroll', '$routeParams'];
   angular.module('marketplace').controller('VersionController', VersionController);
 }());

@@ -1,5 +1,5 @@
 (function () {
-  var SoporteCreateController = function ($scope, $log, $cookieStore, $location, $uibModal, $filter, SoporteFactory, $routeParams) {
+  var SoporteCreateController = function ($scope, $log, $cookies, $location, $uibModal, $filter, SoporteFactory, $routeParams) {
 
     $scope.init = function () {
 
@@ -29,7 +29,7 @@
       $location.path('/monitor-soporte');
     };
   };
-  SoporteCreateController.$inject = ['$scope', '$log', '$cookieStore', '$location', '$uibModal', '$filter', 'SoporteFactory', '$routeParams'];
+  SoporteCreateController.$inject = ['$scope', '$log', '$cookies', '$location', '$uibModal', '$filter', 'SoporteFactory', '$routeParams'];
 
   angular.module('marketplace').controller('SoporteCreateController', SoporteCreateController);
 }());

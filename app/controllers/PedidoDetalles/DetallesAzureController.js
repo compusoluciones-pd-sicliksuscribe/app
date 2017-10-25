@@ -1,5 +1,5 @@
 (function () {
-  var DetallesAzureController = function ($scope, $log, $cookieStore, $location, $uibModal, $filter, PedidoDetallesFactory, $routeParams) {
+  var DetallesAzureController = function ($scope, $log, $cookies, $location, $uibModal, $filter, PedidoDetallesFactory, $routeParams) {
     var IdPedido = $routeParams.IdPedido;
     $scope.Mostrar = false;
     $scope.MostrarMensaje = false;
@@ -37,7 +37,7 @@
     $scope.init();
 
   };
-  DetallesAzureController.$inject = ['$scope', '$log', '$cookieStore', '$location', '$uibModal', '$filter', 'PedidoDetallesFactory', '$routeParams'];
+  DetallesAzureController.$inject = ['$scope', '$log', '$cookies', '$location', '$uibModal', '$filter', 'PedidoDetallesFactory', '$routeParams'];
 
   angular.module('marketplace').controller('DetallesAzureController', DetallesAzureController);
 }());

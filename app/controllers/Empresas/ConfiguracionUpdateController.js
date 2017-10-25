@@ -1,9 +1,9 @@
 (function () {
-  var ConfiguracionUpdateController = function ($scope, $log, $location, $cookieStore, $routeParams, EmpresasFactory, FileUploader, AccesosAmazonFactory) {
+  var ConfiguracionUpdateController = function ($scope, $log, $location, $cookies, $routeParams, EmpresasFactory, FileUploader, AccesosAmazonFactory) {
 
     $scope.init = function () {
       $scope.CheckCookie();
-      var cookie = $cookieStore.get('Session');
+      var cookie = $cookies.getObject('Session');
       $scope.IdEmpresa = cookie.IdEmpresa;
       EmpresasFactory.getMiSitio()
         .success(function (miClickSuscribe) {
@@ -109,7 +109,7 @@
     };
   };
 
-  ConfiguracionUpdateController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$routeParams', 'EmpresasFactory', 'FileUploader', 'AccesosAmazonFactory'];
+  ConfiguracionUpdateController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'EmpresasFactory', 'FileUploader', 'AccesosAmazonFactory'];
 
   angular.module('marketplace').controller('ConfiguracionUpdateController', ConfiguracionUpdateController);
 }());

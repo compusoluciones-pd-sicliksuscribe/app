@@ -1,5 +1,5 @@
 (function () {
-  var EmpresasXEmpresasReadController = function ($scope, $log, $location, $cookieStore, EmpresasXEmpresasFactory, EmpresasFactory, PedidoDetallesFactory) {
+  var EmpresasXEmpresasReadController = function ($scope, $log, $location, $cookies, EmpresasXEmpresasFactory, EmpresasFactory, PedidoDetallesFactory) {
     $scope.sortBy = 'NombreEmpresa';
     $scope.reverse = false;
     $scope.CreditoDisponible = 0;
@@ -257,7 +257,7 @@
     };
   };
 
-  EmpresasXEmpresasReadController.$inject = ['$scope', '$log', '$location', '$cookieStore', 'EmpresasXEmpresasFactory', 'EmpresasFactory', 'PedidoDetallesFactory'];
+  EmpresasXEmpresasReadController.$inject = ['$scope', '$log', '$location', '$cookies', 'EmpresasXEmpresasFactory', 'EmpresasFactory', 'PedidoDetallesFactory'];
 
   angular.module('marketplace').controller('EmpresasXEmpresasReadController', EmpresasXEmpresasReadController);
 }());

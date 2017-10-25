@@ -1,5 +1,5 @@
 (function () {
-  var MigracionDetalleController = function ($scope, $log, $location, $cookieStore, $routeParams, MigracionFactory) {
+  var MigracionDetalleController = function ($scope, $log, $location, $cookies, $routeParams, MigracionFactory) {
     $scope.idMigracion = $routeParams.idMigracion;
     $scope.pasoSeleccionado = 0;
     $scope.pasoActual = 0;
@@ -263,7 +263,7 @@
     };
   };
 
-  MigracionDetalleController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$routeParams', 'MigracionFactory'];
+  MigracionDetalleController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'MigracionFactory'];
 
   angular.module('marketplace').controller('MigracionDetalleController', MigracionDetalleController);
 }());

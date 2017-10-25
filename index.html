@@ -23,6 +23,7 @@
 	<meta name='apple-mobile-web-app-status-bar-style' content='#FFFFFFFF' />
 	<meta name="application-bavbutton-color" content="#FFFFFFFF" />
 	<meta name="apple-mobile-web-app-status-bar-style" content="#FFFFFFFF" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
 	<link rel="shortcut icon" type="image/x-icon" href="images/icon.png" />
 	<link rel="shortcut icon" href="images/icon.png" />
@@ -158,7 +159,7 @@
 												<li ng-show="SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 7"><a ng-click="goToPage('Clientes');">Mis clientes</a></li>
 												<li><a ng-show="SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 4 || SessionCookie.IdTipoAcceso == 7"
 													 ng-click="goToPage('Usuarios');">Mis colaboradores</a></li>
-												<li><a ng-click="goToPage('Monitor');">Monitor de pedidos por cliente</a></li>												
+												<li><a ng-click="goToPage('Monitor');">Monitor de pedidos por cliente</a></li>
 												<li id="monitorPagos" ng-show="SessionCookie.IdTipoAcceso == 2"><a ng-click="goToPage('MonitorPagos');">Monitor de pedidos por pagar</a></li>
 												<li id="activarMiSitio" ng-show="SessionCookie.IdTipoAcceso == 2 && SessionCookie.IdEmpresa == 214"><a ng-click="goToPage('Configuracion');">Activar mi sitio</a></li>
 												<li id="activarMisProductos" ng-show="SessionCookie.IdTipoAcceso == 2 && SessionCookie.IdEmpresa == 214"><a ng-click="goToPage('MisProductos');">Activar mis productos</a></li>
@@ -201,7 +202,7 @@
 
 										<li class="green" ng-show="SessionCookie.Nombre == undefined">
 											<a ng-click="goToPage('Contacto');"><span class="fa fa-phone" style="padding-right:5px;"></span> Contacto </a>
-										</li>										
+										</li>
 
 										<li class="yellow" ng-show="(SessionCookie.Nombre == undefined) || (SessionCookie.IdTipoAcceso == 4 || SessionCookie.IdTipoAcceso == 5 || SessionCookie.IdTipoAcceso == 6)">
 											<a ng-click="goToPage('SoporteCSP');"><span class="fa fa-ticket" style="padding-right:5px;"></span> Soporte CSP</a>
@@ -412,7 +413,7 @@
 							<p>
 								<a style="color:#fff" href="#/Version">Versiones</a>
 								&nbsp; / &nbsp;
-								<a style="color:#fff;" href="http://www.compusoluciones.com/aviso-de-privacidad/">Aviso de privacidad</a> 
+								<a style="color:#fff;" href="http://www.compusoluciones.com/aviso-de-privacidad/">Aviso de privacidad</a>
 								&nbsp; /
 								&nbsp; Queremos Escucharte</p>
 						</div>
@@ -539,13 +540,13 @@
 	</script>
 
 	<!-- Producción-->
-	<!--<script src="https://gateway-na.americanexpress.com/checkout/version/33/checkout.js" 
+	<!--<script src="https://gateway-na.americanexpress.com/checkout/version/33/checkout.js"
             data-error="errorCallback"
             data-complete="completeCallback"
             data-cancel="cancelCallback" >
     </script> -->
 
-	<!-- <div id="divComprar" ng-controller="ComprarController" style="display:none;"></div> -->
+	<div id="divComprar" ng-controller="ComprarController" style="display:none;"></div>
 
 	<script type="text/javascript">
 		function errorCallback(error) {
@@ -563,7 +564,7 @@
 	</script>
 
 	<script>
-						(function (i, s, o, g, r, a, m) {						
+						(function (i, s, o, g, r, a, m) {
 i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
 							(i[r].q = i[r].q || []).push(arguments)
 						}, i[r].l = 1 * new Date(); a = s.createElement(o),

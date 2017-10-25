@@ -1,5 +1,5 @@
 (function () {
-  var EmpresasCompletarController = function ($scope, $log, $location, $cookieStore, $routeParams, EmpresasFactory, EmpresasXEmpresasFactory, EstadosFactory, UsuariosFactory, UsuariosXEmpresasFactory) {
+  var EmpresasCompletarController = function ($scope, $log, $location, $cookies, $routeParams, EmpresasFactory, EmpresasXEmpresasFactory, EstadosFactory, UsuariosFactory, UsuariosXEmpresasFactory) {
     var IdEmpresaDistribuidor = $routeParams.IdEmpresa;
     var IdMicrosoft = $routeParams.IdMicrosoft;
     var Dominio = $routeParams.Dominio;
@@ -108,7 +108,7 @@
               .success(function (UsuariosXEmpresas) {
                 if (UsuariosXEmpresas.length === 0) {
                   $scope.ShowToast('Agrega un administrador, para el distribuidor.', 'danger');
-                } else {         
+                } else {
                   var ObjMicrosoft = {
                     RFC: $scope.Empresa.RFC,
                     NombreEmpresa: DatosMicrosoft.companyName,
@@ -127,7 +127,7 @@
                     IdEmpresaDistribuidor: IdEmpresaDistribuidor,
                     IdUsuario: UsuariosXEmpresas[0].IdUsuario,
                     MonedaPago: $scope.Empresa.MonedaPago,
-                    FormaPago: $scope.Empresa.IdFormaPagoPredilecta
+                    FormaPago: $scope.Empresa.IdFormaPagoPredilecta,
                   };
                   EmpresasFactory.postEmpresaMicrosoft(ObjMicrosoft)
                     .success(function (result) {
@@ -307,7 +307,7 @@
     };
   };
 
-  EmpresasCompletarController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$routeParams', 'EmpresasFactory', 'EmpresasXEmpresasFactory', 'EstadosFactory', 'UsuariosFactory', 'UsuariosXEmpresasFactory'];
+  EmpresasCompletarController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'EmpresasFactory', 'EmpresasXEmpresasFactory', 'EstadosFactory', 'UsuariosFactory', 'UsuariosXEmpresasFactory'];
 
   angular.module('marketplace').controller('EmpresasCompletarController', EmpresasCompletarController);
 } ());

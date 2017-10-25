@@ -1,7 +1,7 @@
 (function () {
-  var DescuentosCreateController = function ($scope, $log, $cookieStore, $location, DescuentosFactory, NivelesDistribuidorFactory) {
+  var DescuentosCreateController = function ($scope, $log, $cookies, $location, DescuentosFactory, NivelesDistribuidorFactory) {
     var Session = {};
-    Session = $cookieStore.get('Session');
+    Session = $cookies.getObject('Session');
     $scope.Session = Session;
     $scope.Descuento = {};
 
@@ -57,7 +57,7 @@
     };
   };
 
-  DescuentosCreateController.$inject = ['$scope', '$log', '$cookieStore', '$location', 'DescuentosFactory', 'NivelesDistribuidorFactory'];
+  DescuentosCreateController.$inject = ['$scope', '$log', '$cookies', '$location', 'DescuentosFactory', 'NivelesDistribuidorFactory'];
 
   angular.module('marketplace').controller('DescuentosCreateController', DescuentosCreateController);
 }());
