@@ -99,7 +99,7 @@
                 <div class="pull-rigth">
                     <label>Empresa* </label>
                     <select name="IdEmpresa" class="form-control" ng-model="Usuario.IdEmpresa" required=""
-                        ng-options="Empresas.IdEmpresa as Empresas.NombreEmpresa for Empresas in selectEmpresas">
+                        ng-options="Empresas.IdEmpresa as Empresas.NombreEmpresa + ' ID: ' + Empresas.IdERP for Empresas in selectEmpresas">
                         <option value="" ng-selected="true">Selecciona una empresa...</option>
                     </select>
                     <div ng-show="frm.$submitted || frm.IdEmpresa.$touched">
