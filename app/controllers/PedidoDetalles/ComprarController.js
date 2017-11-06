@@ -116,18 +116,16 @@
             console.log('pedidosAgrupados', typeof Datos.data['0'].pedidosAgrupados);
             console.log(Datos.data['0'].pedidosAgrupados);
             $cookies.putObject('pedidosAgrupados', Datos.data['0'].pedidosAgrupados, { 'expires': expireDate, secure: $rootScope.secureCookie });
-
             if (Datos.data['0'].total > 0) {
               if (Datos.success) {
                 if ($cookies.getObject('pedidosAgrupados')) {
+                  console.log(Datos.data['0'].total)
                   Checkout.configure({
                     merchant: Datos.data['0'].merchant,
                     session: { id: Datos.data['0'].session_id },
                     order:
                     {
-                      amount: function () {
-                        Datos.data['0'].total;
-                      },
+                      amount: Datos.data['0'].total,
                       currency: Datos.data['0'].moneda,
                       description: 'Pago tarjeta bancaria',
                       id: Datos.data['0'].pedidos
@@ -148,11 +146,12 @@
                         email: 'order@yourMerchantEmailAddress.com',
                         phone: '+1 123 456 789 012',
                       },
-                      displayControl: { billingAddress: 'HIDE', orderSummary: 'READ_ONLY' },
+                      displayControl: { billingAddress: 'HIDE', orderSummary: 'SHOW' },
                       locale: 'es_MX',
                       theme: 'default'
                     }
                   });
+                  console.log('done config');
                   Checkout.showLightbox();
                 } else {
                   $scope.ShowToast('No pudimos comenzar con tu proceso de pago, favor de intentarlo una vez más.', 'danger');
