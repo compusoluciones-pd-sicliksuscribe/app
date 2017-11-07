@@ -380,7 +380,7 @@ angular.module('marketplace')
     $rootScope.rsVersion = '2.1.1';
     /* $rootScope.API = 'http://localhost:8080/';
     $rootScope.MAPI = 'http://localhost:8083/';
-    $rootScope.dominio = 'localhost'; */
+    $rootScope.dominio = 'localhost';*/
     $rootScope.API = 'https://pruebas.compusoluciones.com/';
     $rootScope.MAPI = 'http://microsoft-api.us-east-1.elasticbeanstalk.com/';
     $rootScope.dominio = 'clicksuscribe';
@@ -406,570 +406,6 @@ angular.module('directives.loading', [])
       }
     };
   }]);
-
-(function () {
-  var ContactoController = function ($scope) {
-    $scope.init = function () {
-      $scope.esNavegadorSoportado();
-      $scope.navCollapsed = true;
-    };
-    $scope.init();
-  };
-
-  ContactoController.$inject = ['$scope'];
-
-  angular.module('marketplace').controller('ContactoController', ContactoController);
-}());
-
-'use strict';
-
-(function () {
-  var IndexController = function ($scope, $log, $location, $cookies, $rootScope, PedidosFactory, PedidoDetallesFactory, ngToast, $uibModal, $window, UsuariosFactory, deviceDetector, ComprasUFFactory, EmpresasFactory) {
-    $scope.indexBuscarProductos = {};
-    $scope.SessionCookie = {};
-    $scope.ProductosCarrito = 0;
-    $scope.navCollapsed = true;
-    $scope.currentPath = $location.path();
-    $scope.currentDistribuidor = {};
-    $scope.currentDistribuidor.UrlLogo = 'images/LogoSVG.svg';
-
-    $scope.ContarProductosCarrito = function () {
-      if (!$scope.currentDistribuidor.IdEmpresa) {
-        $scope.ProductosCarrito = 0;
-        PedidoDetallesFactory.getContarProductos()
-          .success(function (cuenta) {
-            if (cuenta.success === 1) {
-              $scope.ProductosCarrito = cuenta.data[0].Cantidad;
-            }
-          })
-          .error(function (data, status, headers, config) {
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-          });
-      } else {
-        $scope.ContarProductosCarritoUF();
-      }
-    };
-
-    $scope.ContarProductosCarritoUF = function () {
-      $scope.ProductosCarrito = 0;
-      ComprasUFFactory.getCantidadProductosCarrito($scope.currentDistribuidor.IdEmpresa)
-        .success(function (cuenta) {
-          if (cuenta.success) {
-            $scope.ProductosCarrito = cuenta.data[0].Cantidad;
-          }
-        })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
-    };
-
-    $scope.$on('LOAD', function () { $scope.cargando = true; });
-
-    $scope.$on('UNLOAD', function () { $scope.cargando = false; });
-
-    $scope.ShowToast = function (Mensaje, className) {
-      /* className = "success", "info", "warning" or "danger"*/
-      ngToast.create({
-        className: className,
-        content: '' + Mensaje + '',
-        dismissButton: true
-      });
-    };
-
-    $scope.ClearToast = function () {
-      ngToast.dismiss();
-    };
-
-    $scope.cambiarDistribuidor = function (Distribuidor, reload) {
-      if (Distribuidor) {
-        var expireDate = new Date();
-        expireDate.setTime(expireDate.getTime() + 600 * 60000);
-        console.log(Distribuidor);
-        console.log(typeof Distribuidor);
-        $cookies.putObject('currentDistribuidor', Distribuidor, { 'expires': expireDate, secure: $rootScope.secureCookie });
-        if ($cookies.getObject('currentDistribuidor')) {
-          $scope.currentDistribuidor = $cookies.getObjectObject('currentDistribuidor');
-        } else {
-          $scope.currentDistribuidor = {};
-          $scope.currentDistribuidor.UrlLogo = 'images/LogoSVG.svg';
-        }
-        if (reload) {
-          $location.path('/');
-          $scope.ActualizarMenu();
-        }
-        $scope.ShowToast('¡Bienvenido a ' + Distribuidor.NombreEmpresa + '!', 'success');
-      }
-    };
-
-    $scope.detectarSitioActivoURL = function (){
-      var Session =  $cookies.getObject('Session');
-      if ($scope.currentDistribuidor.IdEmpresa) {
-        for (var i = 0; i < Session.distribuidores.length; i++) {
-          if (Session.distribuidores[i]) {
-            if (Session.distribuidores[i].IdEmpresa === $scope.currentDistribuidor.IdEmpresa) {
-              $scope.cambiarDistribuidor(Session.distribuidores[i], false);
-            }
-          }
-        }
-      }
-    };
-
-    $scope.addPulseCart = function () {
-      document.getElementById('shoppingCartBG').className += ' elementBGPulse';
-      document.getElementById('shoppingCartBGUF').className += ' elementBGPulseUF';
-    };
-    $scope.removePulseCart = function () {
-      var classes = document.getElementById('shoppingCartBG').className;
-      document.getElementById('shoppingCartBG').className = classes.replace(' elementBGPulse', '');
-      classes = document.getElementById('shoppingCartBGUF').className;
-      document.getElementById('shoppingCartBGUF').className = classes.replace(' elementBGPulseUF', '');
-    };
-
-    $scope.ActualizarMenu = function (location) {
-      $scope.navCollapsed = true;
-      if ($cookies.getObject('Session')) {
-        $scope.SessionCookie = $cookies.getObject('Session');
-        $scope.ContarProductosCarrito();
-        if ($scope.SessionCookie.IdTipoAcceso === 4 || $scope.SessionCookie.IdTipoAcceso === '4' ||
-          $scope.SessionCookie.IdTipoAcceso === 5 || $scope.SessionCookie.IdTipoAcceso === '5' ||
-          $scope.SessionCookie.IdTipoAcceso === 6 || $scope.SessionCookie.IdTipoAcceso === '6') {
-          $scope.cambiarDistribuidor($cookies.getObject('currentDistribuidor'), false);
-        }
-      }
-    };
-
-    $scope.esNavegadorSoportado = function () {
-      if (!validarNavegador(deviceDetector)) {
-        $scope.navCollapsed = true;
-        $location.path('/Navegadores');
-      } else if (validarNavegador(deviceDetector) && $location.$$url === '/Navegadores') {
-        $location.path('/');
-      }
-    };
-
-    $scope.CheckCookie = function () {
-      if (!validarNavegador(deviceDetector)) {
-        $scope.navCollapsed = true;
-        $location.path('/Navegadores');
-      } else {
-        $scope.navCollapsed = true;
-
-        if ($cookies.getObject('Session') == '' || $cookies.getObject('Session') == undefined || $cookies.getObject('Session') == null) {
-          $location.path('/Login');
-        } else {
-          var fecha = new Date();
-
-          if ($cookies.getObject('Session').Expira < fecha.getTime()) {
-            $scope.CerrarSesion();
-          } else {
-            if ($cookies.getObject('Session').LeyoTerminos != 1) {
-              $scope.ShowToast('Para usar el sitio necesitas aceptar los terminos y condiciones', 'danger');
-              $location.path('/TerminosCondiciones');
-            }
-          }
-        }
-      }
-    };
-
-    /* Valida si el navegador que esta usando el usuario es soportado por las tecnologías de click suscribe*/
-    function validarNavegador (deviceDetector) {
-      var esSoportado = false;
-      if (deviceDetector.browser === 'ie' && parseInt(obtenerPrimeraCifraVersionNavegador(deviceDetector)) >= 9) { esSoportado = true; }
-      if (deviceDetector.browser === 'chrome' && parseInt(obtenerPrimeraCifraVersionNavegador(deviceDetector)) >= 47) { esSoportado = true; }
-      if (deviceDetector.browser === 'firefox' && parseInt(obtenerPrimeraCifraVersionNavegador(deviceDetector)) >= 43) { esSoportado = true; }
-      if (deviceDetector.browser === 'safari' && parseInt(obtenerPrimeraCifraVersionNavegador(deviceDetector)) >= 5) { esSoportado = true; }
-      if (deviceDetector.browser === 'opera' && parseInt(obtenerPrimeraCifraVersionNavegador(deviceDetector)) >= 34) { esSoportado = true; }
-      if (deviceDetector.browser === 'ms-edge') { esSoportado = true; }
-      if (deviceDetector.device === 'android') { esSoportado = true; }
-      if (deviceDetector.device === 'ipad') { esSoportado = true; }
-      if (deviceDetector.device === 'iphone') { esSoportado = true; }
-      return esSoportado;
-    }
-
-    /* Obtiene la primera cifra de la versión del navegador que esta usando el usaurio*/
-    function obtenerPrimeraCifraVersionNavegador (deviceDetector) {
-      var arregloCifrasVersion = deviceDetector.browser_version.split('.');
-      return arregloCifrasVersion[0];
-    }
-
-    $scope.init = function () {
-      if (!validarNavegador(deviceDetector)) {
-        $scope.navCollapsed = true;
-        $location.path('/Navegadores');
-        return false;
-      } else {
-        $scope.navCollapsed = true;
-        obtenerSubdominio();
-        $scope.ActualizarMenu();
-      }
-    };
-
-    $scope.init();
-
-    function obtenerSubdominio () {
-      var url = window.location.href;
-      var subdomain = url.replace('http://', '');
-      subdomain = subdomain.replace('https://', '');
-      subdomain = subdomain.substring(0, subdomain.indexOf($rootScope.dominio));
-      subdomain = subdomain.replace(new RegExp('[.]', 'g'), '');
-      subdomain = subdomain.replace('www', '');
-
-      if (!subdomain == '') {
-        EmpresasFactory.getSitio(subdomain).success(function (empresa) {
-          $scope.cambiarDistribuidor(empresa.data[0], false);
-          $scope.ActualizarMenu();
-        });
-        if ($cookies.getObject('currentDistribuidor')) {
-          $scope.currentDistribuidor = $cookies.getObject('currentDistribuidor');
-        } else {
-          $scope.currentDistribuidor = {};
-          $scope.currentDistribuidor.UrlLogo = 'images/LogoSVG.svg';
-        }
-      }
-    }
-
-    $scope.selectMenu = function () {
-      if ($scope.currentDistribuidor) {
-        if ((($scope.SessionCookie.IdTipoAcceso == 4 || $scope.SessionCookie.IdTipoAcceso == 5 || $scope.SessionCookie.IdTipoAcceso == 6)
-        && (($scope.currentDistribuidor.IdEmpresa != 0) && $scope.currentDistribuidor.IdEmpresa != null) && $scope.SessionCookie.IdTipoAcceso != 2)) {
-          return true;
-        }
-
-        if(!$scope.SessionCookie.IdTipoAcceso && $scope.currentDistribuidor.IdEmpresa)
-        {
-          return true;
-        }
-      }
-      return false;
-    };
-
-    $scope.Buscar = function () {
-      try {
-        $scope.goToPage('Productos/' + $scope.indexBuscarProductos.Busqueda.replace('/', ''));
-      } catch (error) { }
-    };
-
-    $scope.BuscarUF = function () {
-      try {
-        $scope.goToPage('uf/Productos/' + $scope.indexBuscarProductos.Busqueda.replace('/', ''));
-      } catch (error) { }
-    };
-
-    $scope.goToPage = function (location) {
-      $scope.navCollapsed = true;
-      $location.path('/' + location);
-    };
-
-    $scope.CerrarSesion = function () {
-      try {
-        $scope.navCollapsed = true;
-
-        var Session =
-          {
-            Token: '',
-            CorreoElectronico: '',
-            Nombre: '',
-            IdUsuario: '',
-            ApellidoPaterno: '',
-            ApellidoMaterno: '',
-            IdTipoAcceso: '',
-            NombreTipoAcceso: '',
-            IdEmpresa: '',
-            NombreEmpresa: '',
-            LeyoTerminos: ''
-          };
-
-        var expireDate = new Date();
-
-        expireDate.setTime(expireDate.getTime() + 1);
-
-        $cookies.remove('Session');
-        $cookies.remove('Pedido');
-        $cookies.remove('currentDistribuidor');
-
-        $scope.SessionCookie = {};
-        $scope.currentDistribuidor = {};
-
-        angular.forEach($cookies, function (v, k) {
-          $cookies.remove(k);
-        });
-
-        $scope = $scope.$new(true);
-
-        UsuariosFactory.getCerrarSession()
-          .success(function (result) {
-            $window.location.reload();
-            $location.path('/Login');
-          })
-          .error(function (data, status, headers, config) {
-            $window.location.reload();
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-            $location.path('/Login');
-          });
-
-        $location.path('/Login');
-        $scope.ActualizarMenu();
-      } catch (error) {
-
-      }
-    };
-
-    $scope.ActualizarDatosSession = function () {
-      $scope.SessionCookie = $cookies.getObject('Session');
-      if ($scope.SessionCookie.IdTipoAcceso === 4 || $scope.SessionCookie.IdTipoAcceso === '4') {
-        $scope.cambiarDistribuidor($cookies.getObject('currentDistribuidor'), false);
-      }
-    };
-
-    $scope.IniciarTour = function () {
-      $scope.Tour = new Tour({
-
-        steps: [
-          {
-            element: '.five',
-            title: 'Ver todos los productos',
-            placement: 'bottom',
-            content: 'Consulta la lista de productos filtrando por fabricante o tipo, configura el producto para agregarlos al carrito de compras.',
-            template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>",
-          },
-          {
-            element: '.one',
-            placement: 'bottom',
-            title: 'Mis clientes',
-            content: 'Aquí podrás administrar a tus colaboradores, consultar tus clientes y ver el monitor de suscripciones.',
-            template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>",
-          },
-          {
-            element: '.four',
-            title: 'Mi perfil',
-            placement: 'bottom',
-            content: 'Actualiza tus datos personales como tu contraseña de acceso.',
-            template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>",
-          },
-          {
-            element: '.two',
-            title: 'Carrito de compras',
-            placement: 'bottom',
-            content: 'Aquí podrás consultar todos los productos que agregues para tu compra.',
-            template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>",
-          },
-          {
-            element: '.three',
-            title: 'Buscador',
-            placement: 'bottom',
-            content: 'Puedes buscar cualquier producto por su nombre, fabricante, o Id.',
-            template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>",
-          }
-        ],
-
-        backdrop: true,
-        storage: false
-      });
-
-      $scope.Tour.init();
-      $scope.Tour.start();
-    };
-  };
-
-  IndexController.$inject = ['$scope', '$log', '$location', '$cookies', '$rootScope', 'PedidosFactory', 'PedidoDetallesFactory', 'ngToast', '$uibModal', '$window', 'UsuariosFactory', 'deviceDetector', 'ComprasUFFactory', 'EmpresasFactory'];
-
-  angular.module('marketplace').controller('IndexController', IndexController);
-}());
-
-(function () {
-  var LandingController = function ($scope, $log, $location, $cookies, PromocionsFactory, deviceDetector) {
-    $scope.Promociones = {};
-
-    $scope.init = function () {
-      $scope.esNavegadorSoportado();
-      $scope.navCollapsed = true;
-      PromocionsFactory.getPromocions()
-        .success(function (Promociones) {
-          $scope.Promociones = Promociones;
-        })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
-    };
-
-    $scope.init();
-  };
-
-  LandingController.$inject = ['$scope', '$log', '$location', '$cookies', 'PromocionsFactory', 'deviceDetector'];
-
-  angular.module('marketplace').controller('LandingController', LandingController);
-}());
-
-(function () {
-  var NavegadoresController = function ($scope) {
-    $scope.init = function () {
-      $scope.esNavegadorSoportado();
-      $scope.navCollapsed = true;
-    };
-
-    $scope.init();
-  };
-  NavegadoresController.$inject = ['$scope'];
-  angular.module('marketplace').controller('NavegadoresController', NavegadoresController);
-}());
-
-(function () {
-  var ReportesController = function ($scope, $log, $location, $cookies, ReportesFactory) {
-
-    $scope.perfil = $cookies.getObject('Session');
-
-    $scope.reportesSel = '';
-
-    $scope.init = function () {
-      $scope.navCollapsed = true;
-      $scope.CheckCookie();
-      ReportesFactory.getReportes()
-        .success(function (result) {
-          if (result) {
-            $scope.reportesSel = result.data[0];
-          }
-        })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
-    };
-
-    $scope.init();
-
-    var maxSize = 5900;
-
-    $scope.GenerarReporte = function (params) {
-      ReportesFactory.getGenerarReporte($scope.reporteSel)
-        .success(function (result) {
-          if (result) {
-            for (var i = 0; i < $scope.reportesSel.length; i++) {
-              if ($scope.reportesSel[i].IdReporte === $scope.reporteSel) {
-                var d = new Date();
-                var sDate = ('0' + d.getDate()).slice(-2) + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + d.getFullYear() + ' ' + ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
-                var NombreReporte = $scope.reportesSel[i].NombreReporte + '_' + sDate;
-
-                var repeat = Math.ceil(result.data[0].length / maxSize);
-                for (var j = 0; j < repeat; j++) {
-                  var start = j * maxSize;
-                  var end = start + maxSize;
-                  var parte = result.data[0].slice(start, end);
-                  var number = j + 1;
-                  NombreReporte = NombreReporte + '_' + number;
-                  $scope.JSONToCSVConvertor(parte, NombreReporte, true);
-                }
-                return;
-              }
-            }
-          }
-        })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
-    };
-
-    $scope.JSONToCSVConvertor = function (JSONData, ReportTitle, ShowLabel) {
-      /* If JSONData is not an object then JSON.parse will parse the JSON string in an Object*/
-      var arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
-      var CSV = '';
-      /* Set Report title in first row or line*/
-      CSV += ReportTitle + '\r\n\n';
-      /* This condition will generate the Label/Header*/
-      if (ShowLabel) {
-        var row = '';
-
-        /* This loop will extract the label from 1st index of on array*/
-        for (var index in arrData[0]) {
-          /* Now convert each value to string and comma-seprated*/
-          row += index + ',';
-        }
-
-        row = row.slice(0, -1);
-
-        /* append Label row with line break*/
-        CSV += row + '\r\n';
-      }
-
-      /* 1st loop is to extract each row*/
-      for (var i = 0; i < arrData.length; i++) {
-        var row = '';
-
-        /* 2nd loop will extract each column and convert it in string comma-seprated*/
-        for (var index in arrData[i]) {
-          row += '"' + arrData[i][index] + '",';
-        }
-
-        row.slice(0, row.length - 1);
-
-        /* add a line break after each row*/
-        CSV += row + '\r\n';
-      }
-
-      if (CSV == '') {
-        alert('Información inválida');
-        return;
-      }
-
-      /* Generate a file name*/
-      var fileName = 'Clicksuscribe_';
-      /* this will remove the blank-spaces from the title and replace it with an underscore*/
-      fileName += ReportTitle.replace(/ /g, '_');
-
-      /* Initialize file format you want csv or xls*/
-      var uri = 'data:text/csv;charset=utf-8,' + escape(CSV);
-
-      /* Now the little tricky part.*/
-      /* you can use either>> window.open(uri);*/
-      /* but this will not work in some browsers*/
-      /* or you will not get the correct file extension*/
-
-      /* this trick will generate a temp <a /> tag*/
-      var link = document.createElement('a');
-      link.href = uri;
-
-      /* set the visibility hidden so it will not effect on your web-layout*/
-      link.style = 'visibility:hidden';
-      link.download = fileName + '.csv';
-
-      /* this part will append the anchor tag and remove it after automatic click*/
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    };
-  };
-
-  ReportesController.$inject = ['$scope', '$log', '$location', '$cookies', 'ReportesFactory'];
-
-  angular.module('marketplace').controller('ReportesController', ReportesController);
-}());
-
-(function () {
-  var SoporteController = function ($scope) {
-    $scope.init = function () {
-      $scope.esNavegadorSoportado();
-      $scope.navCollapsed = true;
-    };
-
-    $scope.init();
-  };
-
-  SoporteController.$inject = ['$scope'];
-
-  angular.module('marketplace').controller('SoporteController', SoporteController);
-}());
-
-(function () {
-  var SugerenciasController = function ($scope) {
-    $scope.init = function () {
-      $scope.navCollapsed = true;
-    };
-
-    $scope.init();
-  };
-
-  SugerenciasController.$inject = ['$scope'];
-
-  angular.module('marketplace').controller('SugerenciasController', SugerenciasController);
-}());
 
 (function () {
   var AccesosAmazonFactory = function ($http, $cookies, $rootScope) {
@@ -2179,6 +1615,570 @@ angular.module('directives.loading', [])
   };
   VersionFactory.$inject = ['$http', '$cookies', '$rootScope'];
   angular.module('marketplace').factory('VersionFactory', VersionFactory);
+}());
+
+(function () {
+  var ContactoController = function ($scope) {
+    $scope.init = function () {
+      $scope.esNavegadorSoportado();
+      $scope.navCollapsed = true;
+    };
+    $scope.init();
+  };
+
+  ContactoController.$inject = ['$scope'];
+
+  angular.module('marketplace').controller('ContactoController', ContactoController);
+}());
+
+'use strict';
+
+(function () {
+  var IndexController = function ($scope, $log, $location, $cookies, $rootScope, PedidosFactory, PedidoDetallesFactory, ngToast, $uibModal, $window, UsuariosFactory, deviceDetector, ComprasUFFactory, EmpresasFactory) {
+    $scope.indexBuscarProductos = {};
+    $scope.SessionCookie = {};
+    $scope.ProductosCarrito = 0;
+    $scope.navCollapsed = true;
+    $scope.currentPath = $location.path();
+    $scope.currentDistribuidor = {};
+    $scope.currentDistribuidor.UrlLogo = 'images/LogoSVG.svg';
+
+    $scope.ContarProductosCarrito = function () {
+      if (!$scope.currentDistribuidor.IdEmpresa) {
+        $scope.ProductosCarrito = 0;
+        PedidoDetallesFactory.getContarProductos()
+          .success(function (cuenta) {
+            if (cuenta.success === 1) {
+              $scope.ProductosCarrito = cuenta.data[0].Cantidad;
+            }
+          })
+          .error(function (data, status, headers, config) {
+            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          });
+      } else {
+        $scope.ContarProductosCarritoUF();
+      }
+    };
+
+    $scope.ContarProductosCarritoUF = function () {
+      $scope.ProductosCarrito = 0;
+      ComprasUFFactory.getCantidadProductosCarrito($scope.currentDistribuidor.IdEmpresa)
+        .success(function (cuenta) {
+          if (cuenta.success) {
+            $scope.ProductosCarrito = cuenta.data[0].Cantidad;
+          }
+        })
+        .error(function (data, status, headers, config) {
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+    };
+
+    $scope.$on('LOAD', function () { $scope.cargando = true; });
+
+    $scope.$on('UNLOAD', function () { $scope.cargando = false; });
+
+    $scope.ShowToast = function (Mensaje, className) {
+      /* className = "success", "info", "warning" or "danger"*/
+      ngToast.create({
+        className: className,
+        content: '' + Mensaje + '',
+        dismissButton: true
+      });
+    };
+
+    $scope.ClearToast = function () {
+      ngToast.dismiss();
+    };
+
+    $scope.cambiarDistribuidor = function (Distribuidor, reload) {
+      if (Distribuidor) {
+        var expireDate = new Date();
+        expireDate.setTime(expireDate.getTime() + 600 * 60000);
+        console.log(Distribuidor);
+        console.log(typeof Distribuidor);
+        $cookies.putObject('currentDistribuidor', Distribuidor, { 'expires': expireDate, secure: $rootScope.secureCookie });
+        if ($cookies.getObject('currentDistribuidor')) {
+          $scope.currentDistribuidor = $cookies.getObjectObject('currentDistribuidor');
+        } else {
+          $scope.currentDistribuidor = {};
+          $scope.currentDistribuidor.UrlLogo = 'images/LogoSVG.svg';
+        }
+        if (reload) {
+          $location.path('/');
+          $scope.ActualizarMenu();
+        }
+        $scope.ShowToast('¡Bienvenido a ' + Distribuidor.NombreEmpresa + '!', 'success');
+      }
+    };
+
+    $scope.detectarSitioActivoURL = function (){
+      var Session =  $cookies.getObject('Session');
+      if ($scope.currentDistribuidor.IdEmpresa) {
+        for (var i = 0; i < Session.distribuidores.length; i++) {
+          if (Session.distribuidores[i]) {
+            if (Session.distribuidores[i].IdEmpresa === $scope.currentDistribuidor.IdEmpresa) {
+              $scope.cambiarDistribuidor(Session.distribuidores[i], false);
+            }
+          }
+        }
+      }
+    };
+
+    $scope.addPulseCart = function () {
+      document.getElementById('shoppingCartBG').className += ' elementBGPulse';
+      document.getElementById('shoppingCartBGUF').className += ' elementBGPulseUF';
+    };
+    $scope.removePulseCart = function () {
+      var classes = document.getElementById('shoppingCartBG').className;
+      document.getElementById('shoppingCartBG').className = classes.replace(' elementBGPulse', '');
+      classes = document.getElementById('shoppingCartBGUF').className;
+      document.getElementById('shoppingCartBGUF').className = classes.replace(' elementBGPulseUF', '');
+    };
+
+    $scope.ActualizarMenu = function (location) {
+      $scope.navCollapsed = true;
+      if ($cookies.getObject('Session')) {
+        $scope.SessionCookie = $cookies.getObject('Session');
+        $scope.ContarProductosCarrito();
+        if ($scope.SessionCookie.IdTipoAcceso === 4 || $scope.SessionCookie.IdTipoAcceso === '4' ||
+          $scope.SessionCookie.IdTipoAcceso === 5 || $scope.SessionCookie.IdTipoAcceso === '5' ||
+          $scope.SessionCookie.IdTipoAcceso === 6 || $scope.SessionCookie.IdTipoAcceso === '6') {
+          $scope.cambiarDistribuidor($cookies.getObject('currentDistribuidor'), false);
+        }
+      }
+    };
+
+    $scope.esNavegadorSoportado = function () {
+      if (!validarNavegador(deviceDetector)) {
+        $scope.navCollapsed = true;
+        $location.path('/Navegadores');
+      } else if (validarNavegador(deviceDetector) && $location.$$url === '/Navegadores') {
+        $location.path('/');
+      }
+    };
+
+    $scope.CheckCookie = function () {
+      if (!validarNavegador(deviceDetector)) {
+        $scope.navCollapsed = true;
+        $location.path('/Navegadores');
+      } else {
+        $scope.navCollapsed = true;
+
+        if ($cookies.getObject('Session') == '' || $cookies.getObject('Session') == undefined || $cookies.getObject('Session') == null) {
+          $location.path('/Login');
+        } else {
+          var fecha = new Date();
+
+          if ($cookies.getObject('Session').Expira < fecha.getTime()) {
+            $scope.CerrarSesion();
+          } else {
+            if ($cookies.getObject('Session').LeyoTerminos != 1) {
+              $scope.ShowToast('Para usar el sitio necesitas aceptar los terminos y condiciones', 'danger');
+              $location.path('/TerminosCondiciones');
+            }
+          }
+        }
+      }
+    };
+
+    /* Valida si el navegador que esta usando el usuario es soportado por las tecnologías de click suscribe*/
+    function validarNavegador (deviceDetector) {
+      var esSoportado = false;
+      if (deviceDetector.browser === 'ie' && parseInt(obtenerPrimeraCifraVersionNavegador(deviceDetector)) >= 9) { esSoportado = true; }
+      if (deviceDetector.browser === 'chrome' && parseInt(obtenerPrimeraCifraVersionNavegador(deviceDetector)) >= 47) { esSoportado = true; }
+      if (deviceDetector.browser === 'firefox' && parseInt(obtenerPrimeraCifraVersionNavegador(deviceDetector)) >= 43) { esSoportado = true; }
+      if (deviceDetector.browser === 'safari' && parseInt(obtenerPrimeraCifraVersionNavegador(deviceDetector)) >= 5) { esSoportado = true; }
+      if (deviceDetector.browser === 'opera' && parseInt(obtenerPrimeraCifraVersionNavegador(deviceDetector)) >= 34) { esSoportado = true; }
+      if (deviceDetector.browser === 'ms-edge') { esSoportado = true; }
+      if (deviceDetector.device === 'android') { esSoportado = true; }
+      if (deviceDetector.device === 'ipad') { esSoportado = true; }
+      if (deviceDetector.device === 'iphone') { esSoportado = true; }
+      return esSoportado;
+    }
+
+    /* Obtiene la primera cifra de la versión del navegador que esta usando el usaurio*/
+    function obtenerPrimeraCifraVersionNavegador (deviceDetector) {
+      var arregloCifrasVersion = deviceDetector.browser_version.split('.');
+      return arregloCifrasVersion[0];
+    }
+
+    $scope.init = function () {
+      if (!validarNavegador(deviceDetector)) {
+        $scope.navCollapsed = true;
+        $location.path('/Navegadores');
+        return false;
+      } else {
+        $scope.navCollapsed = true;
+        obtenerSubdominio();
+        $scope.ActualizarMenu();
+      }
+    };
+
+    $scope.init();
+
+    function obtenerSubdominio () {
+      var url = window.location.href;
+      var subdomain = url.replace('http://', '');
+      subdomain = subdomain.replace('https://', '');
+      subdomain = subdomain.substring(0, subdomain.indexOf($rootScope.dominio));
+      subdomain = subdomain.replace(new RegExp('[.]', 'g'), '');
+      subdomain = subdomain.replace('www', '');
+
+      if (!subdomain == '') {
+        EmpresasFactory.getSitio(subdomain).success(function (empresa) {
+          $scope.cambiarDistribuidor(empresa.data[0], false);
+          $scope.ActualizarMenu();
+        });
+        if ($cookies.getObject('currentDistribuidor')) {
+          $scope.currentDistribuidor = $cookies.getObject('currentDistribuidor');
+        } else {
+          $scope.currentDistribuidor = {};
+          $scope.currentDistribuidor.UrlLogo = 'images/LogoSVG.svg';
+        }
+      }
+    }
+
+    $scope.selectMenu = function () {
+      if ($scope.currentDistribuidor) {
+        if ((($scope.SessionCookie.IdTipoAcceso == 4 || $scope.SessionCookie.IdTipoAcceso == 5 || $scope.SessionCookie.IdTipoAcceso == 6)
+        && (($scope.currentDistribuidor.IdEmpresa != 0) && $scope.currentDistribuidor.IdEmpresa != null) && $scope.SessionCookie.IdTipoAcceso != 2)) {
+          return true;
+        }
+
+        if(!$scope.SessionCookie.IdTipoAcceso && $scope.currentDistribuidor.IdEmpresa)
+        {
+          return true;
+        }
+      }
+      return false;
+    };
+
+    $scope.Buscar = function () {
+      try {
+        $scope.goToPage('Productos/' + $scope.indexBuscarProductos.Busqueda.replace('/', ''));
+      } catch (error) { }
+    };
+
+    $scope.BuscarUF = function () {
+      try {
+        $scope.goToPage('uf/Productos/' + $scope.indexBuscarProductos.Busqueda.replace('/', ''));
+      } catch (error) { }
+    };
+
+    $scope.goToPage = function (location) {
+      $scope.navCollapsed = true;
+      $location.path('/' + location);
+    };
+
+    $scope.CerrarSesion = function () {
+      try {
+        $scope.navCollapsed = true;
+
+        var Session =
+          {
+            Token: '',
+            CorreoElectronico: '',
+            Nombre: '',
+            IdUsuario: '',
+            ApellidoPaterno: '',
+            ApellidoMaterno: '',
+            IdTipoAcceso: '',
+            NombreTipoAcceso: '',
+            IdEmpresa: '',
+            NombreEmpresa: '',
+            LeyoTerminos: ''
+          };
+
+        var expireDate = new Date();
+
+        expireDate.setTime(expireDate.getTime() + 1);
+
+        $cookies.remove('Session');
+        $cookies.remove('Pedido');
+        $cookies.remove('currentDistribuidor');
+
+        $scope.SessionCookie = {};
+        $scope.currentDistribuidor = {};
+
+        angular.forEach($cookies, function (v, k) {
+          $cookies.remove(k);
+        });
+
+        $scope = $scope.$new(true);
+
+        UsuariosFactory.getCerrarSession()
+          .success(function (result) {
+            $window.location.reload();
+            $location.path('/Login');
+          })
+          .error(function (data, status, headers, config) {
+            $window.location.reload();
+            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+            $location.path('/Login');
+          });
+
+        $location.path('/Login');
+        $scope.ActualizarMenu();
+      } catch (error) {
+
+      }
+    };
+
+    $scope.ActualizarDatosSession = function () {
+      $scope.SessionCookie = $cookies.getObject('Session');
+      if ($scope.SessionCookie.IdTipoAcceso === 4 || $scope.SessionCookie.IdTipoAcceso === '4') {
+        $scope.cambiarDistribuidor($cookies.getObject('currentDistribuidor'), false);
+      }
+    };
+
+    $scope.IniciarTour = function () {
+      $scope.Tour = new Tour({
+
+        steps: [
+          {
+            element: '.five',
+            title: 'Ver todos los productos',
+            placement: 'bottom',
+            content: 'Consulta la lista de productos filtrando por fabricante o tipo, configura el producto para agregarlos al carrito de compras.',
+            template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>",
+          },
+          {
+            element: '.one',
+            placement: 'bottom',
+            title: 'Mis clientes',
+            content: 'Aquí podrás administrar a tus colaboradores, consultar tus clientes y ver el monitor de suscripciones.',
+            template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>",
+          },
+          {
+            element: '.four',
+            title: 'Mi perfil',
+            placement: 'bottom',
+            content: 'Actualiza tus datos personales como tu contraseña de acceso.',
+            template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>",
+          },
+          {
+            element: '.two',
+            title: 'Carrito de compras',
+            placement: 'bottom',
+            content: 'Aquí podrás consultar todos los productos que agregues para tu compra.',
+            template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>",
+          },
+          {
+            element: '.three',
+            title: 'Buscador',
+            placement: 'bottom',
+            content: 'Puedes buscar cualquier producto por su nombre, fabricante, o Id.',
+            template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>",
+          }
+        ],
+
+        backdrop: true,
+        storage: false
+      });
+
+      $scope.Tour.init();
+      $scope.Tour.start();
+    };
+  };
+
+  IndexController.$inject = ['$scope', '$log', '$location', '$cookies', '$rootScope', 'PedidosFactory', 'PedidoDetallesFactory', 'ngToast', '$uibModal', '$window', 'UsuariosFactory', 'deviceDetector', 'ComprasUFFactory', 'EmpresasFactory'];
+
+  angular.module('marketplace').controller('IndexController', IndexController);
+}());
+
+(function () {
+  var LandingController = function ($scope, $log, $location, $cookies, PromocionsFactory, deviceDetector) {
+    $scope.Promociones = {};
+
+    $scope.init = function () {
+      $scope.esNavegadorSoportado();
+      $scope.navCollapsed = true;
+      PromocionsFactory.getPromocions()
+        .success(function (Promociones) {
+          $scope.Promociones = Promociones;
+        })
+        .error(function (data, status, headers, config) {
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+    };
+
+    $scope.init();
+  };
+
+  LandingController.$inject = ['$scope', '$log', '$location', '$cookies', 'PromocionsFactory', 'deviceDetector'];
+
+  angular.module('marketplace').controller('LandingController', LandingController);
+}());
+
+(function () {
+  var NavegadoresController = function ($scope) {
+    $scope.init = function () {
+      $scope.esNavegadorSoportado();
+      $scope.navCollapsed = true;
+    };
+
+    $scope.init();
+  };
+  NavegadoresController.$inject = ['$scope'];
+  angular.module('marketplace').controller('NavegadoresController', NavegadoresController);
+}());
+
+(function () {
+  var ReportesController = function ($scope, $log, $location, $cookies, ReportesFactory) {
+
+    $scope.perfil = $cookies.getObject('Session');
+
+    $scope.reportesSel = '';
+
+    $scope.init = function () {
+      $scope.navCollapsed = true;
+      $scope.CheckCookie();
+      ReportesFactory.getReportes()
+        .success(function (result) {
+          if (result) {
+            $scope.reportesSel = result.data[0];
+          }
+        })
+        .error(function (data, status, headers, config) {
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+    };
+
+    $scope.init();
+
+    var maxSize = 5900;
+
+    $scope.GenerarReporte = function (params) {
+      ReportesFactory.getGenerarReporte($scope.reporteSel)
+        .success(function (result) {
+          if (result) {
+            for (var i = 0; i < $scope.reportesSel.length; i++) {
+              if ($scope.reportesSel[i].IdReporte === $scope.reporteSel) {
+                var d = new Date();
+                var sDate = ('0' + d.getDate()).slice(-2) + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + d.getFullYear() + ' ' + ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
+                var NombreReporte = $scope.reportesSel[i].NombreReporte + '_' + sDate;
+
+                var repeat = Math.ceil(result.data[0].length / maxSize);
+                for (var j = 0; j < repeat; j++) {
+                  var start = j * maxSize;
+                  var end = start + maxSize;
+                  var parte = result.data[0].slice(start, end);
+                  var number = j + 1;
+                  NombreReporte = NombreReporte + '_' + number;
+                  $scope.JSONToCSVConvertor(parte, NombreReporte, true);
+                }
+                return;
+              }
+            }
+          }
+        })
+        .error(function (data, status, headers, config) {
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+    };
+
+    $scope.JSONToCSVConvertor = function (JSONData, ReportTitle, ShowLabel) {
+      /* If JSONData is not an object then JSON.parse will parse the JSON string in an Object*/
+      var arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
+      var CSV = '';
+      /* Set Report title in first row or line*/
+      CSV += ReportTitle + '\r\n\n';
+      /* This condition will generate the Label/Header*/
+      if (ShowLabel) {
+        var row = '';
+
+        /* This loop will extract the label from 1st index of on array*/
+        for (var index in arrData[0]) {
+          /* Now convert each value to string and comma-seprated*/
+          row += index + ',';
+        }
+
+        row = row.slice(0, -1);
+
+        /* append Label row with line break*/
+        CSV += row + '\r\n';
+      }
+
+      /* 1st loop is to extract each row*/
+      for (var i = 0; i < arrData.length; i++) {
+        var row = '';
+
+        /* 2nd loop will extract each column and convert it in string comma-seprated*/
+        for (var index in arrData[i]) {
+          row += '"' + arrData[i][index] + '",';
+        }
+
+        row.slice(0, row.length - 1);
+
+        /* add a line break after each row*/
+        CSV += row + '\r\n';
+      }
+
+      if (CSV == '') {
+        alert('Información inválida');
+        return;
+      }
+
+      /* Generate a file name*/
+      var fileName = 'Clicksuscribe_';
+      /* this will remove the blank-spaces from the title and replace it with an underscore*/
+      fileName += ReportTitle.replace(/ /g, '_');
+
+      /* Initialize file format you want csv or xls*/
+      var uri = 'data:text/csv;charset=utf-8,' + escape(CSV);
+
+      /* Now the little tricky part.*/
+      /* you can use either>> window.open(uri);*/
+      /* but this will not work in some browsers*/
+      /* or you will not get the correct file extension*/
+
+      /* this trick will generate a temp <a /> tag*/
+      var link = document.createElement('a');
+      link.href = uri;
+
+      /* set the visibility hidden so it will not effect on your web-layout*/
+      link.style = 'visibility:hidden';
+      link.download = fileName + '.csv';
+
+      /* this part will append the anchor tag and remove it after automatic click*/
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    };
+  };
+
+  ReportesController.$inject = ['$scope', '$log', '$location', '$cookies', 'ReportesFactory'];
+
+  angular.module('marketplace').controller('ReportesController', ReportesController);
+}());
+
+(function () {
+  var SoporteController = function ($scope) {
+    $scope.init = function () {
+      $scope.esNavegadorSoportado();
+      $scope.navCollapsed = true;
+    };
+
+    $scope.init();
+  };
+
+  SoporteController.$inject = ['$scope'];
+
+  angular.module('marketplace').controller('SoporteController', SoporteController);
+}());
+
+(function () {
+  var SugerenciasController = function ($scope) {
+    $scope.init = function () {
+      $scope.navCollapsed = true;
+    };
+
+    $scope.init();
+  };
+
+  SugerenciasController.$inject = ['$scope'];
+
+  angular.module('marketplace').controller('SugerenciasController', SugerenciasController);
 }());
 
 (function () {
@@ -5901,6 +5901,20 @@ angular.module('directives.loading', [])
 }());
 
 (function () {
+  var PowerBIReadController = function ($scope, $log, $cookies, $location, $uibModal, $filter, PedidoDetallesFactory, $routeParams) {
+
+    $scope.init = function () {
+
+    };
+    $scope.init();
+  };
+
+  PowerBIReadController.$inject = ['$scope', '$log', '$cookies', '$location', '$uibModal', '$filter', 'PedidoDetallesFactory', '$routeParams'];
+
+  angular.module('marketplace').controller('PowerBIReadController', PowerBIReadController);
+}());
+
+(function () {
   var ProductoGuardadosReadController = function ($scope, $log, $location, $cookies, ProductoGuardadosFactory, PedidoDetallesFactory) {
 
     $scope.sortBy = 'Nombre';
@@ -5975,20 +5989,6 @@ angular.module('directives.loading', [])
   ProductoGuardadosReadController.$inject = ['$scope', '$log', '$location', '$cookies', 'ProductoGuardadosFactory', 'PedidoDetallesFactory'];
 
   angular.module('marketplace').controller('ProductoGuardadosReadController', ProductoGuardadosReadController);
-}());
-
-(function () {
-  var PowerBIReadController = function ($scope, $log, $cookies, $location, $uibModal, $filter, PedidoDetallesFactory, $routeParams) {
-
-    $scope.init = function () {
-
-    };
-    $scope.init();
-  };
-
-  PowerBIReadController.$inject = ['$scope', '$log', '$cookies', '$location', '$uibModal', '$filter', 'PedidoDetallesFactory', '$routeParams'];
-
-  angular.module('marketplace').controller('PowerBIReadController', PowerBIReadController);
 }());
 
 (function () {
@@ -6458,7 +6458,6 @@ angular.module('directives.loading', [])
           .filter(function (p) {
             return Producto.IdPedidoContrato === p.IdPedido;
           })[0].ResultadoFabricante6;
-        console.log(Producto.contratos, IdPedidocontrato, contrato);
         NuevoProducto.ContratoBaseAutodesk = contrato.trim();
         // NuevoProducto.IdAccionAutodesk = Producto.IdAccionProductoAutodesk === 1 ? 3 : 2;
       }
@@ -6466,6 +6465,7 @@ angular.module('directives.loading', [])
         return $scope.ShowToast('No cuentas con un contrato para este producto.', 'danger');
       }
       if (!NuevoProducto.IdAccionAutodesk) delete NuevoProducto.IdAccionAutodesk;
+      if (NuevoProducto.IdAccionAutodesk === 1 && NuevoProducto.ContratoBaseAutodesk) NuevoProducto.IdAccionAutodesk = 3;
       PedidoDetallesFactory.postPedidoDetalle(NuevoProducto)
         .success(function (PedidoDetalleResult) {
           if (PedidoDetalleResult.success === 1) {
@@ -6476,10 +6476,8 @@ angular.module('directives.loading', [])
                   if (result.data.data.length >= 1) {
                     $location.path("/autodesk/productos/" + NuevoProducto.IdProducto + "/detalle/" + PedidoDetalleResult.data.insertId);
                   }
-                })
-                .catch(console.log);
+                });
             }
-            console.log(PedidoDetalleResult);
             $scope.ShowToast(PedidoDetalleResult.message, 'success');
             $scope.ActualizarMenu();
             $scope.addPulseCart();
@@ -7487,74 +7485,6 @@ angular.module('directives.loading', [])
 }());
 
 (function () {
-  var VersionController = function ($scope, $log, $location, $cookies, $route, VersionFactory, $anchorScroll) {
-    $scope.versiones = [];
-    $scope.currentPath = $location.path();
-    $anchorScroll.yOffset = 130;
-
-    $scope.init = function () {
-      if ($scope.currentPath === '/Version') {
-        $scope.CheckCookie();
-        $scope.obtenerVersiones();
-      }
-    };
-
-    $scope.obtenerVersiones = function () {
-      VersionFactory.getVersiones()
-        .success(function (versiones) {
-          $scope.versiones = versiones.data;
-          obtenerDetalle();
-        })
-        .error(function (data, status, headers, config) {
-          $scope.ShowToast('No pudimos traer las versiones.', 'danger');
-          $location.path('/');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
-    };
-
-    var obtenerDetalle = function (Id) {
-      var IdVersion = Id || $scope.versiones[0].IdVersion;
-      VersionFactory.getVersionDetalle(IdVersion)
-        .success(function (versiones) {
-          $scope.detalleVersion = versiones.data;
-          console.log(versiones);
-          SetTitulo();
-        })
-        .error(function (data, status, headers, config) {
-          $scope.ShowToast('No pudimos traer el detalle de la versión.', 'danger');
-          $location.path('/');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
-    };
-
-    $scope.init();
-
-    $scope.GetDetalle = function (IdVersion, text) {
-      if (!IdVersion) {
-        IdVersion = 4;
-      }
-      obtenerDetalle(IdVersion);
-    };
-
-    $scope.scrollTo = function (id) {
-      //$location.hash(id);
-      $anchorScroll(id);
-    }
-
-    var SetTitulo = function () {
-      var selectedIndex = document.getElementsByName("Versiones")[0].selectedIndex - 1;
-      if (selectedIndex < 0) {
-        selectedIndex = 0;
-      }
-      $scope.Titulo = $scope.versiones[selectedIndex].Version;
-    };
-  };
-
-  VersionController.$inject = ['$scope', '$log', '$location', '$cookies', '$route', 'VersionFactory', '$anchorScroll', '$routeParams'];
-  angular.module('marketplace').controller('VersionController', VersionController);
-}());
-
-(function () {
   var ConfirmarCuentaController = function ($scope, $routeParams, $log, $location, UsuariosFactory) {
     var encryptedObject = $routeParams.encryptedObject;
     $scope.result = {};
@@ -8308,4 +8238,72 @@ angular.module('directives.loading', [])
 
   UsuariosUpdateController.$inject = ['$scope', '$rootScope', '$log', '$location', '$cookies', '$routeParams', 'UsuariosFactory', 'jwtHelper', 'UsuariosXEmpresasFactory', 'TiposAccesosFactory'];
   angular.module('marketplace').controller('UsuariosUpdateController', UsuariosUpdateController);
+}());
+
+(function () {
+  var VersionController = function ($scope, $log, $location, $cookies, $route, VersionFactory, $anchorScroll) {
+    $scope.versiones = [];
+    $scope.currentPath = $location.path();
+    $anchorScroll.yOffset = 130;
+
+    $scope.init = function () {
+      if ($scope.currentPath === '/Version') {
+        $scope.CheckCookie();
+        $scope.obtenerVersiones();
+      }
+    };
+
+    $scope.obtenerVersiones = function () {
+      VersionFactory.getVersiones()
+        .success(function (versiones) {
+          $scope.versiones = versiones.data;
+          obtenerDetalle();
+        })
+        .error(function (data, status, headers, config) {
+          $scope.ShowToast('No pudimos traer las versiones.', 'danger');
+          $location.path('/');
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+    };
+
+    var obtenerDetalle = function (Id) {
+      var IdVersion = Id || $scope.versiones[0].IdVersion;
+      VersionFactory.getVersionDetalle(IdVersion)
+        .success(function (versiones) {
+          $scope.detalleVersion = versiones.data;
+          console.log(versiones);
+          SetTitulo();
+        })
+        .error(function (data, status, headers, config) {
+          $scope.ShowToast('No pudimos traer el detalle de la versión.', 'danger');
+          $location.path('/');
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+    };
+
+    $scope.init();
+
+    $scope.GetDetalle = function (IdVersion, text) {
+      if (!IdVersion) {
+        IdVersion = 4;
+      }
+      obtenerDetalle(IdVersion);
+    };
+
+    $scope.scrollTo = function (id) {
+      //$location.hash(id);
+      $anchorScroll(id);
+    }
+
+    var SetTitulo = function () {
+      var selectedIndex = document.getElementsByName("Versiones")[0].selectedIndex - 1;
+      if (selectedIndex < 0) {
+        selectedIndex = 0;
+      }
+      $scope.Titulo = $scope.versiones[selectedIndex].Version;
+    };
+  };
+
+  VersionController.$inject = ['$scope', '$log', '$location', '$cookies', '$route', 'VersionFactory', '$anchorScroll', '$routeParams'];
+  angular.module('marketplace').controller('VersionController', VersionController);
 }());
