@@ -387,6 +387,26 @@ angular.module('marketplace')
     $rootScope.secureCookie = true;
   });
 
+angular.module('directives.loading', [])
+  .directive('cargando', ['$http', function ($http) {
+    return {
+      restrict: 'A',
+      link: function (scope, elm, attrs) {
+        scope.isLoading = function () {
+          return $http.pendingRequests.length > 0;
+        };
+
+        scope.$watch(scope.isLoading, function (v) {
+          if (v) {
+            elm.show();
+          } else {
+            elm.hide();
+          }
+        });
+      }
+    };
+  }]);
+
 (function () {
   var ContactoController = function ($scope) {
     $scope.init = function () {
@@ -950,26 +970,6 @@ angular.module('marketplace')
 
   angular.module('marketplace').controller('SugerenciasController', SugerenciasController);
 }());
-
-angular.module('directives.loading', [])
-  .directive('cargando', ['$http', function ($http) {
-    return {
-      restrict: 'A',
-      link: function (scope, elm, attrs) {
-        scope.isLoading = function () {
-          return $http.pendingRequests.length > 0;
-        };
-
-        scope.$watch(scope.isLoading, function (v) {
-          if (v) {
-            elm.show();
-          } else {
-            elm.hide();
-          }
-        });
-      }
-    };
-  }]);
 
 (function () {
   var AccesosAmazonFactory = function ($http, $cookies, $rootScope) {
@@ -4678,20 +4678,6 @@ angular.module('directives.loading', [])
 }());
 
 (function () {
-  var PowerBIReadController = function ($scope, $log, $cookies, $location, $uibModal, $filter, PedidoDetallesFactory, $routeParams) {
-
-    $scope.init = function () {
-
-    };
-    $scope.init();
-  };
-
-  PowerBIReadController.$inject = ['$scope', '$log', '$cookies', '$location', '$uibModal', '$filter', 'PedidoDetallesFactory', '$routeParams'];
-
-  angular.module('marketplace').controller('PowerBIReadController', PowerBIReadController);
-}());
-
-(function () {
   var ComprarController = function ($scope, $log, $rootScope, $location, $cookies, PedidoDetallesFactory, TipoCambioFactory, PedidosFactory, EmpresasFactory, $route) {
     $scope.currentPath = $location.path();
     $scope.PedidoDetalles = {};
@@ -4812,7 +4798,6 @@ angular.module('directives.loading', [])
             if (Datos.data['0'].total > 0) {
               if (Datos.success) {
                 if ($cookies.getObject('pedidosAgrupados')) {
-                  console.log(Datos.data['0'].total)
                   Checkout.configure({
                     merchant: Datos.data['0'].merchant,
                     session: { id: Datos.data['0'].session_id },
@@ -5990,6 +5975,20 @@ angular.module('directives.loading', [])
   ProductoGuardadosReadController.$inject = ['$scope', '$log', '$location', '$cookies', 'ProductoGuardadosFactory', 'PedidoDetallesFactory'];
 
   angular.module('marketplace').controller('ProductoGuardadosReadController', ProductoGuardadosReadController);
+}());
+
+(function () {
+  var PowerBIReadController = function ($scope, $log, $cookies, $location, $uibModal, $filter, PedidoDetallesFactory, $routeParams) {
+
+    $scope.init = function () {
+
+    };
+    $scope.init();
+  };
+
+  PowerBIReadController.$inject = ['$scope', '$log', '$cookies', '$location', '$uibModal', '$filter', 'PedidoDetallesFactory', '$routeParams'];
+
+  angular.module('marketplace').controller('PowerBIReadController', PowerBIReadController);
 }());
 
 (function () {
@@ -7488,6 +7487,74 @@ angular.module('directives.loading', [])
 }());
 
 (function () {
+  var VersionController = function ($scope, $log, $location, $cookies, $route, VersionFactory, $anchorScroll) {
+    $scope.versiones = [];
+    $scope.currentPath = $location.path();
+    $anchorScroll.yOffset = 130;
+
+    $scope.init = function () {
+      if ($scope.currentPath === '/Version') {
+        $scope.CheckCookie();
+        $scope.obtenerVersiones();
+      }
+    };
+
+    $scope.obtenerVersiones = function () {
+      VersionFactory.getVersiones()
+        .success(function (versiones) {
+          $scope.versiones = versiones.data;
+          obtenerDetalle();
+        })
+        .error(function (data, status, headers, config) {
+          $scope.ShowToast('No pudimos traer las versiones.', 'danger');
+          $location.path('/');
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+    };
+
+    var obtenerDetalle = function (Id) {
+      var IdVersion = Id || $scope.versiones[0].IdVersion;
+      VersionFactory.getVersionDetalle(IdVersion)
+        .success(function (versiones) {
+          $scope.detalleVersion = versiones.data;
+          console.log(versiones);
+          SetTitulo();
+        })
+        .error(function (data, status, headers, config) {
+          $scope.ShowToast('No pudimos traer el detalle de la versión.', 'danger');
+          $location.path('/');
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+    };
+
+    $scope.init();
+
+    $scope.GetDetalle = function (IdVersion, text) {
+      if (!IdVersion) {
+        IdVersion = 4;
+      }
+      obtenerDetalle(IdVersion);
+    };
+
+    $scope.scrollTo = function (id) {
+      //$location.hash(id);
+      $anchorScroll(id);
+    }
+
+    var SetTitulo = function () {
+      var selectedIndex = document.getElementsByName("Versiones")[0].selectedIndex - 1;
+      if (selectedIndex < 0) {
+        selectedIndex = 0;
+      }
+      $scope.Titulo = $scope.versiones[selectedIndex].Version;
+    };
+  };
+
+  VersionController.$inject = ['$scope', '$log', '$location', '$cookies', '$route', 'VersionFactory', '$anchorScroll', '$routeParams'];
+  angular.module('marketplace').controller('VersionController', VersionController);
+}());
+
+(function () {
   var ConfirmarCuentaController = function ($scope, $routeParams, $log, $location, UsuariosFactory) {
     var encryptedObject = $routeParams.encryptedObject;
     $scope.result = {};
@@ -8241,72 +8308,4 @@ angular.module('directives.loading', [])
 
   UsuariosUpdateController.$inject = ['$scope', '$rootScope', '$log', '$location', '$cookies', '$routeParams', 'UsuariosFactory', 'jwtHelper', 'UsuariosXEmpresasFactory', 'TiposAccesosFactory'];
   angular.module('marketplace').controller('UsuariosUpdateController', UsuariosUpdateController);
-}());
-
-(function () {
-  var VersionController = function ($scope, $log, $location, $cookies, $route, VersionFactory, $anchorScroll) {
-    $scope.versiones = [];
-    $scope.currentPath = $location.path();
-    $anchorScroll.yOffset = 130;
-
-    $scope.init = function () {
-      if ($scope.currentPath === '/Version') {
-        $scope.CheckCookie();
-        $scope.obtenerVersiones();
-      }
-    };
-
-    $scope.obtenerVersiones = function () {
-      VersionFactory.getVersiones()
-        .success(function (versiones) {
-          $scope.versiones = versiones.data;
-          obtenerDetalle();
-        })
-        .error(function (data, status, headers, config) {
-          $scope.ShowToast('No pudimos traer las versiones.', 'danger');
-          $location.path('/');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
-    };
-
-    var obtenerDetalle = function (Id) {
-      var IdVersion = Id || $scope.versiones[0].IdVersion;
-      VersionFactory.getVersionDetalle(IdVersion)
-        .success(function (versiones) {
-          $scope.detalleVersion = versiones.data;
-          console.log(versiones);
-          SetTitulo();
-        })
-        .error(function (data, status, headers, config) {
-          $scope.ShowToast('No pudimos traer el detalle de la versión.', 'danger');
-          $location.path('/');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
-    };
-
-    $scope.init();
-
-    $scope.GetDetalle = function (IdVersion, text) {
-      if (!IdVersion) {
-        IdVersion = 4;
-      }
-      obtenerDetalle(IdVersion);
-    };
-
-    $scope.scrollTo = function (id) {
-      //$location.hash(id);
-      $anchorScroll(id);
-    }
-
-    var SetTitulo = function () {
-      var selectedIndex = document.getElementsByName("Versiones")[0].selectedIndex - 1;
-      if (selectedIndex < 0) {
-        selectedIndex = 0;
-      }
-      $scope.Titulo = $scope.versiones[selectedIndex].Version;
-    };
-  };
-
-  VersionController.$inject = ['$scope', '$log', '$location', '$cookies', '$route', 'VersionFactory', '$anchorScroll', '$routeParams'];
-  angular.module('marketplace').controller('VersionController', VersionController);
 }());

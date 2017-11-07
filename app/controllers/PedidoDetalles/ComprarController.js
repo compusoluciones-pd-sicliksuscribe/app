@@ -119,7 +119,6 @@
             if (Datos.data['0'].total > 0) {
               if (Datos.success) {
                 if ($cookies.getObject('pedidosAgrupados')) {
-                  console.log(Datos.data['0'].total)
                   Checkout.configure({
                     merchant: Datos.data['0'].merchant,
                     session: { id: Datos.data['0'].session_id },
