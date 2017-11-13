@@ -13,7 +13,7 @@
 
     factory.getAccesosAmazon = function () {
       factory.refreshToken();
-      return $http.getObject($rootScope.API + 'AccesosAmazon');
+      return $http.get($rootScope.API + 'AccesosAmazon');
     };
 
     return factory;
