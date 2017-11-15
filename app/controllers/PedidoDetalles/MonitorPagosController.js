@@ -44,7 +44,6 @@
       if ($cookies.getObject('Session').IdTipoAcceso == 2 || $cookies.getObject('Session').IdTipoAcceso == 3) {
         EmpresasFactory.getEmpresa($cookies.getObject('Session').IdEmpresa)
           .success(function (empresa) {
-            console.log(empresa);
             $scope.infoEmpresa = empresa[0];
           })
           .error(function (data, status, headers, config) {
@@ -162,7 +161,7 @@
             Datos.data["0"].pedidosAgrupados[0].TipoCambio = $scope.TipoCambio;
             $cookies.putObject('pedidosAgrupados', Datos.data["0"].pedidosAgrupados, { 'expires': expireDate, secure: $rootScope.secureCookie });
             if (Datos.success) {
-              if ($cookies.get('pedidosAgrupados')) {
+              if ($cookies.getObject('pedidosAgrupados')) {
 
                 Checkout.configure({
                   merchant: Datos.data["0"].merchant,

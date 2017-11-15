@@ -2200,513 +2200,6 @@ angular.module('directives.loading', [])
 }());
 
 (function () {
-  var DescuentosCreateController = function ($scope, $log, $cookies, $location, DescuentosFactory, NivelesDistribuidorFactory) {
-    var Session = {};
-    Session = $cookies.getObject('Session');
-    $scope.Session = Session;
-    $scope.Descuento = {};
-
-    $scope.init = function () {
-      $scope.CheckCookie();
-
-      DescuentosFactory.getEspecializaciones()
-        .success(function (Especializaciones) {
-          if (Especializaciones.success) {
-            $scope.selectEspecializaciones = Especializaciones.data;
-          } else {
-            $scope.ShowToast(Especializaciones.message, 'danger');
-            $location.path('/Descuentos');
-          }
-        })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
-
-      NivelesDistribuidorFactory.getNivelesDistribuidor()
-        .success(function (NivelesDistribuidor) {
-          if (NivelesDistribuidor.success) {
-            $scope.selectNivelesDistribuidor = NivelesDistribuidor.data;
-          } else {
-            $scope.ShowToast(NivelesDistribuidor.message, 'danger');
-            $location.path('/Descuentos');
-          }
-        })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
-    };
-
-    $scope.init();
-
-    $scope.descuentoCancelar = function () {
-      $location.path('/Descuentos');
-    };
-
-    $scope.descuentoCrear = function () {
-      DescuentosFactory.postDescuento($scope.Descuento)
-        .success(function (result) {
-          if (result.success) {
-            $location.path('/Descuentos');
-            $scope.ShowToast(result.message, 'success');
-          } else {
-            $scope.ShowToast(result.message, 'danger');
-          }
-        })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
-    };
-  };
-
-  DescuentosCreateController.$inject = ['$scope', '$log', '$cookies', '$location', 'DescuentosFactory', 'NivelesDistribuidorFactory'];
-
-  angular.module('marketplace').controller('DescuentosCreateController', DescuentosCreateController);
-}());
-
-(function () {
-  var DescuentosNivelesController = function ($scope, $location, $cookies, $routeParams, DescuentosNivelesFactory) {
-    $scope.sortBy = 'Nombre';
-    $scope.reverse = false;
-    $scope.Nivel = $cookies.getObject('nivel');
-    $scope.paginatedProducts = {};
-    $scope.getNumberOfPages = [1];
-    $scope.IdEmpresa = 1;
-    $scope.filter = '';
-    $scope.check;
-    $scope.currentPage = 0;
-    $scope.setCurrentPage = function (i) { $scope.currentPage = i; };
-    const productosEnCache = {};
-    let filteredProducts = [];
-    let searchTimeout;
-    const IdDescuento = $routeParams.IdDescuento;
-
-    const error = function (error) {
-      $scope.ShowToast(!error ? 'Ha ocurrido un error, intentelo mas tarde.' : error.message, 'danger');
-      $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
-    };
-
-    const setPagination = function () {
-      const pages = Math.ceil(filteredProducts.length / 50);
-      $scope.paginatedProducts = {};
-      $scope.currentPage = 0;
-      $scope.getNumberOfPages = new Array(pages);
-      for (var i = 0; i < pages; i++) {
-        $scope.paginatedProducts[i] = filteredProducts.slice(i * 50, (i + 1) * 50);
-      }
-    };
-
-    const filterProducts = function () {
-      const filter = $scope.filter.toLowerCase();
-      filteredProducts = productosEnCache[$scope.IdEmpresa].filter(function (p) {
-        if (p.name.indexOf(filter) > -1) return true;
-        return false;
-      });
-      setPagination();
-      $scope.$apply();
-    };
-
-    const addDiscount = function (product) {
-      DescuentosNivelesFactory.addDiscountLevels(IdDescuento, product)
-        .then(function (result) {
-          if (result.data.success) $scope.ShowToast(result.data.message, 'success');
-          else $scope.ShowToast(result.data.message, 'danger');
-        })
-        .catch(function (result) { error(result.data); });
-    };
-
-    $scope.getProducts = function () {
-      $scope.porcentaje = '';
-      DescuentosNivelesFactory.getDiscountLevels(IdDescuento, $scope.IdEmpresa)
-        .then(function (result) {
-          const response = result.data;
-          if (!response.success) error(result.data);
-          else {
-            $scope.Productos = response.data;
-            $scope.getNumberOfPages = new Array(Math.ceil($scope.Productos.length / 50));
-            productosEnCache[$scope.IdEmpresa] = response.data.map(function (p) {
-              p.name = p.Nombre.toLowerCase();
-              return p;
-            });
-            filteredProducts = productosEnCache[$scope.IdEmpresa];
-            setPagination();
-          }
-        })
-        .catch(function (result) { error(result.data); });
-    };
-
-    $scope.refrescarMisProductos = function () {
-      $scope.filter = '';
-      if (productosEnCache[$scope.IdEmpresa]) {
-        filteredProducts = productosEnCache[$scope.IdEmpresa];
-        $scope.Productos = productosEnCache[$scope.IdEmpresa];
-        setPagination();
-        return;
-      }
-      $scope.getProducts();
-    };
-
-    $scope.search = function () {
-      clearTimeout(searchTimeout);
-      searchTimeout = setTimeout(filterProducts, 150);
-    };
-
-    $scope.OrdenarPor = function (Atributo) {
-      $scope.sortBy = Atributo;
-      $scope.reverse = !$scope.reverse;
-    };
-
-    $scope.calcularDescuento = function (product) {
-      if (product.PorcentajeDescuento && (product.PorcentajeDescuento > 0 && product.PorcentajeDescuento < 101)) {
-        product.PrecioFinal = product.PrecioNormal - (product.PrecioNormal * Number('.' + product.PorcentajeDescuento || 0));
-        product.Activo = 1;
-      } else {
-        product.PrecioFinal = '';
-        product.Activo = 0;
-      }
-    };
-
-    $scope.Actualizar = function (product) {
-      product.Activo = !product.Activo ? 0 : 1;
-      const discount = { Productos: [{ IdProducto: product.IdProducto, Activo: product.Activo }] };
-      if (product.Activo && (product.PorcentajeDescuento > 0 && product.PorcentajeDescuento < 101)) {
-        discount.Productos[0].PorcentajeDescuento = product.PorcentajeDescuento;
-        addDiscount(discount);
-      } else if (!product.Activo) addDiscount(discount);
-      else $scope.ShowToast('El descuento debe ser en un rango entre 1 y 100', 'danger');
-    };
-
-    $scope.guardarTodo = function (discount) {
-      const discounts = { Productos: [] };
-      if (discount) {
-        discounts.Productos = filteredProducts.map(function (product) {
-          return {
-            IdProducto: product.IdProducto, Activo: product.Activo, PorcentajeDescuento: discount, Activo: 1,
-          }
-        });
-        addDiscount(discounts);
-      } else $scope.ShowToast('El descuento debe ser en un rango entre 1 y 100', 'danger');
-    };
-
-    $scope.calcularPrecioVenta = function (discount) {
-      filteredProducts.forEach(function (product) {
-        product.PorcentajeDescuento = discount;
-        product.PrecioFinal = product.PrecioNormal - (product.PrecioNormal * Number('.' + product.PorcentajeDescuento || 0));
-      });
-    };
-
-    $scope.init = function () {
-      $scope.CheckCookie();
-      $scope.refrescarMisProductos();
-    };
-
-    $scope.init();
-  };
-
-  DescuentosNivelesController.$inject = ['$scope', '$location', '$cookies', '$routeParams', 'DescuentosNivelesFactory'];
-
-  angular.module('marketplace').controller('DescuentosNivelesController', DescuentosNivelesController);
-}());
-
-(function () {
-  var DescuentosNivelesCSController = function ($scope, $location, $cookies, $routeParams, NivelesDistribuidorFactory, DescuentosNivelesFactory) {
-    var IdNivelCS = Number($routeParams.IdNivel);
-    $scope.sortBy = 'Nombre';
-    $scope.reverse = false;
-    $scope.Nivel = IdNivelCS;
-    $scope.paginatedProducts = {};
-    $scope.getNumberOfPages = [1];
-    $scope.IdEmpresa = 1;
-    $scope.filter = '';
-    $scope.check;
-    $scope.currentPage = 0;
-    $scope.setCurrentPage = function (i) { $scope.currentPage = i; };
-    var productosEnCache = {};
-    let filteredProducts = [];
-    let searchTimeout;
-
-    var error = function (error) {
-      $scope.ShowToast(!error ? 'Ha ocurrido un error, intentelo mas tarde.' : error.message, 'danger');
-      $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
-    };
-
-    var setPagination = function () {
-      var pages = Math.ceil(filteredProducts.length / 50);
-      $scope.paginatedProducts = {};
-      $scope.currentPage = 0;
-      $scope.getNumberOfPages = new Array(pages);
-      for (var i = 0; i < pages; i++) {
-        $scope.paginatedProducts[i] = filteredProducts.slice(i * 50, (i + 1) * 50);
-      }
-    };
-
-    var filterProducts = function () {
-      var filter = $scope.filter.toLowerCase();
-      filteredProducts = productosEnCache[$scope.IdEmpresa].filter(function (p) {
-        if (p.name.indexOf(filter) > -1) return true;
-        return false;
-      });
-      setPagination();
-      $scope.$apply();
-    };
-
-    const updateDiscounts = function (levels) {
-      return NivelesDistribuidorFactory.createLevelDiscount(levels)
-        .then(function (result) {
-          if (result.data.success === 1) {
-            $scope.ShowToast(result.data.message, 'success');
-          } else {
-            $scope.ShowToast('No se pudo actualizar el descuento, reviza que la cantidad sea un numero entero.', 'danger');
-          }
-        })
-        .catch(function (result) { error(result.data); });
-    };
-
-    $scope.deleteDiscounts = function (product) {
-      const discounts = { IdNivelCS: IdNivelCS, Productos: [] };
-      discounts.Productos = filteredProducts.map(function (product) {
-        return { IdProducto: product.IdProducto, Activo: 0 };
-      });
-      updateDiscounts(discounts)
-        .then(function () { $scope.getProducts(); });
-    };
-
-    $scope.isNumber = function (evt) {
-      evt = evt || window.event;
-      var charCode = (evt.which) ? evt.which : evt.keyCode;
-      if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-        return false;
-      }
-      return true;
-    };
-
-    $scope.getProducts = function () {
-      $scope.porcentaje = '';
-      NivelesDistribuidorFactory.getProductosPorNivel(IdNivelCS)
-        .then(function (result) {
-          const response = result.data;
-          if (!response.success) {
-            error(result.data);
-          } else {
-            const produtosConPrecioFinal = response.data.map(function (producto) {
-              producto.PrecioFinal = Number(((producto.PrecioNormal * (100 - producto.PorcentajeDescuento)) / 100).toFixed(2));
-              producto.Activo = producto.PorcentajeDescuento ? 1 : 0;
-              return producto;
-            });
-            $scope.Productos = produtosConPrecioFinal;
-            $scope.getNumberOfPages = new Array(Math.ceil(produtosConPrecioFinal.length / 50));
-            productosEnCache[$scope.IdEmpresa] = response.data.map(function (p) {
-              p.name = p.Nombre.toLowerCase();
-              return p;
-            });
-            filteredProducts = productosEnCache[$scope.IdEmpresa];
-            setPagination();
-          }
-        })
-        .catch(function (result) { error(result.data); });
-    };
-
-    $scope.refrescarMisProductos = function () {
-      $scope.filter = '';
-      if (productosEnCache[$scope.IdEmpresa]) {
-        filteredProducts = productosEnCache[$scope.IdEmpresa];
-        $scope.Productos = productosEnCache[$scope.IdEmpresa];
-        setPagination();
-        return;
-      }
-      $scope.getProducts();
-    };
-
-    $scope.search = function () {
-      clearTimeout(searchTimeout);
-      searchTimeout = setTimeout(filterProducts, 150);
-    };
-
-    $scope.OrdenarPor = function (Atributo) {
-      $scope.sortBy = Atributo;
-      $scope.reverse = !$scope.reverse;
-    };
-
-    $scope.calcularDescuento = function (product) {
-      if (product.PorcentajeDescuento && (product.PorcentajeDescuento > 0 && product.PorcentajeDescuento < 101)) {
-        product.PrecioFinal = product.PrecioNormal - (product.PrecioNormal * ((product.PorcentajeDescuento || 0) * 0.01));
-        product.PrecioFinal = Number(product.PrecioFinal.toFixed(4));
-      } else product.PrecioFinal = '';
-    };
-
-    $scope.Actualizar = function (product) {
-      const Activo = product.PorcentajeDescuento > 0 && product.PorcentajeDescuento < 101;
-      if (!Activo && product.Activo) $scope.ShowToast('El descuento debe ser en un rango entre 1 y 100', 'danger');
-      else {
-        const PorcentajeDescuento = (!product.PorcentajeDescuento || product.PorcentajeDescuento === '') ? null : product.PorcentajeDescuento;
-        const request = {
-          IdNivelCS: IdNivelCS,
-          Productos: [{
-            Activo: Activo ? 1 : 0,
-            IdProducto: product.IdProducto,
-            PorcentajeDescuento: PorcentajeDescuento
-          }]
-        };
-        updateDiscounts(request);
-      }
-    };
-
-    $scope.resetDiscount = function (product) {
-      if (!product.Activo) {
-        product.PorcentajeDescuento = '';
-        product.PrecioFinal = '';
-      }
-    };
-
-    $scope.guardarTodo = function (levels) {
-      var discounts = { IdNivelCS: IdNivelCS, Productos: [] };
-      if (levels) {
-        discounts.Productos = filteredProducts.map(function (product) {
-          return {
-            IdProducto: product.IdProducto,
-            Activo: 1,
-            PorcentajeDescuento: levels
-          };
-        });
-        updateDiscounts(discounts);
-      } else $scope.ShowToast('El descuento debe ser en un rango entre 1 y 100', 'danger');
-    };
-
-    $scope.calcularPrecioVenta = function (discount) {
-      discount = discount || 100;
-      $scope.porcentaje = Number(discount.toString().replace(/[^0-9]+/g, ''));
-      filteredProducts.forEach(function (product) {
-        product.PorcentajeDescuento = discount;
-        product.PrecioFinal = product.PrecioNormal - (product.PrecioNormal * ((product.PorcentajeDescuento || 0) * 0.01));
-        product.PrecioFinal = Number(product.PrecioFinal.toFixed(4));
-        product.Activo = 1;
-      });
-    };
-
-    var obtenerNivel = function () {
-      NivelesDistribuidorFactory.getNivelesDistribuidor()
-        .then(function (result) {
-          var response = result.data;
-          if (!response.success) {
-            error(result.data);
-          } else {
-            var nivel = response.data.filter(function (nivel) {
-              return nivel.IdNivelDistribuidor === IdNivelCS;
-            }).pop().Nivel;
-            $scope.Nivel = nivel;
-          }
-        })
-        .catch(function (result) { error(result.data); });
-    };
-
-    $scope.init = function () {
-      $scope.CheckCookie();
-      $scope.refrescarMisProductos();
-      obtenerNivel();
-    };
-
-    $scope.init();
-  };
-
-  DescuentosNivelesCSController.$inject = ['$scope', '$location', '$cookies', '$routeParams', 'NivelesDistribuidorFactory', 'DescuentosNivelesFactory'];
-
-  angular.module('marketplace').controller('DescuentosNivelesCSController', DescuentosNivelesCSController);
-}());
-
-(function () {
-  var DescuentosReadController = function ($scope, $log, $location, $cookies, DescuentosFactory) {
-    $scope.sortBy = 'Nivel';
-    $scope.reverse = false;
-
-    $scope.init = function () {
-      $scope.CheckCookie();
-      DescuentosFactory.getDescuentos()
-        .success(function (resultDescuentos) {
-          if (resultDescuentos.success) {
-            $scope.Descuentos = resultDescuentos.data;
-          } else {
-            $scope.ShowToast(resultDescuentos.message, 'danger');
-          }
-        })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
-    };
-
-    $scope.init();
-
-    $scope.OrdenarPor = function (Atributo) {
-      $scope.sortBy = Atributo;
-      $scope.reverse = !$scope.reverse;
-    };
-
-    $scope.eliminarDescuento = function (Descuento) {
-      $scope.Descuentos.forEach(function (Elemento, Index) {
-        if (Elemento.IdConfiguracionDescuento === Descuento.IdConfiguracionDescuento) {
-          $scope.Descuentos.splice(Index, 1);
-          return false;
-        }
-      });
-
-      DescuentosFactory.deleteDescuento(Descuento.IdConfiguracionDescuento)
-        .success(function (result) {
-          if (result.success) {
-            $scope.ShowToast(result.message, 'success');
-          } else {
-            $scope.init();
-            $scope.ShowToast(result.message, 'danger');
-          }
-        })
-        .error(function (data, status, headers, config) {
-          $scope.ShowToast('No pudimos eliminar el descuento seleccionado. Intenta de nuevo más tarde.', 'danger');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
-    };
-  };
-
-  DescuentosReadController.$inject = ['$scope', '$log', '$location', '$cookies', 'DescuentosFactory'];
-
-  angular.module('marketplace').controller('DescuentosReadController', DescuentosReadController);
-}());
-
-(function () {
-  var DescuentosUpdateController = function ($scope, $log, $cookies, $location, DescuentosFactory, $routeParams) {
-    var Session = {};
-    Session = $cookies.getObject('Session');
-    $scope.Session = Session;
-    $scope.Descuento = JSON.parse($routeParams.Descuento);
-
-    $scope.init = function () {
-      $scope.CheckCookie();
-    };
-
-    $scope.init();
-
-    $scope.descuentoCancelar = function () {
-      $location.path('/Descuentos');
-    };
-
-    $scope.descuentoActualizar = function () {
-      DescuentosFactory.putDescuento($scope.Descuento)
-        .success(function (result) {
-          if (result.success) {
-            $location.path('/Descuentos');
-            $scope.ShowToast(result.message, 'success');
-          } else {
-            $scope.ShowToast(result.message, 'danger');
-          }
-        })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
-    };
-  };
-
-  DescuentosUpdateController.$inject = ['$scope', '$log', '$cookies', '$location', 'DescuentosFactory', '$routeParams'];
-
-  angular.module('marketplace').controller('DescuentosUpdateController', DescuentosUpdateController);
-}());
-
-(function () {
   var ConfiguracionUpdateController = function ($scope, $log, $location, $cookies, $routeParams, EmpresasFactory, FileUploader, AccesosAmazonFactory) {
 
     $scope.init = function () {
@@ -3968,6 +3461,513 @@ angular.module('directives.loading', [])
 }());
 
 (function () {
+  var DescuentosCreateController = function ($scope, $log, $cookies, $location, DescuentosFactory, NivelesDistribuidorFactory) {
+    var Session = {};
+    Session = $cookies.getObject('Session');
+    $scope.Session = Session;
+    $scope.Descuento = {};
+
+    $scope.init = function () {
+      $scope.CheckCookie();
+
+      DescuentosFactory.getEspecializaciones()
+        .success(function (Especializaciones) {
+          if (Especializaciones.success) {
+            $scope.selectEspecializaciones = Especializaciones.data;
+          } else {
+            $scope.ShowToast(Especializaciones.message, 'danger');
+            $location.path('/Descuentos');
+          }
+        })
+        .error(function (data, status, headers, config) {
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+
+      NivelesDistribuidorFactory.getNivelesDistribuidor()
+        .success(function (NivelesDistribuidor) {
+          if (NivelesDistribuidor.success) {
+            $scope.selectNivelesDistribuidor = NivelesDistribuidor.data;
+          } else {
+            $scope.ShowToast(NivelesDistribuidor.message, 'danger');
+            $location.path('/Descuentos');
+          }
+        })
+        .error(function (data, status, headers, config) {
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+    };
+
+    $scope.init();
+
+    $scope.descuentoCancelar = function () {
+      $location.path('/Descuentos');
+    };
+
+    $scope.descuentoCrear = function () {
+      DescuentosFactory.postDescuento($scope.Descuento)
+        .success(function (result) {
+          if (result.success) {
+            $location.path('/Descuentos');
+            $scope.ShowToast(result.message, 'success');
+          } else {
+            $scope.ShowToast(result.message, 'danger');
+          }
+        })
+        .error(function (data, status, headers, config) {
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+    };
+  };
+
+  DescuentosCreateController.$inject = ['$scope', '$log', '$cookies', '$location', 'DescuentosFactory', 'NivelesDistribuidorFactory'];
+
+  angular.module('marketplace').controller('DescuentosCreateController', DescuentosCreateController);
+}());
+
+(function () {
+  var DescuentosNivelesController = function ($scope, $location, $cookies, $routeParams, DescuentosNivelesFactory) {
+    $scope.sortBy = 'Nombre';
+    $scope.reverse = false;
+    $scope.Nivel = $cookies.getObject('nivel');
+    $scope.paginatedProducts = {};
+    $scope.getNumberOfPages = [1];
+    $scope.IdEmpresa = 1;
+    $scope.filter = '';
+    $scope.check;
+    $scope.currentPage = 0;
+    $scope.setCurrentPage = function (i) { $scope.currentPage = i; };
+    const productosEnCache = {};
+    let filteredProducts = [];
+    let searchTimeout;
+    const IdDescuento = $routeParams.IdDescuento;
+
+    const error = function (error) {
+      $scope.ShowToast(!error ? 'Ha ocurrido un error, intentelo mas tarde.' : error.message, 'danger');
+      $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+    };
+
+    const setPagination = function () {
+      const pages = Math.ceil(filteredProducts.length / 50);
+      $scope.paginatedProducts = {};
+      $scope.currentPage = 0;
+      $scope.getNumberOfPages = new Array(pages);
+      for (var i = 0; i < pages; i++) {
+        $scope.paginatedProducts[i] = filteredProducts.slice(i * 50, (i + 1) * 50);
+      }
+    };
+
+    const filterProducts = function () {
+      const filter = $scope.filter.toLowerCase();
+      filteredProducts = productosEnCache[$scope.IdEmpresa].filter(function (p) {
+        if (p.name.indexOf(filter) > -1) return true;
+        return false;
+      });
+      setPagination();
+      $scope.$apply();
+    };
+
+    const addDiscount = function (product) {
+      DescuentosNivelesFactory.addDiscountLevels(IdDescuento, product)
+        .then(function (result) {
+          if (result.data.success) $scope.ShowToast(result.data.message, 'success');
+          else $scope.ShowToast(result.data.message, 'danger');
+        })
+        .catch(function (result) { error(result.data); });
+    };
+
+    $scope.getProducts = function () {
+      $scope.porcentaje = '';
+      DescuentosNivelesFactory.getDiscountLevels(IdDescuento, $scope.IdEmpresa)
+        .then(function (result) {
+          const response = result.data;
+          if (!response.success) error(result.data);
+          else {
+            $scope.Productos = response.data;
+            $scope.getNumberOfPages = new Array(Math.ceil($scope.Productos.length / 50));
+            productosEnCache[$scope.IdEmpresa] = response.data.map(function (p) {
+              p.name = p.Nombre.toLowerCase();
+              return p;
+            });
+            filteredProducts = productosEnCache[$scope.IdEmpresa];
+            setPagination();
+          }
+        })
+        .catch(function (result) { error(result.data); });
+    };
+
+    $scope.refrescarMisProductos = function () {
+      $scope.filter = '';
+      if (productosEnCache[$scope.IdEmpresa]) {
+        filteredProducts = productosEnCache[$scope.IdEmpresa];
+        $scope.Productos = productosEnCache[$scope.IdEmpresa];
+        setPagination();
+        return;
+      }
+      $scope.getProducts();
+    };
+
+    $scope.search = function () {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(filterProducts, 150);
+    };
+
+    $scope.OrdenarPor = function (Atributo) {
+      $scope.sortBy = Atributo;
+      $scope.reverse = !$scope.reverse;
+    };
+
+    $scope.calcularDescuento = function (product) {
+      if (product.PorcentajeDescuento && (product.PorcentajeDescuento > 0 && product.PorcentajeDescuento < 101)) {
+        product.PrecioFinal = product.PrecioNormal - (product.PrecioNormal * Number('.' + product.PorcentajeDescuento || 0));
+        product.Activo = 1;
+      } else {
+        product.PrecioFinal = '';
+        product.Activo = 0;
+      }
+    };
+
+    $scope.Actualizar = function (product) {
+      product.Activo = !product.Activo ? 0 : 1;
+      const discount = { Productos: [{ IdProducto: product.IdProducto, Activo: product.Activo }] };
+      if (product.Activo && (product.PorcentajeDescuento > 0 && product.PorcentajeDescuento < 101)) {
+        discount.Productos[0].PorcentajeDescuento = product.PorcentajeDescuento;
+        addDiscount(discount);
+      } else if (!product.Activo) addDiscount(discount);
+      else $scope.ShowToast('El descuento debe ser en un rango entre 1 y 100', 'danger');
+    };
+
+    $scope.guardarTodo = function (discount) {
+      const discounts = { Productos: [] };
+      if (discount) {
+        discounts.Productos = filteredProducts.map(function (product) {
+          return {
+            IdProducto: product.IdProducto, Activo: product.Activo, PorcentajeDescuento: discount, Activo: 1,
+          }
+        });
+        addDiscount(discounts);
+      } else $scope.ShowToast('El descuento debe ser en un rango entre 1 y 100', 'danger');
+    };
+
+    $scope.calcularPrecioVenta = function (discount) {
+      filteredProducts.forEach(function (product) {
+        product.PorcentajeDescuento = discount;
+        product.PrecioFinal = product.PrecioNormal - (product.PrecioNormal * Number('.' + product.PorcentajeDescuento || 0));
+      });
+    };
+
+    $scope.init = function () {
+      $scope.CheckCookie();
+      $scope.refrescarMisProductos();
+    };
+
+    $scope.init();
+  };
+
+  DescuentosNivelesController.$inject = ['$scope', '$location', '$cookies', '$routeParams', 'DescuentosNivelesFactory'];
+
+  angular.module('marketplace').controller('DescuentosNivelesController', DescuentosNivelesController);
+}());
+
+(function () {
+  var DescuentosNivelesCSController = function ($scope, $location, $cookies, $routeParams, NivelesDistribuidorFactory, DescuentosNivelesFactory) {
+    var IdNivelCS = Number($routeParams.IdNivel);
+    $scope.sortBy = 'Nombre';
+    $scope.reverse = false;
+    $scope.Nivel = IdNivelCS;
+    $scope.paginatedProducts = {};
+    $scope.getNumberOfPages = [1];
+    $scope.IdEmpresa = 1;
+    $scope.filter = '';
+    $scope.check;
+    $scope.currentPage = 0;
+    $scope.setCurrentPage = function (i) { $scope.currentPage = i; };
+    var productosEnCache = {};
+    let filteredProducts = [];
+    let searchTimeout;
+
+    var error = function (error) {
+      $scope.ShowToast(!error ? 'Ha ocurrido un error, intentelo mas tarde.' : error.message, 'danger');
+      $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+    };
+
+    var setPagination = function () {
+      var pages = Math.ceil(filteredProducts.length / 50);
+      $scope.paginatedProducts = {};
+      $scope.currentPage = 0;
+      $scope.getNumberOfPages = new Array(pages);
+      for (var i = 0; i < pages; i++) {
+        $scope.paginatedProducts[i] = filteredProducts.slice(i * 50, (i + 1) * 50);
+      }
+    };
+
+    var filterProducts = function () {
+      var filter = $scope.filter.toLowerCase();
+      filteredProducts = productosEnCache[$scope.IdEmpresa].filter(function (p) {
+        if (p.name.indexOf(filter) > -1) return true;
+        return false;
+      });
+      setPagination();
+      $scope.$apply();
+    };
+
+    const updateDiscounts = function (levels) {
+      return NivelesDistribuidorFactory.createLevelDiscount(levels)
+        .then(function (result) {
+          if (result.data.success === 1) {
+            $scope.ShowToast(result.data.message, 'success');
+          } else {
+            $scope.ShowToast('No se pudo actualizar el descuento, reviza que la cantidad sea un numero entero.', 'danger');
+          }
+        })
+        .catch(function (result) { error(result.data); });
+    };
+
+    $scope.deleteDiscounts = function (product) {
+      const discounts = { IdNivelCS: IdNivelCS, Productos: [] };
+      discounts.Productos = filteredProducts.map(function (product) {
+        return { IdProducto: product.IdProducto, Activo: 0 };
+      });
+      updateDiscounts(discounts)
+        .then(function () { $scope.getProducts(); });
+    };
+
+    $scope.isNumber = function (evt) {
+      evt = evt || window.event;
+      var charCode = (evt.which) ? evt.which : evt.keyCode;
+      if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+      }
+      return true;
+    };
+
+    $scope.getProducts = function () {
+      $scope.porcentaje = '';
+      NivelesDistribuidorFactory.getProductosPorNivel(IdNivelCS)
+        .then(function (result) {
+          const response = result.data;
+          if (!response.success) {
+            error(result.data);
+          } else {
+            const produtosConPrecioFinal = response.data.map(function (producto) {
+              producto.PrecioFinal = Number(((producto.PrecioNormal * (100 - producto.PorcentajeDescuento)) / 100).toFixed(2));
+              producto.Activo = producto.PorcentajeDescuento ? 1 : 0;
+              return producto;
+            });
+            $scope.Productos = produtosConPrecioFinal;
+            $scope.getNumberOfPages = new Array(Math.ceil(produtosConPrecioFinal.length / 50));
+            productosEnCache[$scope.IdEmpresa] = response.data.map(function (p) {
+              p.name = p.Nombre.toLowerCase();
+              return p;
+            });
+            filteredProducts = productosEnCache[$scope.IdEmpresa];
+            setPagination();
+          }
+        })
+        .catch(function (result) { error(result.data); });
+    };
+
+    $scope.refrescarMisProductos = function () {
+      $scope.filter = '';
+      if (productosEnCache[$scope.IdEmpresa]) {
+        filteredProducts = productosEnCache[$scope.IdEmpresa];
+        $scope.Productos = productosEnCache[$scope.IdEmpresa];
+        setPagination();
+        return;
+      }
+      $scope.getProducts();
+    };
+
+    $scope.search = function () {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(filterProducts, 150);
+    };
+
+    $scope.OrdenarPor = function (Atributo) {
+      $scope.sortBy = Atributo;
+      $scope.reverse = !$scope.reverse;
+    };
+
+    $scope.calcularDescuento = function (product) {
+      if (product.PorcentajeDescuento && (product.PorcentajeDescuento > 0 && product.PorcentajeDescuento < 101)) {
+        product.PrecioFinal = product.PrecioNormal - (product.PrecioNormal * ((product.PorcentajeDescuento || 0) * 0.01));
+        product.PrecioFinal = Number(product.PrecioFinal.toFixed(4));
+      } else product.PrecioFinal = '';
+    };
+
+    $scope.Actualizar = function (product) {
+      const Activo = product.PorcentajeDescuento > 0 && product.PorcentajeDescuento < 101;
+      if (!Activo && product.Activo) $scope.ShowToast('El descuento debe ser en un rango entre 1 y 100', 'danger');
+      else {
+        const PorcentajeDescuento = (!product.PorcentajeDescuento || product.PorcentajeDescuento === '') ? null : product.PorcentajeDescuento;
+        const request = {
+          IdNivelCS: IdNivelCS,
+          Productos: [{
+            Activo: Activo ? 1 : 0,
+            IdProducto: product.IdProducto,
+            PorcentajeDescuento: PorcentajeDescuento
+          }]
+        };
+        updateDiscounts(request);
+      }
+    };
+
+    $scope.resetDiscount = function (product) {
+      if (!product.Activo) {
+        product.PorcentajeDescuento = '';
+        product.PrecioFinal = '';
+      }
+    };
+
+    $scope.guardarTodo = function (levels) {
+      var discounts = { IdNivelCS: IdNivelCS, Productos: [] };
+      if (levels) {
+        discounts.Productos = filteredProducts.map(function (product) {
+          return {
+            IdProducto: product.IdProducto,
+            Activo: 1,
+            PorcentajeDescuento: levels
+          };
+        });
+        updateDiscounts(discounts);
+      } else $scope.ShowToast('El descuento debe ser en un rango entre 1 y 100', 'danger');
+    };
+
+    $scope.calcularPrecioVenta = function (discount) {
+      discount = discount || 100;
+      $scope.porcentaje = Number(discount.toString().replace(/[^0-9]+/g, ''));
+      filteredProducts.forEach(function (product) {
+        product.PorcentajeDescuento = discount;
+        product.PrecioFinal = product.PrecioNormal - (product.PrecioNormal * ((product.PorcentajeDescuento || 0) * 0.01));
+        product.PrecioFinal = Number(product.PrecioFinal.toFixed(4));
+        product.Activo = 1;
+      });
+    };
+
+    var obtenerNivel = function () {
+      NivelesDistribuidorFactory.getNivelesDistribuidor()
+        .then(function (result) {
+          var response = result.data;
+          if (!response.success) {
+            error(result.data);
+          } else {
+            var nivel = response.data.filter(function (nivel) {
+              return nivel.IdNivelDistribuidor === IdNivelCS;
+            }).pop().Nivel;
+            $scope.Nivel = nivel;
+          }
+        })
+        .catch(function (result) { error(result.data); });
+    };
+
+    $scope.init = function () {
+      $scope.CheckCookie();
+      $scope.refrescarMisProductos();
+      obtenerNivel();
+    };
+
+    $scope.init();
+  };
+
+  DescuentosNivelesCSController.$inject = ['$scope', '$location', '$cookies', '$routeParams', 'NivelesDistribuidorFactory', 'DescuentosNivelesFactory'];
+
+  angular.module('marketplace').controller('DescuentosNivelesCSController', DescuentosNivelesCSController);
+}());
+
+(function () {
+  var DescuentosReadController = function ($scope, $log, $location, $cookies, DescuentosFactory) {
+    $scope.sortBy = 'Nivel';
+    $scope.reverse = false;
+
+    $scope.init = function () {
+      $scope.CheckCookie();
+      DescuentosFactory.getDescuentos()
+        .success(function (resultDescuentos) {
+          if (resultDescuentos.success) {
+            $scope.Descuentos = resultDescuentos.data;
+          } else {
+            $scope.ShowToast(resultDescuentos.message, 'danger');
+          }
+        })
+        .error(function (data, status, headers, config) {
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+    };
+
+    $scope.init();
+
+    $scope.OrdenarPor = function (Atributo) {
+      $scope.sortBy = Atributo;
+      $scope.reverse = !$scope.reverse;
+    };
+
+    $scope.eliminarDescuento = function (Descuento) {
+      $scope.Descuentos.forEach(function (Elemento, Index) {
+        if (Elemento.IdConfiguracionDescuento === Descuento.IdConfiguracionDescuento) {
+          $scope.Descuentos.splice(Index, 1);
+          return false;
+        }
+      });
+
+      DescuentosFactory.deleteDescuento(Descuento.IdConfiguracionDescuento)
+        .success(function (result) {
+          if (result.success) {
+            $scope.ShowToast(result.message, 'success');
+          } else {
+            $scope.init();
+            $scope.ShowToast(result.message, 'danger');
+          }
+        })
+        .error(function (data, status, headers, config) {
+          $scope.ShowToast('No pudimos eliminar el descuento seleccionado. Intenta de nuevo más tarde.', 'danger');
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+    };
+  };
+
+  DescuentosReadController.$inject = ['$scope', '$log', '$location', '$cookies', 'DescuentosFactory'];
+
+  angular.module('marketplace').controller('DescuentosReadController', DescuentosReadController);
+}());
+
+(function () {
+  var DescuentosUpdateController = function ($scope, $log, $cookies, $location, DescuentosFactory, $routeParams) {
+    var Session = {};
+    Session = $cookies.getObject('Session');
+    $scope.Session = Session;
+    $scope.Descuento = JSON.parse($routeParams.Descuento);
+
+    $scope.init = function () {
+      $scope.CheckCookie();
+    };
+
+    $scope.init();
+
+    $scope.descuentoCancelar = function () {
+      $location.path('/Descuentos');
+    };
+
+    $scope.descuentoActualizar = function () {
+      DescuentosFactory.putDescuento($scope.Descuento)
+        .success(function (result) {
+          if (result.success) {
+            $location.path('/Descuentos');
+            $scope.ShowToast(result.message, 'success');
+          } else {
+            $scope.ShowToast(result.message, 'danger');
+          }
+        })
+        .error(function (data, status, headers, config) {
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+    };
+  };
+
+  DescuentosUpdateController.$inject = ['$scope', '$log', '$cookies', '$location', 'DescuentosFactory', '$routeParams'];
+
+  angular.module('marketplace').controller('DescuentosUpdateController', DescuentosUpdateController);
+}());
+
+(function () {
   var EmpresasXEmpresasReadController = function ($scope, $log, $location, $cookies, EmpresasXEmpresasFactory, EmpresasFactory, PedidoDetallesFactory) {
     $scope.sortBy = 'NombreEmpresa';
     $scope.reverse = false;
@@ -4873,7 +4873,7 @@ angular.module('directives.loading', [])
     };
 
     $scope.ComprarConTarjeta = function (resultIndicator, sessionVersion) {
-      var datosTarjeta = { 'TarjetaResultIndicator': resultIndicator, 'TarjetaSessionVersion': sessionVersion, 'PedidosAgrupados': $cookies.get('pedidosAgrupados') };
+      var datosTarjeta = { 'TarjetaResultIndicator': resultIndicator, 'TarjetaSessionVersion': sessionVersion, 'PedidosAgrupados': $cookies.getObject('pedidosAgrupados') };
 
       if (datosTarjeta.PedidosAgrupados) {
         if (datosTarjeta.PedidosAgrupados[0].Renovacion) {
@@ -5231,16 +5231,14 @@ angular.module('directives.loading', [])
             Datos.data["0"].pedidosAgrupados[0].TipoCambio = $scope.TipoCambio;
             $cookies.putObject('pedidosAgrupados', Datos.data["0"].pedidosAgrupados, { 'expires': expireDate, secure: $rootScope.secureCookie });
             if (Datos.success) {
-              if ($cookies.get('pedidosAgrupados')) {
+              if ($cookies.getObject('pedidosAgrupados')) {
 
                 Checkout.configure({
                   merchant: Datos.data["0"].merchant,
                   session: { id: Datos.data["0"].session_id },
                   order:
                   {
-                    amount: function () {
-                      Datos.data["0"].total;
-                    },
+                    amount: Datos.data['0'].total,
                     currency: Datos.data["0"].moneda,
                     description: 'Pago tarjeta bancaria',
                     id: Datos.data["0"].pedidos,
@@ -5261,7 +5259,7 @@ angular.module('directives.loading', [])
                       email: 'order@yourMerchantEmailAddress.com',
                       phone: '+1 123 456 789 012',
                     },
-                    displayControl: { billingAddress: 'HIDE', orderSummary: 'READ_ONLY' },
+                    displayControl: { billingAddress: 'HIDE', orderSummary: 'SHOW' },
                     locale: 'es_MX',
                     theme: 'default'
                   }
@@ -7485,6 +7483,74 @@ angular.module('directives.loading', [])
 }());
 
 (function () {
+  var VersionController = function ($scope, $log, $location, $cookies, $route, VersionFactory, $anchorScroll) {
+    $scope.versiones = [];
+    $scope.currentPath = $location.path();
+    $anchorScroll.yOffset = 130;
+
+    $scope.init = function () {
+      if ($scope.currentPath === '/Version') {
+        $scope.CheckCookie();
+        $scope.obtenerVersiones();
+      }
+    };
+
+    $scope.obtenerVersiones = function () {
+      VersionFactory.getVersiones()
+        .success(function (versiones) {
+          $scope.versiones = versiones.data;
+          obtenerDetalle();
+        })
+        .error(function (data, status, headers, config) {
+          $scope.ShowToast('No pudimos traer las versiones.', 'danger');
+          $location.path('/');
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+    };
+
+    var obtenerDetalle = function (Id) {
+      var IdVersion = Id || $scope.versiones[0].IdVersion;
+      VersionFactory.getVersionDetalle(IdVersion)
+        .success(function (versiones) {
+          $scope.detalleVersion = versiones.data;
+          console.log(versiones);
+          SetTitulo();
+        })
+        .error(function (data, status, headers, config) {
+          $scope.ShowToast('No pudimos traer el detalle de la versión.', 'danger');
+          $location.path('/');
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+    };
+
+    $scope.init();
+
+    $scope.GetDetalle = function (IdVersion, text) {
+      if (!IdVersion) {
+        IdVersion = 4;
+      }
+      obtenerDetalle(IdVersion);
+    };
+
+    $scope.scrollTo = function (id) {
+      //$location.hash(id);
+      $anchorScroll(id);
+    }
+
+    var SetTitulo = function () {
+      var selectedIndex = document.getElementsByName("Versiones")[0].selectedIndex - 1;
+      if (selectedIndex < 0) {
+        selectedIndex = 0;
+      }
+      $scope.Titulo = $scope.versiones[selectedIndex].Version;
+    };
+  };
+
+  VersionController.$inject = ['$scope', '$log', '$location', '$cookies', '$route', 'VersionFactory', '$anchorScroll', '$routeParams'];
+  angular.module('marketplace').controller('VersionController', VersionController);
+}());
+
+(function () {
   var ConfirmarCuentaController = function ($scope, $routeParams, $log, $location, UsuariosFactory) {
     var encryptedObject = $routeParams.encryptedObject;
     $scope.result = {};
@@ -8238,72 +8304,4 @@ angular.module('directives.loading', [])
 
   UsuariosUpdateController.$inject = ['$scope', '$rootScope', '$log', '$location', '$cookies', '$routeParams', 'UsuariosFactory', 'jwtHelper', 'UsuariosXEmpresasFactory', 'TiposAccesosFactory'];
   angular.module('marketplace').controller('UsuariosUpdateController', UsuariosUpdateController);
-}());
-
-(function () {
-  var VersionController = function ($scope, $log, $location, $cookies, $route, VersionFactory, $anchorScroll) {
-    $scope.versiones = [];
-    $scope.currentPath = $location.path();
-    $anchorScroll.yOffset = 130;
-
-    $scope.init = function () {
-      if ($scope.currentPath === '/Version') {
-        $scope.CheckCookie();
-        $scope.obtenerVersiones();
-      }
-    };
-
-    $scope.obtenerVersiones = function () {
-      VersionFactory.getVersiones()
-        .success(function (versiones) {
-          $scope.versiones = versiones.data;
-          obtenerDetalle();
-        })
-        .error(function (data, status, headers, config) {
-          $scope.ShowToast('No pudimos traer las versiones.', 'danger');
-          $location.path('/');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
-    };
-
-    var obtenerDetalle = function (Id) {
-      var IdVersion = Id || $scope.versiones[0].IdVersion;
-      VersionFactory.getVersionDetalle(IdVersion)
-        .success(function (versiones) {
-          $scope.detalleVersion = versiones.data;
-          console.log(versiones);
-          SetTitulo();
-        })
-        .error(function (data, status, headers, config) {
-          $scope.ShowToast('No pudimos traer el detalle de la versión.', 'danger');
-          $location.path('/');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
-    };
-
-    $scope.init();
-
-    $scope.GetDetalle = function (IdVersion, text) {
-      if (!IdVersion) {
-        IdVersion = 4;
-      }
-      obtenerDetalle(IdVersion);
-    };
-
-    $scope.scrollTo = function (id) {
-      //$location.hash(id);
-      $anchorScroll(id);
-    }
-
-    var SetTitulo = function () {
-      var selectedIndex = document.getElementsByName("Versiones")[0].selectedIndex - 1;
-      if (selectedIndex < 0) {
-        selectedIndex = 0;
-      }
-      $scope.Titulo = $scope.versiones[selectedIndex].Version;
-    };
-  };
-
-  VersionController.$inject = ['$scope', '$log', '$location', '$cookies', '$route', 'VersionFactory', '$anchorScroll', '$routeParams'];
-  angular.module('marketplace').controller('VersionController', VersionController);
 }());
