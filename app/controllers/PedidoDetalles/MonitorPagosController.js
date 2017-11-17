@@ -44,7 +44,6 @@
       if ($cookies.getObject('Session').IdTipoAcceso == 2 || $cookies.getObject('Session').IdTipoAcceso == 3) {
         EmpresasFactory.getEmpresa($cookies.getObject('Session').IdEmpresa)
           .success(function (empresa) {
-            console.log(empresa);
             $scope.infoEmpresa = empresa[0];
           })
           .error(function (data, status, headers, config) {
@@ -162,16 +161,14 @@
             Datos.data["0"].pedidosAgrupados[0].TipoCambio = $scope.TipoCambio;
             $cookies.putObject('pedidosAgrupados', Datos.data["0"].pedidosAgrupados, { 'expires': expireDate, secure: $rootScope.secureCookie });
             if (Datos.success) {
-              if ($cookies.get('pedidosAgrupados')) {
+              if ($cookies.getObject('pedidosAgrupados')) {
 
                 Checkout.configure({
                   merchant: Datos.data["0"].merchant,
                   session: { id: Datos.data["0"].session_id },
                   order:
                   {
-                    amount: function () {
-                      Datos.data["0"].total;
-                    },
+                    amount: Datos.data['0'].total,
                     currency: Datos.data["0"].moneda,
                     description: 'Pago tarjeta bancaria',
                     id: Datos.data["0"].pedidos,
@@ -192,7 +189,7 @@
                       email: 'order@yourMerchantEmailAddress.com',
                       phone: '+1 123 456 789 012',
                     },
-                    displayControl: { billingAddress: 'HIDE', orderSummary: 'READ_ONLY' },
+                    displayControl: { billingAddress: 'HIDE', orderSummary: 'SHOW' },
                     locale: 'es_MX',
                     theme: 'default'
                   }

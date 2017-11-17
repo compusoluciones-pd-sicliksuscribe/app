@@ -101,7 +101,7 @@
                             <div ng-show="Producto.IdTipoProducto == 3">Precio de contratación:</div>
                             </label>
                             <span ng-show="Producto.PorcentajeDescuento == 0">
-                                {{Producto.PrecioNormal | currency: "$" : 2}} {{Producto.MonedaPrecio}}                          
+                                {{Producto.PrecioNormal | currency: "$" : 2}} {{Producto.MonedaPrecio}}
                             </span>
                             <span ng-show="Producto.PorcentajeDescuento > 0">
                                 <del style="font-size:11px">{{Producto.PrecioNormal | currency: "$" : 2}} {{Producto.MonedaPrecio}}</del>
@@ -228,7 +228,7 @@
 
                                             <div class="radio" style="margin-left:20px">
                                                 <div>
-                                                    <input type="radio" name="MonedaPago" value="Dólares" ng-model="Producto.MonedaPago" required>                                                    Dólares
+                                                    <input type="radio" name="MonedaPago" value="Dólares" ng-model="Producto.MonedaPago" ng-disabled="ProtectedRP > 0" required>                                                    Dólares
                                                 </div>
                                                 <div>
                                                     <input type="radio" name="MonedaPago" value="Pesos" ng-model="Producto.MonedaPago" required>                                                    Pesos
@@ -237,20 +237,27 @@
 
                                         </div>
 
+
                                         <div style="float:right!important;">
+                                            <div ng-show="ProtectedRP > 0">
+                                                <label for="" title="Tipo Cambio Protegido">Tipo de cambio protegido:</label>
+                                                <b>
+                                                    {{ProtectedRP | currency: "$":4}} MXN.
+                                                </b>
+                                            </div>
                                             <label for="" title="Cantidad por precio">Total:</label>
-                                            <b ng-show="Producto.IdFabricante === 1 && Producto.PorcentajeDescuento == 0"> 
-                                                {{CalcularPrecioTotal(Producto.PrecioProrrateo, Producto.Cantidad, Producto.MonedaPago, Producto.MonedaPrecio, TipoCambioMs) | currency }} {{Producto.MonedaPago}} 
+                                            <b ng-show="Producto.IdFabricante === 1 && Producto.PorcentajeDescuento == 0">
+                                                {{CalcularPrecioTotal(Producto.PrecioProrrateo, Producto.Cantidad, Producto.MonedaPago, Producto.MonedaPrecio, TipoCambioMs, ProtectedRP) | currency }} {{Producto.MonedaPago}}
                                             </b>
-                                            <b ng-show="Producto.IdFabricante !== 1 && Producto.PorcentajeDescuento == 0"> 
-                                                {{CalcularPrecioTotal(Producto.PrecioProrrateo, Producto.Cantidad, Producto.MonedaPago, Producto.MonedaPrecio, TipoCambio) | currency}} {{Producto.MonedaPago}} 
+                                            <b ng-show="Producto.IdFabricante !== 1 && Producto.PorcentajeDescuento == 0">
+                                                {{CalcularPrecioTotal(Producto.PrecioProrrateo, Producto.Cantidad, Producto.MonedaPago, Producto.MonedaPrecio, TipoCambio, ProtectedRP) | currency}} {{Producto.MonedaPago}}
                                             </b>
 
-                                            <b ng-show="Producto.IdFabricante === 1 && Producto.PorcentajeDescuento > 0"> 
-                                                {{CalcularPrecioTotal(Producto.PrecioDescuento, Producto.Cantidad, Producto.MonedaPago, Producto.MonedaPrecio, TipoCambioMs) | currency}} {{Producto.MonedaPago}} 
+                                            <b ng-show="Producto.IdFabricante === 1 && Producto.PorcentajeDescuento > 0">
+                                                {{CalcularPrecioTotal(Producto.PrecioDescuento, Producto.Cantidad, Producto.MonedaPago, Producto.MonedaPrecio, TipoCambioMs, ProtectedRP) | currency}} {{Producto.MonedaPago}}
                                             </b>
-                                            <b ng-show="Producto.IdFabricante !== 1 && Producto.PorcentajeDescuento > 0"> 
-                                                {{CalcularPrecioTotal(Producto.PrecioDescuento, Producto.Cantidad, Producto.MonedaPago, Producto.MonedaPrecio, TipoCambio) | currency}} {{Producto.MonedaPago}} 
+                                            <b ng-show="Producto.IdFabricante !== 1 && Producto.PorcentajeDescuento > 0">
+                                                {{CalcularPrecioTotal(Producto.PrecioDescuento, Producto.Cantidad, Producto.MonedaPago, Producto.MonedaPrecio, TipoCambio, ProtectedRP) | currency}} {{Producto.MonedaPago}}
                                             </b>
                                         </div>
 
@@ -293,13 +300,13 @@
                                     </div>
                                 </div>
                             </div>
-                        
+
                                     </form>
 
                         </div>
-                    
+
                 </div>
-                
+
             </td>
         </tr>
     </table>
@@ -338,9 +345,9 @@
 
         </div>
     </div>
-    
+
     </div>
-    
+
 </div>
 
 </div>
