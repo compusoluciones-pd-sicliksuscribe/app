@@ -53,15 +53,15 @@
 		<h4>Aún no cuentas con suscripciones o servicios... </h4>
 	</div>
 
-	<div ng-repeat="(key, value) in Pedidos | groupBy: 'IdPedido'">
+	<div ng-repeat="order in orders">
 		<div class="row">
 			<div class="col-xs-12 col-sm-4 col-md-3 col-lg-3">
-				<label>Pedido N°:</label> {{key}} {{value.Estatus}}
+				<label>Pedido N°:</label> {{order}} {{Pedidos[order].Estatus}}
 			</div>
 		</div>
 
 		<table class="table table-hover table-responsive border-left-right-cero">
-			<tr ng-repeat="pedido in value | filter:PedidoFilter " class="repeat-animation">
+			<tr ng-repeat="pedido in Pedidos[order] | filter:PedidoFilter " class="repeat-animation">
 				<td>
 					<div class="row" ng-hide="pedido.IdTipoProducto != 1">
 
@@ -97,6 +97,9 @@
 							</div>
 							<div ng-show="pedido.IdFabricante === 2">
 								<label for="">Correo de contacto:</label> {{pedido.CorreoContacto || 'Correo no definido'}}
+							</div>
+							<div ng-show="pedido.ResultadoFabricante6 || pedido.ContratoBaseAutodesk">
+								<label for="">Contrato:</label>{{pedido.ResultadoFabricante6 || pedido.ContratoBaseAutodesk}}
 							</div>
 							<div ng-show="(pedido.Activo) && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
 								<label ng-hide="pedido.Bloquear===1 || pedido.CargoRealizadoProximoPedido ===1 ">Próxima forma de pago:</label>
