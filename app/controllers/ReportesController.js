@@ -21,7 +21,7 @@
 
     $scope.init();
 
-    var maxSize = 5900;
+    var maxSize = 5000;
 
     $scope.GenerarReporte = function (params) {
       ReportesFactory.getGenerarReporte($scope.reporteSel)
