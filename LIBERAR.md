@@ -29,15 +29,6 @@ angular.module('marketplace')
 <script type="text/javascript" src="app/all.js"></script>
 ```
 
-*  Tambien es necesario asegurarse que el script de pago con tarjeta sea el de producción:
-
-``` tarjeta
-<script src="https://gateway-na.americanexpress.com/checkout/version/33/checkout.js" 
-            data-error="errorCallback"
-            data-complete="completeCallback"
-            data-cancel="cancelCallback" >
-    </script>
-```
 
 *  Es necesario comprimir el código html se utiliza:
 
