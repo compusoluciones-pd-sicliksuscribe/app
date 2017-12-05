@@ -114,10 +114,6 @@
                                 | currency}} {{Producto.MonedaPrecio}}
                             </div>
 
-                            <div ng-show="Producto.IdFabricante === 1"><label for="" title=""> Tipo de cambio Microsoft: </label> {{TipoCambioMs | currency: "$":4}}
-                                MXN.
-                            </div>
-                            <div ng-show="Producto.IdFabricante !== 1"><label for="" title=""> Tipo de cambio: </label> {{TipoCambio | currency: "$":4}} MXN.</div>
                             <br>
                         </div>
 
@@ -222,17 +218,6 @@
                                                 </div>
 
                                                 <br>
-                                            </div>
-
-                                            <label for="" class="">* ¿Con qué moneda quieres pagarlos?</label>
-
-                                            <div class="radio" style="margin-left:20px">
-                                                <div>
-                                                    <input type="radio" name="MonedaPago" value="Dólares" ng-model="Producto.MonedaPago" ng-disabled="ProtectedRP > 0" required>                                                    Dólares
-                                                </div>
-                                                <div>
-                                                    <input type="radio" name="MonedaPago" value="Pesos" ng-model="Producto.MonedaPago" required>                                                    Pesos
-                                                </div>
                                             </div>
 
                                         </div>
