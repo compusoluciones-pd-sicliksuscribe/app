@@ -33,7 +33,9 @@
             if ($scope.error) {
               $scope.ShowToast('Ocurrio un error al procesar sus productos del carrito. Favor de contactar a soporte de CompuSoluciones.', 'danger');
             }
-            if (!validate) $scope.ValidarFormaPago();
+            if (!validate){
+              $scope.ValidarFormaPago();
+            } 
           } else {
             $scope.ShowToast(result.data.message, 'danger');
             $location.path('/Productos');
@@ -71,11 +73,28 @@
         });
     };
 
+    var ActualizarFormaPago = function (IdFormaPago) {
+      var empresa = { IdFormaPagoPredilecta: IdFormaPago || $scope.Distribuidor.IdFormaPagoPredilecta};
+      EmpresasFactory.putEmpresaFormaPago(empresa)
+        .then(function (result) {
+          if (result.data.success) {
+            $scope.ShowToast(result.data.message, 'success');
+            getOrderDetails(true);
+          } else $scope.ShowToast(result.data.message, 'danger');
+        })
+        .catch(function (result) { error(result.data); });
+    };
+
+    var ActualizarFormaPagoInicial = function () {
+      if ($scope.Distribuidor.IdFormaPagoPredilecta !== $scope.Distribuidor.IdFormaPago) ActualizarFormaPago($scope.Distribuidor.IdFormaPago);
+    }
+
     $scope.init = function () {
       $scope.CheckCookie();
       PedidoDetallesFactory.getPrepararCompra(0)
         .then(getEnterprises)
         .then(getOrderDetails)
+        .then(ActualizarFormaPago)
         .catch(function (result) { error(result.data); });
     };
 
@@ -127,9 +146,10 @@
       if ($scope.PedidoDetalles) {
         $scope.PedidoDetalles.forEach(function (order) {
           order.Productos.forEach(function (product) {
-            if (product.IdTipoProducto === 3) {
+            if (product.IdTipoProducto === 3 || product.TipoCambioProtegido !== null) {
               disabled = true;
               $scope.Distribuidor.IdFormaPago = 2;
+              $scope.Distribuidor.IdFormaPagoPredilecta = 2;
             }
           });
         });
@@ -137,31 +157,7 @@
       return disabled;
     };
 
-    $scope.ValidarTipoCambio = function () {
-      var disabled = false;
-      if ($scope.PedidoDetalles) {
-        $scope.PedidoDetalles.forEach(function (item) {
-          item.Productos.forEach(function (product) {
-            if (product.TipoCambio != null) {
-              disabled = true;
-            }
-          });
-        });
-      }
-      return disabled;
-    };
-
-    $scope.ActualizarFormaPago = function (IdFormaPago) {
-      var empresa = { IdFormaPagoPredilecta: IdFormaPago };
-      EmpresasFactory.putEmpresaFormaPago(empresa)
-        .then(function (result) {
-          if (result.data.success) {
-            $scope.ShowToast(result.data.message, 'success');
-            getOrderDetails();
-          } else $scope.ShowToast(result.data.message, 'danger');
-        })
-        .catch(function (result) { error(result.data); });
-    };
+    $scope.ActualizarFormaPago = ActualizarFormaPago;
 
     $scope.modificarContratoBase = function (IdProducto, IdPedidoDetalle) {
       $location.path('/autodesk/productos/' + IdProducto + '/detalle/' + IdPedidoDetalle);

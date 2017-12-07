@@ -40,7 +40,7 @@
 						<input type="radio" name="TipoPago" value="2" checked="checked" ng-model="Distribuidor.IdFormaPagoPredilecta" ng-change="ActualizarFormaPago(2);"> Crédito CompuSoluciones
 					</div>
 					<div ng-show="!ValidarFormaPago()">
-						<input type="radio" name="TipoPago" value="1" ng-disabled="ValidarFormaPago() || ValidarTipoCambio()" ng-model="Distribuidor.IdFormaPagoPredilecta"
+						<input type="radio" name="TipoPago" value="1" ng-disabled="ValidarFormaPago()" ng-model="Distribuidor.IdFormaPagoPredilecta"
 							ng-change="ActualizarFormaPago(1);"> Tarjeta bancaria (Solo Pesos MXN)
 					</div>
 				</div>
@@ -52,7 +52,7 @@
 						<div>
 							<input type="radio" ng-checked="Distribuidor.IdFormaPagoPredilecta == 2" name="MonedaPago" value="Pesos" ng-model="Distribuidor.MonedaPago">Pesos
 						</div>
-						<div ng-show="!ValidarTipoCambio();">
+						<div ng-show="!ValidarFormaPago();">
 							<input type="radio" name="MonedaPago"  value="Dólares" ng-model="Distribuidor.MonedaPago">Dólares
 						</div>
 					</div>
@@ -60,7 +60,7 @@
 			</div>
 		</div>
 
-		<div class="form-group row" ng-show="ValidarTipoCambio();">
+		<div class="form-group row" ng-show="ValidarFormaPago();">
 			<div class="alert alert-warning">
 				<b>Nota importante *</b> Cuentas con un producto con Tipo de Cambio Protegido, tu pagó debe de ser con crédito compusoluciones y será aplicado en pesos.<br>
 			</div>
