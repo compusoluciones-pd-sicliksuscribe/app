@@ -164,8 +164,8 @@
             }
           })
           .error(function (data, status, headers, config) {
-            $scope.ShowToast('Error al obtener el tipo de cambio API Intelisis.', 'danger');
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+            const error = !data.message ? 'Error al obtener el tipo de cambio API Intelisis.' : data.message;
+            $scope.ShowToast(error, 'danger');
           });
       }
     };
