@@ -137,6 +137,20 @@
       return disabled;
     };
 
+    $scope.ValidarTipoCambio = function () {
+      var disabled = false;
+      if ($scope.PedidoDetalles) {
+        $scope.PedidoDetalles.forEach(function (item) {
+          item.Productos.forEach(function (product) {
+            if (product.TipoCambio != null) {
+              disabled = true;
+            }
+          });
+        });
+      }
+      return disabled;
+    };
+
     $scope.ActualizarFormaPago = function (IdFormaPago) {
       var empresa = { IdFormaPagoPredilecta: IdFormaPago };
       EmpresasFactory.putEmpresaFormaPago(empresa)
