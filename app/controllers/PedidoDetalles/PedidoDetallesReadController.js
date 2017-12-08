@@ -79,12 +79,25 @@
         .then(function (result) {
           if (result.data.success) {
             $scope.ShowToast(result.data.message, 'success');
+            CambiarMoneda();
             getOrderDetails(true);
           } else $scope.ShowToast(result.data.message, 'danger');
         })
         .catch(function (result) { error(result.data); });
     };
 
+    var CambiarMoneda = function (moneda){
+      var moneda = { MonedaPago: moneda || 'Pesos' };
+      EmpresasFactory.putEmpresaCambiaMoneda(moneda)
+      .then(function (result) {
+        if (result.data.success) {
+          $scope.ShowToast(result.data.message, 'success');
+          getOrderDetails(true);
+        } else $scope.ShowToast(result.data.message, 'danger');
+      })
+      .catch(function (result) { error(result.data); });
+    };
+    
     var ActualizarFormaPagoInicial = function () {
       if ($scope.Distribuidor.IdFormaPagoPredilecta !== $scope.Distribuidor.IdFormaPago) ActualizarFormaPago($scope.Distribuidor.IdFormaPago);
     }
@@ -99,6 +112,8 @@
     };
 
     $scope.init();
+
+   
 
     $scope.QuitarProducto = function (PedidoDetalle) {
       $scope.PedidoDetalles.forEach(function (order, indexOrder) {
@@ -158,7 +173,8 @@
     };
 
     $scope.ActualizarFormaPago = ActualizarFormaPago;
-
+    $scope.CambiarMoneda = CambiarMoneda;
+    
     $scope.modificarContratoBase = function (IdProducto, IdPedidoDetalle) {
       $location.path('/autodesk/productos/' + IdProducto + '/detalle/' + IdPedidoDetalle);
     };

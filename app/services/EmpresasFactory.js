@@ -50,7 +50,11 @@
       factory.refreshToken();
       return $http.put($rootScope.API + 'Empresas/FormaPago', parametros);
     };
-
+    
+    factory.putEmpresaCambiaMoneda = function (parametros) {
+      factory.refreshToken();
+      return $http.put($rootScope.API + 'Empresas/CambiaMoneda', parametros);
+    };
     factory.putEmpresa = function (Empresa) {
       factory.refreshToken();
       return $http.put($rootScope.API + 'Empresas', Empresa);

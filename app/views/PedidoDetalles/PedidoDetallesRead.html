@@ -50,10 +50,10 @@
 					<label for="" class="">* ¿Con qué moneda quieres pagarlos?</label>
 					<div class="radio" style="margin-left:20px" >
 						<div>
-							<input type="radio" ng-checked="Distribuidor.IdFormaPagoPredilecta == 2" name="MonedaPago" value="Pesos" ng-model="Distribuidor.MonedaPago">Pesos
+							<input type="radio" ng-checked="Distribuidor.IdFormaPagoPredilecta == 2" name="MonedaPago" ng-change="CambiarMoneda('Pesos')" value="Pesos" ng-model="Distribuidor.MonedaPago">Pesos
 						</div>
 						<div ng-show="!ValidarFormaPago();">
-							<input type="radio" name="MonedaPago"  value="Dólares" ng-model="Distribuidor.MonedaPago">Dólares
+							<input type="radio" name="MonedaPago"  value="Dólares" ng-model="Distribuidor.MonedaPago" ng-change="CambiarMoneda('Dólares')">Dólares
 						</div>
 					</div>
 				</div>
