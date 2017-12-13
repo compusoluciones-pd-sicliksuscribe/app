@@ -33,9 +33,9 @@
             if ($scope.error) {
               $scope.ShowToast('Ocurrio un error al procesar sus productos del carrito. Favor de contactar a soporte de CompuSoluciones.', 'danger');
             }
-            if (!validate){
+            if (!validate) {
               $scope.ValidarFormaPago();
-            } 
+            }
           } else {
             $scope.ShowToast(result.data.message, 'danger');
             $location.path('/Productos');
@@ -74,7 +74,7 @@
     };
 
     var ActualizarFormaPago = function (IdFormaPago) {
-      var empresa = { IdFormaPagoPredilecta: IdFormaPago || $scope.Distribuidor.IdFormaPagoPredilecta};
+      var empresa = {IdFormaPagoPredilecta: IdFormaPago || $scope.Distribuidor.IdFormaPagoPredilecta};
       EmpresasFactory.putEmpresaFormaPago(empresa)
         .then(function (result) {
           if (result.data.success) {
@@ -86,8 +86,8 @@
         .catch(function (result) { error(result.data); });
     };
 
-    var CambiarMoneda = function (moneda){
-      var moneda = { MonedaPago: moneda || 'Pesos' };
+    var CambiarMoneda = function (tipoMoneda) {
+      var moneda = { MonedaPago: tipoMoneda || 'Pesos' };
       EmpresasFactory.putEmpresaCambiaMoneda(moneda)
       .then(function (result) {
         if (result.data.success) {
@@ -97,10 +97,10 @@
       })
       .catch(function (result) { error(result.data); });
     };
-    
+
     var ActualizarFormaPagoInicial = function () {
       if ($scope.Distribuidor.IdFormaPagoPredilecta !== $scope.Distribuidor.IdFormaPago) ActualizarFormaPago($scope.Distribuidor.IdFormaPago);
-    }
+    };
 
     $scope.init = function () {
       $scope.CheckCookie();
@@ -112,8 +112,6 @@
     };
 
     $scope.init();
-
-   
 
     $scope.QuitarProducto = function (PedidoDetalle) {
       $scope.PedidoDetalles.forEach(function (order, indexOrder) {
@@ -161,7 +159,7 @@
       if ($scope.PedidoDetalles) {
         $scope.PedidoDetalles.forEach(function (order) {
           order.Productos.forEach(function (product) {
-            if (product.IdTipoProducto === 3 || product.TipoCambioProtegido !== null) {
+            if (product.IdTipoProducto === 3 || order.TipoCambioProtegido > 0) {
               disabled = true;
               $scope.Distribuidor.IdFormaPago = 2;
               $scope.Distribuidor.IdFormaPagoPredilecta = 2;
@@ -174,7 +172,7 @@
 
     $scope.ActualizarFormaPago = ActualizarFormaPago;
     $scope.CambiarMoneda = CambiarMoneda;
-    
+
     $scope.modificarContratoBase = function (IdProducto, IdPedidoDetalle) {
       $location.path('/autodesk/productos/' + IdProducto + '/detalle/' + IdPedidoDetalle);
     };
