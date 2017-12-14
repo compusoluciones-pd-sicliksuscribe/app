@@ -98,10 +98,6 @@
       .catch(function (result) { error(result.data); });
     };
 
-    var ActualizarFormaPagoInicial = function () {
-      if ($scope.Distribuidor.IdFormaPagoPredilecta !== $scope.Distribuidor.IdFormaPago) ActualizarFormaPago($scope.Distribuidor.IdFormaPago);
-    };
-
     $scope.init = function () {
       $scope.CheckCookie();
       PedidoDetallesFactory.getPrepararCompra(0)
