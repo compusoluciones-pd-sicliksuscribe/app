@@ -184,8 +184,10 @@
                                                     ng-change="contractSetted(Producto)" ng-required="contrato.ResultadoFabricante6 !== ''">
                                                     </select>
                                             </div>
-                                            <br>
-                                            <label for="contacto" ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2 && !Producto.IdPedidoContrato && Producto.IdAccionAutodesk === 1">* Contacto</label>
+                                            <div ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2 && !Producto.IdPedidoContrato && Producto.IdAccionAutodesk === 1">
+                                                <br>   
+                                                <label for="contacto" >* Contacto</label>
+                                            </div>
                                             <div class="input-group" ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2 && !Producto.IdPedidoContrato && Producto.IdAccionAutodesk === 1">
                                                 <span class="input-group-addon green white">
                                                     <span class="glyphicon glyphicon-user"></span>
@@ -196,7 +198,6 @@
                                                     <option ng-selected="true" value="">Selecciona un contacto...</option>
                                                 </select>
                                             </div>
-                                            <br>
                                             <div ng-show="Producto.MostrarMensajeP" style="color:red;">
 
                                                 <label>* No cuentas con suscripciones para este producto.</label>&nbsp;
