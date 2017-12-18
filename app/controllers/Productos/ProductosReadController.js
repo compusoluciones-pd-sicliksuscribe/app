@@ -229,6 +229,7 @@
         IdProducto: Producto.IdProducto,
         Cantidad: Cantidad,
         IdEmpresaUsuarioFinal: Producto.IdEmpresaUsuarioFinal,
+        MonedaPago: 'Pesos',
         IdEsquemaRenovacion: Producto.IdEsquemaRenovacion,
         IdFabricante: Producto.IdFabricante,
         CodigoPromocion: Producto.CodigoPromocion,
