@@ -224,7 +224,14 @@
 
       .when('/Comprar', {
         controller: 'ComprarController', templateUrl: 'app/views/PedidoDetalles/Comprar.html',
-        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3)) { $location.path('/404'); } } }
+        resolve: {
+          'check': function ($location, $cookies) {
+            var Session = $cookies.getObject('Session');
+            if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3)) {
+              $location.path('/404');
+            }
+          }
+        }
       })
 
       .when('/uf/Comprar', {

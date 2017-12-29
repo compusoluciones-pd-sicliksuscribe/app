@@ -45,7 +45,7 @@
 					</div>
 					<div ng-show="!ValidarFormaPago()">
 						<input type="radio" name="TipoPago" value="3" ng-disabled="ValidarFormaPago()" ng-model="Distribuidor.IdFormaPagoPredilecta"
-							ng-change="ActualizarFormaPago(3);"> Pago Paypal
+							ng-change="ActualizarFormaPago(3);"> Pago Paypal (Solo Pesos MXN)
 					</div>
 				</div>
 			</div>
@@ -73,6 +73,12 @@
 		<div class="form-group row" ng-show="Distribuidor.IdFormaPagoPredilecta == 1">
 			<div class="alert alert-warning">
 				<b>Nota importante *</b> El tipo de pago será en Pesos por la restricción de pago con tarjeta.<br>
+			</div>
+		</div>
+
+		<div class="form-group row" ng-show="Distribuidor.IdFormaPagoPredilecta == 3">
+			<div class="alert alert-warning">
+				<b>Nota importante *</b> El tipo de pago será en Pesos por la restricción de pago en PayPal.<br>
 			</div>
 		</div>
 

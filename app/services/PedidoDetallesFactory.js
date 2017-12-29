@@ -77,6 +77,16 @@
       return $http.get($rootScope.API + 'PrepararTarjetaCredito');
     };
 
+    factory.prepararPaypal = function (params) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'paypal/order', params);
+    };
+
+    factory.confirmarPaypal = function (params) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'paypal/order/confirm/' + params.paymentId + '/' + params.token + '/' + params.PayerID);
+    };
+
     factory.getAzureUsage = function (IdPedido) {
       factory.refreshToken();
       return $http.get($rootScope.API + 'microsoft/billing/azure-usage-report/' + IdPedido);
