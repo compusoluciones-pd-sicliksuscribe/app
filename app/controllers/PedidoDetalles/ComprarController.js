@@ -70,9 +70,11 @@
       const paymentId = $location.search().paymentId;
       const token = $location.search().token;
       const PayerID = $location.search().PayerID;
+      const orderIds = $cookies.getObject('orderIds');
+      $cookies.remove('orderIds');
       $location.url($location.path());
-      if (paymentId && token && PayerID) {
-        PedidoDetallesFactory.confirmarPaypal({ paymentId, token, PayerID })
+      if (paymentId && token && PayerID && orderIds) {
+        PedidoDetallesFactory.confirmarPaypal({ paymentId, PayerID, orderIds })
           .then(function (response) {
             if (response.data.state === 'approved') comprarProductos();
             if (response.data.state === 'failed') $scope.ShowToast('Ocurrio un error al intentar confirmar la compra con Paypal. Intentalo mas tarde.', 'danger');
@@ -198,12 +200,16 @@
     };
 
     $scope.prepararPaypal = function () {
-      const ids = $scope.PedidoDetalles.map(function (result) {
+      const orderIds = $scope.PedidoDetalles.map(function (result) {
         return result.IdPedido;
       });
-      PedidoDetallesFactory.prepararPaypal({ orderIds: ids })
+      const expireDate = new Date();
+      expireDate.setTime(expireDate.getTime() + 600 * 2000);
+      $cookies.putObject('orderIds', orderIds, { expires: expireDate, secure: $rootScope.secureCookie });
+      PedidoDetallesFactory.prepararPaypal({ orderIds })
         .then(function (response) {
-          if (response.data.state === 'created') {
+          if (response.data.message === 'free') comprarProductos();
+          else if (response.data.state === 'created') {
             const paypal = response.data.links.filter(function (item) {
               if (item.method === 'REDIRECT') return item.href;
             })[0];
