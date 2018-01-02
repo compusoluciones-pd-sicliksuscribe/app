@@ -84,7 +84,7 @@
 
     factory.confirmarPaypal = function (params) {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'paypal/order/confirm/' + params.paymentId + '/' + params.token + '/' + params.PayerID);
+      return $http.put($rootScope.API + 'paypal/order/confirm', params);
     };
 
     factory.getAzureUsage = function (IdPedido) {
