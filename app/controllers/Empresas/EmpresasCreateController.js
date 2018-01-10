@@ -119,8 +119,8 @@
     };
 
     $scope.change = function () {
-      if (!!$scope.Empresa.DominioMicrosoft) {
-        $scope.Empresa.DominioMicrosoft = $scope.Empresa.DominioMicrosoft.trim();
+      $scope.Empresa.DominioMicrosoft = $scope.Empresa.DominioMicrosoft.trim();
+      if ($scope.Empresa.DominioMicrosoft) {
         EmpresasFactory.revisarDominio($scope.Empresa.DominioMicrosoft)
           .success(function (result) {
             if (result === 'false') {
@@ -135,11 +135,12 @@
           .error(function (data, status, headers, config) {
             $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
           });
-      } else {
-        $scope.frm.DominioMicrosoft.$pristine = false;
-        $scope.frm.DominioMicrosoft.$invalid = true;
-        $scope.Empresa.MensajeDominio = 'Ingresa un dominio valido.';
-      }
+      } 
+      // else {
+      //   $scope.frm.DominioMicrosoft.$pristine = false;
+      //   $scope.frm.DominioMicrosoft.$invalid = true;
+      //   $scope.Empresa.MensajeDominio = 'Ingresa un dominio valido.';
+      // }
     };
 
     $scope.ComboRFC = function () {

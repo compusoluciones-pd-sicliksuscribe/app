@@ -22,13 +22,16 @@
 
             <div class="form-group col-xs-12 col-sm-4 col-md-4 col-lg-4">
                 <div class="pull-rigth">
-                    <label>Dominio Microsoft *</label>
+                    <label>Dominio Microsoft</label>
                     <!--ng-model-onblur ng-model-options="{ updateOn: 'blur' }"-->
                     <div class="input-group">
                         
-                    <input name="DominioMicrosoft" type="text" ng-model="Empresa.DominioMicrosoft" ng-pattern="/^[a-zA-Z0-9]*$/" ng-change="change()"
-                    class="form-control" ng-model-onblur ng-model-options="{ updateOn: 'blur' }" placeholder="" size="255" ng-maxlength="255" required="" />
+                    <!--input name="DominioMicrosoft" type="text" ng-model="Empresa.DominioMicrosoft" ng-pattern="/^[a-zA-Z0-9]*$/" ng-change="change()"
+                    class="form-control" ng-model-onblur ng-model-options="{ updateOn: 'blur' }" placeholder="" size="255" ng-maxlength="255" required="" /-->
                     
+                    <input name="DominioMicrosoft" type="text" ng-model="Empresa.DominioMicrosoft" ng-pattern="/^[a-zA-Z0-9]*$/" ng-change="change()"
+                    class="form-control" ng-model-onblur ng-model-options="{ updateOn: 'blur' }" placeholder="" size="255" ng-maxlength="255" />
+
                         <span class="input-group-addon">.onmicrosoft.com</span>
                         
                     </div>
