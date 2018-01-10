@@ -142,6 +142,7 @@
         .success(function (respuesta) {
           if (respuesta.success === 1) {
             Producto.contratos = respuesta.data;
+            console.log(Producto)
             if (Producto.contratos.length >= 1) {
               Producto.TieneContrato = true;
               Producto.IdPedidoContrato = respuesta.data[0].IdPedido;
@@ -149,7 +150,7 @@
             if ((Producto.IdAccionAutodesk === 2 || !Producto.IdAccionAutodesk) && Producto.contratos.length === 0) {
               Producto.TieneContrato = false;
             }
-            if (Producto.IdAccionAutodesk === 1) Producto.contratos.unshift({ IdPedido: 0, ResultadoFabricante6: 'Nuevo contrato...' });
+            if (Producto.IdAccionAutodesk === 1) Producto.contratos.unshift({ IdPedido: 0, NumeroContrato: 'Nuevo contrato...' });
             setProtectedRebatePrice(IdEmpresaUsuarioFinal);
           } else {
             $scope.ShowToast('No pudimos cargar la información de tus contratos, por favor intenta de nuevo más tarde.', 'danger');
@@ -242,7 +243,7 @@
         const contrato = Producto.contratos
           .filter(function (p) {
             return Producto.IdPedidoContrato === p.IdPedido;
-          })[0].ResultadoFabricante6;
+          })[0].NumeroContrato;
         NuevoProducto.ContratoBaseAutodesk = contrato.trim();
         // NuevoProducto.IdAccionAutodesk = Producto.IdAccionProductoAutodesk === 1 ? 3 : 2;
       }
