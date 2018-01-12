@@ -1,0 +1,96 @@
+<div class="container" ng-swipe-right="" ng-swipe-left="">
+
+  <div class="row">
+    <div class="col-xs-12 col-sm-4">
+      <h2>Facturación</h2>
+    </div>
+    <div class="col-xs-12 col-sm-4 form-group">
+      <label>Estatus</label>
+      <select id="Estatus" name="Estatus" class="form-control selectOption" ng-model="EstatusSelect.IdEstatusFactura" ng-options="estatus.IdEstatusFactura as estatus.Estatus for estatus in Estatus"
+        ng-change="filtrarEstatus();" ng-show="SessionCookie.IdTipoAcceso == 2"></select>
+    </div>
+		<div class="col-xs-12 col-sm-4 searchOption">
+			<label for="Busqueda">Busqueda</label>
+			<div class="form-group has-feedback">
+				<input type="text" ng-model="filter" ng-change="search()" class="form-control" size="30" placeholder="Busca facturas..." />
+				<i class="form-control-feedback glyphicon glyphicon-search"></i>
+			</div>
+		</div>
+  </div>
+
+  <div class="alert alert-warning">
+    <b>Nota*</b> Los pedidos que sean seleccionados, seran afectados tal cual como aparecen en la tabla, estos pedidos pueden
+    ser modificados mientras no hayan sido afectados.
+  </div>
+
+  <div class="form-group row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <table class="table table-hover table-responsive border-left-right-cero">
+        <th><b>Seleccionado</b></th>
+        <th><b>IdPedido </b></th>
+        <th><b>RFC</b></th>
+        <th><b>Nombre</b></th>
+        <th><b>Total</b></th>
+        <th><b>Estatus</b></th>
+        <th><b>Detalles</b></th>
+        <tr ng-repeat="pedido in paginatedOrders[currentPage]" class="repeat-animation">
+        <!--<tr ng-repeat="pedido in Pedidos | orderBy:sortBy:reverse | filter:EstatusSelect:strict" class="repeat-animation">-->
+          <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
+            <div class="form-group">
+              <input id="Activo" ng-disabled="pedido.IdEstatusFactura != 1" type="checkbox" ng-model="pedido.Check" ng-true-value="1" ng-false-value="0"
+                ng-click="facturasSelecionadas(pedido.IdFactura)">
+            </div>
+          </td>
+          <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
+            <div class="form-group">
+              <b><h5>{{pedido.IdPedido}}</h5></b>
+            </div>
+          </td>
+          <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
+            <div class="form-group">
+              <b><h5>{{pedido.RFC}}</h5></b>
+            </div>
+          </td>
+          <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+            <div class="form-group">
+              <b><h5>{{pedido.Nombre}}</h5></b>
+            </div>
+          </td>
+          <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
+            <div class="form-group">
+              <b><h5>{{pedido.Total | currency}} {{pedido.MonedaPago}}</h5></b>
+            </div>
+          </td>
+          <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
+            <div class="form-group">
+              <b><h5>{{pedido.Estatus}}</h5></b>
+            </div>
+          </td>
+          <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
+            <div class="form-group">
+              <a ng-click="verDetalles(pedido.IdFactura)">Ver</a>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div style="display: flex; justify-content: center; margin-bottom: 20px">
+    <div ng-repeat="i in getNumberOfPages track by $index" class="btn-group" role="toolbar">
+      <button ng-click="setCurrentPage($index)" class="btn" ng-class="{ 'btn-secondary': (currentPage === $index), 'btn-default': (currentPage !== $index) }"
+        type="button">{{ $index + 1 }}</button>
+    </div>
+  </div>
+
+  <div class="form-group row" ng-hide="DeshabilitarFacturar">
+    <div class="col-xs-0 col-sm-0 col-md-9 col-lg-9">
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+      <div class="">
+        <button id="btnSiguiente" type="button" ng-click="timbrarFactura();" class="btn btn-primary btn-block">Facturar</button>
+      </div>
+    </div>
+  </div>
+
+</div>

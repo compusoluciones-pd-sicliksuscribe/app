@@ -87,6 +87,36 @@
         }
       })
 
+      .when('/actualizar-datos-facturacion', {
+        controller: 'FacturacionCreateController', templateUrl: 'app/views/Facturacion/FacturacionCreate.html',
+        resolve: {
+          'check': function ($location, $cookies, jwtHelper) {
+            var Session = $cookies.getObject('Session');
+            if (!((Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 2))) { $location.path('/404'); }
+          }
+        }
+      })
+
+      .when('/facturas-pendientes', {
+        controller: 'FacturacionReadController', templateUrl: 'app/views/Facturacion/FacturacionRead.html',
+        resolve: {
+          'check': function ($location, $cookies, jwtHelper) {
+            var Session = $cookies.getObject('Session');
+            if (!((Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 2))) { $location.path('/404'); }
+          }
+        }
+      })
+
+      .when('/facturas-pendientes/:IdFactura', {
+        controller: 'FacturacionReadDetailsController', templateUrl: 'app/views/Facturacion/FacturacionReadDetails.html',
+        resolve: {
+          'check': function ($location, $cookies, jwtHelper) {
+            var Session = $cookies.getObject('Session');
+            if (!(Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 2)) { $location.path('/404'); }
+          }
+        }
+      })
+
       .when('/power-bi', {
         controller: 'PowerBIReadController', templateUrl: 'app/views/PowerBI/PowerBIRead.html',
         resolve: {
