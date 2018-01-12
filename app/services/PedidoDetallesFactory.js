@@ -74,7 +74,7 @@
 
     factory.getPrepararTarjetaCredito = function () {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'PrepararTarjetaCredito');
+      return $http.post($rootScope.API + 'shopping-cart/credit-card-payments');
     };
 
     factory.getAzureUsage = function (IdPedido) {

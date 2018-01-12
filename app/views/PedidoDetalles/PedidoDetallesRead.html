@@ -33,21 +33,46 @@
 	<div ng-show="PedidoDetalles.length > 0">
 
 		<div class="form-group row">
-			<div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<div class="col-xs-12 col-sm-12 col-md-1 col-lg-5">
 				<label for="" class="formaPago">Forma de pago para {{Distribuidor.NombreEmpresa}}: </label>
 				<div class="radio" style="margin-left:20px">
 					<div>
-						<input type="radio" name="TipoPago" value="2" checked="checked" ng-model="Distribuidor.IdFormaPagoPredilecta" ng-change="ActualizarFormaPago(2);">						Crédito CompuSoluciones
+						<input type="radio" name="TipoPago" value="2" checked="checked" ng-model="Distribuidor.IdFormaPagoPredilecta" ng-change="ActualizarFormaPago(2);"> Crédito CompuSoluciones
 					</div>
-					<div ng-show="!ValidarFormaPago();">
-						<input type="radio" name="TipoPago" value="1" ng-disabled="ValidarFormaPago();" ng-model="Distribuidor.IdFormaPagoPredilecta"
+					<div>
+						<input type="radio" name="TipoPago" value="1" ng-disabled="ValidarFormaPago()" ng-model="Distribuidor.IdFormaPagoPredilecta"
 							ng-change="ActualizarFormaPago(1);"> Tarjeta bancaria (Solo Pesos MXN)
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+				<div class="form-group" ng-hide="isPayingWithCreditCard() || hasProtectedExchangeRate()" >
+					<label for="" class="">* ¿Con qué moneda quieres pagarlos?</label>
+					<div class="radio" style="margin-left:20px" >
+						<div>
+							<input type="radio" ng-checked="isPayingWithCSCredit()" name="MonedaPago" ng-change="CambiarMoneda('Pesos')" value="Pesos" ng-model="Distribuidor.MonedaPago">Pesos
+						</div>
+						<div ng-show="validateUSD();">
+							<input type="radio" name="MonedaPago"  value="Dólares" ng-model="Distribuidor.MonedaPago" ng-change="CambiarMoneda('Dólares')">Dólares
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 
-		<div class="form-group row" ng-show="Distribuidor.IdFormaPagoPredilecta === 1">
+		<div class="form-group row" ng-show="hasProtectedExchangeRate();">
+			<div class="alert alert-warning">
+				<b>Nota importante *</b> Te notificamos que cuentas con un producto que lleva Tipo de Cambio Protegido. Por lo anterior tu pago debe aplicarse en moneda nacional. <br>
+			</div>
+		</div>
+
+		<div class="form-group row" ng-show="isPayingWithCreditCard() && !hasProtectedExchangeRate()">
+			<div class="alert alert-warning">
+				<b>Nota importante *</b> Al haber elegido el método de pago con tarjeta de crédito deberás realizar tu operación en moneda nacional.<br>
+			</div>
+		</div>
+
+		<div class="form-group row" ng-show="isPayingWithCreditCard()">
 			<div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
 				<b>Nota importante *</b> <br> Para realizar la renovación de tus suscripciones de forma automática por medio de tu tarjeta
 				bancaria es necesario descargar la siguiente carta, llenarla y enviarla a tu equipo de soporte CompuSoluciones. <br>				Descarga tu carta <a target="blank" href="https://s3.amazonaws.com/marketplace.compusoluciones.com/autorizacion_tarjeta.pdf">aquí</a>.
