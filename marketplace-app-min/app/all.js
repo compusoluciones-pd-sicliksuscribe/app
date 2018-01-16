@@ -488,7 +488,7 @@ angular.module('directives.loading', [])
         console.log(typeof Distribuidor);
         $cookies.putObject('currentDistribuidor', Distribuidor, { 'expires': expireDate, secure: $rootScope.secureCookie });
         if ($cookies.getObject('currentDistribuidor')) {
-          $scope.currentDistribuidor = $cookies.getObjectObject('currentDistribuidor');
+          $scope.currentDistribuidor = $cookies.getObject('currentDistribuidor');
         } else {
           $scope.currentDistribuidor = {};
           $scope.currentDistribuidor.UrlLogo = 'images/LogoSVG.svg';
