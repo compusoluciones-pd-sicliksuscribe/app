@@ -12,15 +12,15 @@
   <div class="row form-group">
     <div class="col col-xs-12 col-md-4">
         <label>Tipo de cambio</label>
-        <input name="tipoCambio" type="number" ng-model="tipoCambio" ng-blur="changeTipoDeCambio()" ng-change="editTipoDeCambio()" class="form-control" />
+        <input name="tipoCambio" type="number" ng-disabled="factura.receptor.IdEstatusFactura != 1" ng-model="tipoCambio" ng-blur="changeTipoDeCambio()" ng-change="editTipoDeCambio()" class="form-control" />
     </div>
     <div class="col col-xs-12 col-md-4">
         <label>Moneda de pago</label>
-        <select name="monedaPago" class="form-control" ng-model="monedaPago" ng-options="o as o for o in catMonedaPago" ng-change="changeMonedaPago()" required=""></select>
+        <select name="monedaPago" ng-disabled="factura.receptor.IdEstatusFactura != 1" class="form-control" ng-model="monedaPago" ng-options="o as o for o in catMonedaPago" ng-change="changeMonedaPago()" required=""></select>
     </div>
     <div class="form-group col-xs-12 col-md-4">
       <label>Forma de pago *</label>
-      <select name="formaDePago" class="form-control" ng-model="formaDePagoActual" ng-options="o as o.nombre for o in formaDePago" ng-change="changeFormaPago()" required=""></select>
+      <select name="formaDePago" ng-disabled="factura.receptor.IdEstatusFactura != 1" class="form-control" ng-model="formaDePagoActual" ng-options="o as o.nombre for o in formaDePago" ng-change="changeFormaPago()" required=""></select>
     </div>
   </div>
   <h3>Conceptos</h3>
@@ -48,12 +48,12 @@
         <td>
           <input disabled name="total" type="text" ng-model="concepto.total" class="form-control">
         </td>
-        <td style="padding-top: 17px;">
+        <td style="padding-top: 17px;" ng-show="factura.receptor.IdEstatusFactura == 1">
           <a style="font-size: 16px; padding-right: 10px" ng-click="editarConcepto(concepto.id)"><span class="glyphicon glyphicon-floppy-disk"></span></a>
           <a style="font-size: 16px" ng-click="borraConcepto(concepto.id)"><span class="glyphicon glyphicon-trash"></span></a>
         </td>
       </tr>
-      <tr class="repeat-animation">
+      <tr class="repeat-animation" ng-show="factura.receptor.IdEstatusFactura == 1">
         <td>
           <input name="cantidad" type="number" ng-model="concepto.cantidad" ng-change="calculaConcepto()" class="form-control" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
         </td>
