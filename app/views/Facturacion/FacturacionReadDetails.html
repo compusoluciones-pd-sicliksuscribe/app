@@ -94,6 +94,14 @@
     </div>
   </div>
   <br>
+  <div class="form-group row" ng-show="factura.receptor.IdEstatusFactura == 2">
+    <div class="col-xs-12  col-sm-3">
+      <button ng-click="xml()" type="button" class="btn btn-primary btn-block">XML</button>
+    </div>
+    <div class="col-xs-12 col-sm-3">
+      <button ng-click="pdf()" type="button"  class="btn btn-success btn-block">PDF</button>
+    </div>
+  </div>
   <div class="form-group row">
     <div class="col-xs-12 col-sm-offset-6 col-sm-3">
       <button ng-show="factura.receptor.IdEstatusFactura == 1" type="button" ng-click="timbrarFactura()" class="btn btn-primary btn-block">Facturar</button>
