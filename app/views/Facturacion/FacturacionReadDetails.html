@@ -103,8 +103,11 @@
     </div>
   </div>
   <div class="form-group row">
-    <div class="col-xs-12 col-sm-offset-6 col-sm-3">
+    <div class="col-xs-12 col-sm-offset-3 col-sm-3">
       <button ng-show="factura.receptor.IdEstatusFactura == 1" type="button" ng-click="timbrarFactura()" class="btn btn-primary btn-block">Facturar</button>
+    </div>
+    <div class="col-xs-12 col-sm-3">
+      <button ng-show="factura.receptor.IdEstatusFactura == 1" type="button" ng-click="cancelarFactura()" class="btn btn-danger btn-block">Eliminar movimiento</button>
     </div>
     <div class="col-xs-12 col-sm-3">
       <button type="button" ng-click="regresar()" class="btn btn-warning btn-block">Regresar</button>
