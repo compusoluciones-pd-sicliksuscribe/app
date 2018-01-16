@@ -1,5 +1,5 @@
 (function () {
-  function FacturacionReadDetailsController ($scope, $log, $cookies, $location, $uibModal, $filter, FacturacionFactory, $routeParams) {
+  function FacturacionReadDetailsController ($scope, $log, $cookies, $location, $window, $uibModal, $filter, FacturacionFactory, $routeParams) {
     var IdFactura = $routeParams.IdFactura;
     var searchTimeout = {};
     var tipoDeCambioUpdated = false;
@@ -184,6 +184,21 @@
         });
     };
 
+    $scope.cancelarFactura = function () {
+      FacturacionFactory.cancelBill(IdFactura)
+      .success(function (resultado) {
+        if (resultado.success === 1) {
+          $scope.ShowToast('Cancelado para facturar', 'success');
+          $location.path('/facturas-pendientes/');
+        } else {
+          $scope.ShowToast('Problemas de conexión con el servicio, intenta más tarde. (cancelBill)', 'danger');
+        }
+      })
+      .error(function (data, status, headers, config) {
+        $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+      });
+    };
+
     $scope.editarConcepto = function (id) {
       var conceptoEditado = Object.assign({}, $scope.factura.conceptos[id]);
       if (conceptoEditado.cantidad <= 0 || conceptoEditado.descripcion === '') {
@@ -202,6 +217,8 @@
       delete conceptoEditado.total;
       delete conceptoEditado.IdPedido;
       delete conceptoEditado.IdProducto;
+      delete conceptoEditado.urlXML;
+      delete conceptoEditado.urlPDF;
       FacturacionFactory.updateBill(conceptoEditado)
         .success(function (resultado) {
           if (resultado.success === 1) {
@@ -218,6 +235,12 @@
     $scope.regresar = function () {
       $location.path('/facturas-pendientes');
     };
+    $scope.pdf = function () {
+      $window.open($scope.factura.conceptos[0].urlPDF);
+    };
+    $scope.xml = function () {
+      $window.open($scope.factura.conceptos[0].urlXML);
+    };
 
     function init () {
       FacturacionFactory.selectBillsDetails(IdFactura)
@@ -232,10 +255,14 @@
             concepto.cantidad = concepto.Cantidad;
             concepto.precio = concepto.PrecioUnitario;
             concepto.descripcion = concepto.NombreProducto;
+            concepto.urlXML = concepto.UrlFactura;
+            concepto.urlPDF = concepto.UrlPDF;
             concepto.precioOrigianl = concepto.precio;
             delete concepto.NombreProducto;
             delete concepto.Cantidad;
             delete concepto.PrecioUnitario;
+            delete concepto.UrlFactura;
+            delete concepto.UrlPDF;
             return concepto;
           });
           if (result.success === 1) {
@@ -275,7 +302,8 @@
         .success(function (result) {
           if (result.success === 1) {
             $scope.ShowToast('Factura timbrada.', 'success');
-            $location.path('/facturas-pendientes');
+           // $location.path('/facturas-pendientes/');
+            init();
           } else {
             $scope.ShowToast('Problemas de conexión con el servicio, intenta más tarde. (timbrarFactura)', 'danger');
           }
@@ -287,7 +315,7 @@
 
     init();
   };
-  FacturacionReadDetailsController.$inject = ['$scope', '$log', '$cookies', '$location', '$uibModal', '$filter', 'FacturacionFactory', '$routeParams'];
+  FacturacionReadDetailsController.$inject = ['$scope', '$log', '$cookies', '$location', '$window', '$uibModal', '$filter', 'FacturacionFactory', '$routeParams'];
 
   angular.module('marketplace').controller('FacturacionReadDetailsController', FacturacionReadDetailsController);
 }());

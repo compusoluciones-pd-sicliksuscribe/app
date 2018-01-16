@@ -78,6 +78,9 @@
     $scope.filtrarEstatus = function () {
       if ($scope.EstatusSelect.IdEstatusFactura !== 1) {
         $scope.DeshabilitarFacturar = true;
+       
+      }
+      else{
         $scope.DeshabilitarFacturar = false;
       }
       $scope.search();
