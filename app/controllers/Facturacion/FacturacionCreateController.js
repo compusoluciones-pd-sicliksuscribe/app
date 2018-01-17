@@ -100,6 +100,7 @@
           .success(function (resultado) {
             if (resultado.success === 1) {
               $scope.ShowToast('Datos confirmados.', 'success');
+              $location.path('/facturas-pendientes/');
             } else {
               if (resultado.message) {
                 $scope.Mensaje = resultado.message;

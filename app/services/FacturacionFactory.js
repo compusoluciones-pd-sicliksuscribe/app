@@ -69,10 +69,16 @@
       return $http.patch($rootScope.API + 'billing-to-third-parties/bill-details/extras', factura);
     };
 
+    factory.activateBill = function (factura) {
+      factory.refreshToken();
+      return $http.patch($rootScope.API + 'billing-to-third-parties/bill-details/activate', factura);
+    };
+
     factory.cancelBill = function (factura) {
       factory.refreshToken();
       return $http.patch($rootScope.API + 'billing-to-third-parties/bill-details/' + factura);
     };
+
     return factory;
   };
 

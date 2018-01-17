@@ -199,6 +199,23 @@
       });
     };
 
+    $scope.activarFactura = function () {
+      var obj = { IdFactura: IdFactura, IdEstatusFactura: '1' };
+      var conceptoActivado = Object.assign({}, obj);
+      FacturacionFactory.activateBill(conceptoActivado)
+        .success(function (resultado) {
+          if (resultado.success === 1) {
+            $scope.ShowToast('Concepto Actualizado.', 'success');
+            $location.path('/facturas-pendientes/');
+          } else {
+            $scope.ShowToast('Problemas de conexión con el servicio, intenta más tarde. (activateBill)', 'danger');
+          }
+        })
+        .error(function (data, status, headers, config) {
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+    };
+
     $scope.editarConcepto = function (id) {
       var conceptoEditado = Object.assign({}, $scope.factura.conceptos[id]);
       if (conceptoEditado.cantidad <= 0 || conceptoEditado.descripcion === '') {
