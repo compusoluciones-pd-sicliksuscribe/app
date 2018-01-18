@@ -39,6 +39,11 @@
       return $http.get($rootScope.API + 'billing-status');
     };
 
+    factory.datesBills = function () {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'dates-bills');
+    };
+
     factory.selectBillsDetails = function (IdFactura) {
       factory.refreshToken();
       return $http.get($rootScope.API + 'billing-to-third-parties/bill-details/' + IdFactura);

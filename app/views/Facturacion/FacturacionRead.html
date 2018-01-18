@@ -1,15 +1,25 @@
 <div class="container" ng-swipe-right="" ng-swipe-left="">
 
   <div class="row">
-    <div class="col-xs-12 col-sm-4">
+    <div class="col-xs-12 col-sm-2">
       <h2>Facturación</h2>
     </div>
-    <div class="col-xs-12 col-sm-4 form-group">
+    <div class="col-xs-12 col-sm-2">
+      <label>Mes</label>
+      <select id="Meses" name="Meses" class="form-control selectOption" ng-model="MesActual.id" ng-options="meses.id as meses.mes for meses in Meses"
+      ng-change="filtrarEstatus();" ng-show="SessionCookie.IdTipoAcceso == 2"></select>
+    </div>
+    <div class="col-xs-12 col-sm-2">
+      <label>Año</label>
+      <select id="Years" name="Years" class="form-control selectOption" ng-model="YearActual.Year" ng-options="years.FechaActivo as years.FechaActivo for years in Years"
+        ng-change="filtrarEstatus();" ng-show="SessionCookie.IdTipoAcceso == 2"></select>
+    </div>
+    <div class="col-xs-12 col-sm-3 form-group">
       <label>Estatus</label>
       <select id="Estatus" name="Estatus" class="form-control selectOption" ng-model="EstatusSelect.IdEstatusFactura" ng-options="estatus.IdEstatusFactura as estatus.Estatus for estatus in Estatus"
         ng-change="filtrarEstatus();" ng-show="SessionCookie.IdTipoAcceso == 2"></select>
     </div>
-		<div class="col-xs-12 col-sm-4 searchOption">
+		<div class="col-xs-12 col-sm-3 searchOption">
 			<label for="Busqueda">Busqueda</label>
 			<div class="form-group has-feedback">
 				<input type="text" ng-model="filter" ng-change="search()" class="form-control" size="30" placeholder="Busca facturas..." />

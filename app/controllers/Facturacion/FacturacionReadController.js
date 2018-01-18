@@ -31,11 +31,13 @@
         if (!order.IdFactura) {
           return false;
         }
+        const MesActual = parseInt($scope.MesActual.id);
         return (
           order.IdEstatusFactura === $scope.EstatusSelect.IdEstatusFactura &&
           (order.Nombre.toLowerCase().includes(filter) ||
           order.RFC.toLowerCase().includes(filter) ||
-          order.IdPedido.toString().includes(filter))
+          order.IdPedido.toString().includes(filter)) && order.Month === MesActual &&
+          order.Year === $scope.YearActual.Year
         );
       });
       setPagination();
@@ -71,6 +73,38 @@
         .error(function (data, status, headers, config) {
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
+
+      FacturacionFactory.datesBills()
+        .success(function (data) {
+          $scope.Years = data.data;
+        })
+        .error(function (data, status, headers, config) {
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+
+      $scope.MesActual = {};
+      $scope.YearActual = {};
+      $scope.Meses = [
+          { id: '01', mes: 'Enero' },
+          { id: '02', mes: 'Febrero' },
+          { id: '03', mes: 'Marzo' },
+          { id: '04', mes: 'Abril' },
+          { id: '05', mes: 'Mayo' },
+          { id: '06', mes: 'Junio' },
+          { id: '07', mes: 'Julio' },
+          { id: '08', mes: 'Agosto' },
+          { id: '09', mes: 'Septiembre' },
+          { id: '10', mes: 'Octubre' },
+          { id: '11', mes: 'Noviembre' },
+          { id: '12', mes: 'Diciembre' }
+      ];
+
+      let hoy = new Date();
+      let month = hoy.getMonth() + 1;
+      month = month < 10 ? '0' + month : '' + month;
+      let year = hoy.getFullYear();
+      $scope.MesActual.id = month;
+      $scope.YearActual.Year = year;
     };
 
     $scope.init();
@@ -78,9 +112,7 @@
     $scope.filtrarEstatus = function () {
       if ($scope.EstatusSelect.IdEstatusFactura !== 1) {
         $scope.DeshabilitarFacturar = true;
-       
-      }
-      else{
+      } else {
         $scope.DeshabilitarFacturar = false;
       }
       $scope.search();

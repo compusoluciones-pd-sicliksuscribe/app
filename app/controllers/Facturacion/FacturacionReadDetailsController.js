@@ -236,6 +236,7 @@
       delete conceptoEditado.IdProducto;
       delete conceptoEditado.urlXML;
       delete conceptoEditado.urlPDF;
+      delete conceptoEditado.FechaActivo;
       FacturacionFactory.updateBill(conceptoEditado)
         .success(function (resultado) {
           if (resultado.success === 1) {
@@ -280,6 +281,7 @@
             delete concepto.PrecioUnitario;
             delete concepto.UrlFactura;
             delete concepto.UrlPDF;
+            delete concepto.FechaActivo;
             return concepto;
           });
           if (result.success === 1) {
