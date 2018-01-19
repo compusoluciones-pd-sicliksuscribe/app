@@ -223,7 +223,7 @@
       UsuariosFactory.getCorreo($scope.Empresa)
         .success(function (result) {
           if (result[0].Success == 0) {
-            $scope.Empresa.CorreoContacto = '';
+//            $scope.Empresa.CorreoContacto = '';
             $scope.AlertaDominio = 'El Correo ya esta registrado, intenta con un correo diferente.';
           } else {
             if (($scope.frm.$invalid || $scope.Empresa.Formulario) == true || $scope.valido == false) {

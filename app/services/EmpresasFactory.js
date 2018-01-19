@@ -38,7 +38,7 @@
 
     factory.postEmpresa = function (Empresa) {
       factory.refreshToken();
-      return $http.post($rootScope.API + 'Empresas', Empresa);
+      return $http.post($rootScope.API + 'enterprise', Empresa);
     };
 
     factory.postEmpresaMicrosoft = function (ObjMicrosoft) {
