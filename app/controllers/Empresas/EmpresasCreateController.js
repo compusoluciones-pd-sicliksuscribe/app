@@ -135,7 +135,7 @@
           .error(function (data, status, headers, config) {
             $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
           });
-      } 
+      }
       // else {
       //   $scope.frm.DominioMicrosoft.$pristine = false;
       //   $scope.frm.DominioMicrosoft.$invalid = true;
