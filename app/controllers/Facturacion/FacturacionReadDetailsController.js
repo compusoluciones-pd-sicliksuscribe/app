@@ -175,6 +175,7 @@
             $scope.concepto = {};
             $scope.calculaPrecios();
             $scope.ShowToast('Concepto agregado.', 'success');
+            init();
           } else {
             $scope.ShowToast('Problemas de conexión con el servicio, intenta más tarde. (createBill)', 'danger');
           }
