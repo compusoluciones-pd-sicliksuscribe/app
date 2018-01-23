@@ -12,6 +12,7 @@
     $scope.TieneContrato = true;
     $scope.IdPedidoContrato = 0;
     $scope.DominioMicrosoft = true;
+    $scope.usuariosSinDominio = {};
 
     $scope.BuscarProducto = function (ResetPaginado) {
       $scope.Mensaje = 'Buscando...';
@@ -211,7 +212,7 @@
         if (Producto.IdEmpresaUsuarioFinal === item.IdEmpresa) return item;
         return false;
       })[0].DominioMicrosoft;
-      // $scope.usuariosSinDominio[Producto.IdEmpresaUsuarioFinal]
+      $scope.usuariosSinDominio[Producto.IdEmpresaUsuarioFinal] = $scope.DominioMicrosoft !== null;
       $scope.productoSeleccionado = Producto.IdProducto;
       if (Producto.IdFabricante === 2) validateAutodeskData(Producto);
       if (Producto.IdFabricante === 1 && $scope.DominioMicrosoft) validateMicrosoftData(Producto);
