@@ -433,6 +433,10 @@
       $scope.Tour.init();
       $scope.Tour.start();
     };
+
+    $scope.updateEnterprise = function () {
+      $location.path(`/Empresa/ActualizarDominio/${$scope.selectEmpresas.selectedId}`);
+    };
   };
 
   ProductosReadController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'ProductosFactory', 'FabricantesFactory', 'TiposProductosFactory', 'PedidoDetallesFactory', 'TipoCambioFactory', 'ProductoGuardadosFactory', 'EmpresasXEmpresasFactory', 'UsuariosFactory', '$anchorScroll'];
