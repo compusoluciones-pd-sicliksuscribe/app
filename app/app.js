@@ -33,7 +33,7 @@
         resolve: {
           'check': function ($location, $cookies) {
             var Session = $cookies.getObject('Session');
-            if (!(Session.IdTipoAcceso === 2 && Session.IdEmpresa == 214)) { $location.path('/404'); }
+            if (!(Session.IdTipoAcceso === 2 && Session.IdPlanTuClick !== null)) { $location.path('/404'); }
           }
         }
       })
@@ -92,7 +92,7 @@
         resolve: {
           'check': function ($location, $cookies, jwtHelper) {
             var Session = $cookies.getObject('Session');
-            if (!((Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 2))) { $location.path('/404'); }
+            if (!((Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 2) && Session.mFacturacion)) { $location.path('/404'); }
           }
         }
       })
@@ -102,7 +102,7 @@
         resolve: {
           'check': function ($location, $cookies, jwtHelper) {
             var Session = $cookies.getObject('Session');
-            if (!((Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 2))) { $location.path('/404'); }
+            if (!((Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 2) && Session.mFacturacion)) { $location.path('/404'); }
           }
         }
       })
@@ -112,7 +112,7 @@
         resolve: {
           'check': function ($location, $cookies, jwtHelper) {
             var Session = $cookies.getObject('Session');
-            if (!(Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 2)) { $location.path('/404'); }
+            if (!((Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 2) && Session.mFacturacion)) { $location.path('/404'); }
           }
         }
       })

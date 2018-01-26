@@ -162,8 +162,8 @@
 												<li><a ng-click="goToPage('Monitor');">Monitor de pedidos por cliente</a></li>
 												<li id="monitorPagos" ng-show="SessionCookie.IdTipoAcceso == 2"><a ng-click="goToPage('MonitorPagos');">Monitor de pedidos por pagar</a></li>
 												<li id="activarMiSitio" ng-show="SessionCookie.IdTipoAcceso == 2 && SessionCookie.IdEmpresa == 214"><a ng-click="goToPage('Configuracion');">Activar mi sitio</a></li>
-												<li id="actualizarDatos" ng-show="SessionCookie.IdTipoAcceso == 2 "><a ng-click="goToPage('actualizar-datos-facturacion');">Mis datos de facturación</a></li>
-												<li id="facturasPendientes" ng-show="SessionCookie.IdTipoAcceso == 2 "><a ng-click="goToPage('facturas-pendientes');">Facturas de mis clientes</a></li>
+												<li id="actualizarDatos" ng-show="SessionCookie.IdTipoAcceso == 2 && SessionCookie.mFacturacion == 1"><a ng-click="goToPage('actualizar-datos-facturacion');">Mis datos de facturación</a></li>
+												<li id="facturasPendientes" ng-show="SessionCookie.IdTipoAcceso == 2 && SessionCookie.mFacturacion == 1"><a ng-click="goToPage('facturas-pendientes');">Facturas de mis clientes</a></li>
 												<li id="activarMisProductos" ng-show="SessionCookie.IdTipoAcceso == 2 && SessionCookie.IdEmpresa == 14"><a ng-click="goToPage('MisProductos');">Activar mis productos</a></li>
 												<li id="monitorPagos" ng-show="SessionCookie.IdTipoAcceso == 2 && SessionCookie.IdEmpresa == 110"><a ng-click="goToPage('aplicaciones');">Aplicaciones</a></li>
 												<li id="activarMisProductos" ng-show="SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 7"><a ng-click="goToPage('Reportes');">Reportes</a></li>
