@@ -152,7 +152,7 @@
     $scope.AgregarCarrito = function (Producto, Cantidad) {
       if (!Producto.IdProducto) { $scope.ShowToast('Selecciona un producto', 'danger'); return; }
       if (Producto.Cantidad <= 0) { $scope.ShowToast('Escribe una cantidad válida', 'danger'); return; }
-      if (!Producto.MonedaCompra) { $scope.ShowToast('Selecciona una moneda', 'danger'); return; }
+
       var NuevoProducto = {
         IdProducto: Producto.IdProducto,
         Cantidad: Producto.Cantidad,
