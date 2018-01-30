@@ -136,11 +136,6 @@
             $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
           });
       }
-      // else {
-      //   $scope.frm.DominioMicrosoft.$pristine = false;
-      //   $scope.frm.DominioMicrosoft.$invalid = true;
-      //   $scope.Empresa.MensajeDominio = 'Ingresa un dominio valido.';
-      // }
     };
 
     $scope.ComboRFC = function () {
