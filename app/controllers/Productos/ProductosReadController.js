@@ -434,8 +434,8 @@
       $scope.Tour.start();
     };
 
-    $scope.updateEnterprise = function () {
-      $location.path(`/Empresa/ActualizarDominio/${$scope.selectEmpresas.selectedId}`);
+    $scope.updateEnterprise = function (Producto) {
+      $location.path('/Empresa/ActualizarDominio/' + Producto.IdEmpresaUsuarioFinal);
     };
   };
 
