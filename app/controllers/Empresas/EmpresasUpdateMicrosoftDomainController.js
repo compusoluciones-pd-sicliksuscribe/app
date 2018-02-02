@@ -21,13 +21,17 @@
       EmpresasFactory.getClientes()
       .success(function (Empresa) {
         const consultaEmpresa = Empresa.data.filter(function (getEnterprise) {
-          if (getEnterprise.IdEmpresa === Number(IdEmpresa)) return getEnterprise;
+          if (getEnterprise.IdEmpresa === Number(IdEmpresa)) {
+            console.log(getEnterprise);
+            return getEnterprise;
+          };
           return false;
         })[0];
         if (!consultaEmpresa) {
           $scope.ShowToast('No tienes permisos para editar.', 'danger');
          // $scope.Empresa = Empresa[0];
           // Redirecciona a producto
+          $scope.domainCancel();
         }
       })
       .error(function (data, status, headers, config) {
@@ -83,6 +87,9 @@
 
     $scope.EmpresaCancel = function () {
       $location.path('/Clientes');
+    };
+    $scope.domainCancel = function () {
+      $location.path('Productos/');
     };
   };
 
