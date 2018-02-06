@@ -98,7 +98,6 @@
     $scope.init();
 
     $scope.contractSetted = function (producto) {
-      console.log('producto.IdPedidoContrato' + producto.IdPedidoContrato);
       if (producto.IdPedidoContrato) {
         producto.IdUsuarioContacto = undefined;
       }
@@ -137,7 +136,6 @@
         });
       UsuariosFactory.getUsuariosContacto(IdEmpresaUsuarioFinal)
         .success(function (respuesta) {
-          console.log(IdEmpresaUsuarioFinal);
           if (respuesta.success === 1) {
             Producto.usuariosContacto = respuesta.data;
           } else {
@@ -203,35 +201,64 @@
 
     $scope.AgregarCarrito = function (Producto, Cantidad) {
       if (!Producto.IdProducto) { $scope.ShowToast('Selecciona un producto', 'danger'); return; }
-      if (Producto.Cantidad <= 0) { $scope.ShowToast('Escribe una cantidad válida', 'danger'); return; }
-
-      // console.log(' IdProducto: ' + Producto.IdProducto);
-      // console.log('IdEmpresaUsuarioFinal: ' + Producto.IdEmpresa);
-      // console.log(' MonedaPago: ' + Producto.MonedaCompra);
-      // console.log(' IdEsquemaRenovacion: ' + Producto.IdEsquemaRenovacion);
-      // console.log(' IdFabricante:' + Producto.IdFabricante);
-      // console.log(' CodigoPromocion: ' + Producto.CodigoPromocion);
-      // console.log(' ResultadoFabricante2: ' + Producto.IdProductoPadre);
-      // console.log(' Especializacion: ' + Producto.Especializacion);
-      // console.log(' IdUsuarioContacto: ' + Producto.IdUsuarioContacto);
-      // console.log(' IdAccionAutodesk: ' + Producto.IdAccionAutodesk);
+      if (!Cantidad) { $scope.ShowToast('Escribe una cantidad válida', 'danger'); return; }
+      var cookie = $cookies.getObject('Session');
+      var IdEmpresaUsuarioFinal = cookie.IdEmpresa;
 
       var NuevoProducto = {
+        IdProducto: Producto.IdProducto,
+        Cantidad: Cantidad,
+        IdEmpresaUsuarioFinal: IdEmpresaUsuarioFinal,
+        MonedaPago: Producto.MonedaCompra,
+        IdEsquemaRenovacion: Producto.IdEsquemaRenovacion,
+        IdFabricante: Producto.IdFabricante,
+        CodigoPromocion: Producto.CodigoPromocion,
+        ResultadoFabricante2: Producto.IdProductoPadre,
+        Especializacion: Producto.Especializacion,
+        IdUsuarioContacto: Producto.IdUsuarioContacto,
+        IdAccionAutodesk: Producto.IdAccionAutodesk
+      };
+
+      var NuevoProducto2 = {
         IdProducto: Producto.IdProducto,
         Cantidad: Producto.Cantidad,
         IdEmpresaDistribuidor: $scope.currentDistribuidor.IdEmpresa,
         MonedaCompra: Producto.MonedaCompra
       };
-      ComprasUFFactory.postComprasUF(NuevoProducto)
-        .success(function (ProductoResult) {
-          if (ProductoResult.success) {
+
+      if (!Producto.IdUsuarioContacto && Producto.IdFabricante === 2 && Producto.TieneContrato) {
+        const contrato = Producto.contratos
+          .filter(function (p) {
+            return Producto.IdPedidoContrato === p.IdPedido;
+          })[0].ResultadoFabricante6;
+        NuevoProducto.ContratoBaseAutodesk = contrato.trim();
+        // NuevoProducto.IdAccionAutodesk = Producto.IdAccionProductoAutodesk === 1 ? 3 : 2;
+      }
+      if (Producto.IdFabricante === 2 && Producto.IdAccionAutodesk === 2 && !Producto.TieneContrato) {
+        return $scope.ShowToast('No cuentas con un contrato para este producto.', 'danger');
+      }
+      if (!NuevoProducto.IdAccionAutodesk) delete NuevoProducto.IdAccionAutodesk;
+      if (NuevoProducto.IdAccionAutodesk === 1 && NuevoProducto.ContratoBaseAutodesk) NuevoProducto.IdAccionAutodesk = 3;
+
+      PedidoDetallesFactory.postPedidoDetalle(NuevoProducto)
+        .success(function (PedidoDetalleResult) {
+          if (PedidoDetalleResult.success === 1) {
+            if (NuevoProducto.IdFabricante === 2 && Producto.Accion === 'asiento') {
+              ProductosFactory.getBaseSubscription(NuevoProducto.IdProducto)
+                .then(function (result) {
+                  $scope.suscripciones = result.data.data;
+                  if (result.data.data.length >= 1) {
+                    $location.path("/autodesk/productos/" + NuevoProducto.IdProducto + "/detalle/" + PedidoDetalleResult.data.insertId);
+                  }
+                });
+            };
+            $scope.AgregarComprasUF(NuevoProducto2);
+            $scope.ShowToast(PedidoDetalleResult.message, 'success');
             $scope.ActualizarMenu();
-            $scope.ClearToast();
-            $scope.ShowToast('Producto guardado en tu carrito de compras.', 'success');
             $scope.addPulseCart();
             setTimeout($scope.removePulseCart, 9000);
           } else {
-            $scope.ShowToast(ProductoResult.message, 'danger');
+            $scope.ShowToast(PedidoDetalleResult.message, 'danger');
           }
         })
         .error(function (data, status, headers, config) {
@@ -241,6 +268,28 @@
 
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
+    };
+
+    $scope.AgregarComprasUF = function (NuevoProducto2) {
+      ComprasUFFactory.postComprasUF(NuevoProducto2)
+            .success(function (ProductoResult) {
+              if (ProductoResult.success) {
+                $scope.ActualizarMenu();
+                $scope.ClearToast();
+                $scope.ShowToast('Producto guardado en tu carrito de compras.', 'success');
+                $scope.addPulseCart();
+                setTimeout($scope.removePulseCart, 9000);
+              } else {
+                $scope.ShowToast(ProductoResult.message, 'danger');
+              }
+            })
+          .error(function (data, status, headers, config) {
+            $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+
+            $scope.ShowToast('No pudimos agregar este producto a tu carrito de compras, por favor intenta de nuevo más tarde.', 'danger');
+
+            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          });
     };
 
     $scope.OrdenarPor = function (Atributo) {
