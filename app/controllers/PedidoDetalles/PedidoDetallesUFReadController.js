@@ -6,6 +6,17 @@
     $scope.IVA = 0;
     $scope.CarritoValido = false;
 
+    const getDetails = function () {
+      return EmpresasFactory.getDetailsUF()
+        .then(function (result) {
+          $scope.DetailsUf = result.data[0];
+        })
+        .catch(function (result) {
+          error(result.data);
+          $location.path('/Productos');
+        });
+    };
+
     $scope.validarCarrito = function () {
       EmpresasFactory.getValidarCreditoUF($scope.currentDistribuidor.IdEmpresa)
         .success(function (validacion) {
