@@ -15,20 +15,20 @@
     $scope.BuscarProducto = function (ResetPaginado) {
       $scope.Mensaje = 'Buscando...';
 
-      if (ResetPaginado == true) {
+      if (ResetPaginado) {
         $scope.Pagina = 0;
         $scope.BuscarProductos.Offset = $scope.Pagina * 6;
       }
 
-      ProductosFactory.postBuscarProductos($scope.BuscarProductos)
+      ProductosFactory.getBuscarProductos($scope.BuscarProductos)
         .success(function (Productos) {
           if (Productos.success === 1) {
-            $scope.Productos = Productos.data[0].map(function (item) {
+            $scope.Productos = Productos.data.map(function (item) {
               item.IdPedidoContrato = 0;
               item.TieneContrato = true;
               return item;
             });
-            if ($scope.Productos == '') {
+            if ($scope.Productos === '') {
               $scope.Mensaje = 'No encontramos resultados de tu búsqueda...';
               if ($scope.Pagina > 0) {
                 $scope.ShowToast('No encontramos más resultados de esta busqueda, regresaremos a la página anterior.', 'danger');
@@ -40,11 +40,7 @@
           }
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
-
-          $scope.ShowToast('No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.', 'danger');
-
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          $scope.ShowToast(data.error, 'danger');
         });
 
       TipoCambioFactory.getTipoCambio()
@@ -102,10 +98,10 @@
       $scope.BuscarProductos.Offset = $scope.Pagina * 6;
 
       if (BusquedaURL != 'undefined') {
-        $scope.BuscarProductos.Busqueda = BusquedaURL;
+        $scope.BuscarProductos.keyword = BusquedaURL;
         $scope.BuscarProducto(false);
       } else {
-        $scope.BuscarProductos.Busqueda = undefined;
+        $scope.BuscarProductos.keyword = undefined;
         $scope.BuscarProducto(false);
       }
     };
@@ -142,7 +138,6 @@
         .success(function (respuesta) {
           if (respuesta.success === 1) {
             Producto.contratos = respuesta.data;
-            console.log(Producto)
             if (Producto.contratos.length >= 1) {
               Producto.TieneContrato = true;
               Producto.IdPedidoContrato = respuesta.data[0].IdPedido;
