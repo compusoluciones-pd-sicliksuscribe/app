@@ -77,6 +77,16 @@
       return $http.post($rootScope.API + 'shopping-cart/credit-card-payments');
     };
 
+    factory.prepararPaypal = function (params) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'paypal/order', params);
+    };
+
+    factory.confirmarPaypal = function (params) {
+      factory.refreshToken();
+      return $http.put($rootScope.API + 'paypal/order/confirm', params);
+    };
+
     factory.getAzureUsage = function (IdPedido) {
       factory.refreshToken();
       return $http.get($rootScope.API + 'microsoft/billing/azure-usage-report/' + IdPedido);

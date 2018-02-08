@@ -257,7 +257,7 @@
       return total;
     };
 
-    $scope.next = function () {
+    $scope.next = function () {//Este
       if ($scope.Distribuidor.IdFormaPagoPredilecta === 2) validarCarrito();
       let next = true;
       if (!$scope.PedidoDetalles || $scope.PedidoDetalles.length === 0) next = false;

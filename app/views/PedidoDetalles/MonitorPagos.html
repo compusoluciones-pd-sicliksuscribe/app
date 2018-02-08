@@ -17,6 +17,15 @@
     </div>
   </div>
 
+  <h4>Selecciona el Método de Pago:</h4>
+  <div ng-show="!ValidarFormaPago()">
+      <input type="radio" name="TipoPago" value="1" ng-disabled="ValidarFormaPago()" ng-model="Distribuidor.IdFormaPagoPredilecta"
+        ng-change="ActualizarFormaPago(1);"> Tarjeta bancaria
+    </div>
+    <div ng-show="!ValidarFormaPago()">
+      <input type="radio" name="TipoPago" value="3" ng-disabled="ValidarFormaPago()" ng-model="Distribuidor.IdFormaPagoPredilecta"
+        ng-change="ActualizarFormaPago(3);"> Pago Paypal
+    </div>
 
   <div class="row" ng-show="infoEmpresa.CartaConfirmacion2 === 1">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
