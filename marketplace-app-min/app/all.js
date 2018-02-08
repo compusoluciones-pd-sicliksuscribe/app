@@ -387,26 +387,6 @@ angular.module('marketplace')
     $rootScope.secureCookie = true;
   });
 
-angular.module('directives.loading', [])
-  .directive('cargando', ['$http', function ($http) {
-    return {
-      restrict: 'A',
-      link: function (scope, elm, attrs) {
-        scope.isLoading = function () {
-          return $http.pendingRequests.length > 0;
-        };
-
-        scope.$watch(scope.isLoading, function (v) {
-          if (v) {
-            elm.show();
-          } else {
-            elm.hide();
-          }
-        });
-      }
-    };
-  }]);
-
 (function () {
   var ContactoController = function ($scope) {
     $scope.init = function () {
@@ -488,7 +468,7 @@ angular.module('directives.loading', [])
         console.log(typeof Distribuidor);
         $cookies.putObject('currentDistribuidor', Distribuidor, { 'expires': expireDate, secure: $rootScope.secureCookie });
         if ($cookies.getObject('currentDistribuidor')) {
-          $scope.currentDistribuidor = $cookies.getObjectObject('currentDistribuidor');
+          $scope.currentDistribuidor = $cookies.getObject('currentDistribuidor');
         } else {
           $scope.currentDistribuidor = {};
           $scope.currentDistribuidor.UrlLogo = 'images/LogoSVG.svg';
@@ -971,6 +951,26 @@ angular.module('directives.loading', [])
   angular.module('marketplace').controller('SugerenciasController', SugerenciasController);
 }());
 
+angular.module('directives.loading', [])
+  .directive('cargando', ['$http', function ($http) {
+    return {
+      restrict: 'A',
+      link: function (scope, elm, attrs) {
+        scope.isLoading = function () {
+          return $http.pendingRequests.length > 0;
+        };
+
+        scope.$watch(scope.isLoading, function (v) {
+          if (v) {
+            elm.show();
+          } else {
+            elm.hide();
+          }
+        });
+      }
+    };
+  }]);
+
 (function () {
   var AccesosAmazonFactory = function ($http, $cookies, $rootScope) {
     var factory = {};
@@ -1140,7 +1140,7 @@ angular.module('directives.loading', [])
 
     factory.getCliente = function (Id) {
       factory.refreshToken();
-      return $http.get($rootScope.MAPI + 'customer/' + Id);
+      return $http.get($rootScope.API + 'microsoft/customers/' + Id);
     };
 
     factory.getEmpresas = function () {
@@ -1150,7 +1150,7 @@ angular.module('directives.loading', [])
 
     factory.getEmpresasMicrosoft = function () {
       factory.refreshToken();
-      return $http.get($rootScope.MAPI + 'customer');
+      return $http.get($rootScope.API + 'microsoft/customers');
     };
 
     factory.getEmpresa = function (IdEmpresa) {
@@ -1173,6 +1173,10 @@ angular.module('directives.loading', [])
       return $http.put($rootScope.API + 'Empresas/FormaPago', parametros);
     };
 
+    factory.putEmpresaCambiaMoneda = function (parametros) {
+      factory.refreshToken();
+      return $http.put($rootScope.API + 'Empresas/CambiaMoneda', parametros);
+    };
     factory.putEmpresa = function (Empresa) {
       factory.refreshToken();
       return $http.put($rootScope.API + 'Empresas', Empresa);
@@ -1180,7 +1184,7 @@ angular.module('directives.loading', [])
 
     factory.revisarDominio = function (dominio) {
       factory.refreshToken();
-      return $http.get($rootScope.MAPI + 'utilities/' + dominio);
+      return $http.get($rootScope.API + 'microsoft/domains/' + dominio);
     };
 
     factory.revisarRFC = function (ObjRFC) {
@@ -1610,7 +1614,7 @@ angular.module('directives.loading', [])
 
     factory.getPrepararTarjetaCredito = function () {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'PrepararTarjetaCredito');
+      return $http.post($rootScope.API + 'shopping-cart/credit-card-payments');
     };
 
     factory.getAzureUsage = function (IdPedido) {
@@ -5581,6 +5585,9 @@ angular.module('directives.loading', [])
 }());
 
 (function () {
+  const ON_DEMAND = 3;
+  const CREDIT_CARD = 1;
+  const CS_CREDIT = 2;
   var PedidoDetallesReadController = function ($scope, $log, $location, $cookies, PedidoDetallesFactory, TipoCambioFactory, EmpresasXEmpresasFactory, EmpresasFactory, PedidosFactory, $routeParams) {
     $scope.CreditoValido = 1;
     $scope.error = false;
@@ -5615,7 +5622,9 @@ angular.module('directives.loading', [])
             if ($scope.error) {
               $scope.ShowToast('Ocurrio un error al procesar sus productos del carrito. Favor de contactar a soporte de CompuSoluciones.', 'danger');
             }
-            if (!validate) $scope.ValidarFormaPago();
+            if (!validate) {
+              $scope.ValidarFormaPago();
+            }
           } else {
             $scope.ShowToast(result.data.message, 'danger');
             $location.path('/Productos');
@@ -5653,11 +5662,37 @@ angular.module('directives.loading', [])
         });
     };
 
+    var ActualizarFormaPago = function (IdFormaPago) {
+      var empresa = {IdFormaPagoPredilecta: IdFormaPago || $scope.Distribuidor.IdFormaPagoPredilecta};
+      EmpresasFactory.putEmpresaFormaPago(empresa)
+        .then(function (result) {
+          if (result.data.success) {
+            $scope.ShowToast(result.data.message, 'success');
+            CambiarMoneda();
+            getOrderDetails(true);
+          } else $scope.ShowToast(result.data.message, 'danger');
+        })
+        .catch(function (result) { error(result.data); });
+    };
+
+    var CambiarMoneda = function (tipoMoneda) {
+      var moneda = { MonedaPago: tipoMoneda || 'Pesos' };
+      EmpresasFactory.putEmpresaCambiaMoneda(moneda)
+      .then(function (result) {
+        if (result.data.success) {
+          $scope.ShowToast(result.data.message, 'success');
+          getOrderDetails(true);
+        } else $scope.ShowToast(result.data.message, 'danger');
+      })
+      .catch(function (result) { error(result.data); });
+    };
+
     $scope.init = function () {
       $scope.CheckCookie();
       PedidoDetallesFactory.getPrepararCompra(0)
         .then(getEnterprises)
         .then(getOrderDetails)
+        .then(ActualizarFormaPago)
         .catch(function (result) { error(result.data); });
     };
 
@@ -5712,6 +5747,7 @@ angular.module('directives.loading', [])
             if (product.IdTipoProducto === 3) {
               disabled = true;
               $scope.Distribuidor.IdFormaPago = 2;
+              $scope.Distribuidor.IdFormaPagoPredilecta = 2;
             }
           });
         });
@@ -5719,17 +5755,59 @@ angular.module('directives.loading', [])
       return disabled;
     };
 
-    $scope.ActualizarFormaPago = function (IdFormaPago) {
-      var empresa = { IdFormaPagoPredilecta: IdFormaPago };
-      EmpresasFactory.putEmpresaFormaPago(empresa)
-        .then(function (result) {
-          if (result.data.success) {
-            $scope.ShowToast(result.data.message, 'success');
-            getOrderDetails();
-          } else $scope.ShowToast(result.data.message, 'danger');
-        })
-        .catch(function (result) { error(result.data); });
+    const hasProtectedExchangeRate = function (orderDetails) {
+      return orderDetails.some(function (detail) {
+        return detail.TipoCambioProtegido > 0;
+      });
     };
+
+    const isOnDemandProduct = function (product) {
+      return product.IdTipoProducto === ON_DEMAND;
+    };
+
+    const detailHasOnDemandProduct = function (orderDetail) {
+      const products = orderDetail.Productos;
+      return products.some(isOnDemandProduct);
+    };
+
+    const containsOnDemandProduct = function (orderDetails) {
+      return orderDetails.reduce(function (accumulator, currentDetail) {
+        const hasOndemandProduct = detailHasOnDemandProduct(currentDetail);
+        return accumulator || hasOndemandProduct;
+      }, false);
+    };
+
+    const setPaymentMethod = function (paymentMethod) {
+      $scope.Distribuidor.IdFormaPago = paymentMethod;
+      $scope.Distribuidor.IdFormaPagoPredilecta = paymentMethod;
+    };
+
+    $scope.validateUSD = function () {
+      const orderDetails = $scope.PedidoDetalles;
+      if (!orderDetails) return false;
+      if (hasProtectedExchangeRate(orderDetails)) return false;
+      if (containsOnDemandProduct(orderDetails)) {
+        setPaymentMethod(CS_CREDIT);
+        return false;
+      }
+      return true;
+    };
+
+    $scope.isPayingWithCSCredit = function () {
+      return $scope.Distribuidor.IdFormaPagoPredilecta === CS_CREDIT;
+    };
+
+    $scope.isPayingWithCreditCard = function () {
+      return $scope.Distribuidor.IdFormaPagoPredilecta === CREDIT_CARD;
+    };
+
+    $scope.hasProtectedExchangeRate = function () {
+      const orderDetails = $scope.PedidoDetalles;
+      return hasProtectedExchangeRate(orderDetails);
+    };
+
+    $scope.ActualizarFormaPago = ActualizarFormaPago;
+    $scope.CambiarMoneda = CambiarMoneda;
 
     $scope.modificarContratoBase = function (IdProducto, IdPedidoDetalle) {
       $location.path('/autodesk/productos/' + IdProducto + '/detalle/' + IdPedidoDetalle);
@@ -6457,7 +6535,7 @@ angular.module('directives.loading', [])
         IdProducto: Producto.IdProducto,
         Cantidad: Cantidad,
         IdEmpresaUsuarioFinal: Producto.IdEmpresaUsuarioFinal,
-        MonedaPago: Producto.MonedaPago,
+        MonedaPago: 'Pesos',
         IdEsquemaRenovacion: Producto.IdEsquemaRenovacion,
         IdFabricante: Producto.IdFabricante,
         CodigoPromocion: Producto.CodigoPromocion,
@@ -6924,134 +7002,6 @@ angular.module('directives.loading', [])
 }());
 
 (function () {
-  var SoporteCreateController = function ($scope, $log, $cookies, $location, $uibModal, $filter, SoporteFactory, $routeParams) {
-
-    $scope.init = function () {
-
-    };
-    $scope.init();
-
-    $scope.SolicitarSoporte = function () {
-      if (!$scope.frm.$invalid) {
-        SoporteFactory.postSolicitud({ Solicitud: $scope.Soporte })
-          .success(function (resultado) {
-            if (resultado.success === 1) {
-              $scope.ShowToast('Solicitud enviada.', 'success');
-              $location.path('monitor-soporte');
-            }
-          })
-          .error(function (data, status, headers, config) {
-            $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
-
-            $scope.ShowToast('No pudimos enviar tu solicitud, por favor intenta de nuevo más tarde.', 'danger');
-
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-          });
-      }
-    };
-
-    $scope.Cancelar = function () {
-      $location.path('/monitor-soporte');
-    };
-  };
-  SoporteCreateController.$inject = ['$scope', '$log', '$cookies', '$location', '$uibModal', '$filter', 'SoporteFactory', '$routeParams'];
-
-  angular.module('marketplace').controller('SoporteCreateController', SoporteCreateController);
-}());
-
-(function () {
-  var SoporteReadController = function ($scope, $log, $cookies, $location, $uibModal, $filter, SoporteFactory, $routeParams) {
-
-    $scope.init = function () {
-      SoporteFactory.getSolicitudes()
-        .success(function (Solicitudes) {
-          $scope.Solicitudes = Solicitudes.data;
-        })
-        .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
-
-          $scope.ShowToast('No pudimos cargar la lista de solicitudes, por favor intenta de nuevo más tarde.', 'danger');
-
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
-    };
-    $scope.init();
-
-    $scope.NuevaSolicitud = function () {
-      $location.path('solicitar-soporte');
-    };
-
-    $scope.EditarDetalle = function (id) {
-      console.log(id);
-      $location.path('actualizar-soporte/'+id);
-    };
-  };
-  SoporteReadController.$inject = ['$scope', '$log', '$cookies', '$location', '$uibModal', '$filter', 'SoporteFactory', '$routeParams'];
-
-  angular.module('marketplace').controller('SoporteReadController', SoporteReadController);
-}());
-
-(function () {
-  var SoporteUpdateController = function ($scope, $log, $cookies, $location, $uibModal, $filter, SoporteFactory, $routeParams) {
-    var idSoporte = $routeParams.idSoporte;
-    var combo = [];
-    $scope.init = function () {
-      SoporteFactory.getSolicitud(idSoporte)
-        .success(function (resultado) {
-          if (resultado.success === 1) {
-            $scope.Soporte = resultado.data[0];
-            $scope.Soporte.IdEstatus = resultado.data[0].IdEstatus.toString();
-          }
-        }).error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
-          $scope.ShowToast('No pudimos cargar los datos del detalle, por favor intenta de nuevo más tarde.', 'danger');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
-      SoporteFactory.getStatus()
-        .success(function (resultado) {
-          if (resultado.success === 1) {
-            $scope.combo = resultado.data;
-          }
-        }).error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
-          $scope.ShowToast('No pudimos cargar la lista de status, por favor intenta de nuevo más tarde.', 'danger');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
-    };
-    $scope.init();
-    $scope.ActualizarSoporte = function () {
-      if (!$scope.frm.$invalid) {
-        var soporte = {
-          IdEstatus: $scope.Soporte.IdEstatus,
-          DescripcionSolucion: $scope.Soporte.DescripcionSolucion
-        };
-        SoporteFactory.patchSolicitud(idSoporte, soporte)
-          .success(function (resultado) {
-            if (resultado.success === 1) {
-              $scope.ShowToast('Soporte actualizado.', 'success');
-              $location.path('monitor-soporte');
-            }else {
-            $scope.ShowToast('Error al guardar los datos, verifica que los caracteres sean correctos.', 'danger');
-          }
-          })
-          .error(function (data, status, headers, config) {
-            $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
-            $scope.ShowToast('No pudimos enviar tu solicitud, por favor intenta de nuevo más tarde.', 'danger');
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-          });
-      }
-    };
-
-    $scope.Cancelar = function () {
-      $location.path('/monitor-soporte');
-    };
-  };
-  SoporteUpdateController.$inject = ['$scope', '$log', '$cookies', '$location', '$uibModal', '$filter', 'SoporteFactory', '$routeParams'];
-
-  angular.module('marketplace').controller('SoporteUpdateController', SoporteUpdateController);
-}());
-
-(function () {
   var PromocionsCreateController = function ($scope, $log, $cookies, $location, PromocionsFactory, FileUploader, AccesosAmazonFactory) {
     $scope.Promocion = {};
     $scope.IdPromocionNueva = 0;
@@ -7495,6 +7445,134 @@ angular.module('directives.loading', [])
   PromocionsUpdateController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'PromocionsFactory', 'FileUploader', 'AccesosAmazonFactory'];
 
   angular.module('marketplace').controller('PromocionsUpdateController', PromocionsUpdateController);
+}());
+
+(function () {
+  var SoporteCreateController = function ($scope, $log, $cookies, $location, $uibModal, $filter, SoporteFactory, $routeParams) {
+
+    $scope.init = function () {
+
+    };
+    $scope.init();
+
+    $scope.SolicitarSoporte = function () {
+      if (!$scope.frm.$invalid) {
+        SoporteFactory.postSolicitud({ Solicitud: $scope.Soporte })
+          .success(function (resultado) {
+            if (resultado.success === 1) {
+              $scope.ShowToast('Solicitud enviada.', 'success');
+              $location.path('monitor-soporte');
+            }
+          })
+          .error(function (data, status, headers, config) {
+            $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+
+            $scope.ShowToast('No pudimos enviar tu solicitud, por favor intenta de nuevo más tarde.', 'danger');
+
+            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          });
+      }
+    };
+
+    $scope.Cancelar = function () {
+      $location.path('/monitor-soporte');
+    };
+  };
+  SoporteCreateController.$inject = ['$scope', '$log', '$cookies', '$location', '$uibModal', '$filter', 'SoporteFactory', '$routeParams'];
+
+  angular.module('marketplace').controller('SoporteCreateController', SoporteCreateController);
+}());
+
+(function () {
+  var SoporteReadController = function ($scope, $log, $cookies, $location, $uibModal, $filter, SoporteFactory, $routeParams) {
+
+    $scope.init = function () {
+      SoporteFactory.getSolicitudes()
+        .success(function (Solicitudes) {
+          $scope.Solicitudes = Solicitudes.data;
+        })
+        .error(function (data, status, headers, config) {
+          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+
+          $scope.ShowToast('No pudimos cargar la lista de solicitudes, por favor intenta de nuevo más tarde.', 'danger');
+
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+    };
+    $scope.init();
+
+    $scope.NuevaSolicitud = function () {
+      $location.path('solicitar-soporte');
+    };
+
+    $scope.EditarDetalle = function (id) {
+      console.log(id);
+      $location.path('actualizar-soporte/'+id);
+    };
+  };
+  SoporteReadController.$inject = ['$scope', '$log', '$cookies', '$location', '$uibModal', '$filter', 'SoporteFactory', '$routeParams'];
+
+  angular.module('marketplace').controller('SoporteReadController', SoporteReadController);
+}());
+
+(function () {
+  var SoporteUpdateController = function ($scope, $log, $cookies, $location, $uibModal, $filter, SoporteFactory, $routeParams) {
+    var idSoporte = $routeParams.idSoporte;
+    var combo = [];
+    $scope.init = function () {
+      SoporteFactory.getSolicitud(idSoporte)
+        .success(function (resultado) {
+          if (resultado.success === 1) {
+            $scope.Soporte = resultado.data[0];
+            $scope.Soporte.IdEstatus = resultado.data[0].IdEstatus.toString();
+          }
+        }).error(function (data, status, headers, config) {
+          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.ShowToast('No pudimos cargar los datos del detalle, por favor intenta de nuevo más tarde.', 'danger');
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+      SoporteFactory.getStatus()
+        .success(function (resultado) {
+          if (resultado.success === 1) {
+            $scope.combo = resultado.data;
+          }
+        }).error(function (data, status, headers, config) {
+          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.ShowToast('No pudimos cargar la lista de status, por favor intenta de nuevo más tarde.', 'danger');
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+    };
+    $scope.init();
+    $scope.ActualizarSoporte = function () {
+      if (!$scope.frm.$invalid) {
+        var soporte = {
+          IdEstatus: $scope.Soporte.IdEstatus,
+          DescripcionSolucion: $scope.Soporte.DescripcionSolucion
+        };
+        SoporteFactory.patchSolicitud(idSoporte, soporte)
+          .success(function (resultado) {
+            if (resultado.success === 1) {
+              $scope.ShowToast('Soporte actualizado.', 'success');
+              $location.path('monitor-soporte');
+            }else {
+            $scope.ShowToast('Error al guardar los datos, verifica que los caracteres sean correctos.', 'danger');
+          }
+          })
+          .error(function (data, status, headers, config) {
+            $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+            $scope.ShowToast('No pudimos enviar tu solicitud, por favor intenta de nuevo más tarde.', 'danger');
+            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          });
+      }
+    };
+
+    $scope.Cancelar = function () {
+      $location.path('/monitor-soporte');
+    };
+  };
+  SoporteUpdateController.$inject = ['$scope', '$log', '$cookies', '$location', '$uibModal', '$filter', 'SoporteFactory', '$routeParams'];
+
+  angular.module('marketplace').controller('SoporteUpdateController', SoporteUpdateController);
 }());
 
 (function () {

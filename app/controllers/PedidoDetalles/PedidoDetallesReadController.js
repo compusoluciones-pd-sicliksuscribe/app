@@ -1,4 +1,7 @@
 (function () {
+  const ON_DEMAND = 3;
+  const CREDIT_CARD = 1;
+  const CS_CREDIT = 2;
   var PedidoDetallesReadController = function ($scope, $log, $location, $cookies, PedidoDetallesFactory, TipoCambioFactory, EmpresasXEmpresasFactory, EmpresasFactory, PedidosFactory, $routeParams) {
     $scope.CreditoValido = 1;
     $scope.error = false;
@@ -155,7 +158,7 @@
       if ($scope.PedidoDetalles) {
         $scope.PedidoDetalles.forEach(function (order) {
           order.Productos.forEach(function (product) {
-            if (product.IdTipoProducto === 3 || order.TipoCambioProtegido > 0) {
+            if (product.IdTipoProducto === 3) {
               disabled = true;
               $scope.Distribuidor.IdFormaPago = 2;
               $scope.Distribuidor.IdFormaPagoPredilecta = 2;
@@ -164,6 +167,57 @@
         });
       }
       return disabled;
+    };
+
+    const hasProtectedExchangeRate = function (orderDetails) {
+      return orderDetails.some(function (detail) {
+        return detail.TipoCambioProtegido > 0;
+      });
+    };
+
+    const isOnDemandProduct = function (product) {
+      return product.IdTipoProducto === ON_DEMAND;
+    };
+
+    const detailHasOnDemandProduct = function (orderDetail) {
+      const products = orderDetail.Productos;
+      return products.some(isOnDemandProduct);
+    };
+
+    const containsOnDemandProduct = function (orderDetails) {
+      return orderDetails.reduce(function (accumulator, currentDetail) {
+        const hasOndemandProduct = detailHasOnDemandProduct(currentDetail);
+        return accumulator || hasOndemandProduct;
+      }, false);
+    };
+
+    const setPaymentMethod = function (paymentMethod) {
+      $scope.Distribuidor.IdFormaPago = paymentMethod;
+      $scope.Distribuidor.IdFormaPagoPredilecta = paymentMethod;
+    };
+
+    $scope.validateUSD = function () {
+      const orderDetails = $scope.PedidoDetalles;
+      if (!orderDetails) return false;
+      if (hasProtectedExchangeRate(orderDetails)) return false;
+      if (containsOnDemandProduct(orderDetails)) {
+        setPaymentMethod(CS_CREDIT);
+        return false;
+      }
+      return true;
+    };
+
+    $scope.isPayingWithCSCredit = function () {
+      return $scope.Distribuidor.IdFormaPagoPredilecta === CS_CREDIT;
+    };
+
+    $scope.isPayingWithCreditCard = function () {
+      return $scope.Distribuidor.IdFormaPagoPredilecta === CREDIT_CARD;
+    };
+
+    $scope.hasProtectedExchangeRate = function () {
+      const orderDetails = $scope.PedidoDetalles;
+      if (orderDetails) return hasProtectedExchangeRate(orderDetails);
     };
 
     $scope.ActualizarFormaPago = ActualizarFormaPago;

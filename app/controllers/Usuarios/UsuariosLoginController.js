@@ -60,6 +60,8 @@
               NombreEmpresa: tokenPayload.NombreEmpresa,
               LeyoTerminos: tokenPayload.LeyoTerminos,
               distribuidores: tokenPayload.distribuidores,
+              IdPlanTuClick: tokenPayload.IdPlanTuClick,
+              mFacturacion: tokenPayload.mFacturacion,
               Expira: expireDate.getTime()
             };
             console.log('login succesfull');

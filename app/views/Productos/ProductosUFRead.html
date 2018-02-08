@@ -131,7 +131,7 @@
                                                 <span class="input-group-addon green white">
                                                 <span class="glyphicon glyphicon-shopping-cart"></span>
                                                 </span>
-                                                <input id="Cantidad" name="Cantidad" type="number" ng-model="Producto.Cantidad" class="form-control" placeholder="Escribe un número entre {{Producto.CantidadMinima}} y {{Producto.CantidadMaxima}}"
+                                                <input ng-keypress="revisarProducto(Producto);" id="Cantidad" name="Cantidad" type="number" ng-model="Producto.Cantidad" class="form-control" placeholder="Escribe un número entre {{Producto.CantidadMinima}} y {{Producto.CantidadMaxima}}"
                                                     max="{{Producto.CantidadMaxima}}" min="{{Producto.CantidadMinima}}" size="5"
                                                     maxlength="5" title="Escribe un número entre {{Producto.CantidadMinima}} y {{Producto.CantidadMaxima}}"
                                                     required/>
@@ -143,6 +143,39 @@
                                             <p style="color:red" ng-show="frmCantidad.Cantidad.$error.min">Mínimo {{Producto.CantidadMinima}}</p>
                                             <p style="color:red" ng-show="frmCantidad.Cantidad.$error.max">Máximo {{Producto.CantidadMaxima}}</p>
 
+                                            <br>
+                                            <p style="color:red" ng-hide="Producto.IdFabricante === 1 || Producto.TieneContrato">*No cuentas con un contrato para este producto.</p>
+                                            <label for="contrato" ng-if="Producto.IdFabricante === 2 && Producto.TieneContrato">* Contrato</label>
+                                            <div class="input-group" ng-if="Producto.IdFabricante === 2 && Producto.TieneContrato && Producto.IdAccionAutodesk === 1">
+                                                <span class="input-group-addon green white">
+                                                    <span class="glyphicon glyphicon-file"></span>
+                                                </span>
+                                                <select id="contrato" name="contrato" class="form-control selectOption ufs" ng-model="Producto.IdPedidoContrato" ng-options="contrato.IdPedido as contrato.ResultadoFabricante6 for contrato in Producto.contratos"
+                                                    ng-change="contractSetted(Producto)" ng-required="contrato.ResultadoFabricante6 !== ''">
+                                                    <option ng-disabled="" ng-selected="true" ng-value="0">Nuevo contrato...</option>
+                                                </select>
+                                            </div>
+                                            <div class="input-group" ng-if="Producto.IdFabricante === 2 && Producto.TieneContrato && Producto.IdAccionAutodesk === 2">
+                                                <span class="input-group-addon green white">
+                                                        <span class="glyphicon glyphicon-file"></span>
+                                                </span>
+                                                <select id="contrato" name="contrato" class="form-control selectOption ufs" ng-model="Producto.IdPedidoContrato" ng-options="contrato.IdPedido as contrato.ResultadoFabricante6 for contrato in Producto.contratos"
+                                                    ng-change="contractSetted(Producto)" ng-required="contrato.ResultadoFabricante6 !== ''">
+                                                    </select>
+                                            </div>
+                                            <br>
+                                            <label for="contacto" ng-if="Producto.IdFabricante === 2 && !Producto.IdPedidoContrato && Producto.IdAccionAutodesk === 1">* Contacto</label>
+                                            <div class="input-group" ng-if="Producto.IdFabricante === 2 && !Producto.IdPedidoContrato && Producto.IdAccionAutodesk === 1">
+                                                <span class="input-group-addon green white">
+                                                    <span class="glyphicon glyphicon-user"></span>
+                                                </span>
+                                                <select id="contacto" name="IdEmpresaUsuarioFinal" class="form-control selectOption ufs" ng-model="Producto.IdUsuarioContacto"
+                                                    ng-options="usuario.IdUsuario as usuario.Nombre + ' ('+ usuario.CorreoElectronico +')' for usuario in Producto.usuariosContacto"
+                                                    ng-required="!Producto.IdPedidoContrato">
+                                                    <option ng-selected="true" value="">Selecciona un contacto...</option>
+                                                </select>
+                                            </div>
+                                            <br>
                                             <div ng-show="Producto.MostrarMensajeP" style="color:red;">
 
                                                 <label>* No cuentas con suscripciones para este producto.</label>&nbsp;
@@ -166,23 +199,18 @@
                                                 <br>
                                             </div>
 
-                                            <label for="" class="">* ¿Con qué moneda quieres pagarlos?</label>
-
-                                            <div class="radio" style="margin-left:20px">
-                                                <div>
-                                                    <input type="radio" name="MonedaCompra" value="Dólares" ng-model="Producto.MonedaCompra" required>                                                    Dólares
-                                                </div>
-                                                <div>
-                                                    <input type="radio" name="MonedaCompra" value="Pesos" ng-model="Producto.MonedaCompra" required>                                                    Pesos
-                                                </div>
-                                            </div>
-
                                         </div>
 
                                         <div style="float:right!important;">
+                                            <div ng-show="ProtectedRP > 0">
+                                                <label for="" title="Tipo Cambio Protegido">Tipo de cambio protegido:</label>
+                                                <b>
+                                                    {{ProtectedRP | currency: "$":4}} MXN.
+                                                </b>
+                                            </div>
                                             <label for="" title="Cantidad por precio">Total:</label>
                                             <b> 
-                                                {{CalcularPrecioTotal(Producto.PrecioProrrateo, Producto.Cantidad, Producto.MonedaCompra, Producto.MonedaPrecio, TipoCambio) | currency}} {{Producto.MonedaCompra}} 
+                                                {{CalcularPrecioTotal(Producto.PrecioProrrateo, Producto.Cantidad, Producto.MonedaCompra, Producto.MonedaPrecio, TipoCambio, ProtectedRP) | currency}} {{Producto.MonedaCompra}} 
                                             </b>
                                             <!--<b ng-show="Producto.IdFabricante === 1 && Producto.PorcentajeDescuento == 0"> 
                                                 {{CalcularPrecioTotal(Producto.PrecioProrrateo, Producto.Cantidad, Producto.MonedaCompra, Producto.MonedaPrecio, TipoCambioMs) | currency}} {{Producto.MonedaCompra}} 
@@ -232,7 +260,7 @@
                                             <button type="button" ng-show="0" ng-click="AgregarGuardados(Producto.IdProducto)" class="btn btn-link btn-block favoriteOption"><span class="glyphicon glyphicon-star"></span> Agregar a favoritos</span></button>
                                         </div>
                                         <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6" ng-show="SessionCookie.IdTipoAcceso === 1 || SessionCookie.IdTipoAcceso === 2 || SessionCookie.IdTipoAcceso === 3 || SessionCookie.IdTipoAcceso === 4">
-                                            <button class="btn btn-success btn-block addOption" ng-click="AgregarCarrito(Producto)" ng-disabled="!frmCantidad.$valid">Agregar al carrito</md-button>
+                                            <button class="btn btn-success btn-block addOption" ng-click="AgregarCarrito(Producto, Producto.Cantidad)" ng-disabled="!frmCantidad.$valid">Agregar al carrito</md-button>
                                         </div>
                                     </div>
                                 </div>
