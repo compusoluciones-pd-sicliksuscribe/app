@@ -113,8 +113,6 @@
           .success(function (Datos) {
             var expireDate = new Date();
             expireDate.setTime(expireDate.getTime() + 600 * 2000); /* 20 minutos */
-            console.log('pedidosAgrupados', typeof Datos.data['0'].pedidosAgrupados);
-            console.log(Datos.data['0'].pedidosAgrupados);
             $cookies.putObject('pedidosAgrupados', Datos.data['0'].pedidosAgrupados, { 'expires': expireDate, secure: $rootScope.secureCookie });
             if (Datos.data['0'].total > 0) {
               if (Datos.success) {
@@ -150,7 +148,6 @@
                       theme: 'default'
                     }
                   });
-                  console.log('done config');
                   Checkout.showLightbox();
                 } else {
                   $scope.ShowToast('No pudimos comenzar con tu proceso de pago, favor de intentarlo una vez más.', 'danger');
@@ -164,8 +161,8 @@
             }
           })
           .error(function (data, status, headers, config) {
-            $scope.ShowToast('Error al obtener el tipo de cambio API Intelisis.', 'danger');
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+            const error = !data.message ? 'Ocurrio un error al procesar la solicitud. Intentalo de nuevo.' : data.message;
+            $scope.ShowToast(error, 'danger');
           });
       }
     };

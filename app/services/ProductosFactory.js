@@ -3,6 +3,14 @@
     var factory = {};
     var Session = {};
 
+    const encodeQueryData = function (params) {
+      let query = [];
+      Object.keys(params).forEach(function (property) {
+        if (params[property] != null) query.push(encodeURIComponent(property) + '=' + encodeURIComponent(params[property]));
+      });
+      return query.length > 0 ? '?' + query.join('&') : '';
+    };
+
     factory.refreshToken = function () {
       Session = $cookies.getObject('Session');
       if (!Session) { Session = { Token: 'no' }; }
@@ -11,9 +19,10 @@
 
     factory.refreshToken();
 
-    factory.postBuscarProductos = function (Busqueda) {
+    factory.getBuscarProductos = function (params) {
       factory.refreshToken();
-      return $http.post($rootScope.API + 'BuscarProductos', Busqueda);
+      const query = encodeQueryData(params);
+      return $http.get($rootScope.API + 'products' + query);
     };
 
     factory.postComplementos = function (Producto) {

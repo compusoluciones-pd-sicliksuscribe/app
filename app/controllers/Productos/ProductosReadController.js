@@ -15,20 +15,20 @@
     $scope.BuscarProducto = function (ResetPaginado) {
       $scope.Mensaje = 'Buscando...';
 
-      if (ResetPaginado == true) {
+      if (ResetPaginado) {
         $scope.Pagina = 0;
         $scope.BuscarProductos.Offset = $scope.Pagina * 6;
       }
 
-      ProductosFactory.postBuscarProductos($scope.BuscarProductos)
+      ProductosFactory.getBuscarProductos($scope.BuscarProductos)
         .success(function (Productos) {
           if (Productos.success === 1) {
-            $scope.Productos = Productos.data[0].map(function (item) {
+            $scope.Productos = Productos.data.map(function (item) {
               item.IdPedidoContrato = 0;
               item.TieneContrato = true;
               return item;
             });
-            if ($scope.Productos == '') {
+            if ($scope.Productos === '') {
               $scope.Mensaje = 'No encontramos resultados de tu búsqueda...';
               if ($scope.Pagina > 0) {
                 $scope.ShowToast('No encontramos más resultados de esta busqueda, regresaremos a la página anterior.', 'danger');
@@ -40,11 +40,7 @@
           }
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
-
-          $scope.ShowToast('No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.', 'danger');
-
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          $scope.ShowToast(data.error, 'danger');
         });
 
       TipoCambioFactory.getTipoCambio()
@@ -102,10 +98,10 @@
       $scope.BuscarProductos.Offset = $scope.Pagina * 6;
 
       if (BusquedaURL != 'undefined') {
-        $scope.BuscarProductos.Busqueda = BusquedaURL;
+        $scope.BuscarProductos.keyword = BusquedaURL;
         $scope.BuscarProducto(false);
       } else {
-        $scope.BuscarProductos.Busqueda = undefined;
+        $scope.BuscarProductos.keyword = undefined;
         $scope.BuscarProducto(false);
       }
     };
@@ -149,7 +145,7 @@
             if ((Producto.IdAccionAutodesk === 2 || !Producto.IdAccionAutodesk) && Producto.contratos.length === 0) {
               Producto.TieneContrato = false;
             }
-            if (Producto.IdAccionAutodesk === 1) Producto.contratos.unshift({ IdPedido: 0, ResultadoFabricante6: 'Nuevo contrato...' });
+            if (Producto.IdAccionAutodesk === 1) Producto.contratos.unshift({ IdPedido: 0, NumeroContrato: 'Nuevo contrato...' });
             setProtectedRebatePrice(IdEmpresaUsuarioFinal);
           } else {
             $scope.ShowToast('No pudimos cargar la información de tus contratos, por favor intenta de nuevo más tarde.', 'danger');
@@ -242,7 +238,7 @@
         const contrato = Producto.contratos
           .filter(function (p) {
             return Producto.IdPedidoContrato === p.IdPedido;
-          })[0].ResultadoFabricante6;
+          })[0].NumeroContrato;
         NuevoProducto.ContratoBaseAutodesk = contrato.trim();
         // NuevoProducto.IdAccionAutodesk = Producto.IdAccionProductoAutodesk === 1 ? 3 : 2;
       }

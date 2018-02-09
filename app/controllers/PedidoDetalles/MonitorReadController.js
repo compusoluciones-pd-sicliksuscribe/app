@@ -9,6 +9,10 @@
     $scope.BuscarProductos = {};
     $scope.SessionCookie = $cookies.getObject('Session');
 
+    function flattenArray (array) {
+      return array.reduce((previusArray, currentArray) => previusArray.concat(currentArray));
+    };
+
     $scope.init = function () {
       $scope.CheckCookie();
 
@@ -77,7 +81,18 @@
 
       PedidoDetallesFactory.postMonitor(Params)
         .success(function (result) {
-          $scope.Pedidos = result.data[0];
+          var contrato = result.data[0].filter(pedidos => pedidos.ResultadoFabricante6 !== null);
+          var ordered = [];
+          contrato.forEach(function (pedido) {
+            ordered.push(pedido);
+            ordered = ordered.concat(result.data[0].filter(pedidos => pedidos.ContratoBaseAutodesk === pedido.ResultadoFabricante6));
+          });
+          ordered = ordered.concat(result.data[0].filter(pedidos => pedidos.ResultadoFabricante6 === null && pedidos.ContratoBaseAutodesk === null));
+          $scope.orders = _.uniq(ordered.map(function (pedido) {
+            return pedido.IdPedido;
+          }));
+          $scope.Pedidos = $filter('groupBy')(result.data[0], 'IdPedido');
+          //$scope.Pedidos = _.groupBy(ordered, 'IdPedido');
           if ($scope.EmpresaSelect == null || $scope.EmpresaSelect == 0) {
             $scope.Vacio = 1;
           } else {
