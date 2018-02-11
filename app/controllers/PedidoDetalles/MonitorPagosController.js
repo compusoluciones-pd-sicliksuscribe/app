@@ -1,5 +1,5 @@
 (function () {
-  var MonitorPagos = function ($scope, $log, $rootScope,  $cookies, $location, $uibModal, $filter, PedidoDetallesFactory, EmpresasFactory) {
+  var MonitorPagos = function ($scope, $log, $rootScope, $cookies, $location, $uibModal, $filter, PedidoDetallesFactory, EmpresasFactory) {
     $scope.PedidoSeleccionado = 0;
     $scope.PedidosSeleccionadosParaPagar = [];
     $scope.PedidosObj = {};
