@@ -3,13 +3,14 @@
     $scope.PedidoSeleccionado = 0;
     $scope.PedidosSeleccionadosParaPagar = [];
     $scope.PedidosObj = {};
+    $scope.Distribuidor = {};
     $scope.ServicioElectronico = 0;
     $scope.Subtotal = 0;
     $scope.Iva = 0;
     $scope.Total = 0;
     $scope.DeshabilitarPagar = false;
     $scope.todos = 0;
-    function groupBy(array, f) {
+    function groupBy (array, f) {
       var groups = {};
       array.forEach(function (o) {
         var group = JSON.stringify(f(o));
@@ -19,11 +20,35 @@
       return Object.keys(groups).map(function (group) { return groups[group]; });
     };
 
+    const confirmarPaypal = function () {
+      const paymentId = $location.search().paymentId;
+      const token = $location.search().token;
+      const PayerID = $location.search().PayerID;
+      const orderIds = $cookies.getObject('orderIds');
+      $cookies.remove('orderIds');
+      $location.url($location.path());
+      if (paymentId && token && PayerID && orderIds) {
+        PedidoDetallesFactory.confirmarPaypal({ paymentId, PayerID, orderIds })
+          .then(function (response) {
+            if (response.data.state === 'approved') $location.path('/MonitorPagos');
+            if (response.data.state === 'failed') $scope.ShowToast('Ocurrio un error al intentar confirmar la compra con Paypal. Intentalo mas tarde.', 'danger');
+          })
+          .catch(function (response) {
+            $scope.ShowToast('Ocurrio un error de tipo: "' + response.data.message + '". Contacte con soporte de Compusoluciones.', 'danger');
+          });
+      }
+    };
+
     $scope.init = function () {
+      if ($scope.currentPath === '/MonitorPagos') {
+        $scope.CheckCookie();
+        confirmarPaypal();
+      }
       $location.path('/MonitorPagos');
       PedidoDetallesFactory.getPendingOrdersToPay()
         .success(function (ordersToPay) {
           $scope.Pedidos = ordersToPay.data;
+          console.log(ordersToPay.data);
           if (!ordersToPay.data || ordersToPay.data.length === 0) {
             return $scope.DeshabilitarPagar = true;
           }
@@ -152,12 +177,17 @@
       }
     };
 
+    $scope.Comprar = function () {
+      if ($scope.Distribuidor.IdFormaPagoPredilecta === 1) $scope.pagar();
+      if ($scope.Distribuidor.IdFormaPagoPredilecta === 3) $scope.prepararPaypal();
+    };
+
     $scope.pagar = function () {
       if ($scope.PedidosSeleccionadosParaPagar.length > 0) {
         PedidoDetallesFactory.payWidthCard({ Pedidos: $scope.PedidosSeleccionadosParaPagar })
           .success(function (Datos) {
             var expireDate = new Date();
-            expireDate.setTime(expireDate.getTime() + 600 * 2000); /*20 minutos*/
+            expireDate.setTime(expireDate.getTime() + 600 * 2000);
             Datos.data["0"].pedidosAgrupados[0].TipoCambio = $scope.TipoCambio;
             $cookies.putObject('pedidosAgrupados', Datos.data["0"].pedidosAgrupados, { 'expires': expireDate, secure: $rootScope.secureCookie });
             if (Datos.success) {
@@ -210,6 +240,29 @@
       } else {
         $scope.ShowToast('Selecciona al menos un pedido para pagar.', 'danger');
       }
+    };
+
+    $scope.prepararPaypal = function () {
+      const orderIds = $scope.PedidoDetalles.map(function (result) {
+        return result.IdPedido;
+      });
+      const expireDate = new Date();
+      expireDate.setTime(expireDate.getTime() + 600 * 2000);
+      $cookies.putObject('orderIds', orderIds, { expires: expireDate, secure: $rootScope.secureCookie });
+      PedidoDetallesFactory.prepararPaypal({ orderIds })
+        .then(function (response) {
+          if (response.data.state === 'created') {
+            const paypal = response.data.links.filter(function (item) {
+              if (item.method === 'REDIRECT') return item.href;
+            })[0];
+            location.href = paypal.href;
+          } else {
+            $scope.ShowToast('Ocurrio un error al procesar el pago.', 'danger');
+          }
+        })
+        .catch(function (response) {
+          $scope.ShowToast('Ocurrio un error al procesar el pago. de tipo: ' + response.data.message, 'danger');
+        });
     };
   };
   MonitorPagos.$inject = ['$scope', '$log', '$rootScope', '$cookies', '$location', '$uibModal', '$filter', 'PedidoDetallesFactory', 'EmpresasFactory'];
