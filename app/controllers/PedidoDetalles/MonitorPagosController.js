@@ -9,7 +9,8 @@
     $scope.Iva = 0;
     $scope.Total = 0;
     $scope.DeshabilitarPagar = false;
-    $scope.todos = 0;
+    $scope.tarjetaCheckBox = false;
+    $scope.paypalCheckBox = false;
     function groupBy (array, f) {
       var groups = {};
       array.forEach(function (o) {
@@ -109,13 +110,37 @@
       return subtotal * $scope.TipoCambio;
     };
 
-    $scope.seleccionarTodos = function () {
+    const selectByPaymentMethod = function (paymentId, checkBoxName) {
       for (var x = 0; x < $scope.PedidosAgrupados.length; x++) {
-        if ($scope.PedidosObj[$scope.PedidosAgrupados[x][0].IdPedido].Check !== $scope.todos) {
-          $scope.PedidosObj[$scope.PedidosAgrupados[x][0].IdPedido].Check = $scope.todos;
+        const order = $scope.PedidosObj[$scope.PedidosAgrupados[x][0].IdPedido];
+        if (order.Check !== $scope[checkBoxName] && order.IdFormaPagoProxima === paymentId) {
+          order.Check = $scope[checkBoxName];
           $scope.pedidosPorPagar($scope.PedidosAgrupados[x][0].IdPedido);
         }
       }
+    };
+
+    $scope.seleccionarPaypal = function () {
+      selectByPaymentMethod(3, 'paypalCheckBox');
+    };
+
+    $scope.seleccionarTarjeta = function () {
+      selectByPaymentMethod(1, 'tarjetaCheckBox');
+    };
+
+    $scope.filtrarSeleccionados = function () {
+      function filtrarPedidosSeleccionados (pedido) {
+        return pedido.Check === 1;
+      }
+      return $scope.Pedidos && $scope.Pedidos.filter(filtrarPedidosSeleccionados).length === 0;
+    };
+
+    $scope.validarMetodosDePago = function () {
+      if ($scope.tarjetaCheckBox && $scope.paypalCheckBox) {
+        $scope.ShowToast('No se pueden seleccionar ambos pagos, intenta de nuevo seleccionando sólo un método de pago.', 'danger');
+        return false;
+      }
+      return true;
     };
 
     $scope.pedidosPorPagar = function (key) {
@@ -177,9 +202,26 @@
       }
     };
 
+    function getPaymenthMethod () {
+      const ordersToPay = $scope.PedidosObj;
+      const selectedOrdersToPay = $scope.PedidosSeleccionadosParaPagar;
+      const firstSelectedOrderToPay = ordersToPay[selectedOrdersToPay[0]];
+      var firstOrderPaymentMethod = firstSelectedOrderToPay.IdFormaPagoProxima;
+      for (var index = 1; index < selectedOrdersToPay.length; index++) {
+        const order = selectedOrdersToPay[index];
+        if (order.IdFormaPagoProxima !== firstSelectedOrderToPay) {
+          $scope.ShowToast('No se pueden seleccionar ambos pagos, intenta de nuevo seleccionando sólo un método de pago.', 'danger');
+          firstOrderPaymentMethod = 0;
+          return;
+        }
+      }
+      return firstOrderPaymentMethod;
+    }
+
     $scope.Comprar = function () {
-      if ($scope.Distribuidor.IdFormaPagoPredilecta === 1) $scope.pagar();
-      if ($scope.Distribuidor.IdFormaPagoPredilecta === 3) $scope.prepararPaypal();
+      const paymentMethod = getPaymenthMethod();
+      if (paymentMethod === 1) $scope.pagar();
+      if (paymentMethod === 3) $scope.prepararPaypal();
     };
 
     $scope.pagar = function () {
@@ -243,7 +285,7 @@
     };
 
     $scope.prepararPaypal = function () {
-      const orderIds = $scope.PedidoDetalles.map(function (result) {
+      const orderIds = $scope.PedidosSeleccionadosParaPagar.map(function (result) {
         return result.IdPedido;
       });
       const expireDate = new Date();

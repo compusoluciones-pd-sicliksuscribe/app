@@ -17,7 +17,7 @@
     </div>
   </div>
 
-  <h4>Selecciona el Método de Pago:</h4>
+  <!-- <h4>Selecciona el Método de Pago:</h4>
   <div ng-show="!ValidarFormaPago()">
       <input type="radio" name="TipoPago" value="1" ng-disabled="ValidarFormaPago()" ng-model="Distribuidor.IdFormaPagoPredilecta"
         ng-change="ActualizarFormaPago(1);"> Tarjeta bancaria
@@ -25,7 +25,7 @@
     <div ng-show="!ValidarFormaPago()">
       <input type="radio" name="TipoPago" value="3" ng-disabled="ValidarFormaPago()" ng-model="Distribuidor.IdFormaPagoPredilecta"
         ng-change="ActualizarFormaPago(3);"> Pago Paypal
-    </div>
+    </div> -->
 
   <div class="row" ng-show="infoEmpresa.CartaConfirmacion2 === 1">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -36,8 +36,6 @@
   <hr>
   <div class="form-group row" ng-hide="DeshabilitarPagar">
     <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
-      <label>Forma de pago: </label> Tarjeta
-      <br>
       <label>Tipo de cambio: </label> {{TipoCambio | currency: "$":4}} pesos
       <br>
       <label>Servicio electrónico: </label> {{ServicioElectronico | currency}} pesos
@@ -53,8 +51,12 @@
 
   <div class="row" ng-hide="DeshabilitarPagar">
     <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
-      <input id="Activo" type="checkbox" ng-model="todos" ng-true-value="1" ng-false-value="0" ng-click="seleccionarTodos();">
-      <label>Seleccionar todos</label>
+      <input id="Paypal" type="checkbox" ng-model="paypalCheckBox" ng-true-value="1" ng-false-value="0" ng-click="seleccionarPaypal();">
+      <label>Seleccionar todos de Paypal</label>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+      <input id="Tarjeta" type="checkbox" ng-model="tarjetaCheckBox" ng-true-value="1" ng-false-value="0" ng-click="seleccionarTarjeta();">
+      <label>Seleccionar todos de Tarjeta</label>
     </div>
   </div>
   <hr>
@@ -68,6 +70,10 @@
         <label>Pedido N°:</label> {{key}} {{value.Estatus}}
         <br>
         <label>Cliente:</label> {{PedidosObj[key].NombreEmpresa}}
+        <br>
+        <label>Forma de Pago Numérica:</label> {{PedidosObj[key].IdFormaPagoProxima}}
+        <br>
+        <label>Forma de Pago:</label> {{PedidosObj[key].Forma}}
         <br>
         <label>Fecha límite de pago: </label> {{PedidosObj[key].FechaFin| date:'yyyy-MM-dd'}}
         <br>
@@ -121,7 +127,7 @@
     </div>
     <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
       <div class="">
-        <button id="btnSiguiente" type="button" ng-click="Comprar();" class="btn btn-primary btn-block">
+        <button id="btnSiguiente" type="button" ng-click="Comprar();" class="btn btn-primary btn-block" ng-disabled="filtrarSeleccionados() || validarMetodosDePago()">
                         Realizar pago
                     </button>
       </div>
