@@ -6,28 +6,19 @@
     $scope.form.habilitar = false;
     $scope.Vacio = 0;
     $scope.Pedidos = {};
+    $scope.orders = false;
     $scope.BuscarProductos = {};
     $scope.SessionCookie = $cookies.getObject('Session');
 
-    function flattenArray (array) {
-      return array.reduce((previusArray, currentArray) => previusArray.concat(currentArray));
-    };
-
     $scope.init = function () {
       $scope.CheckCookie();
-
       FabricantesFactory.getFabricantes()
         .success(function (Fabricantes) {
           $scope.selectFabricantes = Fabricantes;
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
-
           $scope.ShowToast('No pudimos cargar la lista de fabricantes, por favor intenta de nuevo más tarde.', 'danger');
-
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
-
       EmpresasXEmpresasFactory.getEmpresasXEmpresas()
         .success(function (Empresas) {
           $scope.selectEmpresas = Empresas;
@@ -42,57 +33,28 @@
           $scope.BuscarProductos.IdFabricante = 0;
         }
         Params.IdFabricante = $scope.BuscarProductos.IdFabricante;
-        PedidoDetallesFactory.postMonitor(Params)
-          .success(function (result) {
-            $scope.Pedidos = result.data[0];
-            if (result == '') {
-              $scope.Vacio = 0;
-              $scope.EmpresaSelect = 'a';
-
-            } else {
-              $scope.Vacio = 1;
-            }
-          })
-          .error(function (data, status, headers, config) {
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-          });
+        // PedidoDetallesFactory.postMonitor(Params)
+        //   .success(function (result) {
+        //     $scope.Pedidos = result.data[0];
+        //     if (result == '') {
+        //       $scope.Vacio = 0;
+        //       $scope.EmpresaSelect = 'a';
+        //     } else {
+        //       $scope.Vacio = 1;
+        //     }
+        //   })
+        //   .error(function (data, status, headers, config) {
+        //     $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        //   });
       }
     };
 
-    $scope.init();
-
-    $scope.ActualizarMonitor = function () {
-      var flag = 0;
-      if ($scope.EmpresaSelect == null) {
-        flag = 1;
-      }
-
-      Params.IdEmpresaUsuarioFinal = $scope.EmpresaSelect;
-      Params.IdEmpresaDistribuidor = $cookies.getObject('Session').IdEmpresa;
-
-      if ($scope.EmpresaSelect === 0) {
-        Params.IdEmpresaUsuarioFinal = $cookies.getObject('Session').IdEmpresa;
-        Params.IdEmpresaDistribuidor = null;
-      }
-      if (!$scope.BuscarProductos.IdFabricante) {
-        $scope.BuscarProductos.IdFabricante = 0;
-      }
-      Params.IdFabricante = $scope.BuscarProductos.IdFabricante;
-
+    const getOrderPerCustomer = function (customer) {
       PedidoDetallesFactory.postMonitor(Params)
         .success(function (result) {
-          var contrato = result.data[0].filter(pedidos => pedidos.ResultadoFabricante6 !== null);
-          var ordered = [];
-          contrato.forEach(function (pedido) {
-            ordered.push(pedido);
-            ordered = ordered.concat(result.data[0].filter(pedidos => pedidos.ContratoBaseAutodesk === pedido.ResultadoFabricante6));
-          });
-          ordered = ordered.concat(result.data[0].filter(pedidos => pedidos.ResultadoFabricante6 === null && pedidos.ContratoBaseAutodesk === null));
-          $scope.orders = _.uniq(ordered.map(function (pedido) {
-            return pedido.IdPedido;
-          }));
-          $scope.Pedidos = $filter('groupBy')(result.data[0], 'IdPedido');
-          //$scope.Pedidos = _.groupBy(ordered, 'IdPedido');
+          $scope.Pedidos = result.data[0];
+          $scope.orders = $scope.Pedidos.map(r => r.IdPedido);
+          console.log($scope.orders)
           if ($scope.EmpresaSelect == null || $scope.EmpresaSelect == 0) {
             $scope.Vacio = 1;
           } else {
@@ -104,8 +66,21 @@
           }
         })
         .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          $scope.ShowToast('Ocurrio un error al cargar los datos del cliente, por favor intenta de nuevo más tarde.', 'danger');
         });
+    };
+
+    $scope.init();
+
+    $scope.ActualizarMonitor = function () {
+      Params.IdEmpresaUsuarioFinal = $scope.EmpresaSelect;
+      if ($scope.EmpresaSelect === 0) {
+        Params.IdEmpresaUsuarioFinal = $cookies.getObject('Session').IdEmpresa;
+      }
+      Params.IdFabricante = $scope.BuscarProductos.IdFabricante;
+      if (Params.IdFabricante) {
+        getOrderPerCustomer(Params);
+      }
     };
 
     $scope.ActualizarCantidad = function (IdPedidoDetalle) {
