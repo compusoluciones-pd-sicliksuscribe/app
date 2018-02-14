@@ -252,6 +252,7 @@
                   }
                 });
             };
+            NuevoProducto2.IdPedidoDetalle = PedidoDetalleResult.data.insertId;
             $scope.AgregarComprasUF(NuevoProducto2);
             $scope.ShowToast(PedidoDetalleResult.message, 'success');
             $scope.ActualizarMenu();
