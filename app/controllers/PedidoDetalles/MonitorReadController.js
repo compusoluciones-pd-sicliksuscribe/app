@@ -8,6 +8,7 @@
     $scope.Pedidos = {};
     $scope.orders = false;
     $scope.BuscarProductos = {};
+    $scope.Contrato = {};
     $scope.SessionCookie = $cookies.getObject('Session');
 
     $scope.init = function () {
@@ -33,40 +34,22 @@
           $scope.BuscarProductos.IdFabricante = 0;
         }
         Params.IdFabricante = $scope.BuscarProductos.IdFabricante;
-        // PedidoDetallesFactory.postMonitor(Params)
-        //   .success(function (result) {
-        //     $scope.Pedidos = result.data[0];
-        //     if (result == '') {
-        //       $scope.Vacio = 0;
-        //       $scope.EmpresaSelect = 'a';
-        //     } else {
-        //       $scope.Vacio = 1;
-        //     }
-        //   })
-        //   .error(function (data, status, headers, config) {
-        //     $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        //   });
       }
     };
 
     const getOrderPerCustomer = function (customer) {
-      PedidoDetallesFactory.postMonitor(Params)
-        .success(function (result) {
-          $scope.Pedidos = result.data[0];
-          $scope.orders = $scope.Pedidos.map(r => r.IdPedido);
-          console.log($scope.orders)
-          if ($scope.EmpresaSelect == null || $scope.EmpresaSelect == 0) {
+      PedidoDetallesFactory.getOrderPerCustomer(Params)
+        .then(function (result) {
+          if (result.status === 204) {
+            $scope.Vacio = 0;
+            $scope.Pedidos = {};
+          } else if (result.status === 200) {
+            $scope.Pedidos = result.data.data;
             $scope.Vacio = 1;
-          } else {
-            if (result == '') {
-              $scope.Vacio = 0;
-            } else {
-              $scope.Vacio = 1;
-            }
           }
         })
-        .error(function (data, status, headers, config) {
-          $scope.ShowToast('Ocurrio un error al cargar los datos del cliente, por favor intenta de nuevo más tarde.', 'danger');
+        .catch(function (result) {
+          $scope.ShowToast(result.data.message, 'danger');
         });
     };
 
@@ -78,6 +61,10 @@
         Params.IdEmpresaUsuarioFinal = $cookies.getObject('Session').IdEmpresa;
       }
       Params.IdFabricante = $scope.BuscarProductos.IdFabricante;
+      if (Params.IdFabricante === 1) {
+        $scope.Contrato.tipo = 'all';
+      }
+      Params.AutoRenovable = $scope.Contrato.tipo || 'all';
       if (Params.IdFabricante) {
         getOrderPerCustomer(Params);
       }
@@ -85,17 +72,21 @@
 
     $scope.ActualizarCantidad = function (IdPedidoDetalle) {
       $scope.Pedidos.forEach(function (Pedido) {
-        if (Pedido.IdPedidoDetalle == IdPedidoDetalle) {
-          Pedido.MostrarCantidad = !Pedido.MostrarCantidad;
-        }
+        Pedido.Detalles.forEach(function (Detalles) {
+          if (Detalles.IdPedidoDetalle === IdPedidoDetalle) {
+            Detalles.MostrarCantidad = !Detalles.MostrarCantidad;
+          }
+        }, this);
       }, this);
     };
 
     $scope.Confirmar = function (IdPedidoDetalle) {
       $scope.Pedidos.forEach(function (Pedido) {
-        if (Pedido.IdPedidoDetalle == IdPedidoDetalle) {
-          Pedido.Mostrar = !Pedido.Mostrar;
-        }
+        Pedido.Detalles.forEach(function (Detalles) {
+          if (Detalles.IdPedidoDetalle === IdPedidoDetalle) {
+            Detalles.Mostrar = !Detalles.Mostrar;
+          }
+        }, this);
       }, this);
     };
 
@@ -152,49 +143,42 @@
         });
     };
 
-    $scope.ActualizarDetalle = function (Pedido) {
-      if (Pedido.CantidadProxima <= 0 || Pedido.CantidadProxima === undefined || Pedido.CantidadProxima === null) {
+    $scope.ActualizarDetalle = function (pedido, detalles) {
+      if (detalles.CantidadProxima <= 0 || detalles.CantidadProxima === undefined || detalles.CantidadProxima === null) {
         $scope.ShowToast('Cantidad no válida para el producto', 'danger');
         return false;
       }
-      if (Pedido.CantidadProxima > Pedido.Cantidad) {
+      if (detalles.CantidadProxima > detalles.Cantidad) {
         $scope.ShowToast('No se puede actualizar a un numero mayor de suscripciones.', 'danger');
         return;
       }
-      var PedidoActualizado =
-        {
-          IdPedidoDetalle: Pedido.IdPedidoDetalle,
-          IdEmpresaUsuarioFinal: Pedido.IdEmpresaUsuarioFinal,
-          MonedaCosto: Pedido.MonedaPrecio,
-          CantidadProxima: Pedido.CantidadProxima,
-          CargoRealizadoProximoPedido: Pedido.CargoRealizadoProximoPedido,
-          IdEstatusPedido: 1
-        };
-
-      if (Pedido.Activo === 0) {
+      var PedidoActualizado = {
+        IdPedidoDetalle: detalles.IdPedidoDetalle,
+        IdEmpresaUsuarioFinal: Params.IdEmpresaUsuarioFinal,
+        MonedaCosto: detalles.MonedaPrecio,
+        CantidadProxima: detalles.CantidadProxima,
+        CargoRealizadoProximoPedido: pedido.CargoRealizadoProximoPedido,
+        IdEstatusPedido: 1
+      };
+      if (detalles.Activo === 0) {
         PedidoActualizado.PorActualizarCantidad = 0;
       } else {
-        if (Pedido.CantidadProxima === Pedido.Cantidad) {
+        if (detalles.CantidadProxima === detalles.Cantidad) {
           PedidoActualizado.PorActualizarCantidad = 0;
         } else {
           PedidoActualizado.PorActualizarCantidad = 1;
         }
       }
-
       PedidoDetallesFactory.putPedidoDetalle(PedidoActualizado)
         .success(function (PedidoDetalleSuccess) {
-
-          if (PedidoDetalleSuccess.success == 1) {
+          if (PedidoDetalleSuccess.success) {
             $scope.ShowToast(PedidoDetalleSuccess.message, 'success');
-          }
-          else {
+          } else {
             $scope.ShowToast(PedidoDetalleSuccess.message, 'danger');
           }
         })
         .error(function (data, status, headers, config) {
           $scope.ShowToast('No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde', 'danger');
-
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
     };
 
@@ -206,40 +190,50 @@
       return FechaFin;
     };
 
-    $scope.CancelarPedido = function (Pedido) {
+    $scope.CancelarPedido = function (Pedido, Detalles) {
       $scope.Cancelar = true;
       $scope.guardar = Pedido;
       Pedido.Activo = 0;
       Pedido.PorCancelar = 1;
       $scope.form.habilitar = true;
       $scope.$emit('LOAD');
-      PedidoDetallesFactory.putPedidoDetalle(Pedido)
+      const order = {
+        CargoRealizadoProximoPedido: Pedido.CargoRealizadoProximoPedido,
+        Activo: Pedido.Activo,
+        PorCancelar: Pedido.PorCancelar,
+        ResultadoFabricante1: Detalles.EstatusFabricante,
+        IdTipoProducto: Detalles.IdTipoProducto,
+        IdPedidoDetalle: Detalles.IdPedidoDetalle
+      };
+      PedidoDetallesFactory.putPedidoDetalle(order)
         .success(function (result) {
-          if (result.success == false) {
-            $scope.ShowToast(result.message, 'danger');
-          } else {
-            $scope.ShowToast('Suscripción cancelada.', 'success');
-          }
+          $scope.ShowToast('Suscripción cancelada.', 'success');
           $scope.$emit('UNLOAD');
           $scope.Cancelar = false;
           $scope.ActualizarMonitor();
           $scope.form.habilitar = false;
         })
         .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          $scope.ShowToast(data.message, 'danger');
         });
     };
 
-    $scope.Reanudar = function (pedido) {
-      pedido.Activo = 1;
-      pedido.PorCancelar = 0;
+    $scope.Reanudar = function (pedido, detalles) {
+      const order = {
+        CargoRealizadoProximoPedido: pedido.CargoRealizadoProximoPedido,
+        Activo: 1,
+        PorCancelar: 0,
+        ResultadoFabricante1: detalles.EstatusFabricante,
+        IdTipoProducto: detalles.IdTipoProducto,
+        IdPedidoDetalle: detalles.IdPedidoDetalle
+      };
       $scope.form.habilitar = true;
-      if (pedido.Cantidad !== pedido.CantidadProxima) {
-        pedido.PorActualizarCantidad = 1;
+      if (detalles.Cantidad !== detalles.CantidadProxima) {
+        order.PorActualizarCantidad = 1;
       }
-      PedidoDetallesFactory.putPedidoDetalle(pedido)
+      PedidoDetallesFactory.putPedidoDetalle(order)
         .success(function (result) {
-          if (result.success == false) {
+          if (!result.success) {
             $scope.ShowToast(result.message, 'danger');
           } else {
             $scope.ShowToast('Suscripción reanudada.', 'success');
@@ -254,7 +248,7 @@
     };
 
     $scope.PedidoDetalleCancel = function () {
-      $location.path("/PedidoDetalles");
+      $location.path('/PedidoDetalles');
     };
 
     $scope.IniciarTourMonitor = function () {

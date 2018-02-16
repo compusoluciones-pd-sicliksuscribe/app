@@ -54,7 +54,7 @@
 
     factory.getOrderPerCustomer = function (customer) {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'monitor/orders-per-customer/' + customer.IdEmpresaUsuarioFinal + '/maker/' + customer.IdFabricante);
+      return $http.get($rootScope.API + 'monitor/orders-per-customer/' + customer.IdEmpresaUsuarioFinal + '/maker/' + customer.IdFabricante + '/type/' + customer.AutoRenovable);
     };
 
     factory.postMonitor = function (IdEmpresaUsuarioFinal) {

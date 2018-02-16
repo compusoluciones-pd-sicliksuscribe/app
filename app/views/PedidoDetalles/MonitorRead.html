@@ -21,23 +21,31 @@
 		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
 		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
 		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" ng-show="!(EmpresaSelect == '') || (SessionCookie.IdTipoAcceso === 4 || SessionCookie.IdTipoAcceso === 6)">
-			<label for="IdFabricante">Fabricantes: </label>
-			<div class="form-group has-feedback">
-				<select name="IdFabricante" class="form-control filterOption" ng-model="BuscarProductos.IdFabricante" ng-options="Fabricante.IdFabricante as Fabricante.Nombre for Fabricante in selectFabricantes"
-				 ng-change="ActualizarMonitor();">
-                <option ng-selected="true" value="">Selecciona un fabricante</option>
-            </select>
-			</div>
+		<label for="IdFabricante">Fabricantes: </label>
+			<select name="IdFabricante" class="form-control selectOption" ng-model="BuscarProductos.IdFabricante" ng-options="Fabricante.IdFabricante as Fabricante.Nombre for Fabricante in selectFabricantes"
+				ng-change="ActualizarMonitor();">
+					<option ng-selected="true" value="">Selecciona un fabricante</option>
+			</select>
 		</div>
 	</div>
 
 	<div class="form-group row" ng-show="!(EmpresaSelect === null) || (SessionCookie.IdTipoAcceso === 4 || SessionCookie.IdTipoAcceso === 6)">
-		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
-		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
-		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" ng-show="!(EmpresaSelect == '') || (SessionCookie.IdTipoAcceso === 4 || SessionCookie.IdTipoAcceso === 6)">
+		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+			<br>
 			<div class="form-group has-feedback">
 				<input type="text" ng-model="PedidoFilter" class="form-control" size="30" placeholder="Busca un pedido o contrato" />
 				<i class="form-control-feedback glyphicon glyphicon-search"></i>
+			</div>
+		</div>
+		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
+		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+			<div class="form-group has-feedback" ng-if="(SessionCookie.IdTipoAcceso === 4 || SessionCookie.IdTipoAcceso === 6) || BuscarProductos.IdFabricante === 2">
+				<label for="TipoContrato">Tipo de contrato: </label>
+				<select name="Contrato" id="Contrato" class="form-control selectOption" ng-change="ActualizarMonitor();" ng-model="Contrato.tipo">
+					<option ng-selected="true" value="all">Todos los contratos</option>
+					<option value="1">Auto Renovables</option>
+					<option value="0">Renovables</option>
+				</select>
 			</div>
 		</div>
 	</div>
@@ -54,16 +62,17 @@
 	</div>
 
 	<br>
-	<div ng-show="Vacio == 0 && EmpresaSelect != ''">
+	<div ng-show="Vacio === 0 && EmpresaSelect != ''">
 		<h4>Aún no cuentas con suscripciones o servicios... </h4>
 	</div>
 
-	<!-- <div ng-if="BuscarProductos.IdFabricante === 1" ng-repeat="pedido in Pedidos">
+	<!-- Detalle pedidos MS -->
+	<div ng-if="BuscarProductos.IdFabricante === 1" ng-repeat="pedido in Pedidos">
 		<div class="row">
-				<div class="col-xs-12 col-sm-4 col-md-3 col-lg-3">
-					<label>Pedido N°:</label> {{pedido.IdPedido}}
-				</div>
+			<div class="col-xs-12 col-sm-4 col-md-3 col-lg-3">
+				<label>Número de Orden:</label> {{pedido.IdPedido}}
 			</div>
+		</div>
 		<table class="table table-hover table-responsive border-left-right-cero">
 				<tr ng-repeat="detalles in pedido.Detalles" class="repeat-animation">
 					<td>
@@ -71,8 +80,6 @@
 	
 							<div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
 								<h4><b>{{detalles.Nombre}}</b></h4>
-								<label for="">Fabricante:</label> {{detalles.Fabricante}}
-								<br>
 								<label for="">Tipo de producto:</label> {{detalles.Tipo}}
 								<br>
 								<label for="">Estatus del pedido:</label> {{detalles.Estatus}}
@@ -147,7 +154,6 @@
 							</div>
 						</div>
 
-					
 						<div ng-if="detalles.IdTipoProducto !== 3">
 							<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
 								<label>Suscripciones: </label>
@@ -159,12 +165,12 @@
 									<div ng-if="detalles.Activo"> {{detalles.CantidadProxima}} </div>
 									<div ng-if="!detalles.Activo"> Por cancelar </div>
 								</div> 
-								<a ng-click="ActualizarCantidad(detalles.IdPedidoDetalle)" style="text-decoration: none" ng-hide="pedido.CargoRealizadoProximoPedido === 1 || !(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 ) || (pedido.Bloquear === 1 && pedido.IdFabricante === 2)"> {{detalle.Cantidad}} &nbsp;
-									<span class="glyphicon glyphicon-triangle-bottom" ng-show="!pedido.MostrarCantidad"></span>
-									<span class="glyphicon glyphicon-triangle-top" ng-show="pedido.MostrarCantidad"></span>
+								<a ng-click="ActualizarCantidad(detalles.IdPedidoDetalle)" style="text-decoration: none" ng-hide="pedido.CargoRealizadoProximoPedido === 1 || !(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 ) || (pedido.Bloquear === 1 && pedido.IdFabricante === 2)"> {{detalles.Cantidad}} &nbsp;
+									<span class="glyphicon glyphicon-triangle-bottom" ng-show="!detalles.MostrarCantidad"></span>
+									<span class="glyphicon glyphicon-triangle-top" ng-show="detalles.MostrarCantidad"></span>
 								</a>
 								<br/> <br/> <br/>
-								<div class="row" ng-show="pedido.MostrarCantidad">
+								<div class="row" ng-show="detalles.MostrarCantidad">
 									<div class="form-group col-xs-6 col-sm-6 col-md-12 col-lg-12">
 										<label>Actualizar: </label>
 										<br>
@@ -172,13 +178,13 @@
 									</div>
 								</div>
 	
-								<div class="row" ng-show="pedido.MostrarCantidad">
+								<div class="row" ng-show="detalles.MostrarCantidad">
 									<div class="form-group col-xs-6 col-sm-6 col-md-7 col-lg-7">
-										<input type="number" class="form-control" ng-model="pedido.CantidadProxima" size="5" maxlength="5" />
+										<input type="number" class="form-control" ng-model="detalles.CantidadProxima" size="5" maxlength="5" />
 									</div>
 									<div class="form-group col-xs-6 col-sm-6 col-md-5 col-lg-5 ">
 										<h4>
-											<a id="aActualizar" type="submit" title="Guardar" ng-click="ActualizarDetalle(pedido);" ng-disabled="!frmCantidad.$valid">
+											<a id="aActualizar" type="submit" title="Guardar" ng-click="ActualizarDetalle(pedido, detalles);" ng-disabled="!frmCantidad.$valid">
 												<span class="fa fa-floppy-o" style="cursor:pointer"></span>
 											</a>
 										</h4>
@@ -213,11 +219,11 @@
 								</b>
 							</div>
 							<div ng-hide="pedido.CargoRealizadoProximoPedido === 1 || (pedido.Bloquear === 1 && pedido.IdFabricante === 2)|| detalles.EstatusFabricante === 'FAILED'">
-								<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2" ng-show="detalles.PedidoAFabricante !== 0 && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
-									<button class="btn btn-danger btn-block" ng-show="pedido.Activo" ng-disabled="form.habilitar" ng-click="Confirmar(pedido.IdPedidoDetalle)">Cancelar <span class="glyphicon glyphicon-trash"></span></button>
-									<button class="btn btn-success btn-block" ng-show="!pedido.Activo" ng-disabled="form.habilitar" ng-click="Reanudar(pedido)">Reanudar <span class="glyphicon glyphicon-circle-arrow-up"></span></button>
+								<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2" ng-show="detalles.PedidoAFabricante === 1 && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
+									<button class="btn btn-danger btn-block" ng-show="detalles.Activo" ng-disabled="form.habilitar" ng-click="Confirmar(detalles.IdPedidoDetalle)">Cancelar <span class="glyphicon glyphicon-trash"></span></button>
+									<button class="btn btn-success btn-block" ng-show="!detalles.Activo" ng-disabled="form.habilitar" ng-click="Reanudar(pedido, detalles)">Reanudar <span class="glyphicon glyphicon-circle-arrow-up"></span></button>
 									<br> <br>
-									<div ng-show="pedido.Mostrar">
+									<div ng-show="detalles.Mostrar">
 										<div class="row">
 											<div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
 												<label>Se cancelará la suscripción automática, ¿Estás de acuerdo?</label>
@@ -225,10 +231,10 @@
 										</div>
 										<div class="row">
 											<div class="form-group col-xs-6 col-sm-6 col-md-12 col-lg-12">
-												<button class="btn btn-block btn-warning" ng-disabled="form.habilitar" ng-click="CancelarPedido(pedido)"> Sí </button>
+												<button class="btn btn-block btn-warning" ng-disabled="form.habilitar" ng-click="CancelarPedido(pedido, detalles)"> Sí </button>
 											</div>
 											<div class="form-group col-xs-6 col-sm-6 col-md-12 col-lg-12">
-												<button class="btn btn-block btn-primary" ng-disabled="form.habilitar" ng-click="Confirmar(pedido.IdPedidoDetalle)"> No </button>
+												<button class="btn btn-block btn-primary" ng-disabled="form.habilitar" ng-click="Confirmar(detalles.IdPedidoDetalle)"> No </button>
 											</div>
 										</div>
 									</div>
@@ -238,194 +244,71 @@
 					</td>
 				</tr>
 			</table>
-	</div> -->
+	</div>
 
-
-
-	
-	<div ng-repeat="order in orders">
+	<!-- Detalle pedidos Autodesk -->
+	<div ng-if="BuscarProductos.IdFabricante === 2" ng-repeat="pedido in Pedidos" style="margin-top: 20px;">
 		<div class="row">
-			<div class="col-xs-12 col-sm-4 col-md-3 col-lg-3">
-				<label>Pedido N°:</label> {{order}} {{Pedidos[order].Estatus}}
+			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+				<ul style="list-style-type:none; padding:0%">
+					<li ng-if="pedido.NumeroContrato"> <label for="Contrato">Número de contrato: </label> {{ pedido.NumeroContrato }} </li>
+					<li ng-if="!pedido.NumeroContrato"> <label for="Contrato">Número de contrato: </label> Solicitando contrato... </li>
+					<li> <label for="TipoContrato">Tipo de contrato: </label> {{ pedido.TipoContrato }} </li>
+					<li> <label for="Esquema">Esquema de renovación: </label> {{ pedido.NombreEsquema }} </li>
+					<li> <label for="FechaInicio">Duración del contrato: </label> {{ pedido.FechaInicio }} <label>-</label> {{ pedido.FechaFin }} </li>
+				</ul>
+			</div>
+			<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"></div>
+			<div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+				<button class="pull-right btn btn-block btn-primary" style="margin-top: 20px" ng-if="pedido.TipoContrato === 'Renovable'" ng-disabled="pedido.Renovacion === 0">
+					Renovar
+				</button>
 			</div>
 		</div>
 
 		<table class="table table-hover table-responsive border-left-right-cero">
-			<tr ng-repeat="pedido in Pedidos[order] | filter:PedidoFilter " class="repeat-animation">
+			<tr ng-repeat="detalles in pedido.Detalles" class="repeat-animation">
 				<td>
-					<div class="row" ng-hide="pedido.IdTipoProducto != 1">
 
-						<div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
-							<h4><b>{{pedido.NombreProducto}}</b></h4>
-							<label for="">Fabricante:</label> {{pedido.NombreFabricante}}
-							<br>
-							<label for="">Tipo de producto:</label> {{pedido.Tipo}}
-							<br>
-							<label for="">Estatus del pedido:</label> {{pedido.Estatus}}
-						</div>
-						<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
-							<label>Cantidad: </label>
-							<br/> {{pedido.Cantidad}}
-						</div>
-						<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
-							<label>Fecha Solicitud: </label>
-							<br/> {{pedido.FechaInicio | date:'dd MMMM yyyy'}}
-						</div>
+					<div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+						<h4><b>{{ detalles.Nombre }}</b></h4>
+						<label for="Order">Número de pedido:</label> {{ detalles.IdPedido }}
+						<br>
+						<label for="TipoProducto">Tipo de producto:</label> {{ detalles.Tipo }}
+						<br>
+						<label for="Estatus">Estatus de pedido:</label> {{ detalles.Estatus }}
+						<br>
+						<label for="EstatusRenovacion">Estatus de renovación:</label> {{ detalles.EstatusRenovacion }}
+					</div>
+					<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
+						<label>Suscripciones: </label>
+						<br/> {{ detalles.Cantidad }}
+					</div>
+					<div class="form-group col-xs-12 col-sm-12 col-md-3 col-lg-3">
+						<label>Fecha Solicitud: </label>
+						<br/> {{ detalles.FechaActivo | date:'dd MMMM yyyy' }}
+					</div>
+					<div class="form-group col-xs-12 col-sm-12 col-md-3 col-lg-3">
+						<label>Estatus de pedido: </label>
+						<br/>
+						<b> 
+							<div ng-show="detalles.EstatusFabricante === 'Aceptado'">
+								{{ detalles.EstatusFabricante }} <span class="glyphicon glyphicon-ok" title="{{ detalles.EstatusFabricante }}"> </span>
+							</div>
+							<div ng-show="detalles.EstatusFabricante === 'Error al procesar'">
+									{{ detalles.EstatusFabricante }} <span class="glyphicon glyphicon-remove" title="{{ detalles.EstatusFabricante }}"> </span>
+								</div>
+							<div style="font-style: italic;" ng-show="detalles.EstatusFabricante === 'Procesando...'">
+								{{ detalles.EstatusFabricante }} <span class="glyphicon glyphicon-time" title="{{ detalles.EstatusFabricante }}"> </span>
+							</div>
+						</b>
 					</div>
 
-					<div class="row" ng-show="pedido.IdTipoProducto != 1">
-
-						<div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
-							<h4><b>{{pedido.NombreProducto}}</b></h4>
-							<label for="">Fabricante:</label> {{pedido.NombreFabricante}}
-							<br>
-							<label for="">Tipo de producto:</label> {{pedido.Tipo}}
-							<br>
-							<div ng-show="(pedido.Activo) && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 7)"><label for="">Estatus del pedido:</label> {{pedido.Estatus}}</div>
-							<div ng-show="pedido.IdFormaPagoProxima === 1 && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 7)">
-								<label>Estatus de renovación:</label> {{pedido.EstatusRenovacion}}
-							</div>
-							<div ng-show="pedido.IdFabricante === 2">
-								<label for="">Correo de contacto:</label> {{pedido.CorreoContacto || 'Correo no definido'}}
-							</div>
-							<div ng-show="pedido.ResultadoFabricante6 || pedido.ContratoBaseAutodesk">
-								<label for="">Contrato:</label>{{pedido.ResultadoFabricante6 || pedido.ContratoBaseAutodesk}}
-							</div>
-							<div ng-show="(pedido.Activo) && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
-								<label ng-hide="pedido.Bloquear===1 || pedido.CargoRealizadoProximoPedido ===1 ">Próxima forma de pago:</label>
-							</div>
-							<form ng-hide="pedido.Bloquear===1 || pedido.CargoRealizadoProximoPedido ===1 ">
-								<div class="row" ng-show="(pedido.Activo) && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
-									<div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
-										<div class="radio" style="margin-left:20px">
-											<div ng-hide="pedido.IdTipoProducto === 3">
-												<input type="radio" name="FormaPago" value="1" ng-model="pedido.IdFormaPagoProxima" ng-change="ActualizarPago(pedido)" ng-disabled="(pedido.MonedaPagoProxima === 'Dólares') || (pedido.IdEstatusPedido !== 3)">												Tarjeta
-											</div>
-											<div>
-												<input type="radio" name="FormaPago" value="2" ng-model="pedido.IdFormaPagoProxima" ng-change="ActualizarPago(pedido)" ng-disabled="(pedido.IdEstatusPedido !== 3)">												Crédito
-											</div>
-										</div>
-									</div>
-									<div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
-										<div class="radio" style="margin-left:20px">
-											<div>
-												<input type="radio" name="MonedaPago" value="Dólares" ng-model="pedido.MonedaPagoProxima" ng-change="ActualizarMoneda(pedido)"
-												 ng-disabled="(pedido.IdFormaPagoProxima == 1) || (pedido.IdEstatusPedido !== 3)"> Dólares
-											</div>
-											<div>
-												<input type="radio" name="MonedaPago" value="Pesos" ng-model="pedido.MonedaPagoProxima " ng-change="ActualizarMoneda(pedido)"
-												 ng-disabled="(pedido.IdEstatusPedido !== 3)"> Pesos
-											</div>
-										</div>
-									</div>
-								</div>
-							</form>
-						</div>
-
-						<div ng-show="pedido.IdTipoProducto==3 && (SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3) " class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2 ">
-							<label>Consumo: </label>
-							<br/> {{pedido.PrecioUnitarioSinDescuento | currency}} {{pedido.MonedaPago}}
-							<br/> <a href="#/DetallesAzure/{{pedido.IdPedido}}">Ver detalles</a>
-						</div>
-						<div ng-show="pedido.IdTipoProducto==3 && (SessionCookie.IdTipoAcceso==4 || SessionCookie.IdTipoAcceso==6 || SessionCookie.IdTipoAcceso==7) "
-						 class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2 ">
-							<label>Bajo consumo </label>
-						</div>
-						<div ng-hide="pedido.IdTipoProducto==3 " class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2 ">
-							<label>Suscripciones: </label>
-							<br>
-
-							<div style="margin:0;padding0; " ng-show="(SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3) && pedido.CargoRealizadoProximoPedido ===1">{{pedido.Cantidad}}</div>
-							<div style="margin:0;padding0; " ng-show="!(SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3) || (pedido.Bloquear===1 && pedido.IdFabricante === 2)">{{pedido.Cantidad}}</div>
-							<div style="margin:0;padding0; " ng-show="(SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3) && pedido.CargoRealizadoProximoPedido ===1">
-								<br>
-								<label>Renovación</label>
-								<br>
-								<div ng-show="pedido.Activo">
-									{{pedido.CantidadProxima}}
-								</div>
-								<div ng-hide="pedido.Activo">
-									Por cancelar
-								</div>
-							</div>
-							<a ng-click="ActualizarCantidad(pedido.IdPedidoDetalle) " style="text-decoration: none" ng-hide="pedido.CargoRealizadoProximoPedido ===1 || !(SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3 ) || (pedido.Bloquear===1 && pedido.IdFabricante === 2) ">{{pedido.Cantidad}} &nbsp;
-                                <span class="glyphicon glyphicon-triangle-bottom " ng-show="!pedido.MostrarCantidad " ></span>
-                                <span class="glyphicon glyphicon-triangle-top " ng-show="pedido.MostrarCantidad " ></span>
-                            </a>
-							<br/>
-							<br/>
-							<br/>
-							<div class="row " ng-show="pedido.MostrarCantidad ">
-								<div class="form-group col-xs-6 col-sm-6 col-md-12 col-lg-12 ">
-									<label>Actualizar: </label>
-									<br>
-									<p>El numero de suscripciones se vera reflejado en la renovación.</p>
-								</div>
-							</div>
-
-							<div class="row " ng-show="pedido.MostrarCantidad ">
-								<div class="form-group col-xs-6 col-sm-6 col-md-7 col-lg-7 ">
-									<input type="number " ng class="form-control " ng-model="pedido.CantidadProxima" size="5 " maxlength="5 " />
-								</div>
-								<div class="form-group col-xs-6 col-sm-6 col-md-5 col-lg-5 ">
-									<h4>
-										<a id="aActualizar " type="submit " title="Guardar " ng-click="ActualizarDetalle(pedido);" ng-disabled="!frmCantidad.$valid ">
-											<span class="fa fa-floppy-o " style="cursor:pointer "></span>
-										</a>
-									</h4>
-								</div>
-							</div>
-
-						</div>
-						<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2 ">
-							<label>Fecha inicio de suscripción: </label>
-							<br/> {{pedido.FechaInicio | date:'d/MM/yyyy'}}
-						</div>
-						<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2 ">
-							<label>Fecha fin de suscripción: </label>
-							<br/> {{pedido.FechaFin| date:'d/MM/yyyy'}}
-						</div>
-						<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2 " ng-show="pedido.PedidoAFabricante==0">
-							<br>
-							<b>
-                                <div style="font-style: italic; ">Procesando tu pedido... <span class="glyphicon glyphicon-time " title="Procesando tu pedido... " ></span></div>
-                            </b>
-						</div>
-
-						<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2 " ng-show="pedido.ResultadoFabricante2==='FAILED' ">
-							<b>
-                                <div style="font-style: italic; ">Error al procesar tu pedido, ponte en contacto con el equipo de soporte CompuSoluciones. <span class=" glyphicon glyphicon-remove" title="Procesando tu pedido... " ></span></div>
-                            </b>
-						</div>
-						<div ng-hide="pedido.CargoRealizadoProximoPedido ===1 || (pedido.Bloquear===1 && pedido.IdFabricante === 2)|| pedido.ResultadoFabricante2==='FAILED' ">
-							<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2 " ng-show="pedido.PedidoAFabricante !=0 && (SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3 ) ">
-								<button class="btn btn-danger btn-block " ng-show="pedido.Activo " ng-disabled="form.habilitar" ng-click="Confirmar(pedido.IdPedidoDetalle) ">Cancelar <span class="glyphicon glyphicon-trash "></span></button>
-								<button class="btn btn-success btn-block " ng-show="!pedido.Activo " ng-disabled="form.habilitar" ng-click="Reanudar(pedido) ">Reanudar <span class="glyphicon glyphicon-circle-arrow-up "></span></button>
-								<br>
-								<br>
-								<div ng-show="pedido.Mostrar ">
-									<div class="row ">
-										<div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12 ">
-											<label>Se cancelará la suscripción automática, ¿Estás de acuerdo?</label>
-										</div>
-									</div>
-									<div class="row ">
-										<div class="form-group col-xs-6 col-sm-6 col-md-12 col-lg-12 ">
-											<button class="btn btn-block btn-warning " ng-disabled="form.habilitar" ng-click="CancelarPedido(pedido) ">Sí</button>
-										</div>
-										<div class="form-group col-xs-6 col-sm-6 col-md-12 col-lg-12 ">
-											<button class="btn btn-block btn-primary " ng-disabled="form.habilitar" ng-click="Confirmar(pedido.IdPedidoDetalle) ">No</button>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
 				</td>
 			</tr>
 		</table>
-	</div>
 
+	</div>
 
 
 </div>
