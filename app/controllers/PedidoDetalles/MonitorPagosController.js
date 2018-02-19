@@ -1,16 +1,14 @@
 (function () {
-  var MonitorPagos = function ($scope, $log, $rootScope, $cookies, $location, $uibModal, $filter, PedidoDetallesFactory, EmpresasFactory) {
+  var MonitorPagos = function ($scope, $log, $rootScope, $cookies, $location, $uibModal, $filter, PedidoDetallesFactory, EmpresasFactory, PedidosFactory) {
     $scope.PedidoSeleccionado = 0;
     $scope.PedidosSeleccionadosParaPagar = [];
     $scope.PedidosObj = {};
-    $scope.Distribuidor = {};
     $scope.ServicioElectronico = 0;
     $scope.Subtotal = 0;
     $scope.Iva = 0;
     $scope.Total = 0;
     $scope.DeshabilitarPagar = false;
-    $scope.tarjetaCheckBox = false;
-    $scope.paypalCheckBox = false;
+    $scope.todos = 0;
     function groupBy (array, f) {
       var groups = {};
       array.forEach(function (o) {
@@ -21,7 +19,7 @@
       return Object.keys(groups).map(function (group) { return groups[group]; });
     };
 
-    const confirmarPaypal = function () {
+    const confirmPayPal = function () {
       const paymentId = $location.search().paymentId;
       const token = $location.search().token;
       const PayerID = $location.search().PayerID;
@@ -29,13 +27,20 @@
       $cookies.remove('orderIds');
       $location.url($location.path());
       if (paymentId && token && PayerID && orderIds) {
-        PedidoDetallesFactory.confirmarPaypal({ paymentId, PayerID, orderIds })
+        PedidoDetallesFactory.confirmPayPal({ paymentId, PayerID, orderIds })
           .then(function (response) {
-            if (response.data.state === 'approved') $location.path('/MonitorPagos');
-            if (response.data.state === 'failed') $scope.ShowToast('Ocurrio un error al intentar confirmar la compra con Paypal. Intentalo mas tarde.', 'danger');
+            if (response.data.state === 'approved') {
+              $scope.ComprarConPayPal({ paymentId, PayerID, orderIds });
+              $location.path('/MonitorPagos');
+            }
+            if (response.data.state === 'failed') {
+              $scope.ShowToast('Ocurrio un error al intentar confirmar la compra con Paypal. Intentalo mas tarde.', 'danger');
+              $location.path('/MonitorPagos');
+            }
           })
           .catch(function (response) {
             $scope.ShowToast('Ocurrio un error de tipo: "' + response.data.message + '". Contacte con soporte de Compusoluciones.', 'danger');
+            $location.path('/MonitorPagos');
           });
       }
     };
@@ -43,13 +48,12 @@
     $scope.init = function () {
       if ($scope.currentPath === '/MonitorPagos') {
         $scope.CheckCookie();
-        confirmarPaypal();
+        confirmPayPal();
       }
       $location.path('/MonitorPagos');
       PedidoDetallesFactory.getPendingOrdersToPay()
         .success(function (ordersToPay) {
           $scope.Pedidos = ordersToPay.data;
-          console.log(ordersToPay.data);
           if (!ordersToPay.data || ordersToPay.data.length === 0) {
             return $scope.DeshabilitarPagar = true;
           }
@@ -84,7 +88,6 @@
     $scope.init();
 
     $scope.ActualizarPagoAutomatico = function () {
-      console.log($scope.infoEmpresa.RealizarCargoAutomatico);
       EmpresasFactory.updateAutomaticPayment($scope.infoEmpresa.RealizarCargoAutomatico)
         .success(function (result) {
           if (result.success === 1) {
@@ -110,37 +113,13 @@
       return subtotal * $scope.TipoCambio;
     };
 
-    const selectByPaymentMethod = function (paymentId, checkBoxName) {
+    $scope.seleccionarTodos = function () {
       for (var x = 0; x < $scope.PedidosAgrupados.length; x++) {
-        const order = $scope.PedidosObj[$scope.PedidosAgrupados[x][0].IdPedido];
-        if (order.Check !== $scope[checkBoxName] && order.IdFormaPagoProxima === paymentId) {
-          order.Check = $scope[checkBoxName];
+        if ($scope.PedidosObj[$scope.PedidosAgrupados[x][0].IdPedido].Check !== $scope.todos) {
+          $scope.PedidosObj[$scope.PedidosAgrupados[x][0].IdPedido].Check = $scope.todos;
           $scope.pedidosPorPagar($scope.PedidosAgrupados[x][0].IdPedido);
         }
       }
-    };
-
-    $scope.seleccionarPaypal = function () {
-      selectByPaymentMethod(3, 'paypalCheckBox');
-    };
-
-    $scope.seleccionarTarjeta = function () {
-      selectByPaymentMethod(1, 'tarjetaCheckBox');
-    };
-
-    $scope.filtrarSeleccionados = function () {
-      function filtrarPedidosSeleccionados (pedido) {
-        return pedido.Check === 1;
-      }
-      return $scope.Pedidos && $scope.Pedidos.filter(filtrarPedidosSeleccionados).length === 0;
-    };
-
-    $scope.validarMetodosDePago = function () {
-      if ($scope.tarjetaCheckBox && $scope.paypalCheckBox) {
-        $scope.ShowToast('No se pueden seleccionar ambos pagos, intenta de nuevo seleccionando sólo un método de pago.', 'danger');
-        return false;
-      }
-      return true;
     };
 
     $scope.pedidosPorPagar = function (key) {
@@ -163,13 +142,36 @@
           break;
         }
       }
-
       if ($scope.PedidosSeleccionadosParaPagar.length === 0) {
         $scope.ServicioElectronico = 0;
         $scope.Subtotal = 0;
         $scope.Iva = 0;
         $scope.Total = 0;
-      } else {
+      }
+      if ($scope.PedidosSeleccionadosParaPagar.length !== 0 && document.getElementById('PayPal').checked) {
+        PedidoDetallesFactory.monitorCalculationsPayPal({ Pedidos: $scope.PedidosSeleccionadosParaPagar })
+          .success(function (calculations) {
+            if (calculations.total) {
+              $scope.ServicioElectronico = calculations.electronicService;
+              $scope.Subtotal = calculations.subtotal;
+              $scope.Iva = calculations.iva;
+              $scope.Total = calculations.total;
+            } else {
+              $scope.ServicioElectronico = 0;
+              $scope.Subtotal = 0;
+              $scope.Iva = 0;
+              $scope.Total = 0;
+            }
+          })
+          .error(function (data, status, headers, config) {
+            $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+
+            $scope.ShowToast('No pudimos realizar los cálculos, por favor intenta de nuevo más tarde.', 'danger');
+
+            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          });
+      }
+      if ($scope.PedidosSeleccionadosParaPagar.length !== 0 && document.getElementById('Tarjeta').checked) {
         PedidoDetallesFactory.monitorCalculations({ Pedidos: $scope.PedidosSeleccionadosParaPagar })
           .success(function (calculations) {
             if (calculations.total) {
@@ -202,26 +204,12 @@
       }
     };
 
-    function getPaymenthMethod () {
-      const ordersToPay = $scope.PedidosObj;
-      const selectedOrdersToPay = $scope.PedidosSeleccionadosParaPagar;
-      const firstSelectedOrderToPay = ordersToPay[selectedOrdersToPay[0]];
-      var firstOrderPaymentMethod = firstSelectedOrderToPay.IdFormaPagoProxima;
-      for (var index = 1; index < selectedOrdersToPay.length; index++) {
-        const order = selectedOrdersToPay[index];
-        if (order.IdFormaPagoProxima !== firstSelectedOrderToPay) {
-          $scope.ShowToast('No se pueden seleccionar ambos pagos, intenta de nuevo seleccionando sólo un método de pago.', 'danger');
-          firstOrderPaymentMethod = 0;
-          return;
-        }
+    $scope.checkPayment = function () {
+      if (document.getElementById('Tarjeta').checked) {
+        $scope.pagar();
+      } else if (document.getElementById('PayPal').checked) {
+        $scope.preparePayPal();
       }
-      return firstOrderPaymentMethod;
-    }
-
-    $scope.Comprar = function () {
-      const paymentMethod = getPaymenthMethod();
-      if (paymentMethod === 1) $scope.pagar();
-      if (paymentMethod === 3) $scope.prepararPaypal();
     };
 
     $scope.pagar = function () {
@@ -284,30 +272,71 @@
       }
     };
 
-    $scope.prepararPaypal = function () {
-      const orderIds = $scope.PedidosSeleccionadosParaPagar.map(function (result) {
-        return result.IdPedido;
-      });
-      const expireDate = new Date();
-      expireDate.setTime(expireDate.getTime() + 600 * 2000);
-      $cookies.putObject('orderIds', orderIds, { expires: expireDate, secure: $rootScope.secureCookie });
-      PedidoDetallesFactory.prepararPaypal({ orderIds })
-        .then(function (response) {
-          if (response.data.state === 'created') {
-            const paypal = response.data.links.filter(function (item) {
-              if (item.method === 'REDIRECT') return item.href;
-            })[0];
-            location.href = paypal.href;
-          } else {
-            $scope.ShowToast('Ocurrio un error al procesar el pago.', 'danger');
-          }
+    $scope.preparePayPal = function () {
+      if ($scope.PedidosSeleccionadosParaPagar.length > 0) {
+        PedidoDetallesFactory.payWithPaypal({ Pedidos: $scope.PedidosSeleccionadosParaPagar })
+        .success(function (response) {
+          var expireDate = new Date();
+          expireDate.setTime(expireDate.getTime() + 600 * 2000);
+          const paypalNextPayment = {
+            electronicServiceByOrder: response.data.electronicServiceByOrder,
+            TipoCambio: $scope.TipoCambio
+          };
+          $cookies.putObject('paypalNextPayment', paypalNextPayment, { expires: expireDate, secure: $rootScope.secureCookie });
+          $cookies.putObject('orderIds', $scope.PedidosSeleccionadosParaPagar, { expires: expireDate, secure: $rootScope.secureCookie });
+          PedidoDetallesFactory.preparePayPal({ orderIds: $scope.PedidosSeleccionadosParaPagar, url: 'MonitorPagos' })
+            .then(function (response) {
+              if (response.data.state === 'created') {
+                const paypal = response.data.links.filter(function (item) {
+                  if (item.method === 'REDIRECT') return item.href;
+                })[0];
+                location.href = paypal.href;
+              } else {
+                $scope.ShowToast('Ocurrio un error al procesar el pago.', 'danger');
+              }
+            });
         })
         .catch(function (response) {
           $scope.ShowToast('Ocurrio un error al procesar el pago. de tipo: ' + response.data.message, 'danger');
         });
+      } else {
+        $scope.ShowToast('Selecciona al menos un pedido para pagar.', 'danger');
+      }
+    };
+
+    $scope.ComprarConPayPal = function (resultPaypal) {
+      const paypalNextPayment = $cookies.getObject('paypalNextPayment');
+      const TipoCambio = paypalNextPayment.TipoCambio;
+      const electronicServiceByOrder = paypalNextPayment.electronicServiceByOrder;
+      const PedidosAgrupados = electronicServiceByOrder.map(function (order) {
+        return Object.assign({}, order, { TipoCambio });
+      });
+      const datosPayPal = {
+        TarjetaResultIndicator: resultPaypal.paymentId,
+        TarjetaSessionVersion: resultPaypal.PayerID,
+        PedidosAgrupados
+      };
+      if (datosPayPal.PedidosAgrupados) {
+        PedidosFactory.patchPaymentInformation(datosPayPal)
+          .success(function (compra) {
+            $cookies.remove('pedidosAgrupados');
+            $cookies.remove('TipoCambio');
+            $cookies.remove('electronicServiceByOrder');
+            if (compra.success === 1) {
+              $scope.ShowToast(compra.message, 'success');
+              $location.path('/MonitorPagos/refrescar');
+            }
+          })
+          .error(function (data, status, headers, config) {
+            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          });
+      } else {
+        $scope.ShowToast('Algo salió mal con tu pedido, por favor ponte en contacto con tu equipo de soporte CompuSoluciones para más información.', 'danger');
+        $location.path('/MonitorPagos/e');
+      }
     };
   };
-  MonitorPagos.$inject = ['$scope', '$log', '$rootScope', '$cookies', '$location', '$uibModal', '$filter', 'PedidoDetallesFactory', 'EmpresasFactory'];
+  MonitorPagos.$inject = ['$scope', '$log', '$rootScope', '$cookies', '$location', '$uibModal', '$filter', 'PedidoDetallesFactory', 'EmpresasFactory', 'PedidosFactory'];
 
   angular.module('marketplace').controller('MonitorPagos', MonitorPagos);
 }());

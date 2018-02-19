@@ -76,7 +76,12 @@
       if (paymentId && token && PayerID && orderIds) {
         PedidoDetallesFactory.confirmarPaypal({ paymentId, PayerID, orderIds })
           .then(function (response) {
-            if (response.data.state === 'approved') comprarProductos();
+            if (response.data.state === 'approved') {
+              const PedidosAgrupados = orderIds.map(function (id) { return ({ id }); });
+              const datosPaypal = { TarjetaResultIndicator: paymentId, TarjetaSessionVersion: PayerID, PedidosAgrupados };
+              PedidosFactory.putPedido(datosPaypal)
+                .then(comprarProductos);
+            }
             if (response.data.state === 'failed') $scope.ShowToast('Ocurrio un error al intentar confirmar la compra con Paypal. Intentalo mas tarde.', 'danger');
           })
           .catch(function (response) {
@@ -206,7 +211,7 @@
       const expireDate = new Date();
       expireDate.setTime(expireDate.getTime() + 600 * 2000);
       $cookies.putObject('orderIds', orderIds, { expires: expireDate, secure: $rootScope.secureCookie });
-      PedidoDetallesFactory.prepararPaypal({ orderIds })
+      PedidoDetallesFactory.prepararPaypal({ orderIds, url: 'Comprar' })
         .then(function (response) {
           if (response.data.message === 'free') comprarProductos();
           else if (response.data.state === 'created') {

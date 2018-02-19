@@ -102,9 +102,29 @@
       return $http.post($rootScope.API + 'orders/pending-orders-monitor-calculations/1', Pedidos);
     };
 
+    factory.monitorCalculationsPayPal = function (Pedidos) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'orders/renovations/payments/paypal/1', Pedidos);
+    };
+
     factory.payWidthCard = function (Pedidos) {
       factory.refreshToken();
       return $http.post($rootScope.API + 'orders/pay-width-card', Pedidos);
+    };
+
+    factory.preparePayPal = function (params) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'paypal/order', params);
+    };
+
+    factory.confirmPayPal = function (params) {
+      factory.refreshToken();
+      return $http.put($rootScope.API + 'paypal/order/confirm', params);
+    };
+
+    factory.payWithPaypal = function (Pedidos) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'orders/pay-with-paypal', Pedidos);
     };
 
     return factory;
