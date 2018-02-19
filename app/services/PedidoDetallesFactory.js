@@ -23,6 +23,12 @@
       return $http.get($rootScope.API + 'shopping-cart');
     };
 
+    // Obtener productos del carrito
+    factory.getPedidoDetallesUf = function () {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'shopping-cart-uf');
+    };
+
     // Preparar productos del carrito
     factory.getPrepararCompra = function (commission) {
       factory.refreshToken();

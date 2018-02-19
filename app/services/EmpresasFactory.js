@@ -117,6 +117,11 @@
       return $http.get($rootScope.API + 'ValidarCredito/' + IdEmpresaDistribuidor);
     };
 
+    factory.getDetailsUF = function () {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'tuclick/details-uf');
+    };
+
     factory.updateAutomaticPayment = function (RealizarCargoProximo) {
       factory.refreshToken();
       return $http.patch($rootScope.API + 'enterprise/update-automatic-payment/' + RealizarCargoProximo);
