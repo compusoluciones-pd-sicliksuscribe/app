@@ -1,5 +1,5 @@
 (function () {
-  var LandingController = function ($scope, $log, $location, $cookieStore, PromocionsFactory, deviceDetector) {
+  var LandingController = function ($scope, $log, $location, $cookies, PromocionsFactory, deviceDetector) {
     $scope.Promociones = {};
 
     $scope.init = function () {
@@ -17,7 +17,7 @@
     $scope.init();
   };
 
-  LandingController.$inject = ['$scope', '$log', '$location', '$cookieStore', 'PromocionsFactory', 'deviceDetector'];
+  LandingController.$inject = ['$scope', '$log', '$location', '$cookies', 'PromocionsFactory', 'deviceDetector'];
 
   angular.module('marketplace').controller('LandingController', LandingController);
 }());

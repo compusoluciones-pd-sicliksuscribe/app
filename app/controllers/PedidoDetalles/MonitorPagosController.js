@@ -1,5 +1,5 @@
 (function () {
-  var MonitorPagos = function ($scope, $log, $cookieStore, $location, $uibModal, $filter, PedidoDetallesFactory, EmpresasFactory) {
+  var MonitorPagos = function ($scope, $log, $rootScope,  $cookies, $location, $uibModal, $filter, PedidoDetallesFactory, EmpresasFactory) {
     $scope.PedidoSeleccionado = 0;
     $scope.PedidosSeleccionadosParaPagar = [];
     $scope.PedidosObj = {};
@@ -41,10 +41,9 @@
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
 
-      if ($cookieStore.get('Session').IdTipoAcceso == 2 || $cookieStore.get('Session').IdTipoAcceso == 3) {
-        EmpresasFactory.getEmpresa($cookieStore.get('Session').IdEmpresa)
+      if ($cookies.getObject('Session').IdTipoAcceso == 2 || $cookies.getObject('Session').IdTipoAcceso == 3) {
+        EmpresasFactory.getEmpresa($cookies.getObject('Session').IdEmpresa)
           .success(function (empresa) {
-            console.log(empresa);
             $scope.infoEmpresa = empresa[0];
           })
           .error(function (data, status, headers, config) {
@@ -160,18 +159,16 @@
             var expireDate = new Date();
             expireDate.setTime(expireDate.getTime() + 600 * 2000); /*20 minutos*/
             Datos.data["0"].pedidosAgrupados[0].TipoCambio = $scope.TipoCambio;
-            $cookieStore.put('pedidosAgrupados', Datos.data["0"].pedidosAgrupados, { 'expires': expireDate });
+            $cookies.putObject('pedidosAgrupados', Datos.data["0"].pedidosAgrupados, { 'expires': expireDate, secure: $rootScope.secureCookie });
             if (Datos.success) {
-              if ($cookieStore.get('pedidosAgrupados')) {
+              if ($cookies.getObject('pedidosAgrupados')) {
 
                 Checkout.configure({
                   merchant: Datos.data["0"].merchant,
                   session: { id: Datos.data["0"].session_id },
                   order:
                   {
-                    amount: function () {
-                      Datos.data["0"].total;
-                    },
+                    amount: Datos.data['0'].total,
                     currency: Datos.data["0"].moneda,
                     description: 'Pago tarjeta bancaria',
                     id: Datos.data["0"].pedidos,
@@ -192,7 +189,7 @@
                       email: 'order@yourMerchantEmailAddress.com',
                       phone: '+1 123 456 789 012',
                     },
-                    displayControl: { billingAddress: 'HIDE', orderSummary: 'READ_ONLY' },
+                    displayControl: { billingAddress: 'HIDE', orderSummary: 'SHOW' },
                     locale: 'es_MX',
                     theme: 'default'
                   }
@@ -215,7 +212,7 @@
       }
     };
   };
-  MonitorPagos.$inject = ['$scope', '$log', '$cookieStore', '$location', '$uibModal', '$filter', 'PedidoDetallesFactory', 'EmpresasFactory'];
+  MonitorPagos.$inject = ['$scope', '$log', '$rootScope', '$cookies', '$location', '$uibModal', '$filter', 'PedidoDetallesFactory', 'EmpresasFactory'];
 
   angular.module('marketplace').controller('MonitorPagos', MonitorPagos);
 }());

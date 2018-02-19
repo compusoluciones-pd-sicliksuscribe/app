@@ -130,7 +130,12 @@
 								<h4>{{Promocion.Nombre}}</h4>
 								<p>{{Promocion.Descripcion}}</p>
 
-								<button class="btn btn-success" ng-click="goToPage('Productos/{{Promocion.CodigoProducto}}');" ng-show="SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3">Comprar</button>
+								<button class="btn btn-success" ng-click="goToPage('Productos/{{Promocion.CodigoProducto}}');"
+									ng-show="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3) && {{Promocion.EsUrl}}===0">Comprar</button>
+
+								<a target="_blank" href="//{{Promocion.CodigoProducto}}">
+									<button class="btn btn-success" ng-show="{{Promocion.EsUrl}}===1">Aprovecha</button>
+								</a>
 
 								<div class="sliderMessage" ng-show="!(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
 									Para comprar este producto, ponte en contacto con tu distribuidor

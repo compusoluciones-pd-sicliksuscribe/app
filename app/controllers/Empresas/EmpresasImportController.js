@@ -1,5 +1,5 @@
 (function () {
-  var EmpresasImportController = function ($scope, $log, $location, $cookieStore, $routeParams, EmpresasFactory, EmpresasXEmpresasFactory, EstadosFactory, UsuariosFactory) {
+  var EmpresasImportController = function ($scope, $log, $location, $cookies, $routeParams, EmpresasFactory, EmpresasXEmpresasFactory, EstadosFactory, UsuariosFactory) {
 
     var IdEmpresa = $routeParams.IdEmpresa;
     $scope.IdEmpresaDistribuidor = IdEmpresa;
@@ -20,7 +20,7 @@
 
       EmpresasFactory.getEmpresasMicrosoft()
         .success(function (Empresas) {
-          $scope.EmpresasM = Empresas.value;
+          $scope.EmpresasM = Empresas.items;
           $scope.Combo.TipoRFC = [{ Nombre: 'Persona Física' }, { Nombre: 'Persona Moral' }];
         })
         .error(function (data, status, headers, config) {
@@ -39,7 +39,7 @@
     };
   };
 
-  EmpresasImportController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$routeParams', 'EmpresasFactory', 'EmpresasXEmpresasFactory', 'EstadosFactory', 'UsuariosFactory'];
+  EmpresasImportController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'EmpresasFactory', 'EmpresasXEmpresasFactory', 'EstadosFactory', 'UsuariosFactory'];
 
   angular.module('marketplace').controller('EmpresasImportController', EmpresasImportController);
 }());

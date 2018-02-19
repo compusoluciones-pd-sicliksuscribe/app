@@ -1,5 +1,5 @@
 (function () {
-  var ComprarController = function ($scope, $log, $location, $cookieStore, PedidoDetallesFactory, TipoCambioFactory, PedidosFactory, EmpresasFactory, $route) {
+  var ComprarController = function ($scope, $log, $rootScope, $location, $cookies, PedidoDetallesFactory, TipoCambioFactory, PedidosFactory, EmpresasFactory, $route) {
     $scope.currentPath = $location.path();
     $scope.PedidoDetalles = {};
     $scope.Distribuidor = {};
@@ -113,19 +113,18 @@
           .success(function (Datos) {
             var expireDate = new Date();
             expireDate.setTime(expireDate.getTime() + 600 * 2000); /* 20 minutos */
-            $cookieStore.put('pedidosAgrupados', Datos.data['0'].pedidosAgrupados, { 'expires': expireDate });
-
+            console.log('pedidosAgrupados', typeof Datos.data['0'].pedidosAgrupados);
+            console.log(Datos.data['0'].pedidosAgrupados);
+            $cookies.putObject('pedidosAgrupados', Datos.data['0'].pedidosAgrupados, { 'expires': expireDate, secure: $rootScope.secureCookie });
             if (Datos.data['0'].total > 0) {
               if (Datos.success) {
-                if ($cookieStore.get('pedidosAgrupados')) {
+                if ($cookies.getObject('pedidosAgrupados')) {
                   Checkout.configure({
                     merchant: Datos.data['0'].merchant,
                     session: { id: Datos.data['0'].session_id },
                     order:
                     {
-                      amount: function () {
-                        Datos.data['0'].total;
-                      },
+                      amount: Datos.data['0'].total,
                       currency: Datos.data['0'].moneda,
                       description: 'Pago tarjeta bancaria',
                       id: Datos.data['0'].pedidos
@@ -146,11 +145,12 @@
                         email: 'order@yourMerchantEmailAddress.com',
                         phone: '+1 123 456 789 012',
                       },
-                      displayControl: { billingAddress: 'HIDE', orderSummary: 'READ_ONLY' },
+                      displayControl: { billingAddress: 'HIDE', orderSummary: 'SHOW' },
                       locale: 'es_MX',
                       theme: 'default'
                     }
                   });
+                  console.log('done config');
                   Checkout.showLightbox();
                 } else {
                   $scope.ShowToast('No pudimos comenzar con tu proceso de pago, favor de intentarlo una vez más.', 'danger');
@@ -194,13 +194,12 @@
     };
 
     $scope.ComprarConTarjeta = function (resultIndicator, sessionVersion) {
-      var datosTarjeta = { 'TarjetaResultIndicator': resultIndicator, 'TarjetaSessionVersion': sessionVersion, 'PedidosAgrupados': $cookieStore.get('pedidosAgrupados') };
-
+      var datosTarjeta = { 'TarjetaResultIndicator': resultIndicator, 'TarjetaSessionVersion': sessionVersion, 'PedidosAgrupados': $cookies.getObject('pedidosAgrupados') };
       if (datosTarjeta.PedidosAgrupados) {
         if (datosTarjeta.PedidosAgrupados[0].Renovacion) {
           PedidosFactory.patchPaymentInformation(datosTarjeta)
             .success(function (compra) {
-              $cookieStore.remove('pedidosAgrupados');
+              $cookies.remove('pedidosAgrupados');
               if (compra.success === 1) {
                 $scope.ShowToast(compra.message, 'success');
                 $location.path('/MonitorPagos/refrescar');
@@ -212,7 +211,7 @@
         } else {
           PedidosFactory.putPedido(datosTarjeta)
             .success(function (putPedidoResult) {
-              $cookieStore.remove('pedidosAgrupados');
+              $cookies.remove('pedidosAgrupados');
               if (putPedidoResult.success) {
                 PedidoDetallesFactory.getComprar()
                   .success(function (compra) {
@@ -235,7 +234,7 @@
               }
             })
             .error(function (data, status, headers, config) {
-              $cookieStore.remove('pedidosAgrupados');
+              $cookies.remove('pedidosAgrupados');
               $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
             });
         }
@@ -246,7 +245,7 @@
     };
   };
 
-  ComprarController.$inject = ['$scope', '$log', '$location', '$cookieStore', 'PedidoDetallesFactory', 'TipoCambioFactory', 'PedidosFactory', 'EmpresasFactory', '$route'];
+  ComprarController.$inject = ['$scope', '$log', '$rootScope', '$location', '$cookies', 'PedidoDetallesFactory', 'TipoCambioFactory', 'PedidosFactory', 'EmpresasFactory', '$route'];
 
   angular.module('marketplace').controller('ComprarController', ComprarController);
 }());

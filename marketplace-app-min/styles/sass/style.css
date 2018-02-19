@@ -473,6 +473,11 @@ option {
     text-align: center;
     margin-left: 0px !important; } }
 
+    @media screen and (max-width: 1540px) {
+      .imageBanner {
+        display: none; }
+    }
+
 .tooltip.customClass .tooltip-inner {
   color: #880000;
   background-color: #eee;

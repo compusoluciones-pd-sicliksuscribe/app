@@ -1,10 +1,10 @@
 (function () {
-  var UsuariosReadController = function ($scope, $log, $location, $cookieStore, UsuariosFactory, UsuariosXEmpresasFactory, EmpresasFactory) {
+  var UsuariosReadController = function ($scope, $log, $location, $cookies, UsuariosFactory, UsuariosXEmpresasFactory, EmpresasFactory) {
 
     $scope.sortBy = 'Nombre';
     $scope.reverse = false;
     $scope.empresaSel = '';
-    const Session = $cookieStore.get('Session');
+    const Session = $cookies.getObject('Session');
     if (Session.IdTipoAcceso === 1) {
       $scope.empresaActual = 'CompuSoluciones';
     }
@@ -49,7 +49,6 @@
       UsuariosFactory.getUsuariosPropios()
         .success(function (UsuariosXEmpresas) {
           $scope.Usuarios = UsuariosXEmpresas.data;
-          console.log($scope.Usuarios);
         })
         .error(function (data, status, headers, config) {
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
@@ -114,7 +113,7 @@
     };
   };
 
-  UsuariosReadController.$inject = ['$scope', '$log', '$location', '$cookieStore', 'UsuariosFactory', 'UsuariosXEmpresasFactory', 'EmpresasFactory'];
+  UsuariosReadController.$inject = ['$scope', '$log', '$location', '$cookies', 'UsuariosFactory', 'UsuariosXEmpresasFactory', 'EmpresasFactory'];
 
   angular.module('marketplace').controller('UsuariosReadController', UsuariosReadController);
 }());

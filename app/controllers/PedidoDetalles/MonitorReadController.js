@@ -1,5 +1,5 @@
 (function () {
-  var MonitorReadController = function ($scope, $log, $cookieStore, $location, EmpresasXEmpresasFactory, PedidoDetallesFactory, $uibModal, $filter, FabricantesFactory, PedidosFactory, EmpresasFactory) {
+  var MonitorReadController = function ($scope, $log, $cookies, $location, EmpresasXEmpresasFactory, PedidoDetallesFactory, $uibModal, $filter, FabricantesFactory, PedidosFactory, EmpresasFactory) {
     $scope.EmpresaSelect = 0;
     var Params = {};
     $scope.form = {};
@@ -7,7 +7,7 @@
     $scope.Vacio = 0;
     $scope.Pedidos = {};
     $scope.BuscarProductos = {};
-    $scope.SessionCookie = $cookieStore.get('Session');
+    $scope.SessionCookie = $cookies.getObject('Session');
 
     $scope.init = function () {
       $scope.CheckCookie();
@@ -32,8 +32,8 @@
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
 
-      if ($cookieStore.get('Session').IdTipoAcceso == 4 || $cookieStore.get('Session').IdTipoAcceso == 5 || $cookieStore.get('Session').IdTipoAcceso == 6) {
-        Params.IdEmpresaUsuarioFinal = $cookieStore.get('Session').IdEmpresa;
+      if ($cookies.getObject('Session').IdTipoAcceso == 4 || $cookies.getObject('Session').IdTipoAcceso == 5 || $cookies.getObject('Session').IdTipoAcceso == 6) {
+        Params.IdEmpresaUsuarioFinal = $cookies.getObject('Session').IdEmpresa;
         if (!$scope.BuscarProductos.IdFabricante) {
           $scope.BuscarProductos.IdFabricante = 0;
         }
@@ -64,10 +64,10 @@
       }
 
       Params.IdEmpresaUsuarioFinal = $scope.EmpresaSelect;
-      Params.IdEmpresaDistribuidor = $cookieStore.get('Session').IdEmpresa;
+      Params.IdEmpresaDistribuidor = $cookies.getObject('Session').IdEmpresa;
 
       if ($scope.EmpresaSelect === 0) {
-        Params.IdEmpresaUsuarioFinal = $cookieStore.get('Session').IdEmpresa;
+        Params.IdEmpresaUsuarioFinal = $cookies.getObject('Session').IdEmpresa;
         Params.IdEmpresaDistribuidor = null;
       }
       if (!$scope.BuscarProductos.IdFabricante) {
@@ -289,7 +289,7 @@
     };
   };
 
-  MonitorReadController.$inject = ['$scope', '$log', '$cookieStore', '$location', 'EmpresasXEmpresasFactory', 'PedidoDetallesFactory', '$uibModal', '$filter', 'FabricantesFactory', 'PedidosFactory', 'EmpresasFactory'];
+  MonitorReadController.$inject = ['$scope', '$log', '$cookies', '$location', 'EmpresasXEmpresasFactory', 'PedidoDetallesFactory', '$uibModal', '$filter', 'FabricantesFactory', 'PedidosFactory', 'EmpresasFactory'];
 
   angular.module('marketplace').controller('MonitorReadController', MonitorReadController);
 }());

@@ -1,10 +1,10 @@
 (function () {
-  var DescuentosFactory = function ($http, $cookieStore, $rootScope) {
+  var DescuentosFactory = function ($http, $cookies, $rootScope) {
     var factory = {};
     var Session = {};
 
     factory.refreshToken = function () {
-      Session = $cookieStore.get('Session');
+      Session = $cookies.getObject('Session');
       if (!Session) { Session = { Token: 'no' }; }
       $http.defaults.headers.common['token'] = Session.Token;
     };
@@ -39,7 +39,7 @@
     return factory;
   };
 
-  DescuentosFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
+  DescuentosFactory.$inject = ['$http', '$cookies', '$rootScope'];
 
   angular.module('marketplace').factory('DescuentosFactory', DescuentosFactory);
 }());

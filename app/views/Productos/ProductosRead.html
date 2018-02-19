@@ -101,7 +101,7 @@
                             <div ng-show="Producto.IdTipoProducto == 3">Precio de contratación:</div>
                             </label>
                             <span ng-show="Producto.PorcentajeDescuento == 0">
-                                {{Producto.PrecioNormal | currency: "$" : 2}} {{Producto.MonedaPrecio}}                          
+                                {{Producto.PrecioNormal | currency: "$" : 2}} {{Producto.MonedaPrecio}}
                             </span>
                             <span ng-show="Producto.PorcentajeDescuento > 0">
                                 <del style="font-size:11px">{{Producto.PrecioNormal | currency: "$" : 2}} {{Producto.MonedaPrecio}}</del>
@@ -114,10 +114,6 @@
                                 | currency}} {{Producto.MonedaPrecio}}
                             </div>
 
-                            <div ng-show="Producto.IdFabricante === 1"><label for="" title=""> Tipo de cambio Microsoft: </label> {{TipoCambioMs | currency: "$":4}}
-                                MXN.
-                            </div>
-                            <div ng-show="Producto.IdFabricante !== 1"><label for="" title=""> Tipo de cambio: </label> {{TipoCambio | currency: "$":4}} MXN.</div>
                             <br>
                         </div>
 
@@ -188,8 +184,10 @@
                                                     ng-change="contractSetted(Producto)" ng-required="contrato.ResultadoFabricante6 !== ''">
                                                     </select>
                                             </div>
-                                            <br>
-                                            <label for="contacto" ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2 && !Producto.IdPedidoContrato && Producto.IdAccionAutodesk === 1">* Contacto</label>
+                                            <div ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2 && !Producto.IdPedidoContrato && Producto.IdAccionAutodesk === 1">
+                                                <br>   
+                                                <label for="contacto" >* Contacto</label>
+                                            </div>
                                             <div class="input-group" ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2 && !Producto.IdPedidoContrato && Producto.IdAccionAutodesk === 1">
                                                 <span class="input-group-addon green white">
                                                     <span class="glyphicon glyphicon-user"></span>
@@ -200,7 +198,6 @@
                                                     <option ng-selected="true" value="">Selecciona un contacto...</option>
                                                 </select>
                                             </div>
-                                            <br>
                                             <div ng-show="Producto.MostrarMensajeP" style="color:red;">
 
                                                 <label>* No cuentas con suscripciones para este producto.</label>&nbsp;
@@ -224,33 +221,23 @@
                                                 <br>
                                             </div>
 
-                                            <label for="" class="">* ¿Con qué moneda quieres pagarlos?</label>
-
-                                            <div class="radio" style="margin-left:20px">
-                                                <div>
-                                                    <input type="radio" name="MonedaPago" value="Dólares" ng-model="Producto.MonedaPago" required>                                                    Dólares
-                                                </div>
-                                                <div>
-                                                    <input type="radio" name="MonedaPago" value="Pesos" ng-model="Producto.MonedaPago" required>                                                    Pesos
-                                                </div>
-                                            </div>
-
                                         </div>
+
 
                                         <div style="float:right!important;">
                                             <label for="" title="Cantidad por precio">Total:</label>
-                                            <b ng-show="Producto.IdFabricante === 1 && Producto.PorcentajeDescuento == 0"> 
-                                                {{CalcularPrecioTotal(Producto.PrecioProrrateo, Producto.Cantidad, Producto.MonedaPago, Producto.MonedaPrecio, TipoCambioMs) | currency }} {{Producto.MonedaPago}} 
+                                            <b ng-show="Producto.IdFabricante === 1 && Producto.PorcentajeDescuento == 0">
+                                                {{CalcularPrecioTotal(Producto.PrecioProrrateo, Producto.Cantidad, Producto.MonedaPago, Producto.MonedaPrecio, TipoCambioMs) | currency }} {{Producto.MonedaPago}}
                                             </b>
-                                            <b ng-show="Producto.IdFabricante !== 1 && Producto.PorcentajeDescuento == 0"> 
-                                                {{CalcularPrecioTotal(Producto.PrecioProrrateo, Producto.Cantidad, Producto.MonedaPago, Producto.MonedaPrecio, TipoCambio) | currency}} {{Producto.MonedaPago}} 
+                                            <b ng-show="Producto.IdFabricante !== 1 && Producto.PorcentajeDescuento == 0">
+                                                {{CalcularPrecioTotal(Producto.PrecioProrrateo, Producto.Cantidad, Producto.MonedaPago, Producto.MonedaPrecio, TipoCambio) | currency}} {{Producto.MonedaPago}}
                                             </b>
 
-                                            <b ng-show="Producto.IdFabricante === 1 && Producto.PorcentajeDescuento > 0"> 
-                                                {{CalcularPrecioTotal(Producto.PrecioDescuento, Producto.Cantidad, Producto.MonedaPago, Producto.MonedaPrecio, TipoCambioMs) | currency}} {{Producto.MonedaPago}} 
+                                            <b ng-show="Producto.IdFabricante === 1 && Producto.PorcentajeDescuento > 0">
+                                                {{CalcularPrecioTotal(Producto.PrecioDescuento, Producto.Cantidad, Producto.MonedaPago, Producto.MonedaPrecio, TipoCambioMs) | currency}} {{Producto.MonedaPago}}
                                             </b>
-                                            <b ng-show="Producto.IdFabricante !== 1 && Producto.PorcentajeDescuento > 0"> 
-                                                {{CalcularPrecioTotal(Producto.PrecioDescuento, Producto.Cantidad, Producto.MonedaPago, Producto.MonedaPrecio, TipoCambio) | currency}} {{Producto.MonedaPago}} 
+                                            <b ng-show="Producto.IdFabricante !== 1 && Producto.PorcentajeDescuento > 0">
+                                                {{CalcularPrecioTotal(Producto.PrecioDescuento, Producto.Cantidad, Producto.MonedaPago, Producto.MonedaPrecio, TipoCambio) | currency}} {{Producto.MonedaPago}}
                                             </b>
                                         </div>
 
@@ -293,13 +280,13 @@
                                     </div>
                                 </div>
                             </div>
-                        
+
                                     </form>
 
                         </div>
-                    
+
                 </div>
-                
+
             </td>
         </tr>
     </table>
@@ -338,9 +325,9 @@
 
         </div>
     </div>
-    
+
     </div>
-    
+
 </div>
 
 </div>

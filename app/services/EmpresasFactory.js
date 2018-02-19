@@ -1,10 +1,10 @@
 (function () {
-  var EmpresasFactory = function ($http, $cookieStore, $rootScope) {
+  var EmpresasFactory = function ($http, $cookies, $rootScope) {
     var factory = {};
     var Session = {};
 
     factory.refreshToken = function () {
-      Session = $cookieStore.get('Session');
+      Session = $cookies.getObject('Session');
       if (!Session) { Session = { Token: 'no' }; }
       $http.defaults.headers.common['token'] = Session.Token;
     };
@@ -18,7 +18,7 @@
 
     factory.getCliente = function (Id) {
       factory.refreshToken();
-      return $http.post($rootScope.API + 'Importar/', { IdMicrosoft: Id });
+      return $http.get($rootScope.API + 'microsoft/customers/' + Id);
     };
 
     factory.getEmpresas = function () {
@@ -28,7 +28,7 @@
 
     factory.getEmpresasMicrosoft = function () {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'Empresa/Microsoft');
+      return $http.get($rootScope.API + 'microsoft/customers');
     };
 
     factory.getEmpresa = function (IdEmpresa) {
@@ -51,14 +51,18 @@
       return $http.put($rootScope.API + 'Empresas/FormaPago', parametros);
     };
 
+    factory.putEmpresaCambiaMoneda = function (parametros) {
+      factory.refreshToken();
+      return $http.put($rootScope.API + 'Empresas/CambiaMoneda', parametros);
+    };
     factory.putEmpresa = function (Empresa) {
       factory.refreshToken();
       return $http.put($rootScope.API + 'Empresas', Empresa);
     };
 
-    factory.revisarDominio = function (Empresa) {
+    factory.revisarDominio = function (dominio) {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'Empresa/Dominio/' + Empresa);
+      return $http.get($rootScope.API + 'microsoft/domains/' + dominio);
     };
 
     factory.revisarRFC = function (ObjRFC) {
@@ -126,7 +130,7 @@
     return factory;
   };
 
-  EmpresasFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
+  EmpresasFactory.$inject = ['$http', '$cookies', '$rootScope'];
 
   angular.module('marketplace').factory('EmpresasFactory', EmpresasFactory);
 }());

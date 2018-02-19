@@ -1,15 +1,15 @@
 (function () {
-  var NivelesClienteFinalController = function ($scope, $location, $cookieStore, NivelesClienteFinalFactory) {
+  var NivelesClienteFinalController = function ($scope, $location, $cookies, NivelesClienteFinalFactory) {
     $scope.sortBy = 'Nivel';
     $scope.reverse = false;
     $scope.Nivel = {};
     $scope.levels = [];
     $scope.newLevel = "";
-    $scope.session = $cookieStore.get('Session');
+    $scope.session = $cookies.getObject('Session');
 
     const getLevels = function() {
       NivelesClienteFinalFactory.getLevels()
-        .then(function(result) { 
+        .then(function(result) {
           $scope.levels = result.data.data;
         })
         .catch(function(result) {
@@ -60,13 +60,15 @@
     }
 
     $scope.addDiscount = function(level) {
-      $cookieStore.put('nivel', level.Nivel);
+      console.log('level', typeof level);
+      console.log(level);
+      $cookies.putObject('nivel', level.Nivel);
       $location.path('/Niveles/Distribuidor/' + level.IdNivelEmpresaUsuarioFinal + '/Descuentos');
     };
-    
+
   };
 
-  NivelesClienteFinalController.$inject = ['$scope', '$location', '$cookieStore', 'NivelesClienteFinalFactory'];
+  NivelesClienteFinalController.$inject = ['$scope', '$location', '$cookies', 'NivelesClienteFinalFactory'];
 
   angular.module('marketplace').controller('NivelesClienteFinalController', NivelesClienteFinalController);
 }());

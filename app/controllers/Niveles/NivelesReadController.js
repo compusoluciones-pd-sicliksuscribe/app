@@ -1,5 +1,5 @@
 (function () {
-  var NivelesReadController = function ($scope, $log, $location, $cookieStore, NivelesDistribuidorFactory) {
+  var NivelesReadController = function ($scope, $log, $location, $cookies, NivelesDistribuidorFactory) {
     $scope.sortBy = 'Nivel';
     $scope.reverse = false;
     $scope.Nivel = {};
@@ -65,14 +65,14 @@
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
     };
-    
+
     $scope.configurarNivel = function (nivel) {
       var path = '/Niveles/' + nivel.IdNivelDistribuidor + '/Productos';
       $location.path(path);
     };
   };
 
-  NivelesReadController.$inject = ['$scope', '$log', '$location', '$cookieStore', 'NivelesDistribuidorFactory'];
+  NivelesReadController.$inject = ['$scope', '$log', '$location', '$cookies', 'NivelesDistribuidorFactory'];
 
   angular.module('marketplace').controller('NivelesReadController', NivelesReadController);
 }());

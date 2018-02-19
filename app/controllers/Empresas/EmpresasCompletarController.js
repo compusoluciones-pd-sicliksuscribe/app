@@ -1,5 +1,5 @@
 (function () {
-  var EmpresasCompletarController = function ($scope, $log, $location, $cookieStore, $routeParams, EmpresasFactory, EmpresasXEmpresasFactory, EstadosFactory, UsuariosFactory, UsuariosXEmpresasFactory) {
+  var EmpresasCompletarController = function ($scope, $log, $location, $cookies, $routeParams, EmpresasFactory, EmpresasXEmpresasFactory, EstadosFactory, UsuariosFactory, UsuariosXEmpresasFactory) {
     var IdEmpresaDistribuidor = $routeParams.IdEmpresa;
     var IdMicrosoft = $routeParams.IdMicrosoft;
     var Dominio = $routeParams.Dominio;
@@ -32,7 +32,8 @@
 
       EmpresasFactory.getCliente(IdMicrosoft)
         .success(function (Empresa) {
-          if (!$scope.direccionValida(Empresa.default_address)) {
+          console.log(Empresa);
+          if (!$scope.direccionValida(Empresa.defaultAddress)) {
             $scope.ShowToast('El cliente no cuenta con toda la información para ser importado, actualiza sus datos entrando a partner center ', 'danger');
             return;
           }
@@ -54,8 +55,8 @@
     $scope.init();
 
     $scope.direccionValida = function (direccion) {
-      if (direccion.address_line1 && direccion.city && direccion.country && direccion.phone_number
-        && direccion.postal_code && direccion.region) return true;
+      if (direccion.addressLine1 && direccion.city && direccion.country && direccion.phoneNumber
+        && direccion.postalCode && direccion.state) return true;
       return false;
     };
 
@@ -107,18 +108,18 @@
               .success(function (UsuariosXEmpresas) {
                 if (UsuariosXEmpresas.length === 0) {
                   $scope.ShowToast('Agrega un administrador, para el distribuidor.', 'danger');
-                } else {         
+                } else {
                   var ObjMicrosoft = {
                     RFC: $scope.Empresa.RFC,
-                    NombreEmpresa: DatosMicrosoft.company_name,
-                    Direccion: DatosMicrosoft.default_address.address_line1,
-                    Ciudad: DatosMicrosoft.default_address.city,
-                    Estado: DatosMicrosoft.default_address.region,
-                    CodigoPostal: DatosMicrosoft.default_address.postal_code,
-                    NombreContacto: DatosMicrosoft.first_name || DatosMicrosoft.default_address.first_name,
-                    ApellidosContacto: DatosMicrosoft.last_name || DatosMicrosoft.default_address.last_name,
+                    NombreEmpresa: DatosMicrosoft.companyName,
+                    Direccion: DatosMicrosoft.defaultAddress.addressLine1,
+                    Ciudad: DatosMicrosoft.defaultAddress.city,
+                    Estado: DatosMicrosoft.defaultAddress.state,
+                    CodigoPostal: DatosMicrosoft.defaultAddress.postalCode,
+                    NombreContacto: DatosMicrosoft.firstName,
+                    ApellidosContacto: DatosMicrosoft.lastName,
                     CorreoContacto: $scope.Empresa.CorreoContacto,
-                    TelefonoContacto: DatosMicrosoft.default_address.phone_number,
+                    TelefonoContacto: DatosMicrosoft.defaultAddress.phoneNumber,
                     ZonaImpuesto: 'Normal',
                     Lada: '52',
                     IdMicrosoftUF: IdMicrosoft,
@@ -127,7 +128,7 @@
                     IdUsuario: UsuariosXEmpresas[0].IdUsuario,
                     MonedaPago: $scope.Empresa.MonedaPago,
                     FormaPago: $scope.Empresa.IdFormaPagoPredilecta,
-                  };                  
+                  };
                   EmpresasFactory.postEmpresaMicrosoft(ObjMicrosoft)
                     .success(function (result) {
                       $location.path("/Empresas");
@@ -306,7 +307,7 @@
     };
   };
 
-  EmpresasCompletarController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$routeParams', 'EmpresasFactory', 'EmpresasXEmpresasFactory', 'EstadosFactory', 'UsuariosFactory', 'UsuariosXEmpresasFactory'];
+  EmpresasCompletarController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'EmpresasFactory', 'EmpresasXEmpresasFactory', 'EstadosFactory', 'UsuariosFactory', 'UsuariosXEmpresasFactory'];
 
   angular.module('marketplace').controller('EmpresasCompletarController', EmpresasCompletarController);
 } ());

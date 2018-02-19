@@ -1,5 +1,5 @@
 (function () {
-  var EmpresasCreateController = function ($scope, $log, $cookieStore, $location, EmpresasFactory, EstadosFactory, UsuariosFactory) {
+  var EmpresasCreateController = function ($scope, $log, $cookies, $location, EmpresasFactory, EstadosFactory, UsuariosFactory) {
     $scope.Empresa = {};
     $scope.AlertaDominio = '';
     $scope.Empresa.IdERP = null;
@@ -119,20 +119,27 @@
     };
 
     $scope.change = function () {
-      EmpresasFactory.revisarDominio($scope.Empresa.DominioMicrosoft)
-        .success(function (result) {
-          if (result === 'false') {
-            $scope.frm.DominioMicrosoft.$pristine = false;
-            $scope.frm.DominioMicrosoft.$invalid = true;
-            $scope.Empresa.MensajeDominio = 'Ya existe el dominio, Intenta con uno diferente.';
-          } else {
-            $scope.frm.DominioMicrosoft.$pristine = true;
-            $scope.frm.RFC.$invalid = false;
-          }
-        })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
+      if (!!$scope.Empresa.DominioMicrosoft) {
+        $scope.Empresa.DominioMicrosoft = $scope.Empresa.DominioMicrosoft.trim();
+        EmpresasFactory.revisarDominio($scope.Empresa.DominioMicrosoft)
+          .success(function (result) {
+            if (result === 'false') {
+              $scope.frm.DominioMicrosoft.$pristine = false;
+              $scope.frm.DominioMicrosoft.$invalid = true;
+              $scope.Empresa.MensajeDominio = 'Ya existe el dominio, Intenta con uno diferente.';
+            } else {
+              $scope.frm.DominioMicrosoft.$pristine = true;
+              $scope.frm.RFC.$invalid = false;
+            }
+          })
+          .error(function (data, status, headers, config) {
+            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          });
+      } else {
+        $scope.frm.DominioMicrosoft.$pristine = false;
+        $scope.frm.DominioMicrosoft.$invalid = true;
+        $scope.Empresa.MensajeDominio = 'Ingresa un dominio valido.';
+      }
     };
 
     $scope.ComboRFC = function () {
@@ -298,7 +305,7 @@
     };
   };
 
-  EmpresasCreateController.$inject = ['$scope', '$log', '$cookieStore', '$location', 'EmpresasFactory', 'EstadosFactory', 'UsuariosFactory'];
+  EmpresasCreateController.$inject = ['$scope', '$log', '$cookies', '$location', 'EmpresasFactory', 'EstadosFactory', 'UsuariosFactory'];
 
   angular.module('marketplace').controller('EmpresasCreateController', EmpresasCreateController);
-} ());
+}());

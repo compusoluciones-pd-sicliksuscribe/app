@@ -1,5 +1,5 @@
 (function () {
-  var VersionController = function ($scope, $log, $location, $cookieStore, $route, VersionFactory, $anchorScroll) {
+  var VersionController = function ($scope, $log, $location, $cookies, $route, VersionFactory, $anchorScroll) {
     $scope.versiones = [];
     $scope.currentPath = $location.path();
     $anchorScroll.yOffset = 130;
@@ -62,6 +62,6 @@
     };
   };
 
-  VersionController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$route', 'VersionFactory', '$anchorScroll', '$routeParams'];
+  VersionController.$inject = ['$scope', '$log', '$location', '$cookies', '$route', 'VersionFactory', '$anchorScroll', '$routeParams'];
   angular.module('marketplace').controller('VersionController', VersionController);
 }());

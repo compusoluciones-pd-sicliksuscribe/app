@@ -1,5 +1,5 @@
 (function () {
-  var ProductosReadController = function ($scope, $log, $location, $cookieStore, $routeParams, ProductosFactory, FabricantesFactory, TiposProductosFactory, PedidoDetallesFactory, TipoCambioFactory, ProductoGuardadosFactory, EmpresasXEmpresasFactory, UsuariosFactory, $anchorScroll) {
+  var ProductosReadController = function ($scope, $log, $location, $cookies, $routeParams, ProductosFactory, FabricantesFactory, TiposProductosFactory, PedidoDetallesFactory, TipoCambioFactory, ProductoGuardadosFactory, EmpresasXEmpresasFactory, UsuariosFactory, $anchorScroll) {
     var BusquedaURL = $routeParams.Busqueda;
     $scope.BuscarProductos = {};
     $scope.Pagina = 0;
@@ -118,6 +118,23 @@
       }
     };
 
+    function findEndUser (selectedId) {
+      var enterprises = $scope.selectEmpresas;
+      var index = 0;
+      while (index < enterprises.length) {
+        var enterprise = enterprises[index];
+        if (enterprise.IdEmpresa === selectedId) return enterprise;
+        index++;
+      }
+      return null;
+    }
+
+    function setProtectedRebatePrice (selectedId) {
+      var endUser = findEndUser(selectedId);
+      var protectedRP = !endUser ? null : endUser.TipoCambioRP;
+      $scope.ProtectedRP = protectedRP;
+    }
+
     $scope.revisarProducto = function (Producto) {
       var IdProducto = Producto.IdProducto;
       var IdEmpresaUsuarioFinal = Producto.IdEmpresaUsuarioFinal;
@@ -125,7 +142,6 @@
         .success(function (respuesta) {
           if (respuesta.success === 1) {
             Producto.contratos = respuesta.data;
-            console.log(respuesta);
             if (Producto.contratos.length >= 1) {
               Producto.TieneContrato = true;
               Producto.IdPedidoContrato = respuesta.data[0].IdPedido;
@@ -134,6 +150,7 @@
               Producto.TieneContrato = false;
             }
             if (Producto.IdAccionAutodesk === 1) Producto.contratos.unshift({ IdPedido: 0, ResultadoFabricante6: 'Nuevo contrato...' });
+            setProtectedRebatePrice(IdEmpresaUsuarioFinal);
           } else {
             $scope.ShowToast('No pudimos cargar la información de tus contratos, por favor intenta de nuevo más tarde.', 'danger');
           }
@@ -191,15 +208,15 @@
       }
     };
 
-    $scope.CalcularPrecioTotal = function (Precio, Cantidad, MonedaPago, MonedaProducto, TipoCambio) {
+    $scope.CalcularPrecioTotal = function (Precio, Cantidad, MonedaPago, MonedaProducto, TipoCambio, ProtectedRP) {
       var total = 0.0;
-
+      var rebatePrice = ProtectedRP || TipoCambio;
       if (MonedaPago === 'Pesos' && MonedaProducto === 'Dólares') {
-        Precio = Precio * TipoCambio;
+        Precio = Precio * rebatePrice;
       }
 
       if (MonedaPago === 'Dólares' && MonedaProducto === 'Pesos') {
-        Precio = Precio / TipoCambio;
+        Precio = Precio / rebatePrice;
       }
 
       total = Precio * Cantidad;
@@ -212,7 +229,7 @@
         IdProducto: Producto.IdProducto,
         Cantidad: Cantidad,
         IdEmpresaUsuarioFinal: Producto.IdEmpresaUsuarioFinal,
-        MonedaPago: Producto.MonedaPago,
+        MonedaPago: 'Pesos',
         IdEsquemaRenovacion: Producto.IdEsquemaRenovacion,
         IdFabricante: Producto.IdFabricante,
         CodigoPromocion: Producto.CodigoPromocion,
@@ -226,7 +243,6 @@
           .filter(function (p) {
             return Producto.IdPedidoContrato === p.IdPedido;
           })[0].ResultadoFabricante6;
-        console.log(Producto.contratos, IdPedidocontrato, contrato);
         NuevoProducto.ContratoBaseAutodesk = contrato.trim();
         // NuevoProducto.IdAccionAutodesk = Producto.IdAccionProductoAutodesk === 1 ? 3 : 2;
       }
@@ -234,6 +250,7 @@
         return $scope.ShowToast('No cuentas con un contrato para este producto.', 'danger');
       }
       if (!NuevoProducto.IdAccionAutodesk) delete NuevoProducto.IdAccionAutodesk;
+      if (NuevoProducto.IdAccionAutodesk === 1 && NuevoProducto.ContratoBaseAutodesk) NuevoProducto.IdAccionAutodesk = 3;
       PedidoDetallesFactory.postPedidoDetalle(NuevoProducto)
         .success(function (PedidoDetalleResult) {
           if (PedidoDetalleResult.success === 1) {
@@ -244,10 +261,8 @@
                   if (result.data.data.length >= 1) {
                     $location.path("/autodesk/productos/" + NuevoProducto.IdProducto + "/detalle/" + PedidoDetalleResult.data.insertId);
                   }
-                })
-                .catch(console.log);
+                });
             }
-            console.log(PedidoDetalleResult);
             $scope.ShowToast(PedidoDetalleResult.message, 'success');
             $scope.ActualizarMenu();
             $scope.addPulseCart();
@@ -410,7 +425,7 @@
     };
   };
 
-  ProductosReadController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$routeParams', 'ProductosFactory', 'FabricantesFactory', 'TiposProductosFactory', 'PedidoDetallesFactory', 'TipoCambioFactory', 'ProductoGuardadosFactory', 'EmpresasXEmpresasFactory', 'UsuariosFactory', '$anchorScroll'];
+  ProductosReadController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'ProductosFactory', 'FabricantesFactory', 'TiposProductosFactory', 'PedidoDetallesFactory', 'TipoCambioFactory', 'ProductoGuardadosFactory', 'EmpresasXEmpresasFactory', 'UsuariosFactory', '$anchorScroll'];
 
   angular.module('marketplace').controller('ProductosReadController', ProductosReadController);
 }());

@@ -1,10 +1,10 @@
 (function () {
-  var PromocionsFactory = function ($http, $cookieStore, $rootScope) {
+  var PromocionsFactory = function ($http, $cookies, $rootScope) {
     var factory = {};
     var Session = {};
 
     factory.refreshToken = function () {
-      Session = $cookieStore.get('Session');
+      Session = $cookies.getObject('Session');
       if (!Session) { Session = { Token: 'no' }; }
       $http.defaults.headers.common['token'] = Session.Token;
     };
@@ -28,13 +28,13 @@
 
     factory.putPromocion = function (Promocion) {
       factory.refreshToken();
-      return $http.put($rootScope.API + 'Promocions', Promocion);
+      return $http.put($rootScope.API + 'Promociones', Promocion);
     };
 
     return factory;
   };
 
-  PromocionsFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
+  PromocionsFactory.$inject = ['$http', '$cookies', '$rootScope'];
 
   angular.module('marketplace').factory('PromocionsFactory', PromocionsFactory);
 }());

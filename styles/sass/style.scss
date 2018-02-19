@@ -18,7 +18,7 @@ html {
 }
 
 body
-{  
+{
     position: relative;
     margin: 0;
     padding-bottom: 6rem;
@@ -31,7 +31,7 @@ body
 
    .uppercase{
     text-transform: uppercase;
-    
+
     }
 
 /*colors classes*/
@@ -55,7 +55,7 @@ body
 
 .softBlue{
  background:#e5e5e5;
- /*background:#A1CFFD;*/ 
+ /*background:#A1CFFD;*/
 }
 
 .green{
@@ -137,15 +137,15 @@ header.smaller img{
     background:url('../images/background.png')no-repeat fixed;
     background-size: cover;
     padding:15% 120px;
-    
+
     .center-block{
         width:82px;
     }
-    
+
     h1{
         font-size: 30px;
     }
-    
+
     p{
         font-size:15px;
     }
@@ -163,19 +163,19 @@ header.smaller img{
     height:400px;
     background: transparent;
     margin-top:-160px;
-    
+
     .image1{
         position: relative;
         bottom:0px;
     }
-    
+
     .image2{
         position:absolute;
         right:0px;
        top:80px;
         bottom:0px;
     }
-    
+
     .productOne{
         margin:190px 180px 0px 10px;
     }
@@ -185,7 +185,7 @@ header.smaller img{
     margin-top:10px;
     margin-left:10px;
     position:absolute;
-    
+
 }
 .distintivo img{
     max-width: 130px;
@@ -268,7 +268,7 @@ button a:hover{
 
 .btn-primary:hover{
     background:$blueHover;
-    
+
 }
 
 .btn-warning{
@@ -313,7 +313,7 @@ button a:hover{
 }
 
 option{
- margin-top:12px;   
+ margin-top:12px;
 }
 
 
@@ -340,13 +340,13 @@ option{
 
 .yellow{
     .text:hover{
-        text-decoration: underline; 
+        text-decoration: underline;
     }
 }
 
 .gris{
     .text:hover{
-        text-decoration: underline; 
+        text-decoration: underline;
     }
 }
 
@@ -360,11 +360,11 @@ option{
         white-space: nowrap; /* paragraph to one line */
         overflow:hidden; /* older browsers */
         padding-left:5px;
-    
+
         &:hover{
-            text-decoration: underline; 
+            text-decoration: underline;
         }
-    
+
         }
 }
 
@@ -378,11 +378,11 @@ option{
         white-space: nowrap; /* paragraph to one line */
         overflow:hidden; /* older browsers */
         padding-left:5px;
-    
+
         &:hover{
-            text-decoration: underline; 
+            text-decoration: underline;
         }
-    
+
         }
 }
 
@@ -422,51 +422,51 @@ option{
 .navbar-default{
     color:#fff;
     border:none;
-    
+
     .navbar-nav>li>a{
     color:#fff;
     }
-    
+
     .nav>li>a{
         padding:15px 15px !important;
     }
-    
+
     .navbar-nav>li>a:hover{
-    color:#ffffff !important; 
+    color:#ffffff !important;
       text-decoration: underline;
       background-color: transparent !important;
-      
+
     }
-    
+
     .navbar-brand{
         padding:15px 12px !important;
     }
-    
+
     .navbar-nav>li>a:visited{
     color:#fff;
     background:#363636;
     }
-    
+
     .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover{
     color:#fff;
     background-color:transparent;
     }
-    
+
     .navbar-collapse, .navbar-default .navbar-form{
     border:none;
     }
-    
+
     .navbar-nav .open .dropdown-menu>li>a{
     color:#fff !important;
     background-color: transparent !important;
-   
+
     }
-    
+
      .navbar-nav .open .dropdown-menu>li>a:hover{
-         
+
      text-decoration: underline !important;
      }
-    
+
     .navbar-nav .open .dropdown-menu>li>a:focus, .navbar-default .navbar-nav .open .dropdown-menu>li>a:hover{
     background-color:transparent;
     color:#000000;
@@ -496,7 +496,7 @@ option{
     .tour-step-background{
         background: rgba(250,250,250,0.2) !important;
     }
-    
+
 
 
 /* 404 */
@@ -509,14 +509,14 @@ option{
     margin-top:15px;
     margin-bottom:15px;
     }
-    
-.error-actions .btn { 
-    margin-right:10px; 
+
+.error-actions .btn {
+    margin-right:10px;
     }
-    
-    
+
+
     /*paginador*/
-    
+
     .paginator{
         cursor: pointer;
     }
@@ -540,7 +540,7 @@ option{
     height:auto;
     background: #464646;
     padding:30px;
-    
+
 }
 
 .footer img{
@@ -551,7 +551,7 @@ option{
 .footer p{
     color:#fff;
     font-size: 12px;
-    
+
 }
 
 .footer .container{
@@ -560,101 +560,101 @@ option{
 
 
 
-@media screen and (max-width: 1150px) {
-    
+@media screen and (max-width: 1500px) {
+
         .distintivo{
         display:none !important;
     }
-    
+
 }
 
 
 @media screen and (max-width: 990px) {
-    
+
     .home{
         height:auto !important;
     }
-    
+
     .containerGral{
         margin-top:80px !important;
     }
-    
+
     header{
         box-shadow: none;
     }
-    
+
     .helpStart{
         display:none;
     }
-    
-    
+
+
     header img{
         height:auto !important;
     }
-    
+
     .home{
         margin-top:10px;
         padding:10px;
     }
-    
+
     header.smaller img{
         height:auto;
     }
-    
+
     .AutocadProducts{
         height:auto;
-        
+
         .productOne{
             margin:180px 10px;
         }
-        
+
         .image1{
             display:none;
         }
         .image2{
             display:none;
         }
-        
+
     }
-    
-    
+
+
     .FourProduct{
         background: #A1CFFD !important;
     }
-    
 
-    
+
+
 .imageBanner{
- display: none;   
+ display: none;
 }
-    
+
     .thirdProduct{
         height:auto;
     }
-    
+
     /*.footer img{
         margin-top:10px;
         margin-bottom:10px;
         text-align: center;
     }
-    
+
     .footer{
        text-align: center;
     }*/
-    
+
     .navbar-default{
         background-color: #fff !important;
     }
-    
-    
+
+
     .brands{
         display:none;
     }
-    
+
     .allProductSecondary{
         margin-bottom:30px !important;
     }
-    
+
     .logoFooter{
       display: none !important;
     }
@@ -663,7 +663,7 @@ option{
         text-align: center;
         margin-left:0px !important;
     }
-    
+
 
 }
 
@@ -676,11 +676,11 @@ option{
             .tooltip.customClass .tooltip-arrow {
                 display: none;
             }
-            
+
 // div loading/cargando
 
 .divCargando {
-        
+
             display:table;
             position: fixed;
             text-align: center;

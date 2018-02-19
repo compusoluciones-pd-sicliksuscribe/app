@@ -1,6 +1,6 @@
 (function () {
 
-  var PromocionsReadController = function ($scope, $log, $location, $cookieStore, PromocionsFactory) {
+  var PromocionsReadController = function ($scope, $log, $location, $cookies, PromocionsFactory) {
     $scope.sortBy = 'Nombre';
     $scope.reverse = false;
 
@@ -24,7 +24,7 @@
     };
   };
 
-  PromocionsReadController.$inject = ['$scope', '$log', '$location', '$cookieStore', 'PromocionsFactory'];
+  PromocionsReadController.$inject = ['$scope', '$log', '$location', '$cookies', 'PromocionsFactory'];
 
   angular.module('marketplace').controller('PromocionsReadController', PromocionsReadController);
 }());

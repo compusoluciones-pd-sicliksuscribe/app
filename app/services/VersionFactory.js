@@ -1,10 +1,10 @@
 (function () {
-  var VersionFactory = function ($http, $cookieStore, $rootScope) {
+  var VersionFactory = function ($http, $cookies, $rootScope) {
     var factory = {};
     var Session = {};
 
     factory.refreshToken = function () {
-      Session = $cookieStore.get('Session');
+      Session = $cookies.getObject('Session');
       if (!Session) { Session = { Token: 'no' }; }
       $http.defaults.headers.common['token'] = Session.Token;
     };
@@ -21,6 +21,6 @@
 
     return factory;
   };
-  VersionFactory.$inject = ['$http', '$cookieStore', '$rootScope'];
+  VersionFactory.$inject = ['$http', '$cookies', '$rootScope'];
   angular.module('marketplace').factory('VersionFactory', VersionFactory);
 }());

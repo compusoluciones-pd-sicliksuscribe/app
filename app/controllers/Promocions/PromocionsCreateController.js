@@ -1,5 +1,5 @@
 (function () {
-  var PromocionsCreateController = function ($scope, $log, $cookieStore, $location, PromocionsFactory, FileUploader, AccesosAmazonFactory) {
+  var PromocionsCreateController = function ($scope, $log, $cookies, $location, PromocionsFactory, FileUploader, AccesosAmazonFactory) {
     $scope.Promocion = {};
     $scope.IdPromocionNueva = 0;
     $scope.SubiendoArchivos = false;
@@ -34,7 +34,7 @@
 
     uploader.onBeforeUploadItem = function (item) {
       var extension = item.file.name.split('.');
-      item.file.name = $scope.Promocion.IdPromocionNueva + '.' + extension[1];
+      item.file.name = $scope.Promocion.Url + '.' + extension[1];
     };
 
     uploader.onProgressItem = function (fileItem, progress) {
@@ -142,7 +142,7 @@
               .success(function (result) {
                 if (result[0].Success == true) {
                   $scope.Promocion.IdPromocionNueva = result[0].Dato;
-                  $scope.Promocion.Url = result[0].Dato;
+                  $scope.Promocion.Url = result[0].fileName;
                   $scope.Promocion.IdPromocion = result[0].Dato;
                   uploader.queue[0].upload();
                 } else {
@@ -193,7 +193,7 @@
     }
   };
 
-  PromocionsCreateController.$inject = ['$scope', '$log', '$cookieStore', '$location', 'PromocionsFactory', 'FileUploader', 'AccesosAmazonFactory'];
+  PromocionsCreateController.$inject = ['$scope', '$log', '$cookies', '$location', 'PromocionsFactory', 'FileUploader', 'AccesosAmazonFactory'];
 
   angular.module('marketplace').controller('PromocionsCreateController', PromocionsCreateController);
 }());
