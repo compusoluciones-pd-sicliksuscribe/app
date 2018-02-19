@@ -51,10 +51,21 @@
       return $http.put($rootScope.API + 'Empresas/FormaPago', parametros);
     };
 
+    factory.putEmpresaFormaPagoFinalUser = function (parametros) {
+      factory.refreshToken();
+      return $http.put($rootScope.API + 'Empresas/FormaPago/FinalUser', parametros);
+    };
+
     factory.putEmpresaCambiaMoneda = function (parametros) {
       factory.refreshToken();
       return $http.put($rootScope.API + 'Empresas/CambiaMoneda', parametros);
     };
+
+    factory.putEmpresaCambiaMonedaFinalUser = function (parametros) {
+      factory.refreshToken();
+      return $http.put($rootScope.API + 'Empresas/CambiaMoneda/FinalUser', parametros);
+    };
+
     factory.putEmpresa = function (Empresa) {
       factory.refreshToken();
       return $http.put($rootScope.API + 'Empresas', Empresa);

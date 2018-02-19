@@ -26,7 +26,7 @@
     // Obtener productos del carrito
     factory.getPedidoDetallesUf = function () {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'shopping-cart-uf');
+      return $http.get($rootScope.API + 'shopping-cart/final-user');
     };
 
     // Preparar productos del carrito

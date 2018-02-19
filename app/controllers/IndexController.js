@@ -61,8 +61,8 @@
       if (Distribuidor) {
         var expireDate = new Date();
         expireDate.setTime(expireDate.getTime() + 600 * 60000);
-        console.log(Distribuidor);
-        console.log(typeof Distribuidor);
+        // console.log(Distribuidor);
+        // console.log(typeof Distribuidor);
         $cookies.putObject('currentDistribuidor', Distribuidor, { 'expires': expireDate, secure: $rootScope.secureCookie });
         if ($cookies.getObject('currentDistribuidor')) {
           $scope.currentDistribuidor = $cookies.getObject('currentDistribuidor');
