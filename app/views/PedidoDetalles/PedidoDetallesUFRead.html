@@ -156,22 +156,9 @@
 						<div class="form-group">
 							<label for="">Total del producto:</label>
 							<br>
-							<!-- <span ng-show="producto.DescuentoMonthAutodesk && !(producto.DescuentoNivel || producto.Descuento)">
-									<del style="font-size:11px;">{{ producto.PrecioRenovacionUF * producto.Cantidad | currency }} {{ pedido.MonedaPago }}</del>
-									<b style="color:#68953B;"> 50% Desc. </b>
-							</span>
-							<span ng-show="producto.PrimeraCompraMicrosoft">
-									<del style="font-size:11px;">{{ producto.PrecioNormalUF * producto.Cantidad | currency }} {{ pedido.MonedaPago }}</del>
-									<b style="color:#68953B;">GRATIS!</b>
-							</span> -->
 							<span >
 								{{ producto.PrecioUnitario * producto.Cantidad | currency }} {{ pedido.MonedaPago }} 
 							</span>
-							<!-- <span ng-show="(producto.DescuentoNivel || producto.Descuento) && !producto.PrimeraCompraMicrosoft">
-								<del style="font-size:11px;"> {{ producto.PrecioUnitarioReal * producto.Cantidad | currency }} {{ pedido.MonedaPago }} </del>
-								<b style="color:#68953B;"> {{ producto.DescuentoNivel || producto.Descuento }}% Descuento</b>
-								<p> {{ (producto.PrecioUnitario  * producto.Cantidad).toFixed(2) | currency }}	{{ pedido.MonedaPago }} </p>
-              </span> -->
 						</div>
 					</div>
 					<div class="col-xs-12 col-sm-12 col-md-1 col-lg-1 ">
