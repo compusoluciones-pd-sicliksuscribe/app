@@ -15,12 +15,12 @@
     const getEnterprises = function () {
       return EmpresasFactory.getEmpresas()
         .then(function (result) {
-           console.log('result' + JSON.stringify(result.data[0]));
+        //  console.log('result' + JSON.stringify(result.data[0]));
           $scope.Distribuidor = result.data[0];
         })
         .catch(function (result) {
           error(result.data);
-          $location.path('/Productos');
+          $location.path('uf/Productos');
         });
     };
 
@@ -44,7 +44,7 @@
             }
           } else {
             $scope.ShowToast(result.data.message, 'danger');
-            $location.path('/Productos');
+            $location.path('uf/Productos');
           }
         })
         .then(validarCarrito)
@@ -57,7 +57,7 @@
           if (result.data.success) {
             $scope.PedidoDetalles.forEach(function (item) {
               if ($scope.Distribuidor.IdFormaPagoPredilecta === 1 && item.MonedaPago !== 'Pesos') {
-                $scope.ShowToast('Para pagar con tarjeta bancaria es necesario que los pedidos estén en pesos MXN. Actualiza tu forma de pago o cambia de moneda en los pedidos agregándolos una vez más.', 'danger');
+                $scope.ShowToast('Para pagar con tarjeta bancaria es necesario que los pedidos estén en pesos MXNs. Actualiza tu forma de pago o cambia de moneda en los pedidos agregándolos una vez más.', 'danger');
               }
               $scope.CreditoValido = 1;
               item.hasCredit = 1;
@@ -70,12 +70,12 @@
             });
           } else {
             $scope.ShowToast('No pudimos validar tu carrito de compras, por favor intenta de nuevo.', 'danger');
-            $location.path('/Productos');
+            $location.path('uf/Productos');
           }
         })
         .catch(function (result) {
           error(result.data);
-          $location.path('/Productos');
+          $location.path('uf/Productos');
         });
     };
 
@@ -315,7 +315,7 @@
       }
       if (!next) {
         $scope.ShowToast('Revisa que tengas al menos un producto y que tenga un cliente seleccionado con crédito válido.', 'warning');
-      } else $location.path('/Comprar');
+      } else $location.path('/uf/Comprar');
     };
 
     $scope.IniciarTourCarrito = function () {
