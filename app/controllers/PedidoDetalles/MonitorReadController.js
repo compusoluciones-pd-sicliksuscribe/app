@@ -144,7 +144,7 @@
     };
 
     $scope.ActualizarDetalle = function (pedido, detalles) {
-      if (detalles.CantidadProxima <= 0 || detalles.CantidadProxima === undefined || detalles.CantidadProxima === null) {
+      if (detalles.CantidadProxima <= 0 || !detalles.CantidadProxima) {
         $scope.ShowToast('Cantidad no válida para el producto', 'danger');
         return false;
       }
@@ -160,7 +160,7 @@
         CargoRealizadoProximoPedido: pedido.CargoRealizadoProximoPedido,
         IdEstatusPedido: 1
       };
-      if (detalles.Activo === 0) {
+      if (!detalles.Activo) {
         PedidoActualizado.PorActualizarCantidad = 0;
       } else {
         if (detalles.CantidadProxima === detalles.Cantidad) {
@@ -186,21 +186,18 @@
       var FechaFin = new Date();
       FechaFin.setDate(22);
       FechaFin.setMonth(FechaFin.getMonth() + 2);
-
       return FechaFin;
     };
 
     $scope.CancelarPedido = function (Pedido, Detalles) {
       $scope.Cancelar = true;
       $scope.guardar = Pedido;
-      Pedido.Activo = 0;
-      Pedido.PorCancelar = 1;
       $scope.form.habilitar = true;
       $scope.$emit('LOAD');
       const order = {
         CargoRealizadoProximoPedido: Pedido.CargoRealizadoProximoPedido,
-        Activo: Pedido.Activo,
-        PorCancelar: Pedido.PorCancelar,
+        Activo: 0,
+        PorCancelar: 1,
         ResultadoFabricante1: Detalles.EstatusFabricante,
         IdTipoProducto: Detalles.IdTipoProducto,
         IdPedidoDetalle: Detalles.IdPedidoDetalle
