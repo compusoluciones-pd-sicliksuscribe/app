@@ -1,6 +1,7 @@
 (function () {
   const ON_DEMAND = 3;
   const CREDIT_CARD = 1;
+  const PAYPAL = 3;
   const CS_CREDIT = 2;
   var PedidoDetallesUFReadController = function ($scope, $log, $location, $cookies, PedidoDetallesFactory, TipoCambioFactory, EmpresasXEmpresasFactory, EmpresasFactory, PedidosFactory, ComprasUFFactory, $routeParams) {
     $scope.CreditoValido = 1;
@@ -40,7 +41,6 @@
             }
             if (!validate) {
               $scope.ValidarFormaPago();
-              $scope.ValidarPago();
             }
           } else {
             $scope.ShowToast(result.data.message, 'danger');
@@ -187,14 +187,6 @@
       return disabled;
     };
 
-    $scope.ValidarPago = function () {
-      // $scope.hasProtectedExchangeRate();
-      // $scope.validateUSD();
-      // $scope.isPayingWithCSCredit();
-      if ($scope.isPayingWithCreditCard()) {
-        $scope.Distribuidor.MonedaPago = 'Pesos';
-      }
-    };
     const hasProtectedExchangeRate = function (orderDetails) {
       return orderDetails.some(function (detail) {
         return detail.TipoCambioProtegido > 0;
@@ -234,11 +226,15 @@
     };
 
     $scope.isPayingWithCSCredit = function () {
-      return $scope.Distribuidor.IdFormaPagoPredilecta === CS_CREDIT;
+      return Number($scope.Distribuidor.IdFormaPagoPredilecta) === CS_CREDIT;
     };
 
     $scope.isPayingWithCreditCard = function () {
-      return $scope.Distribuidor.IdFormaPagoPredilecta === CREDIT_CARD;
+      return Number($scope.Distribuidor.IdFormaPagoPredilecta) === CREDIT_CARD;
+    };
+
+    $scope.isPayingWithPaypal = function () {
+      return Number($scope.Distribuidor.IdFormaPagoPredilecta) === PAYPAL;
     };
 
     $scope.hasProtectedExchangeRate = function () {
