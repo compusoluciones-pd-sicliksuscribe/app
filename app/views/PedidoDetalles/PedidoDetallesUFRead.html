@@ -40,11 +40,11 @@
 						<input type="radio" name="TipoPago" value="2" checked="checked" ng-model="Distribuidor.IdFormaPagoPredilecta" ng-change="ActualizarFormaPago(2);"> Crédito CompuSoluciones
 					</div>
 					<div ng-show="!ValidarFormaPago()">
-						<input type="radio" name="Tarjeta bancaria" value="1" ng-disabled="ValidarFormaPago()" ng-model="Distribuidor.IdFormaPagoPredilecta"
+						<input type="radio" name="TipoPago" value="1" ng-disabled="ValidarFormaPago()" ng-model="Distribuidor.IdFormaPagoPredilecta"
 							ng-change="ActualizarFormaPago(1);"> Tarjeta bancaria (Solo Pesos MXN)
 					</div>
 					<div ng-show="!ValidarFormaPago()">
-						<input type="radio" name="Paypal" value="3" ng-disabled="ValidarFormaPago()" ng-model="Distribuidor.IdFormaPagoPredilecta"
+						<input type="radio" name="TipoPago" value="3" ng-disabled="ValidarFormaPago()" ng-model="Distribuidor.IdFormaPagoPredilecta"
 							ng-change="ActualizarFormaPago(3);"> Pago Paypal (Solo Pesos MXN)
 					</div>
 				</div>
