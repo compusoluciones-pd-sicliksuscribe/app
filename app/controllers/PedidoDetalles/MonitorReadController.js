@@ -1,5 +1,5 @@
 (function () {
-  var MonitorReadController = function ($scope, $log, $cookies, $location, EmpresasXEmpresasFactory, PedidoDetallesFactory, $uibModal, $filter, FabricantesFactory, PedidosFactory, EmpresasFactory) {
+  var MonitorReadController = function ($scope, $log, $cookies, $location, EmpresasXEmpresasFactory, PedidoDetallesFactory, $uibModal, $filter, FabricantesFactory, PedidosFactory, EmpresasFactory, UsuariosFactory) {
     $scope.EmpresaSelect = 0;
     var Params = {};
     $scope.form = {};
@@ -9,6 +9,8 @@
     $scope.orders = false;
     $scope.BuscarProductos = {};
     $scope.Contrato = {};
+    $scope.Contactos = [];
+    $scope.Renovar = {};
     $scope.SessionCookie = $cookies.getObject('Session');
 
     $scope.init = function () {
@@ -53,6 +55,24 @@
         });
     };
 
+    const getContactUsers = function () {
+      UsuariosFactory.getUsuariosContacto($scope.EmpresaSelect)
+        .then(result => {
+          $scope.Contactos = result.data.data;
+          $scope.Renovar = {};
+        });
+    };
+
+    const renewContract = function (contractData) {
+      PedidosFactory.renewContract(contractData)
+        .then(result => {
+          console.log(result.data)
+        })
+        .catch(result => {
+          $scope.ShowToast(result.data.message, 'danger');
+        });
+    };
+
     $scope.init();
 
     $scope.ActualizarMonitor = function () {
@@ -67,6 +87,7 @@
       Params.AutoRenovable = $scope.Contrato.tipo || 'all';
       if (Params.IdFabricante) {
         getOrderPerCustomer(Params);
+        if (Params.IdFabricante === 2) getContactUsers();
       }
     };
 
@@ -248,15 +269,32 @@
       $location.path('/PedidoDetalles');
     };
 
+    $scope.SolicitarRenovacion = function () {
+      if ($scope.Renovar.IdUsuarioContacto) {
+        const bodyRequest = {
+          IdContrato: $scope.Renovar.IdContrato,
+          IdEmpresaUsuarioFinal: $scope.EmpresaSelect,
+          IdUsuarioContacto: $scope.Renovar.IdUsuarioContacto
+        };
+        renewContract(bodyRequest);
+      } else {
+        $scope.ShowToast('Selecciona un usuario de contacto', 'warning');
+      }
+    };
+
+    $scope.AgregarContrato = function (pedido) {
+      $scope.Renovar.IdContrato = pedido.IdContrato;
+    };
+
     $scope.IniciarTourMonitor = function () {
       $scope.Tour = new Tour({
         steps: [
           {
-            element: ".selectOption",
-            placement: "bottom",
-            title: "Selecciona un cliente",
-            content: "Para comenzar, selecciona un cliente para poder ver sus pedidos. Aquí podrás cancelar o renovar suscripciones, disminuir asientos para la renovación y consultar todos los pedidos generados.",
-            template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>"
+            element: '.selectOption',
+            placement: 'bottom',
+            title: 'Selecciona un cliente',
+            content: 'Para comenzar, selecciona un cliente para poder ver sus pedidos. Aquí podrás cancelar o renovar suscripciones, disminuir asientos para la renovación y consultar todos los pedidos generados.',
+            template: '<div class="popover tour"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div><div class="popover-navigation"><button class="btn btn-default" data-role="prev">« Atrás</button><button class="btn btn-default" data-role="next">Sig »</button><button class="btn btn-default" data-role="end">Finalizar</button></nav></div></div>'
           }
         ],
 
@@ -269,7 +307,7 @@
     };
   };
 
-  MonitorReadController.$inject = ['$scope', '$log', '$cookies', '$location', 'EmpresasXEmpresasFactory', 'PedidoDetallesFactory', '$uibModal', '$filter', 'FabricantesFactory', 'PedidosFactory', 'EmpresasFactory'];
+  MonitorReadController.$inject = ['$scope', '$log', '$cookies', '$location', 'EmpresasXEmpresasFactory', 'PedidoDetallesFactory', '$uibModal', '$filter', 'FabricantesFactory', 'PedidosFactory', 'EmpresasFactory', 'UsuariosFactory'];
 
   angular.module('marketplace').controller('MonitorReadController', MonitorReadController);
 }());

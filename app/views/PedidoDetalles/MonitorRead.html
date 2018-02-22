@@ -271,7 +271,10 @@
 			</div>
 			<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"></div>
 			<div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
-				<button class="pull-right btn btn-block btn-primary" style="margin-top: 20px" ng-if="!pedido.AutoRenovable" ng-disabled="!pedido.Renovacion || pedido.PorRenovar || pedido.Renovado">
+				<button id="Renovar" class="pull-right btn btn-block btn-primary" style="margin-top: 20px" ng-if="!pedido.AutoRenovable"
+					ng-disabled="(!pedido.Renovacion || pedido.PorRenovar || pedido.Renovado) && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)"
+					data-toggle="modal" data-target="#renovarModal"
+					ng-click="AgregarContrato(pedido);">
 					Renovar
 				</button>
 			</div>
@@ -380,5 +383,39 @@
 				</td>
 			</tr>
 		</table>
+
+		<div id="renovarModal" class="modal fade" tabindex="-1" role="dialog">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">Solicitud de renovación</h4>
+					</div>
+					<div class="modal-body">
+						<div class="form-group has-feedback">
+							<label for="Contacto">*Contacto </label>
+							<select name="Renovar" id="Renovar" class="form-control selectOption" ng-model="Renovar.IdUsuarioContacto" 
+								ng-options="Contacto.IdUsuario as Contacto.Nombre + ' ('+ Contacto.CorreoElectronico +')' for Contacto in Contactos">
+								<option ng-selected="true" value="">Selecciona un contacto...</option>
+							</select>
+						</div>
+						<br/> <br/>
+						<div class="form-group">
+							<p>
+								<b>Nota**</b> <br/>
+								Al dar click en <b>Renovar Contrato</b>, se agregaran al carrito de compras todos los productos que estén incluidos en el
+								contrato con el estatus de <b>Aceptado</b>. En el caso que se hayan modificado las cantidades se renovaran las que estén indicadas
+								en el campo de <b>Renovación</b>, si no se cambiaron, se renovaran las indicadas en el campo de <b>Suscripciones</b>.
+							</p>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Regresar</button>
+						<button type="button" class="btn btn-primary" ng-click="SolicitarRenovacion(pedido.IdContrato);">Renovar contrato</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
 	</div>
 </div>
