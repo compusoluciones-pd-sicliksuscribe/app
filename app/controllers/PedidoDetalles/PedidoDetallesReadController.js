@@ -140,19 +140,6 @@
         });
     };
 
-    $scope.ActualizarCodigo = function (value) {
-      const order = {
-        CodigoPromocion: value.CodigoPromocion,
-        IdPedido: value.IdPedido
-      };
-      PedidosFactory.putCodigoPromocion(order)
-        .then(function (result) {
-          $scope.init();
-          $scope.ShowToast(result.data.message, 'success');
-        })
-        .catch(function (result) { error(result.data); });
-    };
-
     $scope.ValidarFormaPago = function () {
       var disabled = false;
       if ($scope.PedidoDetalles) {

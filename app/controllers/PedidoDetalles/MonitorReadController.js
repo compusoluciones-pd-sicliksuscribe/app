@@ -66,7 +66,11 @@
     const renewContract = function (contractData) {
       PedidosFactory.renewContract(contractData)
         .then(result => {
-          console.log(result.data)
+          $scope.ShowToast(result.data.message, 'success');
+          $scope.ActualizarMenu();
+          $scope.addPulseCart();
+          setTimeout($scope.removePulseCart, 9000);
+          $location.path('/Carrito');
         })
         .catch(result => {
           $scope.ShowToast(result.data.message, 'danger');
@@ -137,8 +141,6 @@
         })
         .error(function (data, status, headers, config) {
           $scope.ShowToast('No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde', 'danger');
-
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
     };
 
@@ -159,8 +161,6 @@
         })
         .error(function (data, status, headers, config) {
           $scope.ShowToast('No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde', 'danger');
-
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
     };
 
@@ -271,12 +271,12 @@
 
     $scope.SolicitarRenovacion = function () {
       if ($scope.Renovar.IdUsuarioContacto) {
-        const bodyRequest = {
+        const payload = {
           IdContrato: $scope.Renovar.IdContrato,
           IdEmpresaUsuarioFinal: $scope.EmpresaSelect,
           IdUsuarioContacto: $scope.Renovar.IdUsuarioContacto
         };
-        renewContract(bodyRequest);
+        renewContract(payload);
       } else {
         $scope.ShowToast('Selecciona un usuario de contacto', 'warning');
       }

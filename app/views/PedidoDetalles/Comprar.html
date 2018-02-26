@@ -29,7 +29,10 @@
 					<label>Marca de los productos:</label> {{ pedido.NombreFabricante }} <br>
 					<label>Duración del periodo:</label> del {{ pedido.FechaInicio }} al {{ pedido.FechaFin }} <br>
 					<label>Renovación del periodo:</label> {{ pedido.NombreEsquemaRenovacion }}
-					<div ng-if="pedido.IdFabricante === 2"><label>Contrato: </label> {{ pedido.ContratoBaseAutodesk || 'Nuevo' }} </div>
+					<div ng-if="pedido.IdFabricante === 2">
+						<label>Contrato: </label> {{ pedido.ContratoBaseAutodesk || 'Nuevo' }} <br>
+						<label>Tipo de orden: </label> <span ng-if="pedido.IdAccionAutodesk !== 4">Add-ons</span> <span ng-if="pedido.IdAccionAutodesk === 4">Renovación</span>
+					</div>
 				</div>
 			</div>
 			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
