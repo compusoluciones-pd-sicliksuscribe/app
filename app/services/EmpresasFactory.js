@@ -127,9 +127,9 @@
       return $http.get($rootScope.API + 'enterprise/clients');
     };
 
-    factory.putEmpresa = function (Empresa) {
+    factory.putEmpresa = function (IdEmpresa, Empresa) {
       factory.refreshToken();
-      return $http.put($rootScope.API + 'enterprise', Empresa);
+      return $http.put($rootScope.API + 'enterprise/' + IdEmpresa, Empresa);
     };
 
     return factory;

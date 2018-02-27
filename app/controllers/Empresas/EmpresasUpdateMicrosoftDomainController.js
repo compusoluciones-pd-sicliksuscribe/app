@@ -65,10 +65,9 @@
 
     $scope.ActualizarDominio = function () {
       const parametro = {
-        IdEmpresa: $scope.Empresa.IdEmpresa,
         DominioMicrosoft: $scope.Empresa.DominioMicrosoft
       };
-      EmpresasFactory.putEmpresa(parametro)
+      EmpresasFactory.putEmpresa($scope.Empresa.IdEmpresa, parametro)
         .success(function (result) {
           Session.NombreEmpresa = $scope.Empresa.NombreEmpresa;
           $cookies.putObject('Session', Session, { secure: $rootScope.secureCookie });
