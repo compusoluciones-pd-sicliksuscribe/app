@@ -69,21 +69,21 @@
 				<div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
 					<div class="form-group">
 						<label for="">Cantidad:</label> {{ producto.Cantidad }} <br>
-						<label for="">Precio unitario:</label> {{ producto.PrecioUnitario | currency }} {{ pedido.MonedaPago }}
+						<label for="">Precio unitario:</label> {{ producto.PrecioNormalUF | currency }} {{ producto.MonedaPrecio }}
 						<br>
-						<label for="">Precio renovación:</label> {{ producto.PrecioRenovacion | currency}} {{ pedido.MonedaPago }}
+						<label for="">Precio renovación:</label> {{ producto.PrecioRenovacionUF | currency}} {{ producto.MonedaPrecio }}
 					</div>
 				</div>
 				<div class="form-group col-xs-12 col-sm-12 col-md-3 col-lg-3">
 					<div class="form-group">
 						<label for="">Total del producto:</label>
 						<br>
-						<span ng-show="producto.PrimeraCompraMicrosoft">
+						<!-- <span ng-show="producto.PrimeraCompraMicrosoft">
               <del style="font-size:11px;">{{ producto.PrecioUnitario * producto.Cantidad | currency }} {{ pedido.MonedaPago }}</del>
               <b style="color:#68953B;">GRATIS!</b>
-						</span>
+						</span> -->
 						<span ng-show="!producto.PrimeraCompraMicrosoft">
-							{{ producto.PrecioUnitario * producto.Cantidad | currency }} {{ pedido.MonedaPago }} 
+							{{ producto.PrecioNormalUF * producto.Cantidad | currency }} {{  producto.MonedaPrecio }} 
 						</span>
 					</div>
 				</div>

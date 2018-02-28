@@ -4,6 +4,7 @@
     $scope.PedidoDetalles = {};
     $scope.Distribuidor = {};
     $scope.error = false;
+    $scope.currentDistribuidor = $cookies.getObject('currentDistribuidor');
 
     const error = function (message) {
       $scope.ShowToast(!message ? 'Ha ocurrido un error, intentelo mas tarde.' : message, 'danger');
@@ -14,6 +15,7 @@
       return PedidoDetallesFactory.getPedidoDetallesUf()
         .then(function (result) {
           if (result.data.success) $scope.PedidoDetalles = result.data.data;
+          //console.log(' result.data.data' + JSON.stringify(result.data.data));
           $scope.PedidoDetalles.forEach(function (elem) {
             elem.Productos.forEach(function (item) {
               if (item.PrecioUnitario == null) $scope.error = true;
@@ -39,7 +41,7 @@
     };
 
     const comprarProductos = function () {
-      PedidoDetallesFactory.getComprar()
+      PedidoDetallesFactory.getComprarFinalUser($scope.currentDistribuidor.IdEmpresa)
         .then(function (response) {
           if (response.data.success) {
             $scope.ShowToast(response.data.message, 'success');
@@ -96,6 +98,7 @@
         confirmarPaypal();
         $scope.prepararPedidos();
       }
+      console.log('$scope.currentDistribuidor' + JSON.stringify($scope.currentDistribuidor.IdEmpresa));
     };
 
     $scope.init();

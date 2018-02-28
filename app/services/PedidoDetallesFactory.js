@@ -47,6 +47,12 @@
       return $http.post($rootScope.API + 'shopping-cart/buy');
     };
 
+    // Comprar productos final user
+    factory.getComprarFinalUser = function (currentDistribuidor) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'shopping-cart/buy-final-user/' + currentDistribuidor);
+    };
+
     // Valida el credito de los clientes
     factory.getValidarCarrito = function () {
       factory.refreshToken();
