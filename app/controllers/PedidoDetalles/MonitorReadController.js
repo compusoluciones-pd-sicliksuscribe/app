@@ -179,7 +179,7 @@
         MonedaCosto: detalles.MonedaPrecio,
         CantidadProxima: detalles.CantidadProxima,
         CargoRealizadoProximoPedido: pedido.CargoRealizadoProximoPedido,
-        IdEstatusPedido: 1
+        PorCancelar: 0
       };
       if (!detalles.Activo) {
         PedidoActualizado.PorActualizarCantidad = 0;
@@ -193,6 +193,8 @@
       PedidoDetallesFactory.putPedidoDetalle(PedidoActualizado)
         .success(function (PedidoDetalleSuccess) {
           if (PedidoDetalleSuccess.success) {
+            detalles.MostrarCantidad = 0;
+            detalles.PorCancelar = 0;
             $scope.ShowToast(PedidoDetalleSuccess.message, 'success');
           } else {
             $scope.ShowToast(PedidoDetalleSuccess.message, 'danger');
@@ -208,6 +210,25 @@
       FechaFin.setDate(22);
       FechaFin.setMonth(FechaFin.getMonth() + 2);
       return FechaFin;
+    };
+
+    $scope.CancelarRenovacion = function (pedido, detalles) {
+      const params = {
+        CargoRealizadoProximoPedido: pedido.CargoRealizadoProximoPedido,
+        PorCancelar: 1,
+        ResultadoFabricante1: detalles.EstatusFabricante,
+        IdTipoProducto: detalles.IdTipoProducto,
+        IdPedidoDetalle: detalles.IdPedidoDetalle
+      };
+      PedidoDetallesFactory.putPedidoDetalle(params)
+        .then(function (result) {
+          detalles.PorCancelar = 1;
+          detalles.MostrarCantidad = 0;
+          $scope.ShowToast(result.data.message, 'success');
+        })
+        .catch(function (result) {
+          $scope.ShowToast(result.data.message, 'danger');
+        });
     };
 
     $scope.CancelarPedido = function (Pedido, Detalles) {
