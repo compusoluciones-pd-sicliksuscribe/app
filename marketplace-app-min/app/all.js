@@ -5803,7 +5803,7 @@ angular.module('directives.loading', [])
 
     $scope.hasProtectedExchangeRate = function () {
       const orderDetails = $scope.PedidoDetalles;
-      return hasProtectedExchangeRate(orderDetails);
+      if (orderDetails) return hasProtectedExchangeRate(orderDetails);
     };
 
     $scope.ActualizarFormaPago = ActualizarFormaPago;
