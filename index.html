@@ -552,6 +552,8 @@
 		}
 
 		function completeCallback(resultIndicator, sessionVersion) {
+			console.log(angular.element(document.getElementById('divComprar')).scope());
+			console.log(angular.element(document.getElementById('divComprar')));
 			angular.element(document.getElementById('divComprar')).scope().ComprarConTarjeta(resultIndicator, sessionVersion);
 		}
 	</script>
