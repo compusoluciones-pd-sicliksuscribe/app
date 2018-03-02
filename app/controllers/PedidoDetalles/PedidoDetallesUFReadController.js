@@ -29,7 +29,7 @@
       return PedidoDetallesFactory.getPedidoDetallesUf()
         .then(function (result) {
           if (result.data.success) {
-            // console.log(' result.data.data' + JSON.stringify( result.data.data));
+           // console.log(' result.data.data' + JSON.stringify( result.data.data));
             $scope.PedidoDetalles = result.data.data;
             $scope.PedidoDetalles.forEach(function (elem) {
               elem.Productos.forEach(function (item) {
@@ -254,7 +254,13 @@
       $scope.PedidoDetalles.forEach(function (order) {
         order.Productos.forEach(function (product) {
           if (order.IdPedido === IdPedido) {
-            total = total + (product.PrecioUnitario * product.Cantidad);
+            if (order.MonedaPago === 'Pesos' && product.MonedaPrecioUF === 'Dólares') {
+              total = total + (product.PrecioNormalUF * product.Cantidad) * order.TipoCambio;
+            } else if (order.MonedaPago === 'Dólares' && product.MonedaPrecioUF === 'Pesos') {
+              total = total + (product.PrecioNormalUF * product.Cantidad) / order.TipoCambio;
+            } else {
+              total = total + (product.PrecioNormalUF * product.Cantidad);
+            }
           }
         });
       });

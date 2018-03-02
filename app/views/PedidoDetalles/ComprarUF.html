@@ -69,9 +69,9 @@
 				<div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
 					<div class="form-group">
 						<label for="">Cantidad:</label> {{ producto.Cantidad }} <br>
-						<label for="">Precio unitario:</label> {{ producto.PrecioNormalUF | currency }} {{ producto.MonedaPrecio }}
+						<label for="">Precio unitario:</label> {{ producto.PrecioNormalUF | currency }} {{ producto.MonedaPrecioUF }}
 						<br>
-						<label for="">Precio renovación:</label> {{ producto.PrecioRenovacionUF | currency}} {{ producto.MonedaPrecio }}
+						<label for="">Precio renovación:</label> {{ producto.PrecioRenovacionUF | currency}} {{ producto.MonedaPrecioUF }}
 					</div>
 				</div>
 				<div class="form-group col-xs-12 col-sm-12 col-md-3 col-lg-3">
@@ -83,7 +83,7 @@
               <b style="color:#68953B;">GRATIS!</b>
 						</span> -->
 						<span ng-show="!producto.PrimeraCompraMicrosoft">
-							{{ producto.PrecioNormalUF * producto.Cantidad | currency }} {{  producto.MonedaPrecio }} 
+							{{ producto.PrecioNormalUF * producto.Cantidad | currency }} {{  producto.MonedaPrecioUF }} 
 						</span>
 					</div>
 				</div>

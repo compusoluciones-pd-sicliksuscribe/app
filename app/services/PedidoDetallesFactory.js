@@ -89,6 +89,11 @@
       return $http.post($rootScope.API + 'shopping-cart/credit-card-payments');
     };
 
+    factory.getPrepararTarjetaCreditoFinalUser = function (currentDistribuidor) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'shopping-cart/credit-card-payments/final-user/' + currentDistribuidor);
+    };
+
     factory.prepararPaypal = function (params) {
       factory.refreshToken();
       return $http.post($rootScope.API + 'paypal/order', params);

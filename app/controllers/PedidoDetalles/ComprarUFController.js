@@ -15,7 +15,7 @@
       return PedidoDetallesFactory.getPedidoDetallesUf()
         .then(function (result) {
           if (result.data.success) $scope.PedidoDetalles = result.data.data;
-          //console.log(' result.data.data' + JSON.stringify(result.data.data));
+          // console.log(' result.data.data' + JSON.stringify(result.data.data));
           $scope.PedidoDetalles.forEach(function (elem) {
             elem.Productos.forEach(function (item) {
               if (item.PrecioUnitario == null) $scope.error = true;
@@ -119,8 +119,14 @@
       let total = 0;
       $scope.PedidoDetalles.forEach(function (order) {
         order.Productos.forEach(function (product) {
-          if (order.IdPedido === IdPedido && !product.PrimeraCompraMicrosoft) {
-            total = total + (product.PrecioUnitario * product.Cantidad);
+          if (order.IdPedido === IdPedido) {
+            if (order.MonedaPago === 'Pesos' && product.MonedaPrecioUF === 'Dólares') {
+              total = total + (product.PrecioNormalUF * product.Cantidad) * order.TipoCambio;
+            } else if (order.MonedaPago === 'Dólares' && product.MonedaPrecioUF === 'Pesos') {
+              total = total + (product.PrecioNormalUF * product.Cantidad) / order.TipoCambio;
+            } else {
+              total = total + (product.PrecioNormalUF * product.Cantidad);
+            }
           }
         });
       });
@@ -150,7 +156,7 @@
     };
 
     $scope.PagarTarjeta = function () {
-      PedidoDetallesFactory.getPrepararTarjetaCredito()
+      PedidoDetallesFactory.getPrepararTarjetaCreditoFinalUser($scope.currentDistribuidor.IdEmpresa)
         .success(function (Datos) {
           var expireDate = new Date();
           expireDate.setTime(expireDate.getTime() + 600 * 2000);
