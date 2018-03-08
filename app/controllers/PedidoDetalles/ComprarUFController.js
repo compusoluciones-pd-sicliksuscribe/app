@@ -15,7 +15,7 @@
       return PedidoDetallesFactory.getPedidoDetallesUf()
         .then(function (result) {
           if (result.data.success) $scope.PedidoDetalles = result.data.data;
-          // console.log(' result.data.data' + JSON.stringify(result.data.data));
+         // console.log(' result.data.data' + JSON.stringify(result.data.data));
           $scope.PedidoDetalles.forEach(function (elem) {
             elem.Productos.forEach(function (item) {
               if (item.PrecioUnitario == null) $scope.error = true;
@@ -55,7 +55,7 @@
     };
 
     $scope.prepararPedidos = function () {
-      PedidoDetallesFactory.getPrepararCompra(1)
+      PedidoDetallesFactory.getPrepararCompraFinalUser(1)
         .then(function (result) {
           if (result.data.success) $scope.ShowToast(result.data.message, 'success');
           else {
@@ -98,7 +98,7 @@
         confirmarPaypal();
         $scope.prepararPedidos();
       }
-      console.log('$scope.currentDistribuidor' + JSON.stringify($scope.currentDistribuidor.IdEmpresa));
+      // console.log('$scope.currentDistribuidor' + JSON.stringify($scope.currentDistribuidor.IdEmpresa));
     };
 
     $scope.init();

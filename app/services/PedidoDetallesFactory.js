@@ -35,6 +35,12 @@
       return $http.post($rootScope.API + 'shopping-cart/prepare-purchase/' + commission);
     };
 
+    // Preparar productos del carrito
+    factory.getPrepararCompraFinalUser = function (commission) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'shopping-cart/prepare-purchase/final-user/' + commission);
+    };
+
     // Eliminar productos del carrito
     factory.deletePedidoDetalles = function (IdPedidoDetalle) {
       factory.refreshToken();
