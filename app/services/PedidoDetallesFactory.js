@@ -102,6 +102,11 @@
       return $http.post($rootScope.API + 'orders/pay-width-card', Pedidos);
     };
 
+    factory.removeRenew = function (pedido) {
+      factory.refreshToken();
+      return $http.delete($rootScope.API + 'shopping-cart/renew/order/' + pedido.IdPedido + '/end-user/' + pedido.IdEmpresaUsuarioFinal);
+    };
+
     return factory;
   };
 

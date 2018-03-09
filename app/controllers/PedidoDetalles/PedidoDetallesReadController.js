@@ -214,6 +214,28 @@
       $location.path('/autodesk/productos/' + IdProducto + '/detalle/' + IdPedidoDetalle);
     };
 
+    $scope.removeRenew = function (pedido) {
+      const params = {
+        IdPedido: pedido.IdPedido,
+        IdEmpresaUsuarioFinal: pedido.IdEmpresaUsuarioFinal
+      };
+      PedidoDetallesFactory.removeRenew(params)
+        .then(function (result) {
+          $scope.PedidoDetalles.forEach(function (order, indexOrder) {
+            if (pedido.IdPedido === order.IdPedido) {
+              $scope.PedidoDetalles.splice(indexOrder, 1);
+              validarCarrito();
+            }
+          });
+          $scope.ActualizarMenu();
+          validarCarrito();
+          $scope.ShowToast(result.data.message, 'success');
+        })
+        .catch(function (result) {
+          $scope.ShowToast(result.data.message, 'danger');
+        });
+    };
+
     $scope.calcularSubTotal = function (IdPedido) {
       let total = 0;
       $scope.PedidoDetalles.forEach(function (order) {
