@@ -59,7 +59,7 @@
       } else {
         $scope.frm.DominioMicrosoft.$pristine = false;
         $scope.frm.DominioMicrosoft.$invalid = true;
-        $scope.Empresa.MensajeDominio = 'Ingresa un dominio valido.';
+        $scope.Empresa.MensajeDominio = 'Ingresa un dominio válido.';
       }
     };
 
@@ -67,7 +67,11 @@
       const parametro = {
         DominioMicrosoft: $scope.Empresa.DominioMicrosoft
       };
-      EmpresasFactory.putEmpresa($scope.Empresa.IdEmpresa, parametro)
+      if ($scope.frm.DominioMicrosoft.$invalid) {
+        $scope.frm.DominioMicrosoft.$pristine = false;
+        $scope.Empresa.MensajeDominio = 'Ingresa un Dominio Válido.';
+      } else {
+        EmpresasFactory.putEmpresa($scope.Empresa.IdEmpresa, parametro)
         .success(function (result) {
           Session.NombreEmpresa = $scope.Empresa.NombreEmpresa;
           $cookies.putObject('Session', Session, { secure: $rootScope.secureCookie });
@@ -78,6 +82,7 @@
         .error(function (data, status, headers, config) {
           $scope.ShowToast(data.message, 'danger');
         });
+      }
     };
 
     $scope.EmpresaCancel = function () {
