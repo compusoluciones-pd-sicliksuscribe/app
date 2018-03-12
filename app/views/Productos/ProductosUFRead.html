@@ -202,12 +202,12 @@
                                         </div>
 
                                         <div style="float:right!important;">
-                                            <div ng-show="ProtectedRP > 0">
+                                            <!-- <div ng-show="ProtectedRP > 0">
                                                 <label for="" title="Tipo Cambio Protegido">Tipo de cambio protegido:</label>
                                                 <b>
                                                     {{ProtectedRP | currency: "$":4}} MXN.
                                                 </b>
-                                            </div>
+                                            </div> -->
                                             <label for="" title="Cantidad por precio">Total:</label>
                                             <b> 
                                                 {{CalcularPrecioTotal(Producto.PrecioProrrateo, Producto.Cantidad, Producto.MonedaCompra, Producto.MonedaPrecio, TipoCambio, ProtectedRP) | currency}} {{Producto.MonedaCompra}} 

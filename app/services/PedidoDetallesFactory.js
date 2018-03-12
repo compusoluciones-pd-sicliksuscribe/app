@@ -56,7 +56,7 @@
     // Comprar productos final user
     factory.getComprarFinalUser = function (currentDistribuidor) {
       factory.refreshToken();
-      return $http.post($rootScope.API + 'shopping-cart/buy-final-user/' + currentDistribuidor);
+      return $http.post($rootScope.API + 'shopping-cart/final-user-purchase/' + currentDistribuidor);
     };
 
     // Valida el credito de los clientes
