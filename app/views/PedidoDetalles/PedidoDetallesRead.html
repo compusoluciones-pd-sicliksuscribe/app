@@ -50,7 +50,7 @@
 				</div>
 			</div>
 			<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
-				<div class="form-group" ng-hide="isPayingWithCreditCard() || hasProtectedExchangeRate()" >
+				<div class="form-group" ng-hide="isPayingWithCreditCard() || hasProtectedExchangeRate() || isPayingWithPaypal()" >
 					<label for="" class="">* ¿Con qué moneda quieres pagarlos?</label>
 					<div class="radio" style="margin-left:20px" >
 						<div>
@@ -70,6 +70,12 @@
 			</div>
 		</div>
 
+		<div class="form-group row" ng-show="isPayingWithPaypal() && !hasProtectedExchangeRate()">
+			<div class="alert alert-warning">
+				<b>Nota importante *</b> Al haber elegido el método de pago con paypal deberás realizar tu operación en moneda nacional.<br>
+			</div>
+		</div>
+		
 		<div class="form-group row" ng-show="isPayingWithCreditCard() && !hasProtectedExchangeRate()">
 			<div class="alert alert-warning">
 				<b>Nota importante *</b> Al haber elegido el método de pago con tarjeta de crédito deberás realizar tu operación en moneda nacional.<br>

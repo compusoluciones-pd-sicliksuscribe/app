@@ -1,5 +1,6 @@
 (function () {
   const ON_DEMAND = 3;
+  const PAYPAL = 3;
   const CREDIT_CARD = 1;
   const CS_CREDIT = 2;
   var PedidoDetallesReadController = function ($scope, $log, $location, $cookies, PedidoDetallesFactory, TipoCambioFactory, EmpresasXEmpresasFactory, EmpresasFactory, PedidosFactory, $routeParams) {
@@ -210,11 +211,15 @@
     };
 
     $scope.isPayingWithCSCredit = function () {
-      return $scope.Distribuidor.IdFormaPagoPredilecta === CS_CREDIT;
+      return Number($scope.Distribuidor.IdFormaPagoPredilecta) === CS_CREDIT;
     };
 
     $scope.isPayingWithCreditCard = function () {
-      return $scope.Distribuidor.IdFormaPagoPredilecta === CREDIT_CARD;
+      return Number($scope.Distribuidor.IdFormaPagoPredilecta) === CREDIT_CARD;
+    };
+
+    $scope.isPayingWithPaypal = function () {
+      return Number($scope.Distribuidor.IdFormaPagoPredilecta) === PAYPAL;
     };
 
     $scope.hasProtectedExchangeRate = function () {

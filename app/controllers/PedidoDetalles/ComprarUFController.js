@@ -48,7 +48,7 @@
             $scope.ActualizarMenu();
             $location.path('/');
           } else {
-            $location.path('/Carrito');
+            $location.path('uf/Carrito');
             $scope.ShowToast(response.data.message, 'danger');
           }
         });
@@ -220,7 +220,7 @@
       const expireDate = new Date();
       expireDate.setTime(expireDate.getTime() + 600 * 2000);
       $cookies.putObject('orderIds', orderIds, { expires: expireDate, secure: $rootScope.secureCookie });
-      PedidoDetallesFactory.prepararPaypal({ orderIds, url: 'Comprar' })
+      PedidoDetallesFactory.prepararPaypalFinalUser({ orderIds, url: 'uf/Comprar' })
         .then(function (response) {
           if (response.data.message === 'free') comprarProductos();
           else if (response.data.state === 'created') {

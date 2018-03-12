@@ -105,6 +105,11 @@
       return $http.post($rootScope.API + 'paypal/order', params);
     };
 
+    factory.prepararPaypalFinalUser = function (params) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'paypal/order/final-user', params);
+    };
+    
     factory.confirmarPaypal = function (params) {
       factory.refreshToken();
       return $http.put($rootScope.API + 'paypal/order/confirm', params);
