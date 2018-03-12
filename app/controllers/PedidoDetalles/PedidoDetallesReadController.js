@@ -1,11 +1,22 @@
 (function () {
-  const ON_DEMAND = 3;
-  const CREDIT_CARD = 1;
-  const CS_CREDIT = 2;
   var PedidoDetallesReadController = function ($scope, $log, $location, $cookies, PedidoDetallesFactory, TipoCambioFactory, EmpresasXEmpresasFactory, EmpresasFactory, PedidosFactory, $routeParams) {
     $scope.CreditoValido = 1;
     $scope.error = false;
     $scope.Distribuidor = {};
+    const ON_DEMAND = 3;
+    const paymentMethods = {
+      CREDIT_CARD: 1,
+      CS_CREDIT: 2,
+      PAYPAL: 3,
+      CASH: 4
+    };
+    const makers = {
+      MICROSOFT: 1,
+      AUTODESK: 2,
+      COMPUSOLUCIONES: 3,
+      HP: 4,
+      APERIO: 5
+    };
 
     const error = function (error) {
       $scope.ShowToast(!error ? 'Ha ocurrido un error, intentelo mas tarde.' : error.message, 'danger');
@@ -23,12 +34,59 @@
         });
     };
 
+    const getPaymentMethods = function (id) {
+      let paymentMethod = '';
+      switch (id) {
+        case paymentMethods.CREDIT_CARD:
+          paymentMethod = 'Tarjeta';
+          break;
+        case paymentMethods.CS_CREDIT:
+          paymentMethod = 'Crédito';
+          break;
+        case paymentMethods.PAYPAL:
+          paymentMethod = 'Paypal';
+          break;
+        case paymentMethods.CASH:
+          paymentMethod = 'Transferencia';
+          break;
+        default:
+          paymentMethod = 'Metodo de pago incorrecto.';
+      }
+      return paymentMethod;
+    };
+
+    const getMakers = function (id) {
+      let maker = '';
+      switch (id) {
+        case makers.MICROSOFT:
+          maker = 'Microsoft';
+          break;
+        case makers.AUTODESK:
+          maker = 'Autodesk';
+          break;
+        case makers.COMPUSOLUCIONES:
+          maker = 'Compusoluciones';
+          break;
+        case makers.APERIO:
+          maker = 'Aperio';
+          break;
+        case makers.HP:
+          maker = 'HP';
+          break;
+        default:
+          maker = 'Fabricante incorrecto.';
+      }
+      return maker;
+    };
+
     const getOrderDetails = function (validate) {
       return PedidoDetallesFactory.getPedidoDetalles()
         .then(function (result) {
           if (result.data.success) {
             $scope.PedidoDetalles = result.data.data;
             $scope.PedidoDetalles.forEach(function (elem) {
+              elem.Forma = getPaymentMethods(elem.IdFormaPago);
+              elem.NombreFabricante = getMakers(elem.IdFabricante);
               elem.Productos.forEach(function (item) {
                 if (item.PrecioUnitario == null) $scope.error = true;
               });
@@ -188,18 +246,18 @@
       if (!orderDetails) return false;
       if (hasProtectedExchangeRate(orderDetails)) return false;
       if (containsOnDemandProduct(orderDetails)) {
-        setPaymentMethod(CS_CREDIT);
+        setPaymentMethod(paymentMethods.CS_CREDIT);
         return false;
       }
       return true;
     };
 
     $scope.isPayingWithCSCredit = function () {
-      return $scope.Distribuidor.IdFormaPagoPredilecta === CS_CREDIT;
+      return $scope.Distribuidor.IdFormaPagoPredilecta === paymentMethods.CS_CREDIT;
     };
 
     $scope.isPayingWithCreditCard = function () {
-      return $scope.Distribuidor.IdFormaPagoPredilecta === CREDIT_CARD;
+      return $scope.Distribuidor.IdFormaPagoPredilecta === paymentMethods.CREDIT_CARD;
     };
 
     $scope.hasProtectedExchangeRate = function () {
