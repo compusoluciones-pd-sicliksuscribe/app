@@ -4,6 +4,7 @@
     $scope.error = false;
     $scope.Distribuidor = {};
     const ON_DEMAND = 3;
+    const ELECTRONIC_SERVICE = 74;
     const paymentMethods = {
       CREDIT_CARD: 1,
       CS_CREDIT: 2,
@@ -74,7 +75,7 @@
           maker = 'HP';
           break;
         default:
-          maker = 'Fabricante incorrecto.';
+          maker = null;
       }
       return maker;
     };
@@ -299,7 +300,7 @@
       $scope.PedidoDetalles.forEach(function (order) {
         order.Productos.forEach(function (product) {
           if (order.IdPedido === IdPedido && !product.PrimeraCompraMicrosoft) {
-            total = total + (product.PrecioUnitario * product.Cantidad);
+            total = total + ($scope.calculateExchangeRate(order, product, 'PrecioUnitario') * product.Cantidad);
           }
         });
       });
@@ -321,6 +322,18 @@
       if ($scope.Distribuidor.ZonaImpuesto === 'Nacional') iva = 0.16 * total;
       if ($scope.Distribuidor.ZonaImpuesto === 'Frontera') iva = 0.11 * total;
       total = total + iva;
+      return total;
+    };
+
+    $scope.calculateExchangeRate = function (order, details, value) {
+      let total = 0;
+      if (order.MonedaPago === 'Pesos' && details.MonedaPrecio === 'Dólares') {
+        total = details[value] * order.TipoCambio;
+      } else if (order.MonedaPago === 'Dólares' && details.MonedaPrecio === 'Pesos' && details.IdProducto !== ELECTRONIC_SERVICE) {
+        total = details[value] / order.TipoCambio;
+      } else {
+        total = details[value];
+      }
       return total;
     };
 

@@ -100,7 +100,10 @@
 						<label>Renovación del periodo:</label> {{ pedido.NombreEsquemaRenovacion }} <br>
 						<div ng-if="pedido.IdFabricante === 2">
 							<label>Contrato: </label> {{ pedido.ContratoBaseAutodesk || 'Nuevo' }} <br>
-							<label>Tipo de orden: </label> <span ng-if="pedido.IdAccionAutodesk !== 4">Add-ons</span> <span ng-if="pedido.IdAccionAutodesk === 4">Renovación</span>
+							<label>Tipo de orden: </label>
+								<span ng-if="pedido.IdAccionAutodesk !== 4 && !pedido.Renovado">Add-ons</span>
+								<span ng-if="pedido.IdAccionAutodesk !== 4 && pedido.Renovado">Add-ons (Renovación)</span>
+								<span ng-if="pedido.IdAccionAutodesk === 4">Renovación</span>
 						</div>
 					</div>
 				</div>
@@ -156,30 +159,30 @@
 					<div class="form-group col-xs-12 col-sm-12 col-md-3 col-lg-3">
 						<div class="form-group">
 							<label for="">Cantidad:</label> {{ producto.Cantidad }} <br>
-							<label for="">Precio unitario:</label> {{ producto.PrecioUnitario | currency }} {{ pedido.MonedaPago }}
+							<label for="">Precio unitario:</label> {{ calculateExchangeRate(pedido, producto, 'PrecioUnitario') | currency }} {{ pedido.MonedaPago }}
 							<br>
-							<label for="">Precio renovación:</label> {{ producto.PrecioRenovacion | currency}} {{ pedido.MonedaPago }}
+							<label for="">Precio renovación:</label> {{ calculateExchangeRate(pedido, producto, 'PrecioRenovacion') | currency}} {{ pedido.MonedaPago }}
 						</div>
 					</div>
 					<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
 						<div class="form-group">
 							<label for="">Total del producto:</label>
 							<br>
-							<span ng-show="producto.DescuentoMonthAutodesk && !(producto.DescuentoNivel || producto.Descuento)">
+							<!-- <span ng-show="producto.DescuentoMonthAutodesk && !(producto.DescuentoNivel || producto.Descuento)">
 									<del style="font-size:11px;">{{ producto.PrecioRenovacion * producto.Cantidad | currency }} {{ pedido.MonedaPago }}</del>
 									<b style="color:#68953B;"> 50% Desc. </b>
 							</span>
 							<span ng-show="producto.PrimeraCompraMicrosoft">
 									<del style="font-size:11px;">{{ producto.PrecioUnitario * producto.Cantidad | currency }} {{ pedido.MonedaPago }}</del>
 									<b style="color:#68953B;">GRATIS!</b>
-							</span>
+							</span> -->
 							<span ng-show="!producto.PrimeraCompraMicrosoft && !producto.DescuentoNivel">
-								{{ producto.PrecioUnitario * producto.Cantidad | currency }} {{ pedido.MonedaPago }} 
+								{{ calculateExchangeRate(pedido, producto, 'PrecioUnitario') * producto.Cantidad | currency }} {{ pedido.MonedaPago }} 
 							</span>
 							<span ng-show="(producto.DescuentoNivel || producto.Descuento) && !producto.PrimeraCompraMicrosoft">
-								<del style="font-size:11px;"> {{ producto.PrecioUnitarioReal * producto.Cantidad | currency }} {{ pedido.MonedaPago }} </del>
+								<del style="font-size:11px;"> {{ calculateExchangeRate(pedido, producto, 'PrecioSinDescuento') * producto.Cantidad | currency }} {{ pedido.MonedaPago }} </del>
 								<b style="color:#68953B;"> {{ producto.DescuentoNivel || producto.Descuento }}% Descuento</b>
-								<p> {{ (producto.PrecioUnitario  * producto.Cantidad).toFixed(2) | currency }}	{{ pedido.MonedaPago }} </p>
+								<p> {{ (calculateExchangeRate(pedido, producto, 'PrecioUnitario')  * producto.Cantidad).toFixed(2) | currency }}	{{ pedido.MonedaPago }} </p>
               </span>
 						</div>
 					</div>
@@ -203,7 +206,7 @@
 			</div>
 			<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
 				<div class="">
-					<button id="btnSiguiente" type="button" ng-click="next();" class="btn btn-primary btn-block" ng-if="!( Distribuidor.IdFormaPagoPredilecta == undefined || Distribuidor.IdFormaPagoPredilecta == null || CreditoValido == 0 || error === true )">
+					<button id="btnSiguiente" type="button" ng-click="next();" class="btn btn-primary btn-block" ng-if="!(!Distribuidor.IdFormaPagoPredilecta || CreditoValido == 0 || error === true )">
             Siguiente
           </button>
 				</div>

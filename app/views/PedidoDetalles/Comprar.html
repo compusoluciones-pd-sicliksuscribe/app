@@ -31,7 +31,10 @@
 					<label>Renovación del periodo:</label> {{ pedido.NombreEsquemaRenovacion }}
 					<div ng-if="pedido.IdFabricante === 2">
 						<label>Contrato: </label> {{ pedido.ContratoBaseAutodesk || 'Nuevo' }} <br>
-						<label>Tipo de orden: </label> <span ng-if="pedido.IdAccionAutodesk !== 4">Add-ons</span> <span ng-if="pedido.IdAccionAutodesk === 4">Renovación</span>
+						<label>Tipo de orden: </label>
+							<span ng-if="pedido.IdAccionAutodesk !== 4 && !pedido.Renovado">Add-ons</span>
+							<span ng-if="pedido.IdAccionAutodesk !== 4 && pedido.Renovado">Add-ons (Renovación)</span>
+							<span ng-if="pedido.IdAccionAutodesk === 4">Renovación</span>
 					</div>
 				</div>
 			</div>
@@ -72,9 +75,9 @@
 				<div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
 					<div class="form-group">
 						<label for="">Cantidad:</label> {{ producto.Cantidad }} <br>
-						<label for="">Precio unitario:</label> {{ producto.PrecioUnitario | currency }} {{ pedido.MonedaPago }}
+						<label for="">Precio unitario:</label> {{ calculateExchangeRate(pedido, producto, 'PrecioUnitario') | currency }} {{ pedido.MonedaPago }}
 						<br>
-						<label for="">Precio renovación:</label> {{ producto.PrecioRenovacion | currency}} {{ pedido.MonedaPago }}
+						<label for="">Precio renovación:</label> {{ calculateExchangeRate(pedido, producto, 'PrecioRenovacion') | currency}} {{ pedido.MonedaPago }}
 					</div>
 				</div>
 				<div class="form-group col-xs-12 col-sm-12 col-md-3 col-lg-3">
@@ -86,7 +89,7 @@
               <b style="color:#68953B;">GRATIS!</b>
 						</span>
 						<span ng-show="!producto.PrimeraCompraMicrosoft">
-							{{ producto.PrecioUnitario * producto.Cantidad | currency }} {{ pedido.MonedaPago }} 
+							{{ calculateExchangeRate(pedido, producto, 'PrecioUnitario') * producto.Cantidad | currency }} {{ pedido.MonedaPago }} 
 						</span>
 					</div>
 				</div>

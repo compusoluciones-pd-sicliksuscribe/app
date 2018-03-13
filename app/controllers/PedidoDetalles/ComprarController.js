@@ -4,10 +4,68 @@
     $scope.PedidoDetalles = {};
     $scope.Distribuidor = {};
     $scope.error = false;
+    const paymentMethods = {
+      CREDIT_CARD: 1,
+      CS_CREDIT: 2,
+      PAYPAL: 3,
+      CASH: 4
+    };
+    const makers = {
+      MICROSOFT: 1,
+      AUTODESK: 2,
+      COMPUSOLUCIONES: 3,
+      HP: 4,
+      APERIO: 5
+    };
 
     const error = function (message) {
       $scope.ShowToast(!message ? 'Ha ocurrido un error, intentelo mas tarde.' : message, 'danger');
       $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+    };
+
+    const getPaymentMethods = function (id) {
+      let paymentMethod = '';
+      switch (id) {
+        case paymentMethods.CREDIT_CARD:
+          paymentMethod = 'Tarjeta';
+          break;
+        case paymentMethods.CS_CREDIT:
+          paymentMethod = 'Crédito';
+          break;
+        case paymentMethods.PAYPAL:
+          paymentMethod = 'Paypal';
+          break;
+        case paymentMethods.CASH:
+          paymentMethod = 'Transferencia';
+          break;
+        default:
+          paymentMethod = 'Metodo de pago incorrecto.';
+      }
+      return paymentMethod;
+    };
+
+    const getMakers = function (id) {
+      let maker = '';
+      switch (id) {
+        case makers.MICROSOFT:
+          maker = 'Microsoft';
+          break;
+        case makers.AUTODESK:
+          maker = 'Autodesk';
+          break;
+        case makers.COMPUSOLUCIONES:
+          maker = 'Compusoluciones';
+          break;
+        case makers.APERIO:
+          maker = 'Aperio';
+          break;
+        case makers.HP:
+          maker = 'HP';
+          break;
+        default:
+          maker = null;
+      }
+      return maker;
     };
 
     const getOrderDetails = function () {
@@ -15,6 +73,8 @@
         .then(function (result) {
           if (result.data.success) $scope.PedidoDetalles = result.data.data;
           $scope.PedidoDetalles.forEach(function (elem) {
+            elem.Forma = getPaymentMethods(elem.IdFormaPago);
+            elem.NombreFabricante = getMakers(elem.IdFabricante);
             elem.Productos.forEach(function (item) {
               if (item.PrecioUnitario == null) $scope.error = true;
             });
@@ -78,7 +138,7 @@
       $scope.PedidoDetalles.forEach(function (order) {
         order.Productos.forEach(function (product) {
           if (order.IdPedido === IdPedido && !product.PrimeraCompraMicrosoft) {
-            total = total + (product.PrecioUnitario * product.Cantidad);
+            total = total + ($scope.calculateExchangeRate(order, product, 'PrecioUnitario') * product.Cantidad);
           }
         });
       });
@@ -100,6 +160,18 @@
       if ($scope.Distribuidor.ZonaImpuesto === 'Nacional') iva = 0.16 * total;
       if ($scope.Distribuidor.ZonaImpuesto === 'Frontera') iva = 0.11 * total;
       total = total + iva;
+      return total;
+    };
+
+    $scope.calculateExchangeRate = function (order, details, value) {
+      let total = 0;
+      if (order.MonedaPago === 'Pesos' && details.MonedaPrecio === 'Dólares') {
+        total = details[value] * order.TipoCambio;
+      } else if (order.MonedaPago === 'Dólares' && details.MonedaPrecio === 'Pesos' && details.IdProducto !== ELECTRONIC_SERVICE) {
+        total = details[value] / order.TipoCambio;
+      } else {
+        total = details[value];
+      }
       return total;
     };
 
