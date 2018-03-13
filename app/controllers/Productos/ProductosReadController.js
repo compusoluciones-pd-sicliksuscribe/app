@@ -211,7 +211,7 @@
       $scope.DominioMicrosoft = $scope.selectEmpresas.filter(function (item) {
         if (Producto.IdEmpresaUsuarioFinal === item.IdEmpresa) return item;
         return false;
-      })[0].DominioMicrosoft;
+      })[0].IdMicrosoftUF;
       $scope.usuariosSinDominio[Producto.IdEmpresaUsuarioFinal] = $scope.DominioMicrosoft !== null;
       $scope.productoSeleccionado = Producto.IdProducto;
       if (Producto.IdFabricante === 2) validateAutodeskData(Producto);
