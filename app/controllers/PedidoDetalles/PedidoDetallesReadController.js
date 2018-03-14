@@ -83,51 +83,44 @@
     const getOrderDetails = function (validate) {
       return PedidoDetallesFactory.getPedidoDetalles()
         .then(function (result) {
-          if (result.data.success) {
-            $scope.PedidoDetalles = result.data.data;
-            $scope.PedidoDetalles.forEach(function (elem) {
-              elem.Forma = getPaymentMethods(elem.IdFormaPago);
-              elem.NombreFabricante = getMakers(elem.IdFabricante);
-              elem.Productos.forEach(function (item) {
-                if (item.PrecioUnitario == null) $scope.error = true;
-              });
+          $scope.PedidoDetalles = result.data.data;
+          $scope.PedidoDetalles.forEach(function (elem) {
+            elem.Forma = getPaymentMethods(elem.IdFormaPago);
+            elem.NombreFabricante = getMakers(elem.IdFabricante);
+            elem.Productos.forEach(function (item) {
+              if (item.PrecioUnitario == null) $scope.error = true;
             });
-            if ($scope.error) {
-              $scope.ShowToast('Ocurrio un error al procesar sus productos del carrito. Favor de contactar a soporte de CompuSoluciones.', 'danger');
-            }
-            if (!validate) {
-              $scope.ValidarFormaPago();
-            }
-          } else {
-            $scope.ShowToast(result.data.message, 'danger');
-            $location.path('/Productos');
+          });
+          if ($scope.error) {
+            $scope.ShowToast('Ocurrio un error al procesar sus productos del carrito. Favor de contactar a soporte de CompuSoluciones.', 'danger');
+          }
+          if (!validate) {
+            $scope.ValidarFormaPago();
           }
         })
         .then(validarCarrito)
-        .catch(function (result) { error(result.data); });
+        .catch(function (result) {
+          error(result.data);
+          $location.path('/Productos');
+        });
     };
 
     const validarCarrito = function () {
       return PedidoDetallesFactory.getValidarCarrito()
         .then(function (result) {
-          if (result.data.success) {
-            $scope.PedidoDetalles.forEach(function (item) {
-              if ($scope.Distribuidor.IdFormaPagoPredilecta === 1 && item.MonedaPago !== 'Pesos') {
-                $scope.ShowToast('Para pagar con tarjeta bancaria es necesario que los pedidos estén en pesos MXN. Actualiza tu forma de pago o cambia de moneda en los pedidos agregándolos una vez más.', 'danger');
+          $scope.PedidoDetalles.forEach(function (item) {
+            if ($scope.Distribuidor.IdFormaPagoPredilecta === 1 && item.MonedaPago !== 'Pesos') {
+              $scope.ShowToast('Para pagar con tarjeta bancaria es necesario que los pedidos estén en pesos MXN. Actualiza tu forma de pago o cambia de moneda en los pedidos agregándolos una vez más.', 'danger');
+            }
+            $scope.CreditoValido = 1;
+            item.hasCredit = 1;
+            result.data.data.forEach(function (user) {
+              if (item.IdEmpresaUsuarioFinal === user.IdEmpresaUsuarioFinal && !user.hasCredit) {
+                $scope.CreditoValido = 0;
+                item.hasCredit = 0;
               }
-              $scope.CreditoValido = 1;
-              item.hasCredit = 1;
-              result.data.data.forEach(function (user) {
-                if (item.IdEmpresaUsuarioFinal === user.IdEmpresaUsuarioFinal && !user.hasCredit) {
-                  $scope.CreditoValido = 0;
-                  item.hasCredit = 0;
-                }
-              });
             });
-          } else {
-            $scope.ShowToast('No pudimos validar tu carrito de compras, por favor intenta de nuevo.', 'danger');
-            $location.path('/Productos');
-          }
+          });
         })
         .catch(function (result) {
           error(result.data);
