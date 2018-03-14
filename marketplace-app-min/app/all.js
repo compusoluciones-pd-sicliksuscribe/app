@@ -383,7 +383,7 @@ angular.module('marketplace')
   .run(function ($rootScope, $location, $anchorScroll, $routeParams) {
     $rootScope.rsTitle = 'click suscribe | CompuSoluciones';
     $rootScope.rsVersion = '2.1.1';
-     /* $rootScope.API = 'http://localhost:8080/';
+    /* $rootScope.API = 'http://localhost:8080/';
     $rootScope.MAPI = 'http://localhost:8083/';
     $rootScope.dominio = 'localhost'; */
     $rootScope.API = 'https://pruebas.compusoluciones.com/';
@@ -1254,9 +1254,14 @@ angular.module('directives.loading', [])
       return $http.get($rootScope.API + 'enterprise/clients');
     };
 
-    factory.putEmpresa = function (IdEmpresa, Empresa) {
+    factory.putEmpresa = function (Empresa) {
       factory.refreshToken();
-      return $http.put($rootScope.API + 'enterprise/' + IdEmpresa, Empresa);
+      return $http.put($rootScope.API + 'Empresas', Empresa);
+    };
+
+    factory.changeDomain = function (enterpriseId, Enterprise) {
+      factory.refreshToken();
+      return $http.put($rootScope.API + 'enterprises/microsoft-domains/' + enterpriseId, Enterprise);
     };
 
     return factory;
@@ -4306,14 +4311,14 @@ angular.module('directives.loading', [])
     };
 
     $scope.ActualizarDominio = function () {
-      const parametro = {
+      const enterprise = {
         DominioMicrosoft: $scope.Empresa.DominioMicrosoft
       };
       if ($scope.frm.DominioMicrosoft.$invalid) {
         $scope.frm.DominioMicrosoft.$pristine = false;
         $scope.Empresa.MensajeDominio = 'Ingresa un Dominio Válido.';
       } else {
-        EmpresasFactory.putEmpresa($scope.Empresa.IdEmpresa, parametro)
+        EmpresasFactory.changeDomain($scope.Empresa.IdEmpresa, enterprise)
         .success(function (result) {
           Session.NombreEmpresa = $scope.Empresa.NombreEmpresa;
           $cookies.putObject('Session', Session, { secure: $rootScope.secureCookie });
@@ -4338,160 +4343,6 @@ angular.module('directives.loading', [])
   EmpresasUpdateMicrosoftDomainController.$inject = ['$scope', '$log', '$cookies', '$location', '$routeParams', 'EmpresasFactory', 'EstadosFactory', 'UsuariosFactory', '$cookies', '$rootScope'];
 
   angular.module('marketplace').controller('EmpresasUpdateMicrosoftDomainController', EmpresasUpdateMicrosoftDomainController);
-}());
-
-(function () {
-  var NivelesClienteFinalController = function ($scope, $location, $cookies, NivelesClienteFinalFactory) {
-    $scope.sortBy = 'Nivel';
-    $scope.reverse = false;
-    $scope.Nivel = {};
-    $scope.levels = [];
-    $scope.newLevel = "";
-    $scope.session = $cookies.getObject('Session');
-
-    const getLevels = function() {
-      NivelesClienteFinalFactory.getLevels()
-        .then(function(result) {
-          $scope.levels = result.data.data;
-        })
-        .catch(function(result) {
-          $scope.ShowToast(!result.data ? 'Ha ocurrido un error, intentelo mas tarde.' : result.data.message, 'danger');
-        });
-    };
-
-    $scope.init = function() {
-      $scope.CheckCookie();
-      getLevels();
-    };
-
-    $scope.init();
-
-    $scope.OrdenarPor = function(Atributo) {
-      $scope.sortBy = Atributo;
-      $scope.reverse = !$scope.reverse;
-    };
-
-    $scope.deleteLevel = function(level) {
-      NivelesClienteFinalFactory.deleteLevel(level.IdNivelEmpresaUsuarioFinal)
-        .then(function(result) {
-          $scope.levels.forEach(function(property, index) {
-            if (property.IdNivelEmpresaUsuarioFinal === level.IdNivelEmpresaUsuarioFinal) {
-              $scope.levels.splice(index, 1);
-            }
-          });
-          return result;
-        })
-        .then(function(result) { $scope.ShowToast(result.data.message, 'success')})
-        .catch(function(result) {
-          $scope.ShowToast(!result.data ? 'Ha ocurrido un error, intentelo mas tarde.' : result.data.message, 'danger');
-        });
-    };
-
-    $scope.addLevel = function(level) {
-      const enterpriseId = $scope.session.IdEmpresa;
-      const newLevel = { IdEmpresaDistribuidor: enterpriseId, Nivel: level };
-      NivelesClienteFinalFactory.addLevel(newLevel)
-        .then(function(result) {
-          $scope.ShowToast(result.data.message, 'success');
-          $scope.newLevel = "";
-          $scope.init();
-        })
-        .catch(function(result) {
-          $scope.ShowToast(!data ? 'Ha ocurrido un error, intentelo mas tarde.' : result.data.message, 'danger');
-        });
-    }
-
-    $scope.addDiscount = function(level) {
-      console.log('level', typeof level);
-      console.log(level);
-      $cookies.putObject('nivel', level.Nivel);
-      $location.path('/Niveles/Distribuidor/' + level.IdNivelEmpresaUsuarioFinal + '/Descuentos');
-    };
-
-  };
-
-  NivelesClienteFinalController.$inject = ['$scope', '$location', '$cookies', 'NivelesClienteFinalFactory'];
-
-  angular.module('marketplace').controller('NivelesClienteFinalController', NivelesClienteFinalController);
-}());
-
-(function () {
-  var NivelesReadController = function ($scope, $log, $location, $cookies, NivelesDistribuidorFactory) {
-    $scope.sortBy = 'Nivel';
-    $scope.reverse = false;
-    $scope.Nivel = {};
-
-    $scope.init = function () {
-      $scope.CheckCookie();
-      NivelesDistribuidorFactory.getNivelesDistribuidor()
-        .success(function (resultNiveles) {
-          if (resultNiveles.success) {
-            $scope.Niveles = resultNiveles.data;
-            $scope.Nivel.Nivel = '';
-          } else {
-            $scope.ShowToast(resultNiveles.message, 'danger');
-          }
-        })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
-    };
-
-    $scope.init();
-
-    $scope.OrdenarPor = function (Atributo) {
-      $scope.sortBy = Atributo;
-      $scope.reverse = !$scope.reverse;
-    };
-
-    $scope.agregarNivel = function () {
-      NivelesDistribuidorFactory.postNivelesDistribuidor($scope.Nivel)
-        .success(function (result) {
-          if (result.success) {
-            $scope.ShowToast(result.message, 'success');
-            $scope.init();
-          } else {
-            $scope.ShowToast(result.message, 'danger');
-          }
-        })
-        .error(function (data, status, headers, config) {
-          $scope.ShowToast('No pudimos eliminar el descuento seleccionado. Intenta de nuevo más tarde.', 'danger');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
-    };
-
-    $scope.eliminarNivel = function (Nivel) {
-      $scope.Niveles.forEach(function (Elemento, Index) {
-        if (Elemento.IdNivelDistribuidor === Nivel.IdNivelDistribuidor) {
-          $scope.Niveles.splice(Index, 1);
-          return false;
-        }
-      });
-
-      NivelesDistribuidorFactory.deleteNivelesDistribuidor(Nivel.IdNivelDistribuidor)
-        .success(function (result) {
-          if (result.success) {
-            $scope.ShowToast(result.message, 'success');
-          } else {
-            $scope.init();
-            $scope.ShowToast(result.message, 'danger');
-          }
-        })
-        .error(function (data, status, headers, config) {
-          $scope.ShowToast('No pudimos eliminar el descuento seleccionado. Intenta de nuevo más tarde.', 'danger');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
-    };
-
-    $scope.configurarNivel = function (nivel) {
-      var path = '/Niveles/' + nivel.IdNivelDistribuidor + '/Productos';
-      $location.path(path);
-    };
-  };
-
-  NivelesReadController.$inject = ['$scope', '$log', '$location', '$cookies', 'NivelesDistribuidorFactory'];
-
-  angular.module('marketplace').controller('NivelesReadController', NivelesReadController);
 }());
 
 (function () {
@@ -4784,6 +4635,160 @@ angular.module('directives.loading', [])
   MigracionDetalleController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'MigracionFactory'];
 
   angular.module('marketplace').controller('MigracionDetalleController', MigracionDetalleController);
+}());
+
+(function () {
+  var NivelesClienteFinalController = function ($scope, $location, $cookies, NivelesClienteFinalFactory) {
+    $scope.sortBy = 'Nivel';
+    $scope.reverse = false;
+    $scope.Nivel = {};
+    $scope.levels = [];
+    $scope.newLevel = "";
+    $scope.session = $cookies.getObject('Session');
+
+    const getLevels = function() {
+      NivelesClienteFinalFactory.getLevels()
+        .then(function(result) {
+          $scope.levels = result.data.data;
+        })
+        .catch(function(result) {
+          $scope.ShowToast(!result.data ? 'Ha ocurrido un error, intentelo mas tarde.' : result.data.message, 'danger');
+        });
+    };
+
+    $scope.init = function() {
+      $scope.CheckCookie();
+      getLevels();
+    };
+
+    $scope.init();
+
+    $scope.OrdenarPor = function(Atributo) {
+      $scope.sortBy = Atributo;
+      $scope.reverse = !$scope.reverse;
+    };
+
+    $scope.deleteLevel = function(level) {
+      NivelesClienteFinalFactory.deleteLevel(level.IdNivelEmpresaUsuarioFinal)
+        .then(function(result) {
+          $scope.levels.forEach(function(property, index) {
+            if (property.IdNivelEmpresaUsuarioFinal === level.IdNivelEmpresaUsuarioFinal) {
+              $scope.levels.splice(index, 1);
+            }
+          });
+          return result;
+        })
+        .then(function(result) { $scope.ShowToast(result.data.message, 'success')})
+        .catch(function(result) {
+          $scope.ShowToast(!result.data ? 'Ha ocurrido un error, intentelo mas tarde.' : result.data.message, 'danger');
+        });
+    };
+
+    $scope.addLevel = function(level) {
+      const enterpriseId = $scope.session.IdEmpresa;
+      const newLevel = { IdEmpresaDistribuidor: enterpriseId, Nivel: level };
+      NivelesClienteFinalFactory.addLevel(newLevel)
+        .then(function(result) {
+          $scope.ShowToast(result.data.message, 'success');
+          $scope.newLevel = "";
+          $scope.init();
+        })
+        .catch(function(result) {
+          $scope.ShowToast(!data ? 'Ha ocurrido un error, intentelo mas tarde.' : result.data.message, 'danger');
+        });
+    }
+
+    $scope.addDiscount = function(level) {
+      console.log('level', typeof level);
+      console.log(level);
+      $cookies.putObject('nivel', level.Nivel);
+      $location.path('/Niveles/Distribuidor/' + level.IdNivelEmpresaUsuarioFinal + '/Descuentos');
+    };
+
+  };
+
+  NivelesClienteFinalController.$inject = ['$scope', '$location', '$cookies', 'NivelesClienteFinalFactory'];
+
+  angular.module('marketplace').controller('NivelesClienteFinalController', NivelesClienteFinalController);
+}());
+
+(function () {
+  var NivelesReadController = function ($scope, $log, $location, $cookies, NivelesDistribuidorFactory) {
+    $scope.sortBy = 'Nivel';
+    $scope.reverse = false;
+    $scope.Nivel = {};
+
+    $scope.init = function () {
+      $scope.CheckCookie();
+      NivelesDistribuidorFactory.getNivelesDistribuidor()
+        .success(function (resultNiveles) {
+          if (resultNiveles.success) {
+            $scope.Niveles = resultNiveles.data;
+            $scope.Nivel.Nivel = '';
+          } else {
+            $scope.ShowToast(resultNiveles.message, 'danger');
+          }
+        })
+        .error(function (data, status, headers, config) {
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+    };
+
+    $scope.init();
+
+    $scope.OrdenarPor = function (Atributo) {
+      $scope.sortBy = Atributo;
+      $scope.reverse = !$scope.reverse;
+    };
+
+    $scope.agregarNivel = function () {
+      NivelesDistribuidorFactory.postNivelesDistribuidor($scope.Nivel)
+        .success(function (result) {
+          if (result.success) {
+            $scope.ShowToast(result.message, 'success');
+            $scope.init();
+          } else {
+            $scope.ShowToast(result.message, 'danger');
+          }
+        })
+        .error(function (data, status, headers, config) {
+          $scope.ShowToast('No pudimos eliminar el descuento seleccionado. Intenta de nuevo más tarde.', 'danger');
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+    };
+
+    $scope.eliminarNivel = function (Nivel) {
+      $scope.Niveles.forEach(function (Elemento, Index) {
+        if (Elemento.IdNivelDistribuidor === Nivel.IdNivelDistribuidor) {
+          $scope.Niveles.splice(Index, 1);
+          return false;
+        }
+      });
+
+      NivelesDistribuidorFactory.deleteNivelesDistribuidor(Nivel.IdNivelDistribuidor)
+        .success(function (result) {
+          if (result.success) {
+            $scope.ShowToast(result.message, 'success');
+          } else {
+            $scope.init();
+            $scope.ShowToast(result.message, 'danger');
+          }
+        })
+        .error(function (data, status, headers, config) {
+          $scope.ShowToast('No pudimos eliminar el descuento seleccionado. Intenta de nuevo más tarde.', 'danger');
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+    };
+
+    $scope.configurarNivel = function (nivel) {
+      var path = '/Niveles/' + nivel.IdNivelDistribuidor + '/Productos';
+      $location.path(path);
+    };
+  };
+
+  NivelesReadController.$inject = ['$scope', '$log', '$location', '$cookies', 'NivelesDistribuidorFactory'];
+
+  angular.module('marketplace').controller('NivelesReadController', NivelesReadController);
 }());
 
 (function () {
