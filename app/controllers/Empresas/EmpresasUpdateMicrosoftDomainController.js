@@ -64,14 +64,14 @@
     };
 
     $scope.ActualizarDominio = function () {
-      const parametro = {
+      const enterprise = {
         DominioMicrosoft: $scope.Empresa.DominioMicrosoft
       };
       if ($scope.frm.DominioMicrosoft.$invalid) {
         $scope.frm.DominioMicrosoft.$pristine = false;
         $scope.Empresa.MensajeDominio = 'Ingresa un Dominio Válido.';
       } else {
-        EmpresasFactory.putEmpresa($scope.Empresa.IdEmpresa, parametro)
+        EmpresasFactory.changeDomain($scope.Empresa.IdEmpresa, enterprise)
         .success(function (result) {
           Session.NombreEmpresa = $scope.Empresa.NombreEmpresa;
           $cookies.putObject('Session', Session, { secure: $rootScope.secureCookie });

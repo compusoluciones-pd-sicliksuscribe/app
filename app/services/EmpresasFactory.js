@@ -127,9 +127,14 @@
       return $http.get($rootScope.API + 'enterprise/clients');
     };
 
-    factory.putEmpresa = function (IdEmpresa, Empresa) {
+    factory.putEmpresa = function (Empresa) {
       factory.refreshToken();
-      return $http.put($rootScope.API + 'enterprise/' + IdEmpresa, Empresa);
+      return $http.put($rootScope.API + 'Empresas', Empresa);
+    };
+
+    factory.changeDomain = function (enterpriseId, Enterprise) {
+      factory.refreshToken();
+      return $http.put($rootScope.API + 'enterprises/microsoft-domains/' + enterpriseId, Enterprise);
     };
 
     return factory;
