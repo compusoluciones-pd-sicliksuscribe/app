@@ -55,7 +55,7 @@
     };
 
     $scope.prepararPedidos = function () {
-      PedidoDetallesFactory.getPrepararCompraFinalUser(1)
+      PedidoDetallesFactory.getPrepararCompraFinalUser(1, $scope.currentDistribuidor.IdEmpresa)
         .then(function (result) {
           if (result.data.success) $scope.ShowToast(result.data.message, 'success');
           else {

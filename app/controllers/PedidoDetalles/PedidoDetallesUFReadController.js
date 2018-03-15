@@ -107,7 +107,7 @@
 
     $scope.init = function () {
       $scope.CheckCookie();
-      PedidoDetallesFactory.getPrepararCompraFinalUser(0)
+      PedidoDetallesFactory.getPrepararCompraFinalUser(0, $scope.currentDistribuidor.IdEmpresa)
         .then(getEnterprises)
         .then(getOrderDetails)
         .then(ActualizarFormaPago)

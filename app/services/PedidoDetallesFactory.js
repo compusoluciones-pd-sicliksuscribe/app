@@ -42,9 +42,9 @@
     };
 
     // Preparar productos del carrito
-    factory.getPrepararCompraFinalUser = function (commission) {
+    factory.getPrepararCompraFinalUser = function (commission, currentDistribuidor) {
       factory.refreshToken();
-      return $http.post($rootScope.API + 'shopping-cart/prepare-purchase/final-user/' + commission);
+      return $http.post($rootScope.API + 'shopping-cart/prepare-purchase/final-user/' + commission + '/distribuidor/' + currentDistribuidor);
     };
 
     // Eliminar productos del carrito
