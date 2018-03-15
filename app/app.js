@@ -43,7 +43,7 @@
         resolve: {
           'check': function ($location, $cookies) {
             var Session = $cookies.getObject('Session');
-            if (!(Session.IdTipoAcceso === 2 && Session.IdEmpresa == 214)) { $location.path('/404'); }
+            if (!(Session.IdTipoAcceso === 2 && Session.IdPlanTuClick !== null)) { $location.path('/404'); }
           }
         }
       })
