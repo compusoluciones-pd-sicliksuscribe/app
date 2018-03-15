@@ -156,7 +156,8 @@
     $scope.init = function () {
       $scope.CheckCookie();
       PedidoDetallesFactory.getPrepararCompra(0)
-        .then(getEnterprises)
+        .catch(function (result) { error(result.data); });
+      getEnterprises()
         .then(getOrderDetails)
         .then(ActualizarFormaPago)
         .catch(function (result) { error(result.data); });

@@ -102,14 +102,13 @@
       PedidoDetallesFactory.getPrepararCompra(1)
         .then(function (result) {
           if (result.data.success) $scope.ShowToast(result.data.message, 'success');
-          else {
-            $scope.ShowToast(result.data.message, 'danger');
-            $location.path('/Carrito/e');
-          }
         })
         .then(getOrderDetails)
         .then(getEnterprises)
-        .catch(function (result) { error(result.data.message); });
+        .catch(function (result) {
+          error(result.data.message);
+          $location.path('/Carrito/e');
+        });
     };
 
     $scope.init = function () {
