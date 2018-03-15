@@ -58,11 +58,10 @@
     };
 
     $scope.cambiarDistribuidor = function (Distribuidor, reload) {
+      console.log(Distribuidor);
       if (Distribuidor) {
         var expireDate = new Date();
         expireDate.setTime(expireDate.getTime() + 600 * 60000);
-        // console.log(Distribuidor);
-        // console.log(typeof Distribuidor);
         $cookies.putObject('currentDistribuidor', Distribuidor, { 'expires': expireDate, secure: $rootScope.secureCookie });
         if ($cookies.getObject('currentDistribuidor')) {
           $scope.currentDistribuidor = $cookies.getObject('currentDistribuidor');
@@ -70,6 +69,8 @@
           $scope.currentDistribuidor = {};
           $scope.currentDistribuidor.UrlLogo = 'images/LogoSVG.svg';
         }
+        console.log($scope.currentDistribuidor);
+        console.log(reload);
         if (reload) {
           $location.path('/');
           $scope.ActualizarMenu();
@@ -190,7 +191,6 @@
       subdomain = subdomain.substring(0, subdomain.indexOf($rootScope.dominio));
       subdomain = subdomain.replace(new RegExp('[.]', 'g'), '');
       subdomain = subdomain.replace('www', '');
-
       if (!subdomain == '') {
         EmpresasFactory.getSitio(subdomain).success(function (empresa) {
           $scope.cambiarDistribuidor(empresa.data[0], false);
