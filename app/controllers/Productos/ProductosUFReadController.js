@@ -240,7 +240,7 @@
       if (!NuevoProducto.IdAccionAutodesk) delete NuevoProducto.IdAccionAutodesk;
       if (NuevoProducto.IdAccionAutodesk === 1 && NuevoProducto.ContratoBaseAutodesk) NuevoProducto.IdAccionAutodesk = 3;
 
-      PedidoDetallesFactory.postPedidoDetalle(NuevoProducto)
+      PedidoDetallesFactory.postPedidoDetalleFinalUser(NuevoProducto, $scope.currentDistribuidor.IdEmpresa)
         .success(function (PedidoDetalleResult) {
           if (PedidoDetalleResult.success === 1) {
             if (NuevoProducto.IdFabricante === 2 && Producto.Accion === 'asiento') {

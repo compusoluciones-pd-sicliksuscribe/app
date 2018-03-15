@@ -12,7 +12,7 @@
     };
 
     const getOrderDetails = function () {
-      return PedidoDetallesFactory.getPedidoDetallesUf()
+      return PedidoDetallesFactory.getPedidoDetallesUf($scope.currentDistribuidor.IdEmpresa)
         .then(function (result) {
           if (result.data.success) $scope.PedidoDetalles = result.data.data;
          // console.log(' result.data.data' + JSON.stringify(result.data.data));
@@ -55,7 +55,7 @@
     };
 
     $scope.prepararPedidos = function () {
-      PedidoDetallesFactory.getPrepararCompraFinalUser(1)
+      PedidoDetallesFactory.getPrepararCompraFinalUser(1, $scope.currentDistribuidor.IdEmpresa)
         .then(function (result) {
           if (result.data.success) $scope.ShowToast(result.data.message, 'success');
           else {
@@ -149,6 +149,18 @@
       if ($scope.Distribuidor.ZonaImpuesto === 'Frontera') iva = 0.11 * total;
       total = total + iva;
       return total;
+    };
+
+    $scope.precioReal = function (precio, monedaPrecio, monedaPago, tipoCambio) {
+      let precioUnitario = 0;
+      if (monedaPrecio === monedaPago) {
+        precioUnitario = precio;
+      } else if (monedaPrecio === 'Dólares' && monedaPago === 'Pesos') {
+        precioUnitario = precio * tipoCambio;
+      } else if (monedaPrecio === 'Pesos' && monedaPago === 'Dólares') {
+        precioUnitario = precio / tipoCambio;
+      }
+      return precioUnitario;
     };
 
     $scope.back = function () {

@@ -17,6 +17,12 @@
       return $http.post($rootScope.API + 'shopping-cart', PedidoDetalle);
     };
 
+    // Agregar al carrito final user
+    factory.postPedidoDetalleFinalUser = function (PedidoDetalle, currentDistribuidor) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'shopping-cart/final-user/' + currentDistribuidor, PedidoDetalle);
+    };
+
     // Obtener productos del carrito
     factory.getPedidoDetalles = function () {
       factory.refreshToken();
@@ -24,9 +30,9 @@
     };
 
     // Obtener productos del carrito
-    factory.getPedidoDetallesUf = function () {
+    factory.getPedidoDetallesUf = function (currentDistribuidor) {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'shopping-cart/final-user');
+      return $http.get($rootScope.API + 'shopping-cart/final-user/' + currentDistribuidor);
     };
 
     // Preparar productos del carrito
@@ -36,9 +42,9 @@
     };
 
     // Preparar productos del carrito
-    factory.getPrepararCompraFinalUser = function (commission) {
+    factory.getPrepararCompraFinalUser = function (commission, currentDistribuidor) {
       factory.refreshToken();
-      return $http.post($rootScope.API + 'shopping-cart/prepare-purchase/final-user/' + commission);
+      return $http.post($rootScope.API + 'shopping-cart/prepare-purchase/final-user/' + commission + '/distribuidor/' + currentDistribuidor);
     };
 
     // Eliminar productos del carrito

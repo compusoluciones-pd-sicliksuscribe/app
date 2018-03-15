@@ -7,6 +7,7 @@
     $scope.CreditoValido = 1;
     $scope.error = false;
     $scope.Distribuidor = {};
+    $scope.currentDistribuidor = $cookies.getObject('currentDistribuidor');
 
     const error = function (error) {
       $scope.ShowToast(!error ? 'Ha ocurrido un error, intentelo mas tarde.' : error.message, 'danger');
@@ -26,10 +27,10 @@
     };
 
     const getOrderDetails = function (validate) {
-      return PedidoDetallesFactory.getPedidoDetallesUf()
+      return PedidoDetallesFactory.getPedidoDetallesUf($scope.currentDistribuidor.IdEmpresa)
         .then(function (result) {
           if (result.data.success) {
-           // console.log(' result.data.data' + JSON.stringify( result.data.data));
+            console.log(' result.data.data' + JSON.stringify(result.data.data));
             $scope.PedidoDetalles = result.data.data;
             $scope.PedidoDetalles.forEach(function (elem) {
               elem.Productos.forEach(function (item) {
@@ -106,7 +107,7 @@
 
     $scope.init = function () {
       $scope.CheckCookie();
-      PedidoDetallesFactory.getPrepararCompra(0)
+      PedidoDetallesFactory.getPrepararCompraFinalUser(0, $scope.currentDistribuidor.IdEmpresa)
         .then(getEnterprises)
         .then(getOrderDetails)
         .then(ActualizarFormaPago)
@@ -301,6 +302,18 @@
       if ($scope.Distribuidor.ZonaImpuesto === 'Frontera') iva = 0.11 * total;
       total = total + iva;
       return total;
+    };
+
+    $scope.precioReal = function (precio, monedaPrecio, monedaPago, tipoCambio) {
+      let precioUnitario = 0;
+      if (monedaPrecio === monedaPago) {
+        precioUnitario = precio;
+      } else if (monedaPrecio === 'Dólares' && monedaPago === 'Pesos') {
+        precioUnitario = precio * tipoCambio;
+      } else if (monedaPrecio === 'Pesos' && monedaPago === 'Dólares') {
+        precioUnitario = precio / tipoCambio;
+      }
+      return precioUnitario;
     };
 
     $scope.next = function () { // Este
