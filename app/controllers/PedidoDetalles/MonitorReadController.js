@@ -249,7 +249,8 @@
         pedido.PorActualizarCantidad = 1;
       }
       PedidoDetallesFactory.putPedidoDetalle(pedido)
-        .success(function (result) {
+        .then(function (result) {
+          console.log(result);
           if (result.success == false) {
             $scope.ShowToast(result.message, 'danger');
           } else {
@@ -259,8 +260,12 @@
           $scope.ActualizarMonitor();
           $scope.form.habilitar = false;
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(function (error) {
+          $scope.ShowToast(error.data.message, 'danger');
+          $log.log('data error: ' + error.data.message + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
+          $scope.form.habilitar = true;
+          $scope.ActualizarMonitor();
+          $scope.form.habilitar = false;
         });
     };
 
