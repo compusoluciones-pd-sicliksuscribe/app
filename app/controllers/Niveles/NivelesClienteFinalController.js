@@ -60,8 +60,8 @@
     };
 
     $scope.addDiscount = function (level) {
-      console.log('level', typeof level);
-      console.log(level);
+      // console.log('level', typeof level);
+      // console.log(level);
       $cookies.putObject('nivel', level.Nivel);
       $location.path('/Niveles/Distribuidor/' + level.IdNivelEmpresaUsuarioFinal + '/Descuentos');
     };
