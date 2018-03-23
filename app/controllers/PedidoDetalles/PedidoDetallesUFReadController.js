@@ -30,7 +30,7 @@
       return PedidoDetallesFactory.getPedidoDetallesUf($scope.currentDistribuidor.IdEmpresa)
         .then(function (result) {
           if (result.data.success) {
-            console.log(' result.data.data' + JSON.stringify(result.data.data));
+            // console.log(' result.data.data' + JSON.stringify(result.data.data));
             $scope.PedidoDetalles = result.data.data;
             $scope.PedidoDetalles.forEach(function (elem) {
               elem.Productos.forEach(function (item) {
