@@ -58,7 +58,6 @@
     };
 
     $scope.cambiarDistribuidor = function (Distribuidor, reload) {
-      console.log(Distribuidor);
       if (Distribuidor) {
         var expireDate = new Date();
         expireDate.setTime(expireDate.getTime() + 600 * 60000);
@@ -69,8 +68,6 @@
           $scope.currentDistribuidor = {};
           $scope.currentDistribuidor.UrlLogo = 'images/LogoSVG.svg';
         }
-        console.log($scope.currentDistribuidor);
-        console.log(reload);
         if (reload) {
           $location.path('/');
           $scope.ActualizarMenu();

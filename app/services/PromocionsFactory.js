@@ -11,24 +11,28 @@
 
     factory.refreshToken();
 
-    factory.getPromocions = function () {
+    factory.getPromocions = function (IdEmpresa) {
+      if (!IdEmpresa) {
+        console.log(IdEmpresa);
+        IdEmpresa = 0;
+      }
       factory.refreshToken();
-      return $http.get($rootScope.API + 'Promocions');
+      return $http.get($rootScope.API + 'Promotions/' + IdEmpresa);
     };
 
     factory.getPromocion = function (IdPromocion) {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'Promocions/' + IdPromocion);
+      return $http.get($rootScope.API + 'Promotion/' + IdPromocion);
     };
 
     factory.postPromocion = function (Promocion) {
       factory.refreshToken();
-      return $http.post($rootScope.API + 'Promocions', Promocion);
+      return $http.post($rootScope.API + 'Promotions', Promocion);
     };
 
     factory.putPromocion = function (Promocion) {
       factory.refreshToken();
-      return $http.put($rootScope.API + 'Promociones', Promocion);
+      return $http.put($rootScope.API + 'Promotion/' + Promocion.IdPromocion, Promocion);
     };
 
     return factory;

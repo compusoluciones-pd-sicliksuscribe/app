@@ -43,11 +43,7 @@
         resolve: {
           'check': function ($location, $cookies) {
             var Session = $cookies.getObject('Session');
-<<<<<<< HEAD
-            if (!(Session.IdTipoAcceso === 2)) { $location.path('/404'); }
-=======
             if (!(Session.IdTipoAcceso === 2 && Session.IdPlanTuClick !== null)) { $location.path('/404'); }
->>>>>>> 598bf0848dc1bdcf6ae93ae2bc2001c7ca5ab632
           }
         }
       })
@@ -330,17 +326,26 @@
 
       .when('/Promocion', {
         controller: 'PromocionsCreateController', templateUrl: 'app/views/Promocions/PromocionsCreate.html',
-        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) {
+          var Session = $cookies.getObject('Session');
+          if (!(Session.IdTipoAcceso === 1) && !(Session.IdTipoAcceso === 2) && !(Session.IdTipoAcceso === 3)) { $location.path('/404'); }
+        } }
       })
 
       .when('/Promocions', {
         controller: 'PromocionsReadController', templateUrl: 'app/views/Promocions/PromocionsRead.html',
-        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) {
+          var Session = $cookies.getObject('Session');
+          if (!(Session.IdTipoAcceso === 1) && !(Session.IdTipoAcceso === 2) && !(Session.IdTipoAcceso === 3)) { $location.path('/404'); }
+        } }
       })
 
       .when('/Promocion/:IdPromocion', {
         controller: 'PromocionsUpdateController', templateUrl: 'app/views/Promocions/PromocionsUpdate.html',
-        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) {
+          var Session = $cookies.getObject('Session'); 
+          if (!(Session.IdTipoAcceso === 1) && !(Session.IdTipoAcceso === 2) && !(Session.IdTipoAcceso === 3)) { $location.path('/404'); }
+        } }
       })
 
       .when('/Reportes', {

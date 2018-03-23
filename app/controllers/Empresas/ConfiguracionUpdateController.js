@@ -8,7 +8,6 @@
       EmpresasFactory.getMiSitio()
         .success(function (miClickSuscribe) {
           if (miClickSuscribe.success) {
-            console.log(miClickSuscribe.data[0]);
             $scope.miSitio = miClickSuscribe.data[0];
           } else {
             $scope.ShowToast(miClickSuscribe.message, 'danger');
