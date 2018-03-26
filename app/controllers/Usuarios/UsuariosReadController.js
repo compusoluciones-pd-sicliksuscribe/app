@@ -4,25 +4,23 @@
     $scope.sortBy = 'Nombre';
     $scope.reverse = false;
     $scope.empresaSel = '';
+    $scope.selectEmpresas = [];
     const Session = $cookies.getObject('Session');
-    if (Session.IdTipoAcceso === 1) {
-      $scope.empresaActual = 'CompuSoluciones';
-    }
-    if (Session.IdTipoAcceso === 2) {
-      $scope.empresaActual = Session.NombreEmpresa;
-    }
 
     $scope.init = function () {
+      let empresaActual = '';
+      if (Session.IdTipoAcceso === 1) empresaActual = { NombreEmpresa: 'CompuSoluciones', IdEmpresa: 1 };
+      if (Session.IdTipoAcceso === 2) empresaActual = { NombreEmpresa: Session.NombreEmpresa, IdEmpresa: Session.IdEmpresa };
       $scope.CheckCookie();
       if (Session.IdTipoAcceso !== 2) {
         EmpresasFactory.getEmpresas()
           .success(function (Empresas) {
             $scope.selectEmpresas = Empresas;
+            $scope.selectEmpresas.unshift(empresaActual);
             if ($scope.SessionCookie.IdTipoAcceso != 1) {
               $scope.empresaSel = $scope.selectEmpresas[0].IdEmpresa;
             }
-
-            $scope.MostrarUsuariosEmp(isNaN(parseInt($scope.empresaSel)) ? 0 : parseInt($scope.empresaSel));
+            $scope.MostrarUsuariosEmp($scope.empresaSel);
           })
           .error(function (data, status, headers, config) {
             $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
@@ -32,7 +30,8 @@
         EmpresasFactory.getClientes()
           .success(function (Empresas) {
             $scope.selectEmpresas = Empresas.data;
-            $scope.ObtenerUsuariosPropios();
+            $scope.selectEmpresas.unshift(empresaActual);
+            $scope.MostrarUsuariosEmp($scope.empresaSel);
           })
           .error(function (data, status, headers, config) {
             $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
@@ -66,14 +65,15 @@
     };
 
     $scope.MostrarUsuariosEmp = function (IdEmpresa) {
+      const empresa = IdEmpresa || false;
       if (Session.IdTipoAcceso === 2) {
-        if (IdEmpresa) {
-          $scope.ObtenerUsuariosPorCliente(IdEmpresa);
-        } else {
+        if (Number(empresa) === Session.IdEmpresa) {
           $scope.ObtenerUsuariosPropios();
+        } else if (empresa) {
+          $scope.ObtenerUsuariosPorCliente(empresa);
         }
       } else {
-        UsuariosXEmpresasFactory.getUsuariosXEmpresa(IdEmpresa)
+        UsuariosXEmpresasFactory.getUsuariosXEmpresa(empresa)
           .success(function (UsuariosXEmpresas) {
             $scope.Usuarios = UsuariosXEmpresas;
           })
