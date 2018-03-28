@@ -97,6 +97,11 @@
       return $http.post($rootScope.API + 'orders/pending-orders-monitor-calculations/1', Pedidos);
     };
 
+    factory.monitorCalculationsPrepaid = function (Pedidos) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'orders/renovations/payments/prepaid/1', Pedidos);
+    };
+
     factory.payWidthCard = function (Pedidos) {
       factory.refreshToken();
       return $http.post($rootScope.API + 'orders/pay-width-card', Pedidos);

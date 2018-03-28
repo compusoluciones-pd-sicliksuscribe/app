@@ -119,9 +119,9 @@
                 item.hasCredit = 0;
               }
             });
-            // if ($scope.Distribuidor.IdFormaPagoPredilecta === 1 || $scope.Distribuidor.IdFormaPagoPredilecta === 4 && item.MonedaPago !== 'Pesos') {
-            //   $scope.ShowToast('Para pagar con tarjeta bancaria o con Transferencia, es necesario que los pedidos estén en pesos MXN. Actualiza tu forma de pago o cambia de moneda en los pedidos agregándolos una vez más.', 'danger');
-            // }
+            if ($scope.Distribuidor.IdFormaPagoPredilecta === 1 || $scope.Distribuidor.IdFormaPagoPredilecta === 4 && item.MonedaPago !== 'Pesos') {
+              $scope.ShowToast('Para pagar con tarjeta bancaria o con Transferencia, es necesario que los pedidos estén en pesos MXN. Actualiza tu forma de pago o cambia de moneda en los pedidos agregándolos una vez más.', 'danger');
+            }
           });
         })
         .catch(function (result) {
@@ -129,9 +129,6 @@
           $location.path('/Productos');
         });
       }
-      // else if ($scope.Distribuidor.IdFormaPagoPredilecta === 1 || $scope.Distribuidor.IdFormaPagoPredilecta === 4 && $scope.PedidoDetalles.MonedaPago !== 'Pesos') {
-      //   $scope.ShowToast('Para pagar con tarjeta bancaria o con Transferencia, es necesario que los pedidos estén en pesos MXN. Actualiza tu forma de pago o cambia de moneda en los pedidos agregándolos una vez más.', 'danger');
-      // }
     };
 
     var ActualizarFormaPago = function (IdFormaPago) {
