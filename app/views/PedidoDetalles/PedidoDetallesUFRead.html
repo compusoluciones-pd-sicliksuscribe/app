@@ -158,7 +158,7 @@
 							<label for="">Precio renovación:</label> {{ precioReal(producto.PrecioRenovacionUF, producto.MonedaPrecioUF, pedido.MonedaPago, pedido.TipoCambio) | currency}} {{ pedido.MonedaPago }}
 						</div>
 					</div>
-					<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
+					<div ng-show="(!producto.PrecioDescuentoTuClick)" class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
 						<div class="form-group">
 							<label for="">Total del producto:</label>
 							<br>
@@ -166,6 +166,16 @@
 								{{ precioReal(producto.PrecioNormalUF, producto.MonedaPrecioUF, pedido.MonedaPago, pedido.TipoCambio) * producto.Cantidad | currency }} {{ pedido.MonedaPago }} 
 							</span>
 						</div>
+					</div>
+					<div ng-show="(producto.PrecioDescuentoTuClick)" class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
+							<div class="form-group">
+									<del style="font-size:11px;"> {{ precioReal(producto.PrecioSinDescuentoTuClick, producto.MonedaPrecioUF, pedido.MonedaPago, pedido.TipoCambio) * producto.Cantidad | currency }} {{ pedido.MonedaPago }}  </del>
+									<b style="color:#68953B;"> {{ producto.PorcentajeDescuentoTuClick}}% Descuento</b>
+								<br>
+								<span >
+									{{ precioReal(producto.PrecioNormalUF, producto.MonedaPrecioUF, pedido.MonedaPago, pedido.TipoCambio) * producto.Cantidad | currency }} {{ pedido.MonedaPago }} 
+								</span>
+							</div>
 					</div>
 					<div class="col-xs-12 col-sm-12 col-md-1 col-lg-1 ">
 						<div class="form-group">
