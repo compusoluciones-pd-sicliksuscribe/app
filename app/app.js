@@ -157,22 +157,24 @@
         }
       })
 
+      .when('/ConfigurarRPs/FinalUser', {
+        controller: 'EmpresasRPUFController', templateUrl: 'app/views/Empresas/EmpresasRPUF.html',
+        resolve: {
+          'check': function ($location, $cookies) {
+            var Session = $cookies.getObject('Session');
+            console.log('hot');
+            if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 4)) { $location.path('/404'); }
+          }
+        }
+      })
+
       .when('/ConfigurarRPs/:IdEmpresa', {
         controller: 'EmpresasRPController', templateUrl: 'app/views/Empresas/EmpresasRP.html',
         resolve: {
           'check': function ($location, $cookies) {
             var Session = $cookies.getObject('Session');
+            console.log('cold');
             if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); }
-          }
-        }
-      })
-
-      .when('/ConfigurarRPs/FinalUser/:IdEmpresa', {
-        controller: 'EmpresasRPUFController', templateUrl: 'app/views/Empresas/EmpresasRPUF.html',
-        resolve: {
-          'check': function ($location, $cookies) {
-            var Session = $cookies.getObject('Session');
-            if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 4)) { $location.path('/404'); }
           }
         }
       })

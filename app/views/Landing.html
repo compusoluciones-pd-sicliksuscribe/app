@@ -122,7 +122,7 @@
 				<div style="height:500px;">
 					<uib-carousel interval="5000" no-wrap="false">
 
-						<uib-slide ng-repeat="Promocion in Promociones | limitTo: 5" active="slide.active">
+						<uib-slide ng-repeat="Promocion in Promociones | limitTo: 100" active="slide.active">
 							<div class="img-responsive">
 								<img class="imageBanner" ng-src="{{Promocion.Url}}" style="float:right; margin-right:10%; width:600px; height:400px;">
 							</div>
