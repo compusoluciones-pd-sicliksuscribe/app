@@ -77,7 +77,7 @@
     };
 
     $scope.detectarSitioActivoURL = function (){
-      var Session =  $cookies.getObject('Session');
+      var Session = $cookies.getObject('Session');
       if ($scope.currentDistribuidor.IdEmpresa) {
         for (var i = 0; i < Session.distribuidores.length; i++) {
           if (Session.distribuidores[i]) {
@@ -188,7 +188,7 @@
       subdomain = subdomain.substring(0, subdomain.indexOf($rootScope.dominio));
       subdomain = subdomain.replace(new RegExp('[.]', 'g'), '');
       subdomain = subdomain.replace('www', '');
-      if (!subdomain == '') {
+      if (subdomain != '') {
         EmpresasFactory.getSitio(subdomain).success(function (empresa) {
           $scope.cambiarDistribuidor(empresa.data[0], false);
           $scope.ActualizarMenu();
@@ -196,6 +196,7 @@
         if ($cookies.getObject('currentDistribuidor')) {
           $scope.currentDistribuidor = $cookies.getObject('currentDistribuidor');
         } else {
+          window.location.href = 'http://localhost:5000/#/';
           $scope.currentDistribuidor = {};
           $scope.currentDistribuidor.UrlLogo = 'images/LogoSVG.svg';
         }
@@ -204,8 +205,7 @@
 
     $scope.selectMenu = function () {
       if ($scope.currentDistribuidor) {
-        if ((($scope.SessionCookie.IdTipoAcceso == 4 || $scope.SessionCookie.IdTipoAcceso == 5 || $scope.SessionCookie.IdTipoAcceso == 6)
-        && (($scope.currentDistribuidor.IdEmpresa != 0) && $scope.currentDistribuidor.IdEmpresa != null) && $scope.SessionCookie.IdTipoAcceso != 2)) {
+        if ($scope.currentDistribuidor.IdEmpresa != 0 && $scope.currentDistribuidor.IdEmpresa != null) {
           return true;
         }
 

@@ -293,22 +293,22 @@
 
       .when('/uf/Productos/:Busqueda', {
         controller: 'ProductosUFReadController', templateUrl: 'app/views/Productos/ProductosUFRead.html',
-        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6)) { $location.path('/404'); } } }
       })
 
       .when('/uf/Productos', {
         controller: 'ProductosUFReadController', templateUrl: 'app/views/Productos/ProductosUFRead.html',
-        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6)) { $location.path('/404'); } } }
       })
 
       .when('/uf/Carrito', {
         controller: 'PedidoDetallesUFReadController', templateUrl: 'app/views/PedidoDetalles/PedidoDetallesUFRead.html',
-        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6)) { $location.path('/404'); } } }
       })
 
       .when('/uf/Carrito/:error', {
         controller: 'PedidoDetallesUFReadController', templateUrl: 'app/views/PedidoDetalles/PedidoDetallesUFRead.html',
-        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6)) { $location.path('/404'); } } }
       })
 
       .when('/Favoritos', {

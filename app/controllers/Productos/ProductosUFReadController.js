@@ -17,6 +17,7 @@
         $scope.Pagina = 0;
         $scope.BuscarProductos.Offset = $scope.Pagina * 6;
       }
+      console.log($scope.BuscarProductos);
       ProductosXEmpresaFactory.postBuscarProductosXEmpresa($scope.BuscarProductos)
         .success(function (Productos) {
           if (Productos.success) {
@@ -86,6 +87,7 @@
       $scope.BuscarProductos.IdTipoProducto = $scope.BuscarProductos.IdTipoProducto;
       $scope.BuscarProductos.Offset = $scope.Pagina * 6;
 
+      console.log(BusquedaURL);
       if (BusquedaURL !== 'undefined') {
         $scope.BuscarProductos.Busqueda = BusquedaURL;
         $scope.BuscarProducto(false);
