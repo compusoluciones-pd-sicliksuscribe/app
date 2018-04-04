@@ -46,7 +46,7 @@
           if (response.data.success) {
             $scope.ShowToast(response.data.message, 'success');
             $scope.ActualizarMenu();
-            $location.path('/');
+            $location.path('uf/Productos');
           } else {
             $location.path('uf/Carrito');
             $scope.ShowToast(response.data.message, 'danger');
