@@ -35,9 +35,9 @@
       return $http.get($rootScope.API + 'Productos');
     };
 
-    factory.getMisProductos = function () {
+    factory.getMisProductos = function (IdEmpresa) {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'MisProductos');
+      return $http.get($rootScope.API + 'MisProductos/' + IdEmpresa);
     };
 
     factory.putMiProducto = function (producto) {

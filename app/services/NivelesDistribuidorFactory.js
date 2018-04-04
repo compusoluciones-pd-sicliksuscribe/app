@@ -31,6 +31,11 @@
       return $http.get($rootScope.API + 'NivelDistribuidor');
     };
 
+    factory.getNivelesDistribuidorFinalUser = function () {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'tuclick/get-levels/');
+    };
+
     factory.getProductosPorNivel = function (idNivelCS) {
       factory.refreshToken();
       return $http.get($rootScope.API + 'levels/' + idNivelCS + '/products');
@@ -41,6 +46,11 @@
       return $http.post($rootScope.API + 'levels/assign', nivel);
     };
 
+    factory.asignarNivelTuclick = function (nivel) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'tuclick/assign-level/', nivel);
+    };
+
     factory.createLevelDiscount = function (level) {
       factory.refreshToken();
       return $http.post($rootScope.API + 'levels/discount', level);
@@ -49,6 +59,11 @@
     factory.removerNivel = function (id) {
       factory.refreshToken();
       return $http.delete($rootScope.API + 'levels/' + id);
+    };
+
+    factory.removerNivelTuclick = function (id) {
+      factory.refreshToken();
+      return $http.delete($rootScope.API + 'tuclick/levels/' + id);
     };
 
     return factory;

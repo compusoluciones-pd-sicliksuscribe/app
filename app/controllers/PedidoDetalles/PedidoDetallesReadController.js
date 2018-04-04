@@ -201,7 +201,9 @@
             if (product.IdTipoProducto === 3) {
               disabled = true;
               $scope.Distribuidor.IdFormaPago = 2;
+              $scope.Distribuidor.IdFormaPago = 3;
               $scope.Distribuidor.IdFormaPagoPredilecta = 2;
+              $scope.Distribuidor.IdFormaPagoPredilecta = 3;
             }
           });
         });
@@ -248,11 +250,15 @@
     };
 
     $scope.isPayingWithCSCredit = function () {
-      return $scope.Distribuidor.IdFormaPagoPredilecta === paymentMethods.CS_CREDIT;
+      return Number($scope.Distribuidor.IdFormaPagoPredilecta) === paymentMethods.CS_CREDIT;
     };
 
     $scope.isPayingWithCreditCard = function () {
-      return $scope.Distribuidor.IdFormaPagoPredilecta === paymentMethods.CREDIT_CARD;
+      return Number($scope.Distribuidor.IdFormaPagoPredilecta) === paymentMethods.CREDIT_CARD;
+    };
+
+    $scope.isPayingWithPaypal = function () {
+      return Number($scope.Distribuidor.IdFormaPagoPredilecta) === paymentMethods.PAYPAL;
     };
 
     $scope.hasProtectedExchangeRate = function () {

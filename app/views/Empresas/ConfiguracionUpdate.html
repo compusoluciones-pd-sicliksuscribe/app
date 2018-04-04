@@ -16,10 +16,37 @@
 		<div class="form-group row">
 			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 				<div class="pull-rigth">
-					<label>Distintivo para menú *</label> <a href="{{miSitio.UrlLogo}}" ng-show="miSitio.UrlLogo != null" target="_blanc">descargar</a>
+					<label>Distintivo para menú *</label> <a href="{{miSitio.UrlLogo}}" ng-show="miSitio.UrlLogo != null" target="_blanc" ng-model="miSitio.UrlLogo">descargar</a>
 					<br>
 					Formato: jpg, png, jpeg, bmp, gif. ancho: 365px, alto: 124px 
-					<input type="file" id="fileUploadImagen" nv-file-select="" ng-model="miSitio.UrlLogo" uploader="uploader" />
+					<input type="file" id="fileUploadImagen" nv-file-select="miSitio.UrlLogo" ng-model="miSitio.UrlLogo" uploader="uploader" />
+					<img ng-show="miSitio.UrlLogo != null" src ="{{miSitio.UrlLogo}}" ng-model="miSitio.UrlLogo" style="max-width:365px"/>
+				</div>
+			</div>
+			<div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div>
+		</div>
+
+		<div class="form-group row">
+			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+				<div class="pull-rigth">
+					<label>
+						Primary
+							<input type="color" id="primaryColorPicker" ng-model="miSitio.PrimaryColor"/>
+							<input id="primaryColorInput" ng-model="miSitio.PrimaryColor"></input>
+					</label>
+				</div>
+			</div>
+			<div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div>
+		</div>
+
+		<div class="form-group row">
+			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+				<div class="pull-rigth">
+						<label>
+								Secondary
+									<input type="color" id="secondaryColorPicker" ng-model="miSitio.SecondaryColor"/>
+									<input id="secondaryColorInput" ng-model="miSitio.SecondaryColor"></input>
+							</label>
 				</div>
 			</div>
 			<div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div>

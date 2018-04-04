@@ -98,6 +98,20 @@
         });
     };
 
+    const comprarProductos = function () {
+      PedidoDetallesFactory.getComprar()
+        .then(function (response) {
+          if (response.data.success) {
+            $scope.ShowToast(response.data.message, 'success');
+            $scope.ActualizarMenu();
+            $location.path('/');
+          } else {
+            $location.path('/Carrito');
+            $scope.ShowToast(response.data.message, 'danger');
+          }
+        });
+    };
+
     $scope.prepararPedidos = function () {
       PedidoDetallesFactory.getPrepararCompra(1)
         .then(function (result) {
@@ -111,9 +125,34 @@
         });
     };
 
+    const confirmarPaypal = function () {
+      const paymentId = $location.search().paymentId;
+      const token = $location.search().token;
+      const PayerID = $location.search().PayerID;
+      const orderIds = $cookies.getObject('orderIds');
+      $cookies.remove('orderIds');
+      $location.url($location.path());
+      if (paymentId && token && PayerID && orderIds) {
+        PedidoDetallesFactory.confirmarPaypal({ paymentId, PayerID, orderIds })
+          .then(function (response) {
+            if (response.data.state === 'approved') {
+              const PedidosAgrupados = orderIds.map(function (id) { return ({ id }); });
+              const datosPaypal = { TarjetaResultIndicator: paymentId, TarjetaSessionVersion: PayerID, PedidosAgrupados };
+              PedidosFactory.putPedido(datosPaypal)
+                .then(comprarProductos);
+            }
+            if (response.data.state === 'failed') $scope.ShowToast('Ocurrio un error al intentar confirmar la compra con Paypal. Intentalo mas tarde.', 'danger');
+          })
+          .catch(function (response) {
+            $scope.ShowToast('Ocurrio un error de tipo: "' + response.data.message + '". Contacte con soporte de Compusoluciones.', 'danger');
+          });
+      }
+    };
+
     $scope.init = function () {
       if ($scope.currentPath === '/Comprar') {
         $scope.CheckCookie();
+        confirmarPaypal();
         $scope.prepararPedidos();
       }
     };
@@ -200,19 +239,13 @@
                     },
                     interaction:
                     {
-                      merchant:
+                      name: 'CompuSoluciones',
+                      address:
                       {
-                        name: 'CompuSoluciones',
-                        address:
-                        {
-                          line1: 'CompuSoluciones y Asociados, S.A. de C.V.',
-                          line2: 'Av. Mariano Oterno No. 1105',
-                          line3: 'Col. Rinconada del Bosque C.P. 44530',
-                          line4: 'Guadalajara, Jalisco. México'
-                        },
-
-                        email: 'order@yourMerchantEmailAddress.com',
-                        phone: '+1 123 456 789 012',
+                        line1: 'CompuSoluciones y Asociados, S.A. de C.V.',
+                        line2: 'Av. Mariano Oterno No. 1105',
+                        line3: 'Col. Rinconada del Bosque C.P. 44530',
+                        line4: 'Guadalajara, Jalisco. México'
                       },
                       displayControl: { billingAddress: 'HIDE', orderSummary: 'SHOW' },
                       locale: 'es_MX',
@@ -224,11 +257,10 @@
                   $scope.ShowToast('No pudimos comenzar con tu proceso de pago, favor de intentarlo una vez más.', 'danger');
                 }
               } else {
-                $scope.ShowToast('Algo salio mal con el pago con tarjeta bancaria, favor de intentarlo una vez más.', 'danger');
+                $scope.ShowToast('No pudimos comenzar con tu proceso de pago, favor de intentarlo una vez más.', 'danger');
               }
             } else {
-              $scope.pedidosAgrupados = Datos.data['0'].pedidosAgrupados;
-              $scope.ComprarConTarjeta('Grátis', 'Grátis');
+              $scope.ShowToast('Algo salio mal con el pago con tarjeta bancaria, favor de intentarlo una vez más.', 'danger');
             }
           })
           .error(function (data, status, headers, config) {
@@ -238,27 +270,34 @@
       }
     };
 
-    $scope.Comprar = function () {
-      if ($scope.Distribuidor.IdFormaPagoPredilecta === 1) {
-        $scope.PagarTarjeta();
-      } else {
-        PedidoDetallesFactory.getComprar()
-          .success(function (compra) {
-            if (compra.success === 1) {
-              $scope.ShowToast(compra.message, 'success');
+    $scope.prepararPaypal = function () {
+      const orderIds = $scope.PedidoDetalles.map(function (result) {
+        return result.IdPedido;
+      });
+      const expireDate = new Date();
+      expireDate.setTime(expireDate.getTime() + 600 * 2000);
+      $cookies.putObject('orderIds', orderIds, { expires: expireDate, secure: $rootScope.secureCookie });
+      PedidoDetallesFactory.prepararPaypal({ orderIds, url: 'Comprar' })
+        .then(function (response) {
+          if (response.data.message === 'free') comprarProductos();
+          else if (response.data.state === 'created') {
+            const paypal = response.data.links.filter(function (item) {
+              if (item.method === 'REDIRECT') return item.href;
+            })[0];
+            location.href = paypal.href;
+          } else {
+            $scope.ShowToast('Ocurrio un error al procesar el pago.', 'danger');
+          }
+        })
+        .catch(function (response) {
+          $scope.ShowToast('Ocurrio un error al procesar el pago. de tipo: ' + response.data.message, 'danger');
+        });
+    };
 
-              $scope.ActualizarMenu();
-              $location.path('/');
-            }
-            else {
-              $location.path('/Carrito');
-              $scope.ShowToast(compra.message, 'danger');
-            }
-          })
-          .error(function (data, status, headers, config) {
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-          });
-      }
+    $scope.Comprar = function () {
+      if ($scope.Distribuidor.IdFormaPagoPredilecta === 1) $scope.PagarTarjeta();
+      if ($scope.Distribuidor.IdFormaPagoPredilecta === 2) comprarProductos();
+      if ($scope.Distribuidor.IdFormaPagoPredilecta === 3) $scope.prepararPaypal();
     };
 
     $scope.ComprarConTarjeta = function (resultIndicator, sessionVersion) {

@@ -17,16 +17,34 @@
       return $http.post($rootScope.API + 'shopping-cart', PedidoDetalle);
     };
 
+    // Agregar al carrito final user
+    factory.postPedidoDetalleFinalUser = function (PedidoDetalle, currentDistribuidor) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'shopping-cart/final-user/' + currentDistribuidor, PedidoDetalle);
+    };
+
     // Obtener productos del carrito
     factory.getPedidoDetalles = function () {
       factory.refreshToken();
       return $http.get($rootScope.API + 'shopping-cart');
     };
 
+    // Obtener productos del carrito
+    factory.getPedidoDetallesUf = function (currentDistribuidor) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'shopping-cart/final-user/' + currentDistribuidor);
+    };
+
     // Preparar productos del carrito
     factory.getPrepararCompra = function (commission) {
       factory.refreshToken();
       return $http.post($rootScope.API + 'shopping-cart/prepare-purchase/' + commission);
+    };
+
+    // Preparar productos del carrito
+    factory.getPrepararCompraFinalUser = function (commission, currentDistribuidor) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'shopping-cart/prepare-purchase/final-user/' + commission + '/distribuidor/' + currentDistribuidor);
     };
 
     // Eliminar productos del carrito
@@ -39,6 +57,12 @@
     factory.getComprar = function () {
       factory.refreshToken();
       return $http.post($rootScope.API + 'shopping-cart/buy');
+    };
+
+    // Comprar productos final user
+    factory.getComprarFinalUser = function (currentDistribuidor) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'shopping-cart/final-user-purchase/' + currentDistribuidor);
     };
 
     // Valida el credito de los clientes
@@ -82,6 +106,26 @@
       return $http.post($rootScope.API + 'shopping-cart/credit-card-payments');
     };
 
+    factory.getPrepararTarjetaCreditoFinalUser = function (currentDistribuidor) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'shopping-cart/credit-card-payments/final-user/' + currentDistribuidor);
+    };
+
+    factory.prepararPaypal = function (params) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'paypal/order', params);
+    };
+
+    factory.prepararPaypalFinalUser = function (params) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'paypal/order/final-user', params);
+    };
+    
+    factory.confirmarPaypal = function (params) {
+      factory.refreshToken();
+      return $http.put($rootScope.API + 'paypal/order/confirm', params);
+    };
+
     factory.getAzureUsage = function (IdPedido) {
       factory.refreshToken();
       return $http.get($rootScope.API + 'microsoft/billing/azure-usage-report/' + IdPedido);
@@ -97,6 +141,11 @@
       return $http.post($rootScope.API + 'orders/pending-orders-monitor-calculations/1', Pedidos);
     };
 
+    factory.monitorCalculationsPayPal = function (Pedidos) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'orders/renovations/payments/paypal/1', Pedidos);
+    };
+
     factory.payWidthCard = function (Pedidos) {
       factory.refreshToken();
       return $http.post($rootScope.API + 'orders/pay-width-card', Pedidos);
@@ -105,6 +154,21 @@
     factory.removeRenew = function (pedido) {
       factory.refreshToken();
       return $http.delete($rootScope.API + 'shopping-cart/renew/order/' + pedido.IdPedido + '/end-user/' + pedido.IdEmpresaUsuarioFinal);
+    };
+
+    factory.preparePayPal = function (params) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'paypal/order', params);
+    };
+
+    factory.confirmPayPal = function (params) {
+      factory.refreshToken();
+      return $http.put($rootScope.API + 'paypal/order/confirm', params);
+    };
+
+    factory.payWithPaypal = function (Pedidos) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'orders/pay-with-paypal', Pedidos);
     };
 
     return factory;

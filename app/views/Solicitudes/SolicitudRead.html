@@ -1,0 +1,90 @@
+<div class="container" ng-swipe-right="" ng-swipe-left="">
+
+  <div class="row">
+    <div class="col-xs-12 col-sm-8">
+      <h2>Solicitudes de TuClick</h2>
+    </div>
+    <div class="col-xs-12 col-sm-4 form-group">
+      <label>Estatus</label>
+      <select id="Estatus" name="Estatus" class="form-control selectOption" ng-model="EstatusSelect.IdEstatus" ng-options="estatus.IdEstatus as estatus.Estatus for estatus in Estatus"></select>
+    </div>
+    <!--<div class="col-xs-12 col-sm-4 searchOption">
+			<label for="Busqueda">Busqueda</label>
+			<div class="form-group has-feedback">
+				<input type="text" ng-model="filter" ng-change="search()" class="form-control" size="30" placeholder="Busca facturas..." />
+				<i class="form-control-feedback glyphicon glyphicon-search"></i>
+			</div>
+		</div>-->
+  </div>
+
+  <!--<div class="alert alert-warning">
+    <b>Nota*</b> Los pedidos que sean seleccionados, seran afectados tal cual como aparecen en la tabla, estos pedidos pueden
+    ser modificados mientran no hayan sido afectados.
+  </div>-->
+  <!--ng-repeat="pedido in paginatedOrders[currentPage]"-->
+  <div class="form-group row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <table class="table table-hover table-responsive border-left-right-cero">
+        <th><b>IdSolicitud</b></th>
+        <th><b>Empresa </b></th>
+        <th><b>Plan</b></th>
+        <th><b>Estatus</b></th>
+        <th><b>Fecha</b></th>
+        <th><b></b></th>
+        <th><b></b></th>
+        <tr ng-repeat="solicitud in Solicitudes | orderBy:sortBy:reverse | filter:EstatusSelect:strict" class="repeat-animation">
+          <!--<tr ng-repeat="pedido in Pedidos | orderBy:sortBy:reverse | filter:EstatusSelect:strict" class="repeat-animation">-->
+          <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
+            <div class="form-group">
+              <b><h5>{{solicitud.IdSolicitud}}</h5></b>
+            </div>
+          </td>
+          <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
+            <div class="form-group">
+              <b><h5>{{solicitud.NombreEmpresa}}</h5></b>
+            </div>
+          </td>
+          <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
+            <div class="form-group">
+              <b><h5>{{solicitud.Nombre}}</h5></b>
+            </div>
+          </td>
+          <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
+            <div class="form-group">
+              <b><h5>{{solicitud.Estatus}}</h5></b>
+            </div>
+          </td>
+          <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
+            <div class="form-group">
+              <b><h5>{{solicitud.FechaActivo}}</h5></b>
+            </div>
+          </td>
+          <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
+            <div class="form-group">
+              <button type="button" class="btn btn-primary btn-block" style="height: 40px; min-width:50px" ng-show="EstatusSelect.IdEstatus === 1"
+                ng-click="patch(solicitud, 2)">
+                Aceptar
+              </button>
+            </div>
+          </td>
+          <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
+            <div class="form-group">
+              <button type="button" class="btn btn-primary btn-block" style="height: 40px; min-width:50px" ng-show="EstatusSelect.IdEstatus === 2"
+                ng-click="patch(solicitud, 4)">
+                Activar
+              </button>
+            </div>
+          </td>
+          <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
+            <div class="form-group">
+              <button type="button" class="btn btn-warning btn-block" style="height: 40px; min-width:50px" ng-show="EstatusSelect.IdEstatus === 1"
+                ng-click="patch(solicitud, 3)">
+                Cancelar
+              </button>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
