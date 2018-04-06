@@ -11,9 +11,9 @@
 
     factory.refreshToken();
 
-    factory.postComprasUF = function (producto) {
+    factory.postComprasUF = function (producto, currentDistribuidor) {
       factory.refreshToken();
-      return $http.post($rootScope.API + 'ComprasUF', producto);
+      return $http.post($rootScope.API + 'ComprasUF/' + currentDistribuidor, producto);
     };
 
     factory.getComprasUF = function (IdEmpresaDistribuidor, ActualizarPrecios) {

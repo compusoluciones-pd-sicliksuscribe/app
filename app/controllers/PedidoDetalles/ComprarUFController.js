@@ -15,7 +15,7 @@
       return PedidoDetallesFactory.getPedidoDetallesUf($scope.currentDistribuidor.IdEmpresa)
         .then(function (result) {
           if (result.data.success) $scope.PedidoDetalles = result.data.data;
-         // console.log(' result.data.data' + JSON.stringify(result.data.data));
+          // console.log(' result.data.data' + JSON.stringify(result.data.data));
           $scope.PedidoDetalles.forEach(function (elem) {
             elem.Productos.forEach(function (item) {
               if (item.PrecioUnitario == null) $scope.error = true;
@@ -32,6 +32,7 @@
     const getEnterprises = function () {
       return EmpresasFactory.getEmpresas()
         .then(function (result) {
+          // console.log(' result.data.data' + JSON.stringify(result.data[0]));
           $scope.Distribuidor = result.data[0];
         })
         .catch(function (result) {
@@ -250,9 +251,13 @@
     };
 
     $scope.Comprar = function () {
-      if ($scope.Distribuidor.IdFormaPagoPredilecta === 1) $scope.PagarTarjeta();
-      if ($scope.Distribuidor.IdFormaPagoPredilecta === 2) comprarProductos();
-      if ($scope.Distribuidor.IdFormaPagoPredilecta === 3) $scope.prepararPaypal();
+      if (Number($scope.currentDistribuidor.IdEmpresa) === Number($scope.Distribuidor.IdEmpresa)) {
+        $scope.ShowToast('No puedes comprarte productos a ti mismo.', 'danger');
+      } else {
+        if ($scope.Distribuidor.IdFormaPagoPredilecta === 1) $scope.PagarTarjeta();
+        if ($scope.Distribuidor.IdFormaPagoPredilecta === 2) comprarProductos();
+        if ($scope.Distribuidor.IdFormaPagoPredilecta === 3) $scope.prepararPaypal();
+      }
     };
 
     $scope.ComprarConTarjeta = function (resultIndicator, sessionVersion) {
