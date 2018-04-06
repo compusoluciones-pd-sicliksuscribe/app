@@ -274,7 +274,8 @@
     };
 
     $scope.AgregarComprasUF = function (NuevoProducto2) {
-      ComprasUFFactory.postComprasUF(NuevoProducto2)
+      const currentDistribuidor = $scope.currentDistribuidor.IdEmpresa;
+      ComprasUFFactory.postComprasUF(NuevoProducto2, currentDistribuidor)
             .success(function (ProductoResult) {
               if (ProductoResult.success) {
                 $scope.ActualizarMenu();

@@ -259,7 +259,7 @@
 
         $cookies.remove('Session');
         $cookies.remove('Pedido');
-        $cookies.remove('currentDistribuidor');
+       // $cookies.remove('currentDistribuidor');
 
         $scope.SessionCookie = {};
         $scope.currentDistribuidor = {};

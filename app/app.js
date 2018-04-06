@@ -278,7 +278,7 @@
 
       .when('/uf/Comprar', {
         controller: 'ComprarUFController', templateUrl: 'app/views/PedidoDetalles/ComprarUF.html',
-        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6 || Session.IdTipoAcceso === 2)) { $location.path('/404'); } } }
       })
 
       .when('/Carrito', {
