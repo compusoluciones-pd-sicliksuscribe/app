@@ -98,6 +98,34 @@
         });
     };
 
+    const comprarProductos = function () {
+      PedidoDetallesFactory.getComprar()
+        .then(function (response) {
+          if (response.data.success) {
+            $scope.ShowToast(response.data.message, 'success');
+            $scope.ActualizarMenu();
+            $location.path('/');
+          } else {
+            $location.path('/Carrito');
+            $scope.ShowToast(response.data.message, 'danger');
+          }
+        });
+    };
+
+    const comprarPrePago = function () {
+      PedidoDetallesFactory.getComprar()
+        .then(function (response) {
+          if (response.data.success) {
+            $scope.ShowToast(response.data.message, 'success');
+            $scope.ActualizarMenu();
+            $location.path('/');
+          } else {
+            $location.path('/Carrito');
+            $scope.ShowToast(response.data.message, 'danger');
+          }
+        });
+    };
+
     $scope.prepararPedidos = function () {
       PedidoDetallesFactory.getPrepararCompra(1)
         .then(function (result) {
@@ -238,27 +266,33 @@
       }
     };
 
-    $scope.Comprar = function () {
-      if ($scope.Distribuidor.IdFormaPagoPredilecta === 1) {
-        $scope.PagarTarjeta();
-      } else {
-        PedidoDetallesFactory.getComprar()
-          .success(function (compra) {
-            if (compra.success === 1) {
-              $scope.ShowToast(compra.message, 'success');
+    // $scope.Comprar = function () {
+    //   if ($scope.Distribuidor.IdFormaPagoPredilecta === 1) {
+    //     $scope.PagarTarjeta();
+    //   } else {
+    //     PedidoDetallesFactory.getComprar()
+    //       .success(function (compra) {
+    //         if (compra.success === 1) {
+    //           $scope.ShowToast(compra.message, 'success');
 
-              $scope.ActualizarMenu();
-              $location.path('/');
-            }
-            else {
-              $location.path('/Carrito');
-              $scope.ShowToast(compra.message, 'danger');
-            }
-          })
-          .error(function (data, status, headers, config) {
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-          });
-      }
+    //           $scope.ActualizarMenu();
+    //           $location.path('/');
+    //         }
+    //         else {
+    //           $location.path('/Carrito');
+    //           $scope.ShowToast(compra.message, 'danger');
+    //         }
+    //       })
+    //       .error(function (data, status, headers, config) {
+    //         $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+    //       });
+    //   }
+    // };
+
+    $scope.Comprar = function () {
+      if ($scope.Distribuidor.IdFormaPagoPredilecta === paymentMethods.CREDIT_CARD) $scope.PagarTarjeta();
+      if ($scope.Distribuidor.IdFormaPagoPredilecta === paymentMethods.CS_CREDIT) comprarProductos();
+      if ($scope.Distribuidor.IdFormaPagoPredilecta === paymentMethods.CASH) comprarPrePago();
     };
 
     $scope.ComprarConTarjeta = function (resultIndicator, sessionVersion) {
