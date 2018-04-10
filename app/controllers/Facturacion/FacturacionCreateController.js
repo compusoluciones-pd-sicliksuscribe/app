@@ -37,7 +37,7 @@
           var empresa = resultado[0];
           if (resultado[0].IdEmpresa) {
             $scope.InfoFactura.rfc = empresa.RFC;
-            $scope.InfoFactura.nombre = empresa.RazonSocial;
+            $scope.InfoFactura.nombre = empresa.NombreEmpresa;
             $scope.InfoFactura.IdEmpresa = empresa.IdEmpresa;
             $scope.InfoFactura.nombre_contacto = empresa.NombreContacto;
             $scope.InfoFactura.telefono = empresa.TelefonoContacto;

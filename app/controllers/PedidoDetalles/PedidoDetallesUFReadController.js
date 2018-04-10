@@ -70,8 +70,8 @@
               });
             });
           } else {
-            $scope.ShowToast('No pudimos validar tu carrito de compras, por favor intenta de nuevo.', 'danger');
-            $location.path('uf/Productos');
+            //$scope.ShowToast('No pudimos validar tu carrito de compras, por favor intenta de nuevo.', 'danger');
+            // $location.path('uf/Productos');
           }
         })
         .catch(function (result) {

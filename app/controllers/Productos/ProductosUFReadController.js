@@ -17,11 +17,11 @@
         $scope.Pagina = 0;
         $scope.BuscarProductos.Offset = $scope.Pagina * 6;
       }
-      console.log($scope.BuscarProductos);
+      // console.log($scope.BuscarProductos);
       ProductosXEmpresaFactory.postBuscarProductosXEmpresa($scope.BuscarProductos)
         .success(function (Productos) {
           if (Productos.success) {
-            $scope.Productos = Productos.data[0].map(function (item) {
+            $scope.Productos = Productos.data.map(function (item) {
               item.IdPedidoContrato = 0;
               item.TieneContrato = true;
               item.IdEmpresaUsuarioFinal = item.IdEmpresa;
@@ -115,7 +115,7 @@
       var IdProducto = Producto.IdProducto;
       var cookie = $cookies.getObject('Session');
       var IdEmpresaUsuarioFinal = cookie.IdEmpresa;
-      ProductosFactory.getProductContracts(IdEmpresaUsuarioFinal, IdProducto)
+      ProductosFactory.getProductContractsTuClick(IdEmpresaUsuarioFinal, IdProducto, $scope.currentDistribuidor.IdEmpresa)
         .success(function (respuesta) {
           if (respuesta.success === 1) {
             Producto.contratos = respuesta.data;
@@ -136,7 +136,7 @@
         .error(function () {
           $scope.ShowToast('No pudimos cargar la información de tus contratos, por favor intenta de nuevo más tarde.', 'danger');
         });
-      UsuariosFactory.getUsuariosContacto(IdEmpresaUsuarioFinal)
+      UsuariosFactory.getUsuariosContactoTuClick(IdEmpresaUsuarioFinal, $scope.currentDistribuidor.IdEmpresa)
         .success(function (respuesta) {
           if (respuesta.success === 1) {
             Producto.usuariosContacto = respuesta.data;
@@ -348,6 +348,12 @@
           y += node.offsetTop;
         } return y;
       }
+    };
+
+    $scope.CalculaDescuento = function (precio, descuento) {
+      var total = 0;
+      total = precio - ((precio * descuento) * 0.01);
+      return total;
     };
 
     $scope.PaginadoInicio = function () {

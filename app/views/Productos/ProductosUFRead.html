@@ -95,13 +95,13 @@
                             <div ng-show="Producto.IdTipoProducto == 2">Precio unitario:</div>
                             <div ng-show="Producto.IdTipoProducto == 3">Precio de contratación:</div>
                             </label>
-                            <span ng-show="Producto.PorcentajeDescuento == 0">
+                            <span ng-show="Producto.PorcentajeDescuentoTuClick == 0">
                                 {{Producto.PrecioNormal | currency: "$" : 2}} {{Producto.MonedaPrecio}}                          
                             </span>
-                            <span ng-show="Producto.PorcentajeDescuento > 0">
+                            <span ng-show="Producto.PorcentajeDescuentoTuClick > 0">
                                 <del style="font-size:11px">{{Producto.PrecioNormal | currency: "$" : 2}} {{Producto.MonedaPrecio}}</del>
-                                {{Producto.PrecioDescuento | currency: "$" : 2}} {{Producto.MonedaPrecio}}
-                                <b style="color:#68953B;">{{Producto.PorcentajeDescuento}}% Desc.</b>
+                                {{CalculaDescuento(Producto.PrecioNormal, Producto.PorcentajeDescuentoTuClick) | currency}} {{Producto.MonedaPrecio}}
+                                <b style="color:#68953B;">{{Producto.PorcentajeDescuentoTuClick}}% Desc.</b>
                             </span>
 
                             <div ng-show="Producto.IdTipoProducto == 2 && Producto.IdFabricante == 1">
