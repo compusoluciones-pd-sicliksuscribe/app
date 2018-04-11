@@ -26,10 +26,16 @@
       return $http.put($rootScope.API + 'Pedidos/CodigoPromocion', Pedido);
     };
 
-    factory.patchPaymentInformation = function (paymentResult)  {
+    factory.patchPaymentInformation = function (paymentResult) {
       factory.refreshToken();
       return $http.patch($rootScope.API + 'orders/update-payment-details', paymentResult);
     };
+
+    factory.patchPaymentInformationPrePaid = function (paymentResult) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'orders/pay-with-prepaid', paymentResult);
+    };
+
 
     factory.renewContract = function (contractData) {
       factory.refreshToken();

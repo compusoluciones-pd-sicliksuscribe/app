@@ -179,7 +179,7 @@
       if (document.getElementById('Tarjeta').checked) {
         $scope.pagar();
       } else if (document.getElementById('Prepago').checked) {
-        $scope.pagarPrepago();
+        $scope.preparePrePaid();
       }
     };
 
@@ -240,17 +240,24 @@
       }
     };
 
-    $scope.pagarPrepago = function () {
+    $scope.preparePrePaid = function () {
       if ($scope.PedidosSeleccionadosParaPagar.length > 0) {
-        PedidoDetallesFactory.getComprar({ Pedidos: $scope.PedidosSeleccionadosParaPagar })
-        .success(function (compra) {
-          if (compra.success === 1) {
-            $scope.ShowToast(compra.message, 'success');
+        PedidoDetallesFactory.payWithPrePaid({ Pedidos: $scope.PedidosSeleccionadosParaPagar })
+        .then(function (response) {
+          if (response.data.success) {
+            var expireDate = new Date();
+            expireDate.setTime(expireDate.getTime() + 600 * 2000);
+            const prePaidNextPayment = {
+              TipoCambio: $scope.TipoCambio
+            };
+            $cookies.putObject('prePaidNextPayment', prePaidNextPayment, { expires: expireDate, secure: $rootScope.secureCookie });
+            $scope.ShowToast(response.data.message, 'success');
+            $scope.ActualizarMenu();
             $location.path('/MonitorPagos');
-          }
-          else {
+          } else {
+            $scope.ShowToast(response.data.message, 'danger');
+            $scope.ActualizarMenu();
             $location.path('/MonitorPagos');
-            $scope.ShowToast(compra.message, 'danger');
           }
         })
         .catch(function (response) {

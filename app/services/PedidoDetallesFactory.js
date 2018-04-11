@@ -102,6 +102,11 @@
       return $http.post($rootScope.API + 'orders/renovations/payments/prepaid/1', Pedidos);
     };
 
+    factory.payWithPrePaid = function (Pedidos) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'orders/pay-with-prepaid', Pedidos);
+    };
+
     factory.payWidthCard = function (Pedidos) {
       factory.refreshToken();
       return $http.post($rootScope.API + 'orders/pay-width-card', Pedidos);
