@@ -245,12 +245,6 @@
         PedidoDetallesFactory.payWithPrePaid({ Pedidos: $scope.PedidosSeleccionadosParaPagar })
         .then(function (response) {
           if (response.data.success) {
-            var expireDate = new Date();
-            expireDate.setTime(expireDate.getTime() + 600 * 2000);
-            const prePaidNextPayment = {
-              TipoCambio: $scope.TipoCambio
-            };
-            $cookies.putObject('prePaidNextPayment', prePaidNextPayment, { expires: expireDate, secure: $rootScope.secureCookie });
             $scope.ShowToast(response.data.message, 'success');
             $scope.ActualizarMenu();
             $location.path('/MonitorPagos');
