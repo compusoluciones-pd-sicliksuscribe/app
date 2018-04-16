@@ -243,19 +243,16 @@
     $scope.preparePrePaid = function () {
       if ($scope.PedidosSeleccionadosParaPagar.length > 0) {
         PedidoDetallesFactory.payWithPrePaid({ Pedidos: $scope.PedidosSeleccionadosParaPagar })
-        .then(function (response) {
-          if (response.data.success) {
-            $scope.ShowToast(response.data.message, 'success');
-            $scope.ActualizarMenu();
-            $location.path('/MonitorPagos');
+        .success(function (response) {
+          if (response[0].success === 1) {
+            $scope.ShowToast('Pago realizado correctamente.', 'success');
+            $location.path('/MonitorPagos/refrescar');
           } else {
-            $scope.ShowToast(response.data.message, 'danger');
-            $scope.ActualizarMenu();
-            $location.path('/MonitorPagos');
+            $scope.ShowToast('Ocurrio un error al procesar el pago, intenta nuevamente', 'danger');
           }
         })
         .catch(function (response) {
-          $scope.ShowToast('Ocurrio un error al procesar el pago. de tipo: ' + response.data.message, 'danger');
+          $scope.ShowToast('Algo salió mal con tu pedido, por favor ponte en contacto con tu equipo de soporte CompuSoluciones para más información.', 'danger');
         });
       } else {
         $scope.ShowToast('Selecciona al menos un pedido para pagar.', 'danger');
