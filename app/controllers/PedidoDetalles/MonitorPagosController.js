@@ -244,11 +244,11 @@
       if ($scope.PedidosSeleccionadosParaPagar.length > 0) {
         PedidoDetallesFactory.payWithPrePaid({ Pedidos: $scope.PedidosSeleccionadosParaPagar })
         .success(function (response) {
-          if (response[0].success === 1) {
+          if (response.statusCode === 400) {
+            $scope.ShowToast(response.message, 'danger');
+          } else {
             $scope.ShowToast('Pago realizado correctamente.', 'success');
             $location.path('/MonitorPagos/refrescar');
-          } else {
-            $scope.ShowToast('Ocurrio un error al procesar el pago, intenta nuevamente', 'danger');
           }
         })
         .catch(function (response) {
