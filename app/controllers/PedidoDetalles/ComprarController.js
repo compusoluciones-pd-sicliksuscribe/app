@@ -239,13 +239,19 @@
                     },
                     interaction:
                     {
-                      name: 'CompuSoluciones',
-                      address:
+                      merchant:
                       {
-                        line1: 'CompuSoluciones y Asociados, S.A. de C.V.',
-                        line2: 'Av. Mariano Oterno No. 1105',
-                        line3: 'Col. Rinconada del Bosque C.P. 44530',
-                        line4: 'Guadalajara, Jalisco. México'
+                        name: 'CompuSoluciones',
+                        address:
+                        {
+                          line1: 'CompuSoluciones y Asociados, S.A. de C.V.',
+                          line2: 'Av. Mariano Oterno No. 1105',
+                          line3: 'Col. Rinconada del Bosque C.P. 44530',
+                          line4: 'Guadalajara, Jalisco. México'
+                        },
+  
+                        email: 'order@yourMerchantEmailAddress.com',
+                        phone: '+1 123 456 789 012'
                       },
                       displayControl: { billingAddress: 'HIDE', orderSummary: 'SHOW' },
                       locale: 'es_MX',
@@ -270,6 +276,12 @@
       }
     };
 
+    const getActualSubdomain = function () {
+      let subdomain = window.location.href;
+      subdomain = subdomain.replace('/#/Comprar', '');
+      return subdomain;
+    };
+    const actualSubdomain = getActualSubdomain();
     $scope.prepararPaypal = function () {
       const orderIds = $scope.PedidoDetalles.map(function (result) {
         return result.IdPedido;
@@ -277,7 +289,7 @@
       const expireDate = new Date();
       expireDate.setTime(expireDate.getTime() + 600 * 2000);
       $cookies.putObject('orderIds', orderIds, { expires: expireDate, secure: $rootScope.secureCookie });
-      PedidoDetallesFactory.prepararPaypal({ orderIds, url: 'Comprar' })
+      PedidoDetallesFactory.prepararPaypal({ orderIds, url: 'Comprar', actualSubdomain })
         .then(function (response) {
           if (response.data.message === 'free') comprarProductos();
           else if (response.data.state === 'created') {
@@ -298,6 +310,15 @@
       if ($scope.Distribuidor.IdFormaPagoPredilecta === 1) $scope.PagarTarjeta();
       if ($scope.Distribuidor.IdFormaPagoPredilecta === 2) comprarProductos();
       if ($scope.Distribuidor.IdFormaPagoPredilecta === 3) $scope.prepararPaypal();
+    };
+
+    $scope.CreditCardPayment = function (resultIndicator, sessionVersion) {
+      $scope.currentDistribuidor = $cookies.getObject('currentDistribuidor');
+      if ($scope.currentDistribuidor) { // si es compra desde tuclick
+        angular.element(document.getElementById('divComprarTuClick')).scope().ComprarConTarjetaTuClick(resultIndicator, sessionVersion);
+      } else {
+        $scope.ComprarConTarjeta(resultIndicator, sessionVersion);
+      };
     };
 
     $scope.ComprarConTarjeta = function (resultIndicator, sessionVersion) {

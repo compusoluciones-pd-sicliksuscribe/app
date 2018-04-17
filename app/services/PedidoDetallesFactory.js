@@ -81,6 +81,11 @@
       return $http.get($rootScope.API + 'monitor/orders-per-customer/' + customer.IdEmpresaUsuarioFinal + '/maker/' + customer.IdFabricante + '/type/' + customer.AutoRenovable);
     };
 
+    factory.getOrderPerCustomerTuClick = function (customer) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'monitor/orders-per-customer/' + customer.IdEmpresaUsuarioFinal + '/maker/' + customer.IdFabricante + '/type/' + customer.AutoRenovable + '/tuclick/' + customer.IdDistribuidorTuClick);
+    };
+
     factory.postMonitor = function (IdEmpresaUsuarioFinal) {
       factory.refreshToken();
       return $http.post($rootScope.API + 'Monitor', IdEmpresaUsuarioFinal);

@@ -217,7 +217,7 @@
             }
           } else {
             $scope.pedidosAgrupados = Datos.data['0'].pedidosAgrupados;
-            $scope.ComprarConTarjeta('Grátis', 'Grátis');
+            $scope.ComprarConTarjetaTuClick('Grátis', 'Grátis');
           }
         })
         .error(function (data, status, headers, config) {
@@ -260,7 +260,7 @@
       }
     };
 
-    $scope.ComprarConTarjeta = function (resultIndicator, sessionVersion) {
+    $scope.ComprarConTarjetaTuClick = function (resultIndicator, sessionVersion) {
       var datosTarjeta = { 'TarjetaResultIndicator': resultIndicator, 'TarjetaSessionVersion': sessionVersion, 'PedidosAgrupados': $cookies.getObject('pedidosAgrupados') };
       if (datosTarjeta.PedidosAgrupados) {
         if (datosTarjeta.PedidosAgrupados[0].Renovacion) {
@@ -280,14 +280,14 @@
             .success(function (putPedidoResult) {
               $cookies.remove('pedidosAgrupados');
               if (putPedidoResult.success) {
-                PedidoDetallesFactory.getComprar()
+                PedidoDetallesFactory.getComprarFinalUser($scope.currentDistribuidor.IdEmpresa)
                   .success(function (compra) {
                     if (compra.success === 1) {
                       $scope.ShowToast(compra.message, 'success');
                       $scope.ActualizarMenu();
                       $location.path('/');
                     } else {
-                      $location.path('/Carrito');
+                      $location.path('uf/Carrito');
                       $scope.ShowToast(compra.message, 'danger');
                     }
                   })
@@ -297,7 +297,7 @@
               } else {
                 $scope.ShowToast('Algo salió mal con tu pedido, por favor ponte en contacto con tu equipo de soporte CompuSoluciones para más información.', 'danger');
                 $scope.ActualizarMenu();
-                $location.path('/Carrito/e');
+                $location.path('uf/Carrito');
               }
             })
             .error(function (data, status, headers, config) {
@@ -307,7 +307,7 @@
         }
       } else {
         $scope.ShowToast('Algo salió mal con tu pedido, por favor ponte en contacto con tu equipo de soporte CompuSoluciones para más información.', 'danger');
-        $location.path('/Carrito/e');
+        $location.path('uf/Carrito');
       }
     };
   };

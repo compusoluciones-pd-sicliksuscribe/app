@@ -76,7 +76,7 @@
       }
     };
 
-    $scope.detectarSitioActivoURL = function (){
+    $scope.detectarSitioActivoURL = function () {
       var Session = $cookies.getObject('Session');
       if ($scope.currentDistribuidor.IdEmpresa) {
         for (var i = 0; i < Session.distribuidores.length; i++) {
@@ -188,18 +188,18 @@
       subdomain = subdomain.substring(0, subdomain.indexOf($rootScope.dominio));
       subdomain = subdomain.replace(new RegExp('[.]', 'g'), '');
       subdomain = subdomain.replace('www', '');
-      if (subdomain != '') {
+      if (subdomain !== '') {
         EmpresasFactory.getSitio(subdomain).success(function (empresa) {
-          $scope.cambiarDistribuidor(empresa.data[0], false);
-          $scope.ActualizarMenu();
+          if (empresa.data[0]) {
+            $scope.cambiarDistribuidor(empresa.data[0], false);
+            $scope.ActualizarMenu();
+            $scope.currentDistribuidor = $cookies.getObject('currentDistribuidor');
+          } else {
+            window.location.href = 'http://localhost:5000/#/';
+            $scope.currentDistribuidor = {};
+            $scope.currentDistribuidor.UrlLogo = 'images/LogoSVG.svg';
+          }
         });
-        if ($cookies.getObject('currentDistribuidor')) {
-          $scope.currentDistribuidor = $cookies.getObject('currentDistribuidor');
-        } else {
-          window.location.href = 'http://localhost:5000/#/';
-          $scope.currentDistribuidor = {};
-          $scope.currentDistribuidor.UrlLogo = 'images/LogoSVG.svg';
-        }
       }
     }
 

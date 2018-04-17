@@ -561,6 +561,7 @@
 	</script>
 
 	<div id="divComprar" ng-controller="ComprarController" style="display:none;"></div>
+	<div id="divComprarTuClick" ng-controller="ComprarUFController" style="display:none;"></div>
 
 	<script type="text/javascript">
 		function errorCallback(error) {
@@ -572,7 +573,7 @@
 		}
 
 		function completeCallback(resultIndicator, sessionVersion) {
-			angular.element(document.getElementById('divComprar')).scope().ComprarConTarjeta(resultIndicator, sessionVersion);
+			angular.element(document.getElementById('divComprar')).scope().CreditCardPayment(resultIndicator, sessionVersion);
 		}
 	</script>
 
