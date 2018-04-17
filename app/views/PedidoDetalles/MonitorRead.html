@@ -159,12 +159,12 @@
 								<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
 									<label>Suscripciones: </label>
 									<br>
-									<div style="margin:0; padding:0;" ng-show="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3) && pedido.CargoRealizadoProximoPedido"> {{ detalles.Cantidad }} </div> 
-									<a ng-click="ActualizarCantidad(detalles.IdPedidoDetalle)" style="text-decoration: none" ng-hide="pedido.CargoRealizadoProximoPedido || !(SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3 )"> {{ detalles.Cantidad }} &nbsp;
+									<div style="margin:0; padding:0;" ng-show="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 4) && pedido.CargoRealizadoProximoPedido"> {{ detalles.Cantidad }} </div> 
+									<a ng-click="ActualizarCantidad(detalles.IdPedidoDetalle)" style="text-decoration: none" ng-hide="pedido.CargoRealizadoProximoPedido || !(SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3 || SessionCookie.IdTipoAcceso==4 )"> {{ detalles.Cantidad }} &nbsp;
 										<span class="glyphicon glyphicon-triangle-bottom" ng-show="!detalles.MostrarCantidad"></span>
 										<span class="glyphicon glyphicon-triangle-top" ng-show="detalles.MostrarCantidad"></span>
 									</a>
-									<div style="margin:0; padding:0;" ng-show="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3) && pedido.CargoRealizadoProximoPedido">
+									<div style="margin:0; padding:0;" ng-show="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 4) && pedido.CargoRealizadoProximoPedido">
 										<br> <label> Renovaciones: </label> <br>
 										<div ng-if="detalles.Activo"> {{ detalles.CantidadProxima }} </div>
 										<div ng-if="!detalles.Activo"> Por cancelar </div>
@@ -297,7 +297,7 @@
 						</ul>
 					</div>
 
-					<div ng-if="detalles.IdTipoProducto !== 3 && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
+					<div ng-if="detalles.IdTipoProducto !== 3 && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 4)">
 						<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
 							<label>Suscripciones: </label> <br>
 							<div style="margin:0; padding:0;" ng-if="detalles.EstatusFabricante !== 'accepted' || (pedido.AutoRenovable && !pedido.CargoRealizadoProximoPedido) || (!pedido.AutoRenovable && (!pedido.Renovacion || pedido.PorRenovar))"> {{ detalles.Cantidad }} </div>
