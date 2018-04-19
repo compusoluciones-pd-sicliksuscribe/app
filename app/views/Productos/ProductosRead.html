@@ -102,12 +102,15 @@
                                 <b> - </b> {{Producto.FechaFinSuscripcion | date:'d/MM/yyyy'}}
                             </div>
 
-                            <label for="" title="" ng-show='Producto.IdFabricante !== 5'>
+                            <label for="" title="" ng-hide='Producto.IdFabricante === 5 && Product.IdTipoProducto !== 4'>
                             <div ng-show="Producto.IdTipoProducto == 1">Precio por servicio:</div>
                             <div ng-show="Producto.IdTipoProducto == 2">Precio unitario:</div>
                             <div ng-show="Producto.IdTipoProducto == 3">Precio de contratación:</div>
                             </label>
-                            <span ng-show="Producto.PorcentajeDescuento == 0 && Producto.IdFabricante !== 5">
+                            <span ng-show="Producto.PorcentajeDescuento == 0">
+                                {{Producto.PrecioNormal | currency: "$" : 2}} {{Producto.MonedaPrecio}}
+                            </span>
+                            <span ng-show="Producto.IdFabricante === 5 && Producto.IdTipoProducto === 4">
                                 {{Producto.PrecioNormal | currency: "$" : 2}} {{Producto.MonedaPrecio}}
                             </span>
                             <span ng-show="Producto.PorcentajeDescuento > 0 && Producto.IdFabricante !== 5">
@@ -145,7 +148,7 @@
                                     <form name="frmCantidad" id="frmCantidad">
 
                                         <div class="form-group">
-                                            <label for="Cantidad">*{{Producto.IdFabricante === 5 ? "¿Cuantos empleados hay en la nómina?" : "¿Cuántos quieres?"}}</label> a partir de {{Producto.CantidadMinima}}
+                                            <label for="Cantidad">*{{Producto.IdFabricante === 5 && Producto.IdTipoProducto !== 4 ? "¿Cuantos empleados hay en la nómina?" : "¿Cuántos quieres?"}}</label> a partir de {{Producto.CantidadMinima}}
                                             a {{Producto.CantidadMaxima}}
 
                                             <div class="input-group">
