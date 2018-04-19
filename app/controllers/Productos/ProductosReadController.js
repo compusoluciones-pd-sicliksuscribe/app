@@ -49,7 +49,6 @@
               item.tiers = formatTiers(item.tiers);
               return item;
             });
-            console.log($scope.Productos);
             if ($scope.Productos === '') {
               $scope.Mensaje = 'No encontramos resultados de tu búsqueda...';
               if ($scope.Pagina > 0) {
@@ -244,7 +243,6 @@
     const estimateTieredTotal = function (tiers, quantity) {
       const indexOfLastTier = tiers.length - 1;
       return tiers.reduce(function (total, currentTier, index, readOnlyTiers) {
-        console.log(index);
         if (quantity >= currentTier.lowerLimit) {
           if (index === indexOfLastTier) {
             const previousTier = readOnlyTiers[index - 1];
