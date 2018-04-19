@@ -102,15 +102,15 @@
                                 <b> - </b> {{Producto.FechaFinSuscripcion | date:'d/MM/yyyy'}}
                             </div>
 
-                            <label for="" title="">
+                            <label for="" title="" ng-show='Producto.IdFabricante !== 5'>
                             <div ng-show="Producto.IdTipoProducto == 1">Precio por servicio:</div>
                             <div ng-show="Producto.IdTipoProducto == 2">Precio unitario:</div>
                             <div ng-show="Producto.IdTipoProducto == 3">Precio de contratación:</div>
                             </label>
-                            <span ng-show="Producto.PorcentajeDescuento == 0">
+                            <span ng-show="Producto.PorcentajeDescuento == 0 && Producto.IdFabricante !== 5">
                                 {{Producto.PrecioNormal | currency: "$" : 2}} {{Producto.MonedaPrecio}}
                             </span>
-                            <span ng-show="Producto.PorcentajeDescuento > 0">
+                            <span ng-show="Producto.PorcentajeDescuento > 0 && Producto.IdFabricante !== 5">
                                 <del style="font-size:11px">{{Producto.PrecioNormal | currency: "$" : 2}} {{Producto.MonedaPrecio}}</del>
                                 {{Producto.PrecioDescuento | currency: "$" : 2}} {{Producto.MonedaPrecio}}
                                 <b style="color:#68953B;">{{Producto.PorcentajeDescuento}}% Desc.</b>
@@ -119,6 +119,16 @@
                             <div ng-show="Producto.IdTipoProducto == 2 && Producto.IdFabricante == 1">
                                 <label for="" title="Precio prorrateado">Precio prorrateado del primer periodo:</label> {{Producto.PrecioProrrateo
                                 | currency}} {{Producto.MonedaPrecio}}
+                            </div>
+
+                            <div ng-show="Producto.tiers">
+                                <label for="" title="nivel">Precios por nivel:</label>
+                                <ul>
+                                    <li ng-repeat="tier in Producto.tiers">
+                                        <span ng-show="tier.upperLimit!==0">De {{tier.lowerLimit}} a {{tier.upperLimit}} {{tier.propertyName}}: {{tier.price | currency: "$" : 2}} {{Producto.MonedaPrecio}}</span>
+                                        <span ng-show="tier.upperLimit===0"> Más de {{tier.lowerLimit}}: {{tier.previousTierPrice | currency: "$" : 2}} + {{tier.price | currency: "$" : 2}} por cada 1000 empleados adicionales</span>
+                                    </li>
+                                </ul>
                             </div>
 
                             <br>
@@ -135,7 +145,7 @@
                                     <form name="frmCantidad" id="frmCantidad">
 
                                         <div class="form-group">
-                                            <label for="Cantidad">* ¿Cuántos quieres?</label> a partir de {{Producto.CantidadMinima}}
+                                            <label for="Cantidad">*{{Producto.IdFabricante === 5 ? "¿Cuantos empleados hay en la nómina?" : "¿Cuántos quieres?"}}</label> a partir de {{Producto.CantidadMinima}}
                                             a {{Producto.CantidadMaxima}}
 
                                             <div class="input-group">
@@ -234,44 +244,9 @@
 
                                         <div style="float:right!important;">
                                             <label for="" title="Cantidad por precio">Total:</label>
-                                            <b ng-show="Producto.IdFabricante === 1 && Producto.PorcentajeDescuento == 0">
-                                                {{CalcularPrecioTotal(Producto.PrecioProrrateo, Producto.Cantidad, Producto.MonedaPago, Producto.MonedaPrecio, TipoCambioMs) | currency }} {{Producto.MonedaPago}}
+                                            <b>
+                                                {{estimateTotal(Producto, Producto.Cantidad) | currency }} {{Producto.MonedaPago}}
                                             </b>
-                                            <b ng-show="Producto.IdFabricante !== 1 && Producto.PorcentajeDescuento == 0">
-                                                {{CalcularPrecioTotal(Producto.PrecioProrrateo, Producto.Cantidad, Producto.MonedaPago, Producto.MonedaPrecio, TipoCambio) | currency}} {{Producto.MonedaPago}}
-                                            </b>
-
-                                            <b ng-show="Producto.IdFabricante === 1 && Producto.PorcentajeDescuento > 0">
-                                                {{CalcularPrecioTotal(Producto.PrecioDescuento, Producto.Cantidad, Producto.MonedaPago, Producto.MonedaPrecio, TipoCambioMs) | currency}} {{Producto.MonedaPago}}
-                                            </b>
-                                            <b ng-show="Producto.IdFabricante !== 1 && Producto.PorcentajeDescuento > 0">
-                                                {{CalcularPrecioTotal(Producto.PrecioDescuento, Producto.Cantidad, Producto.MonedaPago, Producto.MonedaPrecio, TipoCambio) | currency}} {{Producto.MonedaPago}}
-                                            </b>
-                                        </div>
-
-                                        <div ng-show="false">
-                                            <label for="CodigoPromocion">
-                                                <a ng-if="!Producto.expanded" ng-click="Producto.expanded = true">
-                                                    <span class="glyphicon glyphicon-menu-down"></span>
-                                                    Tengo un código de promoción
-                                                </a>
-                                                <a ng-if="Producto.expanded" ng-click="Producto.expanded = false">
-                                                    <span class="glyphicon glyphicon-menu-up"></span>
-                                                    Tengo un código de promoción
-                                                </a>
-                                            </label>
-                                            <div ng-if="Producto.expanded">
-                                                <br>
-                                                <div class="input-group">
-                                                    <span class="input-group-addon green white">
-                                                    <span class="glyphicon glyphicon-gift"></span>
-                                                    </span>
-                                                    <input id="CodigoPromocion" name="CodigoPromocion" type="text" ng-model="Producto.CodigoPromocion" class="form-control" placeholder="Escribe tu código de promoción"
-                                                        max="255" min="255" size="255" maxlength="255" title="Escribe tu código de promoción"
-                                                    />
-                                                </div>
-                                            </div>
-                                            <br>
                                         </div>
                                 </div>
                             </div>
