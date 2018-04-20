@@ -52,6 +52,11 @@
       return $http.post($rootScope.API + 'PedidoDetalles/AddOns', Producto);
     };
 
+    factory.getOrderPerCustomer = function (customer) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'monitor/orders-per-customer/' + customer.IdEmpresaUsuarioFinal + '/maker/' + customer.IdFabricante + '/type/' + customer.AutoRenovable);
+    };
+
     factory.postMonitor = function (IdEmpresaUsuarioFinal) {
       factory.refreshToken();
       return $http.post($rootScope.API + 'Monitor', IdEmpresaUsuarioFinal);
@@ -95,6 +100,11 @@
     factory.payWidthCard = function (Pedidos) {
       factory.refreshToken();
       return $http.post($rootScope.API + 'orders/pay-width-card', Pedidos);
+    };
+
+    factory.removeRenew = function (pedido) {
+      factory.refreshToken();
+      return $http.delete($rootScope.API + 'shopping-cart/renew/order/' + pedido.IdPedido + '/end-user/' + pedido.IdEmpresaUsuarioFinal);
     };
 
     return factory;

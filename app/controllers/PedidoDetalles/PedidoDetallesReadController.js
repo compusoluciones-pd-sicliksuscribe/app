@@ -1,11 +1,23 @@
 (function () {
-  const ON_DEMAND = 3;
-  const CREDIT_CARD = 1;
-  const CS_CREDIT = 2;
   var PedidoDetallesReadController = function ($scope, $log, $location, $cookies, PedidoDetallesFactory, TipoCambioFactory, EmpresasXEmpresasFactory, EmpresasFactory, PedidosFactory, $routeParams) {
     $scope.CreditoValido = 1;
     $scope.error = false;
     $scope.Distribuidor = {};
+    const ON_DEMAND = 3;
+    const ELECTRONIC_SERVICE = 74;
+    const paymentMethods = {
+      CREDIT_CARD: 1,
+      CS_CREDIT: 2,
+      PAYPAL: 3,
+      PREPAY: 4
+    };
+    const makers = {
+      MICROSOFT: 1,
+      AUTODESK: 2,
+      COMPUSOLUCIONES: 3,
+      HP: 4,
+      APERIO: 5
+    };
 
     const error = function (error) {
       $scope.ShowToast(!error ? 'Ha ocurrido un error, intentelo mas tarde.' : error.message, 'danger');
@@ -23,52 +35,92 @@
         });
     };
 
+    const getPaymentMethods = function (id) {
+      let paymentMethod = '';
+      switch (id) {
+        case paymentMethods.CREDIT_CARD:
+          paymentMethod = 'Tarjeta';
+          break;
+        case paymentMethods.CS_CREDIT:
+          paymentMethod = 'Crédito';
+          break;
+        case paymentMethods.PAYPAL:
+          paymentMethod = 'Paypal';
+          break;
+        case paymentMethods.PREPAY:
+          paymentMethod = 'Transferencia';
+          break;
+        default:
+          paymentMethod = 'Metodo de pago incorrecto.';
+      }
+      return paymentMethod;
+    };
+
+    const getMakers = function (id) {
+      let maker = '';
+      switch (id) {
+        case makers.MICROSOFT:
+          maker = 'Microsoft';
+          break;
+        case makers.AUTODESK:
+          maker = 'Autodesk';
+          break;
+        case makers.COMPUSOLUCIONES:
+          maker = 'Compusoluciones';
+          break;
+        case makers.APERIO:
+          maker = 'Aperio';
+          break;
+        case makers.HP:
+          maker = 'HP';
+          break;
+        default:
+          maker = null;
+      }
+      return maker;
+    };
+
     const getOrderDetails = function (validate) {
       return PedidoDetallesFactory.getPedidoDetalles()
         .then(function (result) {
-          if (result.data.success) {
-            $scope.PedidoDetalles = result.data.data;
-            $scope.PedidoDetalles.forEach(function (elem) {
-              elem.Productos.forEach(function (item) {
-                if (item.PrecioUnitario == null) $scope.error = true;
-              });
+          $scope.PedidoDetalles = result.data.data;
+          $scope.PedidoDetalles.forEach(function (elem) {
+            $scope.CreditoValido = 1;
+            elem.hasCredit = 1;
+            elem.Forma = getPaymentMethods(elem.IdFormaPago);
+            elem.NombreFabricante = getMakers(elem.IdFabricante);
+            elem.Productos.forEach(function (item) {
+              if (item.PrecioUnitario == null) $scope.error = true;
             });
-            if ($scope.error) {
-              $scope.ShowToast('Ocurrio un error al procesar sus productos del carrito. Favor de contactar a soporte de CompuSoluciones.', 'danger');
-            }
-            if (!validate) {
-              $scope.ValidarFormaPago();
-            }
-          } else {
-            $scope.ShowToast(result.data.message, 'danger');
-            $location.path('/Productos');
+          });
+          if ($scope.error) {
+            $scope.ShowToast('Ocurrio un error al procesar sus productos del carrito. Favor de contactar a soporte de CompuSoluciones.', 'danger');
+          }
+          if (!validate) {
+            $scope.ValidarFormaPago();
           }
         })
-        .then(validarCarrito)
-        .catch(function (result) { error(result.data); });
+        .then(function () {
+          if ($scope.isPayingWithCSCredit()) validarCarrito();
+        })
+        .catch(function (result) {
+          error(result.data);
+          $location.path('/Productos');
+        });
     };
 
     const validarCarrito = function () {
       return PedidoDetallesFactory.getValidarCarrito()
         .then(function (result) {
-          if (result.data.success) {
-            $scope.PedidoDetalles.forEach(function (item) {
-              if ($scope.Distribuidor.IdFormaPagoPredilecta === 1 && item.MonedaPago !== 'Pesos') {
-                $scope.ShowToast('Para pagar con tarjeta bancaria es necesario que los pedidos estén en pesos MXN. Actualiza tu forma de pago o cambia de moneda en los pedidos agregándolos una vez más.', 'danger');
+          console.log('sadasd')
+          $scope.PedidoDetalles.forEach(function (item) {
+            result.data.data.forEach(function (user) {
+              if (item.IdEmpresaUsuarioFinal === user.IdEmpresaUsuarioFinal && !user.hasCredit) {
+                $scope.CreditoValido = 0;
+                item.hasCredit = 0;
               }
-              $scope.CreditoValido = 1;
-              item.hasCredit = 1;
-              result.data.data.forEach(function (user) {
-                if (item.IdEmpresaUsuarioFinal === user.IdEmpresaUsuarioFinal && !user.hasCredit) {
-                  $scope.CreditoValido = 0;
-                  item.hasCredit = 0;
-                }
-              });
             });
-          } else {
-            $scope.ShowToast('No pudimos validar tu carrito de compras, por favor intenta de nuevo.', 'danger');
-            $location.path('/Productos');
-          }
+          });
         })
         .catch(function (result) {
           error(result.data);
@@ -104,7 +156,8 @@
     $scope.init = function () {
       $scope.CheckCookie();
       PedidoDetallesFactory.getPrepararCompra(0)
-        .then(getEnterprises)
+        .catch(function (result) { error(result.data); });
+      getEnterprises()
         .then(getOrderDetails)
         .then(ActualizarFormaPago)
         .catch(function (result) { error(result.data); });
@@ -117,40 +170,24 @@
         order.Productos.forEach(function (product, indexProduct) {
           if (product.IdPedidoDetalle === PedidoDetalle.IdPedidoDetalle) {
             $scope.PedidoDetalles[indexOrder].Productos.splice(indexProduct, 1);
-            validarCarrito();
           }
           if ($scope.PedidoDetalles[indexOrder].Productos.length === 0) $scope.PedidoDetalles.splice(indexOrder, 1);
         });
       });
-
-      PedidoDetallesFactory.deletePedidoDetalles(PedidoDetalle.IdPedidoDetalle)
+      return PedidoDetallesFactory.deletePedidoDetalles(PedidoDetalle.IdPedidoDetalle)
         .success(function (PedidoDetalleResult) {
           if (!PedidoDetalleResult.success) {
             $scope.ShowToast(PedidoDetalleResult.message, 'danger');
-            getOrderDetails(true);
           } else {
             $scope.ActualizarMenu();
-            validarCarrito();
             $scope.ShowToast(PedidoDetalleResult.message, 'success');
           }
+          return getOrderDetails(true);
         })
         .error(function (data, status, headers, config) {
           $scope.ShowToast('No pudimos quitar el producto seleccionado. Intenta de nuevo más tarde.', 'danger');
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
-    };
-
-    $scope.ActualizarCodigo = function (value) {
-      const order = {
-        CodigoPromocion: value.CodigoPromocion,
-        IdPedido: value.IdPedido
-      };
-      PedidosFactory.putCodigoPromocion(order)
-        .then(function (result) {
-          $scope.init();
-          $scope.ShowToast(result.data.message, 'success');
-        })
-        .catch(function (result) { error(result.data); });
     };
 
     $scope.ValidarFormaPago = function () {
@@ -201,18 +238,20 @@
       if (!orderDetails) return false;
       if (hasProtectedExchangeRate(orderDetails)) return false;
       if (containsOnDemandProduct(orderDetails)) {
-        setPaymentMethod(CS_CREDIT);
+        setPaymentMethod(paymentMethods.CS_CREDIT);
         return false;
       }
       return true;
     };
 
     $scope.isPayingWithCSCredit = function () {
-      return $scope.Distribuidor.IdFormaPagoPredilecta === CS_CREDIT;
+      const IdFormaPago = Number($scope.Distribuidor.IdFormaPagoPredilecta);
+      return IdFormaPago === paymentMethods.CS_CREDIT;
     };
 
     $scope.isPayingWithCreditCard = function () {
-      return $scope.Distribuidor.IdFormaPagoPredilecta === CREDIT_CARD;
+      const IdFormaPago = Number($scope.Distribuidor.IdFormaPagoPredilecta);
+      return IdFormaPago === paymentMethods.CREDIT_CARD;
     };
 
     $scope.hasProtectedExchangeRate = function () {
@@ -227,12 +266,34 @@
       $location.path('/autodesk/productos/' + IdProducto + '/detalle/' + IdPedidoDetalle);
     };
 
+    $scope.removeRenew = function (pedido) {
+      const params = {
+        IdPedido: pedido.IdPedido,
+        IdEmpresaUsuarioFinal: pedido.IdEmpresaUsuarioFinal
+      };
+      PedidoDetallesFactory.removeRenew(params)
+        .then(function (result) {
+          $scope.PedidoDetalles.forEach(function (order, indexOrder) {
+            if (pedido.IdPedido === order.IdPedido) {
+              $scope.PedidoDetalles.splice(indexOrder, 1);
+              if ($scope.isPayingWithCSCredit()) validarCarrito();
+            }
+          });
+          $scope.ActualizarMenu();
+          // validarCarrito();
+          $scope.ShowToast(result.data.message, 'success');
+        })
+        .catch(function (result) {
+          $scope.ShowToast(result.data.message, 'danger');
+        });
+    };
+
     $scope.calcularSubTotal = function (IdPedido) {
       let total = 0;
       $scope.PedidoDetalles.forEach(function (order) {
         order.Productos.forEach(function (product) {
           if (order.IdPedido === IdPedido && !product.PrimeraCompraMicrosoft) {
-            total = total + (product.PrecioUnitario * product.Cantidad);
+            total = total + ($scope.calculateExchangeRate(order, product, 'PrecioUnitario') * product.Cantidad);
           }
         });
       });
@@ -257,8 +318,20 @@
       return total;
     };
 
+    $scope.calculateExchangeRate = function (order, details, value) {
+      let total = 0;
+      if (order.MonedaPago === 'Pesos' && details.MonedaPrecio === 'Dólares') {
+        total = details[value] * order.TipoCambio;
+      } else if (order.MonedaPago === 'Dólares' && details.MonedaPrecio === 'Pesos' && details.IdProducto !== ELECTRONIC_SERVICE) {
+        total = details[value] / order.TipoCambio;
+      } else {
+        total = details[value];
+      }
+      return total;
+    };
+
     $scope.next = function () {
-      if ($scope.Distribuidor.IdFormaPagoPredilecta === 2) validarCarrito();
+      if ($scope.isPayingWithCSCredit()) validarCarrito();
       let next = true;
       if (!$scope.PedidoDetalles || $scope.PedidoDetalles.length === 0) next = false;
       else {

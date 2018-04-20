@@ -31,6 +31,11 @@
       return $http.patch($rootScope.API + 'orders/update-payment-details', paymentResult);
     };
 
+    factory.renewContract = function (contractData) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'autodesk/contracts/renew', contractData);
+    };
+
     return factory;
   };
 
