@@ -49,7 +49,7 @@
               item.tiers = formatTiers(item.tiers);
               return item;
             });
-            if ($scope.Productos === '') {
+            if ($scope.Productos) {
               $scope.Mensaje = 'No encontramos resultados de tu búsqueda...';
               if ($scope.Pagina > 0) {
                 $scope.ShowToast('No encontramos más resultados de esta busqueda, regresaremos a la página anterior.', 'danger');
@@ -281,7 +281,7 @@
         const contrato = Producto.contratos
           .filter(function (p) {
             return Producto.IdPedidoContrato === p.IdPedido;
-          })[0].ResultadoFabricante6;
+          })[0].NumeroContrato;
         NuevoProducto.ContratoBaseAutodesk = contrato.trim();
         // NuevoProducto.IdAccionAutodesk = Producto.IdAccionProductoAutodesk === 1 ? 3 : 2;
       }
