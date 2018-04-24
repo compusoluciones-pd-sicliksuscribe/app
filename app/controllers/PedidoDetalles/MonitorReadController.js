@@ -81,7 +81,7 @@
 
     $scope.ActualizarMonitor = function () {
       Params.IdEmpresaUsuarioFinal = $scope.EmpresaSelect;
-      if ($scope.EmpresaSelect === 0) {
+      if ($scope.EmpresaSelect === null || $scope.EmpresaSelect === undefined) {
         Params.IdEmpresaUsuarioFinal = $cookies.getObject('Session').IdEmpresa;
       }
       Params.IdFabricante = $scope.BuscarProductos.IdFabricante;
