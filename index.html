@@ -319,6 +319,7 @@
 												<li><a href="#/Empresa/{{SessionCookie.IdEmpresa}}">Actualizar {{ SessionCookie.NombreEmpresa }}</a></li>
 												<li><a ng-click="goToPage('Usuarios');">Mis colaboradores</a></li>
 												<li><a ng-click="goToPage('Monitor');">Monitor de pedidos por cliente</a></li>
+												<li id="monitorPagos" ng-show="SessionCookie.IdTipoAcceso == 4"><a ng-click="goToPage('MonitorPagos/uf');">Monitor de pedidos por pagar</a></li>
 												<li><a ng-click="goToPage('SoporteCSP');">Soporte CSP</a></li>
 											</ul>
 										</li>
@@ -505,6 +506,7 @@
 	<script type="text/javascript" src="app/controllers/PedidoDetalles/PedidoDetallesUFReadController.js"></script>
 	<script type="text/javascript" src="app/controllers/PedidoDetalles/MonitorReadController.js"></script>
 	<script type="text/javascript" src="app/controllers/PedidoDetalles/MonitorPagosController.js"></script>
+	<script type="text/javascript" src="app/controllers/PedidoDetalles/MonitorPagosUFController.js"></script>
 	<script type="text/javascript" src="app/controllers/PedidoDetalles/DetallesAzureController.js"></script>
 	<script type="text/javascript" src="app/services/PedidoDetallesFactory.js"></script>
 	<script type="text/javascript" src="app/services/FabricantesFactory.js"></script>

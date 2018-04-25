@@ -13,7 +13,6 @@
 
     factory.getPromocions = function (IdEmpresa) {
       if (!IdEmpresa) {
-        console.log(IdEmpresa);
         IdEmpresa = 0;
       }
       factory.refreshToken();
