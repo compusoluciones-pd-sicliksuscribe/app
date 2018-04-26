@@ -122,7 +122,7 @@
 				<div style="height:500px;">
 					<uib-carousel interval="5000" no-wrap="false">
 
-						<uib-slide ng-repeat="Promocion in Promociones | limitTo: 5" active="slide.active">
+						<uib-slide ng-repeat="Promocion in Promociones | limitTo: 100" active="slide.active">
 							<div class="img-responsive">
 								<img class="imageBanner" ng-src="{{Promocion.Url}}" style="float:right; margin-right:10%; width:600px; height:400px;">
 							</div>
@@ -130,11 +130,11 @@
 								<h4>{{Promocion.Nombre}}</h4>
 								<p>{{Promocion.Descripcion}}</p>
 
-								<button class="btn btn-success" ng-click="goToPage('Productos/{{Promocion.CodigoProducto}}');"
-									ng-show="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3) && {{Promocion.EsUrl}}===0">Comprar</button>
+								<button class="btn btn-success" ng-click="goToPage('Productos/{{Promocion.CodigoProducto}}');" style="background:{{currentDistribuidor.SecondaryColor}}"
+									ng-show="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 4) && {{Promocion.EsUrl}}===0">Comprar</button>
 
 								<a target="_blank" href="//{{Promocion.CodigoProducto}}">
-									<button class="btn btn-success" ng-show="{{Promocion.EsUrl}}===1">Aprovecha</button>
+									<button class="btn btn-success" ng-show="{{Promocion.EsUrl}}===1" style="background:{{currentDistribuidor.SecondaryColor}}">Aprovecha</button>
 								</a>
 
 								<div class="sliderMessage" ng-show="!(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">

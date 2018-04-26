@@ -12,6 +12,7 @@
     $scope.Contactos = [];
     $scope.Renovar = {};
     $scope.SessionCookie = $cookies.getObject('Session');
+    $scope.currentDistribuidor = $cookies.getObject('currentDistribuidor');
 
     $scope.init = function () {
       $scope.CheckCookie();
@@ -55,6 +56,22 @@
         });
     };
 
+    const getOrderPerCustomerTuClick = function (customer) {
+      PedidoDetallesFactory.getOrderPerCustomerTuClick(Params)
+        .then(function (result) {
+          if (result.status === 204) {
+            $scope.Vacio = 0;
+            $scope.Pedidos = {};
+          } else if (result.status === 200) {
+            $scope.Pedidos = result.data.data;
+            $scope.Vacio = 1;
+          }
+        })
+        .catch(function (result) {
+          $scope.ShowToast(result.data.message, 'danger');
+        });
+    };
+
     const getContactUsers = function () {
       UsuariosFactory.getUsuariosContacto($scope.EmpresaSelect)
         .then(result => {
@@ -81,8 +98,10 @@
 
     $scope.ActualizarMonitor = function () {
       Params.IdEmpresaUsuarioFinal = $scope.EmpresaSelect;
-      if ($scope.EmpresaSelect === null || $scope.EmpresaSelect === undefined) {
+      if (($scope.EmpresaSelect === null || $scope.EmpresaSelect === undefined) && $scope.currentDistribuidor) {
         Params.IdEmpresaUsuarioFinal = $cookies.getObject('Session').IdEmpresa;
+        Params.IdDistribuidorTuClick = $scope.currentDistribuidor.IdEmpresa;
+        $scope.EmpresaSelect = $cookies.getObject('Session').IdEmpresa;
       }
       Params.IdFabricante = $scope.BuscarProductos.IdFabricante;
       if (Params.IdFabricante === 1) {
@@ -92,7 +111,10 @@
       //   $scope.BuscarProductos.IdFabricante = null;
       // }
       Params.AutoRenovable = $scope.Contrato.tipo || 'all';
-      if (Params.IdFabricante && $scope.EmpresaSelect) {
+      if (Params.IdFabricante && $scope.EmpresaSelect && Params.IdDistribuidorTuClick) {
+        getOrderPerCustomerTuClick(Params);
+        if (Params.IdFabricante === 2) getContactUsers();
+      } else if (Params.IdFabricante && $scope.EmpresaSelect && (!Params.IdDistribuidorTuClick)) {
         getOrderPerCustomer(Params);
         if (Params.IdFabricante === 2) getContactUsers();
       }

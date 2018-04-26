@@ -34,6 +34,7 @@
 
     uploader.onBeforeUploadItem = function (item) {
       var extension = item.file.name.split('.');
+      console.log($scope.Promocion);
       item.file.name = $scope.Promocion.Url + '.' + extension[1];
     };
 
@@ -140,19 +141,14 @@
           } else {
             PromocionsFactory.postPromocion($scope.Promocion)
               .success(function (result) {
-                if (result[0].Success == true) {
-                  $scope.Promocion.IdPromocionNueva = result[0].Dato;
-                  $scope.Promocion.Url = result[0].fileName;
-                  $scope.Promocion.IdPromocion = result[0].Dato;
-                  uploader.queue[0].upload();
-                } else {
-                  $scope.ShowToast(result[0].Message, 'danger');
-                }
-                $scope.SubiendoArchivos = false;
+                $scope.Promocion.IdPromocionNueva = result.Dato.insertId;
+                $scope.Promocion.Url = result.Dato.Url;
+                $scope.Promocion.IdPromocion = result.Dato.insertId;
+                uploader.queue[0].upload();
               })
               .error(function (data, status, headers, config) {
                 $scope.SubiendoArchivos = false;
-                $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+                $scope.ShowToast(data.message, 'danger');
               });
           }
         } else {
@@ -179,14 +175,15 @@
         if (err) {
           $scope.ShowToast(err, 'danger');
         } else {
+          $scope.Promocion.Activo = 1;
           PromocionsFactory.putPromocion($scope.Promocion)
             .success(function (result) {
-              if (result[0].Success == true) {
-                $location.path('/Promocions');
-                $scope.ShowToast('Promoción registrada', 'success');
-              } else {
-                $scope.ShowToast(result[0].Message, 'danger');
-              }
+              $location.path('/Promocions');
+              $scope.ShowToast('Promoción registrada', 'success');
+            })
+            .error(function (data, status, headers, config) {
+              $scope.SubiendoArchivos = false;
+              $scope.ShowToast(data.message, 'danger');
             });
         }
       });

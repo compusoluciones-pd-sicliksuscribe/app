@@ -3,7 +3,11 @@
   "version": "2.6.2",
   "description": "",
   "main": "gulpfile.js",
-  "dependencies": {},
+  "dependencies": {
+    "angular-colorpicker-directive": "^2.0.0",
+    "angularjs-color-picker": "^3.4.8",
+    "tinycolor2": "^1.4.1"
+  },
   "devDependencies": {
     "browser-sync": "^2.14.3",
     "eslint": "^3.1.1",
