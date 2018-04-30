@@ -357,7 +357,7 @@
 							<div ng-show="detalles.EstatusFabricante === 'FAILED'">
 								Error al procesar <span class="glyphicon glyphicon-remove" title="{{ detalles.EstatusFabricante }}"> </span>
 							</div>
-							<div style="font-style: italic;" ng-show="detalles.EstatusFabricante === '' || !detalles.EstatusFabricante || detalles.EstatusFabricante === 'OK'">
+							<div style="font-style: italic;" ng-show="detalles.EstatusFabricante === '' || !detalles.EstatusFabricante || detalles.EstatusFabricante === 'OK' || detalles.EstatusFabricante === 'processing'">
 								Procesando... <span class="glyphicon glyphicon-time" title="{{ detalles.EstatusFabricante }}"> </span>
 							</div>
 						</b>
