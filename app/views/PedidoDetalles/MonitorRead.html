@@ -300,9 +300,9 @@
 					<div ng-if="detalles.IdTipoProducto !== 3 && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
 						<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
 							<label>Suscripciones: </label> <br>
-							<div style="margin:0; padding:0;" ng-if="detalles.EstatusFabricante !== 'accepted' || (pedido.AutoRenovable && !pedido.CargoRealizadoProximoPedido) || (!pedido.AutoRenovable && (!pedido.Renovacion || pedido.PorRenovar))"> {{ detalles.Cantidad }} </div>
+							<div style="margin:0; padding:0;" ng-if="detalles.EstatusFabricante !== 'accepted' || (pedido.AutoRenovable && pedido.CargoRealizadoProximoPedido) || (!pedido.AutoRenovable && (!pedido.Renovacion || pedido.PorRenovar))"> {{ detalles.Cantidad }} </div>
 							<!-- <div style="margin:0; padding:0;" ng-if="pedido.Renovacion">{{ pedido.Cantidad }}</div> -->
-							<a ng-click="ActualizarCantidad(detalles.IdPedidoDetalle)" style="text-decoration: none" ng-if="detalles.EstatusFabricante === 'accepted' && ((pedido.AutoRenovable && pedido.CargoRealizadoProximoPedido) || (!pedido.AutoRenovable && pedido.Renovacion && !pedido.PorRenovar))"> {{ detalles.Cantidad }} &nbsp;
+							<a ng-click="ActualizarCantidad(detalles.IdPedidoDetalle)" style="text-decoration: none" ng-if="detalles.EstatusFabricante === 'accepted' && ((pedido.AutoRenovable && !pedido.CargoRealizadoProximoPedido) || (!pedido.AutoRenovable && pedido.Renovacion && !pedido.PorRenovar))"> {{ detalles.Cantidad }} &nbsp;
 								<span class="glyphicon glyphicon-triangle-bottom" ng-show="!detalles.MostrarCantidad"></span>
 								<span class="glyphicon glyphicon-triangle-top" ng-show="detalles.MostrarCantidad"></span>
 							</a>
