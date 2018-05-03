@@ -22,25 +22,15 @@
 
       ProductosFactory.getBuscarProductos($scope.BuscarProductos)
         .success(function (Productos) {
-          if (Productos.success === 1) {
-            $scope.Productos = Productos.data.map(function (item) {
-              item.IdPedidoContrato = 0;
-              item.TieneContrato = true;
-              return item;
-            });
-            if ($scope.Productos) {
-              $scope.Mensaje = 'No encontramos resultados de tu búsqueda...';
-              if ($scope.Pagina > 0) {
-                $scope.ShowToast('No encontramos más resultados de esta busqueda, regresaremos a la página anterior.', 'danger');
-                $scope.PaginadoAtras();
-              }
-            }
-          } else {
-            $scope.Mensaje = Productos.message;
-          }
+          $scope.Productos = Productos.data.map(function (item) {
+            item.IdPedidoContrato = 0;
+            item.TieneContrato = true;
+            return item;
+          });
         })
         .error(function (data, status, headers, config) {
-          $scope.ShowToast(data.error, 'danger');
+          $scope.ShowToast('No se encontraron más resultados para la busqueda.', 'danger');
+          $scope.PaginadoAtras();
         });
 
       TipoCambioFactory.getTipoCambio()
