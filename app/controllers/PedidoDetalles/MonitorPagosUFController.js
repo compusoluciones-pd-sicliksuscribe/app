@@ -55,7 +55,8 @@
         .success(function (ordersToPay) {
           $scope.Pedidos = ordersToPay.data;
           if (!ordersToPay.data || ordersToPay.data.length === 0) {
-            return $scope.DeshabilitarPagar = true;
+            $scope.DeshabilitarPagar = true;
+            return $scope.DeshabilitarPagar;
           }
           $scope.PedidosAgrupados = groupBy(ordersToPay.data, function (item) { return [item.IdPedido]; });
           for (let x = 0; x < $scope.PedidosAgrupados.length; x++) {
@@ -71,8 +72,8 @@
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
 
-      if ($cookies.getObject('Session').IdTipoAcceso == 2 || $cookies.getObject('Session').IdTipoAcceso == 3) {
-        EmpresasFactory.getEmpresa($cookies.getObject('Session').IdEmpresa)
+      if ($cookies.getObject('Session').IdTipoAcceso == 2 || $cookies.getObject('Session').IdTipoAcceso == 3 || $cookies.getObject('Session').IdTipoAcceso == 4) {
+        EmpresasFactory.getEmpresa($scope.currentDistribuidor.IdEmpresa)
           .success(function (empresa) {
             $scope.infoEmpresa = empresa[0];
           })
@@ -172,7 +173,7 @@
           });
       }
       if ($scope.PedidosSeleccionadosParaPagar.length !== 0 && document.getElementById('Tarjeta').checked) {
-        PedidoDetallesFactory.monitorCalculations({ Pedidos: $scope.PedidosSeleccionadosParaPagar })
+        PedidoDetallesFactory.monitorCalculationsTuClick({ Pedidos: $scope.PedidosSeleccionadosParaPagar }, $scope.currentDistribuidor.IdEmpresa)
           .success(function (calculations) {
             if (calculations.total) {
               $scope.ServicioElectronico = calculations.electronicService;
@@ -214,7 +215,7 @@
 
     $scope.pagar = function () {
       if ($scope.PedidosSeleccionadosParaPagar.length > 0) {
-        PedidoDetallesFactory.payWidthCard({ Pedidos: $scope.PedidosSeleccionadosParaPagar })
+        PedidoDetallesFactory.payWidthCardTuClick({ Pedidos: $scope.PedidosSeleccionadosParaPagar }, $scope.currentDistribuidor.IdEmpresa)
           .success(function (Datos) {
             var expireDate = new Date();
             expireDate.setTime(expireDate.getTime() + 600 * 2000);

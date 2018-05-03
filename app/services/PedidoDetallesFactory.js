@@ -143,12 +143,17 @@
 
     factory.getPendingOrdersToPayTuClick = function (currentDistribuidor) {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'orders/get-pending-orders-to-pay/' + currentDistribuidor);
+      return $http.get($rootScope.API + 'orders/get-pending-orders-to-pay/tuclick/' + currentDistribuidor);
     };
 
     factory.monitorCalculations = function (Pedidos) {
       factory.refreshToken();
       return $http.post($rootScope.API + 'orders/pending-orders-monitor-calculations/1', Pedidos);
+    };
+
+    factory.monitorCalculationsTuClick = function (Pedidos, currentDistribuidor) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'orders/pending-orders-monitor-calculations/tuclick/' + currentDistribuidor, Pedidos);
     };
 
     factory.monitorCalculationsPayPal = function (Pedidos) {
@@ -159,6 +164,11 @@
     factory.payWidthCard = function (Pedidos) {
       factory.refreshToken();
       return $http.post($rootScope.API + 'orders/pay-width-card', Pedidos);
+    };
+
+    factory.payWidthCardTuClick = function (Pedidos, currentDistribuidor) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'orders/pay-width-card/tuclick/' + currentDistribuidor, Pedidos);
     };
 
     factory.removeRenew = function (pedido) {

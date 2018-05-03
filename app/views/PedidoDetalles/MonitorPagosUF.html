@@ -22,12 +22,15 @@
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
       <label><input id="RealizarCargoAutomatico" type="checkbox" ng-checked="infoEmpresa.RealizarCargoAutomatico" ng-true-value="1" ng-false-value="0" ng-model="infoEmpresa.RealizarCargoAutomatico" ng-click="ActualizarPagoAutomatico();" > Realizar cargo automático a la tarjeta.</label>
     </div>
-        <div>        
-        <input type="radio" name="payType" id="Tarjeta" value="1" checked/> Pagar con Tarjeta
-        </div>
-        <div>
-        <input type="radio" name="payType" id="PayPal" value="3"/> Pagar con PayPal
-        </div>
+  </div>
+  
+  <div class="row" ng-hide="DeshabilitarPagar">
+    <div>        
+      <input type="radio" name="payType" id="Tarjeta" value="1" checked/> Pagar con Tarjeta
+    </div>
+    <div>
+      <input type="radio" name="payType" id="PayPal" value="3"/> Pagar con PayPal
+    </div>
   </div>
 
   <hr>
