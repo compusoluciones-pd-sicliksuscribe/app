@@ -11,15 +11,14 @@
     $scope.selectProductos = {};
     $scope.TieneContrato = true;
     $scope.IdPedidoContrato = 0;
+    const NOT_FOUND = 404;
 
     $scope.BuscarProducto = function (ResetPaginado) {
       $scope.Mensaje = 'Buscando...';
-
       if (ResetPaginado) {
         $scope.Pagina = 0;
         $scope.BuscarProductos.Offset = $scope.Pagina * 6;
       }
-
       ProductosFactory.getBuscarProductos($scope.BuscarProductos)
         .success(function (Productos) {
           $scope.Productos = Productos.data.map(function (item) {
@@ -29,8 +28,12 @@
           });
         })
         .error(function (data, status, headers, config) {
-          $scope.ShowToast('No se encontraron más resultados para la busqueda.', 'danger');
-          $scope.PaginadoAtras();
+          if (status === NOT_FOUND && $scope.Pagina > 0) {
+            $scope.ShowToast('No se encontraron más resultados para la busqueda.', 'danger');
+            $scope.PaginadoAtras();
+          } else {
+            $scope.ShowToast('No se encontraron resultados para la busqueda.', 'danger');
+          }
         });
 
       TipoCambioFactory.getTipoCambio()
@@ -86,7 +89,6 @@
       $scope.BuscarProductos.IdFabricante = $scope.BuscarProductos.IdFabricante;
       $scope.BuscarProductos.IdTipoProducto = $scope.BuscarProductos.IdTipoProducto;
       $scope.BuscarProductos.Offset = $scope.Pagina * 6;
-
       if (BusquedaURL != 'undefined') {
         $scope.BuscarProductos.keyword = BusquedaURL;
         $scope.BuscarProducto(false);
