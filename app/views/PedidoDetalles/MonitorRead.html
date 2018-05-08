@@ -116,7 +116,7 @@
 											<div class="radio" style="margin-left:20px">
 												<div ng-hide="detalles.IdTipoProducto === 3">
 													<input type="radio" name="FormaPago" value="1" ng-model="pedido.IdFormaPagoProxima" ng-change="ActualizarPago(pedido)" ng-disabled="pedido.MonedaPagoProxima === 'Dólares' || pedido.IdEstatusPedido !== 3">
-													Tarjeta
+													Tarjeta o Transferencia
 												</div>
 												<div>
 													<input type="radio" name="FormaPago" value="2" ng-model="pedido.IdFormaPagoProxima" ng-change="ActualizarPago(pedido)" ng-disabled="pedido.IdEstatusPedido !== 3">
