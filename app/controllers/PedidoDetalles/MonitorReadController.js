@@ -98,7 +98,7 @@
 
     $scope.ActualizarMonitor = function () {
       Params.IdEmpresaUsuarioFinal = $scope.EmpresaSelect;
-      if (($scope.EmpresaSelect === null || $scope.EmpresaSelect === undefined) && $scope.currentDistribuidor) {
+      if (($scope.EmpresaSelect === null || $scope.EmpresaSelect === undefined || $scope.EmpresaSelect === 0) && $scope.currentDistribuidor) {
         Params.IdEmpresaUsuarioFinal = $cookies.getObject('Session').IdEmpresa;
         Params.IdDistribuidorTuClick = $scope.currentDistribuidor.IdEmpresa;
         $scope.EmpresaSelect = $cookies.getObject('Session').IdEmpresa;

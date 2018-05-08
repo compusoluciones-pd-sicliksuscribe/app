@@ -61,14 +61,12 @@
 			<td class="row">
 				<div class="col-xs-12 col-md-6">
 					<b>{{Producto.Nombre}}</b> ({{Producto.TipoProducto}})
+					<input id="NombrePropio" name="NombrePropio" type="text" ng-model="Producto.NombrePropio" class="form-control" step="1" placeholder="Nombre producto (opcional)" /><br>
+					<input id="Descripcion" name="Descripcion" type="text" ng-model="Producto.Descripcion" class="form-control" step="1" placeholder="Descripción del producto (opcional)" />
 					<br>
 					<b>Id Artículo:</b> {{Producto.IdERP}}
 					<br>
 					<b>Precio CompuSoluciones:</b> {{Producto.PrecioNormal | currency}} {{Producto.MonedaPrecio}}
-				</div>
-
-				<div class="checkbox col-xs-12 col-md-1" ng-class="{disabled:!Producto.Precio}">
-					<label><input id="Activo" type="checkbox" ng-checked="Producto.Activo" ng-disabled="!Producto.Moneda || !Producto.Precio" ng-true-value="1" ng-false-value="0" ng-model="Producto.Activo" ng-click="Actualizar(Producto);">Vender</label>
 				</div>
 
 				<div class="col-xs-12 col-md-2">
@@ -78,6 +76,10 @@
 				<div class="radio col-xs-6 col-md-2">
 					<label style="margin-right: 8px"><input type="radio" name="Moneda{{Producto.IdProducto}}" value="Dólares" ng-model="Producto.Moneda" required>Dólares</label>
 					<label><input type="radio" name="Moneda{{Producto.IdProducto}}" value="Pesos" ng-model="Producto.Moneda"required>Pesos</label>
+				</div>
+
+				<div class="checkbox col-xs-12 col-md-1" ng-class="{disabled:!Producto.Precio}">
+					<label><input id="Activo" type="checkbox" ng-checked="Producto.Activo" ng-disabled="!Producto.Moneda || !Producto.Precio" ng-true-value="1" ng-false-value="0" ng-model="Producto.Activo" ng-click="Actualizar(Producto);">Vender</label>
 				</div>
 
 				<div class="col-xs-12 col-md-1" style="padding-left: 30px">
