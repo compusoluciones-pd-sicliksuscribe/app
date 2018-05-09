@@ -159,24 +159,25 @@
 								<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
 									<label>Suscripciones: </label>
 									<br>
-									<div style="margin:0; padding:0;" ng-show="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3) && pedido.CargoRealizadoProximoPedido"> {{ detalles.Cantidad }} </div> 
-									<a ng-click="ActualizarCantidad(detalles.IdPedidoDetalle)" style="text-decoration: none" ng-hide="pedido.CargoRealizadoProximoPedido || !(SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3 )"> {{ detalles.Cantidad }} &nbsp;
+									<div style="margin:0; padding:0;" ng-show="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3) && !pedido.CargoRealizadoProximoPedido && !detalles.PedidoAFabricante"> {{ detalles.Cantidad }} </div> 
+									<a ng-click="ActualizarCantidad(detalles.IdPedidoDetalle)" style="text-decoration: none"
+									ng-hide="pedido.CargoRealizadoProximoPedido || (!detalles.PedidoAFabricante || detalles.EstatusFabricante === 'FAILED')"> {{ detalles.Cantidad }} &nbsp;
 										<span class="glyphicon glyphicon-triangle-bottom" ng-show="!detalles.MostrarCantidad"></span>
 										<span class="glyphicon glyphicon-triangle-top" ng-show="detalles.MostrarCantidad"></span>
 									</a>
-									<div style="margin:0; padding:0;" ng-show="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3) && pedido.CargoRealizadoProximoPedido">
-										<br> <label> Renovaciones: </label> <br>
-										<div ng-if="detalles.Activo"> {{ detalles.CantidadProxima }} </div>
-										<div ng-if="!detalles.Activo"> Por cancelar </div>
+									<div style="margin:0; padding:0;" ng-show="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)"> 
+										<br> <label> Renovación: </label> <br>
+										<div ng-if="!detalles.PorCancelar || (detalles.Activo && pedido.IdFabricante === 1)"> {{ detalles.CantidadProxima }} </div>
+										<div ng-if="!detalles.Activo || detalles.PorCancelar"> No renovar </div>
 									</div>
-									<br/> <br/> <br/>
+									<br/>
 									<div class="row" ng-show="detalles.MostrarCantidad">
 										<div class="form-group col-xs-6 col-sm-6 col-md-12 col-lg-12">
 											<label>Actualizar: </label>
-											<br>
 											<p>El número de suscripciones se vera reflejado en la renovación.</p>
 										</div>
 									</div>
+
 		
 									<div class="row" ng-show="detalles.MostrarCantidad">
 										<div class="form-group col-xs-6 col-sm-6 col-md-7 col-lg-7">
@@ -294,22 +295,57 @@
 							<li ng-if="detalles.IdEstatusPedido === 3"> <label for="Estatus">Estatus pedido: </label> Pagado	</li>
 							<li ng-if="pedido.AutoRenovable && detalles.PagoRenovacion"> <label for="EstatusRenovacion">Estatus de renovación:</label> Pagado	</li>
 							<li ng-if="pedido.AutoRenovable && !detalles.PagoRenovacion"> <label for="EstatusRenovacion">Estatus de renovación:</label> Sin renovar </li>
+							<li ng-if="pedido.AutoRenovable && (detalles.Activo) && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
+
+								<form>
+									<label>Próxima forma de pago:</label>
+									<div class="row" ng-show="detalles.Activo && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
+										<div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+											<div class="radio" style="margin-left:20px">
+												<div>
+													<input type="radio" name="FormaPago" value="1" ng-model="detalles.IdFormaPagoProxima" ng-change="ActualizarPago(detalles)"
+														ng-disabled="detalles.MonedaPagoProxima === 'Dólares' || detalles.PagoRenovacion || detalles.EstatusFabricante !== 'accepted'">
+														Tarjeta
+												</div>
+												<div>
+													<input type="radio" name="FormaPago" value="2" ng-model="detalles.IdFormaPagoProxima" ng-change="ActualizarPago(detalles)"
+														ng-disabled="detalles.PagoRenovacion || detalles.EstatusFabricante !== 'accepted'">
+														Crédito
+												</div>
+											</div>
+										</div>
+										<div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+											<div class="radio" style="margin-left:20px">
+												<div>
+													<input type="radio" name="MonedaPago" value="Dólares" ng-model="detalles.MonedaPagoProxima" ng-change="ActualizarMoneda(detalles)"
+														ng-disabled="detalles.IdFormaPagoProxima === 1 || detalles.PagoRenovacion || detalles.EstatusFabricante !== 'accepted'"> Dólares
+												</div>
+												<div>
+													<input type="radio" name="MonedaPago" value="Pesos" ng-model="detalles.MonedaPagoProxima " ng-change="ActualizarMoneda(detalles)"
+														ng-disabled="detalles.PagoRenovacion || detalles.EstatusFabricante !== 'accepted'"> Pesos
+												</div>
+											</div>
+										</div>
+									</div>
+								</form>
+
+							</li>
 						</ul>
 					</div>
 
 					<div ng-if="detalles.IdTipoProducto !== 3 && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
 						<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
 							<label>Suscripciones: </label> <br>
-							<div style="margin:0; padding:0;" ng-if="detalles.EstatusFabricante !== 'accepted' || (pedido.AutoRenovable && pedido.CargoRealizadoProximoPedido) || (!pedido.AutoRenovable && (!pedido.Renovacion || pedido.PorRenovar))"> {{ detalles.Cantidad }} </div>
+							<div style="margin:0; padding:0;" ng-if="detalles.EstatusFabricante !== 'accepted' || (pedido.AutoRenovable && detalles.PagoRenovacion) || (!pedido.AutoRenovable && (!pedido.Renovacion || pedido.PorRenovar))"> {{ detalles.Cantidad }} </div>
 							<!-- <div style="margin:0; padding:0;" ng-if="pedido.Renovacion">{{ pedido.Cantidad }}</div> -->
-							<a ng-click="ActualizarCantidad(detalles.IdPedidoDetalle)" style="text-decoration: none" ng-if="detalles.EstatusFabricante === 'accepted' && ((pedido.AutoRenovable && !pedido.CargoRealizadoProximoPedido) || (!pedido.AutoRenovable && pedido.Renovacion && !pedido.PorRenovar))"> {{ detalles.Cantidad }} &nbsp;
+							<a ng-click="ActualizarCantidad(detalles.IdPedidoDetalle)" style="text-decoration: none" ng-if="detalles.EstatusFabricante === 'accepted' && ((pedido.AutoRenovable && !detalles.PagoRenovacion) || (!pedido.AutoRenovable && pedido.Renovacion && !pedido.PorRenovar))"> {{ detalles.Cantidad }} &nbsp;
 								<span class="glyphicon glyphicon-triangle-bottom" ng-show="!detalles.MostrarCantidad"></span>
 								<span class="glyphicon glyphicon-triangle-top" ng-show="detalles.MostrarCantidad"></span>
 							</a>
 							<!-- ng-show="detalles.Cantidad !== detalles.CantidadProxima" -->
 							<div style="margin:0; padding:0;"> 
 								<br> <label> Renovación: </label> <br>
-								<div ng-if="!detalles.PorCancelar || (detalles.Activo && pedido.IdFabricante === 1)"> {{ detalles.CantidadProxima }} </div>
+								<div ng-if="!detalles.PorCancelar"> {{ detalles.CantidadProxima }} </div>
 								<div ng-if="!detalles.Activo || detalles.PorCancelar"> No renovar </div>
 							</div>
 							<br/>
@@ -331,7 +367,7 @@
 										</a>
 									</h4>
 								</div>
-								<div class="form-group col-xs-6 col-sm-6 col-md-2 col-lg-2">
+								<div class="form-group col-xs-6 col-sm-6 col-md-2 col-lg-2" ng-if="!pedido.AutoRenovable">
 									<h4>
 										<a id="pCancelar" type="button" title="No renovar" ng-click="CancelarRenovacion(pedido, detalles);" ng-disabled="!frmCantidad.$valid">
 											<span class="glyphicon glyphicon-trash" style="cursor:pointer"></span>
@@ -365,7 +401,7 @@
 
 					<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2" ng-if="pedido.AutoRenovable">
 						<button class="btn btn-link" style="text-decoration: underline; color: red !important;" type="button" ng-hide="!detalles.Activo"
-							ng-disabled="pedido.CargoRealizadoProximoPedido || pedido.Renovacion || detalles.EstatusFabricante === 'FAILED'" ng-click="Confirmar(detalles.IdPedidoDetalle)">
+							ng-disabled="detalles.PagoRenovacion || detalles.EstatusFabricante !== 'accepted'" ng-click="Confirmar(detalles.IdPedidoDetalle)">
 							CANCELAR
 						</button>
 						<button class="btn btn-link" style="text-decoration: underline;" type="button" ng-show="pedido.AutoRenovable && !detalles.Activo" ng-disabled="form.habilitar" ng-click="Reanudar(pedido, detalles)">
