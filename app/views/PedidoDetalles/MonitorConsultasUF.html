@@ -16,8 +16,8 @@
           </div>
           <div class="col-xs-12 col-sm-3 form-group">
                 <label for="Cliente">Clientes</label>
-                <select id="IdEmpresaUsuarioFinal" name="IdEmpresaUsuarioFinal" class="form-control selectOption" ng-model="getEnterprise"
-                 ng-options="Empresa.IdEmpresa as Empresa.NombreEmpresa for Empresa in selectFinalUser" ng-change="callFunctions();"
+                <select id="IdEmpresaUsuarioFinal" name="IdEmpresaUsuarioFinal" class="form-control selectOption" ng-model="getEnterprise.IdEmpresaUsuarioFinal"
+                 ng-options="Empresa.Idempresa as Empresa.NombreEmpresa for Empresa in selectFinalUser" ng-change="callFunctions();"
                  ng-show="SessionCookie.IdTipoAcceso == 2">
                     <option ng-selected="true" value="">Selecciona un cliente</option>
                 </select>
@@ -31,9 +31,9 @@
               </div>
         </div>
 
-	<div ng-if="SessionCookie.IdTipoAcceso == 2" ng-repeat="pedido in Pedidos">
+	<div ng-if="SessionCookie.IdTipoAcceso == 2" ng-repeat="pages in paginatedOrders">
             <table class="table table-hover table-responsive border-left-right-cero">
-                    <tr ng-repeat="pedido in Pedidos" class="repeat-animation">
+                    <tr ng-repeat="pedido in pages" class="repeat-animation">
                         <td>    
                                 <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
                                     <label>Número de pedido:</label> {{ pedido.IdPedido }}
@@ -68,4 +68,10 @@
                     </tr>
             </table>
         </div> 
+        <div style="display: flex; justify-content: center; margin-bottom: 20px">
+            <div ng-repeat="i in getNumberOfPages track by $index" class="btn-group" role="toolbar">
+              <button ng-click="setCurrentPage($index)" class="btn" ng-class="{ 'btn-secondary': (currentPage === $index), 'btn-default': (currentPage !== $index) }"
+                type="button">{{ $index + 1 }}</button>
+            </div>
+          </div>
 </div>

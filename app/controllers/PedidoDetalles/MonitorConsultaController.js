@@ -3,7 +3,8 @@
     $scope.Pedidos = [];
     $scope.BuscarProductos = {};
     $scope.filter = '';
-    $scope.getEnterprise = 0;
+    $scope.getEnterprise = {};
+    $scope.selectFinalUser = {};
     var searchTimeout;
     var itemsPerPage = 10;
     $scope.getNumberOfPages = [1];
@@ -23,16 +24,15 @@
 
     $scope.init = function () {
       getDistributorInformation();
-      // $scope.search();
       $scope.callFunctions();
     };
 
     const getDistributorInformation = function () {
       PedidoDetallesFactory.getDistributorData()
         .then(function (result) {
-          // var nuevoPedido = result.data.data.slice(0, 10);
           $scope.Pedidos = result.data.data;
-          // FilteredOrders = result.data.data;
+          FilteredOrders = result.data.data;
+          $scope.search();
         })
         .catch(function (result) {
           $scope.ShowToast(result.data.message, 'danger');
@@ -81,14 +81,12 @@
 
     const filterProducts = function () {
       const filter = $scope.filter.toLowerCase();
-      console.log($scope.filter);
       FilteredOrders = $scope.Pedidos.filter(function (order) {
-        // console.log(order);
         if (!order.IdPedido) {
           return false;
         }
         const MesActual = parseInt($scope.MesActual.id);
-        return (order.IdPedido === $scope.Pedidos.IdPedido &&
+        return (order.IdEmpresaUsuarioFinal === $scope.getEnterprise.IdEmpresaUsuarioFinal &&
           (order.NombreEmpresa.toLowerCase().includes(filter) ||
           order.IdPedido.toString().includes(filter)) &&
           order.Month === MesActual &&
@@ -97,7 +95,6 @@
       });
       setPagination();
       $scope.$apply();
-      console.log(FilteredOrders);
     };
 
     $scope.search = function () {
