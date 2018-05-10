@@ -42,6 +42,7 @@
       });
       setPagination();
       $scope.$apply();
+      console.log(FilteredOrders);
     };
 
     $scope.todos = 0;

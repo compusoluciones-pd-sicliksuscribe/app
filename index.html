@@ -163,7 +163,7 @@
 												<li ng-show="SessionCookie.IdTipoAcceso == 4"><a href="#/Empresa/{{SessionCookie.IdEmpresa}}">Actualizar {{ SessionCookie.NombreEmpresa }}</a></li>
 												<li ng-show="SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 7"><a ng-click="goToPage('Clientes');">Mis clientes</a></li>
 												<li><a ng-show="SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 4 || SessionCookie.IdTipoAcceso == 7"
-													 ng-click="goToPage('Usuarios');">Mis colaboradores</a></li>
+													 ng-click="goToPage('Usuarios');">Mis colaboradores</a></li>												
 												<li><a ng-click="goToPage('Monitor');">Monitor de pedidos por cliente</a></li>
 												<li id="monitorPagos" ng-show="SessionCookie.IdTipoAcceso == 2"><a ng-click="goToPage('MonitorPagos');">Monitor de pedidos por pagar</a></li>
 												<!-- <li id="activarMiSitio" ng-show="((SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3) && SessionCookie.IdPlanTuClick !== null)"><a ng-click="goToPage('Configuracion');">Activar mi sitio</a></li>												
@@ -189,6 +189,7 @@
 												<li id="activarMiBanner" ng-show="((SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3) && SessionCookie.IdPlanTuClick !== null)"><a ng-click="goToPage('Promocions');">Banners</a></li>
 												<li id="activarMiBanner" ng-show="((SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3) && SessionCookie.IdPlanTuClick !== null)"><a ng-click="goToPage('Niveles/Distribuidor');">Agregar Descuentos</a></li>
 												<li id="activarMiBanner" ng-show="((SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3) && SessionCookie.IdPlanTuClick !== null)"><a ng-click="goToPage('ConfigurarRPs/FinalUser');">Configurar Descuentos</a></li>
+												<li id="monitorConsulta" ng-show="SessionCookie.IdTipoAcceso == 2"><a ng-click="goToPage('MonitorConsulta');">Monitor Consulta</a></li>
 											</ul>
 										</li>
 
@@ -520,6 +521,7 @@
 	<script type="text/javascript" src="app/controllers/PedidoDetalles/PedidoDetallesReadController.js"></script>
 	<script type="text/javascript" src="app/controllers/PedidoDetalles/PedidoDetallesUFReadController.js"></script>
 	<script type="text/javascript" src="app/controllers/PedidoDetalles/MonitorReadController.js"></script>
+	<script type="text/javascript" src="app/controllers/PedidoDetalles/MonitorConsultaController.js"></script>
 	<script type="text/javascript" src="app/controllers/PedidoDetalles/MonitorPagosController.js"></script>
 	<script type="text/javascript" src="app/controllers/PedidoDetalles/MonitorPagosUFController.js"></script>
 	<script type="text/javascript" src="app/controllers/PedidoDetalles/DetallesAzureController.js"></script>
