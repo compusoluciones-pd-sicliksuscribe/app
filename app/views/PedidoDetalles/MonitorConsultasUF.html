@@ -1,0 +1,71 @@
+<div class="container" ng-swipe-right="" ng-swipe-left="">
+
+        <div class="row">
+          <div class="col-xs-12 col-sm-2">
+            <h2>Historial de Pedidos</h2>
+          </div>
+          <div class="col-xs-12 col-sm-2">
+            <label>Mes</label>
+            <select id="Meses" name="Meses" class="form-control selectOption" ng-model="MesActual.id" ng-options="meses.id as meses.mes for meses in Meses"
+            ng-change="callFunctions();" ng-show="SessionCookie.IdTipoAcceso == 2"></select>
+          </div>
+          <div class="col-xs-12 col-sm-2">
+            <label>Año</label>
+            <select id="Years" name="Years" class="form-control selectOption" ng-model="YearActual.Year" ng-options="years.FechaActivo as years.FechaActivo for years in Years"
+              ng-change="callFunctions();" ng-show="SessionCookie.IdTipoAcceso == 2"></select>
+          </div>
+          <div class="col-xs-12 col-sm-3 form-group">
+                <label for="Cliente">Clientes</label>
+                <select id="IdEmpresaUsuarioFinal" name="IdEmpresaUsuarioFinal" class="form-control selectOption" ng-model="getEnterprise"
+                 ng-options="Empresa.IdEmpresa as Empresa.NombreEmpresa for Empresa in selectFinalUser" ng-change="callFunctions();"
+                 ng-show="SessionCookie.IdTipoAcceso == 2">
+                    <option ng-selected="true" value="">Selecciona un cliente</option>
+                </select>
+          </div>
+              <div class="col-xs-12 col-sm-3 searchOption">
+                  <label for="Busqueda">Busqueda</label>
+                  <div class="form-group has-feedback">
+                      <input type="text" ng-model="filter" ng-change="search()" class="form-control" size="30" placeholder="Busca Productos..." />
+                      <i class="form-control-feedback glyphicon glyphicon-search"></i>
+                  </div>
+              </div>
+        </div>
+
+	<div ng-if="SessionCookie.IdTipoAcceso == 2" ng-repeat="pedido in Pedidos">
+            <table class="table table-hover table-responsive border-left-right-cero">
+                    <tr ng-repeat="pedido in Pedidos" class="repeat-animation">
+                        <td>    
+                                <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                                    <label>Número de pedido:</label> {{ pedido.IdPedido }}
+                                    <br>
+                                    <label for="">Nombre Empresa:</label> {{ pedido.NombreEmpresa }}
+                                    <br>                                    
+                                    <label for="">Cantidad:</label> {{ pedido.Cantidad }}
+                                    <br>
+                                    <label for="">Producto:</label> {{ pedido.Nombre  }}                                    
+                                    <br>
+                                    <label for="">Nombre Usuario:</label> {{ pedido.NombreUsuario }} {{ pedido.ApellidoPaterno }}
+                                    <br>
+                                    <label for="">Estatus del pedido:</label> {{ pedido.Estatus }}                                    
+                                    <br>
+                                    <label for="">Moneda Compra:</label> {{ pedido.MonedaCompra }}
+                                    <br>                                    
+                                    <label for="">Tipo de Cambio:</label> {{ pedido.TipoCambio }}                                          
+                                    <br>                                    
+                                    <label for="">Precio Renovación Distribuidor:</label> {{ pedido.PrecioRenovacionDist }} {{ pedido.MondaPrecioDist }}
+                                    <br>                                    
+                                    <label for="">Precio Renovación Usuario Final:</label> {{ pedido.PrecioRenovacionUF }} {{ pedido.MonedaPrecioUF }}
+                                    <br>                                    
+                                    <label for="">Estatus Pedido Usuario Final:</label> {{ pedido.EstatusUF }}
+                                    <br>                                    
+                                    <label for="">Estatus Pedido Distribuidor:</label> {{ pedido.EstatusDist }}
+                                    <br>                                    
+                                    <label for="">Precio Compra Usuario Final:</label> {{ pedido.PrecioUsuarioFinalNormal }} {{ pedido.MonedaPrecioUF }}
+                                    <br>                                    
+                                    <label for="">Precio Compra Distribuidor:</label> {{ pedido.PrecioDistribuidorNomal }} {{ pedido.MondaPrecioDist }}
+                                </div>                                                                                       
+                        </td>
+                    </tr>
+            </table>
+        </div> 
+</div>

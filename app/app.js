@@ -448,6 +448,10 @@
         controller: 'VersionController', templateUrl: 'app/views/VersionControl/VersionControl.html',
         resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 1)) { $location.path('/404'); } } }
       })
+      .when('/MonitorConsulta', {
+        controller: 'MonitorConsultaController', templateUrl: 'app/views/PedidoDetalles/MonitorConsultasUF.html',
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 2)) { $location.path('/404'); } } }
+      })
 
       /* .when('/:Subdominio', { controller: 'UsuariosLoginController', templateUrl: 'app/views/Usuarios/UsuariosLogin.html' }) */
 

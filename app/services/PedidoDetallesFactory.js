@@ -191,6 +191,21 @@
       return $http.post($rootScope.API + 'orders/pay-with-paypal', Pedidos);
     };
 
+    factory.getDistributorData = function (params) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'search-distributor/data', params);
+    };
+
+    factory.datesOrders = function () {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'dates-orders');
+    };
+
+    factory.getFinalUser = function () {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'monitor-final-user');
+    };
+
     return factory;
   };
 
