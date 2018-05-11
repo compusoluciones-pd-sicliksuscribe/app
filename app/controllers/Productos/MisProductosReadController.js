@@ -122,6 +122,10 @@
         $scope.ShowToast('Escribe máximo dos decimales', 'danger');
         return false;
       }
+      if (producto.Nombre === '') {
+        $scope.ShowToast('El nombre no debe de ir vacío', 'danger');
+        return false;
+      }
       return true;
     };
 

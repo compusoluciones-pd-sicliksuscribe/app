@@ -60,9 +60,13 @@
 		<tr ng-repeat="Producto in paginatedProducts[currentPage]" class="repeat-animation">
 			<td class="row">
 				<div class="col-xs-12 col-md-6">
-					<b>{{Producto.Nombre}}</b> ({{Producto.TipoProducto}})
-					<!-- <input id="NombrePropio" name="NombrePropio" type="text" ng-model="Producto.NombrePropio" class="form-control" step="1" placeholder="Nombre producto (opcional)" /><br>
-					<input id="Descripcion" name="Descripcion" type="text" ng-model="Producto.Descripcion" class="form-control" step="1" placeholder="Descripción del producto (opcional)" /> -->
+					<label for="title">Nombre: </label>
+					<input class="form-control" type="text" name="title" id="title" maxlength="255" ng-model="Producto.Nombre" >
+					<br>
+					<label for="description">Descripción: </label>
+					<input class="form-control" type="text" name="title" id="description" maxlength="255" ng-model="Producto.Descripcion" >
+					<br>
+					({{Producto.TipoProducto}})
 					<br>
 					<b>Id Artículo:</b> {{Producto.IdERP}}
 					<br>
