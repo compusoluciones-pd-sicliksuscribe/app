@@ -25,13 +25,13 @@
               <div class="col-xs-12 col-sm-3 searchOption">
                   <label for="Busqueda">Busqueda</label>
                   <div class="form-group has-feedback">
-                      <input type="text" ng-model="filter" ng-change="search()" class="form-control" size="30" placeholder="Busca Productos..." />
+                      <input type="text" ng-model="filter" ng-change="search()" class="form-control" size="30" placeholder="Busca Pedidos..." />
                       <i class="form-control-feedback glyphicon glyphicon-search"></i>
                   </div>
               </div>
         </div>
 
-	<div ng-if="SessionCookie.IdTipoAcceso == 2" ng-repeat="pages in paginatedOrders">
+	<!-- <div ng-if="SessionCookie.IdTipoAcceso == 2" ng-repeat="pages in paginatedOrders">
             <table class="table table-hover table-responsive border-left-right-cero">
                     <tr ng-repeat="pedido in pages" class="repeat-animation">
                         <td>    
@@ -67,7 +67,118 @@
                         </td>
                     </tr>
             </table>
-        </div> 
+        </div>  -->
+
+        <div class="form-group row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+              <table class="table table-hover table-responsive border-left-right-cero">
+                <th><b>Número de pedido</b></th>
+                <th><b>Nombre Empresa </b></th>
+                <th><b>Cantidad</b></th>
+                <th><b>Producto</b></th>
+                <th><b>Nombre Usuario</b></th>
+                <th><b>Estatus del pedido</b></th>
+                <th><b>Moneda Compra</b></th>
+                <th><b>Tipo de Cambio</b></th>
+                <th><b>Precio Renovación Distribuidor</b></th>
+                <th><b>Precio Renovación Usuario Final</b></th>
+                <th><b>Estatus Pedido Usuario Final</b></th>
+                <th><b>Estatus Pedido Distribuidor</b></th>
+                <th><b>Precio Compra Usuario Final</b></th>
+                <th><b>Precio Compra Distribuidor</b></th>                
+                <tr ng-repeat="pedido in paginatedOrders[currentPage]" class="repeat-animation">
+                <!--<tr ng-repeat="pedido in Pedidos | orderBy:sortBy:reverse | filter:EstatusSelect:strict" class="repeat-animation">-->
+                  <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
+                    <div class="form-group">
+                      <b><h5>{{ pedido.IdPedido }}</h5></b>
+                    </div>
+                  </td>
+                  <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
+                    <div class="form-group">
+                      <b><h5>{{ pedido.NombreEmpresa }}</h5></b>
+                    </div>
+                  </td>
+                  <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                    <div class="form-group">
+                      <b><h5>{{ pedido.Cantidad }}</h5></b>
+                    </div>
+                  </td>
+
+                  <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                    <div class="form-group">
+                      <b><h5>{{ pedido.Nombre }}</h5></b>
+                    </div>
+                  </td>
+
+                  <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                    <div class="form-group">
+                      <b><h5>{{ pedido.NombreUsuario }} {{ pedido.ApellidoPaterno }}</h5></b>
+                    </div>
+                  </td>
+
+                  <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                    <div class="form-group">
+                      <b><h5>{{ pedido.Estatus }}</h5></b>
+                    </div>
+                  </td>
+
+                  <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                    <div class="form-group">
+                      <b><h5>{{ pedido.MonedaCompra }}</h5></b>
+                    </div>
+                  </td>
+
+                  <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                    <div class="form-group">
+                      <b><h5>{{ pedido.TipoCambio }}</h5></b>
+                    </div>
+                  </td>
+
+                  <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                    <div class="form-group">
+                      <b><h5>{{ pedido.PrecioRenovacionDist }} {{ pedido.MondaPrecioDist }}</h5></b>
+                    </div>
+                  </td>
+
+                  <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                    <div class="form-group">
+                      <b><h5>{{ pedido.PrecioRenovacionUF }} {{ pedido.MonedaPrecioUF }}</h5></b>
+                    </div>
+                  </td>
+
+                  <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                    <div class="form-group">
+                      <b><h5>{{ pedido.EstatusUF }}</h5></b>
+                    </div>
+                  </td>
+
+                  <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                    <div class="form-group">
+                      <b><h5>{{ pedido.EstatusDist }}</h5></b>
+                    </div>
+                  </td>
+
+                  <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                    <div class="form-group">
+                      <b><h5>{{ pedido.PrecioUsuarioFinalNormal }} {{ pedido.MonedaPrecioUF }}</h5></b>
+                    </div>
+                  </td>
+
+                  <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                    <div class="form-group">
+                      <b><h5>{{ pedido.PrecioDistribuidorNomal }} {{ pedido.MondaPrecioDist }}</h5></b>
+                    </div>
+                  </td>                                                        
+                  <!-- <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
+                    <div class="form-group">
+                      <b><h5>{{pedido.Total | currency}} {{pedido.MonedaPago}}</h5></b>
+                    </div>
+                  </td>   -->
+                </tr>
+              </table>
+            </div>
+          </div>
+
         <div style="display: flex; justify-content: center; margin-bottom: 20px">
             <div ng-repeat="i in getNumberOfPages track by $index" class="btn-group" role="toolbar">
               <button ng-click="setCurrentPage($index)" class="btn" ng-class="{ 'btn-secondary': (currentPage === $index), 'btn-default': (currentPage !== $index) }"
