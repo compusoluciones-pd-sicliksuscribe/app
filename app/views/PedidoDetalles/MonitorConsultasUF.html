@@ -19,7 +19,7 @@
                 <select id="IdEmpresaUsuarioFinal" name="IdEmpresaUsuarioFinal" class="form-control selectOption" ng-model="getEnterprise.IdEmpresaUsuarioFinal"
                  ng-options="Empresa.Idempresa as Empresa.NombreEmpresa for Empresa in selectFinalUser" ng-change="callFunctions();"
                  ng-show="SessionCookie.IdTipoAcceso == 2">
-                    <option ng-selected="true" value="">Selecciona un cliente</option>
+                    <option ng-selected="true" value="">Todos</option>
                 </select>
           </div>
               <div class="col-xs-12 col-sm-3 searchOption">

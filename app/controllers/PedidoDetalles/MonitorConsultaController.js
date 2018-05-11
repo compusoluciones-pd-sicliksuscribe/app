@@ -86,7 +86,8 @@
           return false;
         }
         const MesActual = parseInt($scope.MesActual.id);
-        return (order.IdEmpresaUsuarioFinal === $scope.getEnterprise.IdEmpresaUsuarioFinal &&
+        return (
+          ((order.IdEmpresaUsuarioFinal === $scope.getEnterprise.IdEmpresaUsuarioFinal) || !$scope.getEnterprise.IdEmpresaUsuarioFinal) &&
           (order.NombreEmpresa.toLowerCase().includes(filter) ||
           order.IdPedido.toString().includes(filter)) &&
           order.Month === MesActual &&
