@@ -1,9 +1,7 @@
 <div class="container" ng-swipe-right="" ng-swipe-left="">
+<h2>Historial de Pedidos</h2>
 
-        <div class="row">
-          <div class="col-xs-12 col-sm-2">
-            <h2>Historial de Pedidos</h2>
-          </div>
+        <div class="row">          
           <div class="col-xs-12 col-sm-2">
             <label>Mes</label>
             <select id="Meses" name="Meses" class="form-control selectOption" ng-model="MesActual.id" ng-options="meses.id as meses.mes for meses in Meses"
@@ -31,62 +29,24 @@
               </div>
         </div>
 
-	<!-- <div ng-if="SessionCookie.IdTipoAcceso == 2" ng-repeat="pages in paginatedOrders">
-            <table class="table table-hover table-responsive border-left-right-cero">
-                    <tr ng-repeat="pedido in pages" class="repeat-animation">
-                        <td>    
-                                <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                                    <label>Número de pedido:</label> {{ pedido.IdPedido }}
-                                    <br>
-                                    <label for="">Nombre Empresa:</label> {{ pedido.NombreEmpresa }}
-                                    <br>                                    
-                                    <label for="">Cantidad:</label> {{ pedido.Cantidad }}
-                                    <br>
-                                    <label for="">Producto:</label> {{ pedido.Nombre  }}                                    
-                                    <br>
-                                    <label for="">Nombre Usuario:</label> {{ pedido.NombreUsuario }} {{ pedido.ApellidoPaterno }}
-                                    <br>
-                                    <label for="">Estatus del pedido:</label> {{ pedido.Estatus }}                                    
-                                    <br>
-                                    <label for="">Moneda Compra:</label> {{ pedido.MonedaCompra }}
-                                    <br>                                    
-                                    <label for="">Tipo de Cambio:</label> {{ pedido.TipoCambio }}                                          
-                                    <br>                                    
-                                    <label for="">Precio Renovación Distribuidor:</label> {{ pedido.PrecioRenovacionDist }} {{ pedido.MondaPrecioDist }}
-                                    <br>                                    
-                                    <label for="">Precio Renovación Usuario Final:</label> {{ pedido.PrecioRenovacionUF }} {{ pedido.MonedaPrecioUF }}
-                                    <br>                                    
-                                    <label for="">Estatus Pedido Usuario Final:</label> {{ pedido.EstatusUF }}
-                                    <br>                                    
-                                    <label for="">Estatus Pedido Distribuidor:</label> {{ pedido.EstatusDist }}
-                                    <br>                                    
-                                    <label for="">Precio Compra Usuario Final:</label> {{ pedido.PrecioUsuarioFinalNormal }} {{ pedido.MonedaPrecioUF }}
-                                    <br>                                    
-                                    <label for="">Precio Compra Distribuidor:</label> {{ pedido.PrecioDistribuidorNomal }} {{ pedido.MondaPrecioDist }}
-                                </div>                                                                                       
-                        </td>
-                    </tr>
-            </table>
-        </div>  -->
-
         <div class="form-group row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
               <!-- <table class="table table-hover table-responsive border-left-right-cero"> -->
                 <table class="table table-striped table-responsive border-left-right-cero">
                 <th><b>Número de pedido</b></th>
-                <th><b>Nombre Empresa </b></th>
+                <th><b>Cliente</b></th>
+                <th><b>Nombre Usuario</b></th>
                 <th><b>Cantidad</b></th>
                 <th><b>Producto</b></th>
-                <th><b>Nombre Usuario</b></th>
-                <th><b>Estatus del pedido</b></th>
-                <th><b>Moneda Compra</b></th>
+                <th><b>Precio Compra Distribuidor</b></th> 
+                <th><b>Precio Compra Cliente</b></th>                                
+                <th><b>Estatus del pedido</b></th>        
                 <th><b>Tipo de Cambio</b></th>
                 <th><b>Precio Renovación Distribuidor</b></th>
-                <th><b>Precio Renovación Usuario Final</b></th>
-                <th><b>Estatus Pedido Usuario Final</b></th>
+                <th><b>Precio Renovación Cliente</b></th>
                 <th><b>Estatus Pedido Distribuidor</b></th>
-                <th><b>Precio Compra Usuario Final</b></th>
-                <th><b>Precio Compra Distribuidor</b></th>                
+                <th><b>Estatus Pedido Cliente</b></th>
+                                              
                 <tr ng-repeat="pedido in paginatedOrders[currentPage]" class="repeat-animation">
                 <!--<tr ng-repeat="pedido in Pedidos | orderBy:sortBy:reverse | filter:EstatusSelect:strict" class="repeat-animation">-->
                   <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
@@ -94,87 +54,87 @@
                       <b><h5>{{ pedido.IdPedido }}</h5></b>
                     </div>
                   </td>
-                  <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
+                  <!-- <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
                     <div class="form-group">
                       <b><h5>{{ pedido.NombreEmpresa }}</h5></b>
                     </div>
-                  </td>
+                  </td> -->
+                  
+                  <style>
+                  .ngTruncateToggleText {
+                      color: blue;
+                      font-size: 90%;
+                      font-style: italic;
+                  }
+                  </style>
+                  
+                  <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
+                      <div class="form-group">
+                        <p ng-text-truncate="pedido.NombreEmpresa"
+                        ng-tt-chars-threshold="25"></p>
+                      </div>
+                      </td>
                   <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                      <div class="form-group">
+                        <b><h5>{{ pedido.NombreUsuario }} {{ pedido.ApellidoPaterno }}</h5></b>
+                      </div>
+                    </td>
+                  <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
                     <div class="form-group">
                       <b><h5>{{ pedido.Cantidad }}</h5></b>
                     </div>
                   </td>
-
-                  <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                  <!-- <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
                     <div class="form-group">
                       <b><h5>{{ pedido.Nombre }}</h5></b>
                     </div>
-                  </td>
-
+                  </td> -->
+                <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
+                <div class="form-group">
+                  <p ng-text-truncate="pedido.Nombre"
+                  ng-tt-chars-threshold="25"></p>
+                </div>
+                </td>
                   <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
-                    <div class="form-group">
-                      <b><h5>{{ pedido.NombreUsuario }} {{ pedido.ApellidoPaterno }}</h5></b>
-                    </div>
-                  </td>
-
+                      <div class="form-group">
+                        <b><h5>{{ pedido.PrecioDistribuidorNomal }} {{ pedido.MondaPrecioDist }}</h5></b>
+                      </div>
+                    </td>  
+                  <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                      <div class="form-group">
+                        <b><h5>{{ pedido.PrecioUsuarioFinalNormal }} {{ pedido.MonedaPrecioUF }}</h5></b>
+                      </div>
+                    </td>                                    
                   <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
                     <div class="form-group">
                       <b><h5>{{ pedido.Estatus }}</h5></b>
                     </div>
-                  </td>
-
-                  <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
-                    <div class="form-group">
-                      <b><h5>{{ pedido.MonedaCompra }}</h5></b>
-                    </div>
-                  </td>
-
+                  </td>              
                   <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
                     <div class="form-group">
                       <b><h5>{{ pedido.TipoCambio }}</h5></b>
                     </div>
                   </td>
-
                   <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
                     <div class="form-group">
                       <b><h5>{{ pedido.PrecioRenovacionDist }} {{ pedido.MondaPrecioDist }}</h5></b>
                     </div>
                   </td>
-
                   <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
                     <div class="form-group">
                       <b><h5>{{ pedido.PrecioRenovacionUF }} {{ pedido.MonedaPrecioUF }}</h5></b>
                     </div>
                   </td>
-
+                  <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                      <div class="form-group">
+                        <b><h5>{{ pedido.EstatusPedidoDist }}</h5></b>
+                      </div>
+                    </td>
                   <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
                     <div class="form-group">
-                      <b><h5>{{ pedido.EstatusUF }}</h5></b>
+                      <b><h5>{{ pedido.EstatusPedidoUF }}</h5></b>
                     </div>
-                  </td>
-
-                  <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
-                    <div class="form-group">
-                      <b><h5>{{ pedido.EstatusDist }}</h5></b>
-                    </div>
-                  </td>
-
-                  <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
-                    <div class="form-group">
-                      <b><h5>{{ pedido.PrecioUsuarioFinalNormal }} {{ pedido.MonedaPrecioUF }}</h5></b>
-                    </div>
-                  </td>
-
-                  <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
-                    <div class="form-group">
-                      <b><h5>{{ pedido.PrecioDistribuidorNomal }} {{ pedido.MondaPrecioDist }}</h5></b>
-                    </div>
-                  </td>                                                        
-                  <!-- <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
-                    <div class="form-group">
-                      <b><h5>{{pedido.Total | currency}} {{pedido.MonedaPago}}</h5></b>
-                    </div>
-                  </td>   -->
+                  </td>                                                                                                       
                 </tr>
               </table>
             </div>
