@@ -288,12 +288,21 @@
         });
     };
 
+    const isTiredProduct = function (product) {
+      return product.tieredPrice > 0;
+    };
+
     $scope.calcularSubTotal = function (IdPedido) {
       let total = 0;
       $scope.PedidoDetalles.forEach(function (order) {
         order.Productos.forEach(function (product) {
           if (order.IdPedido === IdPedido && !product.PrimeraCompraMicrosoft) {
-            total = total + ($scope.calculateExchangeRate(order, product, 'PrecioUnitario') * product.Cantidad);
+            const productPrice = $scope.calculatePriceWithExchangeRate(order, product, 'PrecioUnitario');
+            if (isTiredProduct(product)) {
+              total = total + productPrice;
+            } else {
+              total = total + (productPrice * product.Cantidad);
+            }
           }
         });
       });
@@ -318,7 +327,7 @@
       return total;
     };
 
-    $scope.calculateExchangeRate = function (order, details, value) {
+    $scope.calculatePriceWithExchangeRate = function (order, details, value) {
       let total = 0;
       if (order.MonedaPago === 'Pesos' && details.MonedaPrecio === 'Dólares') {
         total = details[value] * order.TipoCambio;
@@ -328,6 +337,12 @@
         total = details[value];
       }
       return total;
+    };
+
+    $scope.calcularProductTotal = function (order, product, value) {
+      const priceWithExchangeRate = $scope.calculatePriceWithExchangeRate(order, product, value);
+      if (isTiredProduct(product)) return priceWithExchangeRate;
+      return priceWithExchangeRate * product.Cantidad;
     };
 
     $scope.next = function () {

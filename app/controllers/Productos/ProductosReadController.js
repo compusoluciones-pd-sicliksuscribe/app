@@ -1,6 +1,7 @@
 (function () {
   var ProductosReadController = function ($scope, $log, $location, $cookies, $routeParams, ProductosFactory, FabricantesFactory, TiposProductosFactory, PedidoDetallesFactory, TipoCambioFactory, ProductoGuardadosFactory, EmpresasXEmpresasFactory, UsuariosFactory, $anchorScroll) {
     var BusquedaURL = $routeParams.Busqueda;
+    const HRWAWRE_EXTRA_EMPOLYEES_GROUPING = 1000;
     $scope.BuscarProductos = {};
     $scope.Pagina = 0;
     $scope.sortBy = 'Nombre';
@@ -15,6 +16,23 @@
     $scope.usuariosSinDominio = {};
     const NOT_FOUND = 404;
 
+    const formatTiers = function (tiers) {
+      if (tiers) {
+        const lastTierIndex = tiers.length - 1;
+        return tiers.map(function (tier, index) {
+          const previousTier = tiers[index - 1];
+          const isFirstTier = index === 0;
+          const isLastTier = index === lastTierIndex;
+          const quantityToAdd = isLastTier ? 0 : 1;
+          const lowerLimit = isFirstTier ? 1 : previousTier.employee_limit + quantityToAdd;
+          const upperLimit = isLastTier ? 0 : tier.employee_limit;
+          const previousTierPrice = isFirstTier ? 0 : previousTier.price;
+          return { lowerLimit, upperLimit, propertyName: 'empleados', price: tier.price, previousTierPrice };
+        });
+      }
+      return null;
+    };
+
     $scope.BuscarProducto = function (ResetPaginado) {
       $scope.Mensaje = 'Buscando...';
       if (ResetPaginado) {
@@ -23,11 +41,23 @@
       }
       ProductosFactory.getBuscarProductos($scope.BuscarProductos)
         .success(function (Productos) {
-          $scope.Productos = Productos.data.map(function (item) {
-            item.IdPedidoContrato = 0;
-            item.TieneContrato = true;
-            return item;
-          });
+          if (Productos.success === 1) {
+            $scope.Productos = Productos.data.map(function (item) {
+              item.IdPedidoContrato = 0;
+              item.TieneContrato = true;
+              item.tiers = formatTiers(item.tiers);
+              return item;
+            });
+            if ($scope.Productos) {
+              $scope.Mensaje = 'No encontramos resultados de tu búsqueda...';
+              if ($scope.Pagina > 0) {
+                $scope.ShowToast('No encontramos más resultados de esta busqueda, regresaremos a la página anterior.', 'danger');
+                $scope.PaginadoAtras();
+              }
+            }
+          } else {
+            $scope.Mensaje = Productos.message;
+          }
         })
         .error(function (data, status, headers, config) {
           if (status === NOT_FOUND && $scope.Pagina > 0) {
@@ -206,20 +236,34 @@
       if (Producto.IdFabricante === 1 && $scope.DominioMicrosoft) validateMicrosoftData(Producto);
     };
 
-    $scope.CalcularPrecioTotal = function (Precio, Cantidad, MonedaPago, MonedaProducto, TipoCambio, ProtectedRP) {
-      var total = 0.0;
-      var rebatePrice = ProtectedRP || TipoCambio;
-      if (MonedaPago === 'Pesos' && MonedaProducto === 'Dólares') {
-        Precio = Precio * rebatePrice;
-      }
+    const estimateLastTier = function (previousTier, currentTier, quantity) {
+      const extraEmployees = quantity - previousTier.upperLimit;
+      const extraEmployessFactor = Math.round(extraEmployees / HRWAWRE_EXTRA_EMPOLYEES_GROUPING);
+      const extraEmployeePrice = currentTier.price * extraEmployessFactor;
+      return previousTier.price + extraEmployeePrice;
+    };
 
-      if (MonedaPago === 'Dólares' && MonedaProducto === 'Pesos') {
-        Precio = Precio / rebatePrice;
-      }
+    const estimateTieredTotal = function (tiers, quantity) {
+      const indexOfLastTier = tiers.length - 1;
+      return tiers.reduce(function (total, currentTier, index, readOnlyTiers) {
+        if (quantity >= currentTier.lowerLimit) {
+          if (index === indexOfLastTier) {
+            const previousTier = readOnlyTiers[index - 1];
+            return estimateLastTier(previousTier, currentTier, quantity);
+          }
+          return currentTier.price;
+        }
+        return total;
+      }, 0);
+    };
 
-      total = Precio * Cantidad;
-      if (!total) { total = 0.00; }
-      return total;
+    $scope.estimateTotal = function (product, quantity) {
+      if (product.tiers) {
+        return estimateTieredTotal(product.tiers, quantity);
+      }
+      const price = product.PorcentajeDescuento > 0 ? product.PrecioDescuento : product.PrecioProrrateo;
+      const estimatedTotal = price * quantity || 0.00;
+      return estimatedTotal;
     };
 
     $scope.AgregarCarrito = function (Producto, Cantidad, IdPedidocontrato) {
