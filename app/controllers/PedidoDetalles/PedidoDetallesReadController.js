@@ -299,7 +299,6 @@
           if (order.IdPedido === IdPedido && !product.PrimeraCompraMicrosoft) {
             const productPrice = $scope.calculatePriceWithExchangeRate(order, product, 'PrecioUnitario');
             if (isTiredProduct(product)) {
-              console.log('tiered product');
               total = total + productPrice;
             } else {
               total = total + (productPrice * product.Cantidad);
