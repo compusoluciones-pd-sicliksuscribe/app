@@ -392,6 +392,26 @@ angular.module('marketplace')
     $rootScope.secureCookie = true;
   });
 
+angular.module('directives.loading', [])
+  .directive('cargando', ['$http', function ($http) {
+    return {
+      restrict: 'A',
+      link: function (scope, elm, attrs) {
+        scope.isLoading = function () {
+          return $http.pendingRequests.length > 0;
+        };
+
+        scope.$watch(scope.isLoading, function (v) {
+          if (v) {
+            elm.show();
+          } else {
+            elm.hide();
+          }
+        });
+      }
+    };
+  }]);
+
 (function () {
   var ContactoController = function ($scope) {
     $scope.init = function () {
@@ -955,26 +975,6 @@ angular.module('marketplace')
 
   angular.module('marketplace').controller('SugerenciasController', SugerenciasController);
 }());
-
-angular.module('directives.loading', [])
-  .directive('cargando', ['$http', function ($http) {
-    return {
-      restrict: 'A',
-      link: function (scope, elm, attrs) {
-        scope.isLoading = function () {
-          return $http.pendingRequests.length > 0;
-        };
-
-        scope.$watch(scope.isLoading, function (v) {
-          if (v) {
-            elm.show();
-          } else {
-            elm.hide();
-          }
-        });
-      }
-    };
-  }]);
 
 (function () {
   var AccesosAmazonFactory = function ($http, $cookies, $rootScope) {
