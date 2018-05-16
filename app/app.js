@@ -93,7 +93,7 @@
         resolve: {
           'check': function ($location, $cookies) {
             var Session = $cookies.getObject('Session');
-            if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); }
+            if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 8)) { $location.path('/404'); }
           }
         }
       })
