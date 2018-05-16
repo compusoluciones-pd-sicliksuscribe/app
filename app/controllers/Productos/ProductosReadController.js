@@ -48,15 +48,6 @@
               item.tiers = formatTiers(item.tiers);
               return item;
             });
-            if ($scope.Productos) {
-              $scope.Mensaje = 'No encontramos resultados de tu búsqueda...';
-              if ($scope.Pagina > 0) {
-                $scope.ShowToast('No encontramos más resultados de esta busqueda, regresaremos a la página anterior.', 'danger');
-                $scope.PaginadoAtras();
-              }
-            }
-          } else {
-            $scope.Mensaje = Productos.message;
           }
         })
         .error(function (data, status, headers, config) {
