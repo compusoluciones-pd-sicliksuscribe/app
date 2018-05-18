@@ -40,12 +40,14 @@
                 <th><b>Producto</b></th>
                 <th><b>Precio Compra Distribuidor</b></th> 
                 <th><b>Precio Compra Cliente</b></th>                                
-                <th><b>Estatus del pedido</b></th>        
+                <!-- <th><b>Estatus del pedido</b></th>         -->
                 <th><b>Tipo de Cambio</b></th>
                 <th><b>Precio Renovación Distribuidor</b></th>
                 <th><b>Precio Renovación Cliente</b></th>
                 <th><b>Estatus Pedido Distribuidor</b></th>
                 <th><b>Estatus Pedido Cliente</b></th>
+                <th><b>Renovación Distribuidor</b></th>
+                <th><b>Renovación Usuario Final</b></th>
                                               
                 <tr ng-repeat="pedido in paginatedOrders[currentPage]" class="repeat-animation">
                 <!--<tr ng-repeat="pedido in Pedidos | orderBy:sortBy:reverse | filter:EstatusSelect:strict" class="repeat-animation">-->
@@ -105,11 +107,11 @@
                         <b><h5>{{ pedido.PrecioUsuarioFinalNormal }} {{ pedido.MonedaPrecioUF }}</h5></b>
                       </div>
                     </td>                                    
-                  <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                  <!-- <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
                     <div class="form-group">
                       <b><h5>{{ pedido.Estatus }}</h5></b>
                     </div>
-                  </td>              
+                  </td>               -->
                   <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
                     <div class="form-group">
                       <b><h5>{{ pedido.TipoCambio }}</h5></b>
@@ -134,7 +136,17 @@
                     <div class="form-group">
                       <b><h5>{{ pedido.EstatusPedidoUF }}</h5></b>
                     </div>
-                  </td>                                                                                                       
+                  </td>  
+                  <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                    <div class="form-group">
+                      <b><h5>{{ pedido.PagoRenovacionDist }}</h5></b>
+                    </div>
+                  </td>    
+                  <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                    <div class="form-group">
+                      <b><h5>{{ pedido.PagoRenovacionUF }}</h5></b>
+                    </div>
+                  </td>                                                                                                  
                 </tr>
               </table>
             </div>
