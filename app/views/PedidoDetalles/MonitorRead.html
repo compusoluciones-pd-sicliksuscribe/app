@@ -67,7 +67,7 @@
 	</div>
 
 	<!-- Detalle pedidos MS -->
-	<div ng-if="BuscarProductos.IdFabricante === 1 && EmpresaSelect" ng-repeat="pedido in Pedidos">
+	<div ng-if="BuscarProductos.IdFabricante === 1 && EmpresaSelect" ng-repeat="pedido in Pedidos | filter:PedidoFilter">
 		<div class="row">
 			<div class="col-xs-12 col-sm-4 col-md-3 col-lg-3">
 				<label>Número de pedido:</label> {{ pedido.IdPedido }}
@@ -257,7 +257,7 @@
 	</div>
 
 	<!-- Detalle pedidos Autodesk -->
-	<div ng-if="BuscarProductos.IdFabricante === 2 && EmpresaSelect" ng-repeat="pedido in Pedidos" style="margin-top: 50px;">
+	<div ng-if="BuscarProductos.IdFabricante === 2 && EmpresaSelect" ng-repeat="pedido in Pedidos | filter:PedidoFilter" style="margin-top: 50px;">
 		<div class="row">
 			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 				<ul style="list-style-type:none; padding:0%">
