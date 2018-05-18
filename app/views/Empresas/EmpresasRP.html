@@ -39,16 +39,11 @@
       <table class="table table-hover border-left-right-cero">
         <thead>
           <tr style="font-size:14px">
-            <th>
-              Nombre
-            </th>
-            <th>
-              Tipo de cambio
-            </th>
+            <th>Nombre</th>
+            <th>Tipo de cambio</th>
             <th></th>
-            <th>
-              Nivel
-            </th>
+            <th>Fecha Cancelacion</th>
+            <th>Nivel</th>
             <th></th>
           </tr>
         </thead>
@@ -62,7 +57,7 @@
               <div class="input-group">
                 <span class="input-group-addon" style="border-radius: 0;">$</span>
                 <input id="Cantidad" name="Cantidad" type="text" ng-model="Empresa.TipoCambioRP" class="form-control" value="0" step="1000"
-                  placeholder="Tipo de cambio protegido." maxlength="9" />
+                  placeholder="Tipo de cambio protegido puta." maxlength="9" />
               </div>
               <div ng-show="Empresa.MostrarMensajeError">
                 <p style="color:red">Ingresa una cantidad valida.</p>
@@ -71,6 +66,16 @@
             <td style="vertical-align: middle">
               <span class="fa fa-floppy-o" ng-show="SessionCookie.IdTipoAcceso === 1" title="Guardar" ng-click="ActualizarRP(Empresa);" style="cursor:pointer; color: #337ab7; font-size:24px; margin-left: -10px"></span>
             </td>
+
+            <td style= "vertical-align: middle">
+                <div flex-gt-xs>
+                    <md-datepicker ng-model="ctrl.myDate" md-placeholder="Enter date" md-mode="month"></md-datepicker>
+                  </div>
+                </div>
+            </td>
+
+
+
             <td style="vertical-align: middle">
               <select name="Empresa" class="form-control" ng-model="value" ng-change="asignarNivel(Empresa, value)">
                  <option value="">{{Empresa.NombreNivel}}</option> 
