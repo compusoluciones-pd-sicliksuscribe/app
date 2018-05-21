@@ -4,9 +4,10 @@
       <h2>Administrador de proyectos</h2>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 form-group">
-      <label for="Busqueda">&nbsp;</label> 
+      <label for="Busqueda">&nbsp;</label>
       <div class="has-feedback">
-        <input name="Busqueda" type="text" ng-model="EmpresaFilter" class="form-control" size="30" placeholder="Busca un cliente..." />
+        <input name="Busqueda" type="text" ng-model="EmpresaFilter" class="form-control" size="30" placeholder="Busca un cliente..."
+        />
         <i class="form-control-feedback glyphicon glyphicon-search"></i>
       </div>
     </div>
@@ -24,13 +25,15 @@
           <label labelfor="Cantidad" title="Tipo de cambio protegido.">Cambiar tipo de cambio para todos: </label>
           <div class="input-group">
             <span class="input-group-addon" style="border-radius: 0;">$</span>
-            <input id="Cantidad" name="Cantidad" type="text" ng-model="RPTodos" class="form-control" value="0" step="1000" placeholder="Tipo de cambio protegido." />
+            <input id="Cantidad" name="Cantidad" type="text" ng-model="RPTodos" class="form-control" value="0" step="1000" placeholder="Tipo de cambio protegido."
+            />
           </div>
           <div ng-show="MostrarMensajeError">
             <p style="color:red">Ingresa una cantidad valida.</p>
           </div>
         </div>
-        <span class="fa fa-floppy-o" style="cursor:pointer; color: #337ab7; font-size:24px; margin-left:5px; padding-right:8px; padding-top:8px" title="Guardar" ng-click="ActualizarTodos();" ng-show="!frmCantidad.Cantidad.$error.max"></span>
+        <span class="fa fa-floppy-o" style="cursor:pointer; color: #337ab7; font-size:24px; margin-left:5px; padding-right:8px; padding-top:8px"
+          title="Guardar" ng-click="ActualizarTodos();" ng-show="!frmCantidad.Cantidad.$error.max"></span>
       </div>
     </div>
 
@@ -51,39 +54,42 @@
           <tr ng-repeat="Empresa in Empresas | filter : EmpresaFilter" class="repeat-animation">
             <td>
               <h3 style="color:#00549F;">{{Empresa.NombreEmpresa}}</h3>
-              <h5><b>RFC: </b>{{Empresa.RFC}}<b style="margin-left: 16px">Fecha activo: </b>{{Empresa.FechaActivo | date:'dd/MM/yyyy'}}</h5>
+              <h5>
+                <b>RFC: </b>{{Empresa.RFC}}
+                <b style="margin-left: 16px">Fecha activo: </b>{{Empresa.FechaActivo | date:'dd/MM/yyyy'}}</h5>
             </td>
             <td style="vertical-align: middle">
               <div class="input-group">
                 <span class="input-group-addon" style="border-radius: 0;">$</span>
                 <input id="Cantidad" name="Cantidad" type="text" ng-model="Empresa.TipoCambioRP" class="form-control" value="0" step="1000"
-                  placeholder="Tipo de cambio protegido puta." maxlength="9" />
+                  placeholder="Tipo de cambio protegido." maxlength="9" />
               </div>
               <div ng-show="Empresa.MostrarMensajeError">
                 <p style="color:red">Ingresa una cantidad valida.</p>
               </div>
             </td>
             <td style="vertical-align: middle">
-              <span class="fa fa-floppy-o" ng-show="SessionCookie.IdTipoAcceso === 1" title="Guardar" ng-click="ActualizarRP(Empresa);" style="cursor:pointer; color: #337ab7; font-size:24px; margin-left: -10px"></span>
+              <span class="fa fa-floppy-o" ng-show="SessionCookie.IdTipoAcceso === 1" title="Guardar" ng-click="ActualizarRP(Empresa);"
+                style="cursor:pointer; color: #337ab7; font-size:24px; margin-left: -10px"></span>
             </td>
 
-            <td style= "vertical-align: middle">
-                <div flex-gt-xs>
-                    <md-datepicker ng-model="ctrl.myDate" md-placeholder="Enter date" md-mode="month"></md-datepicker>
-                  </div>
+            <td style="vertical-align: middle">
+                <div class="input-group">
+                    <span class="input-group-addon"><span class="fa fa-calendar"></span>
+                    </span>
+                  <label for="meeting"></label><input id="cancelDate" type="date" value="" class="form-control"/>
                 </div>
             </td>
 
-
-
             <td style="vertical-align: middle">
               <select name="Empresa" class="form-control" ng-model="value" ng-change="asignarNivel(Empresa, value)">
-                 <option value="">{{Empresa.NombreNivel}}</option> 
-                <option ng-repeat="Nivel in Niveles" value="{{Nivel.IdNivelDistribuidor}}"ng-show="{{Empresa.IdNivelCS !== Nivel.IdNivelDistribuidor}}">{{Nivel.Nivel}}</option>
+                <option value="">{{Empresa.NombreNivel}}</option>
+                <option ng-repeat="Nivel in Niveles" value="{{Nivel.IdNivelDistribuidor}}" ng-show="{{Empresa.IdNivelCS !== Nivel.IdNivelDistribuidor}}">{{Nivel.Nivel}}</option>
               </select>
             </td>
             <td style="vertical-align: middle">
-              <span class="fa fa-times" ng-show="SessionCookie.IdTipoAcceso === 1 && Empresa.NombreNivel" title="Quitar nivel" ng-click="removerNivel(Empresa.IdEmpresasXEmpresa);" style="cursor:pointer; color: #337ab7; font-size:24px;margin-left: -10px"></span>
+              <span class="fa fa-times" ng-show="SessionCookie.IdTipoAcceso === 1 && Empresa.NombreNivel" title="Quitar nivel" ng-click="removerNivel(Empresa.IdEmpresasXEmpresa);"
+                style="cursor:pointer; color: #337ab7; font-size:24px;margin-left: -10px"></span>
             </td>
           </tr>
         </tbody>
