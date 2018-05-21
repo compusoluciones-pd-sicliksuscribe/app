@@ -223,41 +223,42 @@
             $cookies.putObject('pedidosAgrupados', Datos.data["0"].pedidosAgrupados, { 'expires': expireDate, secure: $rootScope.secureCookie });
             if (Datos.success) {
               if ($cookies.getObject('pedidosAgrupados')) {
-
-                Checkout.configure({
-                  merchant: Datos.data["0"].merchant,
-                  session: { id: Datos.data["0"].session_id },
-                  order:
-                  {
-                    amount: Datos.data['0'].total,
-                    currency: Datos.data["0"].moneda,
-                    description: 'Pago tarjeta bancaria',
-                    id: Datos.data["0"].pedidos,
-                  },
-                  interaction:
-                  {
-                    merchant:
+                PedidoDetallesFactory.getOwnCreditCardData($scope.currentDistribuidor.IdEmpresa)
+                .success(function (result) {
+                  Checkout.configure({
+                    merchant: Datos.data["0"].merchant,
+                    session: { id: Datos.data["0"].session_id },
+                    order:
                     {
-                      name: 'CompuSoluciones',
-                      address:
-                      {
-                        line1: 'CompuSoluciones y Asociados, S.A. de C.V.',
-                        line2: 'Av. Mariano Oterno No. 1105',
-                        line3: 'Col. Rinconada del Bosque C.P. 44530',
-                        line4: 'Guadalajara, Jalisco. México'
-                      },
-
-                      email: 'order@yourMerchantEmailAddress.com',
-                      phone: '+1 123 456 789 012',
+                      amount: Datos.data['0'].total,
+                      currency: Datos.data["0"].moneda,
+                      description: 'Pago tarjeta bancaria',
+                      id: Datos.data["0"].pedidos,
                     },
-                    displayControl: { billingAddress: 'HIDE', orderSummary: 'SHOW' },
-                    locale: 'es_MX',
-                    theme: 'default'
-                  }
-                });
+                    interaction:
+                    {
+                      merchant:
+                      {
+                        name: result.NombreEmpresa || 'CompuSoluciones',
+                        address:
+                        {
+                          line1: result.RazonSocial || 'CompuSoluciones y Asociados, S.A. de C.V.',
+                          line2: result.Direccion || 'Av. Mariano Oterno No. 1105',
+                          line3: `${result.Colonia} C.P. ${result.CodigoPostal}` || 'Col. Rinconada del Bosque C.P. 44530',
+                          line4: `${result.Ciudad}, ${result.Estado}. México` || 'Guadalajara, Jalisco. México'
+                        },
 
-                Checkout.showLightbox();
+                        email: result.Email || 'order@yourMerchantEmailAddress.com',
+                        phone: result.TelefonoContacto || '+1 123 456 789 012'
+                      },
+                      displayControl: { billingAddress: 'HIDE', orderSummary: 'SHOW' },
+                      locale: 'es_MX',
+                      theme: 'default'
+                    }
+                  });
 
+                  Checkout.showLightbox();
+              });
               }
             }
           })
