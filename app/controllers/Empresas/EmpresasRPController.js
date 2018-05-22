@@ -126,7 +126,9 @@
     };
 
     $scope.ActualizarRP = function (Empresa) {
+      // alert(Empresa);
       if (tipoDeCambioValido(Empresa.TipoCambioRP)) {
+        alert(Empresa.TipoCambioRP);
         var datosDePeticion = prepararDatosDePeticion(Empresa);
         EmpresasXEmpresasFactory.postExchangeRate(datosDePeticion)
           .then(function (respuesta) {
@@ -143,6 +145,12 @@
       } else {
         Empresa.MostrarMensajeError = true;
       }
+    };
+
+    $scope.fechatl = function () {
+      // alert($scope.FechaCancelacion(Empresa));
+      // console.log(Empresa.FechaCancelacion);
+      console.log("------------------------XOXOXOXOXOXO---------------------");
     };
   };
   EmpresasRPController.$inject = ['$scope', '$log', '$cookies', '$location', '$uibModal', '$filter', 'EmpresasXEmpresasFactory', 'NivelesDistribuidorFactory', '$routeParams'];
