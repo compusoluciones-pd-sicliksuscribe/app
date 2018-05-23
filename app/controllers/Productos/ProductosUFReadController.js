@@ -1,5 +1,5 @@
 (function () {
-  var ProductosUFReadController = function ($scope, $log, $location, $cookies, $routeParams, ProductosXEmpresaFactory, FabricantesFactory, TiposProductosFactory, PedidoDetallesFactory, TipoCambioFactory, ProductoGuardadosFactory, EmpresasXEmpresasFactory, $anchorScroll, ProductosFactory, ComprasUFFactory, UsuariosFactory) {
+  var ProductosUFReadController = function ($scope, $log, $location, $cookies, $routeParams, ProductosXEmpresaFactory, FabricantesFactory, TiposProductosFactory, PedidoDetallesFactory, TipoCambioFactory, ProductoGuardadosFactory, EmpresasXEmpresasFactory, EmpresasFactory, $anchorScroll, ProductosFactory, ComprasUFFactory, UsuariosFactory) {
     var BusquedaURL = $routeParams.Busqueda;
     $scope.BuscarProductos = {};
     $scope.Pagina = 0;
@@ -205,6 +205,27 @@
       return total;
     };
 
+    $scope.ValidarDominioMS = function (Producto, Cantidad) {
+      var cookie = $cookies.getObject('Session');
+      var IdEmpresaUsuarioFinal = cookie.IdEmpresa;
+      if (Producto.IdFabricante === 1) {
+        EmpresasFactory.getDominioMsByIdUF(IdEmpresaUsuarioFinal)
+        .success(function (result) {
+          if (result.IdMicrosoftUF !== null && result.IdMicrosoftUF !== '') {
+            $scope.AgregarCarrito(Producto, Cantidad);
+          } else {
+            $scope.ShowToast('No cuentas con dominio de microsoft, ponte en contacto con tu distribuidor', 'danger');
+            return;
+          }
+        })
+        .error(function (data, status, headers, config) {
+          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+        });
+      } else {
+        $scope.AgregarCarrito(Producto, Cantidad);
+      }
+    };
+
     $scope.AgregarCarrito = function (Producto, Cantidad) {
       if (!Producto.IdProducto) { $scope.ShowToast('Selecciona un producto', 'danger'); return; }
       if (!Cantidad) { $scope.ShowToast('Escribe una cantidad válida', 'danger'); return; }
@@ -384,7 +405,7 @@
   };
 
   ProductosUFReadController.$inject =
-    ['$scope', '$log', '$location', '$cookies', '$routeParams', 'ProductosXEmpresaFactory', 'FabricantesFactory', 'TiposProductosFactory', 'PedidoDetallesFactory', 'TipoCambioFactory', 'ProductoGuardadosFactory', 'EmpresasXEmpresasFactory', '$anchorScroll', 'ProductosFactory', 'ComprasUFFactory', 'UsuariosFactory'];
+    ['$scope', '$log', '$location', '$cookies', '$routeParams', 'ProductosXEmpresaFactory', 'FabricantesFactory', 'TiposProductosFactory', 'PedidoDetallesFactory', 'TipoCambioFactory', 'ProductoGuardadosFactory', 'EmpresasXEmpresasFactory', 'EmpresasFactory', '$anchorScroll', 'ProductosFactory', 'ComprasUFFactory', 'UsuariosFactory'];
 
   angular.module('marketplace').controller('ProductosUFReadController', ProductosUFReadController);
 }());

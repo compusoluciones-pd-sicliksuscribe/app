@@ -144,6 +144,7 @@
                                             <p style="color:red" ng-show="frmCantidad.Cantidad.$error.max">Máximo {{Producto.CantidadMaxima}}</p>
 
                                             <br>
+                                            <label style="color:red" for="DominioMicrosoft" ng-show="Producto.IdFabricante === 1 && SessionCookie.DominioMS === null">*No cuentas con un Dominio de Microsoft para este producto.</label>&nbsp;                                            
                                             <p style="color:red" ng-hide="Producto.IdFabricante === 1 || Producto.TieneContrato">*No cuentas con un contrato para este producto.</p>
                                             <label for="contrato" ng-if="Producto.IdFabricante === 2 && Producto.TieneContrato">* Contrato</label>
                                             <div class="input-group" ng-if="Producto.IdFabricante === 2 && Producto.TieneContrato && Producto.IdAccionAutodesk === 1">
@@ -260,7 +261,7 @@
                                             <button type="button" ng-show="0" ng-click="AgregarGuardados(Producto.IdProducto)" class="btn btn-link btn-block favoriteOption"><span class="glyphicon glyphicon-star"></span> Agregar a favoritos</span></button>
                                         </div>
                                         <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6" ng-show="SessionCookie.IdTipoAcceso === 1 || SessionCookie.IdTipoAcceso === 2 || SessionCookie.IdTipoAcceso === 3 || SessionCookie.IdTipoAcceso === 4">
-                                            <button class="btn btn-success btn-block addOption" ng-click="AgregarCarrito(Producto, Producto.Cantidad)" ng-disabled="!frmCantidad.$valid" style="background:{{currentDistribuidor.PrimaryColor}} !important">Agregar al carrito</md-button>
+                                            <button class="btn btn-success btn-block addOption" ng-click="ValidarDominioMS(Producto, Producto.Cantidad)" ng-disabled="!frmCantidad.$valid || (Producto.IdFabricante === 1 && SessionCookie.DominioMS === null)" style="background:{{currentDistribuidor.PrimaryColor}} !important">Agregar al carrito</md-button>
                                         </div>
                                     </div>
                                 </div>

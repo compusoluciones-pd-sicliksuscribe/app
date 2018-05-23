@@ -182,6 +182,9 @@
               $scope.Distribuidor.IdFormaPago = 2;
               $scope.Distribuidor.IdFormaPagoPredilecta = 2;
             }
+            if (!order.BanamexCredentials) {
+              $scope.BanamexCredentials = 1;
+            }
           });
         });
       }

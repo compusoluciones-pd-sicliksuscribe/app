@@ -153,6 +153,11 @@
       return $http.put($rootScope.API + 'enterprises/microsoft-domains/' + enterpriseId, Enterprise);
     };
 
+    factory.getDominioMsByIdUF = function (Empresa) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'enterprise/domain-ms/final-user/' + Empresa);
+    };
+
     return factory;
   };
 

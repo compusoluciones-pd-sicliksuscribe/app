@@ -62,6 +62,7 @@
               distribuidores: tokenPayload.distribuidores,
               IdPlanTuClick: tokenPayload.IdPlanTuClick,
               mFacturacion: tokenPayload.mFacturacion,
+              DominioMS: tokenPayload.DominioMS,
               Expira: expireDate.getTime()
             };
             console.log('login succesfull');
