@@ -3,6 +3,7 @@
     $scope.MostrarMensajeError = false;
     $scope.Empresas = [];
     $scope.Niveles = [];
+    // $scope.fechatl='';
 
     var error = function (error) {
       $scope.ShowToast(!error ? 'Ha ocurrido un error, intentelo mas tarde.' : error.message, 'danger');
@@ -99,6 +100,7 @@
       }
       return {
         Empresas: empresas.map(function (Empresa) {
+          console.log(Empresa);
           return Object.assign({}, { TipoCambioRP: Number(Empresa.TipoCambioRP), IdEmpresasXEmpresa: Empresa.IdEmpresasXEmpresa });
         })
       };
@@ -109,27 +111,26 @@
         actualizaTipoDeCambioATodasLasEmpresas();
         var datosDePeticion = prepararDatosDePeticion($scope.Empresas);
         EmpresasXEmpresasFactory.postExchangeRate(datosDePeticion)
-          .then(function (respuesta) {
-            var data = respuesta.data;
-            var respuestaExitosa = data.success === 1;
-            if (respuestaExitosa) {
-              $scope.ShowToast('Actualizado correctamente.', 'success');
-            } else {
-              $scope.ShowToast('Error al actualizar el tipo de cambio.', 'danger');
-            }
-          })
-          .catch(function (result) { error(result.data); });
+        .then(function (respuesta) {
+          var data = respuesta.data;
+          var respuestaExitosa = data.success === 1;
+          if (respuestaExitosa) {
+            $scope.ShowToast('Actualizado correctamente.', 'success');
+          } else {
+            $scope.ShowToast('Error al actualizar el tipo de cambio.', 'danger');
+          }
+        })
+        .catch(function (result) { error(result.data); });
         $scope.MostrarMensajeError = false;
       } else {
         $scope.MostrarMensajeError = true;
       }
     };
-
+    
     $scope.ActualizarRP = function (Empresa) {
-      // alert(Empresa);
       if (tipoDeCambioValido(Empresa.TipoCambioRP)) {
-        alert(Empresa.TipoCambioRP);
         var datosDePeticion = prepararDatosDePeticion(Empresa);
+      
         EmpresasXEmpresasFactory.postExchangeRate(datosDePeticion)
           .then(function (respuesta) {
             var data = respuesta.data;
@@ -146,13 +147,30 @@
         Empresa.MostrarMensajeError = true;
       }
     };
+    var tipoDeFechaValido = function (cancelDate) {
+      const today = new Date();
+      return cancelDate >= today;
+    };
+  
 
-    $scope.fechatl = function () {
-      // alert($scope.FechaCancelacion(Empresa));
-      // console.log(Empresa.FechaCancelacion);
-      console.log("------------------------XOXOXOXOXOXO---------------------");
+    $scope.asignarCancelacion = function (Empresa) {
+      if (tipoDeFechaValido(Empresa.cancelDate)) {
+  
+        // EmpresasXEmpresasFactory.postCancelDate(Empresa)
+        // .then(function(respuesta){
+          
+        //   var data = respuesta.data;
+        //   var respuestaExitosa = data.success == 1;
+          // if(respuestaExitosa) {
+          $scope.ShowToast('Actualizado correctamente!!!.', 'success');
+        } else {
+          $scope.ShowToast('Fecha no valida, intente de nuevo.', 'danger');
+        }
+
+        // });
     };
   };
+
   EmpresasRPController.$inject = ['$scope', '$log', '$cookies', '$location', '$uibModal', '$filter', 'EmpresasXEmpresasFactory', 'NivelesDistribuidorFactory', '$routeParams'];
 
   angular.module('marketplace').controller('EmpresasRPController', EmpresasRPController);
