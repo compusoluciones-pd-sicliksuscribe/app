@@ -111,26 +111,26 @@
         actualizaTipoDeCambioATodasLasEmpresas();
         var datosDePeticion = prepararDatosDePeticion($scope.Empresas);
         EmpresasXEmpresasFactory.postExchangeRate(datosDePeticion)
-        .then(function (respuesta) {
-          var data = respuesta.data;
-          var respuestaExitosa = data.success === 1;
-          if (respuestaExitosa) {
-            $scope.ShowToast('Actualizado correctamente.', 'success');
-          } else {
-            $scope.ShowToast('Error al actualizar el tipo de cambio.', 'danger');
-          }
-        })
-        .catch(function (result) { error(result.data); });
+          .then(function (respuesta) {
+            var data = respuesta.data;
+            var respuestaExitosa = data.success === 1;
+            if (respuestaExitosa) {
+              $scope.ShowToast('Actualizado correctamente.', 'success');
+            } else {
+              $scope.ShowToast('Error al actualizar el tipo de cambio.', 'danger');
+            }
+          })
+          .catch(function (result) { error(result.data); });
         $scope.MostrarMensajeError = false;
       } else {
         $scope.MostrarMensajeError = true;
       }
     };
-    
+
     $scope.ActualizarRP = function (Empresa) {
       if (tipoDeCambioValido(Empresa.TipoCambioRP)) {
         var datosDePeticion = prepararDatosDePeticion(Empresa);
-      
+
         EmpresasXEmpresasFactory.postExchangeRate(datosDePeticion)
           .then(function (respuesta) {
             var data = respuesta.data;
@@ -149,25 +149,27 @@
     };
     var tipoDeFechaValido = function (cancelDate) {
       const today = new Date();
+      // console.log("fecha is");
+      // console.log.(today);
       return cancelDate >= today;
     };
-  
 
     $scope.asignarCancelacion = function (Empresa) {
+      console.log(Empresa.cancelDate);
       if (tipoDeFechaValido(Empresa.cancelDate)) {
-  
-        // EmpresasXEmpresasFactory.postCancelDate(Empresa)
+        
+        EmpresasXEmpresasFactory.postCancelDate(Empresa);
         // .then(function(respuesta){
-          
+
         //   var data = respuesta.data;
         //   var respuestaExitosa = data.success == 1;
-          // if(respuestaExitosa) {
-          $scope.ShowToast('Actualizado correctamente!!!.', 'success');
-        } else {
-          $scope.ShowToast('Fecha no valida, intente de nuevo.', 'danger');
-        }
+        // if(respuestaExitosa) {
+        $scope.ShowToast('Actualizado correctamente!!!.', 'success');
+      } else {
+        $scope.ShowToast('Fecha no valida, intente de nuevo.', 'danger');
+      }
 
-        // });
+      // });
     };
   };
 
