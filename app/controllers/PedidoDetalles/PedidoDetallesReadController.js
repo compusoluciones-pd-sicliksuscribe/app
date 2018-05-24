@@ -28,6 +28,7 @@
       return EmpresasFactory.getEmpresas()
         .then(function (result) {
           $scope.Distribuidor = result.data[0];
+          $scope.Distribuidor.MonedaPago = 'Pesos';
         })
         .catch(function (result) {
           error(result.data);
@@ -112,7 +113,6 @@
     const validarCarrito = function () {
       return PedidoDetallesFactory.getValidarCarrito()
         .then(function (result) {
-          console.log('sadasd')
           $scope.PedidoDetalles.forEach(function (item) {
             result.data.data.forEach(function (user) {
               if (item.IdEmpresaUsuarioFinal === user.IdEmpresaUsuarioFinal && !user.hasCredit) {
@@ -129,7 +129,7 @@
     };
 
     var ActualizarFormaPago = function (IdFormaPago) {
-      var empresa = {IdFormaPagoPredilecta: IdFormaPago || $scope.Distribuidor.IdFormaPagoPredilecta};
+      var empresa = { IdFormaPagoPredilecta: IdFormaPago || $scope.Distribuidor.IdFormaPagoPredilecta };
       EmpresasFactory.putEmpresaFormaPago(empresa)
         .then(function (result) {
           if (result.data.success) {
@@ -142,8 +142,9 @@
     };
 
     var CambiarMoneda = function (tipoMoneda) {
-      var moneda = { MonedaPago: tipoMoneda || 'Pesos' };
-      EmpresasFactory.putEmpresaCambiaMoneda(moneda)
+      $scope.Distribuidor.MonedaPago = tipoMoneda || 'Pesos';
+      const MonedaPago = $scope.Distribuidor.MonedaPago;
+      EmpresasFactory.putEmpresaCambiaMoneda({ MonedaPago })
       .then(function (result) {
         if (result.data.success) {
           $scope.ShowToast(result.data.message, 'success');
