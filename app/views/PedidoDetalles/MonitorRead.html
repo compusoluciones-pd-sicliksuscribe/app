@@ -111,7 +111,7 @@
 								</div>
 								
 								<form ng-hide="pedido.Bloquear || pedido.CargoRealizadoProximoPedido">
-									<div class="row" ng-show="detalles.Activo && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
+									<div class="row" ng-show="detalles.Activo && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 4)">
 										<div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
 											<div class="radio" style="margin-left:20px">
 												<div ng-hide="detalles.IdTipoProducto === 3">

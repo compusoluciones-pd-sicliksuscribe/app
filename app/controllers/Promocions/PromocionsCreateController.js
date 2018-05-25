@@ -165,11 +165,11 @@
     function subirImagen(fileItem, data) {
       var fileChooser = document.getElementById('archivo_promocion');
       var file = fileChooser.files[0];
-      $scope.Promocion.Url = 'https://s3.amazonaws.com/marketplace.compusoluciones.com/Anexos/' + fileItem.file.name;
+      $scope.Promocion.Url = 'https://s3.amazonaws.com/marketplace.compusoluciones.com/Anexos/' + file.name;
       AWS.config.update({ accessKeyId: data[0].AccessKey, secretAccessKey: data[0].SecretAccess });
       var bucketName = data[0].Bucket;
       var bucket = new AWS.S3({ params: { Bucket: bucketName } });
-      var objKey = 'Anexos' + '/' + fileItem.file.name;
+      var objKey = 'Anexos' + '/' + file.name;
       var params = { Key: objKey, ContentType: fileItem.type, Body: file, ACL: 'public-read' };
       bucket.putObject(params, function (err, data) {
         if (err) {

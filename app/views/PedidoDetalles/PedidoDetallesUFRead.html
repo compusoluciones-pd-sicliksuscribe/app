@@ -37,10 +37,10 @@
 				<label for="" class="formaPago">Forma de pago para {{Distribuidor.NombreEmpresa}}: </label>
 				<div class="radio" style="margin-left:20px">
 					<div>
-						<input type="radio" name="TipoPago" value="2" checked="checked" ng-model="Distribuidor.IdFormaPagoPredilecta" ng-change="ActualizarFormaPago(2);"> Crédito CompuSoluciones
+						<input type="radio" name="TipoPago" value="2" checked="checked" ng-model="Distribuidor.IdFormaPagoPredilecta" ng-change="ActualizarFormaPago(2);"> Crédito {{currentDistribuidor.NombreEmpresa}}
 					</div>
-					<div ng-show="!ValidarFormaPago() && !BanamexCredentials">
-						<input type="radio" name="TipoPago" value="1" ng-disabled="TarjetaCreditoDisabled()" ng-model="Distribuidor.IdFormaPagoPredilecta"
+					<div ng-show="!ValidarFormaPago()">
+						<input type="radio" name="TipoPago" value="1" ng-disabled="BanamexCredentials" ng-model="Distribuidor.IdFormaPagoPredilecta"
 							ng-change="ActualizarFormaPago(1);"> Tarjeta bancaria (Solo Pesos MXN)
 					</div>
 					<div ng-show="!ValidarFormaPago()">
