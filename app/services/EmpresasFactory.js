@@ -51,10 +51,21 @@
       return $http.put($rootScope.API + 'Empresas/FormaPago', parametros);
     };
 
+    factory.putEmpresaFormaPagoFinalUser = function (parametros) {
+      factory.refreshToken();
+      return $http.put($rootScope.API + 'Empresas/FormaPago/FinalUser', parametros);
+    };
+
     factory.putEmpresaCambiaMoneda = function (parametros) {
       factory.refreshToken();
       return $http.put($rootScope.API + 'Empresas/CambiaMoneda', parametros);
     };
+
+    factory.putEmpresaCambiaMonedaFinalUser = function (parametros) {
+      factory.refreshToken();
+      return $http.put($rootScope.API + 'Empresas/CambiaMoneda/FinalUser', parametros);
+    };
+
     factory.putEmpresa = function (Empresa) {
       factory.refreshToken();
       return $http.put($rootScope.API + 'Empresas', Empresa);
@@ -117,6 +128,11 @@
       return $http.get($rootScope.API + 'ValidarCredito/' + IdEmpresaDistribuidor);
     };
 
+    factory.getDetailsUF = function () {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'tuclick/details-uf');
+    };
+
     factory.updateAutomaticPayment = function (RealizarCargoProximo) {
       factory.refreshToken();
       return $http.patch($rootScope.API + 'enterprise/update-automatic-payment/' + RealizarCargoProximo);
@@ -135,6 +151,11 @@
     factory.changeDomain = function (enterpriseId, Enterprise) {
       factory.refreshToken();
       return $http.put($rootScope.API + 'enterprises/microsoft-domains/' + enterpriseId, Enterprise);
+    };
+
+    factory.getDominioMsByIdUF = function (Empresa) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'enterprise/domain-ms/final-user/' + Empresa);
     };
 
     return factory;

@@ -5,7 +5,7 @@
     $scope.init = function () {
       $scope.esNavegadorSoportado();
       $scope.navCollapsed = true;
-      PromocionsFactory.getPromocions()
+      PromocionsFactory.getPromocions($scope.currentDistribuidor.IdEmpresa)
         .success(function (Promociones) {
           $scope.Promociones = Promociones;
         })

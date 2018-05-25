@@ -199,7 +199,9 @@
             if (product.IdTipoProducto === 3) {
               disabled = true;
               $scope.Distribuidor.IdFormaPago = 2;
+              $scope.Distribuidor.IdFormaPago = 3;
               $scope.Distribuidor.IdFormaPagoPredilecta = 2;
+              $scope.Distribuidor.IdFormaPagoPredilecta = 3;
             }
           });
         });
@@ -243,6 +245,10 @@
         return false;
       }
       return true;
+    };
+
+    $scope.isPayingWithPaypal = function () {
+      return Number($scope.Distribuidor.IdFormaPagoPredilecta) === paymentMethods.PAYPAL;
     };
 
     $scope.isPayingWithCSCredit = function () {

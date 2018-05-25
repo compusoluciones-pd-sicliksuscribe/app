@@ -26,7 +26,17 @@
       return $http.put($rootScope.API + 'Pedidos/CodigoPromocion', Pedido);
     };
 
-    factory.patchPaymentInformation = function (paymentResult)  {
+    factory.patchPaymentInformation = function (paymentResult) {
+      factory.refreshToken();
+      return $http.patch($rootScope.API + 'orders/update-payment-details', paymentResult);
+    };
+
+    factory.patchPedidosParaRenovar = function (paymentResult) {
+      factory.refreshToken();
+      return $http.patch($rootScope.API + 'tuclick/update-payment-details', paymentResult);
+    };
+
+    factory.patchPaymentInformationPayPal = function (paymentResult) {
       factory.refreshToken();
       return $http.patch($rootScope.API + 'orders/update-payment-details', paymentResult);
     };

@@ -71,6 +71,11 @@
       return $http.get($rootScope.API + 'users/' + idEmpresaUsuarioFinal);
     };
 
+    factory.getUsuariosContactoTuClick = function (idEmpresaUsuarioFinal, currentDistribuidor) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'users/' + idEmpresaUsuarioFinal + '/distribuidor/' + currentDistribuidor);
+    };
+
     factory.getUsuariosPropios = function () {
       factory.refreshToken();
       return $http.get($rootScope.API + 'users');

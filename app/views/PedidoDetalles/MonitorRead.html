@@ -39,7 +39,7 @@
 		</div>
 		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
 		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-			<div class="form-group has-feedback" ng-if="(SessionCookie.IdTipoAcceso === 4 || SessionCookie.IdTipoAcceso === 6) || BuscarProductos.IdFabricante === 2">
+			<div class="form-group has-feedback" ng-if="(BuscarProductos.IdFabricante === 2)">
 				<label for="TipoContrato">Tipo de contrato: </label>
 				<select name="Contrato" id="Contrato" class="form-control selectOption" ng-change="ActualizarMonitor();" ng-model="Contrato.tipo">
 					<option ng-selected="true" value="all">Todos los contratos</option>
@@ -111,7 +111,7 @@
 								</div>
 								
 								<form ng-hide="pedido.Bloquear || pedido.CargoRealizadoProximoPedido">
-									<div class="row" ng-show="detalles.Activo && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
+									<div class="row" ng-show="detalles.Activo && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 4)">
 										<div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
 											<div class="radio" style="margin-left:20px">
 												<div ng-hide="detalles.IdTipoProducto === 3">
@@ -333,7 +333,7 @@
 						</ul>
 					</div>
 
-					<div ng-if="detalles.IdTipoProducto !== 3 && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
+					<div ng-if="detalles.IdTipoProducto !== 3 && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 4)">
 						<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
 							<label>Suscripciones: </label> <br>
 							<div style="margin:0; padding:0;" ng-if="detalles.EstatusFabricante !== 'accepted' || (pedido.AutoRenovable && detalles.PagoRenovacion) || (!pedido.AutoRenovable && (!pedido.Renovacion || pedido.PorRenovar))"> {{ detalles.Cantidad }} </div>
