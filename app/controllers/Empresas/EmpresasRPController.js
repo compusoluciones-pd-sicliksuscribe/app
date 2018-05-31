@@ -3,7 +3,6 @@
     $scope.MostrarMensajeError = false;
     $scope.Empresas = [];
     $scope.Niveles = [];
-    // $scope.fechatl='';
 
     var error = function (error) {
       $scope.ShowToast(!error ? 'Ha ocurrido un error, intentelo mas tarde.' : error.message, 'danger');
@@ -48,6 +47,13 @@
     $scope.init();
 
     $scope.asignarNivel = function (Empresa, IdNivelCS) {
+      console.log("Empresatl");
+      console.log(Empresa);
+      console.log("Id nivel del cs");
+      console.log(IdNivelCS);
+
+
+
       if (IdNivelCS === '') {
         IdNivelCS = Empresa.IdNivelCS;
       }
@@ -83,7 +89,7 @@
     var tipoDeCambioValido = function (tipoDeCambio) {
       return tipoDeCambio > 0;
     };
-
+    //no se va a utilizar
     var actualizaTipoDeCambioATodasLasEmpresas = function () {
       $scope.Empresas = $scope.Empresas.map(function (Empresa) {
         Empresa.TipoCambioRP = $scope.RPTodos;
@@ -100,12 +106,12 @@
       }
       return {
         Empresas: empresas.map(function (Empresa) {
-          console.log(Empresa);
           return Object.assign({}, { TipoCambioRP: Number(Empresa.TipoCambioRP), IdEmpresasXEmpresa: Empresa.IdEmpresasXEmpresa });
         })
       };
     };
 
+    //no se va a utilizar
     $scope.ActualizarTodos = function () {
       if (tipoDeCambioValido($scope.RPTodos)) {
         actualizaTipoDeCambioATodasLasEmpresas();
@@ -136,7 +142,7 @@
             var data = respuesta.data;
             var respuestaExitosa = data.success === 1;
             if (respuestaExitosa) {
-              $scope.ShowToast('Actualizado correctamente.', 'success');
+              $scope.ShowToast('Actualizado correctamente!!.', 'success');
             } else {
               $scope.ShowToast('Error al actualizar el tipo de cambio.', 'danger');
             }
@@ -147,32 +153,66 @@
         Empresa.MostrarMensajeError = true;
       }
     };
+
     var tipoDeFechaValido = function (cancelDate) {
       const today = new Date();
-      // console.log("fecha is");
-      // console.log.(today);
       return cancelDate >= today;
     };
 
     $scope.asignarCancelacion = function (Empresa) {
-      console.log(Empresa.cancelDate);
-      if (tipoDeFechaValido(Empresa.cancelDate)) {
-        
-        EmpresasXEmpresasFactory.postCancelDate(Empresa);
-        // .then(function(respuesta){
+      const result = removeDataValues(Empresa);
+      console.log(result);
 
-        //   var data = respuesta.data;
-        //   var respuestaExitosa = data.success == 1;
-        // if(respuestaExitosa) {
+      if (tipoDeFechaValido(result.cancelDate)) {
+        EmpresasXEmpresasFactory.patchCancelDate(result)
+          .then(function (respuesta) {
+            var data = respuesta.data;
+            var respuestaExitosa = data.success === 1;
+            if (respuestaExitosa) {
+              $scope.ShowToast('oohhsi.', 'success');
+            }
+          });
+
         $scope.ShowToast('Actualizado correctamente!!!.', 'success');
       } else {
         $scope.ShowToast('Fecha no valida, intente de nuevo.', 'danger');
       }
+    };
 
-      // });
+    //me lo traigo del diskete de guardar
+    $scope.UpdateDateAndRP = function (Empresa) {
+      const result = removeDataValues(Empresa);
+      console.log("result");
+      console.log(result);
+
+      //validar fecha
+      if (tipoDeFechaValido(result.cancelDate)) {
+        EmpresasXEmpresasFactory.patchCancelDate(result)
+          .then(function (respuesta) {
+            var data = respuesta.data;
+            var respuestaExitosa = data.success === 1;
+            if (respuestaExitosa) {
+              $scope.ShowToast('oohhsi.', 'success');
+            }
+          });
+
+          //agregar el resultado del cambio rp
+
+        $scope.ShowToast('Fecha y tipo de cambio cambiados correctamente.', 'success');
+      } else {
+        $scope.ShowToast('Fecha o tipo de cambio no valido, intente de nuevo.', 'danger');
+      }
     };
   };
 
+  const removeDataValues = function (Empresa) {
+    const dataValues = Object.assign({}, Empresa);
+    delete dataValues.MostrarMensajeError;
+    delete dataValues.NombreNivel;
+    delete dataValues.NombreEmpresa;
+
+    return dataValues;
+  };
   EmpresasRPController.$inject = ['$scope', '$log', '$cookies', '$location', '$uibModal', '$filter', 'EmpresasXEmpresasFactory', 'NivelesDistribuidorFactory', '$routeParams'];
 
   angular.module('marketplace').controller('EmpresasRPController', EmpresasRPController);

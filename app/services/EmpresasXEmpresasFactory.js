@@ -26,12 +26,9 @@
       return $http.post($rootScope.API + 'exchange-rate', Empresas);
     };
 
-    factory.postCancelDate = function (Empresa) {
+    factory.patchCancelDate = function (dataValues) {
       factory.refreshToken();
-      delete Empresa.MostrarMensajeError;
-      delete Empresa.NombreNivel;
-      delete Empresa.NombreEmpresa;
-      return $http.patch($rootScope.API + 'enterprise/' + Empresa.IdEmpresaUsuarioFinal + '/cancel-dates', Empresa);
+      return $http.patch($rootScope.API + 'enterprise/' + dataValues.IdEmpresaUsuarioFinal + '/cancel-dates', dataValues);
     };
 
     factory.postEmpresasXEmpresa = function (EmpresasXEmpresa) {
