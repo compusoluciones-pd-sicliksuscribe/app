@@ -42,7 +42,7 @@
             $scope.InfoFactura.nombre_contacto = empresa.NombreContacto;
             $scope.InfoFactura.telefono = empresa.TelefonoContacto;
             $scope.InfoFactura.calle = empresa.Direccion;
-            $scope.InfoFactura.email = empresa.CorreoContacto;
+            $scope.InfoFactura.email = empresa.CorreoContactoFacturacion;
             $scope.InfoFactura.municipio = empresa.Ciudad;
             $scope.InfoFactura.estado = empresa.Estado;
             $scope.InfoFactura.codigo_postal = Number(empresa.CodigoPostal);

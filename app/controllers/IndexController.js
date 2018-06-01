@@ -72,7 +72,9 @@
           $location.path('/');
           $scope.ActualizarMenu();
         }
-        $scope.ShowToast('¡Bienvenido a ' + Distribuidor.NombreEmpresa + '!', 'success');
+        if (window.location.hash === '#/') {
+          $scope.ShowToast('¡Bienvenido a ' + Distribuidor.NombreEmpresa + '!', 'success');
+        }
       }
     };
 

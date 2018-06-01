@@ -71,7 +71,9 @@
 
     const filterProducts = () => {
       const filter = $scope.filter.toLowerCase();
-      filteredProducts = productosEnCache[$scope.IdEmpresa].filter(p => p.name.includes(filter));
+      filteredProducts = productosEnCache[$scope.IdEmpresa].filter(p => {
+        return p.IdERP.toLowerCase().includes(filter) || p.name.includes(filter);
+      });
       setPagination();
       $scope.$apply();
     };
