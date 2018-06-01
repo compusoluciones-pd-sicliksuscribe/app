@@ -57,6 +57,12 @@
       return $http.get($rootScope.API + 'monitor/orders-per-customer/' + customer.IdEmpresaUsuarioFinal + '/maker/' + customer.IdFabricante + '/type/' + customer.AutoRenovable);
     };
 
+    factory.updateSubscriptionNextQuantity = function (detail) {
+      factory.refreshToken();
+      const url = $rootScope.API + 'monitor/orders/' + detail.IdPedido + '/details/' + detail.IdPedidoDetalle + '/subscriptions/';
+      return $http.patch(url, detail);
+    };
+
     factory.postMonitor = function (IdEmpresaUsuarioFinal) {
       factory.refreshToken();
       return $http.post($rootScope.API + 'Monitor', IdEmpresaUsuarioFinal);
