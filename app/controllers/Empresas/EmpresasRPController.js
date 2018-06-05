@@ -142,7 +142,7 @@
             var data = respuesta.data;
             var respuestaExitosa = data.success === 1;
             if (respuestaExitosa) {
-              $scope.ShowToast('Actualizado correctamente!!.', 'success');
+              $scope.ShowToast('Tipo de cambio actualizado correctamente.', 'success');
             } else {
               $scope.ShowToast('Error al actualizar el tipo de cambio.', 'danger');
             }
@@ -190,17 +190,14 @@
         EmpresasXEmpresasFactory.patchCancelDate(result)
           .then(function (respuesta) {
             var data = respuesta.data;
+            // console.log(data.success);
             var respuestaExitosa = data.success === 1;
             if (respuestaExitosa) {
-              $scope.ShowToast('oohhsi.', 'success');
+              $scope.ShowToast(' Fecha cambio correctamente.', 'success');
             }
           });
-
-          //agregar el resultado del cambio rp
-
-        $scope.ShowToast('Fecha y tipo de cambio cambiados correctamente.', 'success');
       } else {
-        $scope.ShowToast('Fecha o tipo de cambio no valido, intente de nuevo.', 'danger');
+        $scope.ShowToast('Fecha no valido, intente de nuevo :(   .', 'danger');
       }
     };
   };
