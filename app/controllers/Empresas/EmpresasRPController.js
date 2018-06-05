@@ -47,13 +47,6 @@
     $scope.init();
 
     $scope.asignarNivel = function (Empresa, IdNivelCS) {
-      console.log("Empresatl");
-      console.log(Empresa);
-      console.log("Id nivel del cs");
-      console.log(IdNivelCS);
-
-
-
       if (IdNivelCS === '') {
         IdNivelCS = Empresa.IdNivelCS;
       }
@@ -134,23 +127,26 @@
     };
 
     $scope.ActualizarRP = function (Empresa) {
-      if (tipoDeCambioValido(Empresa.TipoCambioRP)) {
-        var datosDePeticion = prepararDatosDePeticion(Empresa);
+      console.log(Empresa);
+      if (tipoDeFechaValido(Empresa.cancelDate)) {
+        if (tipoDeCambioValido(Empresa.TipoCambioRP)) {
+          var datosDePeticion = prepararDatosDePeticion(Empresa);
 
-        EmpresasXEmpresasFactory.postExchangeRate(datosDePeticion)
-          .then(function (respuesta) {
-            var data = respuesta.data;
-            var respuestaExitosa = data.success === 1;
-            if (respuestaExitosa) {
-              $scope.ShowToast('Tipo de cambio actualizado correctamente.', 'success');
-            } else {
-              $scope.ShowToast('Error al actualizar el tipo de cambio.', 'danger');
-            }
-          })
-          .catch(function (result) { error(result.data); });
-        Empresa.MostrarMensajeError = false;
+          EmpresasXEmpresasFactory.postExchangeRate(datosDePeticion)
+            .then(function (respuesta) {
+              var data = respuesta.data;
+              var respuestaExitosa = data.success === 1;
+              if (respuestaExitosa) {
+                $scope.ShowToast('Tipo de cambio actualizado correctamente.', 'success');
+              } else {
+                $scope.ShowToast('Error al actualizar el tipo de cambio.', 'danger');
+              }
+            })
+            .catch(function (result) { error(result.data); });
+          Empresa.MostrarMensajeError = false;
+        }
       } else {
-        Empresa.MostrarMensajeError = true;
+        $scope.ShowToast('Favor de asignar Fecha de Cancelacion.', 'danger');
       }
     };
 
@@ -159,45 +155,24 @@
       return cancelDate >= today;
     };
 
-    $scope.asignarCancelacion = function (Empresa) {
-      const result = removeDataValues(Empresa);
-      console.log(result);
-
-      if (tipoDeFechaValido(result.cancelDate)) {
-        EmpresasXEmpresasFactory.patchCancelDate(result)
-          .then(function (respuesta) {
-            var data = respuesta.data;
-            var respuestaExitosa = data.success === 1;
-            if (respuestaExitosa) {
-              $scope.ShowToast('oohhsi.', 'success');
-            }
-          });
-
-        $scope.ShowToast('Actualizado correctamente!!!.', 'success');
-      } else {
-        $scope.ShowToast('Fecha no valida, intente de nuevo.', 'danger');
-      }
-    };
-
-    //me lo traigo del diskete de guardar
     $scope.UpdateDateAndRP = function (Empresa) {
       const result = removeDataValues(Empresa);
-      console.log("result");
-      console.log(result);
-
-      //validar fecha
-      if (tipoDeFechaValido(result.cancelDate)) {
-        EmpresasXEmpresasFactory.patchCancelDate(result)
-          .then(function (respuesta) {
-            var data = respuesta.data;
-            // console.log(data.success);
-            var respuestaExitosa = data.success === 1;
-            if (respuestaExitosa) {
-              $scope.ShowToast(' Fecha cambio correctamente.', 'success');
-            }
-          });
+      if (tipoDeCambioValido(result.TipoCambioRP)) {
+        if (tipoDeFechaValido(result.cancelDate)) {
+          EmpresasXEmpresasFactory.patchCancelDate(result)
+            .then(function (respuesta) {
+              var data = respuesta.data;
+              // console.log(data.success);
+              var respuestaExitosa = data.success === 1;
+              if (respuestaExitosa) {
+                $scope.ShowToast(' Fecha de cambio correctamente.', 'success');
+              }
+            });
+        } else {
+          $scope.ShowToast('Fecha no valido, intente de nuevo.', 'danger');
+        }
       } else {
-        $scope.ShowToast('Fecha no valido, intente de nuevo :(   .', 'danger');
+        $scope.ShowToast('Favor de agregar un Tipo de Cambio', 'danger');
       }
     };
   };
