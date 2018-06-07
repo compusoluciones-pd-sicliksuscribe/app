@@ -11,12 +11,7 @@
     };
 
     const getFechaDisplay = function (cancelDate) {
-      console.log("fecha bien?");
       const cancelDateShort = new Date(cancelDate);
-      // console.log(cancelDateShort);
-      var result = (cancelDateShort.getMonth());// + 1) + '/' + getDate() + '/' + empresa.getFullYear());
-      console.log(result);
-      // const result = "hola";
       return cancelDateShort;
     };
 
@@ -28,15 +23,8 @@
           var empresas = data.data;
           if (respuestaExitosa) {
             var empresasConFormato = empresas.map(function (empresa) {
-              console.log("1");
-              console.log(empresa.FechaActivo);
-              
               empresa.FechaActivo = new Date(empresa.FechaActivo);
-              console.log("2");
-              console.log(empresa.FechaActivo);
-              // empresa.cancelDate = empresa.cancelDate.getMonth() + empresa.cancelDate.getFullYear() + empresa.cancelDate.getDate() + empresa.cancelDate.getFullYear();// getFechaDisplay(empresa);
               empresa.cancelDate = getFechaDisplay(empresa.cancelDate);
-              // console.log("fecha acomodada ", empresa.cancelDate);
               return empresa;
             });
             $scope.Empresas = empresasConFormato;
@@ -150,7 +138,6 @@
       if (tipoDeFechaValido(Empresa.cancelDate)) {
         if (tipoDeCambioValido(Empresa.TipoCambioRP)) {
           var datosDePeticion = prepararDatosDePeticion(Empresa);
-
           EmpresasXEmpresasFactory.postExchangeRate(datosDePeticion)
             .then(function (respuesta) {
               var data = respuesta.data;
@@ -180,12 +167,9 @@
       if (tipoDeCambioValido(result.TipoCambioRP)) {
 
         if (tipoDeFechaValido(result.cancelDate)) {
-          console.log("la fecha correcta sin nada es ", Empresa.cancelDate);
-          console.log(Empresa);
           EmpresasXEmpresasFactory.patchCancelDate(result)
             .then(function (respuesta) {
               var data = respuesta.data;
-              // console.log(data.success);
               var respuestaExitosa = data.success === 1;
               if (respuestaExitosa) {
                 $scope.ShowToast(' Fecha de cambio correctamente.', 'success');
@@ -199,8 +183,6 @@
       }
     };
   };
-
-
 
   const removeDataValues = function (Empresa) {
     const dataValues = Object.assign({}, Empresa);
