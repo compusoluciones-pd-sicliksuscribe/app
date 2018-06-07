@@ -1,4 +1,5 @@
 (function () {
+
   var EmpresasRPController = function ($scope, $log, $cookies, $location, $uibModal, $filter, EmpresasXEmpresasFactory, NivelesDistribuidorFactory, $routeParams) {
     $scope.MostrarMensajeError = false;
     $scope.Empresas = [];
@@ -9,6 +10,16 @@
       $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
     };
 
+    const getFechaDisplay = function (cancelDate) {
+      console.log("fecha bien?");
+      const cancelDateShort = new Date(cancelDate);
+      // console.log(cancelDateShort);
+      var result = (cancelDateShort.getMonth());// + 1) + '/' + getDate() + '/' + empresa.getFullYear());
+      console.log(result);
+      // const result = "hola";
+      return cancelDateShort;
+    };
+
     var obtenerEmpresas = function () {
       EmpresasXEmpresasFactory.getExchangeRateByIdEmpresa($routeParams.IdEmpresa)
         .then(function (respuesta) {
@@ -17,7 +28,15 @@
           var empresas = data.data;
           if (respuestaExitosa) {
             var empresasConFormato = empresas.map(function (empresa) {
+              console.log("1");
+              console.log(empresa.FechaActivo);
+              
               empresa.FechaActivo = new Date(empresa.FechaActivo);
+              console.log("2");
+              console.log(empresa.FechaActivo);
+              // empresa.cancelDate = empresa.cancelDate.getMonth() + empresa.cancelDate.getFullYear() + empresa.cancelDate.getDate() + empresa.cancelDate.getFullYear();// getFechaDisplay(empresa);
+              empresa.cancelDate = getFechaDisplay(empresa.cancelDate);
+              // console.log("fecha acomodada ", empresa.cancelDate);
               return empresa;
             });
             $scope.Empresas = empresasConFormato;
@@ -127,7 +146,7 @@
     };
 
     $scope.ActualizarRP = function (Empresa) {
-      console.log(Empresa);
+      console.log(Empresa.cancelDate);
       if (tipoDeFechaValido(Empresa.cancelDate)) {
         if (tipoDeCambioValido(Empresa.TipoCambioRP)) {
           var datosDePeticion = prepararDatosDePeticion(Empresa);
@@ -156,9 +175,13 @@
     };
 
     $scope.UpdateDateAndRP = function (Empresa) {
+      console.log(Empresa.cancelDate);
       const result = removeDataValues(Empresa);
       if (tipoDeCambioValido(result.TipoCambioRP)) {
+
         if (tipoDeFechaValido(result.cancelDate)) {
+          console.log("la fecha correcta sin nada es ", Empresa.cancelDate);
+          console.log(Empresa);
           EmpresasXEmpresasFactory.patchCancelDate(result)
             .then(function (respuesta) {
               var data = respuesta.data;
@@ -176,6 +199,8 @@
       }
     };
   };
+
+
 
   const removeDataValues = function (Empresa) {
     const dataValues = Object.assign({}, Empresa);
