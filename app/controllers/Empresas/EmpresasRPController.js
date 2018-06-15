@@ -1,5 +1,4 @@
 (function () {
-
   var EmpresasRPController = function ($scope, $log, $cookies, $location, $uibModal, $filter, EmpresasXEmpresasFactory, NivelesDistribuidorFactory, $routeParams) {
     $scope.MostrarMensajeError = false;
     $scope.Empresas = [];
@@ -11,8 +10,14 @@
     };
 
     const getFechaDisplay = function (cancelDate) {
-      const cancelDateShort = new Date(cancelDate);
-      return cancelDateShort;
+      console.log(cancelDate);
+      let result = new Date(cancelDate);
+      console.log(result);
+      if (!cancelDate) {
+        result = 'dd/mm/aaaa';
+        return result;
+      }
+      return result;
     };
 
     var obtenerEmpresas = function () {
@@ -134,7 +139,7 @@
     };
 
     $scope.ActualizarRP = function (Empresa) {
-      console.log(Empresa.cancelDate);
+      // console.log(Empresa.cancelDate);
       if (tipoDeFechaValido(Empresa.cancelDate)) {
         if (tipoDeCambioValido(Empresa.TipoCambioRP)) {
           var datosDePeticion = prepararDatosDePeticion(Empresa);
@@ -162,21 +167,25 @@
     };
 
     $scope.UpdateDateAndRP = function (Empresa) {
-      console.log(Empresa.cancelDate);
       const result = removeDataValues(Empresa);
       if (tipoDeCambioValido(result.TipoCambioRP)) {
-
+        // console.log("tipo de cambio valido");
         if (tipoDeFechaValido(result.cancelDate)) {
+          // console.log("tipo de fecha valido");
           EmpresasXEmpresasFactory.patchCancelDate(result)
             .then(function (respuesta) {
+              // console.log("respuesta ", respuesta);
+
               var data = respuesta.data;
               var respuestaExitosa = data.success === 1;
+              // console.log("respuesta exitosa ", respuestaExitosa);
               if (respuestaExitosa) {
-                $scope.ShowToast(' Fecha de cambio correctamente.', 'success');
-              }
+                // console.log("deberia de ver el alert del cambio correcto de fecha");
+                $scope.ShowToast(' Fecha de cambio correcta.', 'success');
+              } else $scope.ShowToast('ERROR', 'danger');
             });
         } else {
-          $scope.ShowToast('Fecha no valido, intente de nuevo.', 'danger');
+          $scope.ShowToast('Fecha no valida, intente de nuevo.', 'danger');
         }
       } else {
         $scope.ShowToast('Favor de agregar un Tipo de Cambio', 'danger');
