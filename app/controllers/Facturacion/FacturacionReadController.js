@@ -151,7 +151,7 @@
             if (result.success === 1) {
               $scope.ShowToast('Factura timbrada.', 'success');
             } else {
-              $scope.ShowToast('Problemas de conexión con el servicio, intenta más tarde.', 'danger');
+              $scope.ShowToast(result.message, 'danger');
             }
             $scope.pedidosSeleccionados = [];
             $scope.init();

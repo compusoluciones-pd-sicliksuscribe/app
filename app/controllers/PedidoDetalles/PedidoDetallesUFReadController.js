@@ -8,6 +8,19 @@
     $scope.error = false;
     $scope.Distribuidor = {};
     $scope.currentDistribuidor = $cookies.getObject('currentDistribuidor');
+    const paymentMethods = {
+      CREDIT_CARD: 1,
+      CS_CREDIT: 2,
+      PAYPAL: 3,
+      PREPAY: 4
+    };
+    const makers = {
+      MICROSOFT: 1,
+      AUTODESK: 2,
+      COMPUSOLUCIONES: 3,
+      HP: 4,
+      APERIO: 5
+    };
 
     const error = function (error) {
       $scope.ShowToast(!error ? 'Ha ocurrido un error, intentelo mas tarde.' : error.message, 'danger');
@@ -26,6 +39,51 @@
         });
     };
 
+    const getPaymentMethods = function (id) {
+      let paymentMethod = '';
+      switch (id) {
+        case paymentMethods.CREDIT_CARD:
+          paymentMethod = 'Tarjeta';
+          break;
+        case paymentMethods.CS_CREDIT:
+          paymentMethod = 'Crédito';
+          break;
+        case paymentMethods.PAYPAL:
+          paymentMethod = 'Paypal';
+          break;
+        case paymentMethods.PREPAY:
+          paymentMethod = 'Transferencia';
+          break;
+        default:
+          paymentMethod = 'Metodo de pago incorrecto.';
+      }
+      return paymentMethod;
+    };
+
+    const getMakers = function (id) {
+      let maker = '';
+      switch (id) {
+        case makers.MICROSOFT:
+          maker = 'Microsoft';
+          break;
+        case makers.AUTODESK:
+          maker = 'Autodesk';
+          break;
+        case makers.COMPUSOLUCIONES:
+          maker = 'Compusoluciones';
+          break;
+        case makers.APERIO:
+          maker = 'Aperio';
+          break;
+        case makers.HP:
+          maker = 'HP';
+          break;
+        default:
+          maker = null;
+      }
+      return maker;
+    };
+
     const getOrderDetails = function (validate) {
       return PedidoDetallesFactory.getPedidoDetallesUf($scope.currentDistribuidor.IdEmpresa)
         .then(function (result) {
@@ -33,6 +91,8 @@
             // console.log(' result.data.data' + JSON.stringify(result.data.data));
             $scope.PedidoDetalles = result.data.data;
             $scope.PedidoDetalles.forEach(function (elem) {
+              elem.Forma = getPaymentMethods(elem.IdFormaPago);
+              elem.NombreFabricante = getMakers(elem.IdFabricante);
               elem.Productos.forEach(function (item) {
                 if (item.PrecioUnitario == null) $scope.error = true;
               });

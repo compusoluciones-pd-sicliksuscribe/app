@@ -189,6 +189,16 @@
         }
       })
 
+      .when('/Monitor/uf', {
+        controller: 'MonitorReadUFController', templateUrl: 'app/views/PedidoDetalles/MonitorReadUF.html',
+        resolve: {
+          'check': function ($location, $cookies) {
+            var Session = $cookies.getObject('Session');
+            if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6 || Session.IdTipoAcceso === 7)) { $location.path('/404'); }
+          }
+        }
+      })
+
       .when('/MonitorPagos', {
         controller: 'MonitorPagos', templateUrl: 'app/views/PedidoDetalles/MonitorPagos.html',
         resolve: {

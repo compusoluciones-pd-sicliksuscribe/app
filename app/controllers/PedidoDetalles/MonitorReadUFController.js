@@ -1,17 +1,17 @@
 (function () {
-  var MonitorReadController = function ($scope, $log, $cookies, $location, EmpresasXEmpresasFactory, PedidoDetallesFactory, $uibModal, $filter, FabricantesFactory, PedidosFactory, EmpresasFactory, UsuariosFactory) {
+  var MonitorReadUFController = function ($scope, $log, $cookies, $location, EmpresasXEmpresasFactory, PedidoDetallesFactory, $uibModal, $filter, FabricantesFactory, PedidosFactory, EmpresasFactory, UsuariosFactory) {
     $scope.EmpresaSelect = 0;
     var Params = {};
     $scope.form = {};
     $scope.form.habilitar = false;
     $scope.Vacio = 0;
-    $scope.Pedidos = {};
     $scope.orders = false;
     $scope.BuscarProductos = {};
     $scope.Contrato = {};
     $scope.Contactos = [];
     $scope.Renovar = {};
     $scope.SessionCookie = $cookies.getObject('Session');
+    $scope.currentDistribuidor = $cookies.getObject('currentDistribuidor');
 
     $scope.init = function () {
       $scope.CheckCookie();
@@ -55,7 +55,23 @@
         });
     };
 
-    const getContactUsers = function () {
+    const getOrderPerCustomerTuClick = function (customer) {
+      PedidoDetallesFactory.getOrderPerCustomerTuClick(Params)
+        .then(function (result) {
+          if (result.status === 204) {
+            $scope.Vacio = 0;
+            $scope.Pedidos = {};
+          } else if (result.status === 200) {
+            $scope.Pedidos = result.data.data;
+            $scope.Vacio = 1;
+          }
+        })
+        .catch(function (result) {
+          $scope.ShowToast(result.data.message, 'danger');
+        });
+    };
+
+    const getContactUsersClick = function () {
       UsuariosFactory.getUsuariosContacto($scope.EmpresaSelect)
         .then(result => {
           $scope.Contactos = result.data.data;
@@ -63,14 +79,31 @@
         });
     };
 
+    const getContactUsersTuClick = function () {
+      const IdEmpresaUsuarioFinal = $cookies.getObject('Session').IdEmpresa;
+      UsuariosFactory.getUsuariosContactoTuClick(IdEmpresaUsuarioFinal, $scope.currentDistribuidor.IdEmpresa)
+        .then(result => {
+          $scope.Contactos = result.data.data;
+          $scope.Renovar = {};
+        });
+    }
+
+    const getContactUsers = function () {
+      if ($scope.currentDistribuidor) {
+        getContactUsersTuClick();
+      } else {
+        getContactUsersClick();
+      }
+    };
+
     const renewContract = function (contractData) {
-      PedidosFactory.renewContract(contractData)
+      PedidosFactory.renewContractTuClick(contractData, $scope.currentDistribuidor.IdEmpresa)
         .then(result => {
           $scope.ShowToast(result.data.message, 'success');
           $scope.ActualizarMenu();
           $scope.addPulseCart();
           setTimeout($scope.removePulseCart, 9000);
-          $location.path('/Carrito');
+          $location.path('uf/Carrito');
         })
         .catch(result => {
           $scope.ShowToast(result.data.message, 'danger');
@@ -81,8 +114,10 @@
 
     $scope.ActualizarMonitor = function () {
       Params.IdEmpresaUsuarioFinal = $scope.EmpresaSelect;
-      if ($scope.EmpresaSelect === null || $scope.EmpresaSelect === undefined) {
+      if (($scope.EmpresaSelect === null || $scope.EmpresaSelect === undefined || $scope.EmpresaSelect === 0) && $scope.currentDistribuidor) {
         Params.IdEmpresaUsuarioFinal = $cookies.getObject('Session').IdEmpresa;
+        Params.IdDistribuidorTuClick = $scope.currentDistribuidor.IdEmpresa;
+        $scope.EmpresaSelect = $cookies.getObject('Session').IdEmpresa;
       }
       Params.IdFabricante = $scope.BuscarProductos.IdFabricante;
       if (Params.IdFabricante === 1) {
@@ -92,7 +127,10 @@
       //   $scope.BuscarProductos.IdFabricante = null;
       // }
       Params.AutoRenovable = $scope.Contrato.tipo || 'all';
-      if (Params.IdFabricante && $scope.EmpresaSelect) {
+      if (Params.IdFabricante && $scope.EmpresaSelect && Params.IdDistribuidorTuClick) {
+        getOrderPerCustomerTuClick(Params);
+        if (Params.IdFabricante === 2) getContactUsers();
+      } else if (Params.IdFabricante && $scope.EmpresaSelect && (!Params.IdDistribuidorTuClick)) {
         getOrderPerCustomer(Params);
         if (Params.IdFabricante === 2) getContactUsers();
       }
@@ -305,7 +343,7 @@
       if ($scope.Renovar.IdUsuarioContacto) {
         const payload = {
           IdContrato: $scope.Renovar.IdContrato,
-          IdEmpresaUsuarioFinal: $scope.EmpresaSelect,
+          IdEmpresaUsuarioFinal: $scope.SessionCookie.IdEmpresa,
           IdUsuarioContacto: $scope.Renovar.IdUsuarioContacto
         };
         renewContract(payload);
@@ -339,7 +377,7 @@
     };
   };
 
-  MonitorReadController.$inject = ['$scope', '$log', '$cookies', '$location', 'EmpresasXEmpresasFactory', 'PedidoDetallesFactory', '$uibModal', '$filter', 'FabricantesFactory', 'PedidosFactory', 'EmpresasFactory', 'UsuariosFactory'];
+  MonitorReadUFController.$inject = ['$scope', '$log', '$cookies', '$location', 'EmpresasXEmpresasFactory', 'PedidoDetallesFactory', '$uibModal', '$filter', 'FabricantesFactory', 'PedidosFactory', 'EmpresasFactory', 'UsuariosFactory'];
 
-  angular.module('marketplace').controller('MonitorReadController', MonitorReadController);
+  angular.module('marketplace').controller('MonitorReadUFController', MonitorReadUFController);
 }());

@@ -325,7 +325,7 @@
            // $location.path('/facturas-pendientes/');
             init();
           } else {
-            $scope.ShowToast('Problemas de conexión con el servicio, intenta más tarde. (timbrarFactura)', 'danger');
+            $scope.ShowToast(result.message, 'danger');
           }
         })
         .error(function (data, status, headers, config) {
