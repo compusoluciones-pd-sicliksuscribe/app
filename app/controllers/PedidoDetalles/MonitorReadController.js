@@ -81,7 +81,7 @@
 
     $scope.ActualizarMonitor = function () {
       Params.IdEmpresaUsuarioFinal = $scope.EmpresaSelect;
-      if ($scope.EmpresaSelect === 0) {
+      if ($scope.EmpresaSelect === null || $scope.EmpresaSelect === undefined) {
         Params.IdEmpresaUsuarioFinal = $cookies.getObject('Session').IdEmpresa;
       }
       Params.IdFabricante = $scope.BuscarProductos.IdFabricante;
@@ -98,8 +98,12 @@
       }
     };
 
+
     $scope.ActualizarCantidad = function (IdPedidoDetalle) {
       $scope.Pedidos.forEach(function (Pedido) {
+        if (Pedido.IdPedidoDetalle == IdPedidoDetalle) {
+          if (Pedido.IdTipoProducto !== 6) Pedido.MostrarCantidad = !Pedido.MostrarCantidad;
+        }
         Pedido.Detalles.forEach(function (Detalles) {
           if (Detalles.IdPedidoDetalle === IdPedidoDetalle) {
             Detalles.MostrarCantidad = !Detalles.MostrarCantidad;
@@ -284,8 +288,12 @@
           $scope.ActualizarMonitor();
           $scope.form.habilitar = false;
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(function (error) {
+          $scope.ShowToast(error.data.message, 'danger');
+          $log.log('data error: ' + error.data.message + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
+          $scope.form.habilitar = true;
+          $scope.ActualizarMonitor();
+          $scope.form.habilitar = false;
         });
     };
 

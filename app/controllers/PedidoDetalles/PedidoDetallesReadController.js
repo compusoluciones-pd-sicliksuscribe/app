@@ -9,7 +9,7 @@
       CREDIT_CARD: 1,
       CS_CREDIT: 2,
       PAYPAL: 3,
-      CASH: 4
+      PREPAY: 4
     };
     const makers = {
       MICROSOFT: 1,
@@ -28,6 +28,7 @@
       return EmpresasFactory.getEmpresas()
         .then(function (result) {
           $scope.Distribuidor = result.data[0];
+          $scope.Distribuidor.MonedaPago = 'Pesos';
         })
         .catch(function (result) {
           error(result.data);
@@ -47,7 +48,7 @@
         case paymentMethods.PAYPAL:
           paymentMethod = 'Paypal';
           break;
-        case paymentMethods.CASH:
+        case paymentMethods.PREPAY:
           paymentMethod = 'Transferencia';
           break;
         default:
@@ -85,6 +86,8 @@
         .then(function (result) {
           $scope.PedidoDetalles = result.data.data;
           $scope.PedidoDetalles.forEach(function (elem) {
+            $scope.CreditoValido = 1;
+            elem.hasCredit = 1;
             elem.Forma = getPaymentMethods(elem.IdFormaPago);
             elem.NombreFabricante = getMakers(elem.IdFabricante);
             elem.Productos.forEach(function (item) {
@@ -98,7 +101,9 @@
             $scope.ValidarFormaPago();
           }
         })
-        .then(validarCarrito)
+        .then(function () {
+          if ($scope.isPayingWithCSCredit()) validarCarrito();
+        })
         .catch(function (result) {
           error(result.data);
           $location.path('/Productos');
@@ -111,8 +116,6 @@
         return PedidoDetallesFactory.getValidarCarrito()
         .then(function (result) {
           $scope.PedidoDetalles.forEach(function (item) {
-            $scope.CreditoValido = 1;
-            item.hasCredit = 1;
             result.data.data.forEach(function (user) {
               if (item.IdEmpresaUsuarioFinal === user.IdEmpresaUsuarioFinal && !user.hasCredit) {
                 $scope.CreditoValido = 0;
@@ -145,8 +148,9 @@
     };
 
     var CambiarMoneda = function (tipoMoneda) {
-      var moneda = { MonedaPago: tipoMoneda || 'Pesos' };
-      EmpresasFactory.putEmpresaCambiaMoneda(moneda)
+      $scope.Distribuidor.MonedaPago = tipoMoneda || 'Pesos';
+      const MonedaPago = $scope.Distribuidor.MonedaPago;
+      EmpresasFactory.putEmpresaCambiaMoneda({ MonedaPago })
       .then(function (result) {
         if (result.data.success) {
           $scope.ShowToast(result.data.message, 'success');
@@ -173,22 +177,19 @@
         order.Productos.forEach(function (product, indexProduct) {
           if (product.IdPedidoDetalle === PedidoDetalle.IdPedidoDetalle) {
             $scope.PedidoDetalles[indexOrder].Productos.splice(indexProduct, 1);
-            validarCarrito();
           }
           if ($scope.PedidoDetalles[indexOrder].Productos.length === 0) $scope.PedidoDetalles.splice(indexOrder, 1);
         });
       });
-
-      PedidoDetallesFactory.deletePedidoDetalles(PedidoDetalle.IdPedidoDetalle)
+      return PedidoDetallesFactory.deletePedidoDetalles(PedidoDetalle.IdPedidoDetalle)
         .success(function (PedidoDetalleResult) {
           if (!PedidoDetalleResult.success) {
             $scope.ShowToast(PedidoDetalleResult.message, 'danger');
-            getOrderDetails(true);
           } else {
             $scope.ActualizarMenu();
-            validarCarrito();
             $scope.ShowToast(PedidoDetalleResult.message, 'success');
           }
+          return getOrderDetails(true);
         })
         .error(function (data, status, headers, config) {
           $scope.ShowToast('No pudimos quitar el producto seleccionado. Intenta de nuevo más tarde.', 'danger');
@@ -251,11 +252,13 @@
     };
 
     $scope.isPayingWithCSCredit = function () {
-      return $scope.Distribuidor.IdFormaPagoPredilecta === paymentMethods.CS_CREDIT;
+      const IdFormaPago = Number($scope.Distribuidor.IdFormaPagoPredilecta);
+      return IdFormaPago === paymentMethods.CS_CREDIT;
     };
 
     $scope.isPayingWithCreditCard = function () {
-      return $scope.Distribuidor.IdFormaPagoPredilecta === paymentMethods.CREDIT_CARD;
+      const IdFormaPago = Number($scope.Distribuidor.IdFormaPagoPredilecta);
+      return IdFormaPago === paymentMethods.CREDIT_CARD;
     };
 
     $scope.hasProtectedExchangeRate = function () {
@@ -280,11 +283,11 @@
           $scope.PedidoDetalles.forEach(function (order, indexOrder) {
             if (pedido.IdPedido === order.IdPedido) {
               $scope.PedidoDetalles.splice(indexOrder, 1);
-              validarCarrito();
+              if ($scope.isPayingWithCSCredit()) validarCarrito();
             }
           });
           $scope.ActualizarMenu();
-          validarCarrito();
+          // validarCarrito();
           $scope.ShowToast(result.data.message, 'success');
         })
         .catch(function (result) {
@@ -335,7 +338,7 @@
     };
 
     $scope.next = function () {
-      if ($scope.Distribuidor.IdFormaPagoPredilecta === 2) validarCarrito();
+      if ($scope.isPayingWithCSCredit()) validarCarrito();
       let next = true;
       if (!$scope.PedidoDetalles || $scope.PedidoDetalles.length === 0) next = false;
       else {

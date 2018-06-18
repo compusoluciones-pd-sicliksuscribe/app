@@ -459,6 +459,7 @@
 	<script type="text/javascript" src="app/controllers/Usuarios/UsuariosUpdateController.js"></script>
 	<script type="text/javascript" src="app/services/UsuariosFactory.js"></script>
 	<script type="text/javascript" src="app/controllers/Empresas/EmpresasCreditoUpdateController.js"></script>
+	<script type="text/javascript" src="app/controllers/Empresas/EmpresasUpdateMicrosoftDomainController.js"></script>
 	<script type="text/javascript" src="app/controllers/Empresas/EmpresasCreateController.js"></script>
 	<script type="text/javascript" src="app/controllers/Empresas/EmpresasReadController.js"></script>
 	<script type="text/javascript" src="app/controllers/Empresas/EmpresasUpdateController.js"></script>
@@ -553,6 +554,8 @@
 		}
 
 		function completeCallback(resultIndicator, sessionVersion) {
+			console.log(angular.element(document.getElementById('divComprar')).scope());
+			console.log(angular.element(document.getElementById('divComprar')));
 			angular.element(document.getElementById('divComprar')).scope().ComprarConTarjeta(resultIndicator, sessionVersion);
 		}
 	</script>

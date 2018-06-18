@@ -21,13 +21,20 @@
                 <option ng-selected="true" value="">Todos los tipos</option>
             </select>
         </div>
+        
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <br>
+                <div class="alert alert-warning">
+                    <b>Nota importante *</b> Si requieres hacer una compra de suscripciones anuales de productos de Microsoft, comunícate con tu agente de ventas.
+                </div>
+        </div>
 
     </div>
 
     <div id="TopPage"></div>
 
     <br><br><br>
-
+    
     <div ng-show="!(Productos.length > 0)">
         <h4>{{Mensaje}}</h4>
     </div>
@@ -128,7 +135,7 @@
                                     <form name="frmCantidad" id="frmCantidad">
 
                                         <div class="form-group">
-                                            <label for="Cantidad">* ¿Cuántos quieres?</label> a patir de {{Producto.CantidadMinima}}
+                                            <label for="Cantidad">* ¿Cuántos quieres?</label> a partir de {{Producto.CantidadMinima}}
                                             a {{Producto.CantidadMaxima}}
 
                                             <div class="input-group">
@@ -164,8 +171,9 @@
                                                     <option ng-selected="true" value="">Selecciona un cliente...</option>
                                                 </select>
                                             </div>
-                                            <br>
-                                            <p style="color:red" ng-hide="Producto.IdFabricante === 1 || Producto.TieneContrato">*No cuentas con un contrato para este producto.</p>
+                                            <br>                                
+                                            <label style="color:red" for="DominioMicrosoft" ng-show="Producto.IdFabricante === 1 && usuariosSinDominio[Producto.IdEmpresaUsuarioFinal] === false">*No cuentas con un Dominio de Microsoft para este producto.</label>&nbsp;                                            
+                                            <p style="color:red" ng-hide="Producto.IdFabricante === 1 || Producto.TieneContrato">*No cuentas con un contrato para este producto.</p>                                                                                    
                                             <label for="contrato" ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2 && Producto.TieneContrato">* Contrato</label>
                                             <div class="input-group" ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2 && Producto.TieneContrato && Producto.IdAccionAutodesk === 1">
                                                 <span class="input-group-addon green white">
@@ -197,7 +205,7 @@
                                                     ng-required="!Producto.IdPedidoContrato">
                                                     <option ng-selected="true" value="">Selecciona un contacto...</option>
                                                 </select>
-                                            </div>
+                                            </div>                                    
                                             <div ng-show="Producto.MostrarMensajeP" style="color:red;">
 
                                                 <label>* No cuentas con suscripciones para este producto.</label>&nbsp;
@@ -274,9 +282,12 @@
                                         <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
                                             <button type="button" ng-show="0" ng-click="AgregarGuardados(Producto.IdProducto)" class="btn btn-link btn-block favoriteOption"><span class="glyphicon glyphicon-star"></span> Agregar a favoritos</span></button>
                                         </div>
-                                        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6" ng-show="SessionCookie.IdTipoAcceso === 1 || SessionCookie.IdTipoAcceso === 2 || SessionCookie.IdTipoAcceso === 3 || SessionCookie.IdTipoAcceso === 4">
-                                            <button class="btn btn-success btn-block addOption" ng-click="AgregarCarrito(Producto, Producto.Cantidad, Producto.contratos[0].IdPedido)" ng-disabled="!frmCantidad.$valid">Agregar al carrito</md-button>
+                                        <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-show="SessionCookie.IdTipoAcceso === 1 || SessionCookie.IdTipoAcceso === 2 || SessionCookie.IdTipoAcceso === 3 || SessionCookie.IdTipoAcceso === 4">
+                                                <button  ng-click="updateEnterprise(Producto)" ng-show="Producto.IdFabricante === 1 && usuariosSinDominio[Producto.IdEmpresaUsuarioFinal] === false" class="btn btn-primary updateDomain" style="float: center;">Asignar Dominio Microsoft</button>
+                                            <button class="btn btn-success addOption" ng-click="AgregarCarrito(Producto, Producto.Cantidad, Producto.contratos[0].IdPedido)" ng-disabled="!frmCantidad.$valid || Producto.IdFabricante === 1 && usuariosSinDominio[Producto.IdEmpresaUsuarioFinal] === false" style="float: center;">Agregar al carrito</md-button>       
                                         </div>
+
+                                        
                                     </div>
                                 </div>
                             </div>

@@ -38,7 +38,7 @@
 
     factory.postEmpresa = function (Empresa) {
       factory.refreshToken();
-      return $http.post($rootScope.API + 'Empresas', Empresa);
+      return $http.post($rootScope.API + 'enterprise', Empresa);
     };
 
     factory.postEmpresaMicrosoft = function (ObjMicrosoft) {
@@ -125,6 +125,16 @@
     factory.getClientes = function () {
       factory.refreshToken();
       return $http.get($rootScope.API + 'enterprise/clients');
+    };
+
+    factory.putEmpresa = function (Empresa) {
+      factory.refreshToken();
+      return $http.put($rootScope.API + 'Empresas', Empresa);
+    };
+
+    factory.changeDomain = function (enterpriseId, Enterprise) {
+      factory.refreshToken();
+      return $http.put($rootScope.API + 'enterprises/microsoft-domains/' + enterpriseId, Enterprise);
     };
 
     return factory;

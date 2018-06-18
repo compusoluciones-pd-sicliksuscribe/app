@@ -37,11 +37,11 @@
 				<label for="" class="formaPago">Forma de pago para {{Distribuidor.NombreEmpresa}}: </label>
 				<div class="radio" style="margin-left:20px">
 					<div>
-						<input type="radio" name="TipoPago" value="2" checked="checked" ng-model="Distribuidor.IdFormaPagoPredilecta" ng-change="ActualizarFormaPago(2);"> Crédito CompuSoluciones
+						<input type="radio" name="TipoPago" value="2" ng-checked="isPayingWithCSCredit()" ng-model="Distribuidor.IdFormaPagoPredilecta" ng-click="ActualizarFormaPago(2);"> Crédito CompuSoluciones
 					</div>
 					<div>
-						<input type="radio" name="TipoPago" value="1" ng-disabled="ValidarFormaPago()" ng-model="Distribuidor.IdFormaPagoPredilecta"
-							ng-change="ActualizarFormaPago(1);"> Tarjeta bancaria (Solo Pesos MXN)
+						<input type="radio" name="TipoPago" value="1" ng-checked="isPayingWithCreditCard()" ng-disabled="ValidarFormaPago()" ng-model="Distribuidor.IdFormaPagoPredilecta"
+							ng-click="ActualizarFormaPago(1);"> Tarjeta bancaria (Solo Pesos MXN)
 					</div>
 					<div ng-hide="Distribuidor.Transferencia === 0 || Distribuidor.Transferencia === null">
 						<input type="radio" name="TipoPago" value="4" ng-disabled="ValidarFormaPago()" ng-model="Distribuidor.IdFormaPagoPredilecta"
@@ -52,13 +52,13 @@
 				</div>
 			</div>
 			<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
-				<div class="form-group" ng-hide="isPayingWithCreditCard() || hasProtectedExchangeRate()" >
+				<div class="form-group">
 					<label for="" class="">* ¿Con qué moneda quieres pagarlos?</label>
 					<div class="radio" style="margin-left:20px" >
 						<div>
-							<input type="radio" ng-checked="isPayingWithCSCredit()" name="MonedaPago" ng-change="CambiarMoneda('Pesos')" value="Pesos" ng-model="Distribuidor.MonedaPago">Pesos
+							<input type="radio" ng-checked="Distribuidor.IdFormaPagoPredilecta" name="MonedaPago" ng-change="CambiarMoneda('Pesos')" value="Pesos" ng-model="Distribuidor.MonedaPago">Pesos
 						</div>
-						<div ng-show="validateUSD();">
+						<div ng-if="isPayingWithCSCredit()">
 							<input type="radio" name="MonedaPago"  value="Dólares" ng-model="Distribuidor.MonedaPago" ng-change="CambiarMoneda('Dólares')">Dólares
 						</div>
 					</div>
@@ -103,13 +103,14 @@
 						<label for="IdEmpresaUsuarioFinal">Usuario final:</label> {{ pedido.NombreEmpresa }} <br>
 						<label>Marca de los productos:</label> {{ pedido.NombreFabricante }} <br>
 						<label>Duración del periodo:</label> del {{ pedido.FechaInicio }} al {{ pedido.FechaFin }} <br>
-						<label>Renovación del periodo:</label> {{ pedido.NombreEsquemaRenovacion }} <br>
+						<label>Renovación del periodo:</label> {{ pedido.NombreEsquemaRenovacion }}
 						<div ng-if="pedido.IdFabricante === 2">
 							<label>Contrato: </label> {{ pedido.ContratoBaseAutodesk || 'Nuevo' }} <br>
 							<label>Tipo de orden: </label>
-								<span ng-if="pedido.IdAccionAutodesk !== 4 && !pedido.Renovado">Add-ons</span>
-								<span ng-if="pedido.IdAccionAutodesk !== 4 && pedido.Renovado">Add-ons (Renovación)</span>
-								<span ng-if="pedido.IdAccionAutodesk === 4">Renovación</span>
+							<span ng-if="pedido.IdAccionAutodesk === 1 && !pedido.Renovado">Orden inicial</span>
+							<span ng-if="(pedido.IdAccionAutodesk === 2 || pedido.IdAccionAutodesk === 3) && !pedido.Renovado">Add-On</span>
+							<span ng-if="(pedido.IdAccionAutodesk === 2 || pedido.IdAccionAutodesk === 3) && pedido.Renovado">Add-On (Renovación)</span>
+							<span ng-if="pedido.IdAccionAutodesk === 4">Renovación</span>
 						</div>
 					</div>
 				</div>
@@ -131,8 +132,7 @@
 						<label>Total del pedido:</label>
 						<h5>{{ calcularTotal(pedido.IdPedido) | currency }} {{ pedido.MonedaPago }} </h5>
 						<br>
-
-						<div style="color:red;" ng-show="!pedido.hasCredit">
+						<div style="color:red;" ng-show="!pedido.hasCredit && isPayingWithCSCredit()">
 							<span class="glyphicon glyphicon-warning-sign"></span> <b>Cliente sin crédito suficiente.</b>
 							<br> * <a href="#/Clientes" class="form-group" title="Aumenta su crédito"> Aumenta su crédito </a>
 							<br> * Elimina productos de tu carrito.
@@ -212,7 +212,8 @@
 			</div>
 			<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
 				<div class="">
-					<button id="btnSiguiente" type="button" ng-click="next();" class="btn btn-primary btn-block" ng-if="(!Distribuidor.IdFormaPagoPredilecta || CreditoValido == 0 || error === true )">
+					<button id="btnSiguiente" type="button" ng-click="next();" class="btn btn-primary btn-block"
+						ng-if="(hasProtectedExchangeRate() && Distribuidor.MonedaPago === 'Pesos' || !hasProtectedExchangeRate()) && !error && ((isPayingWithCSCredit() && CreditoValido) || isPayingWithCreditCard())">
             Siguiente
           </button>
 				</div>

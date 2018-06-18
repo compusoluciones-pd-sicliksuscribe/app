@@ -99,7 +99,7 @@
                 <div class="pull-rigth">
                     <label>Empresa* </label>
                     <select name="IdEmpresa" class="form-control" ng-model="Usuario.IdEmpresa" required=""
-                        ng-options="Empresas.IdEmpresa as Empresas.NombreEmpresa + ' ID: ' + Empresas.IdERP for Empresas in selectEmpresas">
+                        ng-options="Empresas.IdEmpresa as Empresas.NombreEmpresa for Empresas in selectEmpresas">
                         <option value="" ng-selected="true">Selecciona una empresa...</option>
                     </select>
                     <div ng-show="frm.$submitted || frm.IdEmpresa.$touched">
@@ -110,6 +110,16 @@
             </div>
             <div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div>
         </div>
+
+        <br>
+        <div class="row" ng-if="Session.IdTipoAcceso != 1">
+            <div class="col-md-8 col-xs-12 col-lg-8" style="padding: none;">
+                <div class="alert alert-warning">
+                    <b>Nota *</b> Si se desea agregar un usuario como contacto (Autodesk) es necesario hacerlo con tipo de acceso "Administrador (Usuario final)" y posteriormente elegir la empresa de la cual será contacto. <br>
+                </div>
+            </div>
+        </div>
+        <br>
         
         <div class="form-group row">
             <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">

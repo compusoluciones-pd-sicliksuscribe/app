@@ -22,23 +22,18 @@
 
             <div class="form-group col-xs-12 col-sm-4 col-md-4 col-lg-4">
                 <div class="pull-rigth">
-                    <label>Dominio Microsoft *</label>
-                    <!--ng-model-onblur ng-model-options="{ updateOn: 'blur' }"-->
-                    <div class="input-group">
-                        
-                    <input name="DominioMicrosoft" type="text" ng-model="Empresa.DominioMicrosoft" ng-pattern="/^[a-zA-Z0-9]*$/" ng-change="change()"
-                    class="form-control" ng-model-onblur ng-model-options="{ updateOn: 'blur' }" placeholder="" size="255" ng-maxlength="255" required="" />
-                    
-                        <span class="input-group-addon">.onmicrosoft.com</span>
-                        
+                    <label>Dominio Microsoft (Obligatorio para compras con Microsoft).</label>
+                    <div class="input-group">                                            
+                        <input name="DominioMicrosoft" type="text" ng-model="Empresa.DominioMicrosoft" ng-pattern="/^[a-zA-Z0-9]*$/" ng-change="change()"
+                        class="form-control" ng-model-onblur ng-model-options="{ updateOn: 'blur' }" placeholder="" size="255" ng-maxlength="255" />
+
+                        <span class="input-group-addon">.onmicrosoft.com</span>        
                     </div>
                     
                     <b style="color:red" ng-show="frm.DominioMicrosoft.$invalid && !frm.DominioMicrosoft.$pristine" class="help-block">{{Empresa.MensajeDominio}}</b>
                 </div>
             </div>
-
         </div>
-
 
         <div class="form-group row">
             <div class="form-group col-xs-12 col-sm-4 col-md-4 col-lg-4">
@@ -116,7 +111,7 @@
 
                 <div class="pull-rigth">
                     <label>Nombre *</label>
-                    <input name="Nombre" type="text" ng-model="Empresa.NombreContacto" class="form-control" ng-pattern="/[a-zA-Z]$/" placeholder="" size="255" ng-maxlength="50"
+                    <input name="Nombre" type="text" ng-model="Empresa.Nombre" class="form-control" ng-pattern="/[a-zA-Z]$/" placeholder="" size="255" ng-maxlength="50"
                     required="" />
                     <b style="color:red" ng-show="frm.Nombre.$invalid && !frm.Nombre.$pristine" class="help-block">Ingresa un nombre.</b>
                 </div>
@@ -125,7 +120,7 @@
             <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
                 <div class="pull-rigth">
                     <label>Apellidos *</label>
-                    <input name="Apellidos" type="text" ng-model="Empresa.ApellidosContacto" class="form-control" ng-pattern="/[a-zA-Z]$/" placeholder="" size="255" ng-maxlength="80"
+                    <input name="Apellidos" type="text" ng-model="Empresa.ApellidoPaterno" class="form-control" ng-pattern="/[a-zA-Z]$/" placeholder="" size="255" ng-maxlength="80"
                     required="" />
                     <b style="color:red" ng-show="frm.Apellidos.$invalid && !frm.Apellidos.$pristine" class="help-block">Ingresa los apellidos.</b>
                 </div>
@@ -138,7 +133,7 @@
 
                 <div class="pull-rigth">
                     <label>Correo electrónico *</label>
-                    <input name="CorreoElectronico" type="mail" ng-model="Empresa.CorreoContacto" class="form-control" placeholder="" size="255"
+                    <input name="CorreoElectronico" type="mail" ng-model="Empresa.CorreoElectronico" class="form-control" placeholder="" size="255"
                     ng-maxlength="255"   required="" />
                     <b style="color:red" ng-show="frm.CorreoElectronico.$invalid && !frm.CorreoElectronico.$pristine" class="help-block">Ingresa un correo válido.</b>
                 </div>
@@ -156,7 +151,7 @@
                     </div>
                     <div class="form-group col-xs-9 col-sm-9 col-md-9 col-lg-9">
                         <div class="pull-rigth">
-                            <input name="Telefono" type="text" ng-model="Empresa.TelefonoContacto" ui-mask="(999) 999-9999" ui-mask-placeholder ui-mask-placeholder-char="_" class="form-control" placeholder="" size="255" ng-maxlength="255" />
+                            <input name="Telefono" type="text" ng-model="Empresa.Telefono" ui-mask="(999) 999-9999" ui-mask-placeholder ui-mask-placeholder-char="_" class="form-control" placeholder="" size="255" ng-maxlength="255" />
                             <b style="color:red" ng-show="frm.Telefono.$invalid && !frm.Telefono.$pristine" class="help-block">Ingresa un teléfono válido.</b>
                         </div>
                     </div>

@@ -202,6 +202,11 @@
         resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 7)) { $location.path('/404'); } } }
       })
 
+      .when('/Empresa/ActualizarDominio/:IdEmpresa', {
+        controller: 'EmpresasUpdateMicrosoftDomainController', templateUrl: 'app/views/Empresas/EmpresasUpdateMicrosoftDomain.html',
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 2)) { $location.path('/404'); } } }
+      })
+
       .when('/Empresa/:IdEmpresa', {
         controller: 'EmpresasUpdateController', templateUrl: 'app/views/Empresas/EmpresasUpdate.html',
         resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 6)) { $location.path('/404'); } } }
@@ -378,9 +383,9 @@ angular.module('marketplace')
   .run(function ($rootScope, $location, $anchorScroll, $routeParams) {
     $rootScope.rsTitle = 'click suscribe | CompuSoluciones';
     $rootScope.rsVersion = '2.1.1';
-    /* $rootScope.API = 'http://localhost:8080/';
-    $rootScope.MAPI = 'http://localhost:8083/';
-    $rootScope.dominio = 'localhost'; */
+    // $rootScope.API = 'http://localhost:8080/';
+    // $rootScope.MAPI = 'http://localhost:8083/';
+    // $rootScope.dominio = 'localhost';
     $rootScope.API = 'https://pruebas.compusoluciones.com/';
     $rootScope.MAPI = 'http://microsoft-api.us-east-1.elasticbeanstalk.com/';
     $rootScope.dominio = 'clicksuscribe';
@@ -1160,7 +1165,7 @@ angular.module('directives.loading', [])
 
     factory.postEmpresa = function (Empresa) {
       factory.refreshToken();
-      return $http.post($rootScope.API + 'Empresas', Empresa);
+      return $http.post($rootScope.API + 'enterprise', Empresa);
     };
 
     factory.postEmpresaMicrosoft = function (ObjMicrosoft) {
@@ -1247,6 +1252,16 @@ angular.module('directives.loading', [])
     factory.getClientes = function () {
       factory.refreshToken();
       return $http.get($rootScope.API + 'enterprise/clients');
+    };
+
+    factory.putEmpresa = function (Empresa) {
+      factory.refreshToken();
+      return $http.put($rootScope.API + 'Empresas', Empresa);
+    };
+
+    factory.changeDomain = function (enterpriseId, Enterprise) {
+      factory.refreshToken();
+      return $http.put($rootScope.API + 'enterprises/microsoft-domains/' + enterpriseId, Enterprise);
     };
 
     return factory;
@@ -3261,8 +3276,8 @@ angular.module('directives.loading', [])
     };
 
     $scope.change = function () {
-      if (!!$scope.Empresa.DominioMicrosoft) {
-        $scope.Empresa.DominioMicrosoft = $scope.Empresa.DominioMicrosoft.trim();
+      $scope.Empresa.DominioMicrosoft = $scope.Empresa.DominioMicrosoft.trim();
+      if ($scope.Empresa.DominioMicrosoft) {
         EmpresasFactory.revisarDominio($scope.Empresa.DominioMicrosoft)
           .success(function (result) {
             if (result === 'false') {
@@ -3277,10 +3292,6 @@ angular.module('directives.loading', [])
           .error(function (data, status, headers, config) {
             $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
           });
-      } else {
-        $scope.frm.DominioMicrosoft.$pristine = false;
-        $scope.frm.DominioMicrosoft.$invalid = true;
-        $scope.Empresa.MensajeDominio = 'Ingresa un dominio valido.';
       }
     };
 
@@ -3364,7 +3375,6 @@ angular.module('directives.loading', [])
       UsuariosFactory.getCorreo($scope.Empresa)
         .success(function (result) {
           if (result[0].Success == 0) {
-            $scope.Empresa.CorreoContacto = '';
             $scope.AlertaDominio = 'El Correo ya esta registrado, intenta con un correo diferente.';
           } else {
             if (($scope.frm.$invalid || $scope.Empresa.Formulario) == true || $scope.valido == false) {
@@ -3969,6 +3979,106 @@ angular.module('directives.loading', [])
   EmpresasUpdateController.$inject = ['$scope', '$rootScope', '$log', '$location', '$cookies', '$routeParams', 'EmpresasFactory', 'EmpresasXEmpresasFactory', 'EstadosFactory', 'UsuariosFactory'];
 
   angular.module('marketplace').controller('EmpresasUpdateController', EmpresasUpdateController);
+}());
+
+(function () {
+  var EmpresasUpdateMicrosoftDomainController = function ($scope, $log, $cookies, $location, $routeParams, EmpresasFactory, $rootScope) {
+    $scope.Empresa = {};
+    $scope.AlertaDominio = '';
+    $scope.Empresa.IdERP = null;
+    $scope.loading = false;
+    $scope.Empresa.Formulario = false;
+    $scope.valido;
+    $scope.mensajerfc = '';
+    $scope.DominioMicrosoft = true;
+    $scope.usuariosSinDominio = {};
+    const IdEmpresa = $routeParams.IdEmpresa;
+    var Session = {};
+    Session = $cookies.getObject('Session');
+
+    $scope.init = function () {
+      Session = $cookies.getObject('Session');
+      $scope.CheckCookie();
+
+      EmpresasFactory.getClientes()
+      .success(function (Empresa) {
+        const consultaEmpresa = Empresa.data.filter(function (getEnterprise) {
+          if (getEnterprise.IdEmpresa === Number(IdEmpresa)) {
+            $scope.Empresa = getEnterprise;
+            return getEnterprise;
+          };
+          return false;
+        })[0];
+        if (!consultaEmpresa) {
+          $scope.ShowToast('No tienes permisos para editar.', 'danger');
+          $scope.domainCancel();
+        }
+      })
+      .error(function (data, status, headers, config) {
+        $scope.ShowToast('No pudimos cargar la información de tus clientes, por favor intenta de nuevo más tarde.', 'danger');
+
+        $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+      });
+    };
+
+    $scope.init();
+
+    $scope.change = function () {
+      $scope.Empresa.DominioMicrosoft = $scope.Empresa.DominioMicrosoft.trim();
+      if ($scope.Empresa.DominioMicrosoft) {
+        EmpresasFactory.revisarDominio($scope.Empresa.DominioMicrosoft)
+            .success(function (result) {
+              if (result === 'false') {
+                $scope.frm.DominioMicrosoft.$pristine = false;
+                $scope.frm.DominioMicrosoft.$invalid = true;
+                $scope.Empresa.MensajeDominio = 'Ya existe el dominio, Intenta con uno diferente.';
+              } else {
+                $scope.frm.DominioMicrosoft.$pristine = true;
+              }
+            })
+            .error(function (data, status, headers, config) {
+              $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+            });
+      } else {
+        $scope.frm.DominioMicrosoft.$pristine = false;
+        $scope.frm.DominioMicrosoft.$invalid = true;
+        $scope.Empresa.MensajeDominio = 'Ingresa un dominio válido.';
+      }
+    };
+
+    $scope.ActualizarDominio = function () {
+      const enterprise = {
+        DominioMicrosoft: $scope.Empresa.DominioMicrosoft
+      };
+      if ($scope.frm.DominioMicrosoft.$invalid) {
+        $scope.frm.DominioMicrosoft.$pristine = false;
+        $scope.Empresa.MensajeDominio = 'Ingresa un Dominio Válido.';
+      } else {
+        EmpresasFactory.changeDomain($scope.Empresa.IdEmpresa, enterprise)
+        .success(function (result) {
+          Session.NombreEmpresa = $scope.Empresa.NombreEmpresa;
+          $cookies.putObject('Session', Session, { secure: $rootScope.secureCookie });
+          $scope.ActualizarDatosSession();
+          $location.path('/index');
+          $scope.ShowToast('Empresa Actualizada', 'success');
+        })
+        .error(function (data, status, headers, config) {
+          $scope.ShowToast(data.message, 'danger');
+        });
+      }
+    };
+
+    $scope.EmpresaCancel = function () {
+      $location.path('/Clientes');
+    };
+    $scope.domainCancel = function () {
+      $location.path('Productos/');
+    };
+  };
+
+  EmpresasUpdateMicrosoftDomainController.$inject = ['$scope', '$log', '$cookies', '$location', '$routeParams', 'EmpresasFactory', 'EstadosFactory', 'UsuariosFactory', '$cookies', '$rootScope'];
+
+  angular.module('marketplace').controller('EmpresasUpdateMicrosoftDomainController', EmpresasUpdateMicrosoftDomainController);
 }());
 
 (function () {
@@ -5384,10 +5494,11 @@ angular.module('directives.loading', [])
         });
     };
 
+
     $scope.ActualizarCantidad = function (IdPedidoDetalle) {
       $scope.Pedidos.forEach(function (Pedido) {
         if (Pedido.IdPedidoDetalle == IdPedidoDetalle) {
-          Pedido.MostrarCantidad = !Pedido.MostrarCantidad;
+          if (Pedido.IdTipoProducto !== 6) Pedido.MostrarCantidad = !Pedido.MostrarCantidad;
         }
       }, this);
     };
@@ -5539,7 +5650,8 @@ angular.module('directives.loading', [])
         pedido.PorActualizarCantidad = 1;
       }
       PedidoDetallesFactory.putPedidoDetalle(pedido)
-        .success(function (result) {
+        .then(function (result) {
+          console.log(result);
           if (result.success == false) {
             $scope.ShowToast(result.message, 'danger');
           } else {
@@ -5549,8 +5661,12 @@ angular.module('directives.loading', [])
           $scope.ActualizarMonitor();
           $scope.form.habilitar = false;
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(function (error) {
+          $scope.ShowToast(error.data.message, 'danger');
+          $log.log('data error: ' + error.data.message + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
+          $scope.form.habilitar = true;
+          $scope.ActualizarMonitor();
+          $scope.form.habilitar = false;
         });
     };
 
@@ -5803,7 +5919,7 @@ angular.module('directives.loading', [])
 
     $scope.hasProtectedExchangeRate = function () {
       const orderDetails = $scope.PedidoDetalles;
-      return hasProtectedExchangeRate(orderDetails);
+      if (orderDetails) return hasProtectedExchangeRate(orderDetails);
     };
 
     $scope.ActualizarFormaPago = ActualizarFormaPago;
@@ -6317,6 +6433,8 @@ angular.module('directives.loading', [])
     $scope.selectProductos = {};
     $scope.TieneContrato = true;
     $scope.IdPedidoContrato = 0;
+    $scope.DominioMicrosoft = true;
+    $scope.usuariosSinDominio = {};
 
     $scope.BuscarProducto = function (ResetPaginado) {
       $scope.Mensaje = 'Buscando...';
@@ -6441,10 +6559,8 @@ angular.module('directives.loading', [])
       $scope.ProtectedRP = protectedRP;
     }
 
-    $scope.revisarProducto = function (Producto) {
-      var IdProducto = Producto.IdProducto;
-      var IdEmpresaUsuarioFinal = Producto.IdEmpresaUsuarioFinal;
-      ProductosFactory.getProductContracts(IdEmpresaUsuarioFinal, IdProducto)
+    const validateAutodeskData = function (Producto) {
+      ProductosFactory.getProductContracts(Producto.IdEmpresaUsuarioFinal, Producto.IdProducto)
         .success(function (respuesta) {
           if (respuesta.success === 1) {
             Producto.contratos = respuesta.data;
@@ -6456,7 +6572,7 @@ angular.module('directives.loading', [])
               Producto.TieneContrato = false;
             }
             if (Producto.IdAccionAutodesk === 1) Producto.contratos.unshift({ IdPedido: 0, ResultadoFabricante6: 'Nuevo contrato...' });
-            setProtectedRebatePrice(IdEmpresaUsuarioFinal);
+            setProtectedRebatePrice(Producto.IdEmpresaUsuarioFinal);
           } else {
             $scope.ShowToast('No pudimos cargar la información de tus contratos, por favor intenta de nuevo más tarde.', 'danger');
           }
@@ -6475,26 +6591,25 @@ angular.module('directives.loading', [])
         .error(function () {
           $scope.ShowToast('No pudimos cargar la información de tus contactos, por favor intenta de nuevo más tarde.', 'danger');
         });
+    };
 
+    const validateMicrosoftData = function (Producto) {
       if (Producto.IdTipoProducto === 4 && Producto.IdFabricante === 1) {
         ProductosFactory.postComplementos(Producto)
           .then(function (data) {
             var IdProductoFabricanteExtra = '';
-
             for (var x = 0; x < data.data.length; x++) {
               IdProductoFabricanteExtra += data.data[x].IdProductoFabricante + '|';
               if (x === data.data.length - 1) {
                 IdProductoFabricanteExtra += data.data[x].IdProductoFabricante;
               }
             }
-
             Producto.IdProductoFabricanteExtra = IdProductoFabricanteExtra;
-
             PedidoDetallesFactory.postPedidoDetallesAddOns(Producto)
               .success(function (data) {
                 $scope.selectProductos = data;
                 $scope.Productos.forEach(function (producto) {
-                  if (producto.IdProducto === IdProducto) {
+                  if (producto.IdProducto === Producto.IdProducto) {
                     if ($scope.selectProductos.length === 0) {
                       producto.Mostrar = false;
                       producto.MostrarMensajeP = true;
@@ -6512,6 +6627,17 @@ angular.module('directives.loading', [])
               });
           });
       }
+    };
+
+    $scope.revisarProducto = function (Producto) {
+      $scope.DominioMicrosoft = $scope.selectEmpresas.filter(function (item) {
+        if (Producto.IdEmpresaUsuarioFinal === item.IdEmpresa) return item;
+        return false;
+      })[0].IdMicrosoftUF;
+      $scope.usuariosSinDominio[Producto.IdEmpresaUsuarioFinal] = $scope.DominioMicrosoft !== null;
+      $scope.productoSeleccionado = Producto.IdProducto;
+      if (Producto.IdFabricante === 2) validateAutodeskData(Producto);
+      if (Producto.IdFabricante === 1 && $scope.DominioMicrosoft) validateMicrosoftData(Producto);
     };
 
     $scope.CalcularPrecioTotal = function (Precio, Cantidad, MonedaPago, MonedaProducto, TipoCambio, ProtectedRP) {
@@ -6728,6 +6854,10 @@ angular.module('directives.loading', [])
 
       $scope.Tour.init();
       $scope.Tour.start();
+    };
+
+    $scope.updateEnterprise = function (Producto) {
+      $location.path('/Empresa/ActualizarDominio/' + Producto.IdEmpresaUsuarioFinal);
     };
   };
 
@@ -7975,25 +8105,23 @@ angular.module('directives.loading', [])
     $scope.sortBy = 'Nombre';
     $scope.reverse = false;
     $scope.empresaSel = '';
+    $scope.selectEmpresas = [];
     const Session = $cookies.getObject('Session');
-    if (Session.IdTipoAcceso === 1) {
-      $scope.empresaActual = 'CompuSoluciones';
-    }
-    if (Session.IdTipoAcceso === 2) {
-      $scope.empresaActual = Session.NombreEmpresa;
-    }
 
     $scope.init = function () {
+      let empresaActual = '';
+      if (Session.IdTipoAcceso === 1) empresaActual = { NombreEmpresa: 'CompuSoluciones', IdEmpresa: 1 };
+      if (Session.IdTipoAcceso === 2) empresaActual = { NombreEmpresa: Session.NombreEmpresa, IdEmpresa: Session.IdEmpresa };
       $scope.CheckCookie();
       if (Session.IdTipoAcceso !== 2) {
         EmpresasFactory.getEmpresas()
           .success(function (Empresas) {
             $scope.selectEmpresas = Empresas;
+            $scope.selectEmpresas.unshift(empresaActual);
             if ($scope.SessionCookie.IdTipoAcceso != 1) {
               $scope.empresaSel = $scope.selectEmpresas[0].IdEmpresa;
             }
-
-            $scope.MostrarUsuariosEmp(isNaN(parseInt($scope.empresaSel)) ? 0 : parseInt($scope.empresaSel));
+            $scope.MostrarUsuariosEmp($scope.empresaSel);
           })
           .error(function (data, status, headers, config) {
             $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
@@ -8003,7 +8131,8 @@ angular.module('directives.loading', [])
         EmpresasFactory.getClientes()
           .success(function (Empresas) {
             $scope.selectEmpresas = Empresas.data;
-            $scope.ObtenerUsuariosPropios();
+            $scope.selectEmpresas.unshift(empresaActual);
+            $scope.MostrarUsuariosEmp($scope.empresaSel);
           })
           .error(function (data, status, headers, config) {
             $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
@@ -8037,14 +8166,15 @@ angular.module('directives.loading', [])
     };
 
     $scope.MostrarUsuariosEmp = function (IdEmpresa) {
+      const empresa = IdEmpresa || false;
       if (Session.IdTipoAcceso === 2) {
-        if (IdEmpresa) {
-          $scope.ObtenerUsuariosPorCliente(IdEmpresa);
-        } else {
+        if (Number(empresa) === Session.IdEmpresa) {
           $scope.ObtenerUsuariosPropios();
+        } else if (empresa) {
+          $scope.ObtenerUsuariosPorCliente(empresa);
         }
       } else {
-        UsuariosXEmpresasFactory.getUsuariosXEmpresa(IdEmpresa)
+        UsuariosXEmpresasFactory.getUsuariosXEmpresa(empresa)
           .success(function (UsuariosXEmpresas) {
             $scope.Usuarios = UsuariosXEmpresas;
           })
