@@ -96,6 +96,11 @@
       return $http.put($rootScope.API + 'PedidoDetalles', PedidoDetalle);
     };
 
+    factory.updateProductoAutodesk = function (PedidoDetalle, flag) {
+      factory.refreshToken();
+      return $http.put($rootScope.API + 'autodesk/subscription/update/' + flag, PedidoDetalle);
+    };
+
     factory.getContarProductos = function () {
       factory.refreshToken();
       return $http.get($rootScope.API + 'PedidoDetalles/ContarProductos');

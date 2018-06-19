@@ -404,7 +404,7 @@
 							ng-disabled="detalles.PagoRenovacion || detalles.EstatusFabricante !== 'accepted'" ng-click="Confirmar(detalles.IdPedidoDetalle)">
 							CANCELAR
 						</button>
-						<button class="btn btn-link" style="text-decoration: underline;" type="button" ng-show="pedido.AutoRenovable && !detalles.Activo" ng-disabled="form.habilitar" ng-click="Reanudar(pedido, detalles)">
+						<button class="btn btn-link" style="text-decoration: underline;" type="button" ng-show="pedido.AutoRenovable && !detalles.Activo" ng-disabled="form.habilitar" ng-click="ReanudarPedidoAutodesk(pedido, detalles)">
 							REANUDAR						
 						</button>
 						<br> <br>
@@ -416,7 +416,7 @@
 							</div>
 							<div class="row">
 								<div class="form-group col-xs-6 col-sm-6 col-md-12 col-lg-12">
-									<button class="btn btn-block btn-warning" ng-disabled="form.habilitar" ng-click="CancelarPedido(pedido, detalles)"> Sí </button>
+									<button class="btn btn-block btn-warning" ng-disabled="form.habilitar" ng-click="CancelarPedidoAutodesk(pedido, detalles)"> Sí </button>
 								</div>
 								<div class="form-group col-xs-6 col-sm-6 col-md-12 col-lg-12">
 									<button class="btn btn-block btn-primary" ng-disabled="form.habilitar" ng-click="Confirmar(detalles.IdPedidoDetalle)"> No </button>

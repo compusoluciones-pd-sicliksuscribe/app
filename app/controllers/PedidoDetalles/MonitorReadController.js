@@ -5,7 +5,6 @@
     $scope.form = {};
     $scope.form.habilitar = false;
     $scope.Vacio = 0;
-    $scope.Pedidos = {};
     $scope.orders = false;
     $scope.BuscarProductos = {};
     $scope.Contrato = {};
@@ -44,7 +43,7 @@
         .then(function (result) {
           if (result.status === 204) {
             $scope.Vacio = 0;
-            $scope.Pedidos = {};
+            $scope.Pedidos = '';
           } else if (result.status === 200) {
             $scope.Pedidos = result.data.data;
             $scope.Vacio = 1;
@@ -261,6 +260,50 @@
         })
         .error(function (data, status, headers, config) {
           $scope.ShowToast(data.message, 'danger');
+        });
+    };
+
+    $scope.CancelarPedidoAutodesk = function (Pedido, Detalles) {
+      $scope.Cancelar = true;
+      $scope.guardar = Pedido;
+      $scope.form.habilitar = true;
+      $scope.$emit('LOAD');
+      Pedido.IdPedidoDetalle = Detalles.IdPedidoDetalle;
+      PedidoDetallesFactory.updateProductoAutodesk(Pedido, 0)
+        .success(function (result) {
+          if (result.success === 1) {
+            $scope.ShowToast(result.message, 'success');
+            $scope.$emit('UNLOAD');
+            $scope.Cancelar = false;
+            $scope.ActualizarMonitor();
+            $scope.form.habilitar = false;
+          }
+          console.log(result);
+        })
+        .error(function (error) {
+          $scope.ShowToast(error, 'danger');
+        });
+    };
+
+    $scope.ReanudarPedidoAutodesk = function (Pedido, Detalles) {
+      Pedido.IdPedidoDetalle = Detalles.IdPedidoDetalle;
+      PedidoDetallesFactory.updateProductoAutodesk(Pedido, 1)
+        .success(function (result) {
+          if (!result.success) {
+            $scope.ShowToast(result.message, 'danger');
+          } else {
+            $scope.ShowToast('Suscripción reanudada.', 'success');
+          }
+          $scope.form.habilitar = true;
+          $scope.ActualizarMonitor();
+          $scope.form.habilitar = false;
+        })
+        .catch(function (error) {
+          $scope.ShowToast(error.data.message, 'danger');
+          $log.log('data error: ' + error.data.message + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
+          $scope.form.habilitar = true;
+          $scope.ActualizarMonitor();
+          $scope.form.habilitar = false;
         });
     };
 
