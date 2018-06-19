@@ -247,9 +247,9 @@
       return true;
     };
 
-    // $scope.isPayingWithPaypal = function () {
-    //   return Number($scope.Distribuidor.IdFormaPagoPredilecta) === paymentMethods.PAYPAL;
-    // };
+    $scope.isPayingWithPaypal = function () {
+      return Number($scope.Distribuidor.IdFormaPagoPredilecta) === paymentMethods.PAYPAL;
+    };
 
     $scope.isPayingWithCSCredit = function () {
       const IdFormaPago = Number($scope.Distribuidor.IdFormaPagoPredilecta);
