@@ -23,10 +23,14 @@
       <label><input id="RealizarCargoAutomatico" type="checkbox" ng-checked="infoEmpresa.RealizarCargoAutomatico" ng-true-value="1" ng-false-value="0" ng-model="infoEmpresa.RealizarCargoAutomatico" ng-click="ActualizarPagoAutomatico();" > Realizar cargo automático a la tarjeta.</label>
     </div>
         <div>        
-        <input type="radio" name="payType" id="Tarjeta" value="1" checked/> Pagar con Tarjeta
+          <input type="radio" name="payType" id="Tarjeta" value="1" checked/> Pagar con Tarjeta
         </div>
         <div>
-        <input type="radio" name="payType" id="PayPal" value="3"/> Pagar con PayPal
+          <input type="radio" name="payType" id="PayPal" value="3"/> Pagar con PayPal
+        </div>
+        <div>
+          <input type="radio" name="payType" id="Prepago" value="4"/> Transferencia (Solo Pesos MXN)
+          <label for="" class="SaldoReal" ng-hide="infoEmpresa.Transferencia === 0 || infoEmpresa.Transferencia === null"> &nbsp;<b>Tu Saldo es: ${{infoEmpresa.Transferencia}}</b> </label>
         </div>
   </div>
 
@@ -48,8 +52,8 @@
 
   <div class="row" ng-hide="DeshabilitarPagar">
     <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
-      <input id="Activo" type="checkbox" ng-model="todos" ng-true-value="1" ng-false-value="0" ng-click="seleccionarTodos();">
-      <label>Seleccionar todos</label>
+        <input id="Activo" type="checkbox" ng-model="todos" ng-true-value="1" ng-false-value="0" ng-click="seleccionarTodos();">
+        <label>Seleccionar todos</label>  
     </div>
   </div>
   <hr>
@@ -116,11 +120,17 @@
     </div>
     <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
       <div class="">
-        <button id="btnSiguiente" type="button" ng-click="checkPayment()" class="btn btn-primary btn-block">
-                        Realizar Pago
-                    </button>
+          <button id="btnSiguiente" type="button" ng-click="checkPayment()" class="btn btn-primary btn-block">
+            Realizar Pago
+          </button>
       </div>
     </div>
   </div>
 
 </div>
+
+<script>
+  $('#btnSiguiente').click(function(){
+    location.reload(true);
+  });
+</script>

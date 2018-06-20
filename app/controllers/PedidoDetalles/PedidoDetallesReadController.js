@@ -111,7 +111,9 @@
     };
 
     const validarCarrito = function () {
-      return PedidoDetallesFactory.getValidarCarrito()
+      $scope.CreditoValido = 0;
+      if ($scope.Distribuidor.IdFormaPagoPredilecta === 2) {
+        return PedidoDetallesFactory.getValidarCarrito()
         .then(function (result) {
           $scope.PedidoDetalles.forEach(function (item) {
             result.data.data.forEach(function (user) {
@@ -120,12 +122,16 @@
                 item.hasCredit = 0;
               }
             });
+            if ($scope.Distribuidor.IdFormaPagoPredilecta === 1 || $scope.Distribuidor.IdFormaPagoPredilecta === 4 && item.MonedaPago !== 'Pesos') {
+              $scope.ShowToast('Para pagar con tarjeta bancaria o con Transferencia, es necesario que los pedidos estén en pesos MXN. Actualiza tu forma de pago o cambia de moneda en los pedidos agregándolos una vez más.', 'danger');
+            }
           });
         })
         .catch(function (result) {
           error(result.data);
           $location.path('/Productos');
         });
+      }
     };
 
     var ActualizarFormaPago = function (IdFormaPago) {

@@ -148,6 +148,25 @@
         $scope.Iva = 0;
         $scope.Total = 0;
       }
+      if ($scope.PedidosSeleccionadosParaPagar.length !== 0 && document.getElementById('Prepago').checked) {
+        PedidoDetallesFactory.monitorCalculationsPrepaid({ Pedidos: $scope.PedidosSeleccionadosParaPagar })
+          .success(function (calculations) {
+            if (calculations.total) {
+              $scope.Subtotal = calculations.subtotal;
+              $scope.Iva = calculations.iva;
+              $scope.Total = calculations.total;
+            } else {
+              $scope.ServicioElectronico = 0;
+              $scope.Subtotal = 0;
+              $scope.Iva = 0;
+              $scope.Total = 0;
+            }
+          })
+          .error(function (data, status, headers, config) {
+            $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+            $scope.ShowToast('No pudimos realizar los cálculos, por favor intenta de nuevo más tarde.', 'danger');
+          });
+      }
       if ($scope.PedidosSeleccionadosParaPagar.length !== 0 && document.getElementById('PayPal').checked) {
         PedidoDetallesFactory.monitorCalculationsPayPal({ Pedidos: $scope.PedidosSeleccionadosParaPagar })
           .success(function (calculations) {
@@ -165,10 +184,7 @@
           })
           .error(function (data, status, headers, config) {
             $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
-
             $scope.ShowToast('No pudimos realizar los cálculos, por favor intenta de nuevo más tarde.', 'danger');
-
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
           });
       }
       if ($scope.PedidosSeleccionadosParaPagar.length !== 0 && document.getElementById('Tarjeta').checked) {
@@ -209,6 +225,8 @@
         $scope.pagar();
       } else if (document.getElementById('PayPal').checked) {
         $scope.preparePayPal();
+      } else if (document.getElementById('Prepago').checked) {
+        $scope.preparePrePaid();
       }
     };
 
@@ -245,7 +263,6 @@
                         line3: 'Col. Rinconada del Bosque C.P. 44530',
                         line4: 'Guadalajara, Jalisco. México'
                       },
-
                       email: 'order@yourMerchantEmailAddress.com',
                       phone: '+1 123 456 789 012',
                     },
@@ -254,9 +271,7 @@
                     theme: 'default'
                   }
                 });
-
                 Checkout.showLightbox();
-
               }
             }
           })
@@ -333,6 +348,25 @@
       } else {
         $scope.ShowToast('Algo salió mal con tu pedido, por favor ponte en contacto con tu equipo de soporte CompuSoluciones para más información.', 'danger');
         $location.path('/MonitorPagos/e');
+      }
+    };
+
+    $scope.preparePrePaid = function () {
+      if ($scope.PedidosSeleccionadosParaPagar.length > 0) {
+        PedidoDetallesFactory.payWithPrePaid({ Pedidos: $scope.PedidosSeleccionadosParaPagar })
+        .success(function (response) {
+          if (response.statusCode === 400) {
+            $scope.ShowToast(response.message, 'danger');
+          } else {
+            $scope.ShowToast('Pago realizado correctamente.', 'success');
+            $location.path('/MonitorPagos/refrescar');
+          }
+        })
+        .catch(function (response) {
+          $scope.ShowToast('Algo salió mal con tu pedido, por favor ponte en contacto con tu equipo de soporte CompuSoluciones para más información.', 'danger');
+        });
+      } else {
+        $scope.ShowToast('Selecciona al menos un pedido para pagar.', 'danger');
       }
     };
   };
