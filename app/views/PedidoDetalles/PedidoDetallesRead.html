@@ -224,7 +224,7 @@
 				<div class="">
 					<button id="btnSiguiente" type="button" ng-click="next();" class="btn btn-primary btn-block"
 						ng-if="(hasProtectedExchangeRate() && Distribuidor.MonedaPago === 'Pesos'
-							|| !hasProtectedExchangeRate()) && !error && ((isPayingWithCSCredit() && CreditoValido) || isPayingWithCreditCard() || isPayingWithPaypal())">
+							|| !hasProtectedExchangeRate()) && !error && ((isPayingWithCSCredit() && CreditoValido) || isPayingWithCreditCard() || isPayingWithPaypal() || isPayWithPrepaid())">
             Siguiente
           </button>
 				</div>

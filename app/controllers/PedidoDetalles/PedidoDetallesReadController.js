@@ -267,6 +267,11 @@
       return IdFormaPago === paymentMethods.CREDIT_CARD;
     };
 
+    $scope.isPayWithPrepaid = function() {
+      const IdFormaPago = Number($scope.Distribuidor.IdFormaPagoPredilecta);
+      return IdFormaPago === paymentMethods.PREPAY;
+    }
+
     $scope.hasProtectedExchangeRate = function () {
       const orderDetails = $scope.PedidoDetalles;
       if (orderDetails) return hasProtectedExchangeRate(orderDetails);
