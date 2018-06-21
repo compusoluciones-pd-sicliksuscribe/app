@@ -88,6 +88,12 @@
 			</div>
 		</div>
 
+		<div class="form-group row" ng-show="isPayWithPrepaid() && !hasProtectedExchangeRate()">
+			<div class="alert alert-warning">
+				<b>Nota importante *</b> Al haber elegido el método de pago con prepago deberás realizar tu operación en moneda nacional.<br>
+			</div>
+		</div>
+
 		<div class="form-group row" ng-show="isPayingWithCreditCard()">
 			<div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
 				<b>Nota importante *</b> <br> Para realizar la renovación de tus suscripciones de forma automática por medio de tu tarjeta
