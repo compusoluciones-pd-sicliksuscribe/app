@@ -26,10 +26,10 @@
   
   <div class="row" ng-hide="DeshabilitarPagar">
     <div>        
-      <input type="radio" name="payType" id="Tarjeta" value="1" checked/> Pagar con Tarjeta
+      <input ng-model="PedidosObj[key].Check" ng-click="pedidosPorPagar(key);" type="radio" name="payType" id="Tarjeta" value="1" checked/> Pagar con Tarjeta
     </div>
     <div>
-      <input type="radio" name="payType" id="PayPal" value="3"/> Pagar con PayPal
+      <input ng-model="PedidosObj[key].Check" ng-click="pedidosPorPagar(key);" type="radio" name="payType" id="PayPal" value="3"/> Pagar con PayPal
     </div>
   </div>
 

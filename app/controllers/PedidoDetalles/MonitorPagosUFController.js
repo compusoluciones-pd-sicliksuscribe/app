@@ -10,6 +10,8 @@
     $scope.DeshabilitarPagar = false;
     $scope.todos = 0;
     $scope.Session = $cookies.getObject('Session');
+    const CREDIT_CARD = 2;
+    const PAYPAL = 3;
     function groupBy (array, f) {
       var groups = {};
       array.forEach(function (o) {
@@ -151,7 +153,7 @@
         $scope.Total = 0;
       }
       if ($scope.PedidosSeleccionadosParaPagar.length !== 0 && document.getElementById('PayPal').checked) {
-        PedidoDetallesFactory.monitorCalculationsPayPal({ Pedidos: $scope.PedidosSeleccionadosParaPagar })
+        PedidoDetallesFactory.monitorCalculationsTuClick({ Pedidos: $scope.PedidosSeleccionadosParaPagar }, $scope.currentDistribuidor.IdEmpresa, PAYPAL)
           .success(function (calculations) {
             if (calculations.total) {
               $scope.ServicioElectronico = calculations.electronicService;
@@ -174,7 +176,7 @@
           });
       }
       if ($scope.PedidosSeleccionadosParaPagar.length !== 0 && document.getElementById('Tarjeta').checked) {
-        PedidoDetallesFactory.monitorCalculationsTuClick({ Pedidos: $scope.PedidosSeleccionadosParaPagar }, $scope.currentDistribuidor.IdEmpresa)
+        PedidoDetallesFactory.monitorCalculationsTuClick({ Pedidos: $scope.PedidosSeleccionadosParaPagar }, $scope.currentDistribuidor.IdEmpresa, CREDIT_CARD)
           .success(function (calculations) {
             if (calculations.total) {
               $scope.ServicioElectronico = calculations.electronicService;

@@ -161,9 +161,9 @@
       return $http.post($rootScope.API + 'orders/pending-orders-monitor-calculations/1', Pedidos);
     };
 
-    factory.monitorCalculationsTuClick = function (Pedidos, currentDistribuidor) {
+    factory.monitorCalculationsTuClick = function (Pedidos, currentDistribuidor, metodoPago) {
       factory.refreshToken();
-      return $http.post($rootScope.API + 'orders/pending-orders-monitor-calculations/tuclick/' + currentDistribuidor, Pedidos);
+      return $http.post($rootScope.API + 'orders/pending-orders-monitor-calculations/' + metodoPago + '/tuclick/' + currentDistribuidor, Pedidos);
     };
 
     factory.monitorCalculationsPayPal = function (Pedidos) {
