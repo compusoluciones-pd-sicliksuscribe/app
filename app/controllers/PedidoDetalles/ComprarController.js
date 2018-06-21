@@ -290,12 +290,6 @@
       }
     };
 
-    const getActualSubdomain = function () {
-      let subdomain = window.location.href;
-      subdomain = subdomain.replace('/#/Comprar', '');
-      return subdomain;
-    };
-    const actualSubdomain = getActualSubdomain();
     $scope.prepararPaypal = function () {
       const orderIds = $scope.PedidoDetalles.map(function (result) {
         return result.IdPedido;
@@ -303,7 +297,7 @@
       const expireDate = new Date();
       expireDate.setTime(expireDate.getTime() + 600 * 2000);
       $cookies.putObject('orderIds', orderIds, { expires: expireDate, secure: $rootScope.secureCookie });
-      PedidoDetallesFactory.prepararPaypal({ orderIds, url: 'Comprar', actualSubdomain })
+      PedidoDetallesFactory.prepararPaypal({ orderIds, url: 'Comprar' })
         .then(function (response) {
           if (response.data.message === 'free') comprarProductos();
           else if (response.data.state === 'created') {

@@ -5,7 +5,8 @@
     $scope.Distribuidor = {};
     $scope.error = false;
     $scope.currentDistribuidor = $cookies.getObject('currentDistribuidor');
-
+    $scope.Session = $cookies.getObject('Session');
+  
     const error = function (message) {
       $scope.ShowToast(!message ? 'Ha ocurrido un error, intentelo mas tarde.' : message, 'danger');
       $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
@@ -243,7 +244,7 @@
       const expireDate = new Date();
       expireDate.setTime(expireDate.getTime() + 600 * 2000);
       $cookies.putObject('orderIds', orderIds, { expires: expireDate, secure: $rootScope.secureCookie });
-      PedidoDetallesFactory.prepararPaypalFinalUser({ orderIds, url: 'uf/Comprar', actualSubdomain })
+      PedidoDetallesFactory.prepararPaypalFinalUser({ orderIds, url: 'uf/Comprar', actualSubdomain, IdUsuarioCompra: $scope.Session.IdUsuario })
         .then(function (response) {
           if (response.data.message === 'free') comprarProductos();
           else if (response.data.state === 'created') {

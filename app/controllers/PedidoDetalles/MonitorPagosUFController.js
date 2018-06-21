@@ -9,6 +9,7 @@
     $scope.Total = 0;
     $scope.DeshabilitarPagar = false;
     $scope.todos = 0;
+    $scope.Session = $cookies.getObject('Session');
     function groupBy (array, f) {
       var groups = {};
       array.forEach(function (o) {
@@ -275,8 +276,16 @@
       }
     };
 
+    const getActualSubdomain = function () {
+      let subdomain = window.location.href;
+      subdomain = subdomain.replace('/#/MonitorPagos/uf', '');
+      return subdomain;
+    };
+
     $scope.preparePayPal = function () {
       if ($scope.PedidosSeleccionadosParaPagar.length > 0) {
+        
+        const actualSubdomain = getActualSubdomain();
         PedidoDetallesFactory.payWithPaypal({ Pedidos: $scope.PedidosSeleccionadosParaPagar })
         .success(function (response) {
           var expireDate = new Date();
@@ -287,7 +296,7 @@
           };
           $cookies.putObject('paypalNextPayment', paypalNextPayment, { expires: expireDate, secure: $rootScope.secureCookie });
           $cookies.putObject('orderIds', $scope.PedidosSeleccionadosParaPagar, { expires: expireDate, secure: $rootScope.secureCookie });
-          PedidoDetallesFactory.preparePayPal({ orderIds: $scope.PedidosSeleccionadosParaPagar, url: 'MonitorPagos/uf' })
+          PedidoDetallesFactory.prepararPaypalFinalUser({ orderIds: $scope.PedidosSeleccionadosParaPagar, url: 'MonitorPagos/uf', actualSubdomain, IdUsuarioCompra: $scope.Session.IdUsuario })
             .then(function (response) {
               if (response.data.state === 'created') {
                 const paypal = response.data.links.filter(function (item) {
