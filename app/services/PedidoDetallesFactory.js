@@ -135,7 +135,12 @@
       factory.refreshToken();
       return $http.post($rootScope.API + 'paypal/order/final-user', params);
     };
-    
+
+    factory.prepararPaypalFinalUserMonitor = function (params) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'paypal/order/final-user/monitor', params);
+    };
+
     factory.confirmarPaypal = function (params) {
       factory.refreshToken();
       return $http.put($rootScope.API + 'paypal/order/confirm', params);
@@ -210,6 +215,11 @@
       factory.refreshToken();
       return $http.post($rootScope.API + 'orders/pay-with-paypal', Pedidos);
     };
+
+    factory.payWithPaypalTuClick = function (Pedidos) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'orders/pay-with-paypal/tuclick', Pedidos);
+    }
 
     factory.getDistributorData = function (params) {
       factory.refreshToken();

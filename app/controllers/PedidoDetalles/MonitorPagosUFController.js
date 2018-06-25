@@ -288,8 +288,9 @@
       if ($scope.PedidosSeleccionadosParaPagar.length > 0) {
         
         const actualSubdomain = getActualSubdomain();
-        PedidoDetallesFactory.payWithPaypal({ Pedidos: $scope.PedidosSeleccionadosParaPagar })
+        PedidoDetallesFactory.payWithPaypalTuClick({ Pedidos: $scope.PedidosSeleccionadosParaPagar })
         .success(function (response) {
+          console.log(response);
           var expireDate = new Date();
           expireDate.setTime(expireDate.getTime() + 600 * 2000);
           const paypalNextPayment = {
@@ -298,7 +299,7 @@
           };
           $cookies.putObject('paypalNextPayment', paypalNextPayment, { expires: expireDate, secure: $rootScope.secureCookie });
           $cookies.putObject('orderIds', $scope.PedidosSeleccionadosParaPagar, { expires: expireDate, secure: $rootScope.secureCookie });
-          PedidoDetallesFactory.prepararPaypalFinalUser({ orderIds: $scope.PedidosSeleccionadosParaPagar, url: 'MonitorPagos/uf', actualSubdomain, IdUsuarioCompra: $scope.Session.IdUsuario })
+          PedidoDetallesFactory.prepararPaypalFinalUserMonitor({ orderIds: $scope.PedidosSeleccionadosParaPagar, url: 'MonitorPagos/uf', actualSubdomain, IdUsuarioCompra: $scope.Session.IdUsuario })
             .then(function (response) {
               if (response.data.state === 'created') {
                 const paypal = response.data.links.filter(function (item) {
