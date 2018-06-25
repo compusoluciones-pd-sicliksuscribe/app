@@ -111,7 +111,6 @@
     };
 
     const validarCarrito = function () {
-      $scope.CreditoValido = 0;
       if ($scope.Distribuidor.IdFormaPagoPredilecta === 2) {
         return PedidoDetallesFactory.getValidarCarrito()
         .then(function (result) {
