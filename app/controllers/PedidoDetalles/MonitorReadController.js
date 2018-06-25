@@ -171,11 +171,11 @@
     };
 
     $scope.ActualizarDetalle = function (pedido, detalles) {
-      if (detalles.CantidadProxima <= 0 || !detalles.CantidadProxima) {
+      if (pedido.IdFabricante !== 5 && (detalles.CantidadProxima <= 0 || !detalles.CantidadProxima)) {
         $scope.ShowToast('Cantidad no válida para el producto', 'danger');
         return false;
       }
-      if (detalles.CantidadProxima > detalles.Cantidad) {
+      if (pedido.IdFabricante !== 5 && (detalles.CantidadProxima > detalles.Cantidad)) {
         $scope.ShowToast('No se puede actualizar a un numero mayor de suscripciones.', 'danger');
         return;
       }
@@ -195,6 +195,21 @@
         } else {
           PedidoActualizado.PorActualizarCantidad = 1;
         }
+      }
+      if (detalles.Cantidad !== detalles.CantidadProxima) {
+        const detail = {
+          CantidadProxima: detalles.CantidadProxima,
+          IdPedidoDetalle: detalles.IdPedidoDetalle,
+          IdEmpresaUsuarioFinal: Params.IdEmpresaUsuarioFinal,
+          IdPedido: pedido.IdPedido
+        };
+        PedidoDetallesFactory.updateSubscriptionNextQuantity(detail)
+          .then(function (updateResult) {
+            $scope.ShowToast(updateResult.message, 'success');
+          })
+          .catch(function (error) {
+            $scope.ShowToast(error.data.message, 'danger');
+          });
       }
       PedidoDetallesFactory.putPedidoDetalle(PedidoActualizado)
         .success(function (PedidoDetalleSuccess) {

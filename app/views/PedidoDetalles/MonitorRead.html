@@ -157,7 +157,7 @@
 
 							<div ng-if="detalles.IdTipoProducto !== 3">
 								<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
-									<label>Suscripciones: </label>
+									<label>{{ pedido.IdFabricante === 5 ? "Empleados" : "Suscripciones" }}: </label>
 									<br>
 									<div style="margin:0; padding:0;" ng-show="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3) && !pedido.CargoRealizadoProximoPedido && !detalles.PedidoAFabricante"> {{ detalles.Cantidad }} </div> 
 									<a ng-click="ActualizarCantidad(detalles.IdPedidoDetalle)" style="text-decoration: none"
@@ -174,14 +174,14 @@
 									<div class="row" ng-show="detalles.MostrarCantidad">
 										<div class="form-group col-xs-6 col-sm-6 col-md-12 col-lg-12">
 											<label>Actualizar: </label>
-											<p>El número de suscripciones se vera reflejado en la renovación.</p>
+											<p>El número de {{ pedido.IdFabricante === 5 ? "empleados" : "suscripciones" }} se vera reflejado en la renovación.</p>
 										</div>
 									</div>
 
 		
 									<div class="row" ng-show="detalles.MostrarCantidad">
 										<div class="form-group col-xs-6 col-sm-6 col-md-7 col-lg-7">
-											<input type="number" class="form-control" ng-model="detalles.CantidadProxima" min="1" max="{{ detalles.Cantidad }}" />
+											<input type="number" class="form-control" ng-model="detalles.CantidadProxima" min="1" />
 										</div>
 										<div class="form-group col-xs-6 col-sm-6 col-md-5 col-lg-5 ">
 											<h4>
@@ -223,7 +223,7 @@
 								</b>
 							</div>
 
-							<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
+							<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2" >
 								<button style="text-decoration: underline; color: red !important;" class="btn btn-link" ng-show="detalles.Activo" ng-click="Confirmar(detalles.IdPedidoDetalle)"
 									ng-disabled="pedido.CargoRealizadoProximoPedido || (!detalles.PedidoAFabricante || detalles.EstatusFabricante === 'FAILED')">
 									CANCELAR
@@ -237,6 +237,16 @@
 									<div class="row">
 										<div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
 											<label>Se cancelará la suscripción automática, ¿Estás de acuerdo?</label>
+										</div>
+									</div>
+									<div class="row" ng-show="pedido.IdFabricante === 5">
+										<div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+											<label>Aplica politicas para reanudar servicio despues de cancelar</label>
+										</div>
+									</div>
+									<div class="row" ng-show="pedido.IdFabricante === 5">
+										<div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+											<label>* se cancelaran tambien los complementos de esta subscripción</label>
 										</div>
 									</div>
 									<div class="row">
