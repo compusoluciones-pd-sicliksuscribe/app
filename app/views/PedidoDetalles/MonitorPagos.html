@@ -25,13 +25,16 @@
         <div>        
           <input type="radio" name="payType" id="Tarjeta" value="1" checked/> Pagar con Tarjeta
         </div>
-        <div>
-          <input type="radio" name="payType" id="PayPal" value="3"/> Pagar con PayPal
-        </div>
-        <div>
-          <input type="radio" name="payType" id="Prepago" value="4"/> Transferencia (Solo Pesos MXN)
-          <label for="" class="SaldoReal" ng-hide="infoEmpresa.Transferencia === 0 || infoEmpresa.Transferencia === null"> &nbsp;<b>Tu Saldo es: ${{infoEmpresa.Transferencia}}</b> </label>
-        </div>
+  </div>
+
+  <div class="row">
+    <div>
+      <input type="radio" name="payType" id="PayPal" value="3"/> Pagar con PayPal
+    </div>
+    <div>
+      <input type="radio" name="payType" id="Prepago" value="4"/> Transferencia (Solo Pesos MXN)
+      <label for="" class="SaldoReal" ng-hide="infoEmpresa.Transferencia === 0 || infoEmpresa.Transferencia === null"> &nbsp;<b>Tu Saldo es: ${{infoEmpresa.Transferencia}}</b> </label>
+    </div>
   </div>
 
   <hr>
