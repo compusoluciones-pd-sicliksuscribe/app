@@ -287,8 +287,15 @@
       }
     };
 
+    const getActualSubdomain = function () {
+      let subdomain = window.location.href;
+      subdomain = subdomain.replace('/#/MonitorPagos/', '');
+      return subdomain;
+    };
+
     $scope.preparePayPal = function () {
       if ($scope.PedidosSeleccionadosParaPagar.length > 0) {
+        const actualSubdomain = getActualSubdomain();
         PedidoDetallesFactory.payWithPaypal({ Pedidos: $scope.PedidosSeleccionadosParaPagar })
         .success(function (response) {
           var expireDate = new Date();
@@ -299,7 +306,7 @@
           };
           $cookies.putObject('paypalNextPayment', paypalNextPayment, { expires: expireDate, secure: $rootScope.secureCookie });
           $cookies.putObject('orderIds', $scope.PedidosSeleccionadosParaPagar, { expires: expireDate, secure: $rootScope.secureCookie });
-          PedidoDetallesFactory.preparePayPal({ orderIds: $scope.PedidosSeleccionadosParaPagar, url: 'MonitorPagos' })
+          PedidoDetallesFactory.preparePayPal({ orderIds: $scope.PedidosSeleccionadosParaPagar, url: 'MonitorPagos', actualSubdomain })
             .then(function (response) {
               if (response.data.state === 'created') {
                 const paypal = response.data.links.filter(function (item) {

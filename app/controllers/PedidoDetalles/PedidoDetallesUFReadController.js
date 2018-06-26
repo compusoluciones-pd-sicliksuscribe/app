@@ -103,12 +103,11 @@
             if (!validate) {
               $scope.ValidarFormaPago();
             }
-          } else {
-            $scope.ShowToast(result.data.message, 'danger');
-            $location.path('uf/Productos');
           }
         })
-        .then(validarCarrito)
+        .then(function () {
+          if ($scope.isPayingWithCSCredit()) validarCarrito();
+        })
         .catch(function (result) { error(result.data); });
     };
 
@@ -208,7 +207,6 @@
             getOrderDetails(true);
           } else {
             $scope.ActualizarMenu();
-            validarCarrito();
             $scope.ShowToast(PedidoDetalleResult.message, 'success');
           }
         })
@@ -380,7 +378,7 @@
     };
 
     $scope.next = function () { // Este
-      if ($scope.Distribuidor.IdFormaPagoPredilecta === 2) validarCarrito();
+      if ($scope.isPayingWithCSCredit()) validarCarrito();
       let next = true;
       if (!$scope.PedidoDetalles || $scope.PedidoDetalles.length === 0) next = false;
       else {
