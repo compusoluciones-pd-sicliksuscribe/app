@@ -39,7 +39,7 @@
         <h4>{{Mensaje}}</h4>
     </div>
 
-    <div ng-show="Productos.length > 0">
+    <div ng-if="Productos.length > 0">
 
         <div>Precios más IVA.</div>
         <br>
@@ -148,16 +148,16 @@
                                     <form name="frmCantidad" id="frmCantidad">
 
                                         <div class="form-group">
-                                            <label for="Cantidad">*{{Producto.IdFabricante === 5 && Producto.IdTipoProducto !== 4 ? "¿Cuantos empleados hay en la nómina?" : "¿Cuántos quieres?"}}</label> a partir de {{Producto.CantidadMinima}}
-                                            a {{Producto.CantidadMaxima}}
+                                            <label for="Cantidad">*{{Producto.IdFabricante === 5 && Producto.IdTipoProducto !== 4 ? "¿Cuantos empleados hay en la nómina?" : "¿Cuántos quieres?"}}</label>
+                                            a partir de {{Producto.CantidadMinima}} <sapan ng-if="Producto.CantidadMinima != Producto.CantidadMaxima"> a {{Producto.CantidadMaxima}} </sapan>
 
                                             <div class="input-group">
                                                 <span class="input-group-addon green white">
                                                 <span class="glyphicon glyphicon-shopping-cart"></span>
                                                 </span>
-                                                <input id="Cantidad" name="Cantidad" type="number" ng-model="Producto.Cantidad" class="form-control" placeholder="Escribe un número entre {{Producto.CantidadMinima}} y {{Producto.CantidadMaxima}}"
+                                                <input id="Cantidad" name="Cantidad" type="number" ng-model="Producto.Cantidad" class="form-control" placeholder="Número de licencias"
                                                     max="{{Producto.CantidadMaxima}}" min="{{Producto.CantidadMinima}}" size="5"
-                                                    maxlength="5" title="Escribe un número entre {{Producto.CantidadMinima}} y {{Producto.CantidadMaxima}}"
+                                                    maxlength="5" title="Número de licencias"
                                                     required/>
                                             </div>
 
