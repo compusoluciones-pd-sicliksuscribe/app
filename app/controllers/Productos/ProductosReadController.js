@@ -55,6 +55,8 @@
             $scope.ShowToast('No se encontraron más resultados para la busqueda.', 'danger');
             $scope.PaginadoAtras();
           } else {
+            $scope.Productos = [];
+            $scope.Mensaje = 'Sin resultados para mostrar.';
             $scope.ShowToast('No se encontraron resultados para la busqueda.', 'danger');
           }
         });
@@ -67,7 +69,6 @@
         .error(function (data, status, headers, config) {
           $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
           $scope.ShowToast('No pudimos obtener el tipo de cambio, por favor intenta una vez más.', 'danger');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
     };
 
