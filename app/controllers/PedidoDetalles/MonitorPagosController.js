@@ -289,7 +289,7 @@
 
     const getActualSubdomain = function () {
       let subdomain = window.location.href;
-      subdomain = subdomain.replace('/#/MonitorPagos/', '');
+      subdomain = subdomain.replace('/#/MonitorPagos', '');
       return subdomain;
     };
 
