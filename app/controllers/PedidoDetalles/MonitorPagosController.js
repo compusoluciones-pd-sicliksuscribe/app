@@ -156,37 +156,37 @@
               $scope.Iva = calculations.iva;
               $scope.Total = calculations.total;
             } else {
-              $scope.ServicioElectronico = 0;
               $scope.Subtotal = 0;
               $scope.Iva = 0;
               $scope.Total = 0;
             }
+            $scope.ServicioElectronico = 0;
           })
           .error(function (data, status, headers, config) {
             $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
             $scope.ShowToast('No pudimos realizar los cálculos, por favor intenta de nuevo más tarde.', 'danger');
           });
       }
-      if ($scope.PedidosSeleccionadosParaPagar.length !== 0 && document.getElementById('PayPal').checked) {
-        PedidoDetallesFactory.monitorCalculationsPayPal({ Pedidos: $scope.PedidosSeleccionadosParaPagar })
-          .success(function (calculations) {
-            if (calculations.total) {
-              $scope.ServicioElectronico = calculations.electronicService;
-              $scope.Subtotal = calculations.subtotal;
-              $scope.Iva = calculations.iva;
-              $scope.Total = calculations.total;
-            } else {
-              $scope.ServicioElectronico = 0;
-              $scope.Subtotal = 0;
-              $scope.Iva = 0;
-              $scope.Total = 0;
-            }
-          })
-          .error(function (data, status, headers, config) {
-            $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
-            $scope.ShowToast('No pudimos realizar los cálculos, por favor intenta de nuevo más tarde.', 'danger');
-          });
-      }
+      // if ($scope.PedidosSeleccionadosParaPagar.length !== 0 && document.getElementById('PayPal').checked) {
+      //   PedidoDetallesFactory.monitorCalculationsPayPal({ Pedidos: $scope.PedidosSeleccionadosParaPagar })
+      //     .success(function (calculations) {
+      //       if (calculations.total) {
+      //         $scope.ServicioElectronico = calculations.electronicService;
+      //         $scope.Subtotal = calculations.subtotal;
+      //         $scope.Iva = calculations.iva;
+      //         $scope.Total = calculations.total;
+      //       } else {
+      //         $scope.ServicioElectronico = 0;
+      //         $scope.Subtotal = 0;
+      //         $scope.Iva = 0;
+      //         $scope.Total = 0;
+      //       }
+      //     })
+      //     .error(function (data, status, headers, config) {
+      //       $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+      //       $scope.ShowToast('No pudimos realizar los cálculos, por favor intenta de nuevo más tarde.', 'danger');
+      //     });
+      // }
       if ($scope.PedidosSeleccionadosParaPagar.length !== 0 && document.getElementById('Tarjeta').checked) {
         PedidoDetallesFactory.monitorCalculations({ Pedidos: $scope.PedidosSeleccionadosParaPagar })
           .success(function (calculations) {
