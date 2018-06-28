@@ -1,0 +1,126 @@
+<div class="container">
+  <h2>Alta facturación</h2>
+  <p ng-show="!InfoFactura.AltaFacturacion">Completar informacion necesaria para facturación.</p>
+  <div class="alert alert-info" ng-show="InfoFactura.AltaFacturacion">
+    <strong>Ya te encuentras registrado para poder facturar.</strong> Cualquier cambio realizado en esta forma sera para
+    actualizar tus datos de facturación.
+  </div>
+  <form name="frm" ng-swipe-right="">
+    <hr>
+    <h3>Datos de empresa</h3>
+    <div class="row">
+      <div class="form-group col-xs-12 col-sm-6">
+        <label>Certificado *</label>
+        <input name="CSD_B64" type="file" class="form-control" id="CSD_B64" required="" />
+        <b style="color:red" ng-show="frm.CSD_B64.$invalid && !frm.CSD_B64.$pristine" class="help-block">El certificado es invalido.</b>
+      </div>
+      <div class="form-group col-xs-12 col-sm-6">
+        <label>Llave *</label>
+        <input name="key_B64" type="file" class="form-control" id="key_B64" required="" />
+        <b style="color:red" ng-show="frm.key_B64.$invalid && !frm.key_B64.$pristine" class="help-block">La llave certificado es invalido.</b>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-xs-12 col-sm-6">
+        <label>Contraseña de certificado *</label>
+        <input name="contrasenaCSD" type="password" ng-model="InfoFactura.contrasenaCSD" class="form-control" placeholder="" size="255" ng-maxlength="255" required="" />
+        <b style="color:red" ng-show="frm.contrasenaCSD.$invalid && !frm.contrasenaCSD.$pristine" class="help-block">La contraseña es requerido ó ha sobrepasado el limite de caracteres.</b>
+      </div>
+      <div class="form-group col-xs-12 col-sm-6">
+        <label>RFC *</label>
+        <input disabled name="rfc" type="text" ng-model="InfoFactura.rfc" class="form-control" placeholder="" size="255" ng-maxlength="255" required="" />
+        <b style="color:red" ng-show="frm.rfc.$invalid && !frm.rfc.$pristine" class="help-block">El rfc es requerido ó ha sobrepasado el limite de caracteres.</b>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-xs-12 col-sm-6">
+        <label>Nombre de la empresa *</label>
+        <input disabled name="nombre" type="text" ng-model="InfoFactura.nombre" class="form-control" placeholder="" size="255" ng-maxlength="255" required="" />
+        <b style="color:red" ng-show="frm.nombre.$invalid && !frm.nombre.$pristine" class="help-block">El nombre de contacto es requerido ó ha sobrepasado el limite de caracteres.</b>
+      </div>
+      <div class="form-group col-xs-12 col-sm-6">
+        <label>Regimen *</label>
+        <!--<input name="regimen" type="text" ng-model="InfoFactura.regimen" class="form-control" placeholder="" size="255" ng-maxlength="255" required="" />
+        <b style="color:red" ng-show="frm.regimen.$invalid && !frm.regimen.$pristine" class="help-block">El regimen es requerido ó ha sobrepasado el limite de caracteres.</b>-->
+      	<select name="regimen" class="form-control" ng-model="InfoFactura.regimen"
+            ng-options="o.id as o.name for o in regimen" required="">
+            </select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-xs-12 col-sm-6">
+        <label>Calle *</label>
+        <input disabled name="calle" type="text" ng-model="InfoFactura.calle" class="form-control" placeholder="" size="255" ng-maxlength="255" required="" />
+        <b style="color:red" ng-show="frm.calle.$invalid && !frm.calle.$pristine" class="help-block">La calle es requerido ó ha sobrepasado el limite de caracteres.</b>
+      </div>
+      <div class="form-group col-xs-12 col-sm-6">
+        <label>Municipio *</label>
+        <input disabled name="municipio" type="text" ng-model="InfoFactura.municipio" class="form-control" placeholder="" size="255" ng-maxlength="255" required="" />
+        <b style="color:red" ng-show="frm.municipio.$invalid && !frm.municipio.$pristine" class="help-block">El municipio es requerido ó ha sobrepasado el limite de caracteres.</b>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-xs-12 col-sm-6">
+        <label>Estado *</label>
+        <input disabled name="estado" type="text" ng-model="InfoFactura.estado" class="form-control" placeholder="" size="255" ng-maxlength="255" required="" />
+        <b style="color:red" ng-show="frm.estado.$invalid && !frm.estado.$pristine" class="help-block">El estado es requerido ó ha sobrepasado el limite de caracteres.</b>
+      </div>
+      <div class="form-group col-xs-12 col-sm-6">
+        <label>Codigo postal *</label>
+        <input disabled name="codigo_postal" type="number" ng-model="InfoFactura.codigo_postal" class="form-control" placeholder="" size="8" ng-maxlength="8" required="" />
+        <b style="color:red" ng-show="frm.codigo_postal.$invalid && !frm.codigo_postal.$pristine" class="help-block">El codigo postal es requerido ó ha sobrepasado el limite de caracteres.</b>
+      </div>
+    </div>
+    <h3>Datos de cuenta de facturación</h3>
+    <div class="row">
+      <div class="form-group col-xs-12 col-sm-6">
+        <label>Usuario *</label>
+        <input ng-disabled="usuarioDisabled" name="usuario" type="text" ng-model="InfoFactura.usuario" class="form-control" placeholder="" size="255" ng-maxlength="255" required="" />
+        <b style="color:red" ng-show="frm.usuario.$invalid && !frm.usuario.$pristine" class="help-block">El usuario es requerido ó ha sobrepasado el limite de caracteres.</b>
+      </div>
+      <div class="form-group col-xs-12 col-sm-6">
+        <label>Contraseña *</label>
+        <input name="password" type="password" ng-model="InfoFactura.password" class="form-control" placeholder="" size="255" ng-maxlength="255" required="" />
+        <b style="color:red" ng-show="frm.password.$invalid && !frm.password.$pristine" class="help-block">La contraseña es requerido ó ha sobrepasado el limite de caracteres.</b>
+      </div>
+    </div>
+    <div ng-show="passwordShow" class="alert alert-info" ng-show="(InfoFactura.AltaFacturacion > 0)">
+      <strong>Actualizar contraseña.</strong> Puedes actualizar tu contraseña del portal de facturación cambiando el campo de contraseña y guardando la forma.
+    </div>
+    <h3>Datos de contacto</h3>
+    <div class="row">
+      <!--<div class="form-group col-xs-12 col-sm-6">
+        <label>RFC *</label>
+        <input disabled name="rfc" type="text" ng-model="InfoFactura.rfc" class="form-control" placeholder="" size="255" ng-maxlength="255" required="" />
+        <b style="color:red" ng-show="frm.rfc.$invalid && !frm.rfc.$pristine" class="help-block">El rfc es requerido ó ha sobrepasado el limite de caracteres.</b>
+      </div>-->
+      <div class="form-group col-xs-12">
+        <label>Nombre de contacto *</label>
+        <input name="nombre_contacto" type="text" ng-model="InfoFactura.nombre_contacto" class="form-control" placeholder="" size="255" ng-maxlength="255" required="" />
+        <b style="color:red" ng-show="frm.nombre_contacto.$invalid && !frm.nombre_contacto.$pristine" class="help-block">El nombre de contacto es requerido ó ha sobrepasado el limite de caracteres.</b>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-xs-12 col-sm-6">
+        <label>Telefono *</label>
+        <input name="telefono" type="text" ng-model="InfoFactura.telefono" class="form-control" placeholder="" size="8" ng-maxlength="8" required="" />
+        <b style="color:red" ng-show="frm.telefono.$invalid && !frm.telefono.$pristine" class="help-block">El telefono es requerido ó ha sobrepasado el limite de caracteres.</b>
+      </div>
+      <div class="form-group col-xs-12 col-sm-6">
+        <label>Email *</label>
+        <input name="email" type="email" ng-model="InfoFactura.email" class="form-control" placeholder="" size="255" ng-maxlength="255" required="" />
+        <b style="color:red" ng-show="frm.email.$invalid && !frm.email.$pristine" class="help-block">El email es requerido ó ha sobrepasado el limite de caracteres.</b>
+      </div>
+    </div>
+
+    <br>
+    <div class="row">
+      <div class="form-group col-xs-12 col-sm-offset-9 col-sm-3">
+        <button type="submit" ng-click="DarDeAlta()" class="btn btn-primary btn-block">Guardar</button>
+      </div>
+      <!--<div class="form-group col-xs-12 col-sm-3">
+        <button type="button" ng-click="Cancelar()" class="btn btn-warning btn-block">Cancelar</button>
+      </div>-->
+    </div>
+  </form>
+</div>

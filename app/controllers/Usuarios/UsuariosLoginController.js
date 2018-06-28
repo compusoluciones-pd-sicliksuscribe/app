@@ -34,7 +34,7 @@
       $cookies.remove('Session');
       $cookies.remove('Pedido');
       $scope.Usuario.IdEmpresa = $scope.currentDistribuidor.IdEmpresa;
-      $cookies.remove('currentDistribuidor');
+      // $cookies.remove('currentDistribuidor');
       $scope.SessionCookie = {};
       UsuariosFactory.postUsuarioIniciarSesion($scope.Usuario)
         .success(function (result) {
@@ -60,6 +60,9 @@
               NombreEmpresa: tokenPayload.NombreEmpresa,
               LeyoTerminos: tokenPayload.LeyoTerminos,
               distribuidores: tokenPayload.distribuidores,
+              IdPlanTuClick: tokenPayload.IdPlanTuClick,
+              mFacturacion: tokenPayload.mFacturacion,
+              DominioMS: tokenPayload.DominioMS,
               Expira: expireDate.getTime()
             };
             console.log('login succesfull');
@@ -69,7 +72,7 @@
             if (Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === '4' ||
               Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === '5' ||
               Session.IdTipoAcceso === 6 || Session.IdTipoAcceso === '6') {
-              $cookies.putObject('currentDistribuidor', Session.distribuidores[0], { 'expires': expireDate, secure: $rootScope.secureCookie });
+              //$cookies.putObject('currentDistribuidor', Session.distribuidores[0], { 'expires': expireDate, secure: $rootScope.secureCookie });
             }
 
             $scope.detectarSitioActivoURL();

@@ -21,6 +21,11 @@
       return $http.get($rootScope.API + 'exchange-rate/' + IdEmpresa);
     };
 
+    factory.getClientsTuclick = function () {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'tuclick/get-clients/');
+    };
+
     factory.postExchangeRate = function (Empresas) {
       factory.refreshToken();
       return $http.post($rootScope.API + 'exchange-rate', Empresas);

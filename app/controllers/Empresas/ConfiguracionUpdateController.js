@@ -107,6 +107,53 @@
         putMiSitio();
       }
     };
+
+// options - if a list is given then choose one of the items. The first item in the list will be the default
+    $scope.options = {
+      // html attributes
+      required: false,
+      disabled: false,
+      placeholder: '',
+      inputClass: '',
+      id: undefined,
+      name: undefined,
+      // validation
+      restrictToFormat: false,
+      preserveInputFormat: false,
+      allowEmpty: false,
+      // color
+      format: 'hex',
+      case: 'lower',
+      // sliders
+      hue: true,
+      saturation: true,
+      lightness: true, // Note: In the square mode this is HSV and in round mode this is HSL
+      alpha: true,
+      dynamicHue: true,
+      dynamicSaturation: true,
+      dynamicLightness: true,
+      dynamicAlpha: true,
+      // swatch
+      swatch: true,
+      swatchPos: 'left',
+      swatchBootstrap: true,
+      swatchOnly: false,
+      // popup
+      round: true,
+      pos: 'left',
+      inline: false,
+      horizontal: true,
+      // show/hide
+      show: {
+        swatch: true,
+        focus: true
+      },
+      hide: {
+        blur: false,
+        escape: true,
+        click: true
+      }
+    };
   };
 
   ConfiguracionUpdateController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'EmpresasFactory', 'FileUploader', 'AccesosAmazonFactory'];

@@ -3,6 +3,14 @@
     var factory = {};
     var Session = {};
 
+    const encodeQueryData = function (params) {
+      let query = [];
+      Object.keys(params).forEach(function (property) {
+        if (params[property] != null) query.push(encodeURIComponent(property) + '=' + encodeURIComponent(params[property]));
+      });
+      return query.length > 0 ? '?' + query.join('&') : '';
+    };
+
     factory.refreshToken = function () {
       Session = $cookies.getObject('Session');
       if (!Session) { Session = { Token: 'no' }; }
@@ -11,9 +19,10 @@
 
     factory.refreshToken();
 
-    factory.postBuscarProductos = function (Busqueda) {
+    factory.getBuscarProductos = function (params) {
       factory.refreshToken();
-      return $http.post($rootScope.API + 'BuscarProductos', Busqueda);
+      const query = encodeQueryData(params);
+      return $http.get($rootScope.API + 'products' + query);
     };
 
     factory.postComplementos = function (Producto) {
@@ -26,9 +35,9 @@
       return $http.get($rootScope.API + 'Productos');
     };
 
-    factory.getMisProductos = function () {
+    factory.getMisProductos = function (IdEmpresa) {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'MisProductos');
+      return $http.get($rootScope.API + 'MisProductos/' + IdEmpresa);
     };
 
     factory.putMiProducto = function (producto) {
@@ -54,6 +63,11 @@
     factory.getProductContracts = function (idEmpresaUsuarioFinal, idProducto) {
       factory.refreshToken();
       return $http.get($rootScope.API + 'autodesk/contacts/' + idEmpresaUsuarioFinal + '/contract/' + idProducto);
+    };
+
+    factory.getProductContractsTuClick = function (idEmpresaUsuarioFinal, idProducto, currentDistribuidor) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'autodesk/contacts/' + idEmpresaUsuarioFinal + '/contract/' + idProducto + '/distribuidor/' + currentDistribuidor);
     };
 
     return factory;

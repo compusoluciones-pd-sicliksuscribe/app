@@ -130,38 +130,29 @@
         $scope.ShowToast("Datos inválidos, favor de verificar", 'danger');
       }
       else {
+        $scope.Promocion.Activo = 1;
         PromocionsFactory.putPromocion($scope.Promocion)
           .success(function (result) {
-            if (result[0].Success == true) {
-              $location.path("/Promocions");
-              $scope.ShowToast(result[0].Message, 'success');
-            }
-            else {
-              $scope.ShowToast(result[0].Message, 'danger');
-            }
+            $location.path('/Promocions');
+            console.log(result);
+            $scope.ShowToast(result.Message, 'success');
           })
           .error(function (data, status, headers, config) {
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+            $scope.ShowToast(data.Message, 'danger');
           });
       }
     };
 
     $scope.PromocionDelete = function () {
       $scope.Promocion.Activo = 0;
+      console.log($scope.Promocion);
       PromocionsFactory.putPromocion($scope.Promocion)
         .success(function (result) {
-
-          if (result[0].Success == true) {
-            $location.path("/Promocions");
-            $scope.ShowToast("Promoción dada de baja", 'success');
-          }
-          else {
-            $scope.ShowToast(result[0].Message, 'danger');
-          }
-
+          $location.path('/Promocions');
+          $scope.ShowToast('Promoción dada de baja', 'success');
         })
         .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          $scope.ShowToast(data.message, 'danger');
         });
 
       AccesosAmazonFactory.getAccesosAmazon()

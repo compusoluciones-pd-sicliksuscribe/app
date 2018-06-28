@@ -59,21 +59,21 @@
                         expireDate.setTime(expireDate.getTime() + 600 * 60000);
 
                         Session =
-                          {
-                            Token: result[0].Token,
-                            CorreoElectronico: tokenPayload.CorreoElectronico,
-                            Nombre: tokenPayload.Nombre,
-                            IdUsuario: tokenPayload.IdUsuario,
-                            ApellidoPaterno: tokenPayload.ApellidoPaterno,
-                            ApellidoMaterno: tokenPayload.ApellidoMaterno,
-                            IdTipoAcceso: tokenPayload.IdTipoAcceso,
-                            NombreTipoAcceso: tokenPayload.NombreTipoAcceso,
-                            IdEmpresa: tokenPayload.IdEmpresa,
-                            NombreEmpresa: tokenPayload.NombreEmpresa,
-                            LeyoTerminos: tokenPayload.LeyoTerminos,
-                            distribuidores: tokenPayload.distribuidores,
-                            Expira: expireDate.getTime()
-                          };
+                        {
+                          Token: result[0].Token,
+                          CorreoElectronico: tokenPayload.CorreoElectronico,
+                          Nombre: tokenPayload.Nombre,
+                          IdUsuario: tokenPayload.IdUsuario,
+                          ApellidoPaterno: tokenPayload.ApellidoPaterno,
+                          ApellidoMaterno: tokenPayload.ApellidoMaterno,
+                          IdTipoAcceso: tokenPayload.IdTipoAcceso,
+                          NombreTipoAcceso: tokenPayload.NombreTipoAcceso,
+                          IdEmpresa: tokenPayload.IdEmpresa,
+                          NombreEmpresa: tokenPayload.NombreEmpresa,
+                          LeyoTerminos: tokenPayload.LeyoTerminos,
+                          distribuidores: tokenPayload.distribuidores,
+                          Expira: expireDate.getTime()
+                        };
 
                         $cookies.putObject('Session', Session, { 'expires': expireDate, secure: $rootScope.secureCookie });
 

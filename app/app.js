@@ -1,5 +1,5 @@
 (function () {
-  var app = angular.module('marketplace', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngTouch', 'angular-jwt', 'angular-parallax', 'ui.bootstrap', 'angular.filter', 'angularFileUpload', 'ngToast', 'ui.mask', 'directives.loading', 'bcherny/formatAsCurrency', 'ng.deviceDetector']);
+  var app = angular.module('marketplace', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngTouch', 'angular-jwt', 'angular-parallax', 'ui.bootstrap', 'angular.filter', 'angularFileUpload', 'ngToast', 'ui.mask', 'directives.loading', 'bcherny/formatAsCurrency', 'ng.deviceDetector', 'color.picker', 'ngTextTruncate']);
   app.config(function ($routeProvider) {
     $routeProvider
 
@@ -33,7 +33,7 @@
         resolve: {
           'check': function ($location, $cookies) {
             var Session = $cookies.getObject('Session');
-            if (!(Session.IdTipoAcceso === 2 && Session.IdEmpresa == 214)) { $location.path('/404'); }
+            if (!(Session.IdTipoAcceso === 2 && Session.IdPlanTuClick !== null)) { $location.path('/404'); }
           }
         }
       })
@@ -43,7 +43,7 @@
         resolve: {
           'check': function ($location, $cookies) {
             var Session = $cookies.getObject('Session');
-            if (!(Session.IdTipoAcceso === 2 && Session.IdEmpresa == 214)) { $location.path('/404'); }
+            if (!(Session.IdTipoAcceso === 2)) { $location.path('/404'); }
           }
         }
       })
@@ -83,6 +83,36 @@
           'check': function ($location, $cookies) {
             var Session = $cookies.getObject('Session');
             if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); }
+          }
+        }
+      })
+
+      .when('/actualizar-datos-facturacion', {
+        controller: 'FacturacionCreateController', templateUrl: 'app/views/Facturacion/FacturacionCreate.html',
+        resolve: {
+          'check': function ($location, $cookies, jwtHelper) {
+            var Session = $cookies.getObject('Session');
+            if (!((Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 2) && Session.mFacturacion)) { $location.path('/404'); }
+          }
+        }
+      })
+
+      .when('/facturas-pendientes', {
+        controller: 'FacturacionReadController', templateUrl: 'app/views/Facturacion/FacturacionRead.html',
+        resolve: {
+          'check': function ($location, $cookies, jwtHelper) {
+            var Session = $cookies.getObject('Session');
+            if (!((Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 2) && Session.mFacturacion)) { $location.path('/404'); }
+          }
+        }
+      })
+
+      .when('/facturas-pendientes/:IdFactura', {
+        controller: 'FacturacionReadDetailsController', templateUrl: 'app/views/Facturacion/FacturacionReadDetails.html',
+        resolve: {
+          'check': function ($location, $cookies, jwtHelper) {
+            var Session = $cookies.getObject('Session');
+            if (!((Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 2) && Session.mFacturacion)) { $location.path('/404'); }
           }
         }
       })
@@ -127,11 +157,23 @@
         }
       })
 
+      .when('/ConfigurarRPs/FinalUser', {
+        controller: 'EmpresasRPUFController', templateUrl: 'app/views/Empresas/EmpresasRPUF.html',
+        resolve: {
+          'check': function ($location, $cookies) {
+            var Session = $cookies.getObject('Session');
+            console.log('hot');
+            if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 4)) { $location.path('/404'); }
+          }
+        }
+      })
+
       .when('/ConfigurarRPs/:IdEmpresa', {
         controller: 'EmpresasRPController', templateUrl: 'app/views/Empresas/EmpresasRP.html',
         resolve: {
           'check': function ($location, $cookies) {
             var Session = $cookies.getObject('Session');
+            console.log('cold');
             if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); }
           }
         }
@@ -147,8 +189,38 @@
         }
       })
 
+      .when('/Monitor/uf', {
+        controller: 'MonitorReadUFController', templateUrl: 'app/views/PedidoDetalles/MonitorReadUF.html',
+        resolve: {
+          'check': function ($location, $cookies) {
+            var Session = $cookies.getObject('Session');
+            if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6 || Session.IdTipoAcceso === 7)) { $location.path('/404'); }
+          }
+        }
+      })
+
       .when('/MonitorPagos', {
         controller: 'MonitorPagos', templateUrl: 'app/views/PedidoDetalles/MonitorPagos.html',
+        resolve: {
+          'check': function ($location, $cookies) {
+            var Session = $cookies.getObject('Session');
+            if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6 || Session.IdTipoAcceso === 7)) { $location.path('/404'); }
+          }
+        }
+      })
+
+      .when('/MonitorPagos/uf', {
+        controller: 'MonitorPagosUF', templateUrl: 'app/views/PedidoDetalles/MonitorPagosUF.html',
+        resolve: {
+          'check': function ($location, $cookies) {
+            var Session = $cookies.getObject('Session');
+            if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6 || Session.IdTipoAcceso === 7)) { $location.path('/404'); }
+          }
+        }
+      })
+
+      .when('/MonitorPagos/uf/refrescar', {
+        controller: 'MonitorPagosUF', templateUrl: 'app/views/PedidoDetalles/MonitorPagosUF.html',
         resolve: {
           'check': function ($location, $cookies) {
             var Session = $cookies.getObject('Session');
@@ -209,7 +281,7 @@
 
       .when('/Empresa/:IdEmpresa', {
         controller: 'EmpresasUpdateController', templateUrl: 'app/views/Empresas/EmpresasUpdate.html',
-        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 6)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 6)) { $location.path('/404'); } } }
       })
 
       .when('/Clientes', {
@@ -229,12 +301,19 @@
 
       .when('/Comprar', {
         controller: 'ComprarController', templateUrl: 'app/views/PedidoDetalles/Comprar.html',
-        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3)) { $location.path('/404'); } } }
+        resolve: {
+          'check': function ($location, $cookies) {
+            var Session = $cookies.getObject('Session');
+            if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3)) {
+              $location.path('/404');
+            }
+          }
+        }
       })
 
       .when('/uf/Comprar', {
         controller: 'ComprarUFController', templateUrl: 'app/views/PedidoDetalles/ComprarUF.html',
-        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6 || Session.IdTipoAcceso === 2)) { $location.path('/404'); } } }
       })
 
       .when('/Carrito', {
@@ -249,22 +328,22 @@
 
       .when('/uf/Productos/:Busqueda', {
         controller: 'ProductosUFReadController', templateUrl: 'app/views/Productos/ProductosUFRead.html',
-        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6)) { $location.path('/404'); } } }
       })
 
       .when('/uf/Productos', {
         controller: 'ProductosUFReadController', templateUrl: 'app/views/Productos/ProductosUFRead.html',
-        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6)) { $location.path('/404'); } } }
       })
 
       .when('/uf/Carrito', {
         controller: 'PedidoDetallesUFReadController', templateUrl: 'app/views/PedidoDetalles/PedidoDetallesUFRead.html',
-        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6)) { $location.path('/404'); } } }
       })
 
       .when('/uf/Carrito/:error', {
         controller: 'PedidoDetallesUFReadController', templateUrl: 'app/views/PedidoDetalles/PedidoDetallesUFRead.html',
-        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6)) { $location.path('/404'); } } }
       })
 
       .when('/Favoritos', {
@@ -294,17 +373,26 @@
 
       .when('/Promocion', {
         controller: 'PromocionsCreateController', templateUrl: 'app/views/Promocions/PromocionsCreate.html',
-        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) {
+          var Session = $cookies.getObject('Session');
+          if (!(Session.IdTipoAcceso === 1) && !(Session.IdTipoAcceso === 2) && !(Session.IdTipoAcceso === 3)) { $location.path('/404'); }
+        } }
       })
 
       .when('/Promocions', {
         controller: 'PromocionsReadController', templateUrl: 'app/views/Promocions/PromocionsRead.html',
-        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) {
+          var Session = $cookies.getObject('Session');
+          if (!(Session.IdTipoAcceso === 1) && !(Session.IdTipoAcceso === 2) && !(Session.IdTipoAcceso === 3)) { $location.path('/404'); }
+        } }
       })
 
       .when('/Promocion/:IdPromocion', {
         controller: 'PromocionsUpdateController', templateUrl: 'app/views/Promocions/PromocionsUpdate.html',
-        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) {
+          var Session = $cookies.getObject('Session'); 
+          if (!(Session.IdTipoAcceso === 1) && !(Session.IdTipoAcceso === 2) && !(Session.IdTipoAcceso === 3)) { $location.path('/404'); }
+        } }
       })
 
       .when('/Reportes', {
@@ -369,6 +457,10 @@
       .when('/Version', {
         controller: 'VersionController', templateUrl: 'app/views/VersionControl/VersionControl.html',
         resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 1)) { $location.path('/404'); } } }
+      })
+      .when('/MonitorConsulta', {
+        controller: 'MonitorConsultaController', templateUrl: 'app/views/PedidoDetalles/MonitorConsultasUF.html',
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 2)) { $location.path('/404'); } } }
       })
 
       /* .when('/:Subdominio', { controller: 'UsuariosLoginController', templateUrl: 'app/views/Usuarios/UsuariosLogin.html' }) */

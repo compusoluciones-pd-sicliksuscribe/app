@@ -6,8 +6,7 @@
 
     $scope.init = function () {
       $scope.CheckCookie();
-
-      PromocionsFactory.getPromocions()
+      PromocionsFactory.getPromocions($scope.SessionCookie.IdEmpresa)
         .success(function (Promocions) {
           $scope.Promocions = Promocions;
         })

@@ -26,9 +26,34 @@
       return $http.put($rootScope.API + 'Pedidos/CodigoPromocion', Pedido);
     };
 
-    factory.patchPaymentInformation = function (paymentResult)  {
+    factory.patchPaymentInformation = function (paymentResult) {
       factory.refreshToken();
       return $http.patch($rootScope.API + 'orders/update-payment-details', paymentResult);
+    };
+
+    factory.patchPedidosParaRenovar = function (paymentResult) {
+      factory.refreshToken();
+      return $http.patch($rootScope.API + 'tuclick/update-payment-details', paymentResult);
+    };
+
+    factory.patchPaymentInformationPayPal = function (paymentResult) {
+      factory.refreshToken();
+      return $http.patch($rootScope.API + 'orders/update-payment-details', paymentResult);
+    };
+
+    factory.patchPaymentInformationPrePaid = function (paymentResult) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'orders/pay-with-prepaid', paymentResult);
+    };
+
+    factory.renewContract = function (contractData) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'autodesk/contracts/renew', contractData);
+    };
+
+    factory.renewContractTuClick = function (contractData, currentDistribuidor) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'autodesk/contracts/renew/tuclick/' + currentDistribuidor, contractData);
     };
 
     return factory;

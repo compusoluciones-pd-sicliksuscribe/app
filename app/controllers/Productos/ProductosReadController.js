@@ -1,6 +1,7 @@
 (function () {
   var ProductosReadController = function ($scope, $log, $location, $cookies, $routeParams, ProductosFactory, FabricantesFactory, TiposProductosFactory, PedidoDetallesFactory, TipoCambioFactory, ProductoGuardadosFactory, EmpresasXEmpresasFactory, UsuariosFactory, $anchorScroll) {
     var BusquedaURL = $routeParams.Busqueda;
+    const HRWAWRE_EXTRA_EMPOLYEES_GROUPING = 1000;
     $scope.BuscarProductos = {};
     $scope.Pagina = 0;
     $scope.sortBy = 'Nombre';
@@ -13,40 +14,53 @@
     $scope.IdPedidoContrato = 0;
     $scope.DominioMicrosoft = true;
     $scope.usuariosSinDominio = {};
+    const NOT_FOUND = 404;
+
+    const formatTiers = function (tiers) {
+      if (tiers) {
+        const lastTierIndex = tiers.length - 1;
+        return tiers.map(function (tier, index) {
+          const previousTier = tiers[index - 1];
+          const isFirstTier = index === 0;
+          const isLastTier = index === lastTierIndex;
+          const quantityToAdd = isLastTier ? 0 : 1;
+          const lowerLimit = isFirstTier ? 1 : previousTier.employee_limit + quantityToAdd;
+          const upperLimit = isLastTier ? 0 : tier.employee_limit;
+          const previousTierPrice = isFirstTier ? 0 : previousTier.price;
+          return { lowerLimit, upperLimit, propertyName: 'empleados', price: tier.price, previousTierPrice };
+        });
+      }
+      return null;
+    };
 
     $scope.BuscarProducto = function (ResetPaginado) {
       $scope.Mensaje = 'Buscando...';
-
-      if (ResetPaginado == true) {
+      if (ResetPaginado) {
         $scope.Pagina = 0;
         $scope.BuscarProductos.Offset = $scope.Pagina * 6;
       }
-
-      ProductosFactory.postBuscarProductos($scope.BuscarProductos)
+      const IdTipoProducto = ($scope.BuscarProductos.IdTipoProducto === '' || $scope.BuscarProductos.IdTipoProducto == null) ? undefined : $scope.BuscarProductos.IdTipoProducto;
+      $scope.BuscarProductos.IdTipoProducto = IdTipoProducto;
+      ProductosFactory.getBuscarProductos($scope.BuscarProductos)
         .success(function (Productos) {
           if (Productos.success === 1) {
-            $scope.Productos = Productos.data[0].map(function (item) {
+            $scope.Productos = Productos.data.map(function (item) {
               item.IdPedidoContrato = 0;
               item.TieneContrato = true;
+              item.tiers = formatTiers(item.tiers);
               return item;
             });
-            if ($scope.Productos == '') {
-              $scope.Mensaje = 'No encontramos resultados de tu búsqueda...';
-              if ($scope.Pagina > 0) {
-                $scope.ShowToast('No encontramos más resultados de esta busqueda, regresaremos a la página anterior.', 'danger');
-                $scope.PaginadoAtras();
-              }
-            }
-          } else {
-            $scope.Mensaje = Productos.message;
           }
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
-
-          $scope.ShowToast('No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.', 'danger');
-
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          if (status === NOT_FOUND && $scope.Pagina > 0) {
+            $scope.ShowToast('No se encontraron más resultados para la busqueda.', 'danger');
+            $scope.PaginadoAtras();
+          } else {
+            $scope.Productos = [];
+            $scope.Mensaje = 'Sin resultados para mostrar.';
+            $scope.ShowToast('No se encontraron resultados para la busqueda.', 'danger');
+          }
         });
 
       TipoCambioFactory.getTipoCambio()
@@ -57,7 +71,6 @@
         .error(function (data, status, headers, config) {
           $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
           $scope.ShowToast('No pudimos obtener el tipo de cambio, por favor intenta una vez más.', 'danger');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
     };
 
@@ -102,12 +115,11 @@
       $scope.BuscarProductos.IdFabricante = $scope.BuscarProductos.IdFabricante;
       $scope.BuscarProductos.IdTipoProducto = $scope.BuscarProductos.IdTipoProducto;
       $scope.BuscarProductos.Offset = $scope.Pagina * 6;
-
       if (BusquedaURL != 'undefined') {
-        $scope.BuscarProductos.Busqueda = BusquedaURL;
+        $scope.BuscarProductos.keyword = BusquedaURL;
         $scope.BuscarProducto(false);
       } else {
-        $scope.BuscarProductos.Busqueda = undefined;
+        $scope.BuscarProductos.keyword = undefined;
         $scope.BuscarProducto(false);
       }
     };
@@ -149,7 +161,7 @@
             if ((Producto.IdAccionAutodesk === 2 || !Producto.IdAccionAutodesk) && Producto.contratos.length === 0) {
               Producto.TieneContrato = false;
             }
-            if (Producto.IdAccionAutodesk === 1) Producto.contratos.unshift({ IdPedido: 0, ResultadoFabricante6: 'Nuevo contrato...' });
+            if (Producto.IdAccionAutodesk === 1) Producto.contratos.unshift({ IdPedido: 0, NumeroContrato: 'Nuevo contrato...' });
             setProtectedRebatePrice(Producto.IdEmpresaUsuarioFinal);
           } else {
             $scope.ShowToast('No pudimos cargar la información de tus contratos, por favor intenta de nuevo más tarde.', 'danger');
@@ -218,20 +230,34 @@
       if (Producto.IdFabricante === 1 && $scope.DominioMicrosoft) validateMicrosoftData(Producto);
     };
 
-    $scope.CalcularPrecioTotal = function (Precio, Cantidad, MonedaPago, MonedaProducto, TipoCambio, ProtectedRP) {
-      var total = 0.0;
-      var rebatePrice = ProtectedRP || TipoCambio;
-      if (MonedaPago === 'Pesos' && MonedaProducto === 'Dólares') {
-        Precio = Precio * rebatePrice;
-      }
+    const estimateLastTier = function (previousTier, currentTier, quantity) {
+      const extraEmployees = quantity - previousTier.upperLimit;
+      const extraEmployessFactor = Math.round(extraEmployees / HRWAWRE_EXTRA_EMPOLYEES_GROUPING);
+      const extraEmployeePrice = currentTier.price * extraEmployessFactor;
+      return previousTier.price + extraEmployeePrice;
+    };
 
-      if (MonedaPago === 'Dólares' && MonedaProducto === 'Pesos') {
-        Precio = Precio / rebatePrice;
-      }
+    const estimateTieredTotal = function (tiers, quantity) {
+      const indexOfLastTier = tiers.length - 1;
+      return tiers.reduce(function (total, currentTier, index, readOnlyTiers) {
+        if (quantity >= currentTier.lowerLimit) {
+          if (index === indexOfLastTier) {
+            const previousTier = readOnlyTiers[index - 1];
+            return estimateLastTier(previousTier, currentTier, quantity);
+          }
+          return currentTier.price;
+        }
+        return total;
+      }, 0);
+    };
 
-      total = Precio * Cantidad;
-      if (!total) { total = 0.00; }
-      return total;
+    $scope.estimateTotal = function (product, quantity) {
+      if (product.tiers) {
+        return estimateTieredTotal(product.tiers, quantity);
+      }
+      const price = product.PorcentajeDescuento > 0 ? product.PrecioDescuento : product.PrecioProrrateo;
+      const estimatedTotal = price * quantity || 0.00;
+      return estimatedTotal;
     };
 
     $scope.AgregarCarrito = function (Producto, Cantidad, IdPedidocontrato) {
@@ -252,7 +278,7 @@
         const contrato = Producto.contratos
           .filter(function (p) {
             return Producto.IdPedidoContrato === p.IdPedido;
-          })[0].ResultadoFabricante6;
+          })[0].NumeroContrato;
         NuevoProducto.ContratoBaseAutodesk = contrato.trim();
         // NuevoProducto.IdAccionAutodesk = Producto.IdAccionProductoAutodesk === 1 ? 3 : 2;
       }

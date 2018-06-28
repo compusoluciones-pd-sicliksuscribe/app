@@ -92,7 +92,8 @@
 
     $scope.calcularDescuento = function (product) {
       if (product.PorcentajeDescuento && (product.PorcentajeDescuento > 0 && product.PorcentajeDescuento < 101)) {
-        product.PrecioFinal = product.PrecioNormal - (product.PrecioNormal * Number('.' + product.PorcentajeDescuento || 0));
+        let discount = product.PrecioNormal - (product.PrecioNormal * Number((product.PorcentajeDescuento / 100) || 0));
+        product.PrecioFinal = Number(discount.toFixed(4));
         product.Activo = 1;
       } else {
         product.PrecioFinal = '';
@@ -125,6 +126,7 @@
     $scope.calcularPrecioVenta = function (discount) {
       filteredProducts.forEach(function (product) {
         product.PorcentajeDescuento = discount;
+        product.Activo = 1;
         product.PrecioFinal = product.PrecioNormal - (product.PrecioNormal * Number('.' + product.PorcentajeDescuento || 0));
       });
     };
