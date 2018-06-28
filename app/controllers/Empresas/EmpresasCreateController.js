@@ -224,10 +224,10 @@
               if ($scope.frm.NombreEmpresa.$invalid == true) {
                 $scope.frm.NombreEmpresa.$pristine = false;
               }
-              if ($scope.frm.DominioMicrosoft.$invalid == true) {
-                $scope.frm.DominioMicrosoft.$pristine = false;
-                $scope.Empresa.MensajeDominio = 'Ingresa un Dominio.';
-              }
+              // if ($scope.frm.DominioMicrosoft.$invalid == true) {
+              //   $scope.frm.DominioMicrosoft.$pristine = false;
+              //   $scope.Empresa.MensajeDominio = 'Ingresa un Dominio.';
+              // }
               if ($scope.frm.Direccion1.$invalid == true) {
                 $scope.frm.Direccion1.$pristine = false;
               }
@@ -256,6 +256,10 @@
                 $scope.frm.Telefono.$pristine = false;
               }
             } else {
+              if (!$scope.Empresa.DominioMicrosoft || $scope.Empresa.DominioMicrosoft === ''){
+                delete $scope.Empresa.DominioMicrosoft;
+              }
+              console.log($scope.Empresa)
               $scope.loading = true;
               $scope.Empresa.Formulario = true;
               EmpresasFactory.postEmpresa($scope.Empresa)
