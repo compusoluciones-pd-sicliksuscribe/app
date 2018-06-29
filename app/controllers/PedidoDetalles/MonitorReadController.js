@@ -205,7 +205,7 @@
         };
         PedidoDetallesFactory.updateSubscriptionNextQuantity(detail)
           .then(function (updateResult) {
-            $scope.ShowToast(updateResult.message, 'success');
+            $scope.ShowToast(updateResult.data.message, 'success');
           })
           .catch(function (error) {
             $scope.ShowToast(error.data.message, 'danger');
