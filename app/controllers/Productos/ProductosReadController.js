@@ -196,8 +196,8 @@
             }
             Producto.IdProductoFabricanteExtra = IdProductoFabricanteExtra;
             PedidoDetallesFactory.postPedidoDetallesAddOns(Producto)
-              .success(function (data) {
-                $scope.selectProductos = data;
+              .success(function (result) {
+                $scope.selectProductos = result.data;
                 $scope.Productos.forEach(function (producto) {
                   if (producto.IdProducto === Producto.IdProducto) {
                     if ($scope.selectProductos.length === 0) {
