@@ -223,8 +223,8 @@
     $scope.checkPayment = function () {
       if (document.getElementById('Tarjeta').checked) {
         $scope.pagar();
-      } else if (document.getElementById('PayPal').checked) {
-        $scope.preparePayPal();
+      // } else if (document.getElementById('PayPal').checked) {
+      //   $scope.preparePayPal();
       } else if (document.getElementById('Prepago').checked) {
         $scope.preparePrePaid();
       }
@@ -293,38 +293,38 @@
       return subdomain;
     };
 
-    $scope.preparePayPal = function () {
-      if ($scope.PedidosSeleccionadosParaPagar.length > 0) {
-        const actualSubdomain = getActualSubdomain();
-        PedidoDetallesFactory.payWithPaypal({ Pedidos: $scope.PedidosSeleccionadosParaPagar })
-        .success(function (response) {
-          var expireDate = new Date();
-          expireDate.setTime(expireDate.getTime() + 600 * 2000);
-          const paypalNextPayment = {
-            electronicServiceByOrder: response.data.electronicServiceByOrder,
-            TipoCambio: $scope.TipoCambio
-          };
-          $cookies.putObject('paypalNextPayment', paypalNextPayment, { expires: expireDate, secure: $rootScope.secureCookie });
-          $cookies.putObject('orderIds', $scope.PedidosSeleccionadosParaPagar, { expires: expireDate, secure: $rootScope.secureCookie });
-          PedidoDetallesFactory.preparePayPal({ orderIds: $scope.PedidosSeleccionadosParaPagar, url: 'MonitorPagos', actualSubdomain })
-            .then(function (response) {
-              if (response.data.state === 'created') {
-                const paypal = response.data.links.filter(function (item) {
-                  if (item.method === 'REDIRECT') return item.href;
-                })[0];
-                location.href = paypal.href;
-              } else {
-                $scope.ShowToast('Ocurrio un error al procesar el pago.', 'danger');
-              }
-            });
-        })
-        .catch(function (response) {
-          $scope.ShowToast('Ocurrio un error al procesar el pago. de tipo: ' + response.data.message, 'danger');
-        });
-      } else {
-        $scope.ShowToast('Selecciona al menos un pedido para pagar.', 'danger');
-      }
-    };
+    // $scope.preparePayPal = function () {
+    //   if ($scope.PedidosSeleccionadosParaPagar.length > 0) {
+    //     const actualSubdomain = getActualSubdomain();
+    //     PedidoDetallesFactory.payWithPaypal({ Pedidos: $scope.PedidosSeleccionadosParaPagar })
+    //     .success(function (response) {
+    //       var expireDate = new Date();
+    //       expireDate.setTime(expireDate.getTime() + 600 * 2000);
+    //       const paypalNextPayment = {
+    //         electronicServiceByOrder: response.data.electronicServiceByOrder,
+    //         TipoCambio: $scope.TipoCambio
+    //       };
+    //       $cookies.putObject('paypalNextPayment', paypalNextPayment, { expires: expireDate, secure: $rootScope.secureCookie });
+    //       $cookies.putObject('orderIds', $scope.PedidosSeleccionadosParaPagar, { expires: expireDate, secure: $rootScope.secureCookie });
+    //       PedidoDetallesFactory.preparePayPal({ orderIds: $scope.PedidosSeleccionadosParaPagar, url: 'MonitorPagos', actualSubdomain })
+    //         .then(function (response) {
+    //           if (response.data.state === 'created') {
+    //             const paypal = response.data.links.filter(function (item) {
+    //               if (item.method === 'REDIRECT') return item.href;
+    //             })[0];
+    //             location.href = paypal.href;
+    //           } else {
+    //             $scope.ShowToast('Ocurrio un error al procesar el pago.', 'danger');
+    //           }
+    //         });
+    //     })
+    //     .catch(function (response) {
+    //       $scope.ShowToast('Ocurrio un error al procesar el pago. de tipo: ' + response.data.message, 'danger');
+    //     });
+    //   } else {
+    //     $scope.ShowToast('Selecciona al menos un pedido para pagar.', 'danger');
+    //   }
+    // };
 
     $scope.ComprarConPayPal = function (resultPaypal) {
       const paypalNextPayment = $cookies.getObject('paypalNextPayment');
