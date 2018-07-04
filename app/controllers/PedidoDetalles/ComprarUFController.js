@@ -172,56 +172,51 @@
     $scope.PagarTarjeta = function () {
       PedidoDetallesFactory.getPrepararTarjetaCreditoFinalUser($scope.currentDistribuidor.IdEmpresa)
         .success(function (Datos) {
-          var expireDate = new Date();
-          expireDate.setTime(expireDate.getTime() + 600 * 2000);
-          $cookies.putObject('pedidosAgrupados', Datos.data['0'].pedidosAgrupados, { 'expires': expireDate, secure: $rootScope.secureCookie });
-          if (Datos.data['0'].total > 0) {
-            if (Datos.success) {
-              if ($cookies.getObject('pedidosAgrupados')) {
-                PedidoDetallesFactory.getOwnCreditCardData($scope.currentDistribuidor.IdEmpresa)
-                .success(function (result) {
-                  Checkout.configure({
-                    merchant: Datos.data['0'].merchant,
-                    session: { id: Datos.data['0'].session_id },
-                    order:
+          if (Datos.success) {
+            var expireDate = new Date();
+            expireDate.setTime(expireDate.getTime() + 600 * 2000);
+            $cookies.putObject('pedidosAgrupados', Datos.data['0'].pedidosAgrupados, { 'expires': expireDate, secure: $rootScope.secureCookie });
+            if ($cookies.getObject('pedidosAgrupados')) {
+              PedidoDetallesFactory.getOwnCreditCardData($scope.currentDistribuidor.IdEmpresa)
+              .success(function (result) {
+                Checkout.configure({
+                  merchant: Datos.data['0'].merchant,
+                  session: { id: Datos.data['0'].session_id },
+                  order:
+                  {
+                    amount: Datos.data['0'].total,
+                    currency: Datos.data['0'].moneda,
+                    description: 'Pago tarjeta bancaria',
+                    id: Datos.data['0'].pedidos
+                  },
+                  interaction:
+                  {
+                    merchant:
                     {
-                      amount: Datos.data['0'].total,
-                      currency: Datos.data['0'].moneda,
-                      description: 'Pago tarjeta bancaria',
-                      id: Datos.data['0'].pedidos
-                    },
-                    interaction:
-                    {
-                      merchant:
+                      name: result.NombreEmpresa || 'CompuSoluciones',
+                      address:
                       {
-                        name: result.NombreEmpresa || 'CompuSoluciones',
-                        address:
-                        {
-                          line1: result.RazonSocial || 'CompuSoluciones y Asociados, S.A. de C.V.',
-                          line2: result.Direccion || 'Av. Mariano Oterno No. 1105',
-                          line3: `${result.Colonia} C.P. ${result.CodigoPostal}` || 'Col. Rinconada del Bosque C.P. 44530',
-                          line4: `${result.Ciudad}, ${result.Estado}. México` || 'Guadalajara, Jalisco. México'
-                        },
-
-                        email: result.Email || 'order@yourMerchantEmailAddress.com',
-                        phone: result.TelefonoContacto || '+1 123 456 789 012'
+                        line1: result.RazonSocial || 'CompuSoluciones y Asociados, S.A. de C.V.',
+                        line2: result.Direccion || 'Av. Mariano Oterno No. 1105',
+                        line3: `${result.Colonia} C.P. ${result.CodigoPostal}` || 'Col. Rinconada del Bosque C.P. 44530',
+                        line4: `${result.Ciudad}, ${result.Estado}. México` || 'Guadalajara, Jalisco. México'
                       },
-                      displayControl: { billingAddress: 'HIDE', orderSummary: 'SHOW' },
-                      locale: 'es_MX',
-                      theme: 'default'
-                    }
-                  });
-                  Checkout.showLightbox();
+
+                      email: result.Email || 'order@yourMerchantEmailAddress.com',
+                      phone: result.TelefonoContacto || '+1 123 456 789 012'
+                    },
+                    displayControl: { billingAddress: 'HIDE', orderSummary: 'SHOW' },
+                    locale: 'es_MX',
+                    theme: 'default'
+                  }
                 });
-              } else {
-                $scope.ShowToast('No pudimos comenzar con tu proceso de pago, favor de intentarlo una vez más.', 'danger');
-              }
+                Checkout.showLightbox();
+              });
             } else {
-              $scope.ShowToast('Algo salio mal con el pago con tarjeta bancaria, favor de intentarlo una vez más.', 'danger');
+              $scope.ShowToast('No pudimos comenzar con tu proceso de pago, favor de intentarlo una vez más.', 'danger');
             }
           } else {
-            $scope.pedidosAgrupados = Datos.data['0'].pedidosAgrupados;
-            $scope.ComprarConTarjetaTuClick('Grátis', 'Grátis');
+            $scope.ShowToast('Algo salio mal con el pago con tarjeta bancaria, favor de intentarlo una vez más.', 'danger');
           }
         })
         .error(function (data, status, headers, config) {

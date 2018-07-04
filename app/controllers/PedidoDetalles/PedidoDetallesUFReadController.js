@@ -243,6 +243,9 @@
             if (!order.BanamexCredentials) {
               $scope.BanamexCredentials = 1;
             }
+            if (!order.PaypalCredentials) {
+              $scope.PaypalCredentials = 1;
+            }
           });
         });
       }

@@ -221,49 +221,54 @@
       if ($scope.PedidosSeleccionadosParaPagar.length > 0) {
         PedidoDetallesFactory.payWidthCardTuClick({ Pedidos: $scope.PedidosSeleccionadosParaPagar }, $scope.currentDistribuidor.IdEmpresa)
           .success(function (Datos) {
-            var expireDate = new Date();
-            expireDate.setTime(expireDate.getTime() + 600 * 2000);
-            Datos.data["0"].pedidosAgrupados[0].TipoCambio = $scope.TipoCambio;
-            $cookies.putObject('pedidosAgrupados', Datos.data["0"].pedidosAgrupados, { 'expires': expireDate, secure: $rootScope.secureCookie });
             if (Datos.success) {
-              if ($cookies.getObject('pedidosAgrupados')) {
-                PedidoDetallesFactory.getOwnCreditCardData($scope.currentDistribuidor.IdEmpresa)
-                .success(function (result) {
-                  Checkout.configure({
-                    merchant: Datos.data["0"].merchant,
-                    session: { id: Datos.data["0"].session_id },
-                    order:
-                    {
-                      amount: Datos.data['0'].total,
-                      currency: Datos.data["0"].moneda,
-                      description: 'Pago tarjeta bancaria',
-                      id: Datos.data["0"].pedidos,
-                    },
-                    interaction:
-                    {
-                      merchant:
+              var expireDate = new Date();
+              expireDate.setTime(expireDate.getTime() + 600 * 2000);
+              Datos.data["0"].pedidosAgrupados[0].TipoCambio = $scope.TipoCambio;
+              $cookies.putObject('pedidosAgrupados', Datos.data["0"].pedidosAgrupados, { 'expires': expireDate, secure: $rootScope.secureCookie });
+              if (Datos.success) {
+                if ($cookies.getObject('pedidosAgrupados')) {
+                  PedidoDetallesFactory.getOwnCreditCardData($scope.currentDistribuidor.IdEmpresa)
+                  .success(function (result) {
+                    Checkout.configure({
+                      merchant: Datos.data["0"].merchant,
+                      session: { id: Datos.data["0"].session_id },
+                      order:
                       {
-                        name: result.NombreEmpresa || 'CompuSoluciones',
-                        address:
-                        {
-                          line1: result.RazonSocial || 'CompuSoluciones y Asociados, S.A. de C.V.',
-                          line2: result.Direccion || 'Av. Mariano Oterno No. 1105',
-                          line3: `${result.Colonia} C.P. ${result.CodigoPostal}` || 'Col. Rinconada del Bosque C.P. 44530',
-                          line4: `${result.Ciudad}, ${result.Estado}. México` || 'Guadalajara, Jalisco. México'
-                        },
-
-                        email: result.Email || 'order@yourMerchantEmailAddress.com',
-                        phone: result.TelefonoContacto || '+1 123 456 789 012'
+                        amount: Datos.data['0'].total,
+                        currency: Datos.data["0"].moneda,
+                        description: 'Pago tarjeta bancaria',
+                        id: Datos.data["0"].pedidos,
                       },
-                      displayControl: { billingAddress: 'HIDE', orderSummary: 'SHOW' },
-                      locale: 'es_MX',
-                      theme: 'default'
-                    }
-                  });
+                      interaction:
+                      {
+                        merchant:
+                        {
+                          name: result.NombreEmpresa || 'CompuSoluciones',
+                          address:
+                          {
+                            line1: result.RazonSocial || 'CompuSoluciones y Asociados, S.A. de C.V.',
+                            line2: result.Direccion || 'Av. Mariano Oterno No. 1105',
+                            line3: `${result.Colonia} C.P. ${result.CodigoPostal}` || 'Col. Rinconada del Bosque C.P. 44530',
+                            line4: `${result.Ciudad}, ${result.Estado}. México` || 'Guadalajara, Jalisco. México'
+                          },
 
-                  Checkout.showLightbox();
-              });
+                          email: result.Email || 'order@yourMerchantEmailAddress.com',
+                          phone: result.TelefonoContacto || '+1 123 456 789 012'
+                        },
+                        displayControl: { billingAddress: 'HIDE', orderSummary: 'SHOW' },
+                        locale: 'es_MX',
+                        theme: 'default'
+                      }
+                    });
+
+                    Checkout.showLightbox();
+                  });
+                }
               }
+            }
+            else {
+              $scope.ShowToast('Tu distribuidor no cuenta con el servicio de pago con tarjeta.', 'danger');
             }
           })
           .error(function (data, status, headers, config) {
@@ -299,13 +304,17 @@
           $cookies.putObject('orderIds', $scope.PedidosSeleccionadosParaPagar, { expires: expireDate, secure: $rootScope.secureCookie });
           PedidoDetallesFactory.prepararPaypalFinalUser({ orderIds: $scope.PedidosSeleccionadosParaPagar, url: 'MonitorPagos/uf', actualSubdomain, IdUsuarioCompra: $scope.Session.IdUsuario })
             .then(function (response) {
-              if (response.data.state === 'created') {
-                const paypal = response.data.links.filter(function (item) {
-                  if (item.method === 'REDIRECT') return item.href;
-                })[0];
-                location.href = paypal.href;
+              if (!response.data.state) {
+                $scope.ShowToast('El distribuidor no cuenta con el servicio de pago con Paypal.', 'danger');
               } else {
-                $scope.ShowToast('Ocurrio un error al procesar el pago.', 'danger');
+                if (response.data.state === 'created') {
+                  const paypal = response.data.links.filter(function (item) {
+                    if (item.method === 'REDIRECT') return item.href;
+                  })[0];
+                  location.href = paypal.href;
+                } else {
+                  $scope.ShowToast('Ocurrio un error al procesar el pago.', 'danger');
+                }
               }
             });
         })
