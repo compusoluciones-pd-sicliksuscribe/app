@@ -197,7 +197,7 @@
             $scope.ActualizarMenu();
             $scope.currentDistribuidor = $cookies.getObject('currentDistribuidor');
           } else {
-            window.location.href = 'http://localhost:5000/#/';
+            window.location.href = 'https://clicksuscribe.compusoluciones.com/#/';
             $scope.currentDistribuidor = {};
             $scope.currentDistribuidor.UrlLogo = 'images/LogoSVG.svg';
           }
