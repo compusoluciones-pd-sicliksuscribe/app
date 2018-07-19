@@ -138,43 +138,55 @@
       }
     };
 
-    $scope.ActualizarRP = function (Empresa) {
-      // console.log(Empresa.cancelDate);
-      if (tipoDeFechaValido(Empresa.cancelDate)) {
-        if (tipoDeCambioValido(Empresa.TipoCambioRP)) {
-          var datosDePeticion = prepararDatosDePeticion(Empresa);
-          EmpresasXEmpresasFactory.postExchangeRate(datosDePeticion)
-            .then(function (respuesta) {
-              var data = respuesta.data;
-              var respuestaExitosa = data.success === 1;
-              if (respuestaExitosa) {
-                $scope.ShowToast('Tipo de cambio actualizado correctamente.', 'success');
-              } else {
-                $scope.ShowToast('Error al actualizar el tipo de cambio.', 'danger');
-              }
-            })
-            .catch(function (result) { error(result.data); });
-          Empresa.MostrarMensajeError = false;
-        }
-      } else {
-        $scope.ShowToast('Favor de asignar Fecha de Cancelacion.', 'danger');
-      }
-    };
+    // $scope.ActualizarRP = function (Empresa) {
+    //   // console.log(Empresa.cancelDate);
+    //   if (tipoDeFechaValido(Empresa.cancelDate)) {
+    //     if (tipoDeCambioValido(Empresa.TipoCambioRP)) {
+    //       var datosDePeticion = prepararDatosDePeticion(Empresa);
+    //       EmpresasXEmpresasFactory.postExchangeRate(datosDePeticion)
+    //         .then(function (respuesta) {
+    //           var data = respuesta.data;
+    //           var respuestaExitosa = data.success === 1;
+    //           if (respuestaExitosa) {
+    //             $scope.ShowToast('Tipo de cambio actualizado correctamente.', 'success');
+    //           } else {
+    //             $scope.ShowToast('Error al actualizar el tipo de cambio.', 'danger');
+    //           }
+    //         })
+    //         .catch(function (result) { error(result.data); });
+    //       Empresa.MostrarMensajeError = false;
+    //     }
+    //   } else {
+    //     $scope.ShowToast('Favor de asignar Fecha de Cancelacion.', 'danger');
+    //   }
+    // };
 
     var tipoDeFechaValido = function (cancelDate) {
       const today = new Date();
       return cancelDate >= today;
     };
 
+    const cookieAdminInfo = function ($cookies) {
+      let adminInfo = {};
+      $scope.Session = $cookies.getObject('Session');
+      adminInfo = Object.assign({}, { 'AdminEmailSession': $scope.Session.CorreoElectronico }, { 'AdminIdUser': $scope.Session.IdUsuario }, { 'AdminName': $scope.Session.Nombre });
+      return (adminInfo);
+    }
     $scope.UpdateDateAndRP = function (Empresa) {
+      // const adminInfo = cookieAdminInfo($cookies);
+      // console.log(adminInfo);
       const result = removeDataValues(Empresa);
+
+      // result = Object.assign(result1, adminInfo);   //ya no se a a necesitar, me lo traere desde el back con token
+       console.log(result);
+
       if (tipoDeCambioValido(result.TipoCambioRP)) {
         // console.log("tipo de cambio valido");
         if (tipoDeFechaValido(result.cancelDate)) {
           // console.log("tipo de fecha valido");
           EmpresasXEmpresasFactory.patchCancelDate(result)
             .then(function (respuesta) {
-              // console.log("respuesta ", respuesta);
+               console.log("respuesta ", respuesta);
 
               var data = respuesta.data;
               var respuestaExitosa = data.success === 1;
@@ -192,6 +204,8 @@
       }
     };
   };
+
+
 
   const removeDataValues = function (Empresa) {
     const dataValues = Object.assign({}, Empresa);
