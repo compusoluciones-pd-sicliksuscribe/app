@@ -2,6 +2,7 @@
   var MonitorPagos = function ($scope, $log, $rootScope, $cookies, $location, $uibModal, $filter, PedidoDetallesFactory, EmpresasFactory, PedidosFactory) {
     $scope.PedidoSeleccionado = 0;
     $scope.PedidosSeleccionadosParaPagar = [];
+    $scope.PedidosSeleccionadosParaPagarPrepaid = [];
     $scope.PedidosObj = {};
     $scope.ServicioElectronico = 0;
     $scope.Subtotal = 0;
@@ -53,15 +54,15 @@
       $location.path('/MonitorPagos');
       PedidoDetallesFactory.getPendingOrdersToPay()
         .success(function (ordersToPay) {
-          $scope.Pedidos = ordersToPay.data;
-          if (!ordersToPay.data || ordersToPay.data.length === 0) {
+          $scope.Pedidos = ordersToPay;
+          if (!ordersToPay || ordersToPay.length === 0) {
             return $scope.DeshabilitarPagar = true;
           }
-          $scope.PedidosAgrupados = groupBy(ordersToPay.data, function (item) { return [item.IdPedido]; });
+          $scope.PedidosAgrupados = groupBy(ordersToPay, function (item) { return [item.IdPedido]; });
           for (let x = 0; x < $scope.PedidosAgrupados.length; x++) {
             $scope.PedidosObj[$scope.PedidosAgrupados[x][0].IdPedido] = $scope.PedidosAgrupados[x][0];
           }
-          $scope.TipoCambio = ordersToPay.data[0].TipoCambio;
+          $scope.TipoCambio = ordersToPay[0].TipoCambio;
         })
         .error(function (data, status, headers, config) {
           $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
@@ -107,10 +108,10 @@
       var subtotal = 0;
       for (var x = 0; x < $scope.Pedidos.length; x++) {
         if ($scope.Pedidos[x].IdPedido == key) {
-          subtotal += $scope.Pedidos[x].PrecioRenovacion * $scope.Pedidos[x].CantidadProxima;
+          subtotal += $scope.Pedidos[x].PrecioRenovacion * $scope.Pedidos[x].CantidadProxima  * $scope.Pedidos[x].TipoCambio;
         }
       }
-      return subtotal * $scope.TipoCambio;
+      return subtotal;
     };
 
     $scope.seleccionarTodos = function () {
@@ -136,7 +137,12 @@
             }
             $scope.Pedidos[y].Seleccionado = 0;
           } else {
+            const pedido = {
+              IdPedido: key,
+              TipoCambio: $scope.Pedidos[y].TipoCambio,
+            };
             $scope.PedidosSeleccionadosParaPagar.push(key);
+            $scope.PedidosSeleccionadosParaPagarPrepaid.push(pedido);
             $scope.Pedidos[y].Seleccionado = 1;
           }
           break;
@@ -360,7 +366,7 @@
 
     $scope.preparePrePaid = function () {
       if ($scope.PedidosSeleccionadosParaPagar.length > 0) {
-        PedidoDetallesFactory.payWithPrePaid({ Pedidos: $scope.PedidosSeleccionadosParaPagar })
+        PedidoDetallesFactory.payWithPrePaid({ Pedidos: $scope.PedidosSeleccionadosParaPagarPrepaid })
         .success(function (response) {
           if (response.statusCode === 400) {
             $scope.ShowToast(response.message, 'danger');
