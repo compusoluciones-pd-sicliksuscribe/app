@@ -32,7 +32,7 @@
       <!-- <input type="radio" name="payType" id="PayPal" value="3"/> Pagar con PayPal -->
     </div>
     <div>
-      <!-- <input ng-model="PedidosObj[key].Check" ng-click="pedidosPorPagar(key);" type="radio" name="payType" id="Prepago" value="4"/> Transferencia (Solo Pesos MXN) -->
+      <input ng-model="PedidosObj[key].Check" ng-click="pedidosPorPagar(key);" type="radio" name="payType" id="Prepago" value="4"/> Transferencia (Solo Pesos MXN)
       <label for="" class="SaldoReal" ng-hide="infoEmpresa.Transferencia === 0 || infoEmpresa.Transferencia === null"> &nbsp;<b>Tu Saldo es: {{infoEmpresa.Transferencia | currency}}</b> </label>
     </div>
   </div>
@@ -40,7 +40,7 @@
   <hr>
   <div class="form-group row" ng-hide="DeshabilitarPagar">
     <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
-      <label>Tipo de cambio: </label> {{TipoCambio | currency: "$":4}} pesos
+      <label>Tipo de cambio del día: </label> {{TipoCambio | currency: "$":4}} pesos
       <br>
       <label>Servicio electrónico: </label> {{ServicioElectronico | currency}} pesos
     </div>
@@ -72,6 +72,8 @@
         <label>Cliente:</label> {{PedidosObj[key].NombreEmpresa}}
         <br>
         <label>Fecha límite de pago: </label> {{PedidosObj[key].FechaFin| date:'yyyy-MM-dd'}}
+        <br>
+        <label>Tipo de Cambio: </label> {{PedidosObj[key].TipoCambio | currency: "$":4}}
         <br>
         <label>Periodo a pagar: </label> {{PedidosObj[key].FechaFin| date:'yyyy-MM-dd'}} - {{PedidosObj[key].FechaFinProximo|
         date:'yyyy-MM-dd'}}
