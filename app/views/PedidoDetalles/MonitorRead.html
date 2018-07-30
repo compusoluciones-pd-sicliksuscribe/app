@@ -114,25 +114,33 @@
 									<div class="row" ng-show="detalles.Activo && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
 										<div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
 											<div class="radio" style="margin-left:20px">
-												<div ng-hide="detalles.IdTipoProducto === 3">
-													<input type="radio" name="FormaPago" value="1" ng-model="pedido.IdFormaPagoProxima" ng-change="ActualizarPago(pedido)" ng-disabled="pedido.MonedaPagoProxima === 'Dólares' || pedido.IdEstatusPedido !== 3">
-													Tarjeta o Transferencia
-												</div>
 												<div>
-													<input type="radio" name="FormaPago" value="2" ng-model="pedido.IdFormaPagoProxima" ng-change="ActualizarPago(pedido)" ng-disabled="pedido.IdEstatusPedido !== 3">
+													<input type="radio" name="FormaPago" value="2" ng-model="pedido.IdFormaPagoProxima" ng-change="ActualizarPago(pedido)" ng-disabled="pedido.IdEstatusPedido !== 3"> 
 													Crédito
+												</div>
+												<div ng-hide="detalles.IdTipoProducto === 3" ng-disabled="">
+													<input type="radio" name="FormaPago" value="1" ng-model="pedido.IdFormaPagoProxima" ng-change="ActualizarPago(pedido)" ng-disabled="pedido.MonedaPagoProxima === 'Dólares' || pedido.IdEstatusPedido !== 3">
+													Tarjeta 
+												</div>
+												<div ng-hide="detalles.IdTipoProducto === 3">
+													<input type="radio" name="FormaPago" value="4" ng-model="pedido.IdFormaPagoProxima" ng-change="ActualizarPago(pedido)" ng-disabled="pedido.MonedaPagoProxima === 'Dólares' || pedido.IdEstatusPedido !== 3">
+													Transferencia
+												</div>
+												<div ng-hide="detalles.IdTipoProducto === 3">
+													<input type="radio" name="FormaPago" value="3" ng-model="pedido.IdFormaPagoProxima" ng-change="ActualizarPago(pedido)" ng-disabled="pedido.MonedaPagoProxima === 'Dólares' || pedido.IdEstatusPedido !== 3">
+													Paypal
 												</div>
 											</div>
 										</div>
 										<div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
 											<div class="radio" style="margin-left:20px">
 												<div>
-													<input type="radio" name="MonedaPago" value="Dólares" ng-model="pedido.MonedaPagoProxima" ng-change="ActualizarMoneda(pedido)"
-														ng-disabled="pedido.IdFormaPagoProxima === 1 || pedido.IdEstatusPedido !== 3"> Dólares
+													<input type="radio" name="MonedaPago" value="Dólares" ng-model="pedido.MonedaPagoProxima" ng-change="ActualizarMoneda(pedido) "
+														ng-disabled="pedido.IdEstatusPedido !=3 || pedido.IdFormaPagoProxima != 2"> Dólares
 												</div>
 												<div>
-													<input type="radio" name="MonedaPago" value="Pesos" ng-model="pedido.MonedaPagoProxima " ng-change="ActualizarMoneda(pedido)"
-														ng-disabled="pedido.IdEstatusPedido !== 3"> Pesos
+													<input type="radio" name="MonedaPago" value="Pesos" ng-model="pedido.MonedaPagoProxima" ng-change="ActualizarMoneda(pedido)"
+														ng-disabled="pedido.IdEstatusPedido != 3"> Pesos
 												</div>
 											</div>
 										</div>
@@ -312,23 +320,29 @@
 									<div class="row" ng-show="detalles.Activo && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
 										<div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
 											<div class="radio" style="margin-left:20px">
-												<div>
-													<input type="radio" name="FormaPago" value="1" ng-model="detalles.IdFormaPagoProxima" ng-change="ActualizarPago(detalles)"
-														ng-disabled="detalles.MonedaPagoProxima === 'Dólares' || detalles.PagoRenovacion || detalles.EstatusFabricante !== 'accepted'">
-														Tarjeta o Transferencia o Paypal
-												</div>
-												<div>
-													<input type="radio" name="FormaPago" value="2" ng-model="detalles.IdFormaPagoProxima" ng-change="ActualizarPago(detalles)"
-														ng-disabled="detalles.PagoRenovacion || detalles.EstatusFabricante !== 'accepted'">
-														Crédito
-												</div>
+													<div>
+															<input type="radio" name="FormaPago" value="2" ng-model="detalles.IdFormaPagoProxima" ng-change="ActualizarPago(detalles)" ng-disabled="detalles.PagoRenovacion || detalles.EstatusFabricante !== 'accepted'"> 
+															Crédito
+														</div>
+														<div ng-hide="detalles.IdTipoProducto === 3" ng-disabled="">
+															<input type="radio" name="FormaPago" value="1" ng-model="detalles.IdFormaPagoProxima" ng-change="ActualizarPago(detalles)" ng-disabled="detalles.MonedaPagoProxima === 'Dólares' || detalles.PagoRenovacion || detalles.EstatusFabricante !== 'accepted'">
+															Tarjeta 
+														</div>
+														<div ng-hide="detalles.IdTipoProducto === 3">
+															<input type="radio" name="FormaPago" value="4" ng-model="detalles.IdFormaPagoProxima" ng-change="ActualizarPago(detalles)" ng-disabled="detalles.MonedaPagoProxima === 'Dólares' || detalles.PagoRenovacion || detalles.EstatusFabricante !== 'accepted'">
+															Transferencia
+														</div>
+														<div ng-hide="detalles.IdTipoProducto === 3">
+															<input type="radio" name="FormaPago" value="3" ng-model="detalles.IdFormaPagoProxima" ng-change="ActualizarPago(detalles)" ng-disabled="detalles.MonedaPagoProxima === 'Dólares' || detalles.PagoRenovacion || detalles.EstatusFabricante !== 'accepted'">
+															Paypal
+														</div>
 											</div>
 										</div>
 										<div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
 											<div class="radio" style="margin-left:20px">
 												<div>
 													<input type="radio" name="MonedaPago" value="Dólares" ng-model="detalles.MonedaPagoProxima" ng-change="ActualizarMoneda(detalles)"
-														ng-disabled="detalles.IdFormaPagoProxima === 1 || detalles.PagoRenovacion || detalles.EstatusFabricante !== 'accepted'"> Dólares
+														ng-disabled="detalles.IdFormaPagoProxima != 2 || detalles.PagoRenovacion || detalles.EstatusFabricante !== 'accepted'"> Dólares
 												</div>
 												<div>
 													<input type="radio" name="MonedaPago" value="Pesos" ng-model="detalles.MonedaPagoProxima " ng-change="ActualizarMoneda(detalles)"
