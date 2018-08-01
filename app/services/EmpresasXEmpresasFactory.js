@@ -27,6 +27,7 @@
     };
 
     factory.patchCancelDate = function (dataValues) {
+      console.log("hola entro al patch");
       factory.refreshToken();
       return $http.patch($rootScope.API + 'enterprise/' + dataValues.IdEmpresaUsuarioFinal + '/cancel-dates', dataValues);
     };

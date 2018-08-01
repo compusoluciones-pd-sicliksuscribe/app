@@ -1,5 +1,6 @@
 (function () {
   var EmpresasCreateController = function ($scope, $log, $cookies, $location, EmpresasFactory, EstadosFactory, UsuariosFactory) {
+    console.log("entro al controller empresa -----");
     $scope.Empresa = {};
     $scope.AlertaDominio = '';
     $scope.Empresa.IdERP = null;

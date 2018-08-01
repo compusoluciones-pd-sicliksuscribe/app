@@ -69,21 +69,34 @@
               </div>
             </td>
             
+
+
             <td style="vertical-align: middle">
               <div class="input-group">
                 <span class="input-group-addon" style="border-radius: 0;">
                   <span class="fa fa-calendar" style="color: #337ab7" ;></span>
                 </span>
-                <input id="cancelDate" name="cancelDate" type="date"  value="" class="form-control" ng-model='Empresa.cancelDate' ng-change="" placeholder=''></input>
+                <!-- <input id="cancelDate" type="date" value="" class="form-control" ng-model='Empresa.cancelDate' ng-change="asignarCancelacion(Empresa)"/> -->
+                <input id="cancelDate" name="cancelDate" type="date"  value="2018-01-01" class="form-control" ng-model='Empresa.cancelDate' ng-change="" placeholder=''></input>
+                <p>{{getFechaDisplay}}</p>
+                <!-- <span ng-click="butonclick(cancelDate)">  <P>{{(cancelDate)}}</P>      </span> -->
               </div>
             </td>
+
+
+
 
             <label for="meeting"></label>
             
             <td style="vertical-align: middle">
+              <!-- <span class="fa fa-floppy-o" ng-show="SessionCookie.IdTipoAcceso === 1" title="Guardar" ng-click="ActualizarRP(Empresa); UpdateDateAndRP(Empresa);" -->
               <span class="fa fa-floppy-o" ng-show="SessionCookie.IdTipoAcceso === 1" title="Guardar" ng-click=" UpdateDateAndRP(Empresa); ActualizarRP(Empresa)"
+                
                 style="cursor:pointer; color: #337ab7; font-size:24px; margin-left: -10px"></span>
             </td>
+
+
+
 
             <td style="vertical-align: middle">
               <select name="Empresa" class="form-control" ng-model="value" ng-change="asignarNivel(Empresa, value)">
@@ -91,6 +104,9 @@
                 <option ng-repeat="Nivel in Niveles" value="{{Nivel.IdNivelDistribuidor}}" ng-show="{{Empresa.IdNivelCS !== Nivel.IdNivelDistribuidor}}">{{Nivel.Nivel}}</option>
               </select>
             </td>
+
+
+
 
             <td style="vertical-align: middle">
               <span class="fa fa-times" ng-show="SessionCookie.IdTipoAcceso === 1 && Empresa.NombreNivel" title="Quitar nivel" ng-click="removerNivel(Empresa.IdEmpresasXEmpresa);"
