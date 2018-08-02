@@ -146,9 +146,10 @@
                                     </div> <br>
 
                                     <form name="frmCantidad" id="frmCantidad">
-
+                                        
                                         <div class="form-group">
-                                            <label for="Cantidad">*{{Producto.IdFabricante === 5 && Producto.IdTipoProducto !== 4 ? "¿Cuantos empleados hay en la nómina?" : "¿Cuántos quieres?"}}</label>
+                                            <div ng-hide="Producto.IdFabricante === 6">
+                                            <label for="Cantidad" >*{{Producto.IdFabricante === 5 && Producto.IdTipoProducto !== 4 ? "¿Cuantos empleados hay en la nómina?" : "¿Cuántos quieres?"}}</label>
                                             a partir de {{Producto.CantidadMinima}} <sapan ng-if="Producto.CantidadMinima != Producto.CantidadMaxima"> a {{Producto.CantidadMaxima}} </sapan>
 
                                             <div class="input-group">
@@ -160,7 +161,7 @@
                                                     maxlength="5" title="Número de licencias"
                                                     required/>
                                             </div>
-
+                                           </div>
                                             <br>
 
                                             <p style="color:red" ng-show="frmCantidad.Cantidad.$error.maxlength">Máximo 5 dígitos</p>
@@ -205,11 +206,11 @@
                                                     ng-change="contractSetted(Producto)" ng-required="contrato.NumeroContrato !== ''">
                                                     </select>
                                             </div>
-                                            <div ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2 && !Producto.IdPedidoContrato && Producto.IdAccionAutodesk === 1">
+                                            <div ng-if="(Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2  && !Producto.IdPedidoContrato && Producto.IdAccionAutodesk === 1) ||  Producto.IdFabricante === 6">
                                                 <br>   
                                                 <label for="contacto" >* Contacto</label>
                                             </div>
-                                            <div class="input-group" ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2 && !Producto.IdPedidoContrato && Producto.IdAccionAutodesk === 1">
+                                            <div class="input-group" ng-if="(Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2 && !Producto.IdPedidoContrato && Producto.IdAccionAutodesk === 1) ||  Producto.IdFabricante === 6">
                                                 <span class="input-group-addon green white">
                                                     <span class="glyphicon glyphicon-user"></span>
                                                 </span>
