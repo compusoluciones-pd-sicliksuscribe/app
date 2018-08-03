@@ -183,6 +183,20 @@
         });
     };
 
+    const validateComerciaPointData = function (Producto) {
+      UsuariosFactory.getUsuariosContacto(Producto.IdEmpresaUsuarioFinal)
+        .success(function (respuesta) {
+          if (respuesta.success === 1) {
+            Producto.usuariosContacto = respuesta.data;
+          } else {
+            $scope.ShowToast('No pudimos cargar la información de tus contactos, por favor intenta de nuevo más tarde.', 'danger');
+          }
+        })
+        .error(function () {
+          $scope.ShowToast('No pudimos cargar la información de tus contactos, por favor intenta de nuevo más tarde.', 'danger');
+        });
+    };
+
     const validateMicrosoftData = function (Producto) {
       if (Producto.IdTipoProducto === 4 && Producto.IdFabricante === 1) {
         ProductosFactory.postComplementos(Producto)
@@ -228,6 +242,7 @@
       $scope.productoSeleccionado = Producto.IdProducto;
       if (Producto.IdFabricante === 2) validateAutodeskData(Producto);
       if (Producto.IdFabricante === 1 && $scope.DominioMicrosoft) validateMicrosoftData(Producto);
+      if (Producto.IdFabricante === 6) validateComerciaPointData(Producto);
     };
 
     const estimateLastTier = function (previousTier, currentTier, quantity) {
@@ -260,7 +275,7 @@
       return estimatedTotal;
     };
 
-    $scope.AgregarCarrito = function (Producto, Cantidad, IdPedidocontrato) {
+    $scope.AgregarCarrito = function (Producto, Cantidad = 1, IdPedidocontrato) {
       var NuevoProducto = {
         IdProducto: Producto.IdProducto,
         Cantidad: Cantidad,
