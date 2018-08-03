@@ -148,7 +148,7 @@
                                     <form name="frmCantidad" id="frmCantidad">
                                         
                                         <div class="form-group">
-                                            <div ng-if="Producto.IdFabricante !== 6" >
+                                            <div ng-if="Producto.IdFabricante !== 6">
                                             <label for="Cantidad" >*{{Producto.IdFabricante === 5 && Producto.IdTipoProducto !== 4 ? "¿Cuantos empleados hay en la nómina?" : "¿Cuántos quieres?"}}</label>
                                             a partir de {{Producto.CantidadMinima}} <sapan ng-if="Producto.CantidadMinima != Producto.CantidadMaxima"> a {{Producto.CantidadMaxima}} </sapan>
 
