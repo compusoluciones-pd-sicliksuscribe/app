@@ -5,7 +5,7 @@
 
     factory.refreshToken = function () {
       Session = $cookies.getObject('Session');
-      if (!Session) { Session = { Token: 'no' }; }
+      if (!Session) Session = { Token: 'no' }
       $http.defaults.headers.common['token'] = Session.Token;
     };
 
