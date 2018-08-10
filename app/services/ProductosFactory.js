@@ -70,6 +70,11 @@
       return $http.get($rootScope.API + 'autodesk/contacts/' + idEmpresaUsuarioFinal + '/contract/' + idProducto + '/distribuidor/' + currentDistribuidor);
     };
 
+    factory.getValidateEmail = function (email) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'r&c-solutions/validate-user/' + email);
+    };
+
     return factory;
   };
 
