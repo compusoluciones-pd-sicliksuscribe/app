@@ -285,7 +285,7 @@
           if (!exists) {
             $scope.AgregarCarrito(producto, producto.Cantidad, producto.IdPedidocontrato);
           } else {
-            $scope.ShowToast('No puedes usar este contacto por que ya habia sido seleccionado anteriormente. Seleccione uno diferente', 'danger');
+            $scope.ShowToast('Este usuario ya cuenta con un registro de este producto, contacta a tu administrador.', 'danger');
           }
         });
     };
