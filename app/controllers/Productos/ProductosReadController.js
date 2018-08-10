@@ -275,10 +275,33 @@
       return estimatedTotal;
     };
 
+    $scope.previousISVValidate = function (producto) {
+      if (producto.IdFabricante !== 6) {
+        $scope.AgregarCarrito(producto, producto.Cantidad, producto.IdPedidocontrato);
+      }
+      $scope.validateExistsEmail(producto)
+        .then(function (result) {
+          const { exists } = result.data; 
+          if (!exists) {
+            $scope.AgregarCarrito(producto, producto.Cantidad, producto.IdPedidocontrato);
+          } else {
+            $scope.ShowToast('No puedes usar este contacto por que ya habia sido seleccionado anteriormente. Seleccione uno diferente', 'danger');
+          }
+        });
+    };
+
+    $scope.validateExistsEmail = function (producto) {
+      const usuario = producto.usuariosContacto.filter(function (user) {
+        return user.IdUsuario === producto.IdUsuarioContacto;
+      })[0];
+      console.log(usuario.CorreoElectronico);
+      return ProductosFactory.getValidateEmail(usuario.CorreoElectronico);
+    };
+
     $scope.AgregarCarrito = function (Producto, Cantidad = 1, IdPedidocontrato) {
       var NuevoProducto = {
         IdProducto: Producto.IdProducto,
-        Cantidad: Cantidad,
+        Cantidad: !Producto.Cantidad ? 1 : Producto.Cantidad,
         IdEmpresaUsuarioFinal: Producto.IdEmpresaUsuarioFinal,
         MonedaPago: 'Pesos',
         IdEsquemaRenovacion: Producto.IdEsquemaRenovacion,
@@ -392,7 +415,7 @@
         return 0;
       }
 
-      function elmYPosition(eID) {
+      function elmYPosition (eID) {
         var elm = document.getElementById(eID);
         var y = elm.offsetTop;
         var node = elm;
