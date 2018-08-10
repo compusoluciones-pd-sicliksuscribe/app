@@ -20,6 +20,19 @@
       return cancelDateShort;
     };
 
+    function checkDateNull (empresa) {
+      const date = new Date();
+      const oldDate = date - 365;
+      // console.log("fecha viejita sera ", oldDate);
+      if (empresa.cancelDate <= oldDate) {
+        // console.log("es menor a hoy ", empresa.cancelDate);
+        empresa.cancelDate = 'dd/mm/aaaa';
+      } else {
+        empresa.cancelDate = getFechaDisplay(empresa.cancelDate);
+      }
+      return empresa;
+    }
+
     var obtenerEmpresas = function () {
       EmpresasXEmpresasFactory.getExchangeRateByIdEmpresa($routeParams.IdEmpresa)
         .then(function (respuesta) {
@@ -28,6 +41,7 @@
           var empresas = data.data;
           if (respuestaExitosa) {
             var empresasConFormato = empresas.map(function (empresa) {
+              const dateNull = checkDateNull(empresa);
               console.log("1");
               console.log(empresa.FechaActivo);
               
@@ -35,7 +49,7 @@
               console.log("2");
               console.log(empresa.FechaActivo);
               // empresa.cancelDate = empresa.cancelDate.getMonth() + empresa.cancelDate.getFullYear() + empresa.cancelDate.getDate() + empresa.cancelDate.getFullYear();// getFechaDisplay(empresa);
-              empresa.cancelDate = getFechaDisplay(empresa.cancelDate);
+              empresa.cancelDate = getFechaDisplay(dateNull.cancelDate);
               // console.log("fecha acomodada ", empresa.cancelDate);
               return empresa;
             });
