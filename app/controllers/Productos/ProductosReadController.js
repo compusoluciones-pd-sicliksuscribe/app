@@ -294,7 +294,6 @@
       const usuario = producto.usuariosContacto.filter(function (user) {
         return user.IdUsuario === producto.IdUsuarioContacto;
       })[0];
-      console.log(usuario.CorreoElectronico);
       return ProductosFactory.getValidateEmail(usuario.CorreoElectronico);
     };
 
