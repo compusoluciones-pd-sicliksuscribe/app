@@ -163,7 +163,6 @@
         resolve: {
           'check': function ($location, $cookies) {
             var Session = $cookies.getObject('Session');
-            console.log('hot');
             if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 4)) { $location.path('/404'); }
           }
         }
@@ -174,7 +173,6 @@
         resolve: {
           'check': function ($location, $cookies) {
             var Session = $cookies.getObject('Session');
-            console.log('cold');
             if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); }
           }
         }
