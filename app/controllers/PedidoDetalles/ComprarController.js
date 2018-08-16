@@ -101,14 +101,16 @@
 
     const comprarProductos = function () {
       PedidoDetallesFactory.getComprar()
-        .then(function (response) {
-          if (response.data.success) {
-            $scope.ShowToast(response.data.message, 'success');
+        .then(function (orderIdsCookie) {
+          console.log('respuesta', orderIdsCookie);
+          if (orderIdsCookie) {
+            // $scope.ShowToast(orderIdsCookie.data.message, 'success');
             $scope.ActualizarMenu();
-            $location.path('/');
+            $cookies.putObject('orderIdsCookie', orderIdsCookie, { secure: $rootScope.secureCookie });
+            $location.path('/SuccessOrder');
           } else {
             $location.path('/Carrito');
-            $scope.ShowToast(response.data.message, 'danger');
+            // $scope.ShowToast(orderIdsCookie.data.message, 'danger');
           }
         });
     };
@@ -279,7 +281,7 @@
                           line3: 'Col. Rinconada del Bosque C.P. 44530',
                           line4: 'Guadalajara, Jalisco. México'
                         },
-  
+
                         email: 'order@yourMerchantEmailAddress.com',
                         phone: '+1 123 456 789 012'
                       },
@@ -375,6 +377,7 @@
               if (putPedidoResult.success) {
                 PedidoDetallesFactory.getComprar()
                   .success(function (compra) {
+                    console.log("click despues de siguiente");
                     if (compra.success === 1) {
                       $scope.ShowToast(compra.message, 'success');
                       $scope.ActualizarMenu();

@@ -373,26 +373,32 @@
 
       .when('/Promocion', {
         controller: 'PromocionsCreateController', templateUrl: 'app/views/Promocions/PromocionsCreate.html',
-        resolve: { 'check': function ($location, $cookies) {
-          var Session = $cookies.getObject('Session');
-          if (!(Session.IdTipoAcceso === 1) && !(Session.IdTipoAcceso === 2) && !(Session.IdTipoAcceso === 3)) { $location.path('/404'); }
-        } }
+        resolve: {
+          'check': function ($location, $cookies) {
+            var Session = $cookies.getObject('Session');
+            if (!(Session.IdTipoAcceso === 1) && !(Session.IdTipoAcceso === 2) && !(Session.IdTipoAcceso === 3)) { $location.path('/404'); }
+          }
+        }
       })
 
       .when('/Promocions', {
         controller: 'PromocionsReadController', templateUrl: 'app/views/Promocions/PromocionsRead.html',
-        resolve: { 'check': function ($location, $cookies) {
-          var Session = $cookies.getObject('Session');
-          if (!(Session.IdTipoAcceso === 1) && !(Session.IdTipoAcceso === 2) && !(Session.IdTipoAcceso === 3)) { $location.path('/404'); }
-        } }
+        resolve: {
+          'check': function ($location, $cookies) {
+            var Session = $cookies.getObject('Session');
+            if (!(Session.IdTipoAcceso === 1) && !(Session.IdTipoAcceso === 2) && !(Session.IdTipoAcceso === 3)) { $location.path('/404'); }
+          }
+        }
       })
 
       .when('/Promocion/:IdPromocion', {
         controller: 'PromocionsUpdateController', templateUrl: 'app/views/Promocions/PromocionsUpdate.html',
-        resolve: { 'check': function ($location, $cookies) {
-          var Session = $cookies.getObject('Session'); 
-          if (!(Session.IdTipoAcceso === 1) && !(Session.IdTipoAcceso === 2) && !(Session.IdTipoAcceso === 3)) { $location.path('/404'); }
-        } }
+        resolve: {
+          'check': function ($location, $cookies) {
+            var Session = $cookies.getObject('Session');
+            if (!(Session.IdTipoAcceso === 1) && !(Session.IdTipoAcceso === 2) && !(Session.IdTipoAcceso === 3)) { $location.path('/404'); }
+          }
+        }
       })
 
       .when('/Reportes', {
@@ -415,28 +421,34 @@
 
       .when('/Niveles/Distribuidor', {
         controller: 'NivelesClienteFinalController', templateUrl: 'app/views/Niveles/NivelesClienteFinal.html',
-        resolve: { 'check': function ($location, $cookies, jwtHelper) {
-          var Session = $cookies.getObject('Session');
-          var decoded = jwtHelper.decodeToken(Session.Token);
-          if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3) || !decoded.Niveles) { $location.path('/404'); }
-        } }
+        resolve: {
+          'check': function ($location, $cookies, jwtHelper) {
+            var Session = $cookies.getObject('Session');
+            var decoded = jwtHelper.decodeToken(Session.Token);
+            if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3) || !decoded.Niveles) { $location.path('/404'); }
+          }
+        }
       })
 
       .when('/Niveles/Distribuidor/:IdDescuento/Descuentos', {
         controller: 'DescuentosNivelesController', templateUrl: 'app/views/Descuentos/DescuentosNiveles.html',
-        resolve: { 'check': function ($location, $cookies, jwtHelper) {
-          var Session = $cookies.getObject('Session');
-          var decoded = jwtHelper.decodeToken(Session.Token);
-          if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3) || !decoded.Niveles) { $location.path('/404'); }
-        } }
+        resolve: {
+          'check': function ($location, $cookies, jwtHelper) {
+            var Session = $cookies.getObject('Session');
+            var decoded = jwtHelper.decodeToken(Session.Token);
+            if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3) || !decoded.Niveles) { $location.path('/404'); }
+          }
+        }
       })
 
       .when('/Niveles/:IdNivel/Productos', {
         controller: 'DescuentosNivelesCSController', templateUrl: 'app/views/Descuentos/DescuentosNivelesCS.html',
-        resolve: { 'check': function ($location, $cookies, jwtHelper) {
-          var Session = $cookies.getObject('Session');
-          if (!Session.IdTipoAcceso === 1) { $location.path('/404'); }
-        } }
+        resolve: {
+          'check': function ($location, $cookies, jwtHelper) {
+            var Session = $cookies.getObject('Session');
+            if (!Session.IdTipoAcceso === 1) { $location.path('/404'); }
+          }
+        }
       })
 
       .when('/Descuentos', {
@@ -461,6 +473,11 @@
       .when('/MonitorConsulta', {
         controller: 'MonitorConsultaController', templateUrl: 'app/views/PedidoDetalles/MonitorConsultasUF.html',
         resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 2)) { $location.path('/404'); } } }
+      })
+
+      .when('/SuccessOrder', {
+        controller: 'SuccessOrderController', templateUrl: 'app/views/PedidoDetalles/SuccessOrder.html',
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 2)) { $location.path('/'); } } }
       })
 
       /* .when('/:Subdominio', { controller: 'UsuariosLoginController', templateUrl: 'app/views/Usuarios/UsuariosLogin.html' }) */
