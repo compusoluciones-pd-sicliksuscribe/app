@@ -287,6 +287,7 @@
           } else {
             $scope.ShowToast('Este usuario ya cuenta con un registro de este producto, contacta a tu administrador.', 'danger');
           }
+          return ProductosFactory.postIdERP(producto.IdERP);
         });
     };
 
