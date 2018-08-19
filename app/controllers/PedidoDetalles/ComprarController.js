@@ -99,32 +99,33 @@
         });
     };
 
-    const comprarProductos = function () {
+    const orderCookie = orderIdsCookie => {
+      const cookie = $cookies.putObject('orderIdsCookie', orderIdsCookie, { secure: $rootScope.secureCookie });
+      const location = $location.path('/SuccessOrder');
+      const resultOrderidCookie = [{cookie, location}];
+      return resultOrderidCookie;
+    };
+
+    const comprarProductos = function () { // credito compusoluciones
       PedidoDetallesFactory.getComprar()
         .then(function (orderIdsCookie) {
-          console.log('respuesta', orderIdsCookie);
           if (orderIdsCookie) {
-            // $scope.ShowToast(orderIdsCookie.data.message, 'success');
             $scope.ActualizarMenu();
-            $cookies.putObject('orderIdsCookie', orderIdsCookie, { secure: $rootScope.secureCookie });
-            $location.path('/SuccessOrder');
+            orderCookie(orderIdsCookie);
           } else {
             $location.path('/Carrito');
-            // $scope.ShowToast(orderIdsCookie.data.message, 'danger');
           }
         });
     };
 
-    const comprarPrePago = function () {
+    const comprarPrePago = function () { // transferencia
       PedidoDetallesFactory.getComprar()
-        .then(function (response) {
-          if (response.data.success) {
-            $scope.ShowToast(response.data.message, 'success');
+        .then(function (orderIdsCookie) {
+          if (orderIdsCookie) {
             $scope.ActualizarMenu();
-            $location.path('/');
+            orderCookie(orderIdsCookie);
           } else {
             $location.path('/Carrito');
-            $scope.ShowToast(response.data.message, 'danger');
           }
         });
     };
@@ -249,7 +250,7 @@
       $location.path('/Carrito');
     };
 
-    $scope.PagarTarjeta = function () {
+    $scope.PagarTarjeta = function () { // tarjeta de credito
       if ($scope.Distribuidor.IdFormaPagoPredilecta === 1) {
         PedidoDetallesFactory.getPrepararTarjetaCredito()
           .success(function (Datos) {
@@ -324,6 +325,7 @@
       $cookies.putObject('orderIds', orderIds, { expires: expireDate, secure: $rootScope.secureCookie });
       PedidoDetallesFactory.prepararPaypal({ orderIds, url: 'Comprar', actualSubdomain })
         .then(function (response) {
+          console.log('paypal data ', response);
           if (response.data.message === 'free') comprarProductos();
           else if (response.data.state === 'created') {
             const paypal = response.data.links.filter(function (item) {
@@ -361,7 +363,7 @@
         if (datosTarjeta.PedidosAgrupados[0].Renovacion) {
           PedidosFactory.patchPaymentInformation(datosTarjeta)
             .success(function (compra) {
-              $cookies.remove('pedidosAgrupados');
+              $cookies.remove('pedidosAgrupados'); // revisar
               if (compra.success === 1) {
                 $scope.ShowToast(compra.message, 'success');
                 $location.path('/MonitorPagos/refrescar');
@@ -377,11 +379,9 @@
               if (putPedidoResult.success) {
                 PedidoDetallesFactory.getComprar()
                   .success(function (compra) {
-                    console.log("click despues de siguiente");
-                    if (compra.success === 1) {
-                      $scope.ShowToast(compra.message, 'success');
+                    if (compra) {
                       $scope.ActualizarMenu();
-                      $location.path('/');
+                      orderCookie(compra);
                     } else {
                       $location.path('/Carrito');
                       $scope.ShowToast(compra.message, 'danger');
