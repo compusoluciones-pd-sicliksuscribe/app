@@ -1,17 +1,5 @@
 <!-- <div class="container" ng-swipe-right="" ng-swipe-left="">
-	<h2>Finalizar compra</h2>
-	<hr>
-	<br>
-	<h5><b>CompuSoluciones y Asociados, S.A. de C.V.</b></h5>
-	<h5><b>Av. Mariano Otero No. 1105</b></h5>
-	<h5><b>Col. Rinconada del Bosque C.P. 44530</b></h5>
-	<h5><b>Guadalajara, Jalisco. México</b></h5>
-	<h5><b>Tel: 5000-7777</b></h5>
-	<h5><b>RFC: CAS850526N64</b></h5>
-	<br>
-	<h2>Detalle de los pedidos</h2>
-	<hr>
-	<br>
+	
 	<ul ng-repeat="pedido in PedidoDetalles" class="repeat-animation" style="padding: 0; list-style-type: none;">
 		<div class="form-group row" style="background-color:#f5f5f5; padding: 15px; margin-bottom:15px;">
 			<div class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
@@ -128,6 +116,29 @@
 	</div>
 </div> -->
 
-
-<h1>HELLO</h1>
-<p>world</p>
+<div class="container" ; style="padding-left: 75px">
+	<div class="Title">
+		<h1 style="border-bottom: 1px solid black; padding-bottom: 17px">Compra Realizada Exitosamente </h1>
+		<h2>Tu compra generó los siguientes pedidos:</h2>
+	</div>
+	<div>
+		<h3>Pedido: {{ola k ase}}</h3>
+		<div class="pedidos" style="background-color:#f5f5f5; padding-top: 20px; padding-left: 8px; padding-bottom: 25px;">
+			<p>Fecha de Renovación: {{Fecha renovacion}}</p>
+			<a href="http://www.google.com.mx">ir al Monitor de pedidos</a>
+		</div>
+	</div>
+	<div class="confirmacion" style="position: relative; margin-top: 25px; height: 120px;">
+		<div style="position: absolute; right: 0; " > 
+				<p style="display: block">Método de pago: {{mi metodo de pago}}</p>
+				<p style="display: block">Número de confirmación: {{numero de confirmacion}}</p>
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+						<div class="form-group">
+							<button type="button" class="btn btn-primary btn-block">Aceptar</button>
+						</div>
+					</div>
+				</div>
+		</div>
+	</div>
+</div>
