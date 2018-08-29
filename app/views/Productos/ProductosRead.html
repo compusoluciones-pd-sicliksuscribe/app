@@ -86,7 +86,7 @@
                             <br>
                             <label for="">Tipo de producto:</label> {{Producto.Tipo}}
                             <br>
-                            <label for="">Esquema de renovación:</label> {{Producto.EsquemaRenovacion}}
+                            <label for="" >Esquema de renovación:</label> {{Producto.EsquemaRenovacion}}
                             <br>
                             <label for="">Artículo Id:</label> {{Producto.IdERP}}
                             <br>
@@ -119,7 +119,7 @@
                                 <b style="color:#68953B;">{{Producto.PorcentajeDescuento}}% Desc.</b>
                             </span>
 
-                            <div ng-show="Producto.IdTipoProducto == 2 && Producto.IdFabricante == 1">
+                            <div ng-show="Producto.IdTipoProducto == 2 && Producto.IdFabricante == 1" ng-hide="Producto.EsquemaRenovacion !=='Cada día 22 del mes'" >
                                 <label for="" title="Precio prorrateado">Precio prorrateado del primer periodo:</label> {{Producto.PrecioProrrateo
                                 | currency}} {{Producto.MonedaPrecio}}
                             </div>
@@ -179,24 +179,27 @@
                                                 </span>
                                                 <select id="IdEmpresaUsuarioFinal" name="IdEmpresaUsuarioFinal" class="form-control selectOption ufs" ng-model="Producto.IdEmpresaUsuarioFinal"
                                                     ng-options="Empresa.IdEmpresa as Empresa.NombreEmpresa + ', crédito disponible: ' + (Empresa.CreditoDisponible | currency) + ' pesos.' for Empresa in selectEmpresas"
-                                                    ng-change="revisarProducto(Producto);" title="Selecciona a un cliente (usuario final) para tu producto"
+                                                     title="Selecciona a un cliente (usuario final) para tu producto"
                                                     required>
                                                     <option ng-selected="true" value="">Selecciona un cliente...</option>
                                                 </select>
                                             </div>
-                                            <br>                                
-                                            <label style="color:red" for="DominioMicrosoft" ng-show="Producto.IdFabricante === 1 && usuariosSinDominio[Producto.IdEmpresaUsuarioFinal] === false">*No cuentas con un Dominio de Microsoft para este producto.</label>&nbsp;                                            
-                                            <p style="color:red" ng-hide="Producto.IdFabricante === 1 || Producto.TieneContrato">*No cuentas con un contrato para este producto.</p>                                                                                    
-                                            <label for="contrato" ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2 && Producto.TieneContrato">* Contrato</label>
-                                            <div class="input-group" ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2 && Producto.TieneContrato && Producto.IdAccionAutodesk === 1">
-                                                <span class="input-group-addon green white">
-                                                    <span class="glyphicon glyphicon-file"></span>
-                                                </span>
-                                                <select id="contrato" name="contrato" class="form-control selectOption ufs" ng-model="Producto.IdPedidoContrato" ng-options="contrato.IdPedido as contrato.NumeroContrato for contrato in Producto.contratos"
-                                                    ng-change="contractSetted(Producto)" ng-required="contrato.NumeroContrato !== ''">
-                                                    <option ng-disabled="" ng-selected="true" ng-value="0">Nuevo contrato...</option>
+                                            <br>  
+                                            
+                                            <div ng-hide="Producto.IdFabricante !== 1">
+                                            <label for="IdEmpresaUsuarioFinal">* Tipo de renovación</label> (Mensual/Anual) 
+                                            <div class="input-group">
+                                               
+                                                <select id="esquemaModelo" name="esquemaModelo" class="form-control selectOption EsquemaRenovacion" ng-model="esquemaRenovacionModelo.id"
+                                                    ng-options="esquema.id as esquema.esquema for esquema in EsquemaRenovacion" ng-show="SessionCookie.IdTipoAcceso == 2"  ng-change="CambiarFechaRenovaion(Producto);"
+                                                     title="Selecciona un tipo de renovaion para tu producto" 
+                                                    required>
+                                                    <option ng-selected="true" value="">Selecciona un tipo de renovación...!</option>
                                                 </select>
                                             </div>
+                                            </div>
+                                            <br> 
+                                            
                                             <div class="input-group" ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2 && Producto.TieneContrato && Producto.IdAccionAutodesk === 2">
                                                 <span class="input-group-addon green white">
                                                         <span class="glyphicon glyphicon-file"></span>
@@ -243,12 +246,17 @@
                                             </div>
 
                                         </div>
-
-
-                                        <div style="float:right!important;">
+                                               
+                                        <div style="float:right!important;" ng-if="Producto.EsquemaRenovacion === 'Cada día 22 del mes'" 
                                             <label for="" title="Cantidad por precio">Total:</label>
                                             <b>
                                                 {{estimateTotal(Producto, Producto.Cantidad) | currency }} {{Producto.MonedaPago}}
+                                            </b>
+                                        </div>
+                                        <div style="float:right!important;" ng-if="Producto.EsquemaRenovacion !== 'Cada día 22 del mes'"
+                                            <label for="" title="Cantidad por precio">Total:</label>
+                                            <b>
+                                                {{estimateTotalAnnual(Producto, Producto.Cantidad) | currency }} {{Producto.MonedaPago}}
                                             </b>
                                         </div>
                                 </div>

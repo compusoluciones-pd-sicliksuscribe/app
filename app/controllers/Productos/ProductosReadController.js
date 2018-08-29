@@ -13,9 +13,16 @@
     $scope.TieneContrato = true;
     $scope.IdPedidoContrato = 0;
     $scope.DominioMicrosoft = true;
-    $scope.usuariosSinDominio = {};
+    $scope.usuariosSinDominio = {id:'12'};
     const NOT_FOUND = 404;
-
+    $scope.esquemaRenovacionModelo={};
+    $scope.EsquemaRenovacion=[
+      {id: '01', esquema: 'Mensual' },
+      {id: '02', esquema: 'Anual' }
+    ];
+    $scope.esquemaRenovacionModel = {};
+    
+    
     const formatTiers = function (tiers) {
       if (tiers) {
         const lastTierIndex = tiers.length - 1;
@@ -33,12 +40,17 @@
       return null;
     };
 
+    $scope.hola = function(){
+      console.log('hola');
+    }
+
     $scope.BuscarProducto = function (ResetPaginado) {
       $scope.Mensaje = 'Buscando...';
       if (ResetPaginado) {
         $scope.Pagina = 0;
         $scope.BuscarProductos.Offset = $scope.Pagina * 6;
       }
+
       const IdTipoProducto = ($scope.BuscarProductos.IdTipoProducto === '' || $scope.BuscarProductos.IdTipoProducto == null) ? undefined : $scope.BuscarProductos.IdTipoProducto;
       $scope.BuscarProductos.IdTipoProducto = IdTipoProducto;
       ProductosFactory.getBuscarProductos($scope.BuscarProductos)
@@ -72,6 +84,20 @@
           $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
           $scope.ShowToast('No pudimos obtener el tipo de cambio, por favor intenta una vez más.', 'danger');
         });
+    };
+
+   $scope.CambiarFechaRenovaion = function (Producto) {
+    if ($scope.esquemaRenovacionModelo.id === 02 || $scope.esquemaRenovacionModelo.id === '01'){
+      var fecha = new Date();
+      Producto.EsquemaRenovacion ="Cada día 22 del mes";
+     } 
+    
+    if ($scope.esquemaRenovacionModelo.id === 02 || $scope.esquemaRenovacionModelo.id === '02'){
+      var fecha = new Date();
+      Producto.EsquemaRenovacion =fecha.getDate() + "/" + (fecha.getMonth() +1) + "/" +((fecha.getFullYear()+1));
+     }
+     
+     return Producto.EsquemaRenovacion; 
     };
 
     $scope.init = function () {
@@ -249,6 +275,18 @@
         }
         return total;
       }, 0);
+    };
+
+
+
+    $scope.estimateTotalAnnual = function (product, quantity) {
+      if (product.tiers) {
+        return estimateTieredTotal(product.tiers, quantity);
+      }
+      const price = product.PorcentajeDescuento > 0 ? product.PrecioDescuento : product.PrecioNormal;
+      const estimatedTotal = ((price * quantity)*12) || 0.00;
+
+      return estimatedTotal;
     };
 
     $scope.estimateTotal = function (product, quantity) {

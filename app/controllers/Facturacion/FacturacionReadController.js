@@ -99,6 +99,8 @@
           { id: '12', mes: 'Diciembre' }
       ];
 
+     
+
       let hoy = new Date();
       let month = hoy.getMonth() + 1;
       month = month < 10 ? '0' + month : '' + month;
@@ -169,7 +171,7 @@
           var altaFacturacion = resultado[0].AltaFacturacion;
           if (altaFacturacion === 0) {
             $location.path('/actualizar-datos-facturacion');
-          }
+          }   
         });
     }
 
