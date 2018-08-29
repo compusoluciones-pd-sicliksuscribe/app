@@ -325,7 +325,6 @@
       $cookies.putObject('orderIds', orderIds, { expires: expireDate, secure: $rootScope.secureCookie });
       PedidoDetallesFactory.prepararPaypal({ orderIds, url: 'Comprar', actualSubdomain })
         .then(function (response) {
-          console.log('paypal data ', response);
           if (response.data.message === 'free') comprarProductos();
           else if (response.data.state === 'created') {
             const paypal = response.data.links.filter(function (item) {
@@ -342,7 +341,6 @@
     };
 
     $scope.Comprar = function () {
-      console.log("entro a comprar");
       if ($scope.Distribuidor.IdFormaPagoPredilecta === paymentMethods.CREDIT_CARD) $scope.PagarTarjeta();
       if ($scope.Distribuidor.IdFormaPagoPredilecta === paymentMethods.CS_CREDIT) comprarProductos();
       if ($scope.Distribuidor.IdFormaPagoPredilecta === paymentMethods.CASH) comprarPrePago();
