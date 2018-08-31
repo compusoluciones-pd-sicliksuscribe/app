@@ -277,7 +277,7 @@
 
     $scope.previousISVValidate = function (producto) {
       if (producto.IdFabricante !== 6) {
-        $scope.AgregarCarrito(producto, producto.Cantidad, producto.IdPedidocontrato);
+        return $scope.AgregarCarrito(producto, producto.Cantidad, producto.IdPedidocontrato);
       }
       $scope.validateExistsEmail(producto)
         .then(function (result) {
