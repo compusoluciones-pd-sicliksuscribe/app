@@ -4,9 +4,8 @@
     $scope.orderIdsCookie = $cookies.getObject('orderIdsCookie').data || $cookies.getObject('orderIdsCookie');
     $scope.Session = $cookies.getObject('Session');
 
-    console.log($scope.orderIdsCookie);
     $scope.AceptaPedido = function () {
-      deleteCookie('orderIdsCookie'); // this will delete the cookie.
+      deleteCookie('orderIdsCookie');
       $location.path('/');
     };
 
