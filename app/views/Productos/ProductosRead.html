@@ -187,18 +187,17 @@
                                             <br>  
                                             
                                             <div ng-hide="Producto.IdFabricante !== 1">
-                                            <label for="IdEmpresaUsuarioFinal">* Tipo de renovación</label> (Mensual/Anual) 
-                                            <div class="input-group" style="width:100%;" >
-                                                    <span class="input-group-addon green white">
+                                                <label for="IdEmpresaUsuarioFinal">* Tipo de renovación</label> (Mensual/Anual) 
+                                                <div class="input-group" style="width:100%;" >
+                                                        <span class="input-group-addon green white">
                                                             <span class="glyphicon glyphicon-hourglass"></span>
                                                         </span>
-                                                <select id="esquemaModelo" name="esquemaModelo" class="form-control selectOption EsquemaRenovacion" ng-model="esquemaRenovacionModelo.id"
-                                                    ng-options="esquema.id as esquema.esquema for esquema in EsquemaRenovacion" ng-show="SessionCookie.IdTipoAcceso == 2"  ng-change="CambiarFechaRenovacion(Producto);"
-                                                     title="Selecciona un tipo de renovaion para tu producto" 
-                                                    required>
-                                                    <option ng-selected="true" value="">Selecciona un tipo de renovación...</option>
-                                                </select>
-                                            </div>
+                                                    <select id="esquemaModelo" name="esquemaModelo" class="form-control selectOption EsquemaRenovacion" ng-model="esquemaRenovacionModelo.id"
+                                                        ng-options="esquema.id as esquema.esquema for esquema in EsquemaRenovacion" ng-show="SessionCookie.IdTipoAcceso == 2"
+                                                        ng-change="CambiarFechaRenovacion(Producto);" title="Selecciona un tipo de renovaion para tu producto" required>
+                                                        <option ng-selected="true" value="">Selecciona un tipo de renovación...</option>
+                                                    </select>
+                                                </div>
                                             </div>
                                             <br> 
                                             
