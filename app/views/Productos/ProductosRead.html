@@ -107,7 +107,7 @@
                             <div ng-show="Producto.IdTipoProducto == 2">Precio unitario:</div>
                             <div ng-show="Producto.IdTipoProducto == 3">Precio de contratación:</div>
                             </label>
-                            <span ng-show="Producto.PorcentajeDescuento == 0">
+                            <span ng-show="Producto.PorcentajeDescuento == 0 && Producto.IdFabricante !== 5">
                                 {{Producto.PrecioNormal | currency: "$" : 2}} {{Producto.MonedaPrecio}}
                             </span>
                             <span ng-show="Producto.IdFabricante === 5 && Producto.IdTipoProducto === 4">
