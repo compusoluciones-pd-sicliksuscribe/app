@@ -1,0 +1,159 @@
+<div class="container" ng-swipe-right="" ng-swipe-left="">
+
+    <div class="row">
+
+        <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <h2 style="float:left;">Suscripciones </h2>
+        </div>
+
+        <div class="form-group col-xs-12 col-sm-12 col-md-3 col-lg-3">
+            <label for="IdFabricante">Filtrar por:</label>
+            <select name="IdFabricante" class="form-control filterOption" ng-model="BuscarProductos.IdFabricante" ng-options="Fabricante.IdFabricante as Fabricante.Nombre for Fabricante in selectFabricantes"
+                ng-change="BuscarProducto(true);">
+                <option ng-selected="true" value="">Todos los agentes</option>
+            </select>
+        </div>
+
+        
+        <div class="form-group col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                <label for="IdTipoProducto">&nbsp;</label>
+                <select name="IdTipoProducto" class="form-control typeOptions" ng-model="BuscarProductos.IdTipoProducto" ng-change="BuscarProducto(true);">
+                    <option ng-repeat="Tipo in selectTiposProductos" title="{{Tipo.Descripcion}}" value="{{Tipo.IdTipoProducto}}">{{Tipo.Tipo}}</option>
+                    <option ng-selected="true" value="">Todas las acciones</option>
+                </select>
+        </div>
+    
+        <br><br><br><br><br><br><br>
+
+
+            <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                <div class="form-group has-feedback">
+                    <input name="Busqueda" type="text" ng-model="soporteFilter" class="form-control" size="30" placeholder="Buscar..."/>
+                    <i class="form-control-feedback glyphicon glyphicon-search"></i>
+                </div>
+            </div>
+    </div>
+      
+      
+        <table class="table table-hover table-responsive border-left-right-cero" style="table-layout: fixed;">
+          <th ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2 "><b>Operación</b></th>
+          <th ng-show="SessionCookie.IdTipoAcceso==1 "><b>Ventas</b></th>
+          <th ng-show="SessionCookie.IdTipoAcceso==1 "><b>Agente</b></th>
+          <th ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2  "><b>Acción en Partner Center</b></th>
+          <th ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2  "><b>Articulo </b></th>
+          <th ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2  "><b>Cantidad Click</b></th>
+          <th ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2 "><b>Id Pedido</b></th>
+          <th ng-show="SessionCookie.IdTipoAcceso==1 "><b>Cantidad en Partner Center</b></th>
+          <th ng-show="SessionCookie.IdTipoAcceso==1 "><b>Distribuidor</b></th>
+          <th ng-show="SessionCookie.IdTipoAcceso==1 "><b>Usuario Final</b></th>
+          <tr ><!-- ng-repeat="soporte in Solicitudes | filter:soporteFilter | orderBy:sortBy:reverse" class="repeat-animation" -->
+            
+      
+            <td style="word-wrap:break-word" class="col-xs-12 col-sm-12 col-md-2 col-lg-2" ng-show="SessionCookie.IdTipoAcceso==1 ">
+              <div class="form-group">
+                  <span class="glyphicon glyphicon-ok" style="color:green" aria-hidden="true" ng-hide="checked2"></span>
+                  <span class="glyphicon glyphicon-remove" style="color:red"aria-hidden="true" ng-hide="checked"></span>
+                  <br>  
+                <b><a ng-click="mostrarModal('Operación')"  data-toggle="modal"  data-target="#exampleModal">Editar </a></b>
+              </div>
+            </td>
+
+            <td style="word-wrap:break-word" class="col-xs-12 col-sm-12 col-md-2 col-lg-2" ng-show="SessionCookie.IdTipoAcceso==1 ">
+              <div class="form-group">
+                <span class="glyphicon glyphicon-ok" style="color:green" aria-hidden="true" ng-hide="checked2"></span>
+                  <span class="glyphicon glyphicon-remove" style="color:red"aria-hidden="true" ng-hide="checked"></span>
+                <br>
+                <b><a ng-click="mostrarModal('Ventas')" data-toggle="modal"  data-target="#exampleModal">Editar </a></b>
+              </div>
+            </td>
+      
+            <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2" ng-show="SessionCookie.IdTipoAcceso==1 ">
+              <div class="form-group">
+                <b><h5>Prueba</h5></b>
+              </div>
+            </td>
+      
+            <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2" ng-show="SessionCookie.IdTipoAcceso==1 ">
+              <div class="form-group">
+                <b><h5>Prueba</h5></b>
+              </div>
+            </td>
+
+            <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2" ng-show="SessionCookie.IdTipoAcceso==1 ">
+              <div class="form-group">
+                <b><h5>Prueba</h5></b>
+              </div>
+            </td>
+
+            <td style="word-wrap:break-word"class="col-xs-12 col-sm-12 col-md-1 col-lg-1" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8 ">
+              <div class="form-group">
+                <b><h5>Prueba</h5></b>
+              </div>
+            </td>
+
+            <td style="word-wrap:break-word"class="col-xs-12 col-sm-12 col-md-1 col-lg-1" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8 ">
+              <div class="form-group">
+                <b><h5>Prueba</h5></b>
+              </div>
+            </td>
+
+            <td style="word-wrap:break-word"class="col-xs-12 col-sm-12 col-md-1 col-lg-1" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8 ">
+              <div class="form-group">
+                <b><h5>Prueba</h5></b>
+              </div>
+            </td>
+
+            <td style="word-wrap:break-word"class="col-xs-12 col-sm-12 col-md-1 col-lg-1" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8 ">
+              <div class="form-group">
+                <b><h5>Prueba</h5></b>
+              </div>
+            </td>
+            
+            <td style="word-wrap:break-word"class="col-xs-12 col-sm-12 col-md-1 col-lg-1" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8 ">
+              <div class="form-group">
+                <b><h5>Prueba</h5></b>
+              </div>
+            </td>
+
+          </tr>
+        </table>
+
+        
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="modalTitle">{{ titulo }}</h4>
+            </div>
+            <div class="modal-body">
+              <form>
+                  <div class="form-group">
+                      <label for="message-text" class="control-label">Estado:</label>
+                    </div>
+                    <div class="row text-center">
+                        <label for="default" class="btn btn-success aditionalStyle">Aprobado
+                          <input type="checkbox" id="default" class="badgebox" ng-model="checked" ng-disabled="checked2">
+                          <span class="badge">&check;</span>
+                        </label>
+                        <label for="warning" class="btn btn-danger aditionalStyle">Rechazado
+                          <input type="checkbox" id="warning" class="badgebox" ng-model="checked2" ng-disabled="checked">
+                          <span class="badge">&check;</span>
+                        </label>
+                    </div>       
+                <div class="form-group">
+                  <label for="message-text" class="control-label">Comentario:</label>
+                  <textarea class="form-control" id="message-text"></textarea>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default " data-dismiss="modal">Regresar</button>
+              <button type="button" class="btn btn-info " data-dismiss="modal">Guardar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+</div>
