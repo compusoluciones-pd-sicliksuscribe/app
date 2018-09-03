@@ -24,8 +24,7 @@
         </div>
     
         <br><br><br><br><br><br><br>
-
-
+        
             <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
                 <div class="form-group has-feedback">
                     <input name="Busqueda" type="text" ng-model="soporteFilter" class="form-control" size="30" placeholder="Buscar..."/>
@@ -34,21 +33,21 @@
             </div>
     </div>
       
-      
+
         <table class="table table-hover table-responsive border-left-right-cero" style="table-layout: fixed;">
-          <th ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2 "><b>Operación</b></th>
-          <th ng-show="SessionCookie.IdTipoAcceso==1 "><b>Ventas</b></th>
-          <th ng-show="SessionCookie.IdTipoAcceso==1 "><b>Agente</b></th>
-          <th ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2  "><b>Acción en Partner Center</b></th>
-          <th ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2  "><b>Articulo </b></th>
-          <th ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2  "><b>Cantidad Click</b></th>
-          <th ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2 "><b>Id Pedido</b></th>
-          <th ng-show="SessionCookie.IdTipoAcceso==1 "><b>Cantidad en Partner Center</b></th>
-          <th ng-show="SessionCookie.IdTipoAcceso==1 "><b>Distribuidor</b></th>
-          <th ng-show="SessionCookie.IdTipoAcceso==1 "><b>Usuario Final</b></th>
+          <th style="word-wrap:break-word" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2 "><b>Operación</b></th>
+          <th style="word-wrap:break-word" ng-show="SessionCookie.IdTipoAcceso==1 "><b>Ventas</b></th>
+          <th style="word-wrap:break-word" ng-show="SessionCookie.IdTipoAcceso==1 "><b>Agente</b></th>
+          <th style="word-wrap:break-word" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2  "><b>Acción en Partner Center</b></th>
+          <th style="word-wrap:break-word" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2  "><b>Articulo </b></th>
+          <th style="word-wrap:break-word" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2  "><b>Cantidad Click</b></th>
+          <th style="word-wrap:break-word" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2 "><b>Id Pedido</b></th>
+          <th style="word-wrap:break-word" ng-show="SessionCookie.IdTipoAcceso==1 "><b>Cantidad en Partner Center</b></th>
+          <th style="word-wrap:break-word" ng-show="SessionCookie.IdTipoAcceso==1 "><b>Distribuidor</b></th>
+          <th style="word-wrap:break-word" ng-show="SessionCookie.IdTipoAcceso==1 "><b>Usuario Final</b></th>
           <tr ><!-- ng-repeat="soporte in Solicitudes | filter:soporteFilter | orderBy:sortBy:reverse" class="repeat-animation" -->
             
-      
+  
             <td style="word-wrap:break-word" class="col-xs-12 col-sm-12 col-md-2 col-lg-2" ng-show="SessionCookie.IdTipoAcceso==1 ">
               <div class="form-group">
                   <span class="glyphicon glyphicon-ok" style="color:green" aria-hidden="true" ng-hide="checked2"></span>
@@ -67,49 +66,49 @@
               </div>
             </td>
       
-            <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2" ng-show="SessionCookie.IdTipoAcceso==1 ">
+            <td style="word-wrap:break-word" class="col-xs-12 col-sm-12 col-md-2 col-lg-2" ng-show="SessionCookie.IdTipoAcceso==1 ">
               <div class="form-group">
                 <b><h5>Prueba</h5></b>
               </div>
             </td>
       
-            <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2" ng-show="SessionCookie.IdTipoAcceso==1 ">
+            <td style="word-wrap:break-word" class="col-xs-12 col-sm-12 col-md-2 col-lg-2" ng-show="SessionCookie.IdTipoAcceso==1 ">
               <div class="form-group">
                 <b><h5>Prueba</h5></b>
               </div>
             </td>
 
-            <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2" ng-show="SessionCookie.IdTipoAcceso==1 ">
+            <td style="word-wrap:break-word" class="col-xs-12 col-sm-12 col-md-2 col-lg-2" ng-show="SessionCookie.IdTipoAcceso==1 ">
               <div class="form-group">
                 <b><h5>Prueba</h5></b>
               </div>
             </td>
 
-            <td style="word-wrap:break-word"class="col-xs-12 col-sm-12 col-md-1 col-lg-1" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8 ">
+            <td style="word-wrap:break-word" class="col-xs-12 col-sm-12 col-md-1 col-lg-1" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8 ">
               <div class="form-group">
                 <b><h5>Prueba</h5></b>
               </div>
             </td>
 
-            <td style="word-wrap:break-word"class="col-xs-12 col-sm-12 col-md-1 col-lg-1" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8 ">
+            <td style="word-wrap:break-word" class="col-xs-12 col-sm-12 col-md-1 col-lg-1" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8 ">
               <div class="form-group">
                 <b><h5>Prueba</h5></b>
               </div>
             </td>
 
-            <td style="word-wrap:break-word"class="col-xs-12 col-sm-12 col-md-1 col-lg-1" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8 ">
+            <td style="word-wrap:break-word" class="col-xs-12 col-sm-12 col-md-1 col-lg-1" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8 ">
               <div class="form-group">
                 <b><h5>Prueba</h5></b>
               </div>
             </td>
 
-            <td style="word-wrap:break-word"class="col-xs-12 col-sm-12 col-md-1 col-lg-1" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8 ">
+            <td style="word-wrap:break-word" class="col-xs-12 col-sm-12 col-md-1 col-lg-1" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8 ">
               <div class="form-group">
                 <b><h5>Prueba</h5></b>
               </div>
             </td>
             
-            <td style="word-wrap:break-word"class="col-xs-12 col-sm-12 col-md-1 col-lg-1" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8 ">
+            <td style="word-wrap:break-word" class="col-xs-12 col-sm-12 col-md-1 col-lg-1" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8 ">
               <div class="form-group">
                 <b><h5>Prueba</h5></b>
               </div>
@@ -119,7 +118,6 @@
         </table>
 
         
-
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
         <div class="modal-dialog modal-dialog-centered" role="document">
           <div class="modal-content">
