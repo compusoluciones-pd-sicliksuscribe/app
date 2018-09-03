@@ -28,7 +28,7 @@
               item.MonedaCompra = 'Dólares';
               return item;
             });
-            if ($scope.Productos == '') {
+            if ($scope.Productos === '') {
               $scope.Mensaje = 'No encontramos resultados de tu búsqueda...';
               if ($scope.Pagina > 0) {
                 $scope.ShowToast('No encontramos más resultados de esta busqueda, regresaremos a la página anterior.', 'danger');
@@ -275,7 +275,7 @@
                 .then(function (result) {
                   $scope.suscripciones = result.data.data;
                   if (result.data.data.length >= 1) {
-                    $location.path("/autodesk/productos/" + NuevoProducto.IdProducto + "/detalle/" + PedidoDetalleResult.data.insertId);
+                    $location.path('/autodesk/productos/' + NuevoProducto.IdProducto + '/detalle/' + PedidoDetalleResult.data.insertId);
                   }
                 });
             };
@@ -368,7 +368,7 @@
         var elm = document.getElementById(eID);
         var y = elm.offsetTop;
         var node = elm;
-        while (node.offsetParent && node.offsetParent != document.body) {
+        while (node.offsetParent && node.offsetParent !== document.body) {
           node = node.offsetParent;
           y += node.offsetTop;
         } return y;
