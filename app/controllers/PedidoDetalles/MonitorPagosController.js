@@ -133,6 +133,7 @@
             for (var x = 0; x < $scope.PedidosSeleccionadosParaPagar.length; x++) {
               if (key == $scope.PedidosSeleccionadosParaPagar[x]) {
                 $scope.PedidosSeleccionadosParaPagar.splice(x, 1);
+                $scope.PedidosSeleccionadosParaPagarPrepaid.splice(x, 1);
               }
             }
             $scope.Pedidos[y].Seleccionado = 0;
