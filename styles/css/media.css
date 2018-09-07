@@ -1,0 +1,30 @@
+ @media only screen and (max-width: 600px) {
+    .titleSlide {
+        font-size: 25px !important;
+        width: 100% !important;
+    }
+    .textSlide {
+        font-size: 22px !important;
+        width: 100% !important;
+        /* background: red; */
+
+    }
+}
+
+@media only screen and (min-width: 601px) and (max-width: 1024px) {
+    .titleSlide {
+        font-size: 40px !important;
+        width: 50% !important;
+
+    }
+    .textSlide {
+        font-size: 26px !important;
+        width: 100% !important;
+        /* background: blue; */
+
+    }
+    .imageBanner {
+        width: 100%; /* insert preferred value */
+        height: auto;
+    }
+}

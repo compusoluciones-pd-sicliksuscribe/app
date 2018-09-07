@@ -127,8 +127,8 @@
 								<img class="imageBanner" ng-src="{{Promocion.Url}}" style="float:right; margin-right:10%; width:600px; height:400px;">
 							</div>
 							<div class="carousel-caption" style="height:500px;">
-								<h4>{{Promocion.Nombre}}</h4>
-								<p>{{Promocion.Descripcion}}</p><br>
+								<h4 class="titleSlide">{{Promocion.Nombre}}</h4>
+								<p class="textSlide">{{Promocion.Descripcion}}</p><br>
 
 								<button class="btn btn-success" ng-click="goToPage('Productos/{{Promocion.CodigoProducto}}');" style="background:{{currentDistribuidor.SecondaryColor}}"
 									ng-show="((SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3) && {{Promocion.EsUrl}}===0)">Comprar</button>

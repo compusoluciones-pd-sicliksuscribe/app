@@ -3,6 +3,7 @@
     $scope.init = function () {
       $scope.esNavegadorSoportado();
       $scope.navCollapsed = true;
+      console.log("entro al inicio");
     };
     $scope.init();
   };

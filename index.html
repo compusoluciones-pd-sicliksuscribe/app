@@ -25,12 +25,12 @@
 	<meta name="apple-mobile-web-app-status-bar-style" content="#FFFFFFFF" />
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
-	<link rel="shortcut icon" type="image/x-icon" href="images/icon.png" />
-	<link rel="shortcut icon" href="images/icon.png" />
-	<link rel="shortcut icon" sizes="196x196" href="images/icon.png" />
-	<link rel="shortcut icon" sizes="128x128" href="images/icon.png" />
-	<link rel="icon" type="image/ico" href="images/icon.png" />
-	<link rel="icon" href="images/icon.png" />
+	<link rel="shortcut icon" type="image/x-icon" href="images/Icon.png" />
+	<link rel="shortcut icon" href="images/Icon.png" />
+	<link rel="shortcut icon" sizes="196x196" href="images/Icon.png" />
+	<link rel="shortcut icon" sizes="128x128" href="images/Icon.png" />
+	<link rel="icon" type="image/ico" href="images/Icon.png" />
+	<link rel="icon" href="images/Icon.png" />
 
 	<link rel="apple-touch-icon-precomposed" href="images/appIcon.png" />
 	<link rel="apple-touch-icon" href="images/appIcon.png" />
@@ -52,7 +52,12 @@
 	<link rel="apple-touch-icon" sizes="114x114" href="images/appIcon.png" />
 	<link rel="apple-touch-icon" sizes="144x144" href="images/appIcon.png" />
 
-	<title class="ng-cloak" ng-cloak>click suscribe | CompuSoluciones</title>
+	<div ng-cloak ng-if="!currentDistribuidor.PestanaNavegador" >
+		<title >Click Suscribe | CompuSoluciones</title>
+	</div>
+	<div ng-cloak ng-if="currentDistribuidor.PestanaNavegador" >
+		<title > {{currentDistribuidor.PestanaNavegador}}</title>
+	</div>
 
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
@@ -67,6 +72,7 @@
 	<link href="styles/css/style.css" rel="stylesheet" type="text/css" />
 	<link href="styles/css/landing.css" rel="stylesheet" type="text/css" />
 	<link href="styles/ngToast.css" rel="stylesheet" type="text/css" />
+	<link href="styles/css/media.css" rel="stylesheet" type="text/css" />
 
 	<link href="styles/animations.css" rel="stylesheet" type="text/css" />
 	<link href="styles/pulse.css" rel="stylesheet" type="text/css">
@@ -76,14 +82,14 @@
 
 <body id="MarketPlaceBody" ng-controller="IndexController" class="ng-cloak" ng-cloak>
 
-	<header class="navbar-fixed-top">
+	<header class="navbar-fixed-top"	>
 		<div class="container-fluid">
 
 			<!--Menu general-->
 			<div class="row" style="background:#4a7bab;" ng-hide="selectMenu()">
 				<div class="helpStart" ng-show="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 7) && (SessionCookie.LeyoTerminos == 1)"
 				 ng-click="IniciarTour();"><i class="fa fa-question-circle"></i></div>
-				<div class="col-xs-0 col-sm-0 col-md-3 col-lg-3 hidden-xs hidden-sm" style="background:#fff;">
+				<div class="col-xs-0 col-sm-0 col-md-3 col-lg-3 hidden-xs hidden-sm " style="background:#fff;">
 					<div style="height:110px;">
 						<a href="#/"> <img src="images/LogoSVG.svg" class="img-responsive" style="width:100%; text-align:center;"> </a>
 					</div>
@@ -195,7 +201,6 @@
 												</div>
 											</a>
 										</li>
-
 										<li class="yellow" ng-show="(SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
 											<a ng-click="goToPage('monitor-soporte');"><span class="fa fa-ticket" style="padding-right:5px;"></span> Soporte </a>
 										</li>
@@ -274,7 +279,6 @@
 				<div class="col-xs-0 col-sm-0 col-md-3 col-lg-3 hidden-xs hidden-sm" style="background:#fff;padding: 2px;">
 					<div style="height:110px;">
 						<a href="#/"> <img ng-src="{{currentDistribuidor.UrlLogo}}" class="img-responsive" style="width:100%; text-align:center;"> </a>
-						<!-- <a href="#/"> <img ng-src="images/logo.jpg" class="img-responsive" style="width:100%; text-align:center;"> </a> -->
 					</div>
 				</div>
 
@@ -292,9 +296,9 @@
                                         <span class="icon-bar"></span>
                                         <span class="icon-bar"></span>
                                     </button>
-									<a class="navbar-brand" ng-click="goToPage('');" style="padding:10px 12px!important">
-										<div class="hidden-md hidden-lg">
-											<img ng-src="{{currentDistribuidor.UrlLogo}}" width="30px">
+									<a class="navbar-brand" ng-click="goToPage('');" style="width: 100%;">
+										<div class="hidden-md hidden-lg" style="background: white; display: flex; justify-content: center; align-items: center;">
+											<img ng-src="{{currentDistribuidor.UrlLogo}}" width="300px">
 										</div>
 									</a>
 								</div>
@@ -414,36 +418,71 @@
 	</main>
 
 	<footer>
-
-		<div style="background:{{currentDistribuidor.PrimaryColor}}" class="footer navbar-static-bottom">
-			<div class="container-fluid">
-				<div class="form-group row">
-
-					<div class="form-group col-xs-12 col-sm-12 col-md-8 col-lg-8">
-						<div style="width:100%; color:#fff; font-size:12px; text-align:left!important; cursor:default;" class="pull-left">
-							<label></label>
-							<img class="logoFooter" src="images/logoFooter.svg" width="150px;" style="display:inline-block; vertical-align:bottom;">
-							<p class="textFooter" style="display:inline-block; margin:0; vertical-align:bottom; margin-left:35px;">&nbsp; Todos los derechos reservados CompuSoluciones 2017.</p>
+		<div class="mycolumn2 ng-hide" ng-show="selectMenu()">
+			<div style="background:{{currentDistribuidor.PrimaryColor}}" class="footer navbar-static-bottom">
+				<div class="container-fluid">
+					<div class="form-group row">
+							<div class="form-group col-xs-12 col-sm-12 col-md-8 col-lg-8">
+									<div style="width:100%; color:#fff; font-size:12px; text-align:left!important; cursor:default;" class="pull-left">
+										<label></label>
+										<p class="textFooter" style="display:inline-block; margin-top:19px; vertical-align:bottom; margin-left:35px;">&nbsp; Powered by: CompuSoluciones ©</p>
+									</div>
+								</div>
+						<div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4  hidden-xs hidden-sm pull-right" style="color:#fff;">
+							<div class="pull-right">
+								<p style="margin-top: 19px">
+									<!-- <a style="color:#fff" ng-href="{{currentDistribuidor.UrlInicio}}">Inicio</a>
+									&nbsp; / &nbsp; -->
+									<a style="color:#fff;" ng-href="{{currentDistribuidor.UrlAvisoPrivacidad}}">Aviso de privacidad</a>
+									&nbsp; / &nbsp; 
+									<a style="color:#fff;" ng-href="{{currentDistribuidor.UrlContacto}}">Contacto</a>
+								</p>
+							</div>
 						</div>
+	
 					</div>
-
-					<div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4  hidden-xs hidden-sm pull-right" style="color:#fff;">
-						<div class="pull-right">
-							<label></label>
-							<p>
-								<a style="color:#fff" href="#/Version">Versiones</a>
-								&nbsp; / &nbsp;
-								<a style="color:#fff;" href="http://www.compusoluciones.com/aviso-de-privacidad/">Aviso de privacidad</a>
-								&nbsp; /
-								&nbsp; Queremos Escucharte</p>
-						</div>
-					</div>
-
 				</div>
 			</div>
 		</div>
-
+		
+		<div class="mycolumn" ng-hide="selectMenu()">
+		<div style="background:{{currentDistribuidor.PrimaryColor}}" class="footer navbar-static-bottom">
+				<div class="container-fluid">
+						<div class="form-group row">
+		
+							<div class="form-group col-xs-12 col-sm-12 col-md-8 col-lg-8">
+								<div style="width:100%; color:#fff; font-size:12px; text-align:left!important; cursor:default;" class="pull-left">
+									<label></label>
+									<img class="logoFooter" src="images/logoFooter.svg" width="150px;" style="display:inline-block; vertical-align:bottom;">
+									<p class="textFooter" style="display:inline-block; margin:0; vertical-align:bottom; margin-left:35px;">&nbsp; Todos los derechos reservados CompuSoluciones 2017.</p>
+								</div>
+							</div>
+		
+							<div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4  hidden-xs hidden-sm pull-right" style="color:#fff;">
+								<div class="pull-right">
+									<label></label>
+									<p>
+										<a style="color:#fff" href="#/Version">Versiones</a>
+										&nbsp; / &nbsp;
+										<a style="color:#fff;" href="http://www.compusoluciones.com/aviso-de-privacidad/">Aviso de privacidad</a>
+										&nbsp; /
+										&nbsp; Queremos Escucharte</p>
+								</div>
+							</div>
+		
+						</div>
+					</div>
+		
+			</div>
+		</div>	
+		</div>
+		
+		
 	</footer>
+		
+
+
+	
 
 	<!--scripts Angular JS Descargar en https://code.angularjs.org/1.5.3/-->
 	<!--scripts Angular JS Descargar en https://code.angularjs.org/1.4.8/-->
@@ -565,7 +604,8 @@
 	<script type="text/javascript" src="scripts/re-tree.js"></script>
 	<script type="text/javascript" src="scripts/classie.js"></script>
 
-	<script src="scripts/tinycolor2-min.js"></script>
+	<!-- 404 lo comento para mas velocidad -->
+	<!-- <script src="scripts/tinycolor2-min.js"></script> -->
 	<script src="scripts/angularjs-color-picker.min.js"></script>
 
 	<!-- Tarjeta Credito -->
@@ -576,7 +616,6 @@
 
 	<div id="divComprar" ng-controller="ComprarController" style="display:none;"></div>
 	<div id="divComprarTuClick" ng-controller="ComprarUFController" style="display:none;"></div>
-
 	<script type="text/javascript">
 		function errorCallback(error) {
 			alert('No pudimos procesar tu solictud en este momento, por favor intenta de nuevo más tarde.');

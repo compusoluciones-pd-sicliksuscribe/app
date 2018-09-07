@@ -560,12 +560,18 @@ option{
 
 
 
-@media screen and (max-width: 1500px) {
+@media screen and (min-width: 991px) and (max-width: 1500px) {
 
         .distintivo{
-        display:none !important;
-    }
-
+            display:none !important;
+        }
+        .img-responsive{
+            height: 250px;
+        }
+        .imageBanner{
+             max-width: 400px !important;
+             height: 100% !important;
+        }
 }
 
 

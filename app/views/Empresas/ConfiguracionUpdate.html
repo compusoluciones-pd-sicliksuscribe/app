@@ -4,10 +4,11 @@
 		<hr>
 		<div class="form-group row">
 			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-				<div class="pull-rigth">
+				<div class="pull-rigth" style="margin-bottom: 15px">
 					<label>Subdominio próximamente *</label> {{miSitio.Subdominio}}.clicksuscribe.com
 					<input name="Subdominio" type="text" ng-model="miSitio.Subdominio" class="form-control" placeholder="Subdominio" />
-					<b style="color:red" ng-show="frm.Subdominio.$invalid && !frm.Subdominio.$pristine" class="help-block">Escribe un subdominio válido.</b>
+					<b style="color:red" ng-show="frm.Subdominio.$invalid && !frm.Subdominio.$pristine" class="help-block">Escribe un subdominio
+						válido.</b>
 				</div>
 			</div>
 			<div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div>
@@ -15,24 +16,35 @@
 
 		<div class="form-group row">
 			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-				<div class="pull-rigth">
-					<label>Distintivo para menú *</label> <a href="{{miSitio.UrlLogo}}" ng-show="miSitio.UrlLogo != null" target="_blanc" ng-model="miSitio.UrlLogo">descargar</a>
-					<br>
-					Formato: jpg, png, jpeg, bmp, gif. ancho: 365px, alto: 124px 
-					<input type="file" id="fileUploadImagen" nv-file-select="miSitio.UrlLogo" ng-model="miSitio.UrlLogo" uploader="uploader" />
-					<img ng-show="miSitio.UrlLogo != null" src ="{{miSitio.UrlLogo}}" ng-model="miSitio.UrlLogo" style="max-width:365px"/>
+				<div class="pull-rigth" style="margin-bottom: 15px">
+					<label>Distintivo para menú *</label> <a href="{{miSitio.UrlLogo}}" ng-show="miSitio.UrlLogo != null" target="_blanc"
+					 ng-model="miSitio.UrlLogo">descargar</a>
+					<br> Formato: jpg, png, jpeg, bmp, gif. ancho: 365px, alto: 124px
+					<input type="file" id="fileUploadImagen" nv-file-select="miSitio.UrlLogo" ng-model="miSitio.UrlLogo" uploader="uploader"/>
+					<img ng-show="miSitio.UrlLogo != null" src="{{miSitio.UrlLogo}}" ng-model="miSitio.UrlLogo" style="max-width:365px" />
 				</div>
 			</div>
-			<div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div>
 		</div>
+		
+		<div class="form-group row" >
+				<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+					<div class="pull-rigth" style="margin-bottom: 15px">
+						<label>Selecciona tu ícono de distribuidor</label> <a href="{{miSitio.Icon}}" ng-show="miSitio.Icon != null" target="_blanc"
+						 ng-model="miSitio.Icon">descargar</a>
+						<br> Formato: jpg, png, jpeg, bmp, gif. ancho: 50px, alto: 50px
+						<input type="file" id="fileUploadIcon" nv-file-select="miSitio.Icon" ng-model="miSitio.Icon" uploader="uploader"/>
+						<img ng-show="miSitio.Icon != null" src="{{miSitio.Icon}}" ng-model="miSitio.Icon" style="max-width:200px" />
+					</div>
+				</div>
+			</div>
 
 		<div class="form-group row">
 			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-				<div class="pull-rigth">
+				<div class="pull-rigth" style="margin-bottom: 15px">
 					<label>
 						Primary
-							<input type="color" id="primaryColorPicker" ng-model="miSitio.PrimaryColor"/>
-							<input id="primaryColorInput" ng-model="miSitio.PrimaryColor"></input>
+						<input type="color" id="primaryColorPicker" ng-model="miSitio.PrimaryColor" />
+						<input id="primaryColorInput" ng-model="miSitio.PrimaryColor" />
 					</label>
 				</div>
 			</div>
@@ -41,12 +53,12 @@
 
 		<div class="form-group row">
 			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-				<div class="pull-rigth">
-						<label>
-								Secondary
-									<input type="color" id="secondaryColorPicker" ng-model="miSitio.SecondaryColor"/>
-									<input id="secondaryColorInput" ng-model="miSitio.SecondaryColor"></input>
-							</label>
+				<div class="pull-rigth" style="margin-bottom: 15px">
+					<label>
+						Secondary
+						<input type="color" id="secondaryColorPicker" ng-model="miSitio.SecondaryColor" />
+						<input id="secondaryColorInput" ng-model="miSitio.SecondaryColor" />
+					</label>
 				</div>
 			</div>
 			<div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div>
@@ -54,18 +66,58 @@
 
 		<div class="form-group row">
 			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-				<div class="pull-rigth">
-					<label><input id="SubdominioActivo" type="checkbox" ng-checked="miSitio.SubdominioActivo" ng-true-value="1" ng-false-value="0" ng-model="miSitio.SubdominioActivo"> Activar mi sitio para mis clientes.</label>
+				<label>
+					Nombre en Pestaña de Navegador
+					<input type="text" name="PestanaNavegador" id="pestanaNavegador" placeholder="Mi Empresa | Compusoluciones" 
+					style="width:200px" ng-model="miSitio.PestanaNavegador">
+				</label>
+			</div>
+		</div>
+
+		<!-- <div class="form-group row">
+			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+				<label>
+					Selecciona URL de inicio
+					<input type="url" name="inicio" id="inicioUrl" placeholder="http://myUrl.com/inicio" 
+					style="width:200Px" ng-model="miSitio.UrlInicio">
+				</label>
+			</div>
+		</div> -->
+		<div class="form-group row">
+			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+				<label>
+					URL de Aviso de Privacidad
+					<input type="url" name="AvisoPrivacidad" id="avisoPrivacidad" 
+					placeholder="http://myUrl.com/AvisoDePrivacidad" style="width:200Px" ng-model="miSitio.UrlAvisoPrivacidad">
+				</label>
+
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+				<label>
+					Contacto
+					<input type="url" name="Contacto" id="contacto" placeholder="http://myUrl.com/contacto" style="width:200Px" 
+					ng-model="miSitio.UrlContacto">
+
+				</label>
+
+			</div>
+		</div>
+
+		<div class="form-group row">
+			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+				<div class="pull-rigth" style="margin-bottom: 15px">
+					<label><input id="SubdominioActivo" type="checkbox" ng-checked="miSitio.SubdominioActivo" ng-true-value="1" ng-false-value="0"
+						 ng-model="miSitio.SubdominioActivo"> Activar mi sitio para mis clientes.</label>
 				</div>
 			</div>
 			<div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div>
 		</div>
 
-        <br>
-
 		<div class="form-group row">
 			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-				<div class="pull-rigth">
+				<div class="pull-rigth style="margin-bottom: 15px">
 					<a href="https://s3.amazonaws.com/marketplace.compusoluciones.com/TuClick.pdf" target="_blanc">Términos y condiciones</a>
 				</div>
 			</div>
@@ -74,15 +126,18 @@
 
 		<div class="form-group row">
 			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-				<div class="pull-rigth">
-					<label><b>Acepto expresamente el citado contrato, los términos y condiciones, manifestando bajo protesta de decir verdad que cuento con la capacidad suficiente para contratar y obligarme en términos de los mismos. Acuso de recibo el presente mensaje de datos, siendo de mi conocimiento que la información contenida en este, se mantendrá integra y será accesible a mi ulterior consulta.</b></label>
+				<div class="pull-rigth" style="margin-bottom: 15px">
+					<label><b>Acepto expresamente el citado contrato, los términos y condiciones, manifestando bajo protesta de decir verdad
+							que cuento con la capacidad suficiente para contratar y obligarme en términos de los mismos. Acuso de recibo el presente
+							mensaje de datos, siendo de mi conocimiento que la información contenida en este, se mantendrá integra y será accesible
+							a mi ulterior consulta.</b></label>
 					<br>
-                    <label><input id="Activo" type="checkbox" ng-checked="miSitio.SubdominioAceptoTerminos" ng-true-value="1" ng-false-value="0" ng-model="miSitio.SubdominioAceptoTerminos"> Sí acepto.</label>
+					<label><input id="Activo" type="checkbox" ng-checked="miSitio.SubdominioAceptoTerminos" ng-true-value="1" ng-false-value="0"
+						 ng-model="miSitio.SubdominioAceptoTerminos"> Sí acepto.</label>
 				</div>
 			</div>
 			<div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div>
 		</div>
-
 
 		<div class="form-group row">
 			<div class="col-xs-0 col-sm-0 col-md-2 col-lg-2">

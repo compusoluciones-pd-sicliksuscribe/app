@@ -23,7 +23,7 @@
     $scope.init();
 
     /** Actualiza los datos de la empresa para su sitio **/
-    function putMiSitio() {
+    function putMiSitio () {
       EmpresasFactory.putMiSitio($scope.miSitio)
         .success(function (actualizacion) {
           if (actualizacion.success) {
@@ -63,7 +63,7 @@
     };
 
     /** Subo la imágen y establesco la liga para ser guardada despues si no hay errores **/
-    function subirImagen(fileItem, data) {
+    function subirImagen (fileItem, data) {
       var fileChooser = document.getElementById('fileUploadImagen');
       var file = fileChooser.files[0];
       $scope.miSitio.UrlLogo = 'https://s3.amazonaws.com/marketplace.compusoluciones.com/Anexos/logos/' + fileItem.file.name;
@@ -98,6 +98,7 @@
 
     /** Si trae anexo algo lo sube, si no hace el puro update sin actualizar nada**/
     $scope.Guardar = function () {
+      console.log('uploader ', uploader);
       if (uploader.queue[0]) {
         uploader.queue[0].upload();
       } else {
