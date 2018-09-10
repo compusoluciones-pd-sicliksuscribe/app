@@ -1,0 +1,32 @@
+<div class="container" ; style="padding-left: 75px">
+	<div class="Title">
+		<h1 style="border-bottom: 1px solid black; padding-bottom: 17px">Compra Realizada Exitosamente </h1>
+		<h3>Tu compra generó los siguientes pedidos:</h3>
+		<br>
+	</div>
+	<div>
+		<div class="form-group row" ng-show="orderIdsCookie.length > 0">
+			<ul ng-repeat="pedido in orderIdsCookie" class="repeat-animation" style="padding: 0; list-style-type: none; padding-left:17px">
+				<h4><b>Pedido:</b> {{pedido.IdPedido}}</h4>
+				<div class="pedidos" style="background-color:#f5f5f5; padding-top: 20px; padding-left: 8px; padding-bottom: 25px;">
+					<p><b>Fecha de Renovación:</b>{{pedido.FechaFin}}</p>
+					<a href="#/Monitor">ir al Monitor de pedidos</a>
+				</div>
+			</ul>
+		</div>
+	</div>
+	<ul>
+		<div class="form-group row" style="position: relative; margin-top: 25px; height: 120px;">
+			<div style="position: absolute; right: 0; ">
+				<p style="display: block"><b>Método de pago:</b> {{orderIdsCookie[0].MetodoPago}}</p>
+				<p ng-if="numeroConfirmacion(orderIdsCookie[0].NumeroConfirmacion)" style="display: block"><b>Número de confirmación:</b> {{orderIdsCookie[0].NumeroConfirmacion}}</p>
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+						<div class="form-group">
+							<button id="mainButton" type="button" ng-click="AceptaPedido()" class="btn btn-primary btn-block">Aceptar</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+</div>

@@ -99,30 +99,33 @@
         });
     };
 
-    const comprarProductos = function () {
+    const orderCookie = orderIdsCookie => {
+      const cookie = $cookies.putObject('orderIdsCookie', orderIdsCookie, { secure: $rootScope.secureCookie });
+      const location = $location.path('/SuccessOrder');
+      const resultOrderidCookie = [{cookie, location}];
+      return resultOrderidCookie;
+    };
+
+    const comprarProductos = function () { // credito compusoluciones
       PedidoDetallesFactory.getComprar()
-        .then(function (response) {
-          if (response.data.success) {
-            $scope.ShowToast(response.data.message, 'success');
+        .then(function (orderIdsCookie) {
+          if (orderIdsCookie) {
             $scope.ActualizarMenu();
-            $location.path('/');
+            orderCookie(orderIdsCookie);
           } else {
             $location.path('/Carrito');
-            $scope.ShowToast(response.data.message, 'danger');
           }
         });
     };
 
-    const comprarPrePago = function () {
+    const comprarPrePago = function () { // transferencia
       PedidoDetallesFactory.getComprar()
-        .then(function (response) {
-          if (response.data.success) {
-            $scope.ShowToast(response.data.message, 'success');
+        .then(function (orderIdsCookie) {
+          if (orderIdsCookie) {
             $scope.ActualizarMenu();
-            $location.path('/');
+            orderCookie(orderIdsCookie);
           } else {
             $location.path('/Carrito');
-            $scope.ShowToast(response.data.message, 'danger');
           }
         });
     };
@@ -247,7 +250,7 @@
       $location.path('/Carrito');
     };
 
-    $scope.PagarTarjeta = function () {
+    $scope.PagarTarjeta = function () { // tarjeta de credito
       if ($scope.Distribuidor.IdFormaPagoPredilecta === 1) {
         PedidoDetallesFactory.getPrepararTarjetaCredito()
           .success(function (Datos) {
@@ -279,7 +282,7 @@
                           line3: 'Col. Rinconada del Bosque C.P. 44530',
                           line4: 'Guadalajara, Jalisco. México'
                         },
-  
+
                         email: 'order@yourMerchantEmailAddress.com',
                         phone: '+1 123 456 789 012'
                       },
@@ -359,7 +362,7 @@
         if (datosTarjeta.PedidosAgrupados[0].Renovacion) {
           PedidosFactory.patchPaymentInformation(datosTarjeta)
             .success(function (compra) {
-              $cookies.remove('pedidosAgrupados');
+              $cookies.remove('pedidosAgrupados'); // revisar
               if (compra.success === 1) {
                 $scope.ShowToast(compra.message, 'success');
                 $location.path('/MonitorPagos/refrescar');
@@ -375,10 +378,9 @@
               if (putPedidoResult.success) {
                 PedidoDetallesFactory.getComprar()
                   .success(function (compra) {
-                    if (compra.success === 1) {
-                      $scope.ShowToast(compra.message, 'success');
+                    if (compra) {
                       $scope.ActualizarMenu();
-                      $location.path('/');
+                      orderCookie(compra);
                     } else {
                       $location.path('/Carrito');
                       $scope.ShowToast(compra.message, 'danger');
