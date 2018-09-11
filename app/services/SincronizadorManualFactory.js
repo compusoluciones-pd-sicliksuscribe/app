@@ -11,9 +11,9 @@
 
     factory.refreshToken();
 
-    factory.getSincronizadorManual = function () {
+    factory.getSincronizadorManual = function (agente) {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'microsoft/manualsynchronizer');
+      return $http.get($rootScope.API + 'microsoft/manualsynchronizer/' + agente);
     };
 
     return factory;
