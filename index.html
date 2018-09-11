@@ -152,7 +152,7 @@
 											<a ng-click="goToPage('Usuarios');"><span class="fa fa-users" style="padding-right:5px;"></span> Administradores</a>
 										</li>
 
-										<li class="principalBlue" ng-show="(SessionCookie.IdTipoAcceso == 1) && (SessionCookie.LeyoTerminos == 1)">
+										<li class="principalBlue" ng-show="(SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 8) && (SessionCookie.LeyoTerminos == 1)">
 											<a ng-click="goToPage('Reportes');"><span class="fa fa-bar-chart" style="padding-right:5px;"></span> Reportes</a>
 										</li>
 
@@ -186,7 +186,7 @@
 											</ul>
 										</li>
 
-										<li class="green four" ng-show="(SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 4 || SessionCookie.IdTipoAcceso == 5 || SessionCookie.IdTipoAcceso == 6 || SessionCookie.IdTipoAcceso == 7) && (SessionCookie.LeyoTerminos == 1)">
+										<li class="green four" ng-show="(SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 4 || SessionCookie.IdTipoAcceso == 5 || SessionCookie.IdTipoAcceso == 6 || SessionCookie.IdTipoAcceso == 7 || SessionCookie.IdTipoAcceso == 8) && (SessionCookie.LeyoTerminos == 1)">
 											<a href="#/Usuario/{{SessionCookie.IdUsuario}}"> <span class="glyphicon glyphicon-user"></span>
 												<div class="text">{{SessionCookie.Nombre}} {{SessionCookie.ApellidoPaterno }}
 													<span ng-show="!SessionCookie.ApellidoPaterno">
