@@ -3,6 +3,7 @@
     $scope.versiones = [];
     $scope.currentPath = $location.path();
     $anchorScroll.yOffset = 130;
+    $scope.selected = {};
 
     $scope.init = function () {
       if ($scope.currentPath === '/Version') {
@@ -23,14 +24,12 @@
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
     };
-
+  
     var obtenerDetalle = function (Id) {
-      var IdVersion = Id || $scope.versiones[0].IdVersion;
+      var IdVersion = Id || 1;
       VersionFactory.getVersionDetalle(IdVersion)
         .success(function (versiones) {
           $scope.detalleVersion = versiones.data;
-          console.log(versiones);
-          SetTitulo();
         })
         .error(function (data, status, headers, config) {
           $scope.ShowToast('No pudimos traer el detalle de la versión.', 'danger');
@@ -43,23 +42,15 @@
 
     $scope.GetDetalle = function (IdVersion, text) {
       if (!IdVersion) {
-        IdVersion = 4;
+        IdVersion = 1;
       }
       obtenerDetalle(IdVersion);
     };
 
     $scope.scrollTo = function (id) {
-      //$location.hash(id);
       $anchorScroll(id);
     }
 
-    var SetTitulo = function () {
-      var selectedIndex = document.getElementsByName("Versiones")[0].selectedIndex - 1;
-      if (selectedIndex < 0) {
-        selectedIndex = 0;
-      }
-      $scope.Titulo = $scope.versiones[selectedIndex].Version;
-    };
   };
 
   VersionController.$inject = ['$scope', '$log', '$location', '$cookies', '$route', 'VersionFactory', '$anchorScroll', '$routeParams'];
