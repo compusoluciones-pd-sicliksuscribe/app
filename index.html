@@ -133,6 +133,10 @@
 											</a>
 										</li>
 
+										<li class="red" ng-show="(SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 8) && (SessionCookie.LeyoTerminos == 1)">
+												<a ng-click="goToPage('AdministrarSuscripciones');"><span class="fa fa-desktop" style="padding-right:5px;"></span> Monitor</a>
+											</li>
+
 										<li class="yellow" ng-show="(SessionCookie.IdTipoAcceso == 1) && (SessionCookie.LeyoTerminos == 1)">
 											<a ng-click="goToPage('Empresas');"><span class="fa fa-building-o" style="padding-right:5px;"></span> Distribuidores</a>
 										</li>
