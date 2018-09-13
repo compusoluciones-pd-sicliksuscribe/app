@@ -32,7 +32,7 @@
 						<label>Selecciona tu ícono de distribuidor</label> <a href="{{miSitio.Icon}}" ng-show="miSitio.Icon != null" target="_blanc"
 						 ng-model="miSitio.Icon">descargar</a>
 						<br> Formato: jpg, png, jpeg, bmp, gif. ancho: 50px, alto: 50px
-						<input type="file" id="fileUploadIcon" nv-file-select="miSitio.Icon" ng-model="miSitio.Icon" uploader="uploader"/>
+						<input type="file" id="fileUploadIcon" nv-file-select="miSitio.Icon" ng-model="miSitio.Icon" uploader="uploaderIcon"/>
 						<img ng-show="miSitio.Icon != null" src="{{miSitio.Icon}}" ng-model="miSitio.Icon" style="max-width:200px" />
 					</div>
 				</div>

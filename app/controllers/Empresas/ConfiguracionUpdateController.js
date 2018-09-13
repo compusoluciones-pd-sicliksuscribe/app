@@ -98,7 +98,6 @@
 
     /** Si trae anexo algo lo sube, si no hace el puro update sin actualizar nada**/
     $scope.Guardar = function () {
-      console.log('uploader ', uploader);
       if (uploader.queue[0]) {
         uploader.queue[0].upload();
       } else {

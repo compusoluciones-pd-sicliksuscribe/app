@@ -64,6 +64,8 @@
         $cookies.putObject('currentDistribuidor', Distribuidor, { 'expires': expireDate, secure: $rootScope.secureCookie });
         if ($cookies.getObject('currentDistribuidor')) {
           $scope.currentDistribuidor = $cookies.getObject('currentDistribuidor');
+    console.log('distribuidor ', $scope.currentDistribuidor);
+
         } else {
           $scope.currentDistribuidor = {};
           $scope.currentDistribuidor.UrlLogo = 'images/LogoSVG.svg';
