@@ -227,11 +227,14 @@
     $scope.calculatePriceWithExchangeRate = function (order, details, value,ValueAnnual) {
       let total = 0;
       if( order.IdEsquemaRenovacion === 2 && order.IdFabricante === 1 && order.MonedaPago === 'Pesos' && details.MonedaPrecio === 'Dólares' ){
-
-        total = details[ValueAnnual] * order.TipoCambio;
+        details[value]=details[ValueAnnual];
+        total = (details[ValueAnnual] * order.TipoCambio *12);
+        details['PrecioRenovacion']=total;
       }
       else if( order.IdEsquemaRenovacion === 2 && order.IdFabricante === 1 && order.MonedaPago === 'Dólares' && details.MonedaPrecio === 'Pesos' && details.IdProducto !== ELECTRONIC_SERVICE){
-        total = details[ValueAnnual] / order.TipoCambio;
+        details[value]=details[ValueAnnual];
+        total = (details[ValueAnnual] * order.TipoCambio * 12);
+        details['PrecioRenovacion']=total;
       }
       else if (order.MonedaPago === 'Pesos' && details.MonedaPrecio === 'Dólares') {
         total = details[value] * order.TipoCambio;

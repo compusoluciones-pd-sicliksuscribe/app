@@ -198,7 +198,7 @@
 							<label for="">Total del producto:</label>
 							<br>
 							<span ng-show="!producto.PrimeraCompraMicrosoft && !producto.DescuentoNivel">
-								{{  calcularProductTotal(pedido, producto, 'PrecioUnitario','PrecioRenovacion') | currency }} {{ pedido.MonedaPago }} 
+								{{  calcularProductTotal(pedido, producto, 'PrecioUnitario','PrecioNormal') | currency }} {{ pedido.MonedaPago }} 
 							</span>
 							<span ng-show="(producto.DescuentoNivel || producto.Descuento) && !producto.PrimeraCompraMicrosoft">
 								<del style="font-size:11px;"> {{ calculatePriceWithExchangeRate(pedido, producto, 'PrecioSinDescuento') * producto.Cantidad | currency }} {{ pedido.MonedaPago }} </del>
