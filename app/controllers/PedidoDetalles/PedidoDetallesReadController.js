@@ -314,24 +314,26 @@
       $scope.PedidoDetalles.forEach(function (order) {
         order.Productos.forEach(function (product) {
           if (order.IdPedido === IdPedido && !product.PrimeraCompraMicrosoft) {
-            const productPrice = $scope.calculatePriceWithExchangeRate(order, product, 'PrecioUnitario');
+            const productPrice = $scope.calculatePriceWithExchangeRate(order, product, 'PrecioUnitario','PrecioNormal');
             if (isTiredProduct(product)) {
               total = total + productPrice;
             } else {
               total = total + (productPrice * product.Cantidad);
             }
+
           }
+
         });
       });
       return total;
     };
 
     $scope.calcularIVA = function (IdPedido) {
-      let total = $scope.calcularSubTotal(IdPedido);
-      if ($scope.Distribuidor.ZonaImpuesto === 'Normal') total = 0.16 * total;
-      if ($scope.Distribuidor.ZonaImpuesto === 'Nacional') total = 0.16 * total;
-      if ($scope.Distribuidor.ZonaImpuesto === 'Frontera') total = 0.11 * total;
-      return total;
+          let total = $scope.calcularSubTotal(IdPedido);
+          if ($scope.Distribuidor.ZonaImpuesto === 'Normal') total = 0.16 * total;
+          if ($scope.Distribuidor.ZonaImpuesto === 'Nacional') total = 0.16 * total;
+          if ($scope.Distribuidor.ZonaImpuesto === 'Frontera') total = 0.11 * total;
+    return total;
     };
 
     $scope.calcularTotal = function (IdPedido) {
@@ -344,9 +346,17 @@
       return total;
     };
 
-    $scope.calculatePriceWithExchangeRate = function (order, details, value) {
+    $scope.calculatePriceWithExchangeRate = function (order, details, value, ValueAnnual) {
       let total = 0;
-      if (order.MonedaPago === 'Pesos' && details.MonedaPrecio === 'Dólares') {
+      if( order.IdEsquemaRenovacion === 2 && order.IdFabricante === 1 && order.MonedaPago === 'Pesos' && details.MonedaPrecio === 'Dólares' ){
+        details[value]=details[ValueAnnual];
+        total = details[ValueAnnual] * order.TipoCambio;
+      }
+      else if( order.IdEsquemaRenovacion === 2 && order.IdFabricante === 1 && order.MonedaPago === 'Dólares' && details.MonedaPrecio === 'Pesos' && details.IdProducto !== ELECTRONIC_SERVICE){
+        details[value]=details[ValueAnnual];
+        total = details[ValueAnnual] / order.TipoCambio;
+      }
+      else if (order.MonedaPago === 'Pesos' && details.MonedaPrecio === 'Dólares') {
         total = details[value] * order.TipoCambio;
       } else if (order.MonedaPago === 'Dólares' && details.MonedaPrecio === 'Pesos' && details.IdProducto !== ELECTRONIC_SERVICE) {
         total = details[value] / order.TipoCambio;
@@ -356,8 +366,9 @@
       return total;
     };
 
-    $scope.calcularProductTotal = function (order, product, value) {
-      const priceWithExchangeRate = $scope.calculatePriceWithExchangeRate(order, product, value);
+    $scope.calcularProductTotal = function (order, product, value,ValueAnnual) {
+
+      const priceWithExchangeRate = $scope.calculatePriceWithExchangeRate(order, product, value,ValueAnnual);
       if (isTiredProduct(product)) return priceWithExchangeRate;
       return priceWithExchangeRate * product.Cantidad;
     };

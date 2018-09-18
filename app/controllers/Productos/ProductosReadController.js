@@ -13,7 +13,7 @@
     $scope.TieneContrato = true;
     $scope.IdPedidoContrato = 0;
     $scope.DominioMicrosoft = true;
-    $scope.usuariosSinDominio = {id:'12'};
+    $scope.usuariosSinDominio = {id:''};
     const NOT_FOUND = 404;
     $scope.esquemaRenovacionModelo={};
     $scope.EsquemaRenovacion=[
@@ -39,11 +39,6 @@
       }
       return null;
     };
-
-    $scope.hola = function(){
-      console.log('hola');
-    }
-
     $scope.BuscarProducto = function (ResetPaginado) {
       $scope.Mensaje = 'Buscando...';
       if (ResetPaginado) {
@@ -86,16 +81,19 @@
         });
     };
 
-   $scope.CambiarFechaRenovaion = function (Producto) {
+
+   $scope.CambiarFechaRenovacion = function (Producto) {
     if ($scope.esquemaRenovacionModelo.id === 02 || $scope.esquemaRenovacionModelo.id === '01'){
       var fecha = new Date();
       Producto.EsquemaRenovacion ="Cada día 22 del mes";
+      Producto.IdEsquemaRenovacion='01';
      } 
     
     if ($scope.esquemaRenovacionModelo.id === 02 || $scope.esquemaRenovacionModelo.id === '02'){
       var fecha = new Date();
       Producto.EsquemaRenovacion =fecha.getDate() + "/" + (fecha.getMonth() +1) + "/" +((fecha.getFullYear()+1));
-     }
+      Producto.IdEsquemaRenovacion='02';
+    }
      
      return Producto.EsquemaRenovacion; 
     };
@@ -298,13 +296,16 @@
       return estimatedTotal;
     };
 
+
+    
+
     $scope.AgregarCarrito = function (Producto, Cantidad, IdPedidocontrato) {
       var NuevoProducto = {
         IdProducto: Producto.IdProducto,
         Cantidad: Cantidad,
         IdEmpresaUsuarioFinal: Producto.IdEmpresaUsuarioFinal,
         MonedaPago: 'Pesos',
-        IdEsquemaRenovacion: Producto.IdEsquemaRenovacion,
+        IdEsquemaRenovacion:Producto.IdEsquemaRenovacion,
         IdFabricante: Producto.IdFabricante,
         CodigoPromocion: Producto.CodigoPromocion,
         ResultadoFabricante2: Producto.IdProductoPadre,
@@ -325,12 +326,13 @@
       }
       if (!NuevoProducto.IdAccionAutodesk) delete NuevoProducto.IdAccionAutodesk;
       if (NuevoProducto.IdAccionAutodesk === 1 && NuevoProducto.ContratoBaseAutodesk) NuevoProducto.IdAccionAutodesk = 3;
+     
       PedidoDetallesFactory.postPedidoDetalle(NuevoProducto)
         .success(function (PedidoDetalleResult) {
           if (PedidoDetalleResult.success === 1) {
             if (NuevoProducto.IdFabricante === 2 && Producto.Accion === 'asiento') {
               ProductosFactory.getBaseSubscription(NuevoProducto.IdProducto)
-                .then(function (result) {
+              .then(function (result) {
                   $scope.suscripciones = result.data.data;
                   if (result.data.data.length >= 1) {
                     $location.path("/autodesk/productos/" + NuevoProducto.IdProducto + "/detalle/" + PedidoDetalleResult.data.insertId);

@@ -191,7 +191,7 @@
       $scope.PedidoDetalles.forEach(function (order) {
         order.Productos.forEach(function (product) {
           if (order.IdPedido === IdPedido && !product.PrimeraCompraMicrosoft) {
-            const productPrice = $scope.calculatePriceWithExchangeRate(order, product, 'PrecioUnitario');
+            const productPrice = $scope.calculatePriceWithExchangeRate(order, product, 'PrecioUnitario','PrecioNormal');
             if (isTiredProduct(product)) {
               total = total + productPrice;
             } else {
@@ -202,6 +202,8 @@
       });
       return total;
     };
+
+
 
     $scope.calcularIVA = function (IdPedido) {
       let total = $scope.calcularSubTotal(IdPedido);
@@ -220,14 +222,23 @@
       total = total + iva;
       return total;
     };
-
-    $scope.calculatePriceWithExchangeRate = function (order, details, value) {
+ 
+     
+    $scope.calculatePriceWithExchangeRate = function (order, details, value,ValueAnnual) {
       let total = 0;
-      if (order.MonedaPago === 'Pesos' && details.MonedaPrecio === 'Dólares') {
+      if( order.IdEsquemaRenovacion === 2 && order.IdFabricante === 1 && order.MonedaPago === 'Pesos' && details.MonedaPrecio === 'Dólares' ){
+
+        total = details[ValueAnnual] * order.TipoCambio;
+      }
+      else if( order.IdEsquemaRenovacion === 2 && order.IdFabricante === 1 && order.MonedaPago === 'Dólares' && details.MonedaPrecio === 'Pesos' && details.IdProducto !== ELECTRONIC_SERVICE){
+        total = details[ValueAnnual] / order.TipoCambio;
+      }
+      else if (order.MonedaPago === 'Pesos' && details.MonedaPrecio === 'Dólares') {
         total = details[value] * order.TipoCambio;
       } else if (order.MonedaPago === 'Dólares' && details.MonedaPrecio === 'Pesos' && details.IdProducto !== ELECTRONIC_SERVICE) {
         total = details[value] / order.TipoCambio;
       } else {
+        
         total = details[value];
       }
       return total;
@@ -237,8 +248,8 @@
       return product.tieredPrice > 0;
     };
 
-    $scope.calcularProductTotal = function (order, product, value) {
-      const priceWithExchangeRate = $scope.calculatePriceWithExchangeRate(order, product, value);
+    $scope.calcularProductTotal = function (order, product, value,ValueAnnual) {
+      const priceWithExchangeRate = $scope.calculatePriceWithExchangeRate(order, product, value,ValueAnnual);
       if (isTiredProduct(product)) return priceWithExchangeRate;
       return priceWithExchangeRate * product.Cantidad;
     };
