@@ -64,8 +64,6 @@
         $cookies.putObject('currentDistribuidor', Distribuidor, { 'expires': expireDate, secure: $rootScope.secureCookie });
         if ($cookies.getObject('currentDistribuidor')) {
           $scope.currentDistribuidor = $cookies.getObject('currentDistribuidor');
-    console.log('distribuidor ', $scope.currentDistribuidor);
-
         } else {
           $scope.currentDistribuidor = {};
           $scope.currentDistribuidor.UrlLogo = 'images/LogoSVG.svg';
@@ -192,18 +190,22 @@
       subdomain = subdomain.substring(0, subdomain.indexOf($rootScope.dominio));
       subdomain = subdomain.replace(new RegExp('[.]', 'g'), '');
       subdomain = subdomain.replace('www', '');
+
       if (subdomain !== '') {
         EmpresasFactory.getSitio(subdomain).success(function (empresa) {
           if (empresa.data[0]) {
             $scope.cambiarDistribuidor(empresa.data[0], false);
             $scope.ActualizarMenu();
             $scope.currentDistribuidor = $cookies.getObject('currentDistribuidor');
+            selectNavicon($scope.currentDistribuidor.Icon);
           } else {
             window.location.href = 'https://clicksuscribe.compusoluciones.com/#/';
             $scope.currentDistribuidor = {};
             $scope.currentDistribuidor.UrlLogo = 'images/LogoSVG.svg';
           }
         });
+      } else {
+        selectNavicon();
       }
     }
 
@@ -348,7 +350,13 @@
       $scope.Tour.start();
     };
   };
-
+  function selectNavicon (icon) {
+    var link = document.createElement('link');
+    link.type = 'image/x-icon';
+    link.rel = 'shortcut icon';
+    if (icon) { link.href = icon; } else { link.href = 'images/icon.png'; }
+    document.getElementsByTagName('head')[0].appendChild(link);
+  };
   IndexController.$inject = ['$scope', '$log', '$location', '$cookies', '$rootScope', 'PedidosFactory', 'PedidoDetallesFactory', 'ngToast', '$uibModal', '$window', 'UsuariosFactory', 'deviceDetector', 'ComprasUFFactory', 'EmpresasFactory'];
 
   angular.module('marketplace').controller('IndexController', IndexController);
