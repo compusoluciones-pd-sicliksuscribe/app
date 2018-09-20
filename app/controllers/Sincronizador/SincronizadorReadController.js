@@ -27,6 +27,25 @@
       $scope.agentes = $scope.agentes.map(nombre => ({ nombre }));
     };
 
+    const updateSincronizador = function (payload, detalle) {
+      return SincronizadorManualFactory.updateSincronizadorManual(payload)
+      .then(function (result) {
+        $scope.detallesSincronizador = $scope.detallesSincronizador.map(function (item) {
+          if (item.IdPedido === detalle.IdPedido) {
+            if (detalle.titulo === 'Ventas') {
+              item.ComentarioVenta = $scope.modal.comentario;
+            } else if (detalle.titulo === 'Operación') {
+              item.ComentarioOperacion = $scope.modal.comentario;
+            }
+          }
+          return item;
+        });
+        $scope.ShowToast(result.data.message, 'success');
+      }).catch(function (result) {
+        $scope.ShowToast('No se realizarón los cambios, intentalo mas tarde.', 'danger');
+      });
+    };
+
     const deleteDuplicate = (object) => (
       object.reduce((accumulator, current) => {
         if (accumulator.length === 0 || accumulator[accumulator.length - 1] !== current) {
@@ -40,6 +59,38 @@
       const Agente = ($scope.BuscarSuscripcion.agente === '' || $scope.BuscarSuscripcion.agente == null) ? 'all' : $scope.BuscarSuscripcion.agente;
       $scope.BuscarSuscripcion.agente = Agente;
       getSincronizadorManual($scope.BuscarSuscripcion.agente);
+    };
+
+    $scope.guardarConModal = function (detalle) {
+      detalle.titulo === 'Ventas'
+        ? ((detalle.ComentarioVenta = $scope.modal.comentario) && (detalle.ComentarioOperacion = undefined))
+        : ((detalle.ComentarioOperacion = $scope.modal.comentario) && (detalle.ComentarioVenta = undefined));
+      return $scope.guardarTodo(detalle);
+    };
+
+    $scope.guardarTodo = function (detalle) {
+      const payload = {
+        suscripciones: [{
+          IdPedidoDetalle: detalle.IdPedidoDetalle,
+          ComentarioOperacion: detalle.ComentarioOperacion,
+          ComentarioVenta: detalle.ComentarioVenta
+        }]
+      };
+      return updateSincronizador(payload, detalle)
+        .then(function () {
+          $scope.modal = {};
+        });
+    };
+
+    $scope.guardarEstados = function (detalle) {
+      const payload = {
+        suscripciones: [{
+          IdPedidoDetalle: detalle.IdPedidoDetalle,
+          EstadoOperacion: detalle.EstadoOperacion,
+          EstadoVenta: detalle.EstadoVenta
+        }]
+      };
+      return updateSincronizador(payload, detalle);
     };
 
     $scope.init = function () {

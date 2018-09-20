@@ -16,6 +16,11 @@
       return $http.get($rootScope.API + 'microsoft/manualsynchronizer/' + agente);
     };
 
+    factory.updateSincronizadorManual = function (details) {
+      factory.refreshToken();
+      return $http.put($rootScope.API + 'microsoft/manualsynchronizer', details);
+    };
+
     return factory;
   };
 
