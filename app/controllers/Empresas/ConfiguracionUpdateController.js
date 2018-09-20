@@ -8,7 +8,6 @@
       EmpresasFactory.getMiSitio()
         .success(function (miClickSuscribe) {
           if (miClickSuscribe.success) {
-            console.log('regresa ', miClickSuscribe.data[0]);
             $scope.miSitio = miClickSuscribe.data[0];
           } else {
             $scope.ShowToast(miClickSuscribe.message, 'danger');
@@ -64,11 +63,11 @@
       fn: function (item, options) {
         var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
         var extension = item.type.slice(item.type.lastIndexOf('/') + 1);
-        if (!(extension === 'jpeg' || extension === 'jpg' || extension === 'gif' || extension === 'png')) {
-          $scope.ShowToast('Archivo no válido, por favor adjunta formatos jpeg, jpg, gif o png.', 'danger');
-          $scope.miSitio.UrlIcon = null;
+        if (!(extension === 'jpeg' || extension === 'jpg' || extension === 'gif' || extension === 'png' || extension === 'x-icon')) {
+          $scope.ShowToast('Archivo no válido, por favor adjunta formatos jpeg, jpg, gif png o ico.', 'danger');
+          $scope.miSitio.Icon = null;
         }
-        return this.queue.length < 1 && '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
+        return this.queue.length < 1 && '|jpg|png|jpeg|bmp|gif|ico|x-icon|'.indexOf(type) !== -1;
       }
     });
 
@@ -78,7 +77,7 @@
       item.file.name = $scope.IdEmpresa.toString() + '.' + extension[1];
     };
 
-     /** Antes de subir el archivo le cambio el nombre por el Id de la empresa para hacerlo único **/
+    /** Antes de subir el archivo le cambio el nombre por el Id de la empresa para hacerlo único **/
     uploaderIcon.onBeforeUploadItem = function (item) {
       var extension = item.file.name.split('.');
       item.file.name = $scope.IdEmpresa.toString() + '.' + extension[1];
@@ -107,7 +106,7 @@
     function subirImagenIcon (fileItem, data) {
       var fileChooser = document.getElementById('fileUploadIcon');
       var file = fileChooser.files[0];
-      $scope.miSitio.UrlIcon = 'https://s3.amazonaws.com/marketplace.compusoluciones.com/Anexos/logos/icon' + fileItem.file.name;
+      $scope.miSitio.Icon = 'https://s3.amazonaws.com/marketplace.compusoluciones.com/Anexos/logos/icon' + fileItem.file.name;
       AWS.config.update({ accessKeyId: data[0].AccessKey, secretAccessKey: data[0].SecretAccess });
       var bucketName = data[0].Bucket;
       var bucket = new AWS.S3({ params: { Bucket: bucketName } });
@@ -165,8 +164,8 @@
         if ($scope.miSitio.UrlLogo) {
           $scope.miSitio.UrlLogo = $scope.miSitio.UrlLogo.split('?')[0];
         }
-        if ($scope.miSitio.UrlIcon) {
-          $scope.miSitio.UrlIcon = $scope.miSitio.UrlIcon.split('?')[0];
+        if ($scope.miSitio.Icon) {
+          $scope.miSitio.Icon = $scope.miSitio.Icon.split('?')[0];
         }
         putMiSitio();
       }

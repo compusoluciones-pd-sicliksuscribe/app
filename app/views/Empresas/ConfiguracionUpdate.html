@@ -11,7 +11,6 @@
 						válido.</b>
 				</div>
 			</div>
-			<div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div>
 		</div>
 
 		<div class="form-group row">
@@ -20,7 +19,7 @@
 					<label>Distintivo para menú *</label> <a href="{{miSitio.UrlLogo}}" ng-show="miSitio.UrlLogo != null" target="_blanc"
 					 ng-model="miSitio.UrlLogo">descargar</a>
 					<br> Formato: jpg, png, jpeg, bmp, gif. ancho: 365px, alto: 124px
-					<input type="file" id="fileUploadImagen" nv-file-select="miSitio.UrlLogo" ng-model="miSitio.UrlLogo" uploader="uploader"/>
+					<input type="file" id="fileUploadImagen" nv-file-select="miSitio.UrlLogo" ng-model="miSitio.UrlLogo" uploader="uploader" class="form-control-file"/>
 					<img ng-show="miSitio.UrlLogo != null" src="{{miSitio.UrlLogo}}" ng-model="miSitio.UrlLogo" style="max-width:365px" />
 				</div>
 			</div>
@@ -29,10 +28,10 @@
 		<div class="form-group row" >
 				<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 					<div class="pull-rigth" style="margin-bottom: 15px">
-						<label>Selecciona tu ícono de distribuidor</label> <a href="{{miSitio.Icon}}" ng-show="miSitio.Icon != null" target="_blanc"
+						<label>Selecciona tu ícono de distribuidor *</label> <a href="{{miSitio.Icon}}" ng-show="miSitio.Icon != null" target="_blanc"
 						 ng-model="miSitio.Icon">descargar</a>
-						<br> Formato: jpg, png, jpeg, bmp, gif. ancho: 50px, alto: 50px
-						<input type="file" id="fileUploadIcon" nv-file-select="miSitio.Icon" ng-model="miSitio.Icon" uploader="uploaderIcon"/>
+						<br> Formato: jpg, png, jpeg, bmp, gif ó ico. ancho: 50px, alto: 50px
+						<input type="file" id="fileUploadIcon" nv-file-select="miSitio.Icon" ng-model="miSitio.Icon" uploader="uploaderIcon" class="form-control-file" />
 						<img ng-show="miSitio.Icon != null" src="{{miSitio.Icon}}" ng-model="miSitio.Icon" style="max-width:200px" />
 					</div>
 				</div>
@@ -44,7 +43,7 @@
 					<label>
 						Primary
 						<input type="color" id="primaryColorPicker" ng-model="miSitio.PrimaryColor" />
-						<input id="primaryColorInput" ng-model="miSitio.PrimaryColor" />
+						<input id="primaryColorInput" ng-model="miSitio.PrimaryColor"/>
 					</label>
 				</div>
 			</div>
@@ -67,7 +66,7 @@
 		<div class="form-group row">
 			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 				<label>
-					Nombre en Pestaña del Navegador
+					* Nombre en Pestaña del Navegador
 					<input type="text"  class="form-control" name="PestanaNavegador" id="pestanaNavegador" placeholder="Mi Empresa" 
 					style="width:200px" ng-model="miSitio.PestanaNavegador">
 				</label>
@@ -87,7 +86,7 @@
 			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 				<label>
 					URL de Aviso de Privacidad
-					<input type="url" name="AvisoPrivacidad" id="avisoPrivacidad" 
+					<input type="url" name="AvisoPrivacidad" id="avisoPrivacidad" class="form-control"
 					placeholder="http://myUrl.com" style="width:200Px" ng-model="miSitio.UrlAvisoPrivacidad">
 				</label>
 			</div>
@@ -96,7 +95,7 @@
 			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 				<label>
 					Url de Contacto
-					<input type="url" name="Contacto" id="contacto" placeholder="http://myUrl.com" style="width:200Px" 
+					<input type="url" name="Contacto" id="contacto" placeholder="http://myUrl.com" style="width:200Px" class="form-control"
 					ng-model="miSitio.UrlContacto">
 				</label>
 			</div>
