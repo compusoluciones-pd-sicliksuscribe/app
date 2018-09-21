@@ -133,32 +133,22 @@
 											</a>
 										</li>
 
-										<li class="red" ng-show="(SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 8) && (SessionCookie.LeyoTerminos == 1)">
-												<a ng-click="goToPage('AdministrarSuscripciones');"><span class="fa fa-desktop" style="padding-right:5px;"></span> Monitor</a>
-											</li>
 
-										<li class="yellow" ng-show="(SessionCookie.IdTipoAcceso == 1) && (SessionCookie.LeyoTerminos == 1)">
-											<a ng-click="goToPage('Empresas');"><span class="fa fa-building-o" style="padding-right:5px;"></span> Distribuidores</a>
+										<li class="gris" ng-show="(SessionCookie.IdTipoAcceso == 1) && (SessionCookie.LeyoTerminos == 1)" dropdown>
+												<a dropdown-toggle><span class="fa fa-usd"></span><div class="text">Promociones</div> <b class="caret"></b></a>
+												<ul class="dropdown-menu gris" style="background:!important">
+													<li><a ng-click="goToPage('Niveles');">Niveles</a></li>
+													<li><a ng-click="goToPage('Descuentos');">Descuentos</a></li>
+													<li><a ng-click="goToPage('Promocions');">Banners</a></li>
+												</ul>
 										</li>
 
-										<li class="principalBlue" ng-show="(SessionCookie.IdTipoAcceso == 1) && (SessionCookie.LeyoTerminos == 1)">
-											<a ng-click="goToPage('Niveles');"><span class="fa fa-star" style="padding-right:5px;"></span> Niveles</a>
-										</li>
-
-										<li class="green" ng-show="(SessionCookie.IdTipoAcceso == 1) && (SessionCookie.LeyoTerminos == 1)">
-											<a ng-click="goToPage('Descuentos');"><span class="fa fa-usd" style="padding-right:5px;"></span> Descuentos</a>
-										</li>
-
-										<li class="red" ng-show="(SessionCookie.IdTipoAcceso == 1) && (SessionCookie.LeyoTerminos == 1)">
-											<a ng-click="goToPage('Promocions');"> <span class="fa fa-pencil-square-o" style="padding-right:5px;"></span> Banners</a>
-										</li>
-
-										<li class="yellow" ng-show="(SessionCookie.IdTipoAcceso == 1) && (SessionCookie.LeyoTerminos == 1)">
-											<a ng-click="goToPage('Usuarios');"><span class="fa fa-users" style="padding-right:5px;"></span> Administradores</a>
-										</li>
-
-										<li class="principalBlue" ng-show="(SessionCookie.IdTipoAcceso == 1) && (SessionCookie.LeyoTerminos == 1)">
-											<a ng-click="goToPage('Reportes');"><span class="fa fa-bar-chart" style="padding-right:5px;"></span> Reportes</a>
+										<li class="yellow" ng-show="(SessionCookie.IdTipoAcceso == 1) && (SessionCookie.LeyoTerminos == 1)" dropdown>
+												<a dropdown-toggle ><span class="fa fa-desktop"></span><div class="text" style="width:65px;">Monitoreo</div><b class="caret"></b></a>
+												<ul class="dropdown-menu yellow" style="background:!important">
+													<li><a ng-click="goToPage('AdministrarSuscripciones');">Monitor</a></li>
+													<li><a ng-click="goToPage('Reportes');">Reportes</a></li>
+												</ul>
 										</li>
 
 										<li id="menuEmpresa" class="yellow one" ng-show="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 4 || SessionCookie.IdTipoAcceso == 5 || SessionCookie.IdTipoAcceso == 6  || SessionCookie.IdTipoAcceso == 7) && (SessionCookie.LeyoTerminos == 1)"
@@ -179,7 +169,7 @@
 										<li class="gris" ng-show="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 4 || SessionCookie.IdTipoAcceso == 5 || SessionCookie.IdTipoAcceso == 6  || SessionCookie.IdTipoAcceso == 7) && (SessionCookie.LeyoTerminos == 1) && SessionCookie.IdPlanTuClick !== null"
 										 dropdown>
 											<a dropdown-toggle><span class="fa fa-mouse-pointer" aria-hidden="true"></span><div class="text">TuClick</div> <b class="caret"></b></a>
-											<ul class="dropdown-menu yellow">
+											<ul class="dropdown-menu gris">
 												<li id="activarMiSitio" ng-show="((SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3) && SessionCookie.IdPlanTuClick !== null)"><a ng-click="goToPage('Configuracion');">Activar mi sitio</a></li>												
 												<li id="actualizarDatos" ng-show="SessionCookie.IdTipoAcceso == 2 && SessionCookie.mFacturacion == 1"><a ng-click="goToPage('actualizar-datos-facturacion');">Mis datos de facturación</a></li>
 												<li id="facturasPendientes" ng-show="SessionCookie.IdTipoAcceso == 2 && SessionCookie.mFacturacion == 1"><a ng-click="goToPage('facturas-pendientes');">Facturas de mis clientes</a></li>
@@ -191,7 +181,7 @@
 											</ul>
 										</li>
 
-										<li class="green four" ng-show="(SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 4 || SessionCookie.IdTipoAcceso == 5 || SessionCookie.IdTipoAcceso == 6 || SessionCookie.IdTipoAcceso == 7) && (SessionCookie.LeyoTerminos == 1)">
+										<li class="green four" ng-show="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 4 || SessionCookie.IdTipoAcceso == 5 || SessionCookie.IdTipoAcceso == 6 || SessionCookie.IdTipoAcceso == 7) && (SessionCookie.LeyoTerminos == 1)">
 											<a href="#/Usuario/{{SessionCookie.IdUsuario}}"> <span class="glyphicon glyphicon-user"></span>
 												<div class="text">{{SessionCookie.Nombre}} {{SessionCookie.ApellidoPaterno }}
 													<span ng-show="!SessionCookie.ApellidoPaterno">
@@ -201,9 +191,24 @@
 											</a>
 										</li>
 
-										<li class="yellow" ng-show="(SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
+										<li class="red" ng-show="(SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
 											<a ng-click="goToPage('monitor-soporte');"><span class="fa fa-ticket" style="padding-right:5px;"></span> Soporte </a>
 										</li>
+
+										<li class="green" ng-show="(SessionCookie.IdTipoAcceso == 1) && (SessionCookie.LeyoTerminos == 1)" dropdown>
+												<a dropdown-toggle style="margin-right:15px;"><span class="glyphicon glyphicon-user" style="padding-right:10px; "></span> <b class="caret"></b></a>
+												<ul class="dropdown-menu green">
+													<li><a href="#/Usuario/{{SessionCookie.IdUsuario}}">
+																	<div class="text">{{SessionCookie.Nombre}} {{SessionCookie.ApellidoPaterno }}
+																		<span ng-show="!SessionCookie.ApellidoPaterno">...</span>
+																	</div></a>
+													</li>
+													<li><a ng-click="goToPage('Empresas');">Distribuidores</a></li>
+													<li><a ng-click="goToPage('Usuarios');">Administradores</a></li>
+													<li><a ng-click="CerrarSesion();">Cerrar sesión</a></li>
+												</ul>
+											</li>
+
 
 										<li id="shoppingCartBG" class="navColor two" ng-show="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3) && (SessionCookie.LeyoTerminos == 1)"
 										 dropdown>
@@ -231,7 +236,7 @@
 											<a ng-click="goToPage('SoporteCSP');"><span class="fa fa-ticket" style="padding-right:5px;"></span> Soporte CSP</a>
 										</li>
 
-										<li class="red" ng-show="SessionCookie.Nombre !== undefined" style="padding-right:15px;">
+										<li class="red" ng-show="((SessionCookie.Nombre !== undefined) && (SessionCookie.IdTipoAcceso != 1 ))" style="padding-right:15px;">
 											<a ng-click="CerrarSesion();"><span class="glyphicon glyphicon-log-out"></span> Cerrar sesión</a>
 										</li>
 
