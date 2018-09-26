@@ -40,13 +40,13 @@
           <th style="word-wrap:break-word; text-align:center;" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2">
             <b>Operación</b>
                 <div class="col-md-1">
-                    <input id="Activo" type="checkbox" ng-true-value="1" ng-false-value="0" ng-model="detalle.EstadoOperacion">
+                    <input id="Activo" type="checkbox" ng-model="estado.operacion" ng-true-value="1" ng-false-value="0"  ng-click="ActualizarFiltrados('Operacion')">
                 </div>
           </th>
           <th style="word-wrap:break-word; text-align:center;" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8">
               <b>Ventas</b>
                   <div class="col-md-2">
-                      <input id="Activo" type="checkbox" ng-true-value="1" ng-false-value="0" ng-model="detalle.EstadoOperacion">
+                      <input id="Activo" type="checkbox" ng-true-value="1" ng-false-value="0" ng-model="estado.venta" ng-click="ActualizarFiltrados('Ventas')">
                   </div>
             </th> 
           <th style="word-wrap:break-word; text-align:center;" ng-show="SessionCookie.IdTipoAcceso==1 "><b>Agente</b></th>

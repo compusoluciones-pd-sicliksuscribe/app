@@ -4,6 +4,8 @@
     $scope.detalle = {};
     $scope.agentes = [];
     $scope.BuscarSuscripcion = {};
+    $scope.ActualizarFiltrados = {};
+    $scope.estado = {};
 
     $scope.mostrarModal = function (titulo, detalle) {
       const comentario = titulo === 'Ventas' ? detalle.ComentarioVenta : detalle.ComentarioOperacion;
@@ -31,7 +33,7 @@
       return SincronizadorManualFactory.updateSincronizadorManual(payload)
       .then(function (result) {
         $scope.detallesSincronizador = $scope.detallesSincronizador.map(function (item) {
-          if (item.IdPedido === detalle.IdPedido) {
+          if (item.IdPedidoDetalle === detalle.IdPedidoDetalle) {
             if (detalle.titulo === 'Ventas') {
               item.ComentarioVenta = $scope.modal.comentario;
             } else if (detalle.titulo === 'Operación') {
@@ -91,6 +93,25 @@
         }]
       };
       return updateSincronizador(payload, detalle);
+    };
+
+    $scope.ActualizarFiltrados = function (bandera) {
+      Promise.all($scope.detallesSincronizador.map(function (pedido) {
+        if (bandera === 'Ventas') {
+          pedido.EstadoVenta = $scope.estado.venta;
+        }
+        pedido.EstadoOperacion = $scope.estado.operacion;
+        return updateSincronizador({
+          suscripciones: [{
+            IdPedidoDetalle: pedido.IdPedidoDetalle,
+            EstadoOperacion: pedido.EstadoOperacion,
+            EstadoVenta: pedido.EstadoVenta
+          }]
+        }, pedido);
+      }))
+        .then(function () {
+          getSincronizadorManual($scope.BuscarSuscripcion.agente);
+        });
     };
 
     $scope.init = function () {
