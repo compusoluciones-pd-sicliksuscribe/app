@@ -207,6 +207,20 @@
         });
     };
 
+    const validateComerciaPointData = function (Producto) {
+      UsuariosFactory.getUsuariosContacto(Producto.IdEmpresaUsuarioFinal)
+        .success(function (respuesta) {
+          if (respuesta.success === 1) {
+            Producto.usuariosContacto = respuesta.data;
+          } else {
+            $scope.ShowToast('No pudimos cargar la información de tus contactos, por favor intenta de nuevo más tarde.', 'danger');
+          }
+        })
+        .error(function () {
+          $scope.ShowToast('No pudimos cargar la información de tus contactos, por favor intenta de nuevo más tarde.', 'danger');
+        });
+    };
+
     const validateMicrosoftData = function (Producto) {
       if (Producto.IdTipoProducto === 4 && Producto.IdFabricante === 1) {
         ProductosFactory.postComplementos(Producto)
@@ -252,6 +266,7 @@
       $scope.productoSeleccionado = Producto.IdProducto;
       if (Producto.IdFabricante === 2) validateAutodeskData(Producto);
       if (Producto.IdFabricante === 1 && $scope.DominioMicrosoft) validateMicrosoftData(Producto);
+      if (Producto.IdFabricante === 6) validateComerciaPointData(Producto);
     };
 
     const estimateLastTier = function (previousTier, currentTier, quantity) {
@@ -296,13 +311,33 @@
       return estimatedTotal;
     };
 
+    $scope.previousISVValidate = function (producto) {
+      if (producto.IdFabricante !== 6) {
+        return $scope.AgregarCarrito(producto, producto.Cantidad, producto.IdPedidocontrato);
+      }
+      $scope.validateExistsEmail(producto)
+        .then(function (result) {
+          const { exists } = result.data; 
+          if (!exists) {
+            $scope.AgregarCarrito(producto, producto.Cantidad, producto.IdPedidocontrato);
+          } else {
+            $scope.ShowToast('Este usuario ya cuenta con un registro de este producto, contacta a tu administrador.', 'danger');
+          }
+          return ProductosFactory.postIdERP(producto.IdERP);
+        });
+    };
 
-    
+    $scope.validateExistsEmail = function (producto) {
+      const usuario = producto.usuariosContacto.filter(function (user) {
+        return user.IdUsuario === producto.IdUsuarioContacto;
+      })[0];
+      return ProductosFactory.getValidateEmail(usuario.CorreoElectronico);
+    };
 
-    $scope.AgregarCarrito = function (Producto, Cantidad, IdPedidocontrato) {
+    $scope.AgregarCarrito = function (Producto, Cantidad = 1, IdPedidocontrato) {
       var NuevoProducto = {
         IdProducto: Producto.IdProducto,
-        Cantidad: Cantidad,
+        Cantidad: !Producto.Cantidad ? 1 : Producto.Cantidad,
         IdEmpresaUsuarioFinal: Producto.IdEmpresaUsuarioFinal,
         MonedaPago: 'Pesos',
         IdEsquemaRenovacion:Producto.IdEsquemaRenovacion,
@@ -417,7 +452,7 @@
         return 0;
       }
 
-      function elmYPosition(eID) {
+      function elmYPosition (eID) {
         var elm = document.getElementById(eID);
         var y = elm.offsetTop;
         var node = elm;

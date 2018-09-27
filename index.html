@@ -115,7 +115,8 @@
 									</div>
 									<ul class="nav navbar-nav navbar-right">
 
-										<li id="menuDistribuidores" class="gris" ng-show="SessionCookie.LeyoTerminos == 1 && SessionCookie.distribuidores.length > 1 && SessionCookie.IdTipoAcceso == 4 || SessionCookie.IdTipoAcceso == 6"
+										<li id="menuDistribuidores" class="gris" ng-show="SessionCookie.LeyoTerminos == 1 && SessionCookie.distribuidores.length > 1
+											&& SessionCookie.IdTipoAcceso == 4 || SessionCookie.IdTipoAcceso == 6"
 										 dropdown>
 											<a dropdown-toggle>
 												<div class="text">Sitios</div> <b class="caret"></b></a>
@@ -132,7 +133,7 @@
 											</a>
 										</li>
 
-										<li class="yellow" ng-show="(SessionCookie.IdTipoAcceso == 1) && (SessionCookie.LeyoTerminos == 1)">
+										<li class="yellow" ng-show="(SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 8) && (SessionCookie.LeyoTerminos == 1 )">
 											<a ng-click="goToPage('Empresas');"><span class="fa fa-building-o" style="padding-right:5px;"></span> Distribuidores</a>
 										</li>
 
@@ -148,11 +149,11 @@
 											<a ng-click="goToPage('Promocions');"> <span class="fa fa-pencil-square-o" style="padding-right:5px;"></span> Banners</a>
 										</li>
 
-										<li class="yellow" ng-show="(SessionCookie.IdTipoAcceso == 1) && (SessionCookie.LeyoTerminos == 1)">
+										<li class="yellow" ng-show="(SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 8) && (SessionCookie.LeyoTerminos == 1)">
 											<a ng-click="goToPage('Usuarios');"><span class="fa fa-users" style="padding-right:5px;"></span> Administradores</a>
 										</li>
 
-										<li class="principalBlue" ng-show="(SessionCookie.IdTipoAcceso == 1) && (SessionCookie.LeyoTerminos == 1)">
+										<li class="principalBlue" ng-show="(SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 8) && (SessionCookie.LeyoTerminos == 1)">
 											<a ng-click="goToPage('Reportes');"><span class="fa fa-bar-chart" style="padding-right:5px;"></span> Reportes</a>
 										</li>
 
@@ -186,7 +187,7 @@
 											</ul>
 										</li>
 
-										<li class="green four" ng-show="(SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 4 || SessionCookie.IdTipoAcceso == 5 || SessionCookie.IdTipoAcceso == 6 || SessionCookie.IdTipoAcceso == 7) && (SessionCookie.LeyoTerminos == 1)">
+										<li class="green four" ng-show="(SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 4 || SessionCookie.IdTipoAcceso == 5 || SessionCookie.IdTipoAcceso == 6 || SessionCookie.IdTipoAcceso == 7 || SessionCookie.IdTipoAcceso == 8) && (SessionCookie.LeyoTerminos == 1)">
 											<a href="#/Usuario/{{SessionCookie.IdUsuario}}"> <span class="glyphicon glyphicon-user"></span>
 												<div class="text">{{SessionCookie.Nombre}} {{SessionCookie.ApellidoPaterno }}
 													<span ng-show="!SessionCookie.ApellidoPaterno">
@@ -564,6 +565,7 @@
 	<script type="text/javascript" src="scripts/ng-device-detector.js"></script>
 	<script type="text/javascript" src="scripts/re-tree.js"></script>
 	<script type="text/javascript" src="scripts/classie.js"></script>
+	<script type="text/javascript" src="app/controllers/PedidoDetalles/SuccessOrderController.js"></script>
 
 	<script src="scripts/tinycolor2-min.js"></script>
 	<script src="scripts/angularjs-color-picker.min.js"></script>

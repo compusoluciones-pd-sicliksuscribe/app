@@ -1,4 +1,5 @@
 (function () {
+
   var EmpresasRPController = function ($scope, $log, $cookies, $location, $uibModal, $filter, EmpresasXEmpresasFactory, NivelesDistribuidorFactory, $routeParams) {
     $scope.MostrarMensajeError = false;
     $scope.Empresas = [];
@@ -9,6 +10,22 @@
       $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
     };
 
+    const getFechaDisplay = function (cancelDate) {
+      const cancelDateShort = new Date(cancelDate);
+      return cancelDateShort;
+    };
+
+    function checkDateNull (empresa) {
+      const date = new Date();
+      const oldDate = date - 365;
+      if (empresa.cancelDate <= oldDate) {
+        empresa.cancelDate = 'dd/mm/aaaa';
+      } else {
+        empresa.cancelDate = getFechaDisplay(empresa.cancelDate);
+      }
+      return empresa;
+    }
+
     var obtenerEmpresas = function () {
       EmpresasXEmpresasFactory.getExchangeRateByIdEmpresa($routeParams.IdEmpresa)
         .then(function (respuesta) {
@@ -17,7 +34,9 @@
           var empresas = data.data;
           if (respuestaExitosa) {
             var empresasConFormato = empresas.map(function (empresa) {
+              const dateNull = checkDateNull(empresa);
               empresa.FechaActivo = new Date(empresa.FechaActivo);
+              empresa.cancelDate = getFechaDisplay(dateNull.cancelDate);
               return empresa;
             });
             $scope.Empresas = empresasConFormato;
@@ -82,7 +101,7 @@
     var tipoDeCambioValido = function (tipoDeCambio) {
       return tipoDeCambio > 0;
     };
-
+    //no se va a utilizar
     var actualizaTipoDeCambioATodasLasEmpresas = function () {
       $scope.Empresas = $scope.Empresas.map(function (Empresa) {
         Empresa.TipoCambioRP = $scope.RPTodos;
@@ -104,6 +123,7 @@
       };
     };
 
+    //no se va a utilizar
     $scope.ActualizarTodos = function () {
       if (tipoDeCambioValido($scope.RPTodos)) {
         actualizaTipoDeCambioATodasLasEmpresas();
@@ -126,24 +146,60 @@
     };
 
     $scope.ActualizarRP = function (Empresa) {
-      if (tipoDeCambioValido(Empresa.TipoCambioRP)) {
-        var datosDePeticion = prepararDatosDePeticion(Empresa);
-        EmpresasXEmpresasFactory.postExchangeRate(datosDePeticion)
-          .then(function (respuesta) {
-            var data = respuesta.data;
-            var respuestaExitosa = data.success === 1;
-            if (respuestaExitosa) {
-              $scope.ShowToast('Actualizado correctamente.', 'success');
-            } else {
-              $scope.ShowToast('Error al actualizar el tipo de cambio.', 'danger');
-            }
-          })
-          .catch(function (result) { error(result.data); });
-        Empresa.MostrarMensajeError = false;
+      if (tipoDeFechaValido(Empresa.cancelDate)) {
+        if (tipoDeCambioValido(Empresa.TipoCambioRP)) {
+          var datosDePeticion = prepararDatosDePeticion(Empresa);
+          EmpresasXEmpresasFactory.postExchangeRate(datosDePeticion)
+            .then(function (respuesta) {
+              var data = respuesta.data;
+              var respuestaExitosa = data.success === 1;
+              if (respuestaExitosa) {
+                $scope.ShowToast('Tipo de cambio actualizado correctamente.', 'success');
+              } else {
+                $scope.ShowToast('Error al actualizar el tipo de cambio.', 'danger');
+              }
+            })
+            .catch(function (result) { error(result.data); });
+          Empresa.MostrarMensajeError = false;
+        }
       } else {
-        Empresa.MostrarMensajeError = true;
+        $scope.ShowToast('Favor de asignar Fecha de Cancelacion.', 'danger');
       }
     };
+
+    var tipoDeFechaValido = function (cancelDate) {
+      const today = new Date();
+      return cancelDate >= today;
+    };
+
+    $scope.UpdateDateAndRP = function (Empresa) {
+      const result = removeDataValues(Empresa);
+      if (tipoDeCambioValido(result.TipoCambioRP)) {
+        if (tipoDeFechaValido(result.cancelDate)) {
+          EmpresasXEmpresasFactory.patchCancelDate(result)
+            .then(function (respuesta) {
+              var data = respuesta.data;
+              var respuestaExitosa = data.success === 1;
+              if (respuestaExitosa) {
+                $scope.ShowToast(' Fecha de cambio correctamente.', 'success');
+              }
+            });
+        } else {
+          $scope.ShowToast('Fecha no valido, intente de nuevo.', 'danger');
+        }
+      } else {
+        $scope.ShowToast('Favor de agregar un Tipo de Cambio', 'danger');
+      }
+    };
+  };
+
+  const removeDataValues = function (Empresa) {
+    const dataValues = Object.assign({}, Empresa);
+    delete dataValues.MostrarMensajeError;
+    delete dataValues.NombreNivel;
+    delete dataValues.NombreEmpresa;
+
+    return dataValues;
   };
   EmpresasRPController.$inject = ['$scope', '$log', '$cookies', '$location', '$uibModal', '$filter', 'EmpresasXEmpresasFactory', 'NivelesDistribuidorFactory', '$routeParams'];
 

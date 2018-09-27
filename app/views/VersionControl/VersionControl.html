@@ -3,10 +3,9 @@
   <div class=row>
     <div class=" col-xs-12 col-md-2">
       <h3>Actualizaciones</h3>
-      <select name="Versiones" class="form-control" ng-model="value" ng-change="GetDetalle(value)">
-        <option value="">{{versiones[0].Version}}</option>  
-        <option ng-repeat="version in versiones" value="{{version.IdVersion}}" ng-show="version.IdVersion!=versiones[0].IdVersion">
-          {{version.Version}}</option>
+      <select name="Versiones" class="form-control filterOption" ng-model="BuscarDetalle" ng-options="Versions.IdVersion as Versions.Version for Versions in versiones"
+          ng-change="GetDetalle(BuscarDetalle);">
+          <option ng-selected="true" value="">Versiones</option>
       </select>
       <hr />
       <div>

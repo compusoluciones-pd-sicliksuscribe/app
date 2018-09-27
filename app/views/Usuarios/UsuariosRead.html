@@ -10,7 +10,7 @@
 
   </div>
 
-  <div class="form-group row" ng-show="SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 2">
+  <div class="form-group row" ng-show="SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 8">
     <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 searchOption">
         <label for="Busqueda">&nbsp;</label>
         <div class="form-group has-feedback">
@@ -19,9 +19,9 @@
         </div>
     </div>
     <div class="form-group row">
-      <div class="pull-right">
+      <div class="pull-right" ng-hide="SessionCookie.IdTipoAcceso == 8">
           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">   
-              <button ng-click="goToPage('Usuario');" class="btn btn-primary newColaborator" style="background:{{currentDistribuidor.PrimaryColor}} !important">Nuevo colaborador&nbsp;<span class="glyphicon glyphicon-plus"></span></button>
+              <button ng-click="goToPage('Usuario');" class="btn btn-primary newColaborator" style="background:{{currentDistribuidor.PrimaryColor}} !important">Nuevo colaborador&nbsp;<span class="glyphicon glyphicon-plus"ng-hide="SessionCookie.IdTipoAcceso == 8"></span></button>
           </div>
       </div>
     </div>
@@ -32,7 +32,8 @@
         <select name="IdEmpresa" class="form-control" ng-model="empresaSel"  ng-change="MostrarUsuariosEmp(empresaSel)"            
         ng-options="Empresas.IdEmpresa as Empresas.NombreEmpresa for Empresas in selectEmpresas">
           <option selected value="" ng-disabled="true">Selecciona un cliente</option>
-          <option selected value="Empresas.IdEmpresa" ng-show="SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 2" ng-selected="true">{{Empresas.NombreEmpresa}}</option>      
+          <option selected value="Empresas.IdEmpresa" ng-show="SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 2
+          || SessionCookie.IdTipoAcceso == 8" ng-selected="true">{{Empresas.NombreEmpresa}}</option>      
         </select>
       </div>
 
@@ -59,7 +60,7 @@
             <br> {{Usuario.Tipo}}, desde el {{Usuario.FechaActivo}}
           </td>
           <td>
-            <div class="pull-right" ng-show="(!empresaSel == '') && (SessionCookie.IdTipoAcceso !== 1) && (SessionCookie.IdTipoAcceso !== 2)">
+            <div class="pull-right" ng-show="(!empresaSel == '') && (SessionCookie.IdTipoAcceso !== 1) && (SessionCookie.IdTipoAcceso !== 2) && (SessionCookie.IdTipoAcceso !== 8)">
               <h4>
                 <a href="#/Usuario/{{Usuario.IdUsuario}}">
                   <span class="glyphicon glyphicon-edit edit"></span>
