@@ -102,12 +102,12 @@
       return tipoDeCambio > 0;
     };
     //no se va a utilizar
-    var actualizaTipoDeCambioATodasLasEmpresas = function () {
-      $scope.Empresas = $scope.Empresas.map(function (Empresa) {
-        Empresa.TipoCambioRP = $scope.RPTodos;
-        return Empresa;
-      });
-    };
+    // var actualizaTipoDeCambioATodasLasEmpresas = function () {
+    //   $scope.Empresas = $scope.Empresas.map(function (Empresa) {
+    //     Empresa.TipoCambioRP = $scope.RPTodos;
+    //     return Empresa;
+    //   });
+    // };
 
     var prepararDatosDePeticion = function (datos) {
       var empresas;
@@ -124,26 +124,26 @@
     };
 
     //no se va a utilizar
-    $scope.ActualizarTodos = function () {
-      if (tipoDeCambioValido($scope.RPTodos)) {
-        actualizaTipoDeCambioATodasLasEmpresas();
-        var datosDePeticion = prepararDatosDePeticion($scope.Empresas);
-        EmpresasXEmpresasFactory.postExchangeRate(datosDePeticion)
-          .then(function (respuesta) {
-            var data = respuesta.data;
-            var respuestaExitosa = data.success === 1;
-            if (respuestaExitosa) {
-              $scope.ShowToast('Actualizado correctamente.', 'success');
-            } else {
-              $scope.ShowToast('Error al actualizar el tipo de cambio.', 'danger');
-            }
-          })
-          .catch(function (result) { error(result.data); });
-        $scope.MostrarMensajeError = false;
-      } else {
-        $scope.MostrarMensajeError = true;
-      }
-    };
+    // $scope.ActualizarTodos = function () {
+    //   if (tipoDeCambioValido($scope.RPTodos)) {
+    //     actualizaTipoDeCambioATodasLasEmpresas();
+    //     var datosDePeticion = prepararDatosDePeticion($scope.Empresas);
+    //     EmpresasXEmpresasFactory.postExchangeRate(datosDePeticion)
+    //       .then(function (respuesta) {
+    //         var data = respuesta.data;
+    //         var respuestaExitosa = data.success === 1;
+    //         if (respuestaExitosa) {
+    //           $scope.ShowToast('Actualizado correctamente.', 'success');
+    //         } else {
+    //           $scope.ShowToast('Error al actualizar el tipo de cambio.', 'danger');
+    //         }
+    //       })
+    //       .catch(function (result) { error(result.data); });
+    //     $scope.MostrarMensajeError = false;
+    //   } else {
+    //     $scope.MostrarMensajeError = true;
+    //   }
+    // };
 
     $scope.ActualizarRP = function (Empresa) {
       if (tipoDeFechaValido(Empresa.cancelDate)) {
