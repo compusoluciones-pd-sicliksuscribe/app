@@ -18,7 +18,7 @@
     const getSincronizadorManual = function (agente, offset) {
       return SincronizadorManualFactory.getSincronizadorManual(agente, offset)
         .then(function (response) {
-          $scope.detallesSincronizador = response.data.data;
+          $scope.detallesSincronizador = response.data;
           return $scope.detallesSincronizador;
         })
         .catch(function () {
