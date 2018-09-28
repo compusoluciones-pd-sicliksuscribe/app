@@ -11,9 +11,14 @@
 
     factory.refreshToken();
 
-    factory.getSincronizadorManual = function (agente) {
+    factory.getSincronizadorManual = function (agente, offset) {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'microsoft/manualsynchronizer/' + agente);
+      return $http.get($rootScope.API + 'microsoft/manualsynchronizer/' + agente + '/offset/' + offset);
+    };
+
+    factory.getAgentes = function () {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'microsoft/manualsynchronizer/Agentes');
     };
 
     factory.updateSincronizadorManual = function (details) {

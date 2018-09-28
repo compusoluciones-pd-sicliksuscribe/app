@@ -155,4 +155,41 @@
         </div>
       </div>
 
+      <br><br>
+
+      <div class="form-group row">
+          <div class="text-center">
+  
+              <div class="col-xs-0 col-sm-4 col-md-4 col-lg-4">
+              </div>
+  
+              <div class="col-xs-2 col-sm-1 col-md-1 col-lg-1">
+                  <div ng-click="PaginadoInicio()" ng-show="Pagina > 0">
+                      <b><div class="paginator"><img src="images/backArrow.png"></div></b>
+                  </div>
+              </div>
+  
+              <div class="col-xs-2 col-sm-1 col-md-1 col-lg-1">
+                  <div ng-click="PaginadoAtras()" ng-show="Pagina > 0">
+                      <b><div class="paginator"><img src="images/leftArrow.png"></div></b>
+                  </div>
+              </div>
+  
+              <div class="col-xs-4 col-sm-1 col-md-1 col-lg-1">
+                  <b>Página {{Pagina + 1}}</b>
+              </div>
+  
+              <div class="col-xs-2 col-sm-1 col-md-1 col-lg-1">
+                  <div ng-click="PaginadoSiguiente()" ng-show="Productos.length  !== 0">
+                     <div class="paginator"><img src="images/rightArrow.png"></div>
+                  </div>
+              </div>
+  
+              <div class="col-xs-0 col-sm-4 col-md-4 col-lg-4">
+              </div>
+  
+  
+          </div>
+      </div>
+
 </div>

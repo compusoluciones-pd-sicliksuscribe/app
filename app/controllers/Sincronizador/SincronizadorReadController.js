@@ -5,18 +5,32 @@
     $scope.agentes = [];
     $scope.BuscarSuscripcion = {};
     $scope.ActualizarFiltrados = {};
+    $scope.AgentesSincronizador = {};
     $scope.estado = {};
+    $scope.Offset = 0;
+    $scope.Pagina = 0;
 
     $scope.mostrarModal = function (titulo, detalle) {
       const comentario = titulo === 'Ventas' ? detalle.ComentarioVenta : detalle.ComentarioOperacion;
       Object.assign($scope.modal, detalle, { titulo }, { comentario });
     };
 
-    const getSincronizadorManual = function (agente) {
-      return SincronizadorManualFactory.getSincronizadorManual(agente)
+    const getSincronizadorManual = function (agente, offset) {
+      return SincronizadorManualFactory.getSincronizadorManual(agente, offset)
         .then(function (response) {
           $scope.detallesSincronizador = response.data.data;
           return $scope.detallesSincronizador;
+        })
+        .catch(function () {
+          $scope.ShowToast('No pudimos cargar la lista de detalles, por favor intenta de nuevo más tarde.', 'danger');
+        });
+    };
+
+    const getAgentes = function () {
+      return SincronizadorManualFactory.getAgentes()
+        .then(function (response) {
+          $scope.AgentesSincronizador = response.data.data;
+          return $scope.AgentesSincronizador;
         })
         .catch(function () {
           $scope.ShowToast('No pudimos cargar la lista de detalles, por favor intenta de nuevo más tarde.', 'danger');
@@ -60,7 +74,9 @@
     $scope.BuscarSuscripciones = function () {
       const Agente = ($scope.BuscarSuscripcion.agente === '' || $scope.BuscarSuscripcion.agente == null) ? 'all' : $scope.BuscarSuscripcion.agente;
       $scope.BuscarSuscripcion.agente = Agente;
-      getSincronizadorManual($scope.BuscarSuscripcion.agente);
+      $scope.Pagina = 0;
+      $scope.Offset = 0;
+      getSincronizadorManual($scope.BuscarSuscripcion.agente, $scope.Offset);
     };
 
     $scope.guardarConModal = function (detalle) {
@@ -114,9 +130,39 @@
         });
     };
 
+    $scope.PaginadoInicio = function () {
+      $scope.Pagina = 0;
+      $scope.Offset = $scope.Pagina * 10;
+      if ($scope.BuscarSuscripcion.agente === undefined) {
+        $scope.BuscarSuscripcion.agente = 'all';
+      }
+      getSincronizadorManual($scope.BuscarSuscripcion.agente, $scope.Offset);
+    };
+
+    $scope.PaginadoAtras = function () {
+      $scope.Pagina = $scope.Pagina - 1;
+      $scope.Offset = $scope.Pagina * 10;
+      if ($scope.BuscarSuscripcion.agente === undefined) {
+        $scope.BuscarSuscripcion.agente = 'all';
+      }
+      getSincronizadorManual($scope.BuscarSuscripcion.agente, $scope.Offset);
+
+    };
+
+    $scope.PaginadoSiguiente = function () {
+      $scope.Pagina = $scope.Pagina + 1;
+      $scope.Offset = $scope.Pagina * 10;
+      if ($scope.BuscarSuscripcion.agente === undefined) {
+        $scope.BuscarSuscripcion.agente = 'all';
+      }
+      getSincronizadorManual($scope.BuscarSuscripcion.agente, $scope.Offset);
+    };
+
     $scope.init = function () {
-      getSincronizadorManual('all')
-        .then(setAgentes);
+      getAgentes()
+      .then(setAgentes);
+      $scope.Offset = 0;
+      getSincronizadorManual('all', $scope.Offset);
     };
 
     $scope.init();
