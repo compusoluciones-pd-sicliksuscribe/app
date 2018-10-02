@@ -131,6 +131,14 @@
         });
     };
 
+    $scope.Sincronizar = function (detalle) {
+      const payload = {
+        IdPedidoDetalle: detalle.IdPedidoDetalle,
+        accionCsp: detalle.accionCsp
+      };
+      return SincronizadorManualFactory.Sincronizar(payload);
+    };
+
     $scope.PaginadoInicio = function () {
       $scope.Pagina = 0;
       $scope.Offset = $scope.Pagina * 10;

@@ -26,6 +26,11 @@
       return $http.put($rootScope.API + 'microsoft/manualsynchronizer', details);
     };
 
+    factory.Sincronizar = function (payload) {
+      factory.refreshToken();
+      return $http.post($rootScope.MAPI + 'microsoft/manualsynchronizer/Sincronizar', payload);
+    };
+
     return factory;
   };
 
