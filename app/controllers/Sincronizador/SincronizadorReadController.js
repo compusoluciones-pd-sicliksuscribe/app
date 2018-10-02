@@ -126,7 +126,8 @@
         }, pedido);
       }))
         .then(function () {
-          getSincronizadorManual($scope.BuscarSuscripcion.agente);
+          $scope.Offset = 0;
+          getSincronizadorManual($scope.BuscarSuscripcion.agente, $scope.Offset);
         });
     };
 
