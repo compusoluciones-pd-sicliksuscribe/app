@@ -132,8 +132,13 @@
     };
 
     $scope.Sincronizar = function (detalle) {
+      if (detalle.accionCsp === 'Cancelar') {
+        return SincronizadorManualFactory.SincronizarCancelar(detalle);
+      }
       const payload = {
-        IdPedidoDetalle: detalle.IdPedidoDetalle,
+        IdDistribuidor: detalle.IdDistribuidor,
+        IdCliente: detalle.IdCliente,
+        IdProducto: detalle.IdProducto,
         accionCsp: detalle.accionCsp
       };
       return SincronizadorManualFactory.Sincronizar(payload);

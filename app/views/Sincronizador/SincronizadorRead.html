@@ -79,7 +79,7 @@
             <td style="text-align: center" class="col-xs-12 col-sm-12 col-md-2 col-lg-2" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8">
                 <div class="form-group">
                   <b><h5>
-                      <button ng-click="Sincronizar(detalle)" class="btn btn-primary newColaborator" ng-model="detalle" style='min-width:53px; height:30px'type="submit" ng-disabled="!detalle.EstadoOperacion"><span class="glyphicon glyphicon-refresh"></span></button>
+                      <button ng-click="Sincronizar(detalle)" class="btn btn-primary newColaborator" ng-model="detalle" style='min-width:53px; height:30px'type="submit" ng-disabled="((!detalle.EstadoOperacion) && (detalle.accionCsp !== 'Cancelar'))"><span class="glyphicon glyphicon-refresh"></span></button>
                   </h5></b>
                 </div>
             </td>
