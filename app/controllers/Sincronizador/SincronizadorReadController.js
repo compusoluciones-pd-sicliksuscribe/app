@@ -133,7 +133,16 @@
 
     $scope.Sincronizar = function (detalle) {
       if (detalle.accionCsp === 'Cancelar') {
-        return SincronizadorManualFactory.SincronizarCancelar(detalle);
+        return SincronizadorManualFactory.SincronizarCancelar(detalle)
+        .then(function () {
+          $scope.ShowToast('Cambios realizados exitosamente.', 'success');
+          $scope.Pagina = 0;
+          $scope.Offset = $scope.Pagina * 10;
+          getSincronizadorManual($scope.BuscarSuscripcion.agente, $scope.Offset);
+        })
+        .catch(function () {
+          $scope.ShowToast('No pudimos cargar la lista de detalles, por favor intenta de nuevo más tarde.', 'danger');
+        });
       }
       const payload = {
         IdDistribuidor: detalle.IdDistribuidor,
@@ -141,7 +150,16 @@
         IdProducto: detalle.IdProducto,
         accionCsp: detalle.accionCsp
       };
-      return SincronizadorManualFactory.Sincronizar(payload);
+      return SincronizadorManualFactory.Sincronizar(payload)
+      .then(function () {
+        $scope.ShowToast('Cambios realizados exitosamente.', 'success');
+        $scope.Pagina = 0;
+        $scope.Offset = $scope.Pagina * 10;
+        getSincronizadorManual($scope.BuscarSuscripcion.agente, $scope.Offset);
+      })
+      .catch(function () {
+        $scope.ShowToast('No pudimos cargar la lista de detalles, por favor intenta de nuevo más tarde.', 'danger');
+      });
     };
 
     $scope.PaginadoInicio = function () {
