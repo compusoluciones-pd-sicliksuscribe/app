@@ -396,6 +396,28 @@
         });
     };
 
+    $scope.AceptarTerminos = function (IdEmpresa) {
+      PedidoDetallesFactory.acceptAgreement(IdEmpresa)
+      .success(function (result) {
+        if (!result.success) {
+          $scope.ShowToast('Ocurrió un error, favor de contactar a Soporte', 'danger');
+        } else {
+          $scope.ShowToast('Terminos y condiciones aceptados.', 'success');
+          $scope.ActualizarMonitor();
+        }
+        $scope.form.habilitar = true;
+        $scope.ActualizarMonitor();
+        $scope.form.habilitar = false;
+      })
+      .catch(function (error) {
+        $scope.ShowToast(error.data.message, 'danger');
+        $log.log('data error: ' + error.data.message + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
+        $scope.form.habilitar = true;
+        $scope.ActualizarMonitor();
+        $scope.form.habilitar = false;
+      });
+    };
+
     $scope.IniciarTourMonitor = function () {
       $scope.Tour = new Tour({
         steps: [
