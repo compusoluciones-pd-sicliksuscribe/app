@@ -232,11 +232,11 @@
 							</div>
 
 							<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2" >
-								<button style="text-decoration: underline; color: red !important;" class="btn btn-link" ng-show="detalles.Activo" ng-click="Confirmar(detalles.IdPedidoDetalle)"
+								<button class="btn btn-danger" ng-show="detalles.Activo" ng-click="Confirmar(detalles.IdPedidoDetalle)"
 									ng-disabled="pedido.CargoRealizadoProximoPedido || (!detalles.PedidoAFabricante || detalles.EstatusFabricante === 'FAILED')">
 									CANCELAR
 								</button>
-								<button class="btn btn-link" style="text-decoration: underline;" ng-show="!detalles.Activo" ng-click="Reanudar(pedido, detalles)"
+								<button class="btn btn-success" ng-show="!detalles.Activo" ng-click="Reanudar(pedido, detalles)"
 									ng-disabled="pedido.CargoRealizadoProximoPedido || (!detalles.PedidoAFabricante || detalles.EstatusFabricante === 'FAILED')">
 									REANUDAR
 								</button>
@@ -424,11 +424,11 @@
 					</div>
 
 					<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2" ng-if="pedido.AutoRenovable">
-						<button class="btn btn-link" style="text-decoration: underline; color: red !important;" type="button" ng-hide="!detalles.Activo"
+						<button class="btn btn-danger"  type="button" ng-hide="!detalles.Activo"
 							ng-disabled="detalles.PagoRenovacion || detalles.EstatusFabricante !== 'accepted'" ng-click="Confirmar(detalles.IdPedidoDetalle)">
 							CANCELAR
 						</button>
-						<button class="btn btn-link" style="text-decoration: underline;" type="button" ng-show="pedido.AutoRenovable && !detalles.Activo" ng-disabled="form.habilitar" ng-click="ReanudarPedidoAutodesk(pedido, detalles)">
+						<button class="btn btn-success" type="button" ng-show="pedido.AutoRenovable && !detalles.Activo" ng-disabled="form.habilitar" ng-click="ReanudarPedidoAutodesk(pedido, detalles)">
 							REANUDAR						
 						</button>
 						<br> <br>
