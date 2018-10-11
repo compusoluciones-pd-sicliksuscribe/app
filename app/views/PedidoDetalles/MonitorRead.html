@@ -403,9 +403,18 @@
 					</div>
 
 					<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
+					<div>
 						<label>Fecha Solicitud: </label>
 						<br/> {{ detalles.FechaActivo | date:'dd MMMM yyyy' }}
 					</div>
+
+					<br>
+
+					<div>
+						<label>Fecha limite de cancelación: </label>
+						<br/> {{ pedido.FechaCancelacion  }}
+					</div>
+				</div>
 
 					<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
 						<label>Estatus de pedido: </label>
@@ -422,6 +431,7 @@
 							</div>
 						</b>
 					</div>
+				
 
 					<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2" ng-if="pedido.AutoRenovable">
 						<button class="btn btn-danger"  type="button" ng-hide="!detalles.Activo"
