@@ -19,6 +19,12 @@
       return SincronizadorManualFactory.getSincronizadorManual(agente, offset)
         .then(function (response) {
           $scope.detallesSincronizador = response.data;
+          const tamaño = $scope.detallesSincronizador.length;
+          console.log(tamaño);
+          if (tamaño === 0) {
+            $scope.ShowToast('No se encontraron más resultados para la busqueda.', 'danger');
+            $scope.PaginadoAtras();
+          }
           return $scope.detallesSincronizador;
         })
         .catch(function () {
@@ -137,7 +143,7 @@
         .then(function () {
           $scope.ShowToast('Cambios realizados exitosamente.', 'success');
           $scope.Pagina = 0;
-          $scope.Offset = $scope.Pagina * 10;
+          $scope.Offset = $scope.Pagina * 50;
           getSincronizadorManual($scope.BuscarSuscripcion.agente, $scope.Offset);
         })
         .catch(function () {
@@ -154,7 +160,7 @@
       .then(function () {
         $scope.ShowToast('Cambios realizados exitosamente.', 'success');
         $scope.Pagina = 0;
-        $scope.Offset = $scope.Pagina * 10;
+        $scope.Offset = $scope.Pagina * 50;
         getSincronizadorManual($scope.BuscarSuscripcion.agente, $scope.Offset);
       })
       .catch(function () {
@@ -164,7 +170,7 @@
 
     $scope.PaginadoInicio = function () {
       $scope.Pagina = 0;
-      $scope.Offset = $scope.Pagina * 10;
+      $scope.Offset = $scope.Pagina * 50;
       if ($scope.BuscarSuscripcion.agente === undefined) {
         $scope.BuscarSuscripcion.agente = 'all';
       }
@@ -173,7 +179,7 @@
 
     $scope.PaginadoAtras = function () {
       $scope.Pagina = $scope.Pagina - 1;
-      $scope.Offset = $scope.Pagina * 10;
+      $scope.Offset = $scope.Pagina * 50;
       if ($scope.BuscarSuscripcion.agente === undefined) {
         $scope.BuscarSuscripcion.agente = 'all';
       }
@@ -183,7 +189,7 @@
 
     $scope.PaginadoSiguiente = function () {
       $scope.Pagina = $scope.Pagina + 1;
-      $scope.Offset = $scope.Pagina * 10;
+      $scope.Offset = $scope.Pagina * 50;
       if ($scope.BuscarSuscripcion.agente === undefined) {
         $scope.BuscarSuscripcion.agente = 'all';
       }
