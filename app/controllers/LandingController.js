@@ -5,13 +5,15 @@
     $scope.init = function () {
       $scope.esNavegadorSoportado();
       $scope.navCollapsed = true;
-      PromocionsFactory.getPromocions($scope.currentDistribuidor.IdEmpresa)
+      if ($scope.currentDistribuidor) {
+        PromocionsFactory.getPromocions($scope.currentDistribuidor.IdEmpresa)
         .success(function (Promociones) {
           $scope.Promociones = Promociones;
         })
         .error(function (data, status, headers, config) {
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
+      }
     };
 
     $scope.init();

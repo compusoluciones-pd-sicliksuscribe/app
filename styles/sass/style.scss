@@ -558,18 +558,34 @@ option{
     min-height:auto;
 }*/
 
+@media screen and (max-width: 768px){
+    .text-left{
+        h3{
+            margin-top: 110px;
+        }
+     }
+     #hamburguer {
+        float: left;
+        margin-left: 5px;
+     }
+}
 
-
-@media screen and (max-width: 1500px) {
+@media screen and (min-width: 991px) and (max-width: 1500px) {
 
         .distintivo{
-        display:none !important;
-    }
-
+            display:none !important;
+        }
+        .img-responsive{
+            height: 250px;
+        }
+        .imageBanner{
+             max-width: 400px !important;
+             height: 100% !important;
+        }
 }
 
 
-@media screen and (max-width: 990px) {
+@media screen and (max-width: 991px) {
 
     .home{
         height:auto !important;
@@ -583,13 +599,17 @@ option{
         box-shadow: none;
     }
 
+    header img{
+        height: 114px !important;
+    }
+
     .helpStart{
         display:none;
     }
 
 
-    header img{
-        height:auto !important;
+    .navbar-default .navbar-brand {
+        padding: 0 !important;
     }
 
     .home{
@@ -666,6 +686,9 @@ option{
 
 
 }
+
+
+
 
    .tooltip.customClass .tooltip-inner {
                 color: #880000;
