@@ -40,7 +40,7 @@
 
                         <div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2 pull-right">
                             <div class="pull-right">
-                                <button class="btn btn-primary newClient" ng-click="ImportarEmpresa(IdEmpresaDistribuidor,uf.id,uf.companyProfile.domain,uf.companyProfile.companyName)">Importar </button>
+                                <button class="btn btn-primary newClient" ng-click="ImportarEmpresa(IdEmpresaDistribuidor,uf.id,uf.companyProfile.domain,uf.companyProfile.companyName)"  ng-disabled="SessionCookie.IdTipoAcceso !== 1">Importar </button>
                             </div>
                         </div>
 

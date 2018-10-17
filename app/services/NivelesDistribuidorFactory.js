@@ -26,6 +26,7 @@
       return $http.delete($rootScope.API + 'NivelDistribuidor/' + IdNivelDistribuidor);
     };
 
+    //yorsh
     factory.getNivelesDistribuidor = function () {
       factory.refreshToken();
       return $http.get($rootScope.API + 'NivelDistribuidor');

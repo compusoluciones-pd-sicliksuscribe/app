@@ -11,13 +11,14 @@
       let empresaActual = '';
       if (Session.IdTipoAcceso === 1) empresaActual = { NombreEmpresa: 'CompuSoluciones', IdEmpresa: 1 };
       if (Session.IdTipoAcceso === 2) empresaActual = { NombreEmpresa: Session.NombreEmpresa, IdEmpresa: Session.IdEmpresa };
+      if (Session.IdTipoAcceso === 8) empresaActual = { NombreEmpresa: 'CompusolucionesLectura', IdEmpresa: 8 };
       $scope.CheckCookie();
       if (Session.IdTipoAcceso !== 2) {
         EmpresasFactory.getEmpresas()
           .success(function (Empresas) {
             $scope.selectEmpresas = Empresas;
             $scope.selectEmpresas.unshift(empresaActual);
-            if ($scope.SessionCookie.IdTipoAcceso != 1) {
+            if (!($scope.SessionCookie.IdTipoAcceso === 1 || $scope.SessionCookie.IdTipoAcceso === 8)) {
               $scope.empresaSel = $scope.selectEmpresas[0].IdEmpresa;
             }
             $scope.MostrarUsuariosEmp($scope.empresaSel);
@@ -66,6 +67,7 @@
 
     $scope.MostrarUsuariosEmp = function (IdEmpresa) {
       const empresa = IdEmpresa || false;
+
       if (Session.IdTipoAcceso === 2) {
         if (Number(empresa) === Session.IdEmpresa) {
           $scope.ObtenerUsuariosPropios();
@@ -75,6 +77,7 @@
       } else {
         UsuariosXEmpresasFactory.getUsuariosXEmpresa(empresa)
           .success(function (UsuariosXEmpresas) {
+
             $scope.Usuarios = UsuariosXEmpresas;
           })
           .error(function (data, status, headers, config) {

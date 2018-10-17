@@ -109,6 +109,7 @@
         $scope.ContarProductosCarrito();
         if ($scope.SessionCookie.IdTipoAcceso === 4 || $scope.SessionCookie.IdTipoAcceso === '4' ||
           $scope.SessionCookie.IdTipoAcceso === 5 || $scope.SessionCookie.IdTipoAcceso === '5' ||
+          $scope.SessionCookie.IdTipoAcceso === 8 || $scope.SessionCookie.IdTipoAcceso === '8' ||
           $scope.SessionCookie.IdTipoAcceso === 6 || $scope.SessionCookie.IdTipoAcceso === '6') {
           $scope.cambiarDistribuidor($cookies.getObject('currentDistribuidor'), false);
         }
