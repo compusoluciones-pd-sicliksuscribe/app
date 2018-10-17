@@ -16,7 +16,8 @@
 							max="999999999" 
 							min="000000000" 
 							ng-maxlength="9" size="9" 
-							ng-required="" required="">
+							ng-required="" required=""
+							ng-disabled="SessionCookie.IdTipoAcceso !== 1">
 					<br>
 					
 					<p style="color:red" ng-show="frm.Credito.$error.required">Escribe una cantidad</p>
@@ -32,7 +33,7 @@
 		<div class="form-group row">
 			<div class="col-xs-0 col-sm-0 col-md-2 col-lg-2">
 				<div class="form-group">
-					<button type="submit" ng-click="EmpresaUpdate()" ng-disabled="!frm.$valid" class="btn btn-primary btn-block">Aceptar</button>
+					<button ng-disabled="SessionCookie.IdTipoAcceso !== 1" type="submit" ng-click="EmpresaUpdate()" ng-disabled="!frm.$valid" class="btn btn-primary btn-block">Aceptar</button>
 				</div>
 			</div>
 			<div class="col-xs-0 col-sm-0 col-md-2 col-lg-2">

@@ -1,15 +1,11 @@
 (function () {
   var EmpresasReadController = function ($scope, $log, $location, $cookies, EmpresasFactory, NivelesDistribuidorFactory) {
-    var Session = {};
-
-    Session = $cookies.getObject('Session');
     $scope.sortBy = 'Nombre';
     $scope.reverse = false;
     $scope.TablaVisible = false;
     $scope.cambiaAgente = false;
 
     $scope.init = function () {
-      Session = $cookies.getObject('Session');
       $scope.CheckCookie();
       $scope.Empresas = null;
       $scope.TablaVisible = false;

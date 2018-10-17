@@ -113,7 +113,8 @@
 									</div>
 									<ul class="nav navbar-nav navbar-right">
 
-										<li id="menuDistribuidores" class="gris" ng-show="SessionCookie.LeyoTerminos == 1 && SessionCookie.distribuidores.length > 1 && SessionCookie.IdTipoAcceso == 4 || SessionCookie.IdTipoAcceso == 6"
+										<li id="menuDistribuidores" class="gris" ng-show="SessionCookie.LeyoTerminos == 1 && SessionCookie.distribuidores.length > 1
+											&& SessionCookie.IdTipoAcceso == 4 || SessionCookie.IdTipoAcceso == 6"
 										 dropdown>
 											<a dropdown-toggle>
 												<div class="text">Sitios</div> <b class="caret"></b></a>
@@ -130,8 +131,8 @@
 											</a>
 										</li>
 
-										<li class="yellow" ng-show="(SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 8) && (SessionCookie.LeyoTerminos == 1)" dropdown>
-											<a ng-click="goToPage('Empresas');">Distribuidores</a>
+										<li class="yellow" ng-show="(SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 8) && (SessionCookie.LeyoTerminos == 1 )">
+											<a ng-click="goToPage('Empresas');"><span class="fa fa-building-o" style="padding-right:5px;"></span> Distribuidores</a>
 										</li>
 
 										<li class="principalBlue" ng-show="(SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 8) && (SessionCookie.LeyoTerminos == 1)" dropdown>
