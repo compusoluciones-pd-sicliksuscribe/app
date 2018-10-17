@@ -15,14 +15,13 @@
       Object.assign($scope.modal, detalle, { titulo }, { comentario });
     };
 
-    const getSincronizadorManual = function (agente, offset) {
+    const getSincronizadorManual = function (agente = 'all', offset) {
       return SincronizadorManualFactory.getSincronizadorManual(agente, offset)
         .then(function (response) {
           $scope.detallesSincronizador = response.data;
           const tamaño = $scope.detallesSincronizador.length;
-          console.log(tamaño);
           if (tamaño === 0) {
-            $scope.ShowToast('No se encontraron más resultados para la busqueda.', 'danger');
+            $scope.ShowToast('No se encontraron más resultados para la búsqueda.', 'danger');
             $scope.PaginadoAtras();
           }
           return $scope.detallesSincronizador;
@@ -137,6 +136,15 @@
         });
     };
 
+    const sleep = function (milliseconds) {
+      var start = new Date().getTime();
+      for (var i = 0; i < 1e7; i++) {
+        if ((new Date().getTime() - start) > milliseconds) {
+          break;
+        }
+      }
+    } 
+
     $scope.Sincronizar = function (detalle) {
       if (detalle.accionCsp === 'Cancelar') {
         return SincronizadorManualFactory.SincronizarCancelar(detalle)
@@ -144,6 +152,7 @@
           $scope.ShowToast('Cambios realizados exitosamente.', 'success');
           $scope.Pagina = 0;
           $scope.Offset = $scope.Pagina * 50;
+          sleep(5000);
           getSincronizadorManual($scope.BuscarSuscripcion.agente, $scope.Offset);
         })
         .catch(function () {
@@ -161,6 +170,7 @@
         $scope.ShowToast('Cambios realizados exitosamente.', 'success');
         $scope.Pagina = 0;
         $scope.Offset = $scope.Pagina * 50;
+        sleep(5000);
         getSincronizadorManual($scope.BuscarSuscripcion.agente, $scope.Offset);
       })
       .catch(function () {
