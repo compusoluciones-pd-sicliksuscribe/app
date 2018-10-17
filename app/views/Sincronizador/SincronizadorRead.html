@@ -1,0 +1,199 @@
+<div class="container" ng-swipe-right="" ng-swipe-left="">
+
+    <div class="row">
+
+        <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <h2 style="float:left;">Suscripciones </h2>
+        </div>
+
+        <div class="form-group col-xs-12 col-sm-12 col-md-3 col-lg-3">
+            <label for="agente">Filtrar por:</label>
+            <select name="agente" class="form-control filterOption" ng-model="BuscarSuscripcion.agente"
+            ng-options="agente.nombre as agente.nombre for agente in agentes" ng-change="BuscarSuscripciones(true)">
+                <option ng-selected="true" value="">Todos los agentes</option>   
+            </select>
+        </div>
+
+            <div class="form-group col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                <label for="Agente">&nbsp;</label>
+                <div class="form-group has-feedback" >
+                    <input name="Busqueda" type="text" ng-model="detallesFilter" class="form-control" size="30" placeholder="Buscar..."/>
+                    <i class="form-control-feedback glyphicon glyphicon-search"></i>
+                </div>
+            </div>
+    </div>
+    
+    <br><br><br><br><br>
+
+        <table class="table table-hover table-responsive border-left-right-cero" style="table-layout: fixed;">
+          <th style="word-wrap:break-word; text-align:center;" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2">
+            <b>Operación</b>
+                <div class="col-md-1">
+                    <input id="Activo" type="checkbox" ng-model="estado.operacion" ng-true-value="1" ng-false-value="0"  ng-click="ActualizarFiltrados('Operacion')">
+                </div>
+          </th>
+          <th style="word-wrap:break-word; text-align:center;" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8">
+              <b>Ventas</b>
+                  <div class="col-md-2">
+                      <input id="Activo" type="checkbox" ng-true-value="1" ng-false-value="0" ng-model="estado.venta" ng-click="ActualizarFiltrados('Ventas')">
+                  </div>
+          </th>
+          <th style="word-wrap:break-word; text-align:center;" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8 ">
+                <b>Sincronizar</b>
+          </th>
+          <th style="word-wrap:break-word; text-align:center;" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8 "><b>Agente</b></th>
+          <th style="word-wrap:break-word" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8"><b>Acción en Partner Center</b></th>
+          <th style="word-wrap:break-word" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8"><b>Artículo </b></th>
+          <th width="70" height="16" style="word-wrap:break-word" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8"><b>Cantidad Click</b></th>
+          <th style="word-wrap:break-word" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8"><b>Id Pedido</b></th>
+          <th style="word-wrap:break-word" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8 "><b>Cantidad en Partner Center</b></th>
+          <th style="word-wrap:break-word" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8 "><b>Distribuidor</b></th>
+          <th style="word-wrap:break-word" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8 "><b>Usuario Final</b></th>
+          <tr  ng-repeat="detalle in detallesSincronizador | filter:detallesFilter | orderBy:sortBy:reverse" class="repeat-animation">
+            
+  
+            <td style="word-wrap:break-word" class="col-xs-12 col-sm-12 col-md-2 col-lg-2" ng-show="SessionCookie.IdTipoAcceso==1">
+              <div ng-model="detalle" ng-hide="!detalle.IdPedido"> 
+                  <label style="color: green"ng-true-value="1" ng-false-value="0" ng-model="detalle" ng-show="detalle.EstadoOperacion===1" ng-hide="!detalle.EstadoOperacion"> Aprobado </label>
+                  <label style="color:red" ng-true-value="1" ng-false-value="0" ng-model="detalle.EstadoOperacion" ng-show="!detalle.EstadoOperacion" ng-hide="detalle.EstadoOperacion===1">No aprobado </label>
+                  <input id="Activo" type="checkbox" ng-true-value="1" ng-false-value="0" ng-model="detalle.EstadoOperacion" ng-change="guardarEstados(detalle)">
+              </div>
+              <br>
+              <div ng-model="detalle" ng-hide="!detalle.IdPedido"> 
+                <b><a ng-click="mostrarModal('Operación', detalle)"  data-toggle="modal"  data-target="#exampleModal">Comentario </a></b>
+              </div>
+            </td>
+
+            <td  class="col-xs-12 col-sm-12 col-md-2 col-lg-2" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8">
+              <div ng-model="detalle" ng-hide="!detalle.IdPedido">
+                  <label style="color: green"ng-true-value="1" ng-false-value="0" ng-model="detalle" ng-show="detalle.EstadoVenta===1" ng-hide="!detalle.EstadoVenta"> Aprobado </label>
+                  <label style="color:red" ng-true-value="1" ng-false-value="0" ng-model="detalle.EstadoVenta" ng-show="!detalle.EstadoVenta" ng-hide="detalle.EstadoVenta===1">No aprobado </label>
+                  <input id="Activo" type="checkbox" ng-true-value="1" ng-false-value="0" ng-model="detalle.EstadoVenta" ng-change="guardarEstados(detalle)">
+              </div>
+              <br>
+              <div ng-model="detalle" ng-hide="!detalle.IdPedido">
+                <b><a ng-click="mostrarModal('Ventas', detalle)"  data-toggle="modal"  data-target="#exampleModal">Comentario </a></b>
+              </div>
+            </td>
+      
+            <td style="text-align: center" class="col-xs-12 col-sm-12 col-md-2 col-lg-2" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8">
+                <div class="form-group">
+                  <b><h5>
+                      <button ng-click="Sincronizar(detalle)" class="btn btn-primary newColaborator" ng-model="detalle" style='min-width:53px; height:30px'type="submit" ng-disabled="((!detalle.EstadoOperacion) && (detalle.accionCsp !== 'Cancelar'))"><span class="glyphicon glyphicon-refresh"></span></button>
+                  </h5></b>
+                </div>
+            </td>
+
+            <td style="word-wrap:break-word" class="col-xs-12 col-sm-12 col-md-2 col-lg-2" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8">
+              <div class="form-group">
+                <b><h5>{{detalle.Agente}}</h5></b>
+              </div>
+            </td>
+      
+            <td style="word-wrap:break-word" class="col-xs-12 col-sm-12 col-md-2 col-lg-2" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8">
+              <div class="form-group">
+                <b><h5>{{detalle.accionCsp}}</h5></b>
+              </div>
+            </td>
+
+            <td style="word-wrap:break-word" class="col-xs-12 col-sm-12 col-md-2 col-lg-2" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8">
+              <div class="form-group">
+                <b><h5>{{detalle.Nombre}}</h5></b>
+              </div>
+            </td>
+
+            <td style="word-wrap:break-word" class="col-xs-12 col-sm-12 col-md-1 col-lg-1" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8 ">
+              <div class="form-group">
+                <b><h5>{{detalle.Cantidad}}</h5></b>
+              </div>
+            </td>
+
+            <td style="word-wrap:break-word" class="col-xs-12 col-sm-12 col-md-1 col-lg-1" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8 ">
+              <div class="form-group">
+                <b><h5>{{detalle.IdPedido}}</h5></b>
+              </div>
+            </td>
+
+            <td style="word-wrap:break-word" class="col-xs-12 col-sm-12 col-md-1 col-lg-1" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8 ">
+              <div class="form-group">
+                <b><h5>{{detalle.quantityCSP}}</h5></b>
+              </div>
+            </td>
+
+            <td style="word-wrap:break-word" class="col-xs-12 col-sm-12 col-md-1 col-lg-1" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8 ">
+              <div class="form-group">
+                <b><h5>{{detalle.Distribuidor}}</h5></b>
+              </div>
+            </td>
+            
+            <td style="word-wrap:break-word" class="col-xs-12 col-sm-12 col-md-1 col-lg-1" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8 ">
+              <div class="form-group">
+                <b><h5>{{detalle.Cliente}}</h5></b>
+              </div>
+            </td>
+
+          </tr>
+        </table>
+
+        
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="modalTitle">{{ modal.titulo }}</h4>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="form-group">
+                  <label for="message-text" class="control-label">Comentario:</label>
+                  <textarea class="form-control" id="message-text" ng-model='modal.comentario'>{{modal.comentario}}</textarea>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default " data-dismiss="modal">Regresar</button>
+              <button type="button" class="btn btn-info " data-dismiss="modal" ng-click="guardarConModal(modal)">Guardar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <br><br>
+
+      <div class="form-group row">
+          <div class="text-center">
+  
+              <div class="col-xs-0 col-sm-4 col-md-4 col-lg-4">
+              </div>
+  
+              <div class="col-xs-2 col-sm-1 col-md-1 col-lg-1">
+                  <div ng-click="PaginadoInicio()" ng-show="Pagina > 0">
+                      <b><div class="paginator"><img src="images/backArrow.png"></div></b>
+                  </div>
+              </div>
+  
+              <div class="col-xs-2 col-sm-1 col-md-1 col-lg-1">
+                  <div ng-click="PaginadoAtras()" ng-show="Pagina > 0">
+                      <b><div class="paginator"><img src="images/leftArrow.png"></div></b>
+                  </div>
+              </div>
+  
+              <div class="col-xs-4 col-sm-1 col-md-1 col-lg-1">
+                  <b>Página {{Pagina + 1}}</b>
+              </div>
+  
+              <div class="col-xs-2 col-sm-1 col-md-1 col-lg-1">
+                  <div ng-click="PaginadoSiguiente()" ng-show="detallesSincronizador.length  !== 0" >
+                     <div class="paginator"><img src="images/rightArrow.png"></div>
+                  </div>
+              </div>
+  
+              <div class="col-xs-0 col-sm-4 col-md-4 col-lg-4">
+              </div>
+  
+  
+          </div>
+      </div>
+
+</div>

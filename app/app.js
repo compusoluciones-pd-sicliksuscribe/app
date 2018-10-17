@@ -479,6 +479,11 @@
         resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 2)) { $location.path('/'); } } }
       })
 
+      .when('/AdministrarSuscripciones', {
+        controller: 'SincronizadorReadController', templateUrl: 'app/views/Sincronizador/SincronizadorRead.html',
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 8)) { $location.path('/404'); } } }
+      })
+
       /* .when('/:Subdominio', { controller: 'UsuariosLoginController', templateUrl: 'app/views/Usuarios/UsuariosLogin.html' }) */
 
       .otherwise({ redirectTo: '/404' });
