@@ -133,6 +133,14 @@
 											</a>
 										</li>
 
+										<li class="yellow" ng-show="(SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 8) && (SessionCookie.LeyoTerminos == 1)" dropdown>
+											<a ng-click="goToPage('Empresas');">Distribuidores</a>
+										</li>
+
+										<li class="principalBlue" ng-show="(SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 8) && (SessionCookie.LeyoTerminos == 1)" dropdown>
+											<a ng-click="goToPage('Usuarios');">Administradores</a>
+										</li>
+
 
 										<li class="gris" ng-show="(SessionCookie.IdTipoAcceso == 1) && (SessionCookie.LeyoTerminos == 1)" dropdown>
 												<a dropdown-toggle><span class="fa fa-usd"></span><div class="text">Promociones</div> <b class="caret"></b></a>
@@ -143,7 +151,7 @@
 												</ul>
 										</li>
 
-										<li class="yellow" ng-show="(SessionCookie.IdTipoAcceso == 1) && (SessionCookie.LeyoTerminos == 1)" dropdown>
+										<li class="yellow" ng-show="(SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 8) && (SessionCookie.LeyoTerminos == 1)" dropdown>
 												<a dropdown-toggle ><span class="fa fa-desktop"></span><div class="text" style="width:65px;">Monitoreo</div><b class="caret"></b></a>
 												<ul class="dropdown-menu yellow" style="background:!important">
 													<li><a ng-click="goToPage('AdministrarSuscripciones');">Monitor</a></li>
@@ -203,8 +211,6 @@
 																		<span ng-show="!SessionCookie.ApellidoPaterno">...</span>
 																	</div></a>
 													</li>
-													<li><a ng-click="goToPage('Empresas');">Distribuidores</a></li>
-													<li><a ng-click="goToPage('Usuarios');">Administradores</a></li>
 													<li><a ng-click="CerrarSesion();">Cerrar sesión</a></li>
 												</ul>
 											</li>
