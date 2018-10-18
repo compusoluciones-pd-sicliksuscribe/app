@@ -49,7 +49,7 @@
           <th style="word-wrap:break-word" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8 "><b>Cantidad en Partner Center</b></th>
           <th style="word-wrap:break-word" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8 "><b>Distribuidor</b></th>
           <th style="word-wrap:break-word" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8 "><b>Usuario Final</b></th>
-          <tr  ng-repeat="detalle in detallesSincronizador | filter:detallesFilter | orderBy:sortBy:reverse" class="repeat-animation">
+          <tr  ng-repeat="detalle in detallesSincronizador | filter:detallesFilter | orderBy:sortBy:reverse" class="repeat-animation" ng-hide="((detalle.accionCsp=='Igual') && (SessionCookie.IdTipoAcceso==1))">
             
   
             <td style="word-wrap:break-word" class="col-xs-12 col-sm-12 col-md-2 col-lg-2" ng-show="SessionCookie.IdTipoAcceso==1">
@@ -194,6 +194,6 @@
   
   
           </div>
-      </div>
+      </div> 
 
 </div>
