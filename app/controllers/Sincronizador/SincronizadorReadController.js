@@ -143,7 +143,7 @@
           break;
         }
       }
-    } 
+    };
 
     $scope.Sincronizar = function (detalle) {
       if (detalle.accionCsp === 'Cancelar') {
