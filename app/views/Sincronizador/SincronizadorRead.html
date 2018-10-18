@@ -26,7 +26,7 @@
     <br><br><br><br><br>
 
         <table class="table table-hover table-responsive border-left-right-cero" style="table-layout: fixed;">
-          <th style="word-wrap:break-word; text-align:center;" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2">
+          <th style="word-wrap:break-word; text-align:center;" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==8">
             <b>Operación</b>
                 <div class="col-md-1">
                     <input id="Activo" type="checkbox" ng-model="estado.operacion" ng-true-value="1" ng-false-value="0"  ng-click="ActualizarFiltrados('Operacion')">
@@ -52,7 +52,7 @@
           <tr  ng-repeat="detalle in detallesSincronizador | filter:detallesFilter | orderBy:sortBy:reverse" class="repeat-animation">
             
   
-            <td style="word-wrap:break-word" class="col-xs-12 col-sm-12 col-md-2 col-lg-2" ng-show="SessionCookie.IdTipoAcceso==1">
+            <td style="word-wrap:break-word" class="col-xs-12 col-sm-12 col-md-2 col-lg-2" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8">
               <div ng-model="detalle" ng-hide="!detalle.IdPedido"> 
                   <label style="color: green"ng-true-value="1" ng-false-value="0" ng-model="detalle" ng-show="detalle.EstadoOperacion===1" ng-hide="!detalle.EstadoOperacion"> Aprobado </label>
                   <label style="color:red" ng-true-value="1" ng-false-value="0" ng-model="detalle.EstadoOperacion" ng-show="!detalle.EstadoOperacion" ng-hide="detalle.EstadoOperacion===1">No aprobado </label>
