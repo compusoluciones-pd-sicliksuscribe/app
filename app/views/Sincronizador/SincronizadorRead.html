@@ -52,11 +52,11 @@
           <tr  ng-repeat="detalle in detallesSincronizador | filter:detallesFilter | orderBy:sortBy:reverse" class="repeat-animation">
             
   
-            <td style="word-wrap:break-word" class="col-xs-12 col-sm-12 col-md-2 col-lg-2" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8">
+            <td style="word-wrap:break-word" class="col-xs-12 col-sm-12 col-md-2 col-lg-2"  >
               <div ng-model="detalle" ng-hide="!detalle.IdPedido"> 
                   <label style="color: green"ng-true-value="1" ng-false-value="0" ng-model="detalle" ng-show="detalle.EstadoOperacion===1" ng-hide="!detalle.EstadoOperacion"> Aprobado </label>
                   <label style="color:red" ng-true-value="1" ng-false-value="0" ng-model="detalle.EstadoOperacion" ng-show="!detalle.EstadoOperacion" ng-hide="detalle.EstadoOperacion===1">No aprobado </label>
-                  <input id="Activo" type="checkbox" ng-true-value="1" ng-false-value="0" ng-model="detalle.EstadoOperacion" ng-change="guardarEstados(detalle)">
+                  <input id="Activo" type="checkbox" ng-true-value="1" ng-false-value="0" ng-model="detalle.EstadoOperacion" ng-change="guardarEstados(detalle)" ng-disabled="SessionCookie.IdTipoAcceso==8">
               </div>
               <br>
               <div ng-model="detalle" ng-hide="!detalle.IdPedido"> 
