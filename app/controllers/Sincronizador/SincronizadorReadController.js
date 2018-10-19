@@ -20,7 +20,7 @@
         .then(function (response) {
           $scope.detallesSincronizador = response.data;
           const tamaño = $scope.detallesSincronizador.length;
-          if (tamaño === 0) {
+          if (tamaño === 0 && $cookies.getObject('Session').IdTipoAcceso !== 1) {
             $scope.ShowToast('No se encontraron más resultados para la búsqueda.', 'danger');
             $scope.PaginadoAtras();
           }
@@ -194,7 +194,6 @@
         $scope.BuscarSuscripcion.agente = 'all';
       }
       getSincronizadorManual($scope.BuscarSuscripcion.agente, $scope.Offset);
-
     };
 
     $scope.PaginadoSiguiente = function () {

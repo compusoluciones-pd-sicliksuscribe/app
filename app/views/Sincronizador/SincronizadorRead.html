@@ -53,31 +53,31 @@
             
   
             <td style="word-wrap:break-word" class="col-xs-12 col-sm-12 col-md-2 col-lg-2"  >
-              <div ng-model="detalle" ng-hide="!detalle.IdPedido"> 
+              <div ng-model="detalle" ng-hide="((!detalle.IdPedido) || (detalle.accionCsp == 'Igual'))"> 
                   <label style="color: green"ng-true-value="1" ng-false-value="0" ng-model="detalle" ng-show="detalle.EstadoOperacion===1" ng-hide="!detalle.EstadoOperacion"> Aprobado </label>
                   <label style="color:red" ng-true-value="1" ng-false-value="0" ng-model="detalle.EstadoOperacion" ng-show="!detalle.EstadoOperacion" ng-hide="detalle.EstadoOperacion===1">No aprobado </label>
                   <input id="Activo" type="checkbox" ng-true-value="1" ng-false-value="0" ng-model="detalle.EstadoOperacion" ng-change="guardarEstados(detalle)" ng-disabled="SessionCookie.IdTipoAcceso==8">
               </div>
               <br>
-              <div ng-model="detalle" ng-hide="!detalle.IdPedido"> 
+              <div ng-model="detalle" ng-hide="((!detalle.IdPedido) || (detalle.accionCsp == 'Igual'))"> 
                 <b><a ng-click="mostrarModal('Operación', detalle)"  data-toggle="modal"  data-target="#exampleModal">Comentario </a></b>
               </div>
             </td>
 
             <td  class="col-xs-12 col-sm-12 col-md-2 col-lg-2" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8">
-              <div ng-model="detalle" ng-hide="!detalle.IdPedido">
+              <div ng-model="detalle" ng-hide="((!detalle.IdPedido) || (detalle.accionCsp == 'Igual'))">
                   <label style="color: green"ng-true-value="1" ng-false-value="0" ng-model="detalle" ng-show="detalle.EstadoVenta===1" ng-hide="!detalle.EstadoVenta"> Aprobado </label>
                   <label style="color:red" ng-true-value="1" ng-false-value="0" ng-model="detalle.EstadoVenta" ng-show="!detalle.EstadoVenta" ng-hide="detalle.EstadoVenta===1">No aprobado </label>
                   <input id="Activo" type="checkbox" ng-true-value="1" ng-false-value="0" ng-model="detalle.EstadoVenta" ng-change="guardarEstados(detalle)">
               </div>
               <br>
-              <div ng-model="detalle" ng-hide="!detalle.IdPedido">
+              <div ng-model="detalle" ng-hide="((!detalle.IdPedido) || (detalle.accionCsp == 'Igual'))">
                 <b><a ng-click="mostrarModal('Ventas', detalle)"  data-toggle="modal"  data-target="#exampleModal">Comentario </a></b>
               </div>
             </td>
       
             <td style="text-align: center" class="col-xs-12 col-sm-12 col-md-2 col-lg-2" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8">
-                <div class="form-group">
+                <div class="form-group" ng-hide="((detalle.accionCsp == 'Igual'))">
                   <b><h5>
                       <button ng-click="Sincronizar(detalle)" class="btn btn-primary newColaborator" ng-model="detalle" style='min-width:53px; height:30px'type="submit" ng-disabled="((!detalle.EstadoOperacion) && (detalle.accionCsp !== 'Cancelar'))"><span class="glyphicon glyphicon-refresh"></span></button>
                   </h5></b>
@@ -162,7 +162,7 @@
       <br><br>
 
       <div class="form-group row">
-          <div class="text-center" ng-hide="SessionCookie.IdTipoAcceso==1">
+          <div class="text-center" ng-hide="((SessionCookie.IdTipoAcceso==1) || (SessionCookie.IdTipoAcceso==8))">
   
               <div class="col-xs-0 col-sm-4 col-md-4 col-lg-4">
               </div>

@@ -28,12 +28,12 @@
 
     factory.Sincronizar = function (payload) {
       factory.refreshToken();
-      return $http.post($rootScope.MAPI + 'subscriptions/manualSync', payload);
+      return $http.post($rootScope.API + 'microsoft/manualSync', payload);
     };
 
     factory.SincronizarCancelar = function (detalle) {
       factory.refreshToken();
-      return $http.post($rootScope.MAPI + 'subscriptions/manualSync/Cancelar', detalle);
+      return $http.post($rootScope.API + 'microsoft/manualSync/Cancel', detalle);
     };
 
     return factory;
