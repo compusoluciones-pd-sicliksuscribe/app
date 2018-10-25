@@ -262,9 +262,13 @@
                                         <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
                                             <button type="button" ng-show="0" ng-click="AgregarGuardados(Producto.IdProducto)" class="btn btn-link btn-block favoriteOption"><span class="glyphicon glyphicon-star"></span> Agregar a favoritos</span></button>
                                         </div>
+                                        <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-show="((terminos) && (Producto.IdFabricante === 1))">
+                                            <p >* Primero debes de aceptar términos y condiciones</p>  
+                                        </div>
                                         <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-show="SessionCookie.IdTipoAcceso === 1 || SessionCookie.IdTipoAcceso === 2 || SessionCookie.IdTipoAcceso === 3 || SessionCookie.IdTipoAcceso === 4">
                                                 <button  ng-click="updateEnterprise(Producto)" ng-show="Producto.IdFabricante === 1 && usuariosSinDominio[Producto.IdEmpresaUsuarioFinal] === false" class="btn btn-primary updateDomain" style="float: center;">Asignar Dominio Microsoft</button>
-                                            <button class="btn btn-success addOption" ng-click="previousISVValidate(Producto)" ng-disabled="!frmCantidad.$valid || Producto.IdFabricante === 1 && usuariosSinDominio[Producto.IdEmpresaUsuarioFinal] === false" style="float: center;">Agregar al carrito</md-button>       
+                                            <button class="btn btn-success addOption" ng-click="previousISVValidate(Producto)" ng-disabled="!frmCantidad.$valid || Producto.IdFabricante === 1 && usuariosSinDominio[Producto.IdEmpresaUsuarioFinal] === false" style="float: center;" ng-hide="((terminos) && (Producto.IdFabricante === 1))">Agregar al carrito</md-button>
+                                            <button class="btn btn-danger addOption" style="float: center;" data-toggle="modal" data-target="#terminosModal" ng-show="((terminos) && (Producto.IdFabricante === 1))">Aceptar términos</md-button>
                                         </div>
 
                                         
@@ -281,7 +285,29 @@
             </td>
         </tr>
     </table>
-
+    <div id="terminosModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Términos y condiciones</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Por disposición de Microsoft se debe de aceptar los Contratos de clientes y mercados de Proveedor de soluciones en la nube de Microsoft para poder seguir consumiendo sus productos. La fecha límite para aceptar los términos es el 06 de noviembre del 2018.
+                        En caso de no aceptar los términos, no se podrá hacer ningún movimiento en las licencias actuales ni comprar nuevas.
+                    </br></br>
+                    <a href="https://docs.microsoft.com/partner-center/agreements" class="alert-link"  target="_blank">
+                        *Consultar los Contratos de clientes y mercados de Proveedor de soluciones en la nube de Microsoft
+                    </a>
+                    </p>
+                    <hr>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" ng-click="AceptarTerminos()" data-dismiss="modal">Aceptar términos</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="form-group row">
         <div class="text-center">
 

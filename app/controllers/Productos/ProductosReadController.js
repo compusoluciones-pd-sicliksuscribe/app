@@ -14,6 +14,7 @@
     $scope.IdPedidoContrato = 0;
     $scope.DominioMicrosoft = true;
     $scope.usuariosSinDominio = {};
+    $scope.terminos = false;
     const NOT_FOUND = 404;
 
     const formatTiers = function (tiers) {
@@ -275,20 +276,65 @@
       return estimatedTotal;
     };
 
+    $scope.AceptarTerminos = function () {
+      PedidoDetallesFactory.acceptAgreement($scope.IdEmpresaUsuarioFinalTerminos)
+      .success(function (result) {
+        if (!result.success) {
+          $scope.ShowToast('Ocurrió un error, favor de contactar a Soporte', 'danger');
+        } else {
+          $scope.ShowToast('Terminos y condiciones aceptados.', 'success');
+          $scope.terminos = false;
+        }
+      })
+      .catch(function (error) {
+        $scope.ShowToast(error.data.message, 'danger');
+        $log.log('data error: ' + error.data.message + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
+        $scope.form.habilitar = true;
+        $scope.ActualizarMonitor();
+        $scope.form.habilitar = false;
+      });
+    };
+
+    $scope.validateAgreementCSP = function (producto) {
+      return EmpresasXEmpresasFactory.getAcceptanceAgreementByClient(producto.IdEmpresaUsuarioFinal)
+      .success(function (result) {
+        console.log('resultado', result);
+        if (!result.AceptoTerminosMicrosoft) {
+          $scope.ShowToast('No has aceptado los términos y condiciones que necesita microsoft.', 'danger');
+          $scope.IdEmpresaUsuarioFinalTerminos = producto.IdEmpresaUsuarioFinal;
+          $scope.terminos = true;
+        } else {
+          return $scope.AgregarCarrito(producto, producto.Cantidad, producto.IdPedidocontrato);
+        }
+      })
+      .catch(function (error) {
+        $scope.ShowToast(error.data.message, 'danger');
+        $log.log('data error: ' + error.data.message + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
+        $scope.form.habilitar = true;
+        $scope.ActualizarMonitor();
+        $scope.form.habilitar = false;
+      });
+    };
+
     $scope.previousISVValidate = function (producto) {
       if (producto.IdFabricante !== 6) {
-        return $scope.AgregarCarrito(producto, producto.Cantidad, producto.IdPedidocontrato);
+        if (producto.IdFabricante === 1) {
+          return $scope.validateAgreementCSP(producto);
+        } else {
+          return $scope.AgregarCarrito(producto, producto.Cantidad, producto.IdPedidocontrato);
+        }
       }
+
       $scope.validateExistsEmail(producto)
-        .then(function (result) {
-          const { exists } = result.data; 
-          if (!exists) {
-            $scope.AgregarCarrito(producto, producto.Cantidad, producto.IdPedidocontrato);
-          } else {
-            $scope.ShowToast('Este usuario ya cuenta con un registro de este producto, contacta a tu administrador.', 'danger');
-          }
-          return ProductosFactory.postIdERP(producto.IdERP);
-        });
+      .then(function (result) {
+        const { exists } = result.data;
+        if (!exists) {
+          $scope.AgregarCarrito(producto, producto.Cantidad, producto.IdPedidocontrato);
+        } else {
+          $scope.ShowToast('Este usuario ya cuenta con un registro de este producto, contacta a tu administrador.', 'danger');
+        }
+        return ProductosFactory.postIdERP(producto.IdERP);
+      });
     };
 
     $scope.validateExistsEmail = function (producto) {
@@ -333,7 +379,7 @@
                 .then(function (result) {
                   $scope.suscripciones = result.data.data;
                   if (result.data.data.length >= 1) {
-                    $location.path("/autodesk/productos/" + NuevoProducto.IdProducto + "/detalle/" + PedidoDetalleResult.data.insertId);
+                    $location.path('/autodesk/productos/' + NuevoProducto.IdProducto + '/detalle/' + PedidoDetalleResult.data.insertId);
                   }
                 });
             }
@@ -405,11 +451,10 @@
         leapY -= step; if (leapY < stopY) leapY = stopY; timer++;
       }
 
-      function currentYPosition() {
+      function currentYPosition () {
         if (self.pageYOffset) return self.pageYOffset;
 
-        if (document.documentElement && document.documentElement.scrollTop)
-          return document.documentElement.scrollTop;
+        if (document.documentElement && document.documentElement.scrollTop) { return document.documentElement.scrollTop; }
 
         if (document.body.scrollTop) return document.body.scrollTop;
         return 0;
@@ -457,41 +502,41 @@
             placement: 'bottom',
             title: 'Filtra por fabricante',
             content: 'Puedes filtrar tu búsqueda por fabricante o marca para ser más preciso.',
-            template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>",
+            template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>"
           },
           {
             element: '.typeOptions',
             placement: 'bottom',
             title: 'Filtra por un tipo de producto',
             content: 'Puedes hacer un filtrado por los tipos de producto que requieras; suscripción o complementos.',
-            template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>",
+            template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>"
           },
           {
             element: '.favoriteOption',
             placement: 'left',
             title: 'Agregar a favoritos',
             content: 'Al agregar un producto a favoritos se guardará en tu lista de favoritos que podrás consultar en la parte superior derecha de la pagina, en el menú del carrito de compras.',
-            template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>",
+            template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>"
           },
           {
             element: '.ufs',
             placement: 'bottom',
             title: 'Selecciona el cliente',
             content: 'Una vez establecida la cantidad, selecciona a que usuario final va destinado este producto.',
-            template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>",
+            template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>"
           },
           {
             element: '.addOption',
             placement: 'bottom',
             title: 'Agregar al carrito',
             content: 'Una vez configurado tu producto, agregalo al carrito de compras.',
-            template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>",
-          },
+            template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>"
+          }
 
         ],
 
         backdrop: true,
-        storage: false,
+        storage: false
       });
 
       $scope.Tour.init();
