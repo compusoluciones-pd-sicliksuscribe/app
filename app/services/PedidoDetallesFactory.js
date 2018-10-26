@@ -237,6 +237,11 @@
       return $http.get($rootScope.API + 'monitor-final-user');
     };
 
+    factory.acceptAgreement = function (IdEmpresaUsuarioFinal) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'agreements/accept-agreement/' + IdEmpresaUsuarioFinal);
+    };
+
     return factory;
   };
 

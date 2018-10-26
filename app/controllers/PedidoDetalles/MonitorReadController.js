@@ -10,6 +10,7 @@
     $scope.Contrato = {};
     $scope.Contactos = [];
     $scope.Renovar = {};
+    $scope.terminos = false;
     $scope.SessionCookie = $cookies.getObject('Session');
 
     $scope.init = function () {
@@ -95,6 +96,7 @@
         getOrderPerCustomer(Params);
         if (Params.IdFabricante === 2) getContactUsers();
       }
+      getTerminos($scope.EmpresaSelect);
     };
 
 
@@ -374,6 +376,46 @@
 
     $scope.AgregarContrato = function (pedido) {
       $scope.Renovar.IdContrato = pedido.IdContrato;
+    };
+
+    const getTerminos = function (IdEmpresa) {
+      EmpresasXEmpresasFactory.getAcceptanceAgreementByClient(IdEmpresa)
+        .success(function (result) {
+          if (!result.AceptoTerminosMicrosoft) {
+            $scope.terminos = false;
+          } else {
+            $scope.terminos = true;
+          }
+        })
+        .catch(function (error) {
+          $scope.ShowToast(error.data.message, 'danger');
+          $log.log('data error: ' + error.data.message + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
+          $scope.form.habilitar = true;
+          $scope.ActualizarMonitor();
+          $scope.form.habilitar = false;
+        });
+    };
+
+    $scope.AceptarTerminos = function (IdEmpresa) {
+      PedidoDetallesFactory.acceptAgreement(IdEmpresa)
+      .success(function (result) {
+        if (!result.success) {
+          $scope.ShowToast('Ocurrió un error, favor de contactar a Soporte', 'danger');
+        } else {
+          $scope.ShowToast('Terminos y condiciones aceptados.', 'success');
+          $scope.ActualizarMonitor();
+        }
+        $scope.form.habilitar = true;
+        $scope.ActualizarMonitor();
+        $scope.form.habilitar = false;
+      })
+      .catch(function (error) {
+        $scope.ShowToast(error.data.message, 'danger');
+        $log.log('data error: ' + error.data.message + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
+        $scope.form.habilitar = true;
+        $scope.ActualizarMonitor();
+        $scope.form.habilitar = false;
+      });
     };
 
     $scope.IniciarTourMonitor = function () {

@@ -49,6 +49,24 @@
 			</div>
 		</div>
 	</div>
+	<div class="form-group row" ng-show="(!(EmpresaSelect === null) || (SessionCookie.IdTipoAcceso === 4 || SessionCookie.IdTipoAcceso === 6)) && !terminos">
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="(SessionCookie.IdTipoAcceso === 4 || SessionCookie.IdTipoAcceso === 6) || BuscarProductos.IdFabricante === 1">
+			<div class="alert alert-danger" role="alert">
+				<h4 class="alert-heading">Términos y condiciones</h4>
+				<p>Por disposición de Microsoft se debe de aceptar los Contratos de clientes y mercados de Proveedor de soluciones en la nube de Microsoft para poder seguir consumiendo sus productos. La fecha límite para aceptar los términos es el 06 de noviembre del 2018.
+					En caso de no aceptar los términos, no se podrá hacer ningún movimiento en las licencias actuales ni comprar nuevas.
+				</br></br>
+				<a href="https://docs.microsoft.com/partner-center/agreements" class="alert-link"  target="_blank">
+					*Consultar los Contratos de clientes y mercados de Proveedor de soluciones en la nube de Microsoft
+				</a>
+				</p>
+				<hr>
+				<p class="mb-0">
+					<button type="button" class="btn btn-success" ng-click="AceptarTerminos(EmpresaSelect)">Aceptar términos</button>
+				</p>
+			</div>
+		</div>
+	</div>
 
 	<div class="form-group row" ng-show="SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 7">
 		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -494,6 +512,12 @@
 				</div>
 			</div>
 		</div>
-
+		<div style="visibility: hidden">
+			<div class="md-dialog-container" id="myStaticDialog">
+			  <md-dialog>
+				This is a pre-rendered dialog.
+			  </md-dialog>
+			</div>
+		  </div>
 	</div>
 </div>
