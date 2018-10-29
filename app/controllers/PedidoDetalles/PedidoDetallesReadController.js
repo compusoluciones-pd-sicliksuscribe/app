@@ -315,6 +315,8 @@
         order.Productos.forEach(function (product) {
           if (order.IdPedido === IdPedido && !product.PrimeraCompraMicrosoft) {
             const productPrice = $scope.calculatePriceWithExchangeRate(order, product, 'PrecioUnitario','PrecioNormal');
+            
+            
             if (isTiredProduct(product)) {
               total = total + productPrice;
             } else {
@@ -348,19 +350,18 @@
 
     $scope.calculatePriceWithExchangeRate = function (order, details, value, ValueAnnual) {
       let total = 0;
-      if( order.IdEsquemaRenovacion === 2 && order.IdFabricante === 1 && order.MonedaPago === 'Pesos' && details.MonedaPrecio === 'Dólares' ){
-        details[value]=details[ValueAnnual];
-        total = details[ValueAnnual] * order.TipoCambio*12;
-        details['PrecioRenovacion']=total;
+      if ( order.IdEsquemaRenovacion === 2 && order.IdFabricante === 1 && order.MonedaPago === 'Pesos' && details.MonedaPrecio === 'Dólares' ){
+        details[value] = details[ValueAnnual];
+        total = details[ValueAnnual] * order.TipoCambio * 12;
       }
-      else if( order.IdEsquemaRenovacion === 2 && order.IdFabricante === 1 && order.MonedaPago === 'Dólares' && details.MonedaPrecio === 'Pesos' && details.IdProducto !== ELECTRONIC_SERVICE){
+      else if ( order.IdEsquemaRenovacion === 2 && order.IdFabricante === 1 && order.MonedaPago === 'Dólares'){
         details[value]=details[ValueAnnual];
-        total = details[ValueAnnual] / order.TipoCambio*12;
-        details['PrecioRenovacion']=total;
+        total = (details[value] * 12 );
       }
-      else if (order.MonedaPago === 'Pesos' && details.MonedaPrecio === 'Dólares') {
+      else if ( order.IdEsquemaRenovacion === 1 && order.MonedaPago === 'Pesos' && details.MonedaPrecio === 'Dólares' details.IdProducto !== ELECTRONIC_SERVICE) {
         total = details[value] * order.TipoCambio;
-      } else if (order.MonedaPago === 'Dólares' && details.MonedaPrecio === 'Pesos' && details.IdProducto !== ELECTRONIC_SERVICE) {
+      }
+      else if ( order.IdEsquemaRenovacion === 1 && order.MonedaPago === 'Dólares'  && details.IdProducto !== ELECTRONIC_SERVICE) {
         total = details[value] / order.TipoCambio;
       } else {
         total = details[value];
@@ -368,9 +369,9 @@
       return total;
     };
 
-    $scope.calcularProductTotal = function (order, product, value,ValueAnnual) {
+    $scope.calcularProductTotal = function (order, product, value, ValueAnnual) {
 
-      const priceWithExchangeRate = $scope.calculatePriceWithExchangeRate(order, product, value,ValueAnnual);
+      const priceWithExchangeRate = $scope.calculatePriceWithExchangeRate(order, product, value, ValueAnnual);
       if (isTiredProduct(product)) return priceWithExchangeRate;
       return priceWithExchangeRate * product.Cantidad;
     };
