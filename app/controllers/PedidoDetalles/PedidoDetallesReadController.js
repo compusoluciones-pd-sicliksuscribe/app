@@ -350,18 +350,17 @@
 
     $scope.calculatePriceWithExchangeRate = function (order, details, value, ValueAnnual) {
       let total = 0;
-      if ( order.IdEsquemaRenovacion === 2 && order.IdFabricante === 1 && order.MonedaPago === 'Pesos' && details.MonedaPrecio === 'Dólares' ){
+      if (order.IdEsquemaRenovacion === 2 && order.IdFabricante === 1 && order.MonedaPago === 'Pesos' && details.MonedaPrecio === 'Dólares') {
         details[value] = details[ValueAnnual];
-        total = details[ValueAnnual] * order.TipoCambio * 12;
+        total = details[value] * order.TipoCambio * 12;
       }
-      else if ( order.IdEsquemaRenovacion === 2 && order.IdFabricante === 1 && order.MonedaPago === 'Dólares'){
-        details[value]=details[ValueAnnual];
-        total = (details[value] * 12 );
+      else if (order.IdEsquemaRenovacion === 2 && order.IdFabricante === 1 && order.MonedaPago === 'Dólares'){
+        details[value] = details[ValueAnnual];
+        total = (details[value] * 12);
       }
-      else if ( order.IdEsquemaRenovacion === 1 && order.MonedaPago === 'Pesos' && details.MonedaPrecio === 'Dólares' details.IdProducto !== ELECTRONIC_SERVICE) {
+      else if (order.IdEsquemaRenovacion === 1 && order.MonedaPago === 'Pesos' && details.MonedaPrecio === 'Dólares' && details.IdProducto !== ELECTRONIC_SERVICE) {
         total = details[value] * order.TipoCambio;
-      }
-      else if ( order.IdEsquemaRenovacion === 1 && order.MonedaPago === 'Dólares'  && details.IdProducto !== ELECTRONIC_SERVICE) {
+      } else if (order.IdEsquemaRenovacion === 1 && order.MonedaPago === 'Dólares' && details.IdProducto !== ELECTRONIC_SERVICE) {
         total = details[value] / order.TipoCambio;
       } else {
         total = details[value];
