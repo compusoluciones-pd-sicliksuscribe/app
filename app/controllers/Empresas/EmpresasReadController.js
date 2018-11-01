@@ -59,6 +59,7 @@
       EmpresasFactory.getEmpresa($scope.Empresa.Busqueda)
         .success(function (Empresas) {
           if (Empresas) {
+            console.log(Empresas);
             try {
               if (Empresas[0].Success == false || Empresas.length == null || Empresas.length == 'undefined') {
                 $scope.Empresas = null;
@@ -123,6 +124,23 @@
         });
     };
 
+    $scope.ActualizarIdNivelDistribuidorMicrosoft = function (Empresa) {
+      console.log(JSON.stringify(Empresa));
+      var parametros = { IdEmpresa: Empresa.IdEmpresa, IdNivelDistribuidor: Empresa.IdNivelDistribuidorMicrosoft };
+      EmpresasFactory.putActualizarNivelDistribuidorMicrosoft(parametros)
+        .success(function (result) {
+          if (result.success) {
+            $scope.ShowToast(result.message, 'success');
+          } else {
+            $scope.ShowToast(result.message, 'danger');
+          }
+        }
+      )
+        .error(function (data, status, headers, config) {
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+      };
+
     $scope.ActualizarAgentes = function (Empresa) {
       var parametros = { IdEmpresa: Empresa.IdEmpresa, AgenteMicrosoft: Empresa.AgenteMicrosoft, AgenteAutodesk: Empresa.AgenteAutodesk };
       if (typeof Empresa.AgenteMicrosoft === 'undefined' || typeof Empresa.AgenteAutodesk === 'undefined') {
@@ -145,7 +163,7 @@
 
     $scope.cambiarBoton = function (Empresa) {
       Empresa.cambiaAgente = true;
-    };
+    };    
   };
 
   EmpresasReadController.$inject = ['$scope', '$log', '$location', '$cookies', 'EmpresasFactory', 'NivelesDistribuidorFactory'];
