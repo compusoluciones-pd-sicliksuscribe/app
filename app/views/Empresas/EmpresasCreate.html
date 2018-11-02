@@ -14,7 +14,7 @@
             <div class="form-group col-xs-12 col-sm-4 col-md-4 col-lg-4">
                 <div class="pull-rigth">
                     <label>Nombre de la Empresa *</label>
-                    <input name="NombreEmpresa" type="text" ng-model="Empresa.NombreEmpresa" class="form-control" placeholder="" size="255" ng-maxlength="255"
+                    <input name="NombreEmpresa" type="text" ng-model="Empresa.NombreEmpresa" class="form-control" placeholder="" 
                     required="" />
                     <b style="color:red" ng-show="frm.NombreEmpresa.$invalid && !frm.NombreEmpresa.$pristine" class="help-block">El nombre de empresa es requerido.</b>
                 </div>
@@ -24,7 +24,7 @@
                 <div class="pull-rigth">
                     <label>Dominio Microsoft (Obligatorio para compras con Microsoft).</label>
                     <div class="input-group">                                            
-                        <input name="DominioMicrosoft" type="text" ng-model="Empresa.DominioMicrosoft" ng-pattern="/^[a-zA-Z0-9]*$/" ng-change="change()"
+                        <input name="DominioMicrosoft" type="text" ng-model="Empresa.DominioMicrosoft"  ng-change="change()"
                         class="form-control" ng-model-onblur ng-model-options="{ updateOn: 'blur' }" placeholder="" size="255" ng-maxlength="255" />
 
                         <span class="input-group-addon">.onmicrosoft.com</span>        
@@ -169,7 +169,7 @@
             <div class="col-xs-0 col-sm-0 col-md-2 col-lg-2">
                 <div class="form-group">
                     <!--ng-disabled="frm.$invalid ||  Empresa.Formulario"-->
-                    <button type="submit" ng-click="EmpresaCreate()" class="btn btn-primary btn-block">Aceptar</button>
+                    <button type="submit" ng-click="EmpresaCreate()" class="btn btn-primary btn-block" ng-if="aceptarButton">Aceptar</button>
                     <br/><b style="color:red">{{AlertaDominio}}</b>
                 </div>
             </div>
