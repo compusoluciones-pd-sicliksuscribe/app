@@ -188,9 +188,8 @@
                                             </div>
                                             <br>                                
                                             <label style="color:red" for="DominioMicrosoft" ng-show="Producto.IdFabricante === 1 && usuariosSinDominio[Producto.IdEmpresaUsuarioFinal] === false">*No cuentas con un Dominio de Microsoft para este producto.</label>&nbsp;                                            
-                                            <p style="color:red" ng-hide="Producto.IdFabricante === 1 || Producto.TieneContrato">*No cuentas con un contrato para este producto.</p>                                                                                    
-                                            <label for="contrato" ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2 && Producto.TieneContrato">* Contrato</label>
-                                            <div class="input-group" ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2 && Producto.TieneContrato && Producto.IdAccionAutodesk === 1">
+                                            <label for="contrato" ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2">* Contrato</label>
+                                                    <div class="input-group" ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2 && Producto.IdAccionAutodesk === 1">
                                                 <span class="input-group-addon green white">
                                                     <span class="glyphicon glyphicon-file"></span>
                                                 </span>
