@@ -314,9 +314,7 @@
       $scope.PedidoDetalles.forEach(function (order) {
         order.Productos.forEach(function (product) {
           if (order.IdPedido === IdPedido && !product.PrimeraCompraMicrosoft) {
-            const productPrice = $scope.calculatePriceWithExchangeRate(order, product, 'PrecioUnitario','PrecioNormal');
-            
-            
+            const productPrice = $scope.calculatePriceWithExchangeRate(order, product, 'PrecioUnitario', 'PrecioNormal');
             if (isTiredProduct(product)) {
               total = total + productPrice;
             } else {
@@ -331,11 +329,11 @@
     };
 
     $scope.calcularIVA = function (IdPedido) {
-          let total = $scope.calcularSubTotal(IdPedido);
-          if ($scope.Distribuidor.ZonaImpuesto === 'Normal') total = 0.16 * total;
-          if ($scope.Distribuidor.ZonaImpuesto === 'Nacional') total = 0.16 * total;
-          if ($scope.Distribuidor.ZonaImpuesto === 'Frontera') total = 0.11 * total;
-    return total;
+      let total = $scope.calcularSubTotal(IdPedido);
+      if ($scope.Distribuidor.ZonaImpuesto === 'Normal') total = 0.16 * total;
+      if ($scope.Distribuidor.ZonaImpuesto === 'Nacional') total = 0.16 * total;
+      if ($scope.Distribuidor.ZonaImpuesto === 'Frontera') total = 0.11 * total;
+      return total;
     };
 
     $scope.calcularTotal = function (IdPedido) {
@@ -348,30 +346,35 @@
       return total;
     };
 
-    $scope.calculatePriceWithExchangeRate = function (order, details, value, ValueAnnual) {
+    const validateMicrosoftAnnual = function (order, details) {
       let total = 0;
-      if (order.IdEsquemaRenovacion === 2 && order.IdFabricante === 1 && order.MonedaPago === 'Pesos' && details.MonedaPrecio === 'Dólares') {
-        details[value] = details[ValueAnnual];
-        total = details[value] * order.TipoCambio * 12;
+      if (order.IdEsquemaRenovacion === 2 && order.IdFabricante === 1 && order.MonedaPago === 'Dólares') {
+        total = (details['PrecioNormal']) * 12;
       }
-      else if ( order.IdEsquemaRenovacion === 2 && order.IdFabricante === 1 && order.MonedaPago === 'Dólares'){
-        details[value] = details[ValueAnnual];
-        total = (details[value] * 12);
-      }
-      else if ( order.IdEsquemaRenovacion === 1 && order.MonedaPago === 'Pesos' && details.MonedaPrecio === 'Dólares' && details.IdProducto !== ELECTRONIC_SERVICE) {
-        total = details[value] * order.TipoCambio;
-      }
-      else if ( order.IdEsquemaRenovacion === 1 && order.MonedaPago === 'Dólares' && details.IdProducto !== ELECTRONIC_SERVICE) {
-        total = details[value] / order.TipoCambio;
-      } else {
-        total = details[value];
+
+      if (order.IdEsquemaRenovacion === 2 && order.IdFabricante === 1 && order.MonedaPago === 'Pesos') {
+        total = details['PrecioNormal'] * order.TipoCambio * 12;
       }
       return total;
     };
 
-    $scope.calcularProductTotal = function (order, product, value, ValueAnnual) {
+    $scope.calculatePriceWithExchangeRate = function (order, details, value) {
+      let total = 0;
+      if (order.MonedaPago === 'Pesos' && details.MonedaPrecio === 'Dólares') {
+        total = details[value] * order.TipoCambio;
+      } else if (order.MonedaPago === 'Dólares' && details.MonedaPrecio === 'Pesos' && details.IdProducto !== ELECTRONIC_SERVICE) {
+        total = details[value] / order.TipoCambio;
+      } else {
+        total = details[value];
+      }
+      if (order.IdEsquemaRenovacion === 2 && order.IdFabricante === 1) {
+        total = validateMicrosoftAnnual(order, details);
+      }
+      return total;
+    };
 
-      const priceWithExchangeRate = $scope.calculatePriceWithExchangeRate(order, product, value, ValueAnnual);
+    $scope.calcularProductTotal = function (order, product, value) {
+      const priceWithExchangeRate = $scope.calculatePriceWithExchangeRate(order, product, value);
       if (isTiredProduct(product)) return priceWithExchangeRate;
       return priceWithExchangeRate * product.Cantidad;
     };

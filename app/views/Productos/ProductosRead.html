@@ -76,7 +76,7 @@
                         </div>
 
                         <div class="form-group col-xs-0 col-sm-0 col-md-6 col-lg-6">
-                               
+
                             <div>
                                 <h3><b>{{Producto.Nombre}}</b></h3>
                             </div>
@@ -87,26 +87,20 @@
                             <br>
                             <label for="">Tipo de producto:</label> {{Producto.Tipo}}
                             <br>
-                            <label for="" >Esquema de renovación:</label> {{Producto.EsquemaRenovacion}}
+                            <label for="">Esquema de renovación:</label> {{Producto.EsquemaRenovacion}}
                             <br>
                             <label for="">Artículo Id:</label> {{Producto.IdERP}}
                             <br>
                             <label for="">Última actualización del producto:</label> {{Producto.FechaActualizado | date:'d/MM/yyyy
                             hh:mm a'}}
-
                             <br><br>
 
                             <h4><b>Precio del periodo</b></h4>
 
-                            <div ng-hide="Producto.EsquemaRenovacion !=='Cada día 22 del mes'">
-                                    <label   for="">Duración del periodo: </label> {{Producto.FechaInicioSuscripcion | date:'d/MM/yyyy'}}
-                                    <b> - </b> {{  Producto.FechaFinSuscripcion| date:'yyyy-MM-dd'}}
-                                </div>
-                                
-                            <div  ng-hide="Producto.EsquemaRenovacion ==='Cada día 22 del mes' " >
-                                    <label for="">Duración del periodo: </label> {{Producto.FechaInicioSuscripcion | date:'d/MM/yyyy'}}
-                                    <b> - </b> {{ CambiarFechaRenovacion(Producto)}}
-                                </div>
+                            <div ng-show="Producto.IdTipoProducto == 2">
+                                <label for="">Duración del periodo: </label> {{Producto.FechaInicioSuscripcion | date:'d/MM/yyyy'}}
+                                <b> - </b> {{Producto.FechaFinSuscripcion | date:'d/MM/yyyy'}}
+                            </div>
 
                             <label for="" title="" ng-hide='Producto.IdFabricante === 5 && Product.IdTipoProducto !== 4'>
                             <div ng-show="Producto.IdTipoProducto == 1">Precio por servicio:</div>
@@ -125,7 +119,7 @@
                                 <b style="color:#68953B;">{{Producto.PorcentajeDescuento}}% Desc.</b>
                             </span>
 
-                            <div ng-show="Producto.IdTipoProducto == 2 && Producto.IdFabricante == 1" ng-hide="Producto.EsquemaRenovacion !=='Cada día 22 del mes'" >
+                            <div ng-show="Producto.IdTipoProducto == 2 && Producto.IdFabricante == 1 && Producto.IdEsquemaRenovacion == '01'">
                                 <label for="" title="Precio prorrateado">Precio prorrateado del primer periodo:</label> {{Producto.PrecioProrrateo
                                 | currency}} {{Producto.MonedaPrecio}}
                             </div>
@@ -191,7 +185,7 @@
                                                     <option ng-selected="true" value="">Selecciona un cliente...</option>
                                                 </select>
                                             </div>
-                                            <br> 
+                                            <br>                                
                                             <label style="color:red" for="DominioMicrosoft" ng-show="Producto.IdFabricante === 1 && usuariosSinDominio[Producto.IdEmpresaUsuarioFinal] === false">*No cuentas con un Dominio de Microsoft para este producto.</label>&nbsp;                                            
                                             <p style="color:red" ng-hide="Producto.IdFabricante === 1 || Producto.TieneContrato">*No cuentas con un contrato para este producto.</p>                                                                                    
                                             <label for="contrato" ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2 && Producto.TieneContrato">* Contrato</label>
@@ -204,9 +198,6 @@
                                                     <option ng-disabled="" ng-selected="true" ng-value="0">Nuevo contrato...</option>
                                                 </select>
                                             </div>
-                                            <br>
- 
-                                            
                                             <div ng-hide="Producto.IdFabricante !== 1 || Producto.IdTipoProducto === 6" >
                                                 <label for="IdEmpresaUsuarioFinal">* Tipo de renovación</label> (Mensual/Anual) 
                                                 <div class="input-group" style="width:100%;" >
@@ -215,13 +206,11 @@
                                                         </span>
                                                     <select id="esquemaModelo" name="esquemaModelo" class="form-control selectOption EsquemaRenovacion" ng-model="esquemaRenovacionModelo.id"
                                                         ng-options="esquema.id as esquema.esquema for esquema in EsquemaRenovacion" ng-show="SessionCookie.IdTipoAcceso == 2"
-                                                        ng-change="CambiarFechaRenovacion(Producto);" title="Selecciona un tipo de renovaion para tu producto" required>
+                                                        ng-change="CambiarFechaRenovacion(Producto);" title="Selecciona un tipo de renovaion para tu producto" ng-required="Producto.IdFabricante === 1 && Producto.IdTipoProducto !== 6">
                                                         <option ng-selected="true" value="">Selecciona un tipo de renovación...</option>
                                                     </select>
                                                 </div>
                                             </div>
-                                            <br> 
-                                            
                                             <div class="input-group" ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2 && Producto.TieneContrato && Producto.IdAccionAutodesk === 2">
                                                 <span class="input-group-addon green white">
                                                         <span class="glyphicon glyphicon-file"></span>
@@ -266,20 +255,18 @@
 
                                                 <br>
                                             </div>
-                                            <div style="float:right!important;" ng-if="Producto.EsquemaRenovacion === 'Cada día 22 del mes'">
-                                            <label for="" title="Cantidad por precio">Total:</label>
-                                                <b>
-                                                    {{estimateTotal(Producto, Producto.Cantidad) | currency }} {{Producto.MonedaPago}}
-                                                </b>
-                                            </div>
-                                            <div style="float:right!important;" ng-if="Producto.EsquemaRenovacion !== 'Cada día 22 del mes'">
-                                                <label for="" title="Cantidad por precio">Total:</label>
-                                                <b>
-                                                    {{estimateTotalAnnual(Producto, Producto.Cantidad) | currency }} {{Producto.MonedaPago}}
-                                                </b>
-                                            </div>
-                            </div>
+
                                         </div>
+
+
+                                        <div style="float:right!important;">
+                                            <label for="" title="Cantidad por precio">Total:</label>
+                                            <b>
+                                                {{estimateTotal(Producto, Producto.Cantidad) | currency }} {{Producto.MonedaPago}}
+                                            </b>
+                                        </div>
+                                </div>
+                            </div>
 
                             <div class="row">
                                 <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -287,12 +274,19 @@
                                         <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
                                             <button type="button" ng-show="0" ng-click="AgregarGuardados(Producto.IdProducto)" class="btn btn-link btn-block favoriteOption"><span class="glyphicon glyphicon-star"></span> Agregar a favoritos</span></button>
                                         </div>
+                                        <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-show="((terminos) && (Producto.IdFabricante === 1))">
+                                            <p >* Primero debes de aceptar términos y condiciones</p>  
+                                        </div>
                                         <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-show="SessionCookie.IdTipoAcceso === 1 || SessionCookie.IdTipoAcceso === 2 || SessionCookie.IdTipoAcceso === 3 || SessionCookie.IdTipoAcceso === 4">
                                                 <button  ng-click="updateEnterprise(Producto)" ng-show="Producto.IdFabricante === 1 && usuariosSinDominio[Producto.IdEmpresaUsuarioFinal] === false" class="btn btn-primary updateDomain" style="float: center;">Asignar Dominio Microsoft</button>
-                                            <button class="btn btn-success addOption" ng-click="previousISVValidate(Producto)" ng-disabled="!frmCantidad.$valid || Producto.IdFabricante === 1 && usuariosSinDominio[Producto.IdEmpresaUsuarioFinal] === false" style="float: center;">Agregar al carrito</md-button>       
+                                            <button class="btn btn-success addOption" ng-click="previousISVValidate(Producto)" ng-disabled="!frmCantidad.$valid || Producto.IdFabricante === 1 && usuariosSinDominio[Producto.IdEmpresaUsuarioFinal] === false" style="float: center;" ng-hide="((terminos) && (Producto.IdFabricante === 1))">Agregar al carrito</md-button>
+                                            <button class="btn btn-danger addOption" style="float: center;" data-toggle="modal" data-target="#terminosModal" ng-show="((terminos) && (Producto.IdFabricante === 1))">Aceptar términos</md-button>
                                         </div>
+
+                                        
                                     </div>
                                 </div>
+                            </div>
 
                                     </form>
 
@@ -303,7 +297,29 @@
             </td>
         </tr>
     </table>
-
+    <div id="terminosModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Términos y condiciones</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Por disposición de Microsoft se debe de aceptar los Contratos de clientes y mercados de Proveedor de soluciones en la nube de Microsoft para poder seguir consumiendo sus productos. La fecha límite para aceptar los términos es el 06 de noviembre del 2018.
+                        En caso de no aceptar los términos, no se podrá hacer ningún movimiento en las licencias actuales ni comprar nuevas.
+                    </br></br>
+                    <a href="https://docs.microsoft.com/partner-center/agreements" class="alert-link"  target="_blank">
+                        *Consultar los Contratos de clientes y mercados de Proveedor de soluciones en la nube de Microsoft
+                    </a>
+                    </p>
+                    <hr>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" ng-click="AceptarTerminos()" data-dismiss="modal">Aceptar términos</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="form-group row">
         <div class="text-center">
 

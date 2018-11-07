@@ -91,6 +91,7 @@
     
     if ($scope.esquemaRenovacionModelo.id === 02 || $scope.esquemaRenovacionModelo.id === '02'){
       var fecha = new Date();
+      Producto.FechaFinSuscripcion = fecha.getDate() + "/" + (fecha.getMonth() +1) + "/" +((fecha.getFullYear()+1));
       Producto.EsquemaRenovacion =fecha.getDate() + "/" + (fecha.getMonth() +1) + "/" +((fecha.getFullYear()+1));
       Producto.IdEsquemaRenovacion='02';
     }
@@ -293,9 +294,7 @@
 
 
     $scope.estimateTotalAnnual = function (product, quantity) {
-      if (product.tiers) {
-        return estimateTieredTotal(product.tiers, quantity);
-      }
+
       const price = product.PorcentajeDescuento > 0 ? product.PrecioDescuento : product.PrecioNormal;
       const estimatedTotal = ((price * quantity)*12) || 0.00;
 
@@ -305,6 +304,10 @@
     $scope.estimateTotal = function (product, quantity) {
       if (product.tiers) {
         return estimateTieredTotal(product.tiers, quantity);
+      }
+
+      if (product.IdEsquemaRenovacion === '02') {
+        return $scope.estimateTotalAnnual(product,quantity);
       }
       const price = product.PorcentajeDescuento > 0 ? product.PrecioDescuento : product.PrecioProrrateo;
       const estimatedTotal = price * quantity || 0.00;
