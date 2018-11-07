@@ -379,7 +379,7 @@
           } else {
             NuevoProducto.IdAccionAutodesk = 3;
           }
-          if (Producto.IdPedidoContrato === 0) {
+          if (Producto.IdPedidoContrato === 0) { // Cuando se elige la acción de nuevo contrato y existen contratos adicionales disponibles
             NuevoProducto.IdAccionAutodesk = 1;
           }
           return postPedidoAutodesk(NuevoProducto);
