@@ -37,7 +37,6 @@
     };
 
     factory.getCategorysReport = function () {
-      console.log('algo');
       factory.refreshToken();
       return $http.get($rootScope.API + 'category-support');
     };

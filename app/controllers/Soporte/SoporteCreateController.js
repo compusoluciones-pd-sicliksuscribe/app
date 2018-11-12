@@ -8,8 +8,6 @@
       FabricantesFactory.getFabricantes()
       .success(function (Fabricantes) {
         $scope.selectFabricantes = Fabricantes;
-        
-        console.log(JSON.stringify(Fabricantes));
       })
       .error(function (data, status, headers, config) {
         $scope.ShowToast('No pudimos cargar la lista de fabricantes, por favor intenta de nuevo más tarde.', 'danger');
