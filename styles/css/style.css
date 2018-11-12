@@ -419,8 +419,15 @@ option {
     margin-top: 110px; }
 
   #hamburguer {
+    position: absolute;
     float: left;
-    margin-left: 5px; } }
+    margin-left: 5px; }
+
+  #menu-desplegable {
+    position: absolute;
+    width: 100%;
+    top: 82px;
+    z-index: 5; } }
 @media screen and (min-width: 991px) and (max-width: 1500px) {
   .distintivo {
     display: none !important; }
@@ -448,7 +455,8 @@ option {
     display: none; }
 
   .navbar-default .navbar-brand {
-    padding: 0 !important; }
+    padding: 0 !important;
+    margin-bottom: 40px; }
 
   .home {
     margin-top: 10px;
