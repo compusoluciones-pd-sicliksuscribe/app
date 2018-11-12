@@ -385,6 +385,27 @@
           return postPedidoAutodesk(NuevoProducto);
         });
       }
+      if (Producto.IdFabricante !== 2) {
+        if (!NuevoProducto.IdAccionAutodesk) delete NuevoProducto.IdAccionAutodesk;
+        PedidoDetallesFactory.postPedidoDetalle(NuevoProducto)
+        .success(function (PedidoDetalleResult) {
+          if (PedidoDetalleResult.success === 1) {
+            $scope.ShowToast(PedidoDetalleResult.message, 'success');
+            $scope.ActualizarMenu();
+            $scope.addPulseCart();
+            setTimeout($scope.removePulseCart, 9000);
+          } else {
+            $scope.ShowToast(PedidoDetalleResult.message, 'danger');
+          }
+        })
+        .error(function (data, status, headers, config) {
+          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+
+          $scope.ShowToast('No pudimos agregar este producto a tu carrito de compras, por favor intenta de nuevo más tarde.', 'danger');
+
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+      }
     };
 
     const postPedidoAutodesk = function (NuevoProducto) {
