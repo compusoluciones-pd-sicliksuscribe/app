@@ -77,7 +77,6 @@
 
     $scope.init = function () {
       $scope.CheckCookie();
-
       FabricantesFactory.getFabricantes()
         .success(function (Fabricantes) {
           $scope.selectFabricantes = Fabricantes;

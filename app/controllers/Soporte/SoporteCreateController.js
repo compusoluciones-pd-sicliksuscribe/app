@@ -1,9 +1,42 @@
 (function () {
-  var SoporteCreateController = function ($scope, $log, $cookies, $location, $uibModal, $filter, SoporteFactory, $routeParams) {
+  var SoporteCreateController = function ($scope, $log, $cookies, $location, $uibModal, $filter, FabricantesFactory, SoporteFactory, $routeParams) {
+
+    $scope.selectFabricantes = {};
+    $scope.selectCategorias = {};
+
+    const obtenerFabricantes = function () {
+      FabricantesFactory.getFabricantes()
+      .success(function (Fabricantes) {
+        $scope.selectFabricantes = Fabricantes;
+        
+        console.log(JSON.stringify(Fabricantes));
+      })
+      .error(function (data, status, headers, config) {
+        $scope.ShowToast('No pudimos cargar la lista de fabricantes, por favor intenta de nuevo más tarde.', 'danger');
+      });
+    };
+
+    const obtenerCategorias = function () {
+      return SoporteFactory.getCategorysReport()
+          .success(function (Categorias) {
+            if (Categorias.success === 1) {
+              $scope.selectCategorias = Categorias.data;
+            }
+          })
+          .error(function (data, status, headers, config) {
+            $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+
+            $scope.ShowToast('No pudimos enviar tu solicitud, por favor intenta de nuevo más tarde.', 'danger');
+
+            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          });
+    };
 
     $scope.init = function () {
-
+      obtenerFabricantes();
+      obtenerCategorias();
     };
+
     $scope.init();
 
     $scope.SolicitarSoporte = function () {
@@ -29,7 +62,7 @@
       $location.path('/monitor-soporte');
     };
   };
-  SoporteCreateController.$inject = ['$scope', '$log', '$cookies', '$location', '$uibModal', '$filter', 'SoporteFactory', '$routeParams'];
+  SoporteCreateController.$inject = ['$scope', '$log', '$cookies', '$location', '$uibModal', '$filter', 'FabricantesFactory', 'SoporteFactory', '$routeParams'];
 
   angular.module('marketplace').controller('SoporteCreateController', SoporteCreateController);
 }());

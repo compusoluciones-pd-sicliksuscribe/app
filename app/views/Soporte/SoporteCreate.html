@@ -1,62 +1,75 @@
-<div class="container">
-    
-    <h2>Solicitar soporte</h2>
-    <br>
-    <p>Describe tu duda o problema.</p>
-    <form name="frm" ng-swipe-right="">                
-        <hr>
+<div class="container" >
+    <div class="col-md-12 col-md-offset-4">.
         
-        <div class="form-group row">
-            
-            <div class="form-group col-xs-12 col-sm-4 col-md-6 col-lg-6">
-                <div class="pull-rigth">
-                    <label>Título *</label>
-                    <input name="Titulo" type="text" ng-model="Soporte.Titulo" class="form-control" placeholder="" size="255" ng-maxlength="255"
-                    required="" />
-                    <b style="color:red" ng-show="frm.Titulo.$invalid && !frm.Titulo.$pristine" class="help-block">El Título es requerido ó ha sobrepasado el limite de caracteres.</b>
-                </div>
-            </div>
-
-        </div>
-
-
-        <div class="form-group row">
-            <div class="form-group col-xs-12 col-sm-4 col-md-7 col-lg-7">
-
-                <div class="pull-rigth">
-                    <label>Descripción *</label>
-                    <textarea name="Descripcion" type="text" ng-model="Soporte.Descripcion" class="form-control" placeholder="" size="255" ng-maxlength="255"
-                    required="" />
-                    <b style="color:red" ng-show="frm.Descripcion.$invalid && !frm.Descripcion.$pristine" class="help-block">La Descripción es requerida ó ha sobrepasado el limite de caracteres..</b>
-                </div>
-
-            </div>
-  
-        </div>
-
-
+        <h2>Solicitar soporte</h2>
         <br>
+        <form name="frm" ng-swipe-right="">                
+            <hr>
+            
+            <div class="form-group row">
+                
+                <div class="form-group col-xs-12 col-sm-4 col-md-6 col-lg-6 ">
+                    <div class="pull-rigth">
+                        <label></label>
+                        <input name="Titulo" type="text" ng-model="Soporte.Titulo" class="form-control" placeholder="Título *" size="255" ng-maxlength="255"
+                        required="" />
+                    </div>
+                </div>
 
-        <div class="form-group row">
-            <div class="form-group col-xs-12 col-sm-12 col-md-3 col-lg-3">                
             </div>
-            <div class="col-xs-0 col-sm-0 col-md-2 col-lg-2">
-                <div class="form-group">                
-                    <button type="submit" ng-click="SolicitarSoporte()" class="btn btn-primary btn-block">Enviar</button>                    
+            <!-- -->
+            
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                
+            <div class="form-group col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                    <select name="IdFabricante" placeholder="Descripción *" class="form-control filterOption" ng-model="Soporte.IdFabricante" ng-options="Fabricante.IdFabricante as Fabricante.Nombre for Fabricante in selectFabricantes"
+                        ng-change=";">
+                        <option value="">Fabricante</option> 
+                    </select>
+                </div>
+
+            <div class="form-group col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                    <select name="IdCategoria"  class="form-control filterOption" ng-model="Soporte.IdCategoria" ng-options="+(Fabricante.IdCategoriasReportes) as Categoria.Categorias for Categoria in selectCategorias">
+                    <option value="">Categoría</option>    
+                    </select>
+                </div>
+                </div>
+            <!--  fin-->
+
+            <div class="form-group row">
+                <div class="form-group col-xs-12 col-sm-4 col-md-6 col-lg-6">
+
+                    <div class="pull-rigth">
+                        <label></label>
+                        <textarea name="Descripcion" type="text" ng-model="Soporte.Descripcion" class="form-control" placeholder="Descripción *" size="255" ng-maxlength="255"
+                        required="" />
+                    </div>
+
+                </div>
+    
+            </div>
+
+
+            <br>
+
+            <div class="form-group row  col-md-offset-2" >
+                <div class="col-xs-0 col-sm-0 col-md-2 col-lg-2">
+                    <div class="form-group">                
+                        <button type="submit" ng-click="SolicitarSoporte()" class="btn btn-primary btn-block">Enviar</button>                    
+                    </div>
+                </div>
+                <div class="col-xs-0 col-sm-0 col-md-2 col-lg-2">
+                    <div class="form-group">
+                        <button type="button" ng-click="Cancelar()" ng-disabled="Empresa.Formulario" class="btn btn-warning btn-block">Cancelar</button>
+                    </div>
                 </div>
             </div>
-            <div class="col-xs-0 col-sm-0 col-md-2 col-lg-2">
-                <div class="form-group">
-                    <button type="button" ng-click="Cancelar()" ng-disabled="Empresa.Formulario" class="btn btn-warning btn-block">Cancelar</button>
-                </div>
+
+            <div class="form-group row">
+                <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
+                <div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div>
             </div>
-        </div>
 
-        <div class="form-group row">
-            <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
-            <div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div>
-        </div>
-
-    </form>
-
+        </form>
+    </div>
 </div>
