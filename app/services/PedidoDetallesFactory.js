@@ -242,6 +242,12 @@
       return $http.post($rootScope.API + 'agreements/accept-agreement/' + IdEmpresaUsuarioFinal);
     };
 
+    factory.idOrderComparePaymentCurrency = function (params) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'previouslyOrderToCompare', params);
+      //  return info;
+    };
+
     return factory;
   };
 
