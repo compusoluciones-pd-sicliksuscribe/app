@@ -6,6 +6,7 @@
 
     $scope.AceptaPedido = function () {
       deleteCookie('orderIdsCookie');
+      deleteCookie('compararPedidosAnteriores');
       $location.path('/');
     };
 
