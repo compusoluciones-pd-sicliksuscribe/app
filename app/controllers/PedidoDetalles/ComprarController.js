@@ -224,18 +224,6 @@
       return total;
     };
 
-    const validateMicrosoftAnnual = function (order, details) {
-      let total = 0;
-      if (order.IdEsquemaRenovacion === 2 && order.IdFabricante === 1 && order.MonedaPago === 'Dólares') {
-        total = (details['PrecioNormal']) * 12;
-      }
-
-      if (order.IdEsquemaRenovacion === 2 && order.IdFabricante === 1 && order.MonedaPago === 'Pesos') {
-        total = details['PrecioNormal'] * order.TipoCambio * 12;
-      }
-      return total;
-    };
-
     $scope.calculatePriceWithExchangeRate = function (order, details, value) {
       let total = 0;
       if (order.MonedaPago === 'Pesos' && details.MonedaPrecio === 'Dólares') {
@@ -244,9 +232,6 @@
         total = details[value] / order.TipoCambio;
       } else {
         total = details[value];
-      }
-      if (order.IdEsquemaRenovacion === 2 && order.IdFabricante === 1 && details.IdProducto !== ELECTRONIC_SERVICE) {
-        total = validateMicrosoftAnnual(order, details);
       }
       return total;
     };
