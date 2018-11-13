@@ -120,8 +120,8 @@
 					<div class="form-group">
 						<label for="IdEmpresaUsuarioFinal">Usuario final:</label> {{ pedido.NombreEmpresa }} <br>
 						<label>Marca de los productos:</label> {{ pedido.NombreFabricante }} <br>
-						<label>Duración del periodo:</label> del {{ pedido.FechaInicio }} al {{ pedido.FechaFin }} <br>
-						<label>Renovación del periodo:</label> {{ pedido.NombreEsquemaRenovacion }}
+						<label >Duración del periodo: del {{ pedido.FechaInicio }} al {{ pedido.FechaFin | date:'yyyy-MM-dd'}}</label> <br>						
+						<label>Renovación del periodo:</label> {{ pedido.NombreEsquemaRenovacion }}						
 						<div ng-if="pedido.IdFabricante === 2">
 							<label>Contrato: </label> {{ pedido.ContratoBaseAutodesk || 'Nuevo' }} <br>
 							<label>Tipo de orden: </label>
@@ -132,13 +132,16 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
-					<div class="form-group">
-						<label>Forma de pago:</label> {{ pedido.Forma }} <br>
-						<label>Tipo de cambio:</label> {{ pedido.TipoCambio | currency: "$":4 }} {{ pedido.MonedaPago }}<br>
-						<label>Subtotal:</label> {{ calcularSubTotal(pedido.IdPedido) | currency }} {{ pedido.MonedaPago }} <br>
-						<label>IVA:</label> {{ calcularIVA(pedido.IdPedido) | currency }} {{ pedido.MonedaPago }}
-					</div>
+				<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3" class="form-group" >
+
+					
+						<div class="form-group">
+							<label>Forma de pago:</label> {{ pedido.Forma }} <br>
+							<label>Tipo de cambio:</label> {{ pedido.TipoCambio | currency: "$":4 }} {{ pedido.MonedaPago }}<br>
+							<label >Subtotal: {{ calcularSubTotal(pedido.IdPedido) | currency }} {{ pedido.MonedaPago }} </label><br>
+							<label>IVA: {{ calcularIVA(pedido.IdPedido) | currency }} {{ pedido.MonedaPago }}</label>
+						
+						</div>
 				</div>
 
 				<div class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
@@ -148,7 +151,8 @@
 				<div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 pull-right" >
 					<div class="form-group">
 						<label>Total del pedido:</label>
-						<h5>{{ calcularTotal(pedido.IdPedido) | currency }} {{ pedido.MonedaPago }} </h5>
+						<h5 >{{ calcularTotal(pedido.IdPedido) | currency }} {{ pedido.MonedaPago }} </h5>
+						
 						<br>
 						<div style="color:red;" ng-show="!pedido.hasCredit && isPayingWithCSCredit()">
 							<span class="glyphicon glyphicon-warning-sign"></span> <b>Cliente sin crédito suficiente.</b>
@@ -177,15 +181,16 @@
 						<div class="form-group">
 							<label for="">Id Artículo:</label> {{producto.IdERP}} <br>
 							<label for="">Nombre:</label> {{producto.NombreProducto}} <br>
-							<label for="">Tipo de producto:</label> {{producto.Tipo}} <br>
+							<label for="">Tipo de producto:</label> {{producto.Tipo}} <br>	
 						</div>
 					</div>
 					<div class="form-group col-xs-12 col-sm-12 col-md-3 col-lg-3">
 						<div class="form-group">
-							<label for="">{{producto.IdFabricante === 5 && producto.IdTipoProducto !== 4 ? "Empleados:" : "Cantidad:"}}</label> {{ producto.Cantidad }} <br>
-							<label for="">Precio unitario:</label> {{ calculatePriceWithExchangeRate(pedido, producto, 'PrecioUnitario') | currency }} {{ pedido.MonedaPago }}
+							<label for="">{{producto.IdFabricante == 5 && producto.IdTipoProducto !== 4 ? "Empleados:" : "Cantidad:"}}</label> {{ producto.Cantidad }} <br>
+							<label ng-if="pedido.NombreEsquemaRenovacion === 'Mensual'" for="">Precio unitario: {{ calculatePriceWithExchangeRate(pedido, producto, 'PrecioUnitario') | currency }} {{ pedido.MonedaPago }}</label>
 							<br>
-							<label for="">Precio renovación:</label> {{ calculatePriceWithExchangeRate(pedido, producto, 'PrecioRenovacion') | currency}} {{ pedido.MonedaPago }}
+							<label ng-if="pedido.NombreEsquemaRenovacion === 'Mensual'" for="">Precio renovación: {{ calculatePriceWithExchangeRate(pedido, producto, 'PrecioUnitario') | currency}} {{ pedido.MonedaPago }}</label>
+							
 						</div>
 					</div>
 					<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
@@ -193,13 +198,13 @@
 							<label for="">Total del producto:</label>
 							<br>
 							<span ng-show="!producto.PrimeraCompraMicrosoft && !producto.DescuentoNivel">
-								{{ calcularProductTotal(pedido, producto, 'PrecioUnitario') | currency }} {{ pedido.MonedaPago }} 
+								{{  calcularProductTotal(pedido, producto, 'PrecioUnitario') | currency }} {{ pedido.MonedaPago }} 
 							</span>
 							<span ng-show="(producto.DescuentoNivel || producto.Descuento) && !producto.PrimeraCompraMicrosoft">
 								<del style="font-size:11px;"> {{ calculatePriceWithExchangeRate(pedido, producto, 'PrecioSinDescuento') * producto.Cantidad | currency }} {{ pedido.MonedaPago }} </del>
 								<b style="color:#68953B;"> {{ producto.DescuentoNivel || producto.Descuento }}% Descuento</b>
 								<p> {{ (calculatePriceWithExchangeRate(pedido, producto, 'PrecioUnitario')  * producto.Cantidad).toFixed(2) | currency }}	{{ pedido.MonedaPago }} </p>
-              </span>
+                            </span>
 						</div>
 					</div>
 					<div class="col-xs-12 col-sm-12 col-md-1 col-lg-1" ng-hide="pedido.IdFabricante === 2 && pedido.IdAccionAutodesk === 4">

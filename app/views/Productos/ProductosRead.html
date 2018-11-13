@@ -93,7 +93,6 @@
                             <br>
                             <label for="">Última actualización del producto:</label> {{Producto.FechaActualizado | date:'d/MM/yyyy
                             hh:mm a'}}
-
                             <br><br>
 
                             <h4><b>Precio del periodo</b></h4>
@@ -120,7 +119,7 @@
                                 <b style="color:#68953B;">{{Producto.PorcentajeDescuento}}% Desc.</b>
                             </span>
 
-                            <div ng-show="Producto.IdTipoProducto == 2 && Producto.IdFabricante == 1">
+                            <div ng-show="Producto.IdTipoProducto == 2 && Producto.IdFabricante == 1 && Producto.IdEsquemaRenovacion == '01'">
                                 <label for="" title="Precio prorrateado">Precio prorrateado del primer periodo:</label> {{Producto.PrecioProrrateo
                                 | currency}} {{Producto.MonedaPrecio}}
                             </div>
@@ -197,6 +196,19 @@
                                                     ng-change="contractSetted(Producto)" ng-required="contrato.NumeroContrato !== ''">
                                                     <option ng-disabled="" ng-selected="true" ng-value="0">Nuevo contrato...</option>
                                                 </select>
+                                            </div>
+                                            <div ng-hide="Producto.IdFabricante !== 1 || Producto.IdTipoProducto === 6" >
+                                                <label for="IdEmpresaUsuarioFinal">* Tipo de renovación</label> (Mensual/Anual) 
+                                                <div class="input-group" style="width:100%;" >
+                                                        <span class="input-group-addon green white">
+                                                            <span class="glyphicon glyphicon-hourglass"></span>
+                                                        </span>
+                                                    <select id="esquemaModelo" name="esquemaModelo" class="form-control selectOption ufs" ng-model="Producto.Esquema"
+                                                        ng-options="esquema.id as esquema.esquema for esquema in EsquemaRenovacion" ng-show="SessionCookie.IdTipoAcceso == 2"
+                                                        ng-change="CambiarFechaRenovacion(Producto);" title="Selecciona un tipo de renovaion para tu producto" ng-required="Producto.IdFabricante === 1 && Producto.IdTipoProducto !== 6">
+                                                        <option ng-selected="true" value="">Selecciona un tipo de renovación...</option>
+                                                    </select>
+                                                </div>
                                             </div>
                                             <div class="input-group" ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2 && Producto.TieneContrato && Producto.IdAccionAutodesk === 2">
                                                 <span class="input-group-addon green white">
