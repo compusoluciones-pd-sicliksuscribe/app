@@ -4,16 +4,26 @@
     <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
       <h2 style="float:left;">Solicitudes de soporte</h2>
     </div>
-    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4  " >
       <div class="form-group has-feedback">
         <input name="Busqueda" type="text" ng-model="soporteFilter" class="form-control" size="30" placeholder="Busca una solicitud..."
         />
         <i class="form-control-feedback glyphicon glyphicon-search"></i>
       </div>
+      
+      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" style="float:right";>
+          <select name="IdFabricante" class="form-control filterOption" ng-model="soporteIdFabricante" ng-options="Fabricante.IdFabricante as Fabricante.Nombre for Fabricante in selectFabricantes"
+              ng-change=";">
+              <option value="">Fabricante</option> 
+          </select>
+      </div>
+      <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+          <select name="IdCategoria"  class="form-control filterOption" ng-model="soporteIdCategoria" ng-options="+(Categoria.IdCategoria) as Categoria.Categorias for Categoria in selectCategorias">
+          <option value="">Categoría</option>    
+          </select>
+      </div>
     </div>
   </div>
-
-
   <div class="form-group row">
     <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12 ">
       <div class="pull-right" ng-show="SessionCookie.IdTipoAcceso === 2 || SessionCookie.IdTipoAcceso === 3">
@@ -30,9 +40,11 @@
     <th ng-show="SessionCookie.IdTipoAcceso==1 "><b>Detalle</b></th>
     <th ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3 "><b>Estatus</b></th>
     <th ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3 "><b>Título </b></th>
+    <th ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3 "><b>Fabricante</b></th>
+    <th ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3 "><b>Categoría </b></th>
     <th ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3 "><b>Descripción</b></th>
     <th ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3 "><b>Fecha de solicitud</b></th>
-    <tr ng-repeat="soporte in Solicitudes | filter:soporteFilter | orderBy:sortBy:reverse" class="repeat-animation">
+    <tr ng-repeat="soporte in Solicitudes | filter:soporteFilter| filter:soporteIdCategoria | filter:soporteIdFabricante | orderBy:sortBy:reverse" class="repeat-animation">
       <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3 ">
 
         <div class="form-group">
@@ -80,14 +92,27 @@
         </div>
 
       </td>
-
       <td style="word-wrap:break-word" class="col-xs-12 col-sm-12 col-md-2 col-lg-2" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3 ">
 
-        <div class="form-group">
-          <b><h5>{{soporte.Titulo}}</h5></b>
-        </div>
+          <div class="form-group">
+            <b><h5>{{soporte.Titulo}}</h5></b>
+          </div>
+  
+        </td>
+      <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3 ">
 
-      </td>
+          <div class="form-group">
+            <b><h5>{{soporte.Nombre}}</h5></b>
+          </div>
+  
+        </td>
+        <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3 ">
+
+            <div class="form-group">
+              <b><h5>{{soporte.Categorias}}</h5></b>
+            </div>
+    
+          </td>
       <td style="word-wrap:break-word" class="col-xs-12 col-sm-12 col-md-4 col-lg-4" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3 ">
 
         <div class="form-group">

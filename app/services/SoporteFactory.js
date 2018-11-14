@@ -11,9 +11,9 @@
 
     factory.refreshToken();
 
-    factory.getSolicitudes = function () {
+    factory.getSolicitudes = function (body) {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'support');
+      return $http.get($rootScope.API + 'support', body);
     };
 
     factory.postSolicitud = function (Solicitud) {

@@ -1,6 +1,5 @@
 (function () {
   var SoporteCreateController = function ($scope, $log, $cookies, $location, $uibModal, $filter, FabricantesFactory, SoporteFactory, $routeParams) {
-
     $scope.selectFabricantes = {};
     $scope.selectCategorias = {};
 
@@ -15,11 +14,12 @@
     };
 
     const obtenerCategorias = function () {
-      return SoporteFactory.getCategorysReport()
+      SoporteFactory.getCategorysReport()
           .success(function (Categorias) {
             if (Categorias.success === 1) {
               $scope.selectCategorias = Categorias.data;
             }
+            console.log(JSON.stringify($scope.selectCategorias));
           })
           .error(function (data, status, headers, config) {
             $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
