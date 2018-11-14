@@ -36,6 +36,8 @@
       $scope.Usuario.IdEmpresa = $scope.currentDistribuidor.IdEmpresa;
       // $cookies.remove('currentDistribuidor');
       $scope.SessionCookie = {};
+      const datatl = UsuariosFactory.postUsuarioIniciarSesion($scope.Usuario);
+      console.log('jojotl ', datatl);
       UsuariosFactory.postUsuarioIniciarSesion($scope.Usuario)
         .success(function (result) {
           if (result[0].Success) {

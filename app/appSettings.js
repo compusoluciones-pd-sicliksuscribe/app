@@ -10,5 +10,5 @@ angular.module('marketplace')
     // $rootScope.API = 'https://pruebas.compusoluciones.com/';
     // $rootScope.MAPI = 'http://microsoft-api.us-east-1.elasticbeanstalk.com/';
     // $rootScope.dominio = 'clicksuscribe';
-    $rootScope.secureCookie = true;
+    // $rootScope.secureCookie = true;
   });
