@@ -40,6 +40,11 @@
       factory.refreshToken();
       return $http.get($rootScope.API + 'category-support');
     };
+
+    factory.putDeleteSupport = function (SoporteUpdate) {
+      factory.refreshToken();
+      return $http.put($rootScope.API + 'support-delete/'+ SoporteUpdate);
+    };
     return factory;
   };
 

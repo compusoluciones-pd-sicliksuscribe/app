@@ -4,7 +4,7 @@
     <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
       <h2 style="float:left;">Solicitudes de soporte</h2>
     </div>
-    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4  " >
+    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-5   offset:right" style="float:right" >
       <div class="form-group has-feedback">
         <input name="Busqueda" type="text" ng-model="soporteFilter" class="form-control" size="30" placeholder="Busca una solicitud..."
         />
@@ -14,12 +14,12 @@
       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" style="float:right";>
           <select name="IdFabricante" class="form-control filterOption" ng-model="soporteIdFabricante" ng-options="Fabricante.IdFabricante as Fabricante.Nombre for Fabricante in selectFabricantes"
               ng-change=";">
-              <option value="">Fabricante</option> 
+              <option value="">Todos los Fabricante</option> 
           </select>
       </div>
       <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
           <select name="IdCategoria"  class="form-control filterOption" ng-model="soporteIdCategoria" ng-options="+(Categoria.IdCategoria) as Categoria.Categorias for Categoria in selectCategorias">
-          <option value="">Categoría</option>    
+          <option value="">Todas las Categoría</option>    
           </select>
       </div>
     </div>
@@ -44,6 +44,7 @@
     <th ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3 "><b>Categoría </b></th>
     <th ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3 "><b>Descripción</b></th>
     <th ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3 "><b>Fecha de solicitud</b></th>
+    <th ng-show="SessionCookie.IdTipoAcceso==1 "><b>Solicitud</b></th>
     <tr ng-repeat="soporte in Solicitudes | filter:soporteFilter| filter:soporteIdCategoria | filter:soporteIdFabricante | orderBy:sortBy:reverse" class="repeat-animation">
       <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3 ">
 
@@ -82,6 +83,9 @@
         <div class="form-group">
           <b><a ng-click="EditarDetalle(soporte.IdSoporte)">Editar</a></b>
         </div>
+
+      </td>
+
 
       </td>
 
@@ -126,8 +130,36 @@
         <div class="form-group">
           <b><h5>{{soporte.FechaSolicitud}}</h5></b>
         </div>
+        <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2" ng-show="SessionCookie.IdTipoAcceso==1 ">
+            <div class="form-group"> 
+          <div class="form-group col-xs-10 col-sm-6 col-md-2 col-lg-2" style="margin-top:2px;">
+                <br>
+                <button class="btn btn-danger btn-md " style="min-width: 0px;height: 40px;" ng-click="Confirmar(soporte.IdSoporte)" ng-show="SessionCookie.IdTipoAcceso === 1 || SessionCookie.IdTipoAcceso === 2 || SessionCookie.IdTipoAcceso === 3 || SessionCookie.IdTipoAcceso === 4">Eliminar  <span class="glyphicon glyphicon-trash"></span></button>
+                <br><br>
+                <div ng-show="soporte.Mostrar">
+                    <div class="row">
+                        <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-6" >
+                            <label>La solicitud será eliminada, ¿Deseas continuar?</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-xs-6 col-sm-6 col-md-12 col-lg-6" >
+                            <button class="btn btn-block btn-warning" style="min-width:40px;height:40px;" ng-disabled="form.habilitar" ng-click="BajaSolicitud(soporte.IdSoporte)">Sí</button>
+                        </div>
+                        <div class="form-group col-xs-6 col-sm-6 col-md-12 col-lg-6">
+                            <button class="btn btn-block btn-primary"  style="min-width:40px;height:40px;" ng-disabled="form.habilitar" ng-click="Confirmar(soporte.IdSoporte)">No</button>
+                        </div>
+                     </div>
+                </div>
+  
+             </div> 
+      </td>
 
       </td>
+
+
+          
+
     </tr>
   </table>
 
