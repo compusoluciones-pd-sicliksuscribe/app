@@ -320,7 +320,9 @@
             } else {
               total = total + (productPrice * product.Cantidad);
             }
+
           }
+
         });
       });
       return total;
