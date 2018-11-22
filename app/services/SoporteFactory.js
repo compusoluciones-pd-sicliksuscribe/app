@@ -12,8 +12,9 @@
     factory.refreshToken();
 
     factory.getSolicitudes = function (body) {
+      console.log('algo', body)
       factory.refreshToken();
-      return $http.get($rootScope.API + 'support', body);
+      return $http.get($rootScope.API + 'support/' + body.Categoria + '/' + body.Fabricante);
     };
 
     factory.postSolicitud = function (Solicitud) {

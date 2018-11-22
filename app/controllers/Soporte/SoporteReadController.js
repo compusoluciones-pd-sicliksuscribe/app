@@ -1,5 +1,6 @@
 (function () {
   var SoporteReadController = function ($scope, $log, $cookies, $location, $uibModal, $filter, SoporteFactory , FabricantesFactory , $routeParams) {
+   
     $scope.Confirmar = function (IdSolicitud) {
       $scope.Solicitudes.forEach(function (solicitud) {
         if (solicitud.IdSoporte === IdSolicitud) {
@@ -34,10 +35,12 @@
     };
 
     const getSolicitudes = function (Fabricante = 'all', Categoria = 'all') {
+      console.log('aaa', $scope.soporteIdFabricante)
       const payload = {
         Fabricante,
         Categoria
       };
+      console.log(payload);
       SoporteFactory.getSolicitudes(payload)
       .success(function (Solicitudes) {
         $scope.Solicitudes = Solicitudes.data;
@@ -52,7 +55,6 @@
     };
 
     $scope.BajaSolicitud = function (soporte) {
-      console.log(JSON.stringify(soporte));
       SoporteFactory.putDeleteSupport(soporte)
         .success(function (data) {
           if (data) {
