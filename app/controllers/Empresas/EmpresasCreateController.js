@@ -10,6 +10,7 @@
     $scope.Empresa.TelefonoContacto2 = '';
     $scope.valido;
     $scope.mensajerfc = '';
+    $scope.aceptarButton = true;
 
     $scope.init = function () {
       $scope.CheckCookie();
@@ -130,10 +131,12 @@
             } else {
               $scope.frm.DominioMicrosoft.$pristine = true;
               $scope.frm.RFC.$invalid = false;
+              $scope.aceptarButton = true;
             }
           })
-          .error(function (data, status, headers, config) {
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          .error(function (info) {
+            $scope.ShowToast(info.message, 'danger');
+            $scope.aceptarButton = false;
           });
       }
     };
@@ -220,49 +223,47 @@
           if (result[0].Success == 0) {
             $scope.AlertaDominio = 'El Correo ya esta registrado, intenta con un correo diferente.';
           } else {
-            if (($scope.frm.$invalid || $scope.Empresa.Formulario) == true || $scope.valido == false) {
-              if ($scope.frm.NombreEmpresa.$invalid == true) {
-                $scope.frm.NombreEmpresa.$pristine = false;
-              }
+            if ($scope.frm.NombreEmpresa.$invalid == true) {
+              $scope.frm.NombreEmpresa.$pristine = false;
+            }
               // if ($scope.frm.DominioMicrosoft.$invalid == true) {
               //   $scope.frm.DominioMicrosoft.$pristine = false;
               //   $scope.Empresa.MensajeDominio = 'Ingresa un Dominio.';
               // }
-              if ($scope.frm.Direccion1.$invalid == true) {
-                $scope.frm.Direccion1.$pristine = false;
-              }
-              if ($scope.frm.RFC.$invalid == true) {
-                $scope.frm.RFC.$pristine = false;
-              }
-              if ($scope.frm.Ciudad.$invalid == true) {
-                $scope.frm.Ciudad.$pristine = false;
-              }
-              if ($scope.Empresa.Estado == undefined) {
-                $scope.frm.Estado.$pristine = false;
-              }
-              if ($scope.frm.Postal.$invalid == true) {
-                $scope.frm.Postal.$pristine = false;
-              }
-              if ($scope.frm.Nombre.$invalid == true) {
-                $scope.frm.Nombre.$pristine = false;
-              }
-              if ($scope.frm.Apellidos.$invalid == true) {
-                $scope.frm.Apellidos.$pristine = false;
-              }
-              if ($scope.frm.CorreoElectronico.$invalid == true) {
-                $scope.frm.CorreoElectronico.$pristine = false;
-              }
-              if ($scope.frm.Telefono.$invalid == true) {
-                $scope.frm.Telefono.$pristine = false;
-              }
-            } else {
-              if (!$scope.Empresa.DominioMicrosoft || $scope.Empresa.DominioMicrosoft === ''){
-                delete $scope.Empresa.DominioMicrosoft;
-              }
-              console.log($scope.Empresa)
-              $scope.loading = true;
-              $scope.Empresa.Formulario = true;
-              EmpresasFactory.postEmpresa($scope.Empresa)
+            if ($scope.frm.Direccion1.$invalid == true) {
+              $scope.frm.Direccion1.$pristine = false;
+            }
+            if ($scope.frm.RFC.$invalid == true) {
+              $scope.frm.RFC.$pristine = false;
+            }
+            if ($scope.frm.Ciudad.$invalid == true) {
+              $scope.frm.Ciudad.$pristine = false;
+            }
+            if ($scope.Empresa.Estado == undefined) {
+              $scope.frm.Estado.$pristine = false;
+            }
+            if ($scope.frm.Postal.$invalid == true) {
+              $scope.frm.Postal.$pristine = false;
+            }
+            if ($scope.frm.Nombre.$invalid == true) {
+              $scope.frm.Nombre.$pristine = false;
+            }
+            if ($scope.frm.Apellidos.$invalid == true) {
+              $scope.frm.Apellidos.$pristine = false;
+            }
+            if ($scope.frm.CorreoElectronico.$invalid == true) {
+              $scope.frm.CorreoElectronico.$pristine = false;
+            }
+            if ($scope.frm.Telefono.$invalid == true) {
+              $scope.frm.Telefono.$pristine = false;
+            }
+            if (!$scope.Empresa.DominioMicrosoft || $scope.Empresa.DominioMicrosoft === ''){
+              delete $scope.Empresa.DominioMicrosoft;
+            }
+            console.log($scope.Empresa)
+            $scope.loading = true;
+            $scope.Empresa.Formulario = true;
+            EmpresasFactory.postEmpresa($scope.Empresa)
                 .success(function (result) {
                   var re, me, dat;
                   if (result[0]) {
@@ -288,14 +289,12 @@
                     }
                   }
                 })
-                .error(function (data, status, headers, config) {
-                  $scope.Empresa.Formulario = false;
+                .error(function (error) {
+                  $scope.ShowToast(error.message, 'danger');
                 });
-            }
           }
         })
         .error(function (data, status, headers, config) {
-          $scope.Empresa.Formulario = false;
         });
     };
 
