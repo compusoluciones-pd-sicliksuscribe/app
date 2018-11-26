@@ -10,32 +10,33 @@
         />
         <i class="form-control-feedback glyphicon glyphicon-search"></i>
       </div>
+      <div class="form-group row">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" style="float:right";>
+            <select name="IdFabricante" class="form-control filterOption" ng-model="soporteIdFabricante" ng-options="Fabricante.IdFabricante as Fabricante.Nombre for Fabricante in selectFabricantes"
+                ng-change="getSolicitudes();">
+                <option value="">Todos los Fabricantes</option> 
+            </select>
+            
+        {{soporteIdFabricante}}
+        </div>
+        <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <select name="IdCategoria"  class="form-control filterOption" ng-model="soporteIdCategoria" ng-options="+(Categoria.IdCategoria) as Categoria.Categorias for Categoria in selectCategorias"
+            ng-change="getSolicitudes();">
+            <option value="">Todas las Categorías</option>    
+            </select>
+        </div>
+        {{soporteIdCategoria}}
+      </div>
       
-      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" style="float:right";>
-          <select name="IdFabricante" class="form-control filterOption" ng-model="soporteIdFabricante" ng-options="Fabricante.IdFabricante as Fabricante.Nombre for Fabricante in selectFabricantes"
-              ng-change="getSolicitudes();">
-              <option value="">Todos los Fabricantes</option> 
-          </select>
-          
-      {{soporteIdFabricante}}
-      </div>
-      <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
-          <select name="IdCategoria"  class="form-control filterOption" ng-model="soporteIdCategoria" ng-options="+(Categoria.IdCategoria) as Categoria.Categorias for Categoria in selectCategorias"
-          ng-change="getSolicitudes();">
-          <option value="">Todas las Categorías</option>    
-          </select>
-      </div>
-      {{soporteIdCategoria}}
+      <div class="form-group row">
+        <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12 ">
+          <div class="pull-right" ng-show="SessionCookie.IdTipoAcceso === 2 || SessionCookie.IdTipoAcceso === 3">
+            <button ng-click="NuevaSolicitud()" class="btn btn-primary newClient">Nueva Solicitud&nbsp;<span class="glyphicon glyphicon-plus"></span></button>
+          </div>
+        </div>
+        </div>
     </div>
-  </div>
-  <div class="form-group row">
-    <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12 ">
-      <div class="pull-right" ng-show="SessionCookie.IdTipoAcceso === 2 || SessionCookie.IdTipoAcceso === 3">
-        <button ng-click="NuevaSolicitud()" class="btn btn-primary newClient">Nueva Solicitud&nbsp;<span class="glyphicon glyphicon-plus"></span></button>
-      </div>
-    </div>
-  </div>
-
+</div>
   <table class="table table-hover table-responsive border-left-right-cero" style="table-layout: fixed;">
     <th ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3 "><b>IdSoporte</b></th>
     <th ng-show="SessionCookie.IdTipoAcceso==1 "><b>Nombre solicitante</b></th>

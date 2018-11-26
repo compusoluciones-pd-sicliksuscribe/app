@@ -26,6 +26,11 @@
       return $http.get($rootScope.API + 'Empresas');
     };
 
+    factory.getIndustrias = function () {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'enterprise/Industrias');
+    };
+
     factory.getEmpresasMicrosoft = function () {
       factory.refreshToken();
       return $http.get($rootScope.API + 'microsoft/customers');
