@@ -15,8 +15,16 @@
     $scope.DominioMicrosoft = true;
     $scope.usuariosSinDominio = {};
     $scope.terminos = false;
+    $scope.usuariosSinDominio = {id:''};
     const NOT_FOUND = 404;
-
+    $scope.esquemaRenovacionModelo={};
+    $scope.EsquemaRenovacion=[
+      {id: '01', esquema: 'Mensual' },
+      {id: '02', esquema: 'Anual' }
+    ];
+    $scope.esquemaRenovacionModel = {};
+    
+    
     const formatTiers = function (tiers) {
       if (tiers) {
         const lastTierIndex = tiers.length - 1;
@@ -33,13 +41,13 @@
       }
       return null;
     };
-
     $scope.BuscarProducto = function (ResetPaginado) {
       $scope.Mensaje = 'Buscando...';
       if (ResetPaginado) {
         $scope.Pagina = 0;
         $scope.BuscarProductos.Offset = $scope.Pagina * 6;
       }
+
       const IdTipoProducto = ($scope.BuscarProductos.IdTipoProducto === '' || $scope.BuscarProductos.IdTipoProducto == null) ? undefined : $scope.BuscarProductos.IdTipoProducto;
       $scope.BuscarProductos.IdTipoProducto = IdTipoProducto;
       ProductosFactory.getBuscarProductos($scope.BuscarProductos)
@@ -73,6 +81,27 @@
           $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
           $scope.ShowToast('No pudimos obtener el tipo de cambio, por favor intenta una vez más.', 'danger');
         });
+    };
+
+
+   $scope.CambiarFechaRenovacion = function (Producto) {
+    if (Producto.Esquema === 01 || Producto.Esquema === '01'){
+      var fecha = new Date();
+      const a = 22;
+      const monthApart = a >= 22 ? 2 : 1;
+      Producto.FechaFinSuscripcion = '22' + "/" + (fecha.getMonth() + monthApart) + "/" +((fecha.getFullYear()));
+      Producto.EsquemaRenovacion ="Cada día 22 del mes";
+      Producto.IdEsquemaRenovacion='01';
+     } 
+    
+    if (Producto.Esquema === 02 ||Producto.Esquema === '02'){
+      var fecha = new Date();
+      Producto.FechaFinSuscripcion = fecha.getDate() + "/" + (fecha.getMonth() +1) + "/" +((fecha.getFullYear()+1));
+      Producto.EsquemaRenovacion =fecha.getDate() + "/" + (fecha.getMonth() +1) + "/" +((fecha.getFullYear()+1));
+      Producto.IdEsquemaRenovacion='02';
+    }
+     
+     return Producto.EsquemaRenovacion; 
     };
 
     $scope.init = function () {
@@ -270,9 +299,23 @@
       }, 0);
     };
 
+
+
+    $scope.estimateTotalAnnual = function (product, quantity) {
+
+      const price = product.PorcentajeDescuento > 0 ? product.PrecioDescuento : product.PrecioNormal;
+      const estimatedTotal = ((price * quantity)*12) || 0.00;
+
+      return estimatedTotal;
+    };
+
     $scope.estimateTotal = function (product, quantity) {
       if (product.tiers) {
         return estimateTieredTotal(product.tiers, quantity);
+      }
+
+      if (product.IdEsquemaRenovacion === '02') {
+        return $scope.estimateTotalAnnual(product,quantity);
       }
       const price = product.PorcentajeDescuento > 0 ? product.PrecioDescuento : product.PrecioProrrateo;
       const estimatedTotal = price * quantity || 0.00;
@@ -353,7 +396,7 @@
         Cantidad: !Producto.Cantidad ? 1 : Producto.Cantidad,
         IdEmpresaUsuarioFinal: Producto.IdEmpresaUsuarioFinal,
         MonedaPago: 'Pesos',
-        IdEsquemaRenovacion: Producto.IdEsquemaRenovacion,
+        IdEsquemaRenovacion:Producto.IdEsquemaRenovacion,
         IdFabricante: Producto.IdFabricante,
         CodigoPromocion: Producto.CodigoPromocion,
         ResultadoFabricante2: Producto.IdProductoPadre,

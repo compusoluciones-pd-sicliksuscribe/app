@@ -24,7 +24,7 @@
     };
 
     $scope.AgregarCarrito = function (Producto) {
-      var ProductoGuardado = { IdPedido: $cookies.getObject('Pedido').IdPedidoActual, IdProducto: Producto.IdProducto, Cantidad: 1 };
+      var ProductoGuardado = { IdPedido: $cookies.getObject('Pedido').IdPedidoActual, IdProducto: Producto.IdProducto, Cantidad: 1};
 
       PedidoDetallesFactory.postPedidoDetalle(ProductoGuardado)
         .success(function (PedidoDetalleResult) {
