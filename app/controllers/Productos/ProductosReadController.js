@@ -326,7 +326,7 @@
         } else {
           return $scope.AgregarCarrito(producto, producto.Cantidad, producto.IdPedidocontrato);
         }
-      }
+      };
 
       $scope.validateExistsEmail(producto)
       .then(function (result) {
