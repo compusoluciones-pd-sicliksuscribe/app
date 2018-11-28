@@ -33,9 +33,9 @@
             $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
           });
     };
-
-    const getSolicitudes = function (Fabricante = 'all', Categoria = 'all') {
-      console.log('aaa', $scope.soporteIdFabricante)
+    
+   //const getSolicitudes = function (Fabricante = 'all', Categoria = 'all') {
+    const getSolicitudes = function (Fabricante , Categoria) {
       const payload = {
         Fabricante,
         Categoria
@@ -75,7 +75,7 @@
     $scope.init = function () {
       obtenerCategorias();
       obtenerFabricantes();
-      getSolicitudes();
+      getSolicitudes('all', 'all');
     };
     $scope.init();
 
