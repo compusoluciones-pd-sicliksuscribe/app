@@ -10,8 +10,7 @@
     $scope.Empresa.TelefonoContacto2 = '';
     $scope.valido;
     $scope.mensajerfc = '';
-    $scope.selectIndustrias={};
-    $scope.IdIndustrias=0;
+    $scope.selectIndustrias = {};
 
     $scope.init = function () {
       $scope.CheckCookie();

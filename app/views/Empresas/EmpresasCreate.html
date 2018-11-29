@@ -107,9 +107,8 @@
             <div class="form-group col-xs-12 col-sm-4 col-md-4 col-lg-4">
                 
                         <label>Industria*</label>
-                        <select name="IdIndustria"  class="form-control filterOption" ng-mouseover=""  ng-model="Empresa.IdIndustria" ng-options="+(Empresa.IdIndustria) as Industria.Industria for Industria in selectIndustrias"
+                        <select name="IdIndustria"  class="form-control filterOption" ng-mouseover=""  ng-model="Empresa.IdIndustria" ng-options="+(Industria.IdIndustria) as Industria.Industria for Industria in selectIndustrias"
                         ng-change="">
-
                         <option value="">Selecciona uno ..
                                 <span ng-show="true" class="animate-show">
                                         <a>
@@ -119,7 +118,6 @@
                                     </span>
                         </option>    
                         </select>
-                    
 
             </div>
         </div>
