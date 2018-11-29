@@ -187,9 +187,9 @@
 					<div class="form-group col-xs-12 col-sm-12 col-md-3 col-lg-3">
 						<div class="form-group">
 							<label for="">{{producto.IdFabricante == 5 && producto.IdTipoProducto !== 4 ? "Empleados:" : "Cantidad:"}}</label> {{ producto.Cantidad }} <br>
-							<label ng-if="pedido.NombreEsquemaRenovacion === 'Mensual'" for="">Precio unitario: {{ calculatePriceWithExchangeRate(pedido, producto, 'PrecioUnitario') | currency }} {{ pedido.MonedaPago }}</label>
+							<label for="">Precio unitario:</label> {{ calculatePriceWithExchangeRate(pedido, producto, 'PrecioUnitario') | currency }} {{ pedido.MonedaPago }}
 							<br>
-							<label ng-if="pedido.NombreEsquemaRenovacion === 'Mensual'" for="">Precio renovación: {{ calculatePriceWithExchangeRate(pedido, producto, 'PrecioUnitario') | currency}} {{ pedido.MonedaPago }}</label>
+							<label for="">Precio renovación:</label> {{ calculatePriceWithExchangeRate(pedido, producto, 'PrecioRenovacion') | currency}} {{ pedido.MonedaPago }}
 							
 						</div>
 					</div>

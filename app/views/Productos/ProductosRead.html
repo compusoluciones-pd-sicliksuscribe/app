@@ -21,13 +21,6 @@
                 <option ng-selected="true" value="">Todos los tipos</option>
             </select>
         </div>
-        
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <br>
-                <div class="alert alert-warning">
-                    <b>Nota importante *</b> Si requieres hacer una compra de suscripciones anuales de productos de Microsoft, comunícate con tu agente de ventas.
-                </div>
-        </div>
 
     </div>
 
@@ -107,8 +100,11 @@
                             <div ng-show="Producto.IdTipoProducto == 2">Precio unitario:</div>
                             <div ng-show="Producto.IdTipoProducto == 3">Precio de contratación:</div>
                             </label>
-                            <span ng-show="Producto.PorcentajeDescuento == 0 && Producto.IdFabricante !== 5">
+                            <span ng-show="Producto.PorcentajeDescuento == 0 && Producto.IdFabricante !== 5 && Producto.Esquema != '02'">
                                 {{Producto.PrecioNormal | currency: "$" : 2}} {{Producto.MonedaPrecio}}
+                            </span>
+                            <span ng-show="Producto.PorcentajeDescuento == 0 && Producto.IdFabricante !== 5 && Producto.Esquema != '01'">
+                                {{Producto.PrecioNormalAnual | currency: "$" : 2}} {{Producto.MonedaPrecio}}
                             </span>
                             <span ng-show="Producto.IdFabricante === 5 && Producto.IdTipoProducto === 4">
                                 {{Producto.PrecioNormal | currency: "$" : 2}} {{Producto.MonedaPrecio}}

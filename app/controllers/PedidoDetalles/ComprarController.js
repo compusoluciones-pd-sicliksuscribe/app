@@ -233,6 +233,9 @@
       } else {
         total = details[value];
       }
+      if (order.IdEsquemaRenovacion === 2 && value === 'PrecioRenovacion') {
+        total *= 12;
+      }
       return total;
     };
 

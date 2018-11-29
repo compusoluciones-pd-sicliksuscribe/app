@@ -97,8 +97,9 @@
     if (Producto.Esquema === 02 ||Producto.Esquema === '02'){
       var fecha = new Date();
       Producto.FechaFinSuscripcion = fecha.getDate() + "/" + (fecha.getMonth() +1) + "/" +((fecha.getFullYear()+1));
-      Producto.EsquemaRenovacion =fecha.getDate() + "/" + (fecha.getMonth() +1) + "/" +((fecha.getFullYear()+1));
+      Producto.EsquemaRenovacion ='Anual';
       Producto.IdEsquemaRenovacion='02';
+      Producto.PrecioNormalAnual = Producto.PrecioNormal * 12;
     }
      
      return Producto.EsquemaRenovacion; 
