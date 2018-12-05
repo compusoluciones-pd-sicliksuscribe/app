@@ -31,6 +31,11 @@
       return $http.put($rootScope.API + 'Fabricantes', Fabricante);
     };
 
+    factory.getUriVmwareDistributor = function () {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'Vmware/get-token');
+    };
+
     return factory;
   };
 

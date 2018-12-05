@@ -200,7 +200,7 @@
                                                             <span class="glyphicon glyphicon-hourglass"></span>
                                                         </span>
                                                     <select id="esquemaModelo" name="esquemaModelo" class="form-control selectOption ufs" ng-model="Producto.Esquema"
-                                                        ng-options="esquema.id as esquema.esquema for esquema in EsquemaRenovacion" ng-show="SessionCookie.IdTipoAcceso == 2"
+                                                        ng-options="esquema.id as esquema.esquema for esquema in EsquemaRenovacion"
                                                         ng-change="CambiarFechaRenovacion(Producto);" title="Selecciona un tipo de renovaion para tu producto" ng-required="Producto.IdFabricante === 1 && Producto.IdTipoProducto !== 6">
                                                         <option ng-selected="true" value="">Selecciona un tipo de renovación...</option>
                                                     </select>
