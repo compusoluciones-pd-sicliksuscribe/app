@@ -59,7 +59,6 @@
       EmpresasFactory.getEmpresa($scope.Empresa.Busqueda)
         .success(function (Empresas) {
           if (Empresas) {
-            console.log(Empresas);
             try {
               if (Empresas[0].Success == false || Empresas.length == null || Empresas.length == 'undefined') {
                 $scope.Empresas = null;
