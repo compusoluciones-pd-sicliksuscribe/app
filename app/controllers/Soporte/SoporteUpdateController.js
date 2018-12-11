@@ -47,7 +47,6 @@
             $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
           });
       }
-      console.log("resultado.-.-.-.-."+JSON.stringify(resultado));
     };
 
     $scope.Cancelar = function () {
