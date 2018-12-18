@@ -1,6 +1,6 @@
 (function () {
   var SoporteReadController = function ($scope, $log, $cookies, $location, $uibModal, $filter, SoporteFactory , FabricantesFactory , $routeParams) {
-   
+    $scope.soporteIdCategoria = '';
     $scope.Confirmar = function (IdSolicitud) {
       $scope.Solicitudes.forEach(function (solicitud) {
         if (solicitud.IdSoporte === IdSolicitud) {
@@ -32,14 +32,12 @@
             $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
           });
     };
-    
-   //const getSolicitudes = function (Fabricante = 'all', Categoria = 'all') {
-    const getSolicitudes = function (Fabricante , Categoria) {
+
+    $scope.getSolicitudes = function () {
       const payload = {
-        Fabricante,
-        Categoria
+        Fabricante: $scope.soporteIdFabricante || 'all',
+        Categoria: $scope.soporteIdCategoria || 'all'
       };
-      console.log(payload);
       SoporteFactory.getSolicitudes(payload)
       .success(function (Solicitudes) {
         $scope.Solicitudes = Solicitudes.data;
@@ -74,7 +72,7 @@
     $scope.init = function () {
       obtenerCategorias();
       obtenerFabricantes();
-      getSolicitudes('all', 'all');
+      $scope.getSolicitudes();
     };
     $scope.init();
 

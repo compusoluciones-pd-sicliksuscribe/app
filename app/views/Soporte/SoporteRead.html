@@ -13,19 +13,16 @@
       <div class="form-group row">
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" style="float:right";>
             <select name="IdFabricante" class="form-control filterOption" ng-model="soporteIdFabricante" ng-options="Fabricante.IdFabricante as Fabricante.Nombre for Fabricante in selectFabricantes"
-                ng-change="getSolicitudes(soporteIdFabricante,'all');">
+                ng-change="getSolicitudes();">
                 <option value="">Todos los Fabricantes</option> 
             </select>
-            
-        {{soporteIdFabricante}}
         </div>
         <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
             <select name="IdCategoria"  class="form-control filterOption" ng-model="soporteIdCategoria" ng-options="+(Categoria.IdCategoria) as Categoria.Categorias for Categoria in selectCategorias"
-            ng-change="getSolicitudes(soporteIdCategoria,'all');">
+            ng-change="getSolicitudes();">
             <option value="">Todas las Categorías</option>    
             </select>
         </div>
-        {{soporteIdCategoria}}
       </div>
       
       <div class="form-group row">
