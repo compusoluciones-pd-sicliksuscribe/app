@@ -130,6 +130,7 @@
                                 </ul>
                             </div>
 
+                           
                             <br>
                         </div>
 
@@ -164,10 +165,10 @@
                                             <p style="color:red" ng-show="frmCantidad.Cantidad.$error.min">Mínimo {{Producto.CantidadMinima}}</p>
                                             <p style="color:red" ng-show="frmCantidad.Cantidad.$error.max">Máximo {{Producto.CantidadMaxima}}</p>
 
-                                            <label for="IdEmpresaUsuarioFinal">* ¿Para quiénes son?</label> (Cliente usuario
-                                            final) &nbsp;
-                                            <a href="#/Empresa" class="form-group" title="Nuevo cliente" ng-show="SessionCookie.IdTipoAcceso == 2">
-                                                <span class="glyphicon glyphicon-plus"></span>
+                                            <label for="IdEmpresaUsuarioFinal">* ¿Para quiénes son?</label> 
+                                            <a href="#/Empresa" class="form-group" title="Nuevo cliente" ng-show="SessionCookie.IdTipoAcceso == 2" style="background-blend-mode: initial">
+                                                <strong>(Añadir cliente usuario
+                                            final) &nbsp;</strong><span class="glyphicon glyphicon-plus"> </span>
                                             </a>
 
                                             <div class="input-group">
