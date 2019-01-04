@@ -36,6 +36,11 @@
       return $http.get($rootScope.API + 'Vmware/get-token');
     };
 
+    factory.getUsersListVmware = function () {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'Vmware/get-users-list');
+    };
+
     return factory;
   };
 

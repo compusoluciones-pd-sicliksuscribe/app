@@ -1,6 +1,4 @@
-<div class="container-fluid" ng-swipe-right="" ng-swipe-left="">
-
-
+<div class="container-fluid" ng-swipe-right="" ng-swipe-left="" ng-show="SessionCookie.IdTipoAcceso != 1">
 	<div class="form-group row">
 		<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
 			<h2 style="float:left;">Monitor de suscripciones y servicios <i class="fa fa-question-circle tourButton" style="float:right; font-size:12px; margin-top:10px; margin-left:10px;"
@@ -19,5 +17,54 @@
     <div class="embed-responsive embed-responsive-16by9">
         <iframe class="embed-responsive-item" ng-src="{{url}}" allowfullscreen></iframe>
     </div>
-	
+</div>
+<div class="container-fluid" ng-swipe-right="" ng-swipe-left="" ng-show="SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso === 8">
+	<div class="form-group row">
+		<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+			<h2 style="float:left;">Monitor de suscripciones y servicios <i class="fa fa-question-circle tourButton" style="float:right; font-size:12px; margin-top:10px; margin-left:10px;"
+					ng-click="IniciarTourMonitor();"></i></h2>
+		</div>
+	</div>
+	<div class="form-group row">
+			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" ng-show="(SessionCookie.IdTipoAcceso === 1 || SessionCookie.IdTipoAcceso === 8)">
+			<label for="IdCliente">Clientes: </label>
+				<select id="IdCliente" name="IdCliente" class="form-control selectOption" ng-model="ClientesVmware" ng-options="Vmware as Vmware.entityName for Vmware in selectVmware"
+					ng-change="GetMonthlyUsage(Vmware);">
+						<option ng-selected="true" value="">Selecciona un cliente</option>
+				</select>
+			</div>
+			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
+			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
+	</div>
+	<div class="form-group row">
+		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+				<label for="IdCliente">De: </label>
+				<input class="form-control" type="month" name="firsDate">
+			</div>
+			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+				<label for="IdCliente">A: </label>
+				<input class="form-control" type="month" name="secondDate">
+			</div>
+			<!-- <div class="row">
+				<div class='col-sm-6'>
+					<div class="form-group">
+						<div class='input-group date' id='datetimepicker1'>
+							<input type='text' class="form-control" />
+							<span class="input-group-addon">
+								<span class="glyphicon glyphicon-calendar"></span>
+							</span>
+						</div>
+					</div>
+				</div>
+				<script type="text/javascript">
+					$(function () {
+						$('#datetimepicker1').datetimepicker();
+					});
+				</script>
+			</div> -->
+		</div>
+		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
+		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
+	</div>
 </div>
