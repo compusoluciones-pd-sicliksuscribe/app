@@ -88,7 +88,6 @@
       return PedidoDetallesFactory.getPedidoDetallesUf($scope.currentDistribuidor.IdEmpresa)
         .then(function (result) {
           if (result.data.success) {
-            // console.log(' result.data.data' + JSON.stringify(result.data.data));
             $scope.PedidoDetalles = result.data.data;
             $scope.PedidoDetalles.forEach(function (elem) {
               elem.Forma = getPaymentMethods(elem.IdFormaPago);
@@ -380,7 +379,7 @@
       return precioUnitario;
     };
 
-    $scope.next = function () { // Este
+    $scope.next = function () {
       if ($scope.isPayingWithCSCredit()) validarCarrito();
       let next = true;
       if (!$scope.PedidoDetalles || $scope.PedidoDetalles.length === 0) next = false;

@@ -84,10 +84,8 @@
     const getOrderDetails = function (validate) {
       return PedidoDetallesFactory.getPedidoDetalles()
         .then(function (result) {
-          // console.log('result.data', result.data);
           $scope.PedidoDetalles = result.data.data;
           $scope.PedidoDetalles.forEach(function (elem) {
-            // console.log('------', elem, '......');
             $scope.CreditoValido = 1;
             elem.hasCredit = 1;
             elem.Forma = getPaymentMethods(elem.IdFormaPago);
