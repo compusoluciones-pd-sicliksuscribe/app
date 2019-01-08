@@ -1,16 +1,20 @@
+
+
 (function () {
+
     var MonitorDetalleVmwareController = function ($scope, $sce, $cookies, $location, EmpresasXEmpresasFactory, PedidoDetallesFactory, $uibModal, $filter, FabricantesFactory, PedidosFactory, EmpresasFactory, UsuariosFactory) {
       $scope.SessionCookie = $cookies.getObject('Session');
       $scope.url = '';
       $scope.selectVmware = {};
+
+
       
 
       $scope.OpenUrl = function () {
         window.open($scope.url,'_blank');
       };
 
-      $scope.GetMonthlyUsage = function (a) {
-        // console.log('a', a);
+      $scope.GetMonthlyUsage = function () {
         console.log($scope.ClientesVmware);
       }
 
@@ -38,6 +42,25 @@
                 $scope.ShowToast('El distribuidor no cuenta con datos en Vmware', 'danger');
             });
         }
+
+        $scope.validate = function () {
+
+            if ($scope.firstDate && $scope.secondDate && $scope.ClientesVmware) {
+                 const datosFinal = {                
+                    ContractNumber: $scope.ClientesVmware,
+                    CollectionStartMonth: $scope.firstDate,
+                    CollectionEndMonth: $scope.secondDate
+                }
+
+                console.log(datosFinal);
+            } else {
+                $scope.ShowToast('Es necesrio completar los datos', 'danger');
+            }
+            
+                //Aqui va la consulta :)
+ 
+            
+          };
       }
   
       $scope.init = function () {
@@ -52,3 +75,5 @@
   
     angular.module('marketplace').controller('MonitorDetalleVmwareController', MonitorDetalleVmwareController);
   }());
+
+  
