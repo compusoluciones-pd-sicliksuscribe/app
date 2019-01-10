@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+
   var IndexController = function ($scope, $log, $location, $cookies, $rootScope, PedidosFactory, PedidoDetallesFactory, ngToast, $uibModal, $window, UsuariosFactory, deviceDetector, ComprasUFFactory, EmpresasFactory) {
     $scope.indexBuscarProductos = {};
     $scope.SessionCookie = {};
@@ -191,7 +192,6 @@
       subdomain = subdomain.substring(0, subdomain.indexOf($rootScope.dominio));
       subdomain = subdomain.replace(new RegExp('[.]', 'g'), '');
       subdomain = subdomain.replace('www', '');
-
       if (subdomain !== '') {
         EmpresasFactory.getSitio(subdomain).success(function (empresa) {
           if (empresa.data[0]) {
@@ -209,7 +209,6 @@
         selectNavicon();
       }
     }
-
     $scope.selectMenu = function () {
       if ($scope.currentDistribuidor) {
         if ($scope.currentDistribuidor.IdEmpresa != 0 && $scope.currentDistribuidor.IdEmpresa != null) {
