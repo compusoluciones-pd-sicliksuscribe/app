@@ -6,9 +6,15 @@
       $scope.SessionCookie = $cookies.getObject('Session');
       $scope.url = '';
       $scope.selectVmware = {};
-
-
-      
+      $scope.contractUsageStatus = [{
+          1: 'Not opened',
+          2: 'Pending SP',
+          3: 'Pending Agg',
+          4: 'Pending Vendor',
+          5: 'Closed',
+          7: 'Pending Site'
+        }
+      ];
 
       $scope.OpenUrl = function () {
         window.open($scope.url,'_blank');
@@ -48,17 +54,24 @@
             if ($scope.firstDate && $scope.secondDate && $scope.ClientesVmware) {
                  const datosFinal = {                
                     ContractNumber: $scope.ClientesVmware,
-                    CollectionStartMonth: $scope.firstDate,
-                    CollectionEndMonth: $scope.secondDate
-                }
-
-                console.log(datosFinal);
+                    CollectionStartMonth:"2018-12",
+                    CollectionEndMonth: "2018-12"
+                };
+                FabricantesFactory.getMonthlyUsageVmware(datosFinal)
+                    .success(function (data) {
+                    $scope.header = data.header;
+                    $scope.enterprise = data.header.serviceProvider;
+                    $scope.Periodos = data.body;
+                    
+                    $scope.contractVmware = data;
+                })
+                .error(function () {
+                    $scope.url = '';
+                    $scope.ShowToast('El distribuidor no cuenta con datos en Vmware', 'danger');
+                });
             } else {
-                $scope.ShowToast('Es necesrio completar los datos', 'danger');
+                $scope.ShowToast('Es necesario completar los datos', 'danger');
             }
-            
-                //Aqui va la consulta :)
- 
             
           };
       }

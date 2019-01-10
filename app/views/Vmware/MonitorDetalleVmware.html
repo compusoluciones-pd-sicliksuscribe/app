@@ -38,7 +38,7 @@
 				<label class="labelMes" for="firsDate">De: </label>
 			</div>
 			<div class="col-xs-12 col-sm-4 col-md-4 col-lg-3">
-				<input class="form-control" type="month" name="firstDate" ng-model="firstDate">
+				<input class="form-control" type="month" name="firstDate" ng-model="firstDate" min="2018-11" ata-date-format="MM YYYY">
 			</div>
 			<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 colMedio">
 					<label class="labelMes" for="secondDate">A: </label>
@@ -49,26 +49,85 @@
 					<button type="button" class="btn btn-success btnEnviar" ng-click="validate();">Consultar</button>
 				</div>
 			</div>
-
-			<!-- <div class="row">
-				<div class='col-sm-6'>
-					<div class="form-group">
-						<div class='input-group date' id='datetimepicker1'>
-							<input type='text' class="form-control" />
-							<span class="input-group-addon">
-								<span class="glyphicon glyphicon-calendar"></span>
-							</span>
-						</div>
-					</div>
-				</div>
-				<script type="text/javascript">
-					$(function () {
-						$('#datetimepicker1').datetimepicker();
-					});
-				</script>
-			</div> -->
 		</div>
-
+	</div>
+	<div class="row" ng-if="enterprise">
+			<!-- <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div> -->
+	
+			<div class="form-group col-xs-12 col-md-4">
+				<label for="">Nombre empresa:</label>
+				{{enterprise.company}}
+				<br>
+				<label for="">Contacto:</label>
+				{{enterprise.serviceProviderContact}}
+				<br>
+				<label for="">Email:</label>
+				{{enterprise.email}}
+				<br>
+			</div>
+	
+			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 searchOption">
+				<label for="">No. contrato:</label>
+				{{header.contractNumber}}
+				<br>
+				<label for="">Plan de puntos:</label>
+				{{header.contractPointPlan}}
+			</div>
+	
+	</div>
+	<div class="row" ng-if="enterprise" ng-repeat="Periodo in Periodos | filter:ProductoFilter | orderBy:sortBy:reverse" class="repeat-animation">
+			<div class="form-group col-xs-12 col-md-6" >
+					<label for="">Periodo:</label>
+					{{Periodo.collectionPeriod}}
+					<br>
+					<label for="">Estatus:</label>
+					{{contractUsageStatus[Periodo.collectionStatus]}}
+					<br>
+					<label for="">SP PONumber:</label>
+					{{Periodo.serviceProviderPONumber}}
+					<br>
+					<label for="">Agg PONumber:</label>
+					{{Periodo.aggregatorPONumber}}
+					<br>
+			</div>
+			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-6 searchOption">
+				<label for="">Total puntos:</label>
+				{{Periodo.totalPoints}}
+				<br>
+				<label for="">Total base:</label>
+				{{Periodo.totalBase}}
+				<br>
+				<label for="">Total overage:</label>
+				{{Periodo.totalOverage}}
+				<br>
+			</div>
+			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-12"></div>
+			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-6">
+				<br>
+				<label for="">Productos</label>
+				<div  ng-repeat="Producto in Periodo.products | orderBy:sortBy:reverse" class="repeat-animation">
+					<br>
+					<label for="">SKU:</label>
+					{{Producto.sku}}
+					<br>
+					<label for="">Descripción:</label>
+					{{Producto.description}}
+					<br>
+					<label for="">Unidades utilizadas:</label>
+					{{Producto.utilizedUnits}}
+					<br>
+				</div>
+			</div>
+			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-6">
+				<br>
+				<label for="">Descripción/Estatus:</label>
+				<div  ng-repeat="Coleccion in Periodo.collectionNotes | orderBy:sortBy:reverse" class="repeat-animation">
+					<br>
+					<label for="">Descripción:</label>
+					{{Coleccion.description}}
+					<br>
+				</div>
+			</div>
 	</div>
 
 </div>

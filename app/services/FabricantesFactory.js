@@ -41,6 +41,11 @@
       return $http.get($rootScope.API + 'Vmware/get-users-list');
     };
 
+    factory.getMonthlyUsageVmware = function (payload) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'Vmware/get-monthly-usage', payload);
+    };
+
     return factory;
   };
 
