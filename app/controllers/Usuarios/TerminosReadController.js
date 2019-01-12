@@ -121,4 +121,4 @@
   TerminosReadController.$inject = ['$scope', '$rootScope', '$log', '$location', '$cookies', 'UsuariosFactory', 'jwtHelper'];
 
   angular.module('marketplace').controller('TerminosReadController', TerminosReadController);
-} ());
+}());
