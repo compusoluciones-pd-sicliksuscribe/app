@@ -51,7 +51,7 @@
 
         $scope.validate = function () {
 
-            if ($scope.firstDate && $scope.secondDate && $scope.ClientesVmware) {
+            if ($scope.firstDate && $scope.ClientesVmware) {
                  const datosFinal = {                
                     ContractNumber: $scope.ClientesVmware,
                     CollectionStartMonth:"2018-12",

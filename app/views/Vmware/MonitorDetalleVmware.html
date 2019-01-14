@@ -34,17 +34,17 @@
 	</div>
 	<div class="form-group row">
 		<div class="col-xs-12 col-sm-6 col-md-5 col-lg-4" style="float:right">
-			<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 colMedio">
-				<label class="labelMes" for="firsDate">De: </label>
+			<div class="col-xs-1 col-sm-1 col-md-1 col-lg-2 ">
+				<label class="labelMes" for="firsDate">Fecha: </label>
 			</div>
 			<div class="col-xs-12 col-sm-5 col-md-5 col-lg-5">
 				<input class="form-control" type="month" name="firstDate" ng-model="firstDate" min="2018-11" ata-date-format="MM YYYY">
 			</div>
-			<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 colMedio">
+			<!-- <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 colMedio">
 				<label class="labelMes" for="secondDate">A: </label>
-			</div>
+			</div> -->
 			<div class="col-xs-12 col-sm-5 col-md-5 col-lg-5">
-				<input class="form-control" type="month" name="secondDate" ng-model="secondDate">
+				<!-- <input class="form-control" type="month" name="secondDate" ng-model="secondDate"> -->
 				<div class="row text-right">
 					<button type="button" class="btn btn-success btnEnviar" ng-click="validate();">Consultar</button>
 				</div>
@@ -68,11 +68,13 @@
 				<div class="profile-card__txt">
 					<span class="glyphicon glyphicon-list-alt"></span> {{header.contractNumber}}
 					<span class="glyphicon glyphicon-certificate"></span> {{header.contractPointPlan}}
-
 				</div>
 				<div class="profile-card__txt">
-					<span class="glyphicon glyphicon-calendar profile-card-loc__txt"> {{Periodo.collectionPeriod}}</span>
-					<span class="glyphicon glyphicon-ok profile-card-loc__txt"> {{contractUsageStatus[Periodo.collectionStatus]}}</span>
+					<span class="glyphicon glyphicon-calendar profile-card-loc__txt"> {{Periodo.collectionPeriod | date:'dd/MM/yyyy'}}</span>
+				</div>
+				<div class="profile-card__txt">
+					<label for="">Estatus: </label>
+					<span > {{contractUsageStatus[0][Periodo.collectionStatus]}}</span>
 				</div>
 				<div>
 				</div>
@@ -82,7 +84,10 @@
 						<div class="profile-card-inf__txt">SP PONumber</div>
 					</div>
 					<div class="profile-card-inf__item">
-						<div class="profile-card-inf__title">{{Periodo.aggregatorPONumber}}</div>
+						<div ng-if="Periodo.aggregatorPONumber" class="profile-card-inf__title">{{Periodo.aggregatorPONumber}}</div>
+						<div ng-show="!Periodo.aggregatorPONumber" class="profile-card-inf__title">
+							<button type="button" class="btn btn-primary btnEnviar" ng-click="validate();">Generar</button>
+						</div>
 						<div class="profile-card-inf__txt">Agg PONumber</div>
 					</div>
 					<div class="profile-card-inf__item">
