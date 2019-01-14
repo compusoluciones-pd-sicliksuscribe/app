@@ -13,8 +13,8 @@
           }
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo m醩 tarde.';
-          $scope.ShowToast('No pudimos cargar la informaci髇 de tu sitio, por favor intenta de nuevo m醩 tarde.', 'danger');
+          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo m谩s tarde.';
+          $scope.ShowToast('No pudimos cargar la informaci贸n de tu sitio, por favor intenta de nuevo m谩s tarde.', 'danger');
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
     };
@@ -32,8 +32,8 @@
           }
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo m醩 tarde.';
-          $scope.ShowToast('No pudimos cargar la lista de productos, por favor intenta de nuevo m醩 tarde.', 'danger');
+          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo m谩s tarde.';
+          $scope.ShowToast('No pudimos cargar la lista de productos, por favor intenta de nuevo m谩s tarde.', 'danger');
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
     }
@@ -43,14 +43,14 @@
     var uploaderIcon = $scope.uploaderIcon = new FileUploader({});
     var uploadPDF = $scope.uploadPDF = new FileUploader({});
 
-    /** Al momento de anexar el archivo se hace la validaci髇 del formato, si no es el esperado no permite subir el archivo y manda un mensaje **/
+    /** Al momento de anexar el archivo se hace la validaci贸n del formato, si no es el esperado no permite subir el archivo y manda un mensaje **/
     uploader.filters.push({
       name: 'imageFilter',
       fn: function (item, options) {
         var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
         var extension = item.type.slice(item.type.lastIndexOf('/') + 1);
         if (!(extension === 'jpeg' || extension === 'jpg' || extension === 'gif' || extension === 'png')) {
-          $scope.ShowToast('Archivo no v醠ido, por favor adjunta formatos jpeg, jpg, gif o png.', 'danger');
+          $scope.ShowToast('Archivo no v谩lido, por favor adjunta formatos jpeg, jpg, gif o png.', 'danger');
           $scope.miSitio.UrlLogo = null;
         }
         return this.queue.length < 1 && '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
@@ -63,7 +63,7 @@
         var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
         var extension = item.type.slice(item.type.lastIndexOf('/') + 1);
         if (!(extension === 'jpeg' || extension === 'jpg' || extension === 'gif' || extension === 'png' || extension === 'x-icon')) {
-          $scope.ShowToast('Archivo no v醠ido, por favor adjunta formatos jpeg, jpg, gif png o ico.', 'danger');
+          $scope.ShowToast('Archivo no v谩lido, por favor adjunta formatos jpeg, jpg, gif png o ico.', 'danger');
           $scope.miSitio.Icon = null;
         }
         return this.queue.length < 1 && '|jpg|png|jpeg|bmp|gif|ico|x-icon|'.indexOf(type) !== -1;
@@ -76,14 +76,13 @@
         var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
         var extension = item.type.slice(item.type.lastIndexOf('/') + 1);
         if (!(extension === 'pdf')) {
-          $scope.ShowToast('Archivo no v醠ido, por favor adjunta formato PDF.', 'danger');
-          $scope.miSitio.TerminosYCondiciones = null;
+          $scope.ShowToast('Archivo no v谩lido, por favor adjunta formato PDF.', 'danger');
         }
         return this.queue.length < 1 && '|pdf|'.indexOf(type) !== -1;
       }
     });
 
-    /** Antes de subir el archivo le cambio el nombre por el Id de la empresa para hacerlo 鷑ico **/
+    /** Antes de subir el archivo le cambio el nombre por el Id de la empresa para hacerlo 煤nico **/
     uploader.onBeforeUploadItem = function (item) {
       var extension = item.file.name.split('.');
       item.file.name = $scope.IdEmpresa.toString() + '.' + extension[1];
@@ -99,7 +98,7 @@
       item.file.name = $scope.IdEmpresa.toString() + '.' + extension[1];
     };
 
-    /** Subo la im醙en y establesco la liga para ser guardada despues si no hay errores **/
+    /** Subo la im谩gen y establesco la liga para ser guardada despues si no hay errores **/
     function subirImagen (fileItem, data) {
       var fileChooser = document.getElementById('fileUploadImagen');
       var file = fileChooser.files[0];
@@ -154,7 +153,7 @@
       });
     }
 
-    /** Una vez que se termino de anexar va y busca las credenciales de Amazon y lasa pasa a la funci髇 subirImagen junto con el archivo para comenzar la subida **/
+    /** Una vez que se termino de anexar va y busca las credenciales de Amazon y lasa pasa a la funci贸n subirImagen junto con el archivo para comenzar la subida **/
     uploader.onCompleteItem = function (fileItem, response, status, headers) {
       AccesosAmazonFactory.getAccesosAmazon()
         .success(function (result) {
@@ -165,11 +164,11 @@
           }
         })
         .error(function (data, status, headers, config) {
-          $scope.ShowToast('Error al obtener la conexi髇', 'danger');
+          $scope.ShowToast('Error al obtener la conexi贸n', 'danger');
         });
     };
 
-      /** Una vez que se termino de anexar va y busca las credenciales de Amazon y lasa pasa a la funci髇 subirImagen junto con el archivo para comenzar la subida **/
+      /** Una vez que se termino de anexar va y busca las credenciales de Amazon y lasa pasa a la funci贸n subirImagen junto con el archivo para comenzar la subida **/
     uploaderIcon.onCompleteItem = function (fileItem, response, status, headers) {
       AccesosAmazonFactory.getAccesosAmazon()
         .success(function (result) {
@@ -180,11 +179,11 @@
           }
         })
         .error(function (data, status, headers, config) {
-          $scope.ShowToast('Error al obtener la conexi髇', 'danger');
+          $scope.ShowToast('Error al obtener la conexi贸n', 'danger');
         });
     };
 
-     /** Una vez que se termino de anexar va y busca las credenciales de Amazon y lasa pasa a la funci髇 subirImagen junto con el archivo para comenzar la subida **/
+     /** Una vez que se termino de anexar va y busca las credenciales de Amazon y lasa pasa a la funci贸n subirImagen junto con el archivo para comenzar la subida **/
     uploadPDF.onCompleteItem = function (fileItem, response, status, headers) {
       AccesosAmazonFactory.getAccesosAmazon()
         .success(function (result) {
@@ -195,7 +194,7 @@
           }
         })
         .error(function (data, status, headers, config) {
-          $scope.ShowToast('Error al obtener la conexi髇', 'danger');
+          $scope.ShowToast('Error al obtener la conexi贸n', 'danger');
         });
     };
 
