@@ -63,6 +63,9 @@
         case makers.HP:
           maker = 'HP';
           break;
+          case makers.COMPUCAMPO:
+          maker = 'Compucampo';
+          break;
         default:
           maker = null;
       }
