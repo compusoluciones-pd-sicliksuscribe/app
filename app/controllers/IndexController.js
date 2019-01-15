@@ -210,6 +210,7 @@
       }
     }
     $scope.selectMenu = function () {
+      $scope.currentDistribuidor = $cookies.getObject('currentDistribuidor');
       if ($scope.currentDistribuidor) {
         if ($scope.currentDistribuidor.IdEmpresa != 0 && $scope.currentDistribuidor.IdEmpresa != null) {
           return true;
