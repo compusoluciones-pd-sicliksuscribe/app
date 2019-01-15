@@ -142,7 +142,7 @@
       AWS.config.update({ accessKeyId: data[0].AccessKey, secretAccessKey: data[0].SecretAccess });
       var bucketName = data[0].Bucket;
       var bucket = new AWS.S3({ params: { Bucket: bucketName } });
-      var objKey = 'Anexos/logos/TerminosYCondiciones' + fileItem.file.name;
+      var objKey = 'Anexos/terminosycondiciones/pdf' + fileItem.file.name;
       var params = { Key: objKey, ContentType: fileItem.type, Body: file, ACL: 'public-read' };
       bucket.putObject(params, function (err, data) {
         if (err) {
