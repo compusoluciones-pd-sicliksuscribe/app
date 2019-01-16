@@ -30,14 +30,11 @@
     $scope.init();
 
     $scope.IniciarSesion = function () {
-      console.log('doing login');
       $cookies.remove('Session');
       $cookies.remove('Pedido');
       $scope.Usuario.IdEmpresa = $scope.currentDistribuidor.IdEmpresa;
       // $cookies.remove('currentDistribuidor');
       $scope.SessionCookie = {};
-      const datatl = UsuariosFactory.postUsuarioIniciarSesion($scope.Usuario);
-      console.log('jojotl ', datatl);
       UsuariosFactory.postUsuarioIniciarSesion($scope.Usuario)
         .success(function (result) {
           if (result[0].Success) {
@@ -67,8 +64,6 @@
               DominioMS: tokenPayload.DominioMS,
               Expira: expireDate.getTime()
             };
-            console.log('login succesfull');
-            console.log($cookies);
             $cookies.putObject('Session', Session, { 'expires': expireDate, secure: $rootScope.secureCookie });
 
             if (Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === '4' ||

@@ -5,13 +5,9 @@
     Session = $cookies.getObject('Session');
     $scope.currentDistribuidor = $cookies.getObject('currentDistribuidor');
     const currentDistribuidor = $scope.currentDistribuidor;
-    console.log('curren el distribuidor', currentDistribuidor);
-
     $scope.Usuario = {};
 
     $scope.getTerminosYCondiciones = function (currentDistribuidor) {
-      console.log('currentDistribuidor', currentDistribuidor);
-      
       if (!currentDistribuidor) {
         $scope.isClickTerminos = true;
       } else {
