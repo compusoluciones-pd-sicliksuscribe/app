@@ -5,6 +5,7 @@
     Session = $cookies.getObject('Session');
     $scope.currentDistribuidor = $cookies.getObject('currentDistribuidor');
     const currentDistribuidor = $scope.currentDistribuidor;
+    console.log('curren el distribuidor', currentDistribuidor);
 
     $scope.Usuario = {};
 
