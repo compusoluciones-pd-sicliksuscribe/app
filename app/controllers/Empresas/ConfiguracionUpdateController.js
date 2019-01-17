@@ -1,6 +1,5 @@
 (function () {
   var ConfiguracionUpdateController = function ($scope, $log, $location, $cookies, $routeParams, EmpresasFactory, FileUploader, AccesosAmazonFactory) {
-
     $scope.init = function () {
       $scope.CheckCookie();
       var cookie = $cookies.getObject('Session');
@@ -42,6 +41,7 @@
     /** Declaro el uploader como un nuevo FileUploader **/
     var uploader = $scope.uploader = new FileUploader({});
     var uploaderIcon = $scope.uploaderIcon = new FileUploader({});
+    var uploadPDF = $scope.uploadPDF = new FileUploader({});
 
     /** Al momento de anexar el archivo se hace la validación del formato, si no es el esperado no permite subir el archivo y manda un mensaje **/
     uploader.filters.push({
@@ -57,7 +57,6 @@
       }
     });
 
-    /** Al momento de anexar el archivo se hace la validación del formato, si no es el esperado no permite subir el archivo y manda un mensaje **/
     uploaderIcon.filters.push({
       name: 'imageFilter',
       fn: function (item, options) {
@@ -71,14 +70,30 @@
       }
     });
 
+    uploadPDF.filters.push({
+      name: 'pdfFilter',
+      fn: function (item, options) {
+        var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
+        var extension = item.type.slice(item.type.lastIndexOf('/') + 1);
+        if (!(extension === 'pdf')) {
+          $scope.ShowToast('Archivo no válido, por favor adjunta formato PDF.', 'danger');
+        }
+        return this.queue.length < 1 && '|pdf|'.indexOf(type) !== -1;
+      }
+    });
+
     /** Antes de subir el archivo le cambio el nombre por el Id de la empresa para hacerlo único **/
     uploader.onBeforeUploadItem = function (item) {
       var extension = item.file.name.split('.');
       item.file.name = $scope.IdEmpresa.toString() + '.' + extension[1];
     };
 
-    /** Antes de subir el archivo le cambio el nombre por el Id de la empresa para hacerlo único **/
     uploaderIcon.onBeforeUploadItem = function (item) {
+      var extension = item.file.name.split('.');
+      item.file.name = $scope.IdEmpresa.toString() + '.' + extension[1];
+    };
+
+    uploadPDF.onBeforeUploadItem = function (item) {
       var extension = item.file.name.split('.');
       item.file.name = $scope.IdEmpresa.toString() + '.' + extension[1];
     };
@@ -102,7 +117,6 @@
       });
     }
 
-    /** Subo la imágen y establesco la liga para ser guardada despues si no hay errores **/
     function subirImagenIcon (fileItem, data) {
       var fileChooser = document.getElementById('fileUploadIcon');
       var file = fileChooser.files[0];
@@ -111,6 +125,24 @@
       var bucketName = data[0].Bucket;
       var bucket = new AWS.S3({ params: { Bucket: bucketName } });
       var objKey = 'Anexos/logos/icon' + fileItem.file.name;
+      var params = { Key: objKey, ContentType: fileItem.type, Body: file, ACL: 'public-read' };
+      bucket.putObject(params, function (err, data) {
+        if (err) {
+          $scope.ShowToast(err, 'danger');
+        } else {
+          putMiSitio();
+        }
+      });
+    }
+
+    function subirPDF (fileItem, data) {
+      var fileChooser = document.getElementById('uploadTerminosCondiciones');
+      var file = fileChooser.files[0];
+      $scope.miSitio.TerminosYCondiciones = 'https://s3.amazonaws.com/marketplace.compusoluciones.com/Anexos/terminosycondiciones/tyc' + fileItem.file.name;
+      AWS.config.update({ accessKeyId: data[0].AccessKey, secretAccessKey: data[0].SecretAccess });
+      var bucketName = data[0].Bucket;
+      var bucket = new AWS.S3({ params: { Bucket: bucketName } });
+      var objKey = 'Anexos/terminosycondiciones/tyc' + fileItem.file.name;
       var params = { Key: objKey, ContentType: fileItem.type, Body: file, ACL: 'public-read' };
       bucket.putObject(params, function (err, data) {
         if (err) {
@@ -136,7 +168,7 @@
         });
     };
 
-    /** Una vez que se termino de anexar va y busca las credenciales de Amazon y lasa pasa a la función subirImagen junto con el archivo para comenzar la subida **/
+      /** Una vez que se termino de anexar va y busca las credenciales de Amazon y lasa pasa a la función subirImagen junto con el archivo para comenzar la subida **/
     uploaderIcon.onCompleteItem = function (fileItem, response, status, headers) {
       AccesosAmazonFactory.getAccesosAmazon()
         .success(function (result) {
@@ -151,20 +183,41 @@
         });
     };
 
-    /** Si trae anexo algo lo sube, si no hace el puro update sin actualizar nada**/
+     /** Una vez que se termino de anexar va y busca las credenciales de Amazon y lasa pasa a la función subirImagen junto con el archivo para comenzar la subida **/
+    uploadPDF.onCompleteItem = function (fileItem, response, status, headers) {
+      AccesosAmazonFactory.getAccesosAmazon()
+        .success(function (result) {
+          if (result[0].Success === true) {
+            subirPDF(fileItem, result);
+          } else {
+            $scope.ShowToast(result[0].Message, 'danger');
+          }
+        })
+        .error(function (data, status, headers, config) {
+          $scope.ShowToast('Error al obtener la conexión', 'danger');
+        });
+    };
+
+      /** Si trae anexo algo lo sube, si no hace el puro update sin actualizar nada**/
     $scope.Guardar = function () {
-      if (uploader.queue[0] || uploaderIcon.queue[0]) {
+      if (uploader.queue[0] || uploaderIcon.queue[0] || uploadPDF.queue[0]) {
         if (uploader.queue[0]) {
           uploader.queue[0].upload();
         }
         if (uploaderIcon.queue[0]) {
           uploaderIcon.queue[0].upload();
         }
+        if (uploadPDF.queue[0]) {
+          uploadPDF.queue[0].upload();
+        }
       } else {
         if ($scope.miSitio.UrlLogo) {
           $scope.miSitio.UrlLogo = $scope.miSitio.UrlLogo.split('?')[0];
         }
         if ($scope.miSitio.Icon) {
+          $scope.miSitio.Icon = $scope.miSitio.Icon.split('?')[0];
+        }
+        if ($scope.miSitio.TerminosYCondiciones) {
           $scope.miSitio.Icon = $scope.miSitio.Icon.split('?')[0];
         }
         putMiSitio();

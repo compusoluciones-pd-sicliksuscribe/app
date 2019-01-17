@@ -117,6 +117,7 @@
     };
 
     factory.putMiSitio = function (miSitio) {
+      console.log('misitio', miSitio);
       factory.refreshToken();
       return $http.put($rootScope.API + 'MiSitio', miSitio);
     };

@@ -3,8 +3,8 @@
     <form name="frm">
     
         <div class="form-group row">
-
-            <div class="form-group row">
+            <!-- el HTML de Clicksuscribe -->
+            <div class="form-group row" ng-show="isClickTerminos">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     
                         <h1><span>Políticas<o:p></o:p></span></h1>
@@ -703,16 +703,20 @@
                             <span>LEÍDO QUE FUE POR AMBAS PARTES EL PRESENTE ANEXO AL CONTRATO Y ENTERADAS DEBIDAMENTE DE SU CONTENIDO, ALCANCE Y CONSECUENCIAS LEGALES, LO ACEPTAN EXPRESAMENTE, MANIFESTANDO BAJO PROTESTA DE DECIR VERDAD QUE LAS PARTES CUENTAN CON LA CAPACIDAD SUFICIENTE PARA CONTRATAR Y OBLIGARSE EN TÉRMINOS DE LOS MISMOS. EL CLIENTE ACUSA DE RECIBO EL PRESENTE MENSAJE DE DATOS, SIENDO DE SU CONOCIMIENTO QUE LA INFORMACIÓN CONTENIDA EN ESTE, SE MANTENDRÁ INTEGRA Y SERÁ ACCESIBLE A SU ULTERIOR CONSULTA,<o:p></o:p></span></p>
                     
                     </div>
-                </div>
-            
-            <div class="form-group row">
+            </div>
+
+            <div class="form-group row" ng-show="!isClickTerminos">
+                <iframe style="width:100%; height:700px;" ng-src="{{terminosPDF}}"  frameborder="0"> </iframe>
+            </div>
+
+            <div class="form-group row" ng-show="isClickTerminos">
                 <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
                     <div class="pull-rigth">
                         Para descargar el documento da click <a target="blank" href="https://s3.amazonaws.com/marketplace.compusoluciones.com/TerminosCondiciones.pdf">aquí</a>.
                     </div>
                 </div>
             </div>
-            
+         
             <br>
             
             <div class="form-group row">
