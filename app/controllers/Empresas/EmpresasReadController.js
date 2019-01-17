@@ -4,12 +4,14 @@
     $scope.reverse = false;
     $scope.TablaVisible = false;
     $scope.cambiaAgente = false;
+    $scope.cambiaAgenteAutodesk = false;
 
     $scope.init = function () {
       $scope.CheckCookie();
       $scope.Empresas = null;
       $scope.TablaVisible = false;
       $scope.cambiaAgente = false;
+      $scope.cambiaAgenteAutodesk = false;
 
       NivelesDistribuidorFactory.getNivelesDistribuidor()
         .success(function (NivelesDistribuidor) {
@@ -140,8 +142,7 @@
       };
 
     $scope.ActualizarAgentes = function (Empresa) {
-      var parametros = { IdEmpresa: Empresa.IdEmpresa, AgenteMicrosoft: Empresa.AgenteMicrosoft, AgenteAutodesk: Empresa.AgenteAutodesk , AgenteAutodeskRenovacion: Empresa.AgenteAutodeskRenovacion
-      };
+      var parametros = { IdEmpresa: Empresa.IdEmpresa, AgenteMicrosoft: Empresa.AgenteMicrosoft, AgenteAutodesk: Empresa.AgenteAutodesk, AgenteAutodeskRenovacion: Empresa.AgenteAutodeskRenovacion };
       if (typeof Empresa.AgenteMicrosoft === 'undefined' || typeof Empresa.AgenteAutodesk === 'undefined' || typeof Empresa.AgenteAutodeskRenovacion === 'undefined') {
         $scope.ShowToast('El nombre del agente solo debe contener letras y una longitud menor a 10 caracteres.', 'danger');
       } else {
@@ -150,6 +151,7 @@
             if (result.success) {
               $scope.ShowToast(result.message, 'success');
               Empresa.cambiaAgente = false;
+              Empresa.cambiaAgenteAutodesk = false;
             } else {
               $scope.ShowToast(result.message, 'danger');
             }
@@ -159,10 +161,13 @@
           });
       }
     };
-
     $scope.cambiarBoton = function (Empresa) {
       Empresa.cambiaAgente = true;
-    };    
+    };
+  
+    $scope.cambiarBotonAutodesk = function (Empresa) {
+      Empresa.cambiaAgenteAutodesk = true;
+    };
   };
 
   EmpresasReadController.$inject = ['$scope', '$log', '$location', '$cookies', 'EmpresasFactory', 'NivelesDistribuidorFactory'];

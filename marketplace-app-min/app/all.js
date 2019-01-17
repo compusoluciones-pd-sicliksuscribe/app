@@ -1944,6 +1944,12 @@ angular.module('directives.loading', [])
       return $http.get($rootScope.API + 'support/'+ idSolicitud);
     };
 
+    factory.getCategorysReport = function () {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'category-support');
+    };
+
+    
     return factory;
   };
 
@@ -7665,6 +7671,26 @@ angular.module('directives.loading', [])
         .success(function (resultado) {
           if (resultado.success === 1) {
             $scope.combo = resultado.data;
+          }
+        }).error(function (data, status, headers, config) {
+          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.ShowToast('No pudimos cargar la lista de status, por favor intenta de nuevo más tarde.', 'danger');
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+        SoporteFactory.getCategorysReport()
+        .success(function (resultado) {
+          if (resultado.success === 1) {
+            $scope.selectCategorias = resultado.data;
+          }
+        }).error(function (data, status, headers, config) {
+          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.ShowToast('No pudimos cargar la lista de status, por favor intenta de nuevo más tarde.', 'danger');
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+        SoporteFactory.getMakersReport()
+        .success(function (resultado) {
+          if (resultado.success === 1) {
+            $scope.selectFabricantes = resultado.data;
           }
         }).error(function (data, status, headers, config) {
           $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
