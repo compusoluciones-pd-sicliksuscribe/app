@@ -75,13 +75,24 @@
                                                     <label>Agente Autodesk: </label>
                                                     
                                                     <div class="input-group">
-                                                        <input name="agenteAutodesk" type="text" ng-change="cambiarBoton(Empresa)" ng-model="Empresa.AgenteAutodesk" ng-pattern="/^[a-zA-ZñÑáéíóúü\s]{0,10}$/" class="form-control"  placeholder="Agente Autodesk" size="255" ng-maxlength="45"  ng-disabled="SessionCookie.IdTipoAcceso !== 1"/>
-                                                        <span ng-show="Empresa.cambiaAgente" style="padding-left: 15px;" class="input-group-btn">
-                                                            <h3 style="margin: 0;"><a title="Guardar Agentes" ng-click="ActualizarAgentes(Empresa)"><span class="fa fa-floppy-o"></span></a></h3>
-                                                        </span>
+                                                            <input name="agenteAutodesk" type="text" ng-change="cambiarBoton(Empresa)" ng-model="Empresa.AgenteAutodesk" ng-pattern="/^[a-zA-ZñÑáéíóúü\s]{0,10}$/" class="form-control"  placeholder="Agente Autodesk " size="255" ng-maxlength="45"  ng-disabled="SessionCookie.IdTipoAcceso !== 1"/>
                                                     </div>
                                                 </div>
+                                                
+
+                                                <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" style="padding-left: 0; margin-top: 10px;">
+                                                        <label>Agente Autodesk Renovación: </label>
+                                                        
+                                                        <div class="input-group">
+                                                            <input name="agenteAutodeskRenovacion" type="text" ng-change="cambiarBoton(Empresa)" ng-model="Empresa.AgenteAutodeskRenovacion" ng-pattern="/^[a-zA-ZñÑáéíóúü\s]{0,10}$/" class="form-control"  placeholder="Agente Autodesk Renovación" size="255" ng-maxlength="45"  ng-disabled="SessionCookie.IdTipoAcceso !== 1"/>
+                                                            <span ng-show="Empresa.cambiaAgente" style="padding-left: 15px;" class="input-group-btn">
+                                                                <h3 style="margin: 0;"><a title="Guardar Agentes" ng-click="ActualizarAgentes(Empresa)"><span class="fa fa-floppy-o"></span></a></h3>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+
                                             </div>
+
 
                                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-left: 0;">
                                                 <h5>Fecha de activación: {{Empresa.FechaActivo | date:'d/MM/yyyy' }}</h5>
