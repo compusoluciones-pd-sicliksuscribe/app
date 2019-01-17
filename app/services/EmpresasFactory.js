@@ -158,6 +158,11 @@
       return $http.get($rootScope.API + 'enterprise/domain-ms/final-user/' + Empresa);
     };
 
+    factory.putActualizarNivelDistribuidorMicrosoft = function (parametros) {
+      factory.refreshToken();
+      return $http.put($rootScope.API + 'enterprises/level-descount-microsoft', parametros);
+    };
+
     return factory;
   };
 
