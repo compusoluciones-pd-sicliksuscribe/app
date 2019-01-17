@@ -266,10 +266,10 @@
       return IdFormaPago === paymentMethods.CREDIT_CARD;
     };
 
-    $scope.isPayWithPrepaid = function() {
+    $scope.isPayWithPrepaid = function () {
       const IdFormaPago = Number($scope.Distribuidor.IdFormaPagoPredilecta);
       return IdFormaPago === paymentMethods.PREPAY;
-    }
+    };
 
     $scope.hasProtectedExchangeRate = function () {
       const orderDetails = $scope.PedidoDetalles;
@@ -373,6 +373,19 @@
       if (!$scope.PedidoDetalles || $scope.PedidoDetalles.length === 0) next = false;
       else {
         $scope.PedidoDetalles.forEach(function (order) {
+          PedidoDetallesFactory.idOrderComparePaymentCurrency(order)
+          .then(function (result) {
+            result.data.data.forEach(function (compararPedidosAnteriores) {
+              if (order.MonedaPago === compararPedidosAnteriores.MonedaPago) {
+              } else {
+                $cookies.putObject('compararPedidosAnteriores', compararPedidosAnteriores);
+                document.getElementById('modalTipoMoneda').style.display = 'block';
+              }
+            });
+          })
+          .catch(function (result) {
+            $scope.ShowToast(result.data.message, 'danger');
+          });
           if (!order.IdEmpresaUsuarioFinal) next = false;
           order.Productos.forEach(function (product) {
             if (product.Cantidad <= 0) next = false;
