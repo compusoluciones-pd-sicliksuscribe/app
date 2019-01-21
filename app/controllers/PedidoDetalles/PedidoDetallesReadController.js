@@ -16,7 +16,8 @@
       AUTODESK: 2,
       COMPUSOLUCIONES: 3,
       HP: 4,
-      APERIO: 5
+      APERIO: 5,
+      COMPUCAMPO: 8
     };
 
     const error = function (error) {
@@ -74,6 +75,9 @@
           break;
         case makers.HP:
           maker = 'HP';
+          break;
+        case makers.COMPUCAMPO:
+          maker = 'Compucampo';
           break;
         default:
           maker = null;
