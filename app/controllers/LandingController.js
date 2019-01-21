@@ -14,17 +14,27 @@
       subdomain = subdomain.replace(new RegExp('[.]', 'g'), '');
       subdomain = subdomain.replace('www', '');
 
+      if (subdomain) {
         EmpresasFactory.getSitio(subdomain).success(function (empresa) {
-            if ($scope.currentDistribuidor) {
-              PromocionsFactory.getPromocions(empresa.data[0].IdEmpresa)
-              .success(function (Promociones) {
-                $scope.Promociones = Promociones;
-              })
-              .error(function (data, status, headers, config) {
-                $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-              });
-            }
+          if ($scope.currentDistribuidor) {
+            PromocionsFactory.getPromocions(empresa.data[0].IdEmpresa)
+            .success(function (Promociones) {
+              $scope.Promociones = Promociones;
+            })
+            .error(function (data, status, headers, config) {
+              $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+            });
+          }
         });
+      } else {
+        PromocionsFactory.getPromocions(0)
+        .success(function (Promociones) {
+          $scope.Promociones = Promociones;
+        })
+        .error(function (data, status, headers, config) {
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+      }
     };
 
     $scope.init();
