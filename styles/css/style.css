@@ -30,7 +30,7 @@ html {
   /* Stay in place */
   z-index: 1;
   /* Sit on top */
-  padding-top: 100px;
+  padding-top: 200px;
   /* Location of the box */
   left: 0;
   top: 0;
@@ -45,20 +45,6 @@ html {
   background-color: rgba(0, 0, 0, 0.4);
   /* Black w/ opacity */ }
 
-/* Modal Content */
-.modal-content {
-  position: relative;
-  background-color: #fefefe;
-  margin-top: 117px;
-  margin-left: 200px;
-  padding: 0;
-  border: 1px solid #888;
-  width: 80%;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  -webkit-animation-name: animatetop;
-  -webkit-animation-duration: 0.4s;
-  animation-name: animatetop;
-  animation-duration: 0.4s; }
 
 /* Add Animation */
 @-webkit-keyframes animatetop {
@@ -75,45 +61,6 @@ html {
   to {
     top: 0;
     opacity: 1; } }
-/* The Close Button */
-.close {
-  color: blue;
-  float: right;
-  font-size: 28px;
-  font-weight: bold; }
-
-.modal-header {
-  padding: 2px 16px;
-  background-color: #00549f;
-  color: white; }
-
-.btn-group {
-  background-color: blue;
-  /* blue background */
-  border: 5px solid white;
-  /* white border */
-  color: white;
-  /* White text */
-  padding: 10px 34px;
-  /* Some padding */
-  cursor: pointer;
-  /* Pointer/hand icon */
-  float: right;
-  /* Float the buttons side by side */
-  width: 50%; }
-
-/* Clear floats (clearfix hack) */
-.btn-group:after {
-  content: "";
-  clear: both;
-  display: table; }
-
-.btn-group button:not(:last-child) {
-  border-right: none;
-  /* Prevent double borders */ }
-
-.btn-group:hover {
-  background-color: #0307ddce; }
 
 body {
   position: relative;
@@ -288,7 +235,8 @@ button a:hover {
 .btn-primary {
   min-width: 150px;
   height: 45px;
-  background: #00549F !important; }
+  /* background: #00549F !important; */
+} 
 
 .md-primary {
   min-width: 150px;
@@ -484,29 +432,6 @@ option {
   background: #3c3c3c;
   padding-top: 20px; }
 
-/*
-.footer{
-    width:100%;
-    height:auto;
-    background: #464646;
-    padding:30px;
-
-}
-
-.footer img{
-    width:140px;
-    margin-top:-20px;
-}
-
-.footer p{
-    color:#fff;
-    font-size: 12px;
-
-}
-
-.footer .container{
-    min-height:auto;
-}*/
 @media screen and (max-width: 768px) {
   .text-left h3 {
     margin-top: 110px; }

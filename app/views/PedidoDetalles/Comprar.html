@@ -1,18 +1,22 @@
 <div class="container" ng-swipe-right="" ng-swipe-left="">
 	<!-- The Modal -->
-	<div id="modalTipoMoneda" class="modal">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h1>Forma de Pago</h1>
-			</div>	
-			<div class="modal-body" id="div1">
-				<p>Su moneda de pago (pesos/dólares) es distinto al pedido {{ tipoMonedaCambio.IdPedido}} realizado para éste mismo usuario. </p>
-				<p>Si desea continuar con una moneda pago distinta para el mismo usuario, haga click en "Aceptar".</p>
-				<p>Si desea unificar moneda pago haga click en "Modificar moneda pago" y seleccione la moneda pago correspondiente </p>
-			</div>
-			<div class="modal-footer">
-				<button class="btn-group" ng-click="modalNotificacionCarrito();">Aceptar</button>
-  				<button class="btn-group" ng-click="modalNotificacionComprar();">Modificar moneda pago</button>
+	<div class="modal" id="modalTipoMoneda" tabindex="-1"  role="dialog" aria-labelledby="exampleModalLabel">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title">Forma de Pago</h4>
+				</div>	
+				<div class="modal-body">
+					<p>Su moneda de pago (pesos/dólares) es distinto al pedido {{ tipoMonedaCambio.IdPedido}} realizado para éste mismo usuario. 
+						<br>
+						Si desea continuar con una moneda pago distinta para el mismo usuario, haga click en "Aceptar". <br>
+						Si desea unificar moneda pago haga click en "Modificar moneda pago" y seleccione la moneda pago correspondiente.
+					</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-success" ng-click="modalNotificacionCarrito();">Aceptar</button>
+					<button type="button" class="btn btn-primary" ng-click="modalNotificacionComprar();">Modificar moneda pago</button>
+				</div>
 			</div>
 		</div>
 	</div>
