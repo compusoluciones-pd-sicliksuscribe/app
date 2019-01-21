@@ -571,7 +571,8 @@ a, a:hover {
   box-shadow: 2px 2px 30px -10px rgba(13, 28, 39, 0.6);
   background: #fff;
   border-radius: 12px;
-  position: relative; }
+  position: relative;
+  margin-top: 70px; }
   .profile-card.active .profile-card__cnt {
     filter: blur(6px); }
   .profile-card.active .profile-card-message,
