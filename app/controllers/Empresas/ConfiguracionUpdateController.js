@@ -197,8 +197,6 @@
           $scope.ShowToast('Error al obtener la conexión', 'danger');
         });
     };
-
-      /** Si trae anexo algo lo sube, si no hace el puro update sin actualizar nada**/
     $scope.Guardar = function () {
       if (uploader.queue[0] || uploaderIcon.queue[0] || uploadPDF.queue[0]) {
         if (uploader.queue[0]) {
