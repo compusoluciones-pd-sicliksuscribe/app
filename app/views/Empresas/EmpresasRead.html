@@ -56,12 +56,20 @@
                                             
                                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-left: 0;">
                                                 <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" style="padding-left: 0;">
-                                                    <h5>Nivel del distribuidor para descuentos: </h5>
+                                                    <h5>Nivel del distribuidor para descuentos Autodesk: </h5>
                                                     <select name="IdNivelDistribuidor" class="form-control" ng-model="Empresa.IdNivelDistribuidor" 
                                                             ng-disabled="SessionCookie.IdTipoAcceso !== 1"
                                                             ng-options="Niveles.IdNivelDistribuidor as Niveles.Nivel for Niveles in selectNivelesDistribuidor"
                                                             ng-change="ActualizarIdNivelDistribuidor(Empresa);" >
                                                     </select>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" style="padding-left: 0;">
+                                                    <h5>Nivel del distribuidor para descuentos Microsoft: </h5>
+                                                    <select name="IdNivelDistribuidorMicrosoft" class="form-control" ng-model="Empresa.IdNivelDistribuidorMicrosoft" 
+                                                            ng-options="Niveles.IdNivelDistribuidor as Niveles.Nivel for Niveles in selectNivelesDistribuidor "
+                                                            ng-change="ActualizarIdNivelDistribuidorMicrosoft(Empresa);">
+                                                    </select>
+
                                                 </div>
                                             </div>
 
