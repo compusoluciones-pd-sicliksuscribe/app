@@ -16,7 +16,8 @@
       AUTODESK: 2,
       COMPUSOLUCIONES: 3,
       HP: 4,
-      APERIO: 5
+      APERIO: 5,
+      COMPUCAMPO: 8
     };
 
     const error = function (error) {
@@ -74,6 +75,9 @@
           break;
         case makers.HP:
           maker = 'HP';
+          break;
+        case makers.COMPUCAMPO:
+          maker = 'Compucampo';
           break;
         default:
           maker = null;
@@ -266,10 +270,10 @@
       return IdFormaPago === paymentMethods.CREDIT_CARD;
     };
 
-    $scope.isPayWithPrepaid = function() {
+    $scope.isPayWithPrepaid = function () {
       const IdFormaPago = Number($scope.Distribuidor.IdFormaPagoPredilecta);
       return IdFormaPago === paymentMethods.PREPAY;
-    }
+    };
 
     $scope.hasProtectedExchangeRate = function () {
       const orderDetails = $scope.PedidoDetalles;
@@ -373,6 +377,19 @@
       if (!$scope.PedidoDetalles || $scope.PedidoDetalles.length === 0) next = false;
       else {
         $scope.PedidoDetalles.forEach(function (order) {
+          PedidoDetallesFactory.idOrderComparePaymentCurrency(order)
+          .then(function (result) {
+            result.data.data.forEach(function (compararPedidosAnteriores) {
+              if (order.MonedaPago === compararPedidosAnteriores.MonedaPago) {
+              } else {
+                $cookies.putObject('compararPedidosAnteriores', compararPedidosAnteriores);
+                document.getElementById('modalTipoMoneda').style.display = 'block';
+              }
+            });
+          })
+          .catch(function (result) {
+            $scope.ShowToast(result.data.message, 'danger');
+          });
           if (!order.IdEmpresaUsuarioFinal) next = false;
           order.Productos.forEach(function (product) {
             if (product.Cantidad <= 0) next = false;

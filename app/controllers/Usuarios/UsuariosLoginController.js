@@ -30,7 +30,6 @@
     $scope.init();
 
     $scope.IniciarSesion = function () {
-      console.log('doing login');
       $cookies.remove('Session');
       $cookies.remove('Pedido');
       $scope.Usuario.IdEmpresa = $scope.currentDistribuidor.IdEmpresa;
@@ -65,8 +64,6 @@
               DominioMS: tokenPayload.DominioMS,
               Expira: expireDate.getTime()
             };
-            console.log('login succesfull');
-            console.log($cookies);
             $cookies.putObject('Session', Session, { 'expires': expireDate, secure: $rootScope.secureCookie });
 
             if (Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === '4' ||

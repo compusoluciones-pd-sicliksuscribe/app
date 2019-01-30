@@ -11,9 +11,9 @@
 
     factory.refreshToken();
 
-    factory.getSolicitudes = function () {
+    factory.getSolicitudes = function (body) {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'support');
+      return $http.get($rootScope.API + 'support/' + body.Categoria + '/' + body.Fabricante);
     };
 
     factory.postSolicitud = function (Solicitud) {
@@ -36,6 +36,15 @@
       return $http.get($rootScope.API + 'support/'+ idSolicitud);
     };
 
+    factory.getCategorysReport = function () {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'category-support');
+    };
+
+    factory.putDeleteSupport = function (SoporteUpdate) {
+      factory.refreshToken();
+      return $http.put($rootScope.API + 'support-delete/'+ SoporteUpdate);
+    };
     return factory;
   };
 

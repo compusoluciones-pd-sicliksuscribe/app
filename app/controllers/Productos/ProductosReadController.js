@@ -107,7 +107,6 @@
 
     $scope.init = function () {
       $scope.CheckCookie();
-
       FabricantesFactory.getFabricantes()
         .success(function (Fabricantes) {
           $scope.selectFabricantes = Fabricantes;
@@ -370,7 +369,7 @@
         } else {
           return $scope.AgregarCarrito(producto, producto.Cantidad, producto.IdPedidocontrato);
         }
-      }
+      };
 
       $scope.validateExistsEmail(producto)
       .then(function (result) {

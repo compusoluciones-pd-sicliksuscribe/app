@@ -11,6 +11,7 @@
     $scope.valido;
     $scope.mensajerfc = '';
     $scope.aceptarButton = true;
+    $scope.selectIndustrias = {};
 
     $scope.init = function () {
       $scope.CheckCookie();
@@ -25,6 +26,14 @@
         });
 
       $scope.Empresa.Lada = 52;
+
+      EmpresasFactory.getIndustrias()
+      .success(function (result) {
+        $scope.selectIndustrias = result.data;
+      })
+      .error(function (data, status, headers, config) {
+        $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+      });
     };
 
     $scope.init();

@@ -19,7 +19,8 @@
       AUTODESK: 2,
       COMPUSOLUCIONES: 3,
       HP: 4,
-      APERIO: 5
+      APERIO: 5,
+      COMPUCAMPO: 8
     };
 
     const error = function (error) {
@@ -78,6 +79,9 @@
         case makers.HP:
           maker = 'HP';
           break;
+        case makers.COMPUCAMPO:
+          maker = 'Compucampo';
+          break;
         default:
           maker = null;
       }
@@ -88,7 +92,6 @@
       return PedidoDetallesFactory.getPedidoDetallesUf($scope.currentDistribuidor.IdEmpresa)
         .then(function (result) {
           if (result.data.success) {
-            // console.log(' result.data.data' + JSON.stringify(result.data.data));
             $scope.PedidoDetalles = result.data.data;
             $scope.PedidoDetalles.forEach(function (elem) {
               elem.Forma = getPaymentMethods(elem.IdFormaPago);
@@ -380,7 +383,7 @@
       return precioUnitario;
     };
 
-    $scope.next = function () { // Este
+    $scope.next = function () {
       if ($scope.isPayingWithCSCredit()) validarCarrito();
       let next = true;
       if (!$scope.PedidoDetalles || $scope.PedidoDetalles.length === 0) next = false;

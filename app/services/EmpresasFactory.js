@@ -26,6 +26,11 @@
       return $http.get($rootScope.API + 'Empresas');
     };
 
+    factory.getIndustrias = function () {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'enterprise/Industrias');
+    };
+
     factory.getEmpresasMicrosoft = function () {
       factory.refreshToken();
       return $http.get($rootScope.API + 'microsoft/customers');
@@ -156,6 +161,11 @@
     factory.getDominioMsByIdUF = function (Empresa) {
       factory.refreshToken();
       return $http.get($rootScope.API + 'enterprise/domain-ms/final-user/' + Empresa);
+    };
+
+    factory.putActualizarNivelDistribuidorMicrosoft = function (parametros) {
+      factory.refreshToken();
+      return $http.put($rootScope.API + 'enterprises/level-descount-microsoft', parametros);
     };
 
     return factory;

@@ -1,13 +1,28 @@
 (function () {
-  var TerminosReadController = function ($scope, $rootScope,  $log, $location, $cookies, UsuariosFactory, jwtHelper) {
+  var TerminosReadController = function ($scope, $rootScope, $log, $location, $cookies, UsuariosFactory, jwtHelper, $sce) {
     var Session = {};
 
     Session = $cookies.getObject('Session');
-
+    $scope.currentDistribuidor = $cookies.getObject('currentDistribuidor');
+    const currentDistribuidor = $scope.currentDistribuidor;
     $scope.Usuario = {};
+
+    $scope.getTerminosYCondiciones = function (currentDistribuidor) {
+      if (!currentDistribuidor) {
+        $scope.isClickTerminos = true;
+      } else {
+        if (currentDistribuidor.TerminosYCondiciones) {
+          $scope.isClickTerminos = false;
+          $scope.terminosPDF = $sce.trustAsResourceUrl(currentDistribuidor.TerminosYCondiciones);
+        } else {
+          $scope.isClickTerminos = true;
+        }
+      }
+    };
 
     $scope.init = function () {
       $scope.navCollapsed = true;
+      $scope.getTerminosYCondiciones(currentDistribuidor);
     };
 
     $scope.ActualizarTerminos = function () {
@@ -118,7 +133,7 @@
     $scope.init();
   };
 
-  TerminosReadController.$inject = ['$scope', '$rootScope', '$log', '$location', '$cookies', 'UsuariosFactory', 'jwtHelper'];
+  TerminosReadController.$inject = ['$scope', '$rootScope', '$log', '$location', '$cookies', 'UsuariosFactory', 'jwtHelper', '$sce'];
 
   angular.module('marketplace').controller('TerminosReadController', TerminosReadController);
-} ());
+}());

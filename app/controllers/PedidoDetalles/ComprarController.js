@@ -18,6 +18,7 @@
       HP: 4,
       APERIO: 5
     };
+    $scope.tipoMonedaCambio = $cookies.getObject('compararPedidosAnteriores');
 
     const error = function (message) {
       $scope.ShowToast(!message ? 'Ha ocurrido un error, intentelo mas tarde.' : message, 'danger');
@@ -62,6 +63,9 @@
           break;
         case makers.HP:
           maker = 'HP';
+          break;
+          case makers.COMPUCAMPO:
+          maker = 'Compucampo';
           break;
         default:
           maker = null;
@@ -406,6 +410,22 @@
       } else {
         $scope.ShowToast('Algo salió mal con tu pedido, por favor ponte en contacto con tu equipo de soporte CompuSoluciones para más información.', 'danger');
         $location.path('/Carrito/e');
+      }
+    };
+
+    var modal = document.getElementById('modalTipoMoneda');
+
+    $scope.modalNotificacionComprar = function () {
+      modal.style.display = 'none';
+      $location.path('/Carrito');
+    };
+    $scope.modalNotificacionCarrito = function () {
+      modal.style.display = 'none';
+    };
+
+    window.onclick = function (event) { // When the user clicks anywhere outside of the modal, close it
+      if (event.target === modal) {
+        modal.style.display = 'none';
       }
     };
   };

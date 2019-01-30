@@ -1,12 +1,33 @@
 (function () {
-  var LandingController = function ($scope, $log, $location, $cookies, PromocionsFactory, deviceDetector) {
+  var LandingController = function ($scope, $log, $location, $cookies, PromocionsFactory, deviceDetector, $rootScope, EmpresasFactory) {
     $scope.Promociones = {};
 
     $scope.init = function () {
       $scope.esNavegadorSoportado();
       $scope.navCollapsed = true;
-      if ($scope.currentDistribuidor) {
-        PromocionsFactory.getPromocions($scope.currentDistribuidor.IdEmpresa)
+
+      var url = window.location.href;
+      var subdomain = '';
+      subdomain = url.replace('http://', '');
+      subdomain = subdomain.replace('https://', '');
+      subdomain = subdomain.substring(0, subdomain.indexOf($rootScope.dominio));
+      subdomain = subdomain.replace(new RegExp('[.]', 'g'), '');
+      subdomain = subdomain.replace('www', '');
+
+      if (subdomain) {
+        EmpresasFactory.getSitio(subdomain).success(function (empresa) {
+          if ($scope.currentDistribuidor) {
+            PromocionsFactory.getPromocions(empresa.data[0].IdEmpresa)
+            .success(function (Promociones) {
+              $scope.Promociones = Promociones;
+            })
+            .error(function (data, status, headers, config) {
+              $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+            });
+          }
+        });
+      } else {
+        PromocionsFactory.getPromocions(0)
         .success(function (Promociones) {
           $scope.Promociones = Promociones;
         })
@@ -19,7 +40,6 @@
     $scope.init();
   };
 
-  LandingController.$inject = ['$scope', '$log', '$location', '$cookies', 'PromocionsFactory', 'deviceDetector'];
-
+  LandingController.$inject = ['$scope', '$log', '$location', '$cookies', 'PromocionsFactory', 'deviceDetector', '$rootScope', 'EmpresasFactory'];
   angular.module('marketplace').controller('LandingController', LandingController);
 }());

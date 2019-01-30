@@ -4,12 +4,14 @@
     $scope.reverse = false;
     $scope.TablaVisible = false;
     $scope.cambiaAgente = false;
+    $scope.cambiaAgenteAutodesk = false;
 
     $scope.init = function () {
       $scope.CheckCookie();
       $scope.Empresas = null;
       $scope.TablaVisible = false;
       $scope.cambiaAgente = false;
+      $scope.cambiaAgenteAutodesk = false;
 
       NivelesDistribuidorFactory.getNivelesDistribuidor()
         .success(function (NivelesDistribuidor) {
@@ -123,9 +125,25 @@
         });
     };
 
+    $scope.ActualizarIdNivelDistribuidorMicrosoft = function (Empresa) {
+      var parametros = { IdEmpresa: Empresa.IdEmpresa, IdNivelDistribuidor: Empresa.IdNivelDistribuidorMicrosoft };
+      EmpresasFactory.putActualizarNivelDistribuidorMicrosoft(parametros)
+        .success(function (result) {
+          if (result.success) {
+            $scope.ShowToast(result.message, 'success');
+          } else {
+            $scope.ShowToast(result.message, 'danger');
+          }
+        }
+      )
+        .error(function (data, status, headers, config) {
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+      };
+
     $scope.ActualizarAgentes = function (Empresa) {
-      var parametros = { IdEmpresa: Empresa.IdEmpresa, AgenteMicrosoft: Empresa.AgenteMicrosoft, AgenteAutodesk: Empresa.AgenteAutodesk };
-      if (typeof Empresa.AgenteMicrosoft === 'undefined' || typeof Empresa.AgenteAutodesk === 'undefined') {
+      var parametros = { IdEmpresa: Empresa.IdEmpresa, AgenteMicrosoft: Empresa.AgenteMicrosoft, AgenteAutodesk: Empresa.AgenteAutodesk, AgenteAutodeskRenovacion: Empresa.AgenteAutodeskRenovacion };
+      if (typeof Empresa.AgenteMicrosoft === 'undefined' || typeof Empresa.AgenteAutodesk === 'undefined' || typeof Empresa.AgenteAutodeskRenovacion === 'undefined') {
         $scope.ShowToast('El nombre del agente solo debe contener letras y una longitud menor a 10 caracteres.', 'danger');
       } else {
         EmpresasFactory.putActualizarAgenteMarca(parametros)
@@ -133,6 +151,7 @@
             if (result.success) {
               $scope.ShowToast(result.message, 'success');
               Empresa.cambiaAgente = false;
+              Empresa.cambiaAgenteAutodesk = false;
             } else {
               $scope.ShowToast(result.message, 'danger');
             }
@@ -142,9 +161,12 @@
           });
       }
     };
-
     $scope.cambiarBoton = function (Empresa) {
       Empresa.cambiaAgente = true;
+    };
+  
+    $scope.cambiarBotonAutodesk = function (Empresa) {
+      Empresa.cambiaAgenteAutodesk = true;
     };
   };
 
