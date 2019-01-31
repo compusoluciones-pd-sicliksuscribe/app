@@ -27,6 +27,33 @@
       ReportesFactory.getGenerarReporte($scope.reporteSel)
         .success(function (result) {
           if (result) {
+            if ($scope.reporteSel === 29 ){
+            
+              for (var i = 0; i < $scope.reportesSel.length; i++) {
+                if ($scope.reportesSel[i].IdReporte === $scope.reporteSel) {
+                  var d = new Date();
+                  var sDate = ('0' + d.getDate()).slice(-2) + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + d.getFullYear() + ' ' + ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
+                  var NombreReporte = $scope.reportesSel[i].NombreReporte + '_' + sDate;
+  
+                  var repeat = Math.ceil(result.data[0].length / maxSize);
+                  var k=0;
+                  for (var j = 0; j < repeat; j++) {
+                    var start = j * maxSize;
+                    var end = start + maxSize;
+                    var parte = result.data[0].slice(start, end);
+                    var number = j + 1;
+                    var contenido = result.data[0].slice(start, end);
+                    NombreReporte = NombreReporte + '_' + number;
+                    var copia
+                    console.log("ARRE : "+JSON.stringify(parte[0])+"copia"+JSON.stringify(contenido[0]));
+
+                   // $scope.JSONToCSVConvertor(parte, NombreReporte, true);
+                  }
+                }
+              }
+          }else{
+
+
             for (var i = 0; i < $scope.reportesSel.length; i++) {
               if ($scope.reportesSel[i].IdReporte === $scope.reporteSel) {
                 var d = new Date();
@@ -45,6 +72,10 @@
                 return;
               }
             }
+
+
+
+          }
           }
         })
         .error(function (data, status, headers, config) {
