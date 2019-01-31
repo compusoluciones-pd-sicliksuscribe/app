@@ -94,9 +94,10 @@
 							type="number" 
 							ng-model="Producto.PorcentajeDescuento"
 							ng-change="calcularDescuento(Producto)" 
-							class="form-control" step="1"
+							class="form-control"
 							placeholder="Descuento"
-							min="1" max="100"
+							step=".01"
+							min="0.01"  max="100"
 							ng-disabled="!Producto.Activo"
 						/>
 						<div class="input-group-addon">%</div>
