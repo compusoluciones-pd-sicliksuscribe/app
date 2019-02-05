@@ -44,8 +44,6 @@
                     var number = j + 1;
                     var contenido = result.data[0].slice(start, end);
                     NombreReporte = NombreReporte + '_' + number;
-                    var copia
-                    console.log("ARRE : "+JSON.stringify(parte[0])+"copia"+JSON.stringify(contenido[0]));
 
                    // $scope.JSONToCSVConvertor(parte, NombreReporte, true);
                   }
