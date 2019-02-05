@@ -36,16 +36,24 @@
                   var NombreReporte = $scope.reportesSel[i].NombreReporte + '_' + sDate;
   
                   var repeat = Math.ceil(result.data[0].length / maxSize);
-                  var k=0;
+                  var k=1;
                   for (var j = 0; j < repeat; j++) {
                     var start = j * maxSize;
                     var end = start + maxSize;
                     var parte = result.data[0].slice(start, end);
                     var number = j + 1;
                     var contenido = result.data[0].slice(start, end);
+                    var resultado = result.data[0].slice(start, end);
                     NombreReporte = NombreReporte + '_' + number;
 
-                   // $scope.JSONToCSVConvertor(parte, NombreReporte, true);
+                      if(parte[i].FechaInicio ===  contenido[k].FechaInicio && parte[i].FechaFin===contenido[i].FechaFin &&parte[i].Periodo ===contenido[k].Periodo ){
+                        if(parte[i].SubMayorista=== contenido[k].SubMayorista && parte[i].Cantidad === contenido.Cantidad){
+                          
+                        }
+  
+                      }
+                      
+                  
                   }
                 }
               }
