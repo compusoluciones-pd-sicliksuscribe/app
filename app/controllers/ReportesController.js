@@ -42,30 +42,31 @@
                     var start = j * maxSize;
                     var end = start + maxSize;
                     var parte = result.data[0].slice(start, end);
+
                     var number = j + 1;
                     var contenido = result.data[0].slice(start, end);
                     var resultado = result.data[0].slice(start, end);
                     NombreReporte = NombreReporte + '_' + number;
-                    
-                    console.log(JSON.stringify(resultado[j].CostoTotal)+"="+JSON.stringify(entro)+"=");
-                      if(parte[j].FechaInicio ===  contenido[k].FechaInicio && parte[k].FechaFin !== "" && parte[j].Periodo ===contenido[k].Periodo ){
+
+              
+                    console.log("resultado 1:"+JSON.stringify(resultado));
+
+                      if(parte[j].FechaInicio ===  contenido[k].FechaInicio && parte[k].FechaFin === "" && parte[j].Periodo ===contenido[k].Periodo ){
                         
                         if(parte[j].SubMayorista=== contenido[k].SubMayorista && parte[j].Cantidad === contenido[k].Cantidad){
                           //entro+=resultado[j].CostoTotal;
-                          entro++;
-                          resultado[j].CostoTotal=1;
-                          resultado[j]=parte[j];
-                          console.log("si entra ");
+                          resultado[j].DiasTotalActivo+=parte[j].DiasTotalActivo;
                         }else{
                           console.log(JSON.stringify(resultado[j].CostoTotal)+"COSTO"+JSON.stringify(entro)+"ENTRO");
-                          resultado[j].CostoTotal=1;
+                      
                           // resultado[j].CostoTotal=resultado[j].CostoPorDia*resultado[j].CostoPorDia;
                           console.log(JSON.stringify(resultado[j].CostoTotal)+"="+JSON.stringify(entro)+"=");
                         }
   
                       }
                       k++;
-                      $scope.JSONToCSVConvertor(resultado, NombreReporte, true);
+                      console.log("resultado :"+JSON.stringify(resultado));
+                      //$scope.JSONToCSVConvertor(resultado, NombreReporte, true);
                   }
                 }
               }
