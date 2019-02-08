@@ -1,7 +1,6 @@
 /*variables*/
 /*colors*/
 /*buttonsHovers*/
-@import url("https://fonts.googleapis.com/css?family=Quicksand:400,500,700&subset=latin-ext");
 @font-face {
   font-family: 'newsgoth_lt_btlight';
   src: url("fonts/newsgotlb-webfont.eot");
@@ -558,18 +557,20 @@ html {
   box-sizing: border-box; }
 
 body {
-  font-family: 'Quicksand', sans-serif;
   color: #324e63; }
 
 a, a:hover {
   text-decoration: none; }
 
+.carousel-control {
+  width: 8% !important; }
+
 .profile-card {
   width: 100%;
   min-height: 460px;
   margin: auto;
-  box-shadow: 2px 2px 30px -10px rgba(13, 28, 39, 0.6);
-  background: #fff;
+  box-shadow: -1px -1px 2px -1px rgba(13, 28, 39, 0.6);
+  background: rgba(255, 255, 255, 0.445);
   border-radius: 12px;
   position: relative;
   margin-top: 70px; }
@@ -584,15 +585,15 @@ a, a:hover {
     transform: none;
     transition-delay: .1s; }
   .profile-card__img {
-    width: 150px;
-    height: 150px;
+    width: 25%;
+    height: 25%;
     margin-left: auto;
     margin-right: auto;
-    transform: translateY(-50%);
     border-radius: 50%;
-    overflow: hidden;
     position: relative;
-    z-index: 4; }
+    z-index: 4;
+    padding-top: 20px;
+    padding-bottom: 30px; }
     @media screen and (max-width: 576px) {
       .profile-card__img {
         width: 120px;
@@ -601,30 +602,27 @@ a, a:hover {
       display: block;
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      border-radius: 50%; }
+      object-fit: cover; }
   .profile-card__cnt {
     margin-top: -35px;
-    text-align: center;
-    padding: 0 20px;
+    padding: 0 100px;
     padding-bottom: 40px;
     transition: all .3s; }
   .profile-card__name {
-    font-weight: 700;
-    font-size: 24px;
+    font-size: 32px;
     color: #337ab7;
-    margin-bottom: 15px; }
+    margin-bottom: 15px;
+    padding-top: 40px;
+    text-align: center; }
   .profile-card__txt {
-    font-size: 18px;
+    font-size: 16px;
+    font-family: 'newsgoth_lt_btlight';
     font-weight: 500;
-    color: #324e63;
-    margin-bottom: 15px; }
+    color: #324e63; }
     .profile-card__txt strong {
       font-weight: 700; }
   .profile-card-loc {
     display: flex;
-    justify-content: center;
-    align-items: center;
     font-size: 18px;
     font-weight: 600; }
     .profile-card-loc__icon {
@@ -635,107 +633,18 @@ a, a:hover {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    align-items: flex-start;
-    margin-top: 35px; }
+    align-items: flex-start; }
     .profile-card-inf__item {
-      padding: 10px 35px;
       min-width: 150px; }
       @media screen and (max-width: 768px) {
         .profile-card-inf__item {
-          padding: 10px 20px;
           min-width: 120px; } }
     .profile-card-inf__title {
       font-weight: 700;
       font-size: 27px;
       color: #324e63; }
     .profile-card-inf__txt {
-      font-weight: 500;
-      margin-top: 7px; }
-  .profile-card-social {
-    margin-top: 25px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap; }
-    .profile-card-social__item {
-      display: inline-flex;
-      width: 55px;
-      height: 55px;
-      margin: 15px;
-      border-radius: 50%;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      background: #405de6;
-      box-shadow: 0px 7px 30px rgba(43, 98, 169, 0.5);
-      position: relative;
-      font-size: 21px;
-      flex-shrink: 0;
-      transition: all .3s; }
-      @media screen and (max-width: 768px) {
-        .profile-card-social__item {
-          width: 50px;
-          height: 50px;
-          margin: 10px; } }
-      @media screen and (min-width: 768px) {
-        .profile-card-social__item:hover {
-          transform: scale(1.2); } }
-  .profile-card-ctr {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 40px; }
-    @media screen and (max-width: 576px) {
-      .profile-card-ctr {
-        flex-wrap: wrap; } }
-  .profile-card__button {
-    background: none;
-    border: none;
-    font-family: 'Quicksand', sans-serif;
-    font-weight: 700;
-    font-size: 19px;
-    margin: 15px 35px;
-    padding: 15px 40px;
-    min-width: 201px;
-    border-radius: 50px;
-    min-height: 55px;
-    color: #fff;
-    cursor: pointer;
-    backface-visibility: hidden;
-    transition: all .3s; }
-    @media screen and (max-width: 768px) {
-      .profile-card__button {
-        min-width: 170px;
-        margin: 15px 25px; } }
-    @media screen and (max-width: 576px) {
-      .profile-card__button {
-        min-width: inherit;
-        margin: 0;
-        margin-bottom: 16px;
-        width: 100%;
-        max-width: 300px; }
-        .profile-card__button:last-child {
-          margin-bottom: 0; } }
-    .profile-card__button:focus {
-      outline: none !important; }
-    @media screen and (min-width: 768px) {
-      .profile-card__button:hover {
-        transform: translateY(-5px); } }
-    .profile-card__button:first-child {
-      margin-left: 0; }
-    .profile-card__button:last-child {
-      margin-right: 0; }
-  .profile-card-message {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    padding-top: 130px;
-    padding-bottom: 100px;
-    opacity: 0;
-    pointer-events: none;
-    transition: all .3s; }
+      font-weight: 500; }
   .profile-card-form {
     box-shadow: 0 4px 30px rgba(15, 22, 56, 0.35);
     max-width: 80%;
@@ -762,32 +671,5 @@ a, a:hover {
       @media screen and (max-width: 576px) {
         .profile-card-form__bottom {
           flex-wrap: wrap; } }
-  .profile-card textarea {
-    width: 100%;
-    resize: none;
-    height: 210px;
-    margin-bottom: 20px;
-    border: 2px solid #dcdcdc;
-    border-radius: 10px;
-    padding: 15px 20px;
-    color: #324e63;
-    font-weight: 500;
-    font-family: 'Quicksand', sans-serif;
-    outline: none;
-    transition: all .3s; }
-    .profile-card textarea:focus {
-      outline: none;
-      border-color: #8a979e; }
-  .profile-card__overlay {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-    opacity: 0;
-    background: rgba(22, 33, 72, 0.35);
-    border-radius: 12px;
-    transition: all .3s; }
 
 /*# sourceMappingURL=style.css.map */

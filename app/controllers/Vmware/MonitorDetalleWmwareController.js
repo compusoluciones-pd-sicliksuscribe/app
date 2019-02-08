@@ -48,15 +48,22 @@
         if (month === 1) {
           month = 12;
           year = year - 1;
+        } else {
+          month -= 1;
         }
+        month = (month < 10 ? '0' : '') + month;
         date = `${year}-${month}`;
+        $scope.afterDate = date;
         $scope.searchApi(date);
       };
 
       $scope.searchApi = function (date) {
         if ($scope.firstDate) {
+          let month;
           date = new Date($scope.firstDate);
-          date = `${date.getFullYear()}-${date.getMonth() + 1}`;
+          month = date.getMonth() + 1;
+          month = (month < 10 ? '0' : '') + month;
+          date = `${date.getFullYear()}-${month}`;
         }
         const datosFinal = {
           CollectionStartMonth: date,
