@@ -70,6 +70,11 @@
       return $http.get($rootScope.API + 'autodesk/contact/' + idEmpresaUsuarioFinal + '/product/' + idProducto + '/contract/' + idContrato);
     };
 
+    factory.getQuantity = function (idEmpresaUsuarioFinal, idProducto) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'pickit/contact/' + idEmpresaUsuarioFinal + '/product/' + idProducto);
+    };
+
     factory.getProductContractsTuClick = function (idEmpresaUsuarioFinal, idProducto, currentDistribuidor) {
       factory.refreshToken();
       return $http.get($rootScope.API + 'autodesk/contacts/' + idEmpresaUsuarioFinal + '/contract/' + idProducto + '/distribuidor/' + currentDistribuidor);

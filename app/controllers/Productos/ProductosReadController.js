@@ -367,11 +367,14 @@
       if (producto.IdFabricante !== 6) {
         if (producto.IdFabricante === 1) {
           return $scope.validateAgreementCSP(producto);
-        } else {
+        } 
+        else if (producto.IdFabricante === 7) {
+          return validateQuantity(producto);
+        } 
+        else {
           return $scope.AgregarCarrito(producto, producto.Cantidad, producto.IdPedidocontrato);
         }
       }
-
       $scope.validateExistsEmail(producto)
       .then(function (result) {
         const { exists } = result.data;
@@ -383,6 +386,17 @@
         return ProductosFactory.postIdERP(producto.IdERP);
       });
     };
+
+    const validateQuantity = function (producto) {
+      ProductosFactory.getQuantity(producto.IdEmpresaUsuarioFinal, producto.IdProducto)
+      .then(function (result) {
+        if (result.data.Licencias === 0 ) {
+          $scope.AgregarCarrito(producto, producto.Cantidad, producto.IdPedidocontrato);
+        } else if ((result.data.Licencias+producto.Cantidad) < producto.CantidadMaxima || (result.data.Licencias+producto.Cantidad) > producto.CantidadMaxima) {
+          $scope.ShowToast('Ha excedido la cantidad máxima de licencias disponibles para este producto', 'danger');
+        } else $scope.AgregarCarrito(producto, producto.Cantidad, producto.IdPedidocontrato);
+      });
+      };
 
     $scope.validateExistsEmail = function (producto) {
       const usuario = producto.usuariosContacto.filter(function (user) {
