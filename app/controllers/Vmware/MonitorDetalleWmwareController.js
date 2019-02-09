@@ -12,6 +12,9 @@
       7: 'Pending Site'
     }];
 
+    $scope.generateAggPo = {};
+    $scope.collectionDate = {};
+
     $scope.OpenUrl = function () {
       window.open($scope.url, '_blank');
     };
@@ -69,6 +72,7 @@
           CollectionStartMonth: date,
           CollectionEndMonth: date
         };
+        $scope.collectionDate = datosFinal;
         FabricantesFactory.getMonthlyUsageVmware(datosFinal)
           .success(function (data) {
             $scope.resultApi = data;
@@ -77,6 +81,30 @@
             $scope.url = '';
             $scope.ShowToast('No se encontraron datos en la fecha seleccionada', 'danger');
           });
+      };
+
+      $scope.generarPONumber = function () {
+        const MonedaPago = document.getElementById('moneda').value;
+        if (!MonedaPago) return $scope.ShowToast('Selecciona la moneda', 'danger');
+        $scope.generateAggPo = Object.assign({}, $scope.generateAggPo, { MonedaPago });
+        FabricantesFactory.putVmwarePoNumber($scope.generateAggPo)
+          .success(function (data) {
+            if (data === 'PO Number has been updated.') {
+              $scope.ShowToast('PO number asignado', 'success');
+              document.getElementById('monedaPagoModal').style.display = "block";
+              $scope.searchApi($scope.generateAggPo.CollectionStartMonth);
+            }
+            else {
+              $scope.ShowToast('Ocurrió un error', 'danger');
+            }
+          }).error(function () {
+            $scope.url = '';
+            $scope.ShowToast('Ocurrió un error', 'danger');
+          });
+      };
+
+      $scope.generarObjPONumber = function (contract) {
+        $scope.generateAggPo = Object.assign({}, $scope.collectionDate, { ContractNumber: contract});
       };
 
       $scope.validate = function (valor) {

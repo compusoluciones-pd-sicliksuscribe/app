@@ -106,7 +106,7 @@
 								{{Periodo.aggregatorPONumber}}
 							</div>
 							<div ng-show="!Periodo.aggregatorPONumber && Periodo.collectionStatus === '3'">
-								<button type="button" class="btn btn-primary btnEnviar" ng-click="validate();">Generar</button>
+								<button type="button" data-toggle="modal" data-target="#monedaPagoModal" class="btn btn-primary btnEnviar" ng-click="generarObjPONumber(header.contractNumber);">Generar</button>
 							</div>
 						</div>
 					</div>
@@ -157,7 +157,37 @@
 
 			</div>
 		</div>
-
+		<div id="monedaPagoModal" class="modal fade" tabindex="-1" role="dialog">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">Generar Agg PoNumber</h4>
+					</div>
+					<div class="modal-body">
+						<div class="form-group has-feedback">
+							<label for="Contacto">*Selecciona </label>
+							<select name="moneda" id="moneda" class="form-control selectOption" ng-model="monedaPago" required>
+								<option ng-selected="true" value="">Selecciona la moneda...</option>
+								<option value="Pesos">Pesos</option>
+								<option value="Dólares">Dólares</option>
+							</select>
+						</div>
+						<br/> <br/>
+						<div class="form-group">
+							<p>
+								<b>Nota**</b> <br/> <br/>
+								Al dar click en <b>Generar Po</b>, se generará un movimiento factura en Intelisis y se enviará el Agg PoNumber en VMWARE.
+							</p>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Regresar</button>
+						<button type="button" class="btn btn-primary" ng-click="generarPONumber();">Generar PO</button>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 
 </div>

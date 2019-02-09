@@ -46,6 +46,11 @@
       return $http.post($rootScope.API + 'Vmware/get-monthly-usage', payload);
     };
 
+    factory.putVmwarePoNumber = function (payload) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'Vmware/usage-po-update', payload);
+    };
+
     return factory;
   };
 
