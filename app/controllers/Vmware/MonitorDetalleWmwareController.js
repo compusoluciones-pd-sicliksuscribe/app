@@ -91,15 +91,15 @@
           .success(function (data) {
             if (data === 'PO Number has been updated.') {
               $scope.ShowToast('PO number asignado', 'success');
-              document.getElementById('monedaPagoModal').style.display = "block";
+              $('.close').click();
               $scope.searchApi($scope.generateAggPo.CollectionStartMonth);
             }
             else {
-              $scope.ShowToast('Ocurrió un error', 'danger');
+              $scope.ShowToast(data.message, 'danger');
             }
-          }).error(function () {
+          }).error(function (data) {
             $scope.url = '';
-            $scope.ShowToast('Ocurrió un error', 'danger');
+            $scope.ShowToast(data.message, 'danger');
           });
       };
 
