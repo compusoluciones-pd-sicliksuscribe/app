@@ -124,9 +124,11 @@
     $scope.init = function () {
       $scope.CheckCookie();
       checkUser();
+      if ($scope.SessionCookie.IdTipoAcceso === 1 || $scope.SessionCookie.IdTipoAcceso === 8) {
+        $scope.dateSearch();
+      }
     };
     $scope.init();
-    $scope.dateSearch();
   };
 
   MonitorDetalleVmwareController.$inject = ['$scope', '$sce', '$cookies', '$location', 'EmpresasXEmpresasFactory', 'PedidoDetallesFactory', '$uibModal', '$filter', 'FabricantesFactory', 'PedidosFactory', 'EmpresasFactory', 'UsuariosFactory'];
