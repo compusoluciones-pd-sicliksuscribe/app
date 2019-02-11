@@ -154,6 +154,7 @@
 												<ul class="dropdown-menu yellow" style="background:!important">
 													<li><a ng-click="goToPage('AdministrarSuscripciones');">Monitor</a></li>
 													<li><a ng-click="goToPage('Reportes');">Reportes</a></li>
+													<li><a ng-click="goToPage('MonitorVmware');">Vmware</a></li>
 												</ul>
 										</li>
 
@@ -165,6 +166,7 @@
 												<li ng-show="SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 7"><a ng-click="goToPage('Clientes');">Mis clientes</a></li>
 												<li><a ng-show="SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 4 || SessionCookie.IdTipoAcceso == 7"
 													 ng-click="goToPage('Usuarios');">Mis colaboradores</a></li>												
+												<li><a ng-click="goToPage('MonitorVmware');">Monitor Vmware</a></li>
 												<li><a ng-click="goToPage('Monitor');">Monitor de pedidos por cliente</a></li>
 												<li id="monitorPagos" ng-show="SessionCookie.IdTipoAcceso == 2"><a ng-click="goToPage('MonitorPagos');">Monitor de pedidos por pagar</a></li>
 												<li id="monitorPagos" ng-show="SessionCookie.IdTipoAcceso == 2 && SessionCookie.IdEmpresa == 110"><a ng-click="goToPage('aplicaciones');">Aplicaciones</a></li>
@@ -592,6 +594,7 @@
 	<script type="text/javascript" src="app/services/DescuentosNivelesFactory.js"></script>
 	<script type="text/javascript" src="app/services/NivelesClienteFinalFactory.js"></script>
 	<script type="text/javascript" src="app/controllers/Empresas/ConfiguracionUpdateController.js"></script>
+	<script type="text/javascript" src="app/controllers/Vmware/MonitorDetalleWmwareController.js"></script>
 	<script type="text/javascript" src="app/controllers/Empresas/EmpresasRPController.js"></script>
 	<script type="text/javascript" src="app/controllers/Empresas/EmpresasRPUFController.js"></script>
 	<script type="text/javascript" src="app/controllers/Productos/MisProductosReadController.js"></script>
