@@ -392,7 +392,7 @@
       .then(function (result) {
         if (result.data.Licencias === 0 ) {
           $scope.AgregarCarrito(producto, producto.Cantidad, producto.IdPedidocontrato);
-        } else if ((result.data.Licencias+producto.Cantidad) < producto.CantidadMaxima || (result.data.Licencias+producto.Cantidad) > producto.CantidadMaxima) {
+        } else if ( (result.data.Licencias+producto.Cantidad) > producto.CantidadMaxima) {
           $scope.ShowToast('Ha excedido la cantidad máxima de licencias disponibles para este producto', 'danger');
         } else $scope.AgregarCarrito(producto, producto.Cantidad, producto.IdPedidocontrato);
       });
