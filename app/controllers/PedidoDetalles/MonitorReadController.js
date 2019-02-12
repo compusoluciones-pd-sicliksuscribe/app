@@ -173,11 +173,11 @@
     };
 
     $scope.ActualizarDetalle = function (pedido, detalles) {
-      if (pedido.IdFabricante !== 5 && (detalles.CantidadProxima <= 0 || !detalles.CantidadProxima)) {
+      if (pedido.IdFabricante !== 5 && (detalles.CantidadProxima <= 0 || !detalles.CantidadProxima) && pedido.IdFabricante !== 7) {
         $scope.ShowToast('Cantidad no válida para el producto', 'danger');
         return false;
       }
-      if (pedido.IdFabricante !== 5 && (detalles.CantidadProxima > detalles.Cantidad)) {
+      if (pedido.IdFabricante !== 5 && (detalles.CantidadProxima > detalles.Cantidad) && pedido.IdFabricante !== 7) {
         $scope.ShowToast('No se puede actualizar a un numero mayor de suscripciones.', 'danger');
         return;
       }
