@@ -103,6 +103,9 @@
             $scope.frm.RFC.$invalid = true;
             $scope.frm.RFC.$pristine = false;
             $scope.mensajerfc = result[0].Message;
+            if ($scope.mensajerfc === 'Ya esta registrado el RFC') {
+              $scope.abrirModal();
+            }
           } else {
             UsuariosXEmpresasFactory.getUsuariosXEmpresa(IdEmpresaDistribuidor)
               .success(function (UsuariosXEmpresas) {
@@ -229,7 +232,14 @@
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
     };
+    $scope.abrirModal = function () {
 
+      document.getElementById('avisoModal').style.display = 'block';
+    };
+    $scope.cerrar = function () {
+
+      document.getElementById('avisoModal').style.display = 'none';
+    };
     $scope.ComboRFC = function () {
       EmpresasFactory.checkRFC({ RFC: $scope.Empresa.RFC })
         .success(function (result) {

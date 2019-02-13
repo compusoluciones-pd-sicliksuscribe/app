@@ -98,8 +98,21 @@
                     <button type="button" ng-click="EmpresaCancel()" class="btn btn-warning btn-block">Cancelar</button>
                 </div>
             </div>
-            <div class="col-xs-0 col-sm-0 col-md-8 col-lg-8">
-
+        </div>
+        <div id="avisoModal" class="modal fade in" tabindex="-1" role="dialog" style="padding-right: 17px;">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                        <h4 class="modal-title">Aviso</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p style="text-align: center">El RFC ingresado ya está relacionado con el distribuidor seleccionado</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" ng-click="cerrar()" data-dismiss="modal">Enterado</button>
+                    </div>
+                </div>
             </div>
         </div>
     </form>
