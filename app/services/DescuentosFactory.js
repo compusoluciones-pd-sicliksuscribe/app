@@ -9,6 +9,17 @@
       $http.defaults.headers.common['token'] = Session.Token;
     };
 
+    factory.postDescuentoAnual = function (DescuentoAnual) {
+      factory.refreshToken();
+
+      return $http.post($rootScope.API + 'descuentoAnual/' + DescuentoAnual);
+    };
+
+    factory.getDescuentoAnual = function () {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'DescuentoAnual');
+    };
+
     factory.refreshToken();
 
     factory.postDescuento = function (Descuento) {

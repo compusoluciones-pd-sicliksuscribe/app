@@ -1,5 +1,5 @@
 (function () {
-  var PedidoDetallesReadController = function ($scope, $log, $location, $cookies, PedidoDetallesFactory, TipoCambioFactory, EmpresasXEmpresasFactory, EmpresasFactory, PedidosFactory, $routeParams) {
+  var PedidoDetallesReadController = function ($scope, $log, $location, $cookies, PedidoDetallesFactory, TipoCambioFactory, EmpresasXEmpresasFactory, EmpresasFactory, PedidosFactory , DescuentosFactory , $routeParams) {
     $scope.CreditoValido = 1;
     $scope.error = false;
     $scope.Distribuidor = {};
@@ -136,6 +136,16 @@
         });
       }
     };
+    const getAnualdiscount = function () {
+      return DescuentosFactory.getDescuentoAnual()
+        .then(function (result) {
+          console.log(result);
+          $scope.descuentoAnual = result.data.data;
+          if ($scope.error) {
+            $scope.ShowToast('Ocurrio un error al procesar sus productos del carrito. Favor de contactar a soporte de CompuSoluciones.', 'danger');
+          }
+        });
+    };
 
     var ActualizarFormaPago = function (IdFormaPago) {
       var empresa = { IdFormaPagoPredilecta: IdFormaPago || $scope.Distribuidor.IdFormaPagoPredilecta };
@@ -149,7 +159,6 @@
         })
         .catch(function (result) { error(result.data); });
     };
-
     var CambiarMoneda = function (tipoMoneda) {
       $scope.Distribuidor.MonedaPago = tipoMoneda || 'Pesos';
       const MonedaPago = $scope.Distribuidor.MonedaPago;
@@ -171,6 +180,21 @@
         .then(getOrderDetails)
         .then(ActualizarFormaPago)
         .catch(function (result) { error(result.data); });
+        
+        
+      DescuentosFactory.getDescuentoAnual()
+      .success(function (result) {
+      $scope.descuentoAnual = result.data;
+          console.log(result);
+          console.log( $scope.descuentoAnual);
+          console.log(result);
+        })
+        .error(function (data, status, headers, config) {
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+
+      getAnualdiscount()
+      .catch(function (result) { error(result.data); });
     };
 
     $scope.init();

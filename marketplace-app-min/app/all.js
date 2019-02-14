@@ -312,6 +312,16 @@
         resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6 || Session.IdTipoAcceso === 7)) { $location.path('/404'); } } }
       })
 
+      .when('/Descuento-Anual', {
+        controller: 'DescuentoAnualCreateController', templateUrl: 'app/views/Descuentos/DescuentoAnualCreate.html',
+        resolve: {
+          'check': function ($location, $cookies) {
+            var Session = $cookies.getObject('Session');
+            if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 7)) { $location.path('/404'); }
+          }
+        }
+      })
+
       .when('/Niveles', {
         controller: 'NivelesReadController', templateUrl: 'app/views/Niveles/NivelesRead.html',
         resolve: {
@@ -342,6 +352,7 @@
           if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3) || !decoded.Niveles) { $location.path('/404'); }
         } }
       })
+
 
       .when('/Niveles/:IdNivel/Productos', {
         controller: 'DescuentosNivelesCSController', templateUrl: 'app/views/Descuentos/DescuentosNivelesCS.html',

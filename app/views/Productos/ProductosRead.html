@@ -69,7 +69,7 @@
                         </div>
 
                         <div class="form-group col-xs-0 col-sm-0 col-md-6 col-lg-6">
-
+                                    
                             <div>
                                 <h3><b>{{Producto.Nombre}}</b></h3>
                             </div>
@@ -87,13 +87,14 @@
                             <label for="">Última actualización del producto:</label> {{Producto.FechaActualizado | date:'d/MM/yyyy
                             hh:mm a'}}
                             <br><br>
-
+                                
                             <h4><b>Precio del periodo</b></h4>
 
                             <div ng-show="Producto.IdTipoProducto == 2">
                                 <label for="">Duración del periodo: </label> {{Producto.FechaInicioSuscripcion | date:'d/MM/yyyy'}}
                                 <b> - </b> {{Producto.FechaFinSuscripcion | date:'d/MM/yyyy'}}
                             </div>
+
 
                             <label for="" title="" ng-hide='Producto.IdFabricante === 5 && Product.IdTipoProducto !== 4'>
                             <div ng-show="Producto.IdTipoProducto == 1">Precio por servicio:</div>
@@ -114,6 +115,9 @@
                                 {{Producto.PrecioDescuento | currency: "$" : 2}} {{Producto.MonedaPrecio}}
                                 <b style="color:#68953B;">{{Producto.PorcentajeDescuento}}% Desc.</b>
                             </span>
+                            <div ng-show="Producto.Esquema == 2">
+                                    <label for="">Descuento Anual: </label> {{Producto.DescuentoAnual}}
+                                </div>
 
                             <div ng-show="Producto.IdTipoProducto == 2 && Producto.IdFabricante == 1 && Producto.IdEsquemaRenovacion == '01'">
                                 <label for="" title="Precio prorrateado">Precio prorrateado del primer periodo:</label> {{Producto.PrecioProrrateo
