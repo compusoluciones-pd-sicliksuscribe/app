@@ -1,5 +1,5 @@
 (function () {
-  var PedidoDetallesReadController = function ($scope, $log, $location, $cookies, PedidoDetallesFactory, TipoCambioFactory, EmpresasXEmpresasFactory, EmpresasFactory, PedidosFactory , DescuentosFactory , $routeParams) {
+  var PedidoDetallesReadController = function ($scope, $log, $location, $cookies, PedidoDetallesFactory, TipoCambioFactory, EmpresasXEmpresasFactory, EmpresasFactory, PedidosFactory, DescuentosFactory, $routeParams) {
     $scope.CreditoValido = 1;
     $scope.error = false;
     $scope.Distribuidor = {};
@@ -171,7 +171,6 @@
         .then(getOrderDetails)
         .then(ActualizarFormaPago)
         .catch(function (result) { error(result.data); });
-        
     };
 
     $scope.init();
@@ -422,7 +421,7 @@
     };
   };
 
-  PedidoDetallesReadController.$inject = ['$scope', '$log', '$location', '$cookies', 'PedidoDetallesFactory', 'TipoCambioFactory', 'EmpresasXEmpresasFactory', 'EmpresasFactory', 'PedidosFactory', '$routeParams','DescuentosFactory'];
+  PedidoDetallesReadController.$inject = ['$scope', '$log', '$location', '$cookies', 'PedidoDetallesFactory', 'TipoCambioFactory', 'EmpresasXEmpresasFactory', 'EmpresasFactory', 'PedidosFactory','DescuentosFactory', '$routeParams'];
 
   angular.module('marketplace').controller('PedidoDetallesReadController', PedidoDetallesReadController);
 }());
