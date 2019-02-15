@@ -17,7 +17,7 @@
 
     factory.getDescuentoAnual = function () {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'DescuentoAnual');
+      return $http.get($rootScope.API + 'descuentoAnual');
     };
 
     factory.refreshToken();
