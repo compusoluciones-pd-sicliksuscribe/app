@@ -38,6 +38,14 @@
                   var repeat = Math.ceil(result.data[0].length / maxSize);
                   var k=1;
                   var entro=0;
+                  for(let ind=0; ind<repeat; ind++ )
+                  {
+                    
+                  }
+
+
+
+
                   for (var j = 0; j < repeat; j++) {
                     var start = j * maxSize;
                     var end = start + maxSize;
@@ -47,26 +55,25 @@
                     var contenido = result.data[0].slice(start, end);
                     var resultado = result.data[0].slice(start, end);
                     NombreReporte = NombreReporte + '_' + number;
+                    var resultado=JSON.stringify($scope.generarReporte(contenido));
+                    // console.log("resultado 1:"+JSON.stringify(resultado));
 
-              
-                    console.log("resultado 1:"+JSON.stringify(resultado));
-
-                      if(parte[j].FechaInicio ===  contenido[k].FechaInicio && parte[k].FechaFin === "" && parte[j].Periodo ===contenido[k].Periodo ){
+                    //   if(parte[j].FechaInicio ===  contenido[k].FechaInicio && parte[k].FechaFin === "" && parte[j].Periodo ===contenido[k].Periodo ){
                         
-                        if(parte[j].SubMayorista=== contenido[k].SubMayorista && parte[j].Cantidad === contenido[k].Cantidad){
-                          //entro+=resultado[j].CostoTotal;
-                          resultado[j].DiasTotalActivo+=parte[j].DiasTotalActivo;
-                        }else{
-                          console.log(JSON.stringify(resultado[j].CostoTotal)+"COSTO"+JSON.stringify(entro)+"ENTRO");
+                    //     if(parte[j].SubMayorista=== contenido[k].SubMayorista && parte[j].Cantidad === contenido[k].Cantidad){
+                    //       //entro+=resultado[j].CostoTotal;
+                    //       resultado[j].DiasTotalActivo+=parte[j].DiasTotalActivo;
+                    //     }else{
+                    //       console.log(JSON.stringify(resultado[j].CostoTotal)+"COSTO"+JSON.stringify(entro)+"ENTRO");
                       
-                          // resultado[j].CostoTotal=resultado[j].CostoPorDia*resultado[j].CostoPorDia;
-                          console.log(JSON.stringify(resultado[j].CostoTotal)+"="+JSON.stringify(entro)+"=");
-                        }
+                    //       // resultado[j].CostoTotal=resultado[j].CostoPorDia*resultado[j].CostoPorDia;
+                    //       console.log(JSON.stringify(resultado[j].CostoTotal)+"="+JSON.stringify(entro)+"=");
+                    //     }
   
-                      }
-                      k++;
-                      console.log("resultado :"+JSON.stringify(resultado));
-                      //$scope.JSONToCSVConvertor(resultado, NombreReporte, true);
+                    //   }
+                    //   k++;
+                    //   console.log("resultado :"+JSON.stringify(resultado));
+                       $scope.JSONToCSVConvertor(resultado, NombreReporte, true);
                   }
                 }
               }
@@ -101,6 +108,64 @@
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
     };
+
+    $scope.generarReporte = function ( contenido ) {
+      var k=0;
+      var copia=contenido.length;
+
+      var total =new Array(2);
+      for(var fila=0; fila<contenido.length; fila++)
+      total[fila]= new Array(2);
+      
+      var aux={};
+      for (var m = 0; m<contenido.length; m++){
+        for(var n = 0; n<contenido.length-1; n++){
+          if(contenido[m].IdSuscripcion<contenido[n].IdSuscripcion){
+            aux=contenido[n+1];
+            contenido[n]=contenido[m];
+            contenido[m]=aux;
+          }
+        }
+      }
+      console.log(contenido[0]);
+      console.log(JSON.stringify(contenido[0]));
+
+      var fila=0;
+      columna=0;
+      var pivote={};
+     // pivote=contenido[0];
+      //console.log("este es el pivote wey "+JSON.stringify(pivote));
+      //for(var j = 0; j<contenido.length; j++){
+      for (var i = 0; i<contenido.length; i++){
+        pivote=contenido[i];
+        console.log("pivote"+JSON.stringify(pivote.IdOrden)+"contenido"+JSON.stringify(contenido[i].IdSuscripcion));  
+              if(pivote.Periodo ===contenido[i].Periodo && pivote.IdSuscripcion=== contenido[i].IdSuscripcion ){
+              if(pivote.IdOrden=== contenido[i].IdOrden && pivote.Cantidad === contenido[i].Cantidad){
+                //console.log("lo que meti en el array"+JSON.stringify(contenido[i]));
+                total[fila][columna]=contenido[i];
+                columna++;
+                            }else{
+                              fila++;
+                              columna=0;
+                             
+                            }
+            }
+       // }
+       
+      }
+
+
+        for (var m = 0; m<contenido.length; m++){
+          for(var n = 0; n<contenido.length-1; n++){
+            console.log("Matriz result :"+JSON.stringify(total[m][n])  );
+          }
+        }
+      
+                    
+      console.log("ordenado array :"+JSON.stringify(total));
+
+      return total;
+    }
 
     $scope.JSONToCSVConvertor = function (JSONData, ReportTitle, ShowLabel) {
       /* If JSONData is not an object then JSON.parse will parse the JSON string in an Object*/
