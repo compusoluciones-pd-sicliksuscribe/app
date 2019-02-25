@@ -17,8 +17,12 @@
         .success(function (result) {
           console.log(result,'ccccc');
           if (result.success) {
+            console.log();
             $scope.DescuentoAnual.PorcentajeDescuento = result.data.DescuentoAnual;
-            $scope.DescuentoAnual.FechaExpiracion = result.data.FechaExpiracion;
+            var fecha= result.data.FechaExpiracion;
+            var res = fecha.replace(" 00:00:00", "");
+            document.getElementById("FechaExpiracion").innerHTML = fecha;
+            $scope.FechaExpiracion = res;
           } else {
             $scope.ShowToast(result.message, 'danger');
           }
@@ -35,7 +39,12 @@
     };
 
     $scope.DescuentoAnual = function () {
-      DescuentosFactory.postDescuentoAnual($scope.DescuentoAnual.PorcentajeDescuento, $scope.FechaExpiracion)
+      var dateExpiration = document.getElementById("FechaExpiracion").value;
+      var fullDateExpiration = dateExpiration + " 00:00:00"
+      
+      $scope.DescuentoAnual.FechaExpiracion=fullDateExpiration;
+      console.log("...........-..-.-----------------...",$scope.DescuentoAnual.FechaExpiracion);
+      DescuentosFactory.postDescuentoAnual($scope.DescuentoAnual.PorcentajeDescuento, $scope.DescuentoAnual.FechaExpiracion)
           .success(function (result) {
             if (result.success) {
               $location.path('/Descuento-Anual');
@@ -52,3 +61,4 @@
   DescuentoAnualCreateController.$inject = ['$scope', '$log', '$cookies', '$location', 'DescuentosFactory', '$routeParams'];
   angular.module('marketplace').controller('DescuentoAnualCreateController', DescuentoAnualCreateController);
 }());
+

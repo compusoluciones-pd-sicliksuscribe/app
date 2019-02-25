@@ -9,20 +9,23 @@
               <label>Descuento anual </label>
               <div class="input-group">
                 <span class="input-group-addon" style="border-radius: 0;">%</span> 
-                <input name="Porcentaje" type="number" ng-model="DescuentoAnual.PorcentajeDescuento" class="form-control" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01"
+                <input name="Porcentaje" type="number" ng-model="DescuentoAnual.PorcentajeDescuento"  class="form-control" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01"
                 placeholder="Descuento" size="3" min="1" max="100" ng-disabled="SessionCookie.IdTipoAcceso !== 1" required/>
               </div>
               <br>
-        ​
               <!--input fecha-->
-              <label>Fecha de expiración </label>
+              <label>Nueva fecha de expiración </label>
               <div class="input-group" >
-                <span class="input-group-addon" style="border-radius: 0;">
-                  <span class="fa fa-calendar" style="color: #337ab7" ;></span>
+                <span class="input-group-addon" style="border-radius: 200;">
+                  <span class="fa fa-calendar" style="color: #337ab7"; ></span>
+                  
+                  <label >{{FechaExpiracion}} </label>
                 </span>
-                <input id="FechaExpiracion" type="date"  ng-model='DescuentoAnual.FechaExpiracion' class="form-control"
-                  ng-disabled="SessionCookie.IdTipoAcceso !== 1">
+                <input id="FechaExpiracion" type="date"  ng-model='FechaExpiracion' class="form-control"
+                ng-disabled="SessionCookie.IdTipoAcceso !== 1" value="FechaExpiracion" placeholder="\{{FechaExpiracion}}\" >
+                  
               </div> 
+              
         ​
               <br>
               <!--Boton enviar-->
