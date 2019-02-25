@@ -9,10 +9,10 @@
       $http.defaults.headers.common['token'] = Session.Token;
     };
 
-    factory.postDescuentoAnual = function (DescuentoAnual) {
+    factory.postDescuentoAnual = function (DescuentoAnual, FechaExpiracion) {
       factory.refreshToken();
 
-      return $http.post($rootScope.API + 'descuentoAnual/' + DescuentoAnual);
+      return $http.post($rootScope.API + 'descuentoAnual/' + DescuentoAnual + '/' + FechaExpiracion);
     };
 
     factory.getDescuentoAnual = function () {
@@ -22,9 +22,10 @@
 
     factory.refreshToken();
 
-    factory.postDescuento = function (Descuento) {
+    factory.postDescuento = function (Descuento,FechaExpiracion) {
+      console.log('desc: ', Descuento, 'fecha ', FechaExpiracion);
       factory.refreshToken();
-      return $http.post($rootScope.API + 'ConfiguracionDescuento', Descuento);
+      return $http.post($rootScope.API + 'ConfiguracionDescuento', Descuento, FechaExpiracion);
     };
 
     factory.putDescuento = function (Descuento) {

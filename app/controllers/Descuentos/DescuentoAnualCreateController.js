@@ -4,18 +4,21 @@
     Session = $cookies.getObject('Session');
     $scope.Session = Session;
     $scope.descuentoAnual = {};
+    $scope.FechaExpiracion = {};
 
     $scope.init = function () {
       $scope.CheckCookie();
-
       $scope.obtenerDescuentoAnual();
+
     };
 
     $scope.obtenerDescuentoAnual = function () {
       DescuentosFactory.getDescuentoAnual()
         .success(function (result) {
+          console.log(result,'ccccc');
           if (result.success) {
             $scope.DescuentoAnual.PorcentajeDescuento = result.data.DescuentoAnual;
+            $scope.DescuentoAnual.FechaExpiracion = result.data.FechaExpiracion;
           } else {
             $scope.ShowToast(result.message, 'danger');
           }
@@ -32,7 +35,7 @@
     };
 
     $scope.DescuentoAnual = function () {
-      DescuentosFactory.postDescuentoAnual($scope.DescuentoAnual.PorcentajeDescuento)
+      DescuentosFactory.postDescuentoAnual($scope.DescuentoAnual.PorcentajeDescuento, $scope.FechaExpiracion)
           .success(function (result) {
             if (result.success) {
               $location.path('/Descuento-Anual');
@@ -42,7 +45,7 @@
             }
           })
           .error(function (result) {
-            $scope.ShowToast(result.message, 'danger');
+            $scope.ShowToast(result.message,'danger');
           });
     };
   };
