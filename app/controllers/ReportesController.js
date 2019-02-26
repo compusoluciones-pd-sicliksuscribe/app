@@ -27,59 +27,6 @@
       ReportesFactory.getGenerarReporte($scope.reporteSel)
         .success(function (result) {
           if (result) {
-            if ($scope.reporteSel === 29 ){
-            
-              for (var i = 0; i < $scope.reportesSel.length; i++) {
-                if ($scope.reportesSel[i].IdReporte === $scope.reporteSel) {
-                  var d = new Date();
-                  var sDate = ('0' + d.getDate()).slice(-2) + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + d.getFullYear() + ' ' + ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
-                  var NombreReporte = $scope.reportesSel[i].NombreReporte + '_' + sDate;
-  
-                  var repeat = Math.ceil(result.data[0].length / maxSize);
-                  var k=1;
-                  var entro=0;
-                  for(let ind=0; ind<repeat; ind++ )
-                  {
-                    
-                  }
-
-
-
-
-                  for (var j = 0; j < repeat; j++) {
-                    var start = j * maxSize;
-                    var end = start + maxSize;
-                    var parte = result.data[0].slice(start, end);
-
-                    var number = j + 1;
-                    var contenido = result.data[0].slice(start, end);
-                    var resultado = result.data[0].slice(start, end);
-                    NombreReporte = NombreReporte + '_' + number;
-                    var resultado=JSON.stringify($scope.generarReporte(contenido));
-                    // console.log("resultado 1:"+JSON.stringify(resultado));
-
-                    //   if(parte[j].FechaInicio ===  contenido[k].FechaInicio && parte[k].FechaFin === "" && parte[j].Periodo ===contenido[k].Periodo ){
-                        
-                    //     if(parte[j].SubMayorista=== contenido[k].SubMayorista && parte[j].Cantidad === contenido[k].Cantidad){
-                    //       //entro+=resultado[j].CostoTotal;
-                    //       resultado[j].DiasTotalActivo+=parte[j].DiasTotalActivo;
-                    //     }else{
-                    //       console.log(JSON.stringify(resultado[j].CostoTotal)+"COSTO"+JSON.stringify(entro)+"ENTRO");
-                      
-                    //       // resultado[j].CostoTotal=resultado[j].CostoPorDia*resultado[j].CostoPorDia;
-                    //       console.log(JSON.stringify(resultado[j].CostoTotal)+"="+JSON.stringify(entro)+"=");
-                    //     }
-  
-                    //   }
-                    //   k++;
-                    //   console.log("resultado :"+JSON.stringify(resultado));
-                       $scope.JSONToCSVConvertor(resultado, NombreReporte, true);
-                  }
-                }
-              }
-          }else{
-
-
             for (var i = 0; i < $scope.reportesSel.length; i++) {
               if ($scope.reportesSel[i].IdReporte === $scope.reporteSel) {
                 var d = new Date();
@@ -98,10 +45,6 @@
                 return;
               }
             }
-
-
-
-          }
           }
         })
         .error(function (data, status, headers, config) {
