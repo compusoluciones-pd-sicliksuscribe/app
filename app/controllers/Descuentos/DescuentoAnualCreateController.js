@@ -19,9 +19,11 @@
           if (result.success) {
             console.log();
             $scope.DescuentoAnual.PorcentajeDescuento = result.data.DescuentoAnual;
+            $scope.FechaExpiracion = result.data.FechaExpiracion;
             var fecha= result.data.FechaExpiracion;
             var res = fecha.replace(" 00:00:00", "");
-            document.getElementById("FechaExpiracion").innerHTML = fecha;
+            console.log("valor fecha",res);
+            document.getElementById("FechaExpiracion").innerHTML = res;
             $scope.FechaExpiracion = res;
           } else {
             $scope.ShowToast(result.message, 'danger');
@@ -42,19 +44,18 @@
       var dateExpiration = document.getElementById("FechaExpiracion").value;
       var fullDateExpiration = dateExpiration + " 00:00:00"
       
-      $scope.DescuentoAnual.FechaExpiracion=fullDateExpiration;
-      console.log("...........-..-.-----------------...",$scope.DescuentoAnual.FechaExpiracion);
-      DescuentosFactory.postDescuentoAnual($scope.DescuentoAnual.PorcentajeDescuento, $scope.DescuentoAnual.FechaExpiracion)
+      $scope.FechaExpiracion=fullDateExpiration;
+      DescuentosFactory.postDescuentoAnual($scope.DescuentoAnual.PorcentajeDescuento, $scope.FechaExpiracion)
           .success(function (result) {
             if (result.success) {
               $location.path('/Descuento-Anual');
               $scope.ShowToast(result.message, 'success');
             } else {
-              $scope.ShowToast(result.message, 'danger');
+              $scope.ShowToast("Por favor ingresa Una fecha valida", 'danger');
             }
           })
           .error(function (result) {
-            $scope.ShowToast(result.message,'danger');
+            $scope.ShowToast("Por favor ingresa Una fecha valida",'danger');
           });
     };
   };

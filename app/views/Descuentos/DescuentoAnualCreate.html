@@ -14,15 +14,17 @@
               </div>
               <br>
               <!--input fecha-->
-              <label>Nueva fecha de expiración </label>
+              <label class="form-group  col-xs-9 col-sm-9 col-md-9 col-lg-9" ng-show="FechaExpiracion === FechaExpiracion">  Fecha Expiración actual
+                  {{FechaExpiracion}} </label>
+                                                                 <label> Nueva fecha de expiración </label>
               <div class="input-group" >
                 <span class="input-group-addon" style="border-radius: 200;">
                   <span class="fa fa-calendar" style="color: #337ab7"; ></span>
                   
-                  <label >{{FechaExpiracion}} </label>
+                  <label ></label>
                 </span>
                 <input id="FechaExpiracion" type="date"  ng-model='FechaExpiracion' class="form-control"
-                ng-disabled="SessionCookie.IdTipoAcceso !== 1" value="FechaExpiracion" placeholder="\{{FechaExpiracion}}\" >
+                ng-disabled="SessionCookie.IdTipoAcceso !== 1" value="FechaExpiracion" placeholder="\{{FechaExpiracion}}\"  required>
                   
               </div> 
               
