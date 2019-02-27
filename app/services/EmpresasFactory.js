@@ -91,6 +91,11 @@
       return $http.post($rootScope.API + 'Empresa/check', ObjRFC);
     };
 
+    factory.checkRFCImport = function (ObjRFC) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'enterprise/checkImport/' + ObjRFC);
+    };
+
     factory.validarBajaEmpresa = function (Empresa) {
       factory.refreshToken();
       return $http.post($rootScope.API + 'Empresa/ValidarBajaEmpresa', Empresa);

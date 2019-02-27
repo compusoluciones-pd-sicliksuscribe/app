@@ -110,7 +110,24 @@
                         <p style="text-align: center">El RFC ingresado ya está relacionado con el distribuidor seleccionado</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-success" ng-click="cerrar()" data-dismiss="modal">Enterado</button>
+                        <button type="button" class="btn btn-success" ng-click="cerrarModal('avisoModal')" data-dismiss="modal">Enterado</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="confirmarModal" class="modal fade in" tabindex="-1" role="dialog" style="padding-right: 17px; display: block">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                        <h4 class="modal-title">Confirmación</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p style="text-align: center">El RFC ingresado ya se encuentra relacionado, desea relacionarlo con el distribuidor seleccionado?</p>
+                    </div>
+                    <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" ng-click="cerrarModal('confirmarModal')" data-dismiss="modal">No</button>
+                        <button type="button" class="btn btn-success" ng-click="importar()" data-dismiss="modal">Si</button>
                     </div>
                 </div>
             </div>
