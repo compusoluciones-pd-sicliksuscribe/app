@@ -85,6 +85,13 @@
       factory.refreshToken();
       return $http.get($rootScope.API + 'users-access');
     };
+    
+    
+    factory.putDeleteFinalUser = function (IdUsuario) {
+      factory.refreshToken();
+      console.log("entro aqui",IdUsuario);
+      return $http.put($rootScope.API + 'BajaUsuarioFinal/'+ IdUsuario);
+  };
 
     return factory;
   };

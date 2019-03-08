@@ -47,6 +47,7 @@
       <b> &nbsp;Nombre
         <span class="fa fa-sort"></span>
       </b>
+      
     </th>
     <th>&nbsp;</th>
 
@@ -68,11 +69,30 @@
               </h4>
             </div>
           </td>
+        <td>
+          
+            <div class="form-group" > 
+                {{Usuario}}
+                <button class="btn btn-danger btn-sm" style="min-width: 0px; height: 40px;" ng-click="Confirmar(Usuario.IdUsuario)" ng-show="SessionCookie.IdTipoAcceso === 1 || SessionCookie.IdTipoAcceso === 2 || SessionCookie.IdTipoAcceso === 3 || SessionCookie.IdTipoAcceso === 4">Eliminar  <span class="glyphicon glyphicon-trash"></span></button>
+            </div>
+            {{Usuario.Mostrar}}
+        
+        {{Usuario.Mostrar}}
+            <div ng-show="Usuario.Mostrar" >
+                <div class="form-group" >
+                    <label>El Usuario sera dado de baja, ¿Deseas continuar?</label>
+                </div>
+                <div class="form-group" >
+                    <button class="btn btn-warning btn-sm" style="min-width:0px;height:40px;" ng-disabled="form.habilitar" ng-click="BajaUsuario(Usuario.IdUsuario)">Sí</button>
+                    <button class="btn btn-primary btn-sm"  style="min-width:0px;height:40px;" ng-disabled="form.habilitar" ng-click="Confirmar(Usuario.IdUsuario)">No</button>
+                </div>
+              </div>
         </div>
-      </div>
+      </div> 
+    </td>
     </tr>
   </table>
-
+  
   <div ng-show="!empresaSel" class="form-group row">
     <div class="pull-left">
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -80,7 +100,7 @@
       </div>
     </div>
   </div>
-
+  
   <div ng-show="empresaSel" class="form-group row">
     <div class="pull-left">
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">

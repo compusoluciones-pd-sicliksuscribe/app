@@ -64,6 +64,43 @@
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
     };
+    
+    $scope.Confirmar = function (IdUsuario) {
+      $scope.Usuarios.forEach(function (Usuario) {
+      
+        if (Usuario.IdUsuario === IdUsuario) {
+          
+          Usuario.Mostrar = !Usuario.Mostrar;
+          console.log("entro a confirmar",Usuario.Mostrar);
+        }
+      }, this);
+    };
+  
+    $scope.BajaUsuario = function (Usuario) {
+      console.log("entro bajaususario",Usuario);
+      UsuariosFactory.putDeleteFinalUser(Usuario)
+         .success(
+          function (data) {
+            console.log(data);
+          if (data) {
+            console.log(data);
+            $scope.ShowToast(data, 'success');
+
+            $scope.init();
+          } else {
+            console.log(data);
+            $scope.ShowToast(data, 'danger');
+          }
+        })
+        .error(function (data, status, headers, config) {
+          $scope.ShowToast('No pudimos dar de baja tu solicitud, por favor intenta de nuevo más tarde', 'danger');
+
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+
+
+        // .then(resp=>console.log("respuesta de delete",resp));
+    };
 
     $scope.MostrarUsuariosEmp = function (IdEmpresa) {
       const empresa = IdEmpresa || false;
