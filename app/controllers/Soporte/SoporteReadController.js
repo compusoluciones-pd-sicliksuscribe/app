@@ -82,7 +82,6 @@
     };
 
     $scope.EditarDetalle = function (id) {
-      console.log(id);
       $location.path('actualizar-soporte/'+id);
     };
   };

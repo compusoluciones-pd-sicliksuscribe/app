@@ -41,7 +41,7 @@
     <div class="col-xs-0 col-sm-0 col-md-6 col-lg-6"></div>
   </div>
 
-  <table ng-show="empresaSel" class="table table-hover table-responsive border-left-right-cero">
+  <table ng-show="empresaSel" class="table table-hover table-responsive border-left-right-cero" >
 
     <th style="cursor:pointer" ng-click="OrdenarPor('Nombre')">
       <b> &nbsp;Nombre
@@ -59,8 +59,7 @@
               <h3> {{Usuario.Nombre}} {{Usuario.ApellidoPaterno}} {{Usuario.ApellidoMaterno}}</h3>
             </b> {{Usuario.CorreoElectronico}}
             <br> {{Usuario.Tipo}}, desde el {{Usuario.FechaActivo}}
-          </td>
-          <td>
+        
             <div class="pull-right" ng-show="(!empresaSel == '') && (SessionCookie.IdTipoAcceso !== 1) && (SessionCookie.IdTipoAcceso !== 2) && (SessionCookie.IdTipoAcceso !== 8)">
               <h4>
                 <a href="#/Usuario/{{Usuario.IdUsuario}}">
@@ -69,26 +68,23 @@
               </h4>
             </div>
           </td>
-        <td>
-          
+          <td>
             <div class="form-group" > 
-                {{Usuario}}
-                <button class="btn btn-danger btn-sm" style="min-width: 0px; height: 40px;" ng-click="Confirmar(Usuario.IdUsuario)" ng-show="SessionCookie.IdTipoAcceso === 1 || SessionCookie.IdTipoAcceso === 2 || SessionCookie.IdTipoAcceso === 3 || SessionCookie.IdTipoAcceso === 4">Eliminar  <span class="glyphicon glyphicon-trash"></span></button>
-            </div>
-            {{Usuario.Mostrar}}
-        
-        {{Usuario.Mostrar}}
-            <div ng-show="Usuario.Mostrar" >
-                <div class="form-group" >
+              <div>
+                <button  class="btn btn-danger btn-sm" style="min-width: 0px; height: 40px; margin-top:20px" ng-click="Confirmar(Usuario.IdUsuario)" ng-show="SessionCookie.IdTipoAcceso === 1 || SessionCookie.IdTipoAcceso === 2 || SessionCookie.IdTipoAcceso === 3 || SessionCookie.IdTipoAcceso === 4">Eliminar  <span class="glyphicon glyphicon-trash"></span></button>
+              </div>
+              <div ng-show="Usuario.Mostrar"class="form-group" style=" margin-top:5px; ">
+                <div >
                     <label>El Usuario sera dado de baja, ¿Deseas continuar?</label>
                 </div>
-                <div class="form-group" >
-                    <button class="btn btn-warning btn-sm" style="min-width:0px;height:40px;" ng-disabled="form.habilitar" ng-click="BajaUsuario(Usuario.IdUsuario)">Sí</button>
+                <div>
+                    <button  class="btn btn-warning btn-sm   " style="min-width:0px;height:40px" ng-disabled="form.habilitar" ng-click="BajaUsuario(Usuario.IdUsuario)">Sí</button>
                     <button class="btn btn-primary btn-sm"  style="min-width:0px;height:40px;" ng-disabled="form.habilitar" ng-click="Confirmar(Usuario.IdUsuario)">No</button>
                 </div>
               </div>
+            </div>
         </div>
-      </div> 
+      </div>
     </td>
     </tr>
   </table>
