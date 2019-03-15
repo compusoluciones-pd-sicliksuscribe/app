@@ -1,6 +1,9 @@
-<div class="container login" ng-swipe-right="" ng-swipe-left=""></div>
-  <div class="form-group row">
-    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+
+  
+<div class="container" ng-swipe-right="" ng-swipe-left="">
+  
+  <div class="form-group row" >
+    <div  align="center" class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
       <h2 style="float:left;">Colaboradores
         <i class="fa fa-question-circle tourButton" style="float:right; font-size:12px; margin-top:10px; margin-left:10px;"
           ng-click="IniciarTourColaborador();"></i>
@@ -17,7 +20,7 @@
             <i class="form-control-feedback glyphicon glyphicon-search"></i>
         </div>
     </div>
-    <div class="form-group row">
+    <div class="form-group row" >
       <div class="pull-right" ng-hide="SessionCookie.IdTipoAcceso == 8">
           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">   
               <button ng-click="goToPage('Usuario');" class="btn btn-primary newColaborator" style="background:{{currentDistribuidor.PrimaryColor}} !important">Nuevo colaborador&nbsp;<span class="glyphicon glyphicon-plus"ng-hide="SessionCookie.IdTipoAcceso == 8"></span></button>
@@ -37,10 +40,9 @@
       </div>
 
     </div>
-    <div class="col-xs-0 col-sm-0 col-md-6 col-lg-6"></div>
   </div>
 
-  <table ng-show="empresaSel" class="table table-hover table-responsive border-left-right-cero" >
+  <table align="center" ng-show="empresaSel" class="  table table-hover table-responsive  "  style=" width: 1000% ">
 
     <th style="cursor:pointer" ng-click="OrdenarPor('Nombre')">
       <b> &nbsp;Nombre
@@ -50,9 +52,9 @@
     </th>
     <th>&nbsp;</th>
 
-    <tr ng-repeat="Usuario in Usuarios | filter:UsuarioFilter | orderBy:sortBy:reverse" class="repeat-animation">
+    <tr ng-repeat="Usuario in Usuarios | filter:UsuarioFilter | orderBy:sortBy:reverse" class="repeat-animation" class="">
       <div class="form-group row">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div >
           <td style="width: 850px;">
             <b>
               <h3> {{Usuario.Nombre}} {{Usuario.ApellidoPaterno}} {{Usuario.ApellidoMaterno}}</h3>
@@ -99,15 +101,16 @@
     </div>
   </div>
   
-  <div ng-show="empresaSel" class="form-group row">
+  <div  ng-show="empresaSel" class="form-group row" align="center">
     <div class="pull-left">
-      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <div >
         Número de colaboradores: {{ Usuarios.length }}
       </div>
     </div>
   </div>
 
 
+</div>
 
 
   <!--<div class="form-group row" >
@@ -123,5 +126,3 @@
             </div>
             <div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div>
         </div>-->
-
-</div>
