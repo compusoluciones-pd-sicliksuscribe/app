@@ -48,7 +48,7 @@
 
     factory.postEmpresaMicrosoft = function (ObjMicrosoft) {
       factory.refreshToken();
-      return $http.post($rootScope.API + 'Empresa/Microsoft', ObjMicrosoft);
+      return $http.post($rootScope.API + 'enterprise/microsoft', ObjMicrosoft);
     };
 
     factory.putEmpresaFormaPago = function (parametros) {

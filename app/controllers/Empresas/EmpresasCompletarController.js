@@ -13,6 +13,7 @@
     $scope.MostrarCorreo = false;
     $scope.CorreoRepetido = false;
     $scope.direccionValidada = false;
+    $scope.selectIndustrias = {};
 
     $scope.init = function () {
       $scope.esNavegadorSoportado();
@@ -45,6 +46,14 @@
             $scope.Empresa.CorreoContacto = Empresa.email;
             $scope.validiaMail(Empresa.email);
           }
+        })
+        .error(function (data, status, headers, config) {
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+
+      EmpresasFactory.getIndustrias()
+        .success(function (result) {
+          $scope.selectIndustrias = result.data;
         })
         .error(function (data, status, headers, config) {
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
@@ -136,17 +145,18 @@
             Estado: DatosMicrosoft.defaultAddress.state,
             CodigoPostal: DatosMicrosoft.defaultAddress.postalCode,
             NombreContacto: DatosMicrosoft.firstName,
-            ApellidosContacto: DatosMicrosoft.lastName,
-            CorreoContacto: $scope.Empresa.CorreoContacto,
+            ApellidoPaterno: DatosMicrosoft.lastName,
+            CorreoElectronico: $scope.Empresa.CorreoContacto,
             TelefonoContacto: DatosMicrosoft.defaultAddress.phoneNumber,
             ZonaImpuesto: 'Normal',
             Lada: '52',
             IdMicrosoftUF: IdMicrosoft,
             DominioMicrosoftUF: Dominio,
+            IdIndustria: $scope.Empresa.IdIndustria,
             IdEmpresaDistribuidor: IdEmpresaDistribuidor,
             IdUsuario: UsuariosXEmpresas[0].IdUsuario,
             MonedaPago: $scope.Empresa.MonedaPago,
-            FormaPago: $scope.Empresa.IdFormaPagoPredilecta,
+            IdFormaPagoPredilecta: $scope.Empresa.IdFormaPagoPredilecta
           };
           EmpresasFactory.postEmpresaMicrosoft(ObjMicrosoft)
             .success(function (result) {
