@@ -18,7 +18,11 @@
             $scope.DescuentoAnual.PorcentajeDescuento = result.data.DescuentoAnual;
             $scope.FechaExpiracion = new Date(result.data.FechaExpiracion);
           } else {
-            $scope.ShowToast(result.message, 'danger');
+            if (result.message) {
+              $scope.ShowToast(result.message, 'danger');
+            } else {
+              $scope.ShowToast('No tienes descuentos activos', 'danger');
+            }
           }
         })
         .error(function (result) {
