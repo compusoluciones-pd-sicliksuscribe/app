@@ -44,7 +44,7 @@
               $location.path('/Descuento-Anual');
               $scope.ShowToast(result.message, 'success');
             } else {
-              $scope.ShowToast("Por favor ingresa Una fecha valida", 'danger');
+              $scope.ShowToast("Ingresa una fecha válida.", 'danger');
             }
           })
           .error(function (result) {
