@@ -78,7 +78,7 @@
             $scope.CorreoRepetido = false;
             $scope.MostrarCorreo = false;
           }
-          if (callMeMaybe && $scope.CorreoRepetido === false) {
+          if (callMeMaybe) {
             callMeMaybe();
           }
         })
