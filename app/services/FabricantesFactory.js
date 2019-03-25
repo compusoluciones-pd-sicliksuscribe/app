@@ -31,6 +31,26 @@
       return $http.put($rootScope.API + 'Fabricantes', Fabricante);
     };
 
+    factory.getUriVmwareDistributor = function () {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'Vmware/get-token');
+    };
+
+    factory.getUsersListVmware = function () {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'Vmware/get-users-list');
+    };
+
+    factory.getMonthlyUsageVmware = function (payload) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'Vmware/get-monthly-usage', payload);
+    };
+
+    factory.putVmwarePoNumber = function (payload) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'Vmware/usage-po-update', payload);
+    };
+
     return factory;
   };
 
