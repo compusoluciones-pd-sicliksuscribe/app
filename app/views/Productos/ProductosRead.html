@@ -177,7 +177,7 @@
                                                 </span>
                                                 <select id="IdEmpresaUsuarioFinal" name="IdEmpresaUsuarioFinal" class="form-control selectOption ufs" ng-model="Producto.IdEmpresaUsuarioFinal"
                                                     ng-options="Empresa.IdEmpresa as Empresa.NombreEmpresa + ', crédito disponible: ' + (Empresa.CreditoDisponible | currency) + ' pesos.' for Empresa in selectEmpresas"
-                                                    ng-change="revisarProducto(Producto);" title="Selecciona a un cliente (usuario final) para tu producto"
+                                                    ng-change="revisarProducto(Producto); getDataFinalUserById(Producto.IdEmpresaUsuarioFinal)" title="Selecciona a un cliente (usuario final) para tu producto"
                                                     required>
                                                     <option ng-selected="true" value="">Selecciona un cliente...</option>
                                                 </select>
@@ -275,7 +275,8 @@
                                         <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-show="SessionCookie.IdTipoAcceso === 1 || SessionCookie.IdTipoAcceso === 2 || SessionCookie.IdTipoAcceso === 3 || SessionCookie.IdTipoAcceso === 4">
                                                 <button  ng-click="updateEnterprise(Producto)" ng-show="Producto.IdFabricante === 1 && usuariosSinDominio[Producto.IdEmpresaUsuarioFinal] === false" class="btn btn-primary updateDomain" style="float: center;">Asignar Dominio Microsoft</button>
                                             <button class="btn btn-success addOption" ng-click="previousISVValidate(Producto)" ng-disabled="!frmCantidad.$valid || Producto.IdFabricante === 1 && usuariosSinDominio[Producto.IdEmpresaUsuarioFinal] === false" style="float: center;" ng-hide="((terminos) && (Producto.IdFabricante === 1))">Agregar al carrito</md-button>
-                                            <button class="btn btn-danger addOption" style="float: center;" data-toggle="modal" data-target="#terminosModal" ng-show="((terminos) && (Producto.IdFabricante === 1))">Aceptar términos</md-button>
+                                                <!-- <button  ng-show="mostrarBoton==1" class="btn btn-danger addOption" style="float: center;" data-toggle="modal" data-target="#terminosModal" ng-show="((terminos) && (Producto.IdFabricante === 1))">Aceptar términos</md-button> -->
+                                                <button  ng-click="selectModal()"  class="btn btn-danger addOption" style="float: center;" data-toggle="modal" ng-show="((terminos) && (Producto.IdFabricante === 1))">Aceptar términos</md-button>
                                         </div>
 
                                         
@@ -292,26 +293,101 @@
             </td>
         </tr>
     </table>
-    <div id="terminosModal" class="modal fade" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Términos y condiciones</h4>
-                </div>
-                <div class="modal-body">
-                    <p>Por disposición de Microsoft se debe de aceptar los Contratos de clientes y mercados de Proveedor de soluciones en la nube de Microsoft para poder seguir consumiendo sus productos. La fecha límite para aceptar los términos es el 06 de noviembre del 2018.
-                        En caso de no aceptar los términos, no se podrá hacer ningún movimiento en las licencias actuales ni comprar nuevas.
-                    </br></br>
-                    <a href="https://docs.microsoft.com/partner-center/agreements" class="alert-link"  target="_blank">
-                        *Consultar los Contratos de clientes y mercados de Proveedor de soluciones en la nube de Microsoft
-                    </a>
-                    </p>
-                    <hr>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-success" ng-click="AceptarTerminos()" data-dismiss="modal">Aceptar términos</button>
-                </div>
+
+    <div id="formModal" class="modal fade in" tabindex="-1" role="dialog">
+            
+        <div ng-show="mostrarBoton==1">
+                <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header" >
+                
+                                Actualiza o completa tus datos para poder aceptar los términos
+                                <br/>
+                                <label>Contacto principal</label>
+                                <hr>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                        
+                                        <div class="pull-rigth">
+                                            <label>Nombre *</label>
+                                            <input name="Nombre" type="text" ng-model="finalUser.Nombre" class="form-control"  placeholder="" size="255" ng-maxlength="50"
+                                            required  pattern="[a-z]{1,15}"
+                                            title="Username should only contain lowercase letters. e.g. john" />
+                                            <b style="color:red" ng-show="finalUser.Nombre.$invalid && !finalUserNombre.$pristine" class="help-block">Ingresa un nombre.</b>
+                                            <b style="color:red" ng-show="frm.NombreEmpresa.$invalid && !frm.NombreEmpresa.$pristine" class="help-block">El nombre de empresa es requerido.</b>
+                                        </div>
+                        
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                                        <div class="pull-rigth">
+                                            <label>Apellidos *</label>
+                                            <input name="Apellidos" type="text" ng-model="finalUser.Apellidos" class="form-control" ng-pattern="/[a-zA-Z]$/" placeholder="" size="255" ng-maxlength="80"
+                                            required  pattern="[A-Za-z0-9]{5,40}"/>
+                                            <b style="color:red" ng-show="frm.finalUser.Apellidos.$invalid && !frm.Apellidos.$pristine" class="help-block">Ingresa los apellidos.</b>
+                                        </div>
+                                    </div>
+                        
+                                </div>
+                        
+                                <div class="row" >
+                                    <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                        
+                                        <div class="pull-rigth">
+                                            <label>Correo electrónico *</label>
+                                            <input name="CorreoElectronico" type="mail" ng-model="finalUser.CorreoElectronico" class="form-control" placeholder="" size="255"
+                                            ng-maxlength="255"   required />
+                                            <b style="color:red" ng-show="frm.finalUser.CorreoElectronico.$invalid && !frm.CorreoElectronico.$pristine" class="help-block">Ingresa un correo válido.</b>
+                                        </div>
+                                        <!--ng-pattern="/^[a-z]+[a-z0-9._-]+@[a-z]+\.[a-z.]{2,5}$/+\.[a-z.]{2,5}$/"-->
+                                    </div>
+                                    <div  class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                                        <div class="pull-rigth">
+                                            <label>Número de celular </label>
+                                        </div>
+                                        <div >
+                                            <div >
+                                                <div class="pull-rigth">
+                                                    <input name="finalUser.Telefono" type="text" ng-model="finalUser.Telefono" ui-mask="(999) 999-9999" ui-mask-placeholder ui-mask-placeholder-char="_" class="form-control" placeholder="" size="255" ng-maxlength="255" required/>
+                                                    <b style="color:red" ng-show="frm.finalUser.Telefono.$invalid && !frm.Telefono.$pristine" class="help-block">Ingresa un teléfono válido.</b>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                
+                        </div>
+                    </div>
+                            <div  class="modal-footer">
+                                <button   ng-disabled="finalUser.Nombre==null||finalUser.Apellidos==null||finalUser.CorreoElectronico==''||finalUser.Telefono==null" type="button" class="btn btn-success" ng-click="updateFinalUserData();  cerrarModal('formModal')" data-dismiss="modal">Actualizar Información </button>
+                            </div>
+            </div></div>
+        </div>
+    </div>
+    <div id="terminosModal" class="modal fade in" tabindex="-1" role="dialog">
+        
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                
+                    <div class="modal-header" >
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Términos y condiciones</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Por disposición de Microsoft se debe de aceptar los Contratos de clientes y mercados de Proveedor de soluciones en la nube de Microsoft para poder seguir consumiendo sus productos. La fecha límite para aceptar los términos es el 06 de noviembre del 2018.
+                            En caso de no aceptar los términos, no se podrá hacer ningún movimiento en las licencias actuales ni comprar nuevas.
+                        </br></br>
+                        <a href="https://docs.microsoft.com/partner-center/agreements" class="alert-link"  target="_blank">
+                            *Consultar los Contratos de clientes y mercados de Proveedor de soluciones en la nube de Microsoft
+                        </a>
+                        </p>
+                        <hr>
+                        <div  class="modal-footer">
+                            <button   type="button" class="btn btn-success" ng-click="AceptarTerminos(); cerrarModal('terminosModal')" data-dismiss="modal">Aceptar términos</button>
+                        </div>
+
+
+
             </div>
         </div>
     </div>

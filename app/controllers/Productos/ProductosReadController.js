@@ -16,7 +16,10 @@
     $scope.usuariosSinDominio = {};
     $scope.terminos = false;
     $scope.usuariosSinDominio = {id:''};
+    $scope.finalUser = {};
+    $scope.mostrarBoton=0;
     const NOT_FOUND = 404;
+
     $scope.esquemaRenovacionModelo={};
     $scope.EsquemaRenovacion=[
       {id: '01', esquema: 'Mensual' },
@@ -154,6 +157,78 @@
       }
     };
 
+    $scope.updateFinalUserData = function () {
+      if($scope.finalUser.Nombre==""||$scope.finalUser.Nombre== null||
+      $scope.finalUser.CorreoElectronico==""||$scope.finalUser.CorreoElectronico== null||
+      $scope.finalUser.Telefono==""||$scope.finalUser.Telefono==null||
+      $scope.finalUser.Apellidos==""||$scope.finalUser.Apellidos==null
+    ){
+        $scope.ShowToast('Ingresa la información completa ó valida por favor  .', 'danger');
+      }else{
+     var IdFinalUser = $scope.IdEmpresaUsuarioFinalTerminos;
+     $scope.finalUser.IdFinalUser= IdFinalUser;
+      UsuariosFactory.putUpdateFinalUserData( $scope.finalUser )
+      .success(function (respuesta) {
+        if (respuesta.Success === 1) {
+          $scope.ShowToast('Información Actualizada ','success');
+          location.reload();
+
+        } else {
+          $scope.ShowToast('No pudimos cargar la información de tu datos ,porfavor intenta mas tarde.', 'danger');
+        }
+      })
+      .error(function () {
+        $scope.ShowToast('No pudimos cargar la información de tus contactos, por favor intenta de nuevo más tarde.', 'danger');
+      });
+    }
+    };
+
+    $scope.selectModal = function () {
+
+      console.log("entro a selectModal ");
+      console.log("valor mostrar boton ",$scope.mostrarBoton);
+      if( $scope.mostrarBoton == 1){
+        $scope.abrirModal('formModal');
+      }else{
+        console.log('MH');
+        $scope.abrirModal('terminosModal');
+      }
+    };
+
+    $scope.abrirModal = function (modal) {
+      document.getElementById(modal).style.display = 'block';
+    };
+    $scope.cerrarModal = function (modal) {
+      document.getElementById(modal).style.display = 'none';
+    };
+
+
+
+    $scope.getDataFinalUserById  = function (IdEmpresa) {
+      console.log($scope.IdEmpresaUsuarioFinalTerminos);
+
+      UsuariosFactory.getInformationFinalUser(IdEmpresa)
+        .success(function (respuesta) {
+          if (respuesta.success === 1) {
+            $scope.finalUser.Nombre=respuesta.data[0].NombreContacto;
+            $scope.finalUser.Apellidos = respuesta.data[0].ApellidosContacto;
+            $scope.finalUser.Telefono = respuesta.data[0].TelefonoContacto;
+            $scope.finalUser.CorreoElectronico = respuesta.data[0].CorreoContacto;
+            if( $scope.finalUser.Nombre===null||$scope.finalUser.Nombre===""||$scope.finalUser.Apellidos===null||$scope.finalUser.Apellidos===""||$scope.finalUser.Telefono===null||$scope.finalUser.Telefono===""||$scope.finalUser.CorreoElectronico===null||$scope.finalUser.CorreoElectronico===""  ){
+              
+              $scope.mostrarBoton=1;
+            }
+
+          } else {
+            $scope.ShowToast('No pudimos cargar la información de tu datos ,porfavor intenta mas tarde.', 'danger');
+          }
+        })
+        .error(function () {
+          $scope.ShowToast('No pudimos cargar la información de tus contactos, por favor intenta de nuevo más tarde.', 'danger');
+        });
+      
+    };
+
     $scope.init();
 
     $scope.contractSetted = function (producto) {
@@ -172,6 +247,7 @@
       }
       return null;
     }
+
 
     function setProtectedRebatePrice (selectedId) {
       var endUser = findEndUser(selectedId);
@@ -323,22 +399,22 @@
     };
 
     $scope.AceptarTerminos = function () {
-      PedidoDetallesFactory.acceptAgreement($scope.IdEmpresaUsuarioFinalTerminos)
-      .success(function (result) {
-        if (!result.success) {
-          $scope.ShowToast('Ocurrió un error, favor de contactar a Soporte', 'danger');
-        } else {
-          $scope.ShowToast('Terminos y condiciones aceptados.', 'success');
-          $scope.terminos = false;
-        }
-      })
-      .catch(function (error) {
-        $scope.ShowToast(error.data.message, 'danger');
-        $log.log('data error: ' + error.data.message + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
-        $scope.form.habilitar = true;
-        $scope.ActualizarMonitor();
-        $scope.form.habilitar = false;
-      });
+        PedidoDetallesFactory.acceptAgreement($scope.IdEmpresaUsuarioFinalTerminos)
+        .success(function (result) {
+          if (!result.success) {
+            $scope.ShowToast('error', 'danger');
+          } else {
+            $scope.ShowToast('Terminos y condiciones aceptados.', 'success');
+            $scope.terminos = false;
+          }
+        })
+        .catch(function (error) {
+          $scope.ShowToast(error.data.message, 'danger');
+          $log.log('data error: ' + error.data.message + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
+          $scope.form.habilitar = true;
+          $scope.ActualizarMonitor();
+          $scope.form.habilitar = false;
+        });
     };
 
     $scope.validateAgreementCSP = function (producto) {

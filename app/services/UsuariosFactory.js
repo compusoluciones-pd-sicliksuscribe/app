@@ -86,6 +86,15 @@
       return $http.get($rootScope.API + 'users-access');
     };
 
+    factory.putUpdateFinalUserData = function (finalUser) {
+      factory.refreshToken();
+      return $http.put($rootScope.API + 'finalUserData/', finalUser);
+    };
+
+    factory.getInformationFinalUser = function (IdUsuario) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'getInfoContactFinalUser/' + IdUsuario);
+    };
     return factory;
   };
 
