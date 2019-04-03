@@ -1,6 +1,7 @@
 (function () {
   var SoporteReadController = function ($scope, $log, $cookies, $location, $uibModal, $filter, SoporteFactory , FabricantesFactory , $routeParams) {
     $scope.soporteIdCategoria = '';
+
     $scope.Confirmar = function (IdSolicitud) {
       $scope.Solicitudes.forEach(function (solicitud) {
         if (solicitud.IdSoporte === IdSolicitud) {
@@ -53,7 +54,7 @@
 
     $scope.BajaSolicitud = function (soporte) {
       SoporteFactory.putDeleteSupport(soporte)
-        .success(function (data) {
+      .success(function (data) {
           if (data) {
             $scope.ShowToast(data, 'success');
 
@@ -81,7 +82,6 @@
     };
 
     $scope.EditarDetalle = function (id) {
-      console.log(id);
       $location.path('actualizar-soporte/'+id);
     };
   };

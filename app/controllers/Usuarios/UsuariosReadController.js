@@ -64,6 +64,35 @@
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
     };
+    
+    $scope.Confirmar = function (IdUsuario) {
+      $scope.Usuarios.forEach(function (Usuario) {
+      
+        if (Usuario.IdUsuario === IdUsuario) {
+          
+          Usuario.Mostrar = !Usuario.Mostrar;
+        }
+      }, this);
+    };
+
+    $scope.BajaUsuario = function (Usuario) {
+      UsuariosFactory.putDeleteFinalUser(Usuario)
+      .success(function (data) {
+        if (data) {
+          $scope.ShowToast(data.message, 'success');
+
+          $scope.init();
+        } else {
+          $scope.ShowToast(data.message, 'danger');
+        }
+      })
+      .error(function (data, status, headers, config) {
+        $scope.ShowToast('No pudimos dar de baja tu solicitud, por favor intenta de nuevo más tarde', 'danger');
+
+        $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+      });
+        
+    };
 
     $scope.MostrarUsuariosEmp = function (IdEmpresa) {
       const empresa = IdEmpresa || false;
