@@ -68,6 +68,17 @@
         }
       })
 
+      .when('/Descuento-Anual', {
+        controller: 'DescuentoAnualCreateController', templateUrl: 'app/views/Descuentos/DescuentoAnualCreate.html',
+        resolve: {
+          'check': function ($location, $cookies) {
+            var Session = $cookies.getObject('Session');
+            if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 7)) { $location.path('/app/views/Aplicaciones/DescuentoAnualCreate.html'); }
+          }
+        }
+      })
+      
+
       .when('/solicitar-soporte', {
         controller: 'SoporteCreateController', templateUrl: 'app/views/Soporte/SoporteCreate.html',
         resolve: {
@@ -454,6 +465,8 @@
         controller: 'DescuentosReadController', templateUrl: 'app/views/Descuentos/DescuentosRead.html',
         resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 1)) { $location.path('/404'); } } }
       })
+
+
 
       .when('/Descuento', {
         controller: 'DescuentosCreateController', templateUrl: 'app/views/Descuentos/DescuentosCreate.html',

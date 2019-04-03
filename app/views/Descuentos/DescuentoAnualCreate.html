@@ -1,0 +1,31 @@
+<div class="container login" ng-swipe-right="" ng-swipe-left="">
+  <div class="form-group col-xs-12 col-sm-12 col-md-8 col-lg-8">
+    <h2>Descuento Anual</h2>
+    <h4>Ingresa el porcentaje de descuento en licencias anuales Microsoft</h4>
+    ​
+    <div class="form-group row col-xs-10 col-sm-7 col-md-6 col-lg-5">
+      <!--input descuento-->
+      <label>Descuento anual </label>
+      <div class="input-group">
+        <span class="input-group-addon" style="border-radius: 0;">%</span> 
+        <input name="Porcentaje" type="number" ng-model="DescuentoAnual.PorcentajeDescuento"  class="form-control" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01"
+        placeholder="Descuento" size="3" min="1" max="100" ng-disabled="SessionCookie.IdTipoAcceso !== 1" required/>
+      </div>
+      <br>
+      <!--input fecha-->
+      <!-- <label class="form-group  col-xs-9 col-sm-9 col-md-9 col-lg-9" ng-show="FechaExpiracion">  Fecha Expiración actual</label> -->
+      <label> Nueva fecha de expiración </label>
+      <div class="input-group" >
+        <span class="input-group-addon" style="border-radius: 200;">
+        <span class="fa fa-calendar" style="color: #337ab7"; ></span>
+        </span>
+        <input id="FechaExpiracion" type="date"  ng-model='FechaExpiracion' class="form-control" ng-disabled="SessionCookie.IdTipoAcceso !== 1" required>
+      </div> 
+      <br>
+      <!--Boton enviar-->
+      <div class="pull-left">
+        <button style="border:300px; width:40px; height:35px;" ng-click="DescuentoAnual()" class="btn btn-primary" class="rigth" > Guardar </button>
+      </div>
+    </div>
+  </div>
+</div>
