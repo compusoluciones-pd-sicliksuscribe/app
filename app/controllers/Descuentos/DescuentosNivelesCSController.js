@@ -46,7 +46,7 @@
           if (result.data.success === 1) {
             $scope.ShowToast(result.data.message, 'success');
           } else {
-            $scope.ShowToast('No se pudo actualizar el descuento, reviza que la cantidad sea un numero entero.', 'danger');
+            $scope.ShowToast('No se pudo actualizar el descuento, reviza que la cantidad sea un de 0.01 a 100', 'danger');
           }
         })
         .catch(function (result) { error(result.data); });
