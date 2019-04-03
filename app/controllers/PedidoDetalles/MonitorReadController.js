@@ -88,17 +88,18 @@
       if (Params.IdFabricante === 1) {
         $scope.Contrato.tipo = 'all';
       }
-      // if (!Params.IdFabricante) {
-      //   $scope.BuscarProductos.IdFabricante = null;
-      // }
       Params.AutoRenovable = $scope.Contrato.tipo || 'all';
       if (Params.IdFabricante && $scope.EmpresaSelect) {
         getOrderPerCustomer(Params);
-        if (Params.IdFabricante === 2) getContactUsers();
+        if (Params.IdFabricante === 2) {
+          if ($scope.Contrato.tipo === 2) {
+            getOrderPerCustomer(Params);
+          }
+          getContactUsers();
+        }
       }
       getTerminos($scope.EmpresaSelect);
     };
-
 
     $scope.ActualizarCantidad = function (IdPedidoDetalle) {
       $scope.Pedidos.forEach(function (Pedido) {
