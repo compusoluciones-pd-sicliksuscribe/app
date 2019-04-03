@@ -59,6 +59,21 @@
                 </div>
 
             </div>
+            <div class="form-group row">
+                <div class="form-group col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                    <label>Industria*</label>
+                    <select name="IdIndustria"  class="form-control filterOption" ng-mouseover=""  ng-model="Empresa.IdIndustria" ng-options="+(Industria.IdIndustria) as Industria.Industria for Industria in selectIndustrias"
+                    ng-change="">
+                    <option value="">Selecciona uno ..
+                        <span ng-show="true" class="animate-show">
+                            <a>
+                                {{selectIndustrias.Descripcion}}
+                            </a>
+                        </span>
+                    </option>    
+                    </select>
+                </div>
+            </div>
 
             <div class="form-group col-xs-1 col-sm-1 col-md-1 col-lg-1">
                 <div class="pull-rigth">
@@ -98,8 +113,38 @@
                     <button type="button" ng-click="EmpresaCancel()" class="btn btn-warning btn-block">Cancelar</button>
                 </div>
             </div>
-            <div class="col-xs-0 col-sm-0 col-md-8 col-lg-8">
-
+        </div>
+        <div id="avisoModal" class="modal fade in" tabindex="-1" role="dialog" style="padding-right: 17px;">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                        <h4 class="modal-title">Aviso</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p style="text-align: center">{{Name}} ya está relacionado con el distribuidor seleccionado</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" ng-click="cerrarModal('avisoModal')" data-dismiss="modal">Enterado</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="confirmarModal" class="modal fade in" tabindex="-1" role="dialog" style="padding-right: 17px;">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                        <h4 class="modal-title">Confirmación</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p style="text-align: center">El RFC ingresado ya se encuentra registrado con otro distribuidor. ¿Desea relacionarlo con el distribuidor seleccionado?</p>
+                    </div>
+                    <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" ng-click="cerrarModal('confirmarModal')" data-dismiss="modal">No</button>
+                        <button type="button" class="btn btn-success" ng-click="importar()" data-dismiss="modal">Si</button>
+                    </div>
+                </div>
             </div>
         </div>
     </form>

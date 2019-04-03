@@ -48,7 +48,7 @@
 
     factory.postEmpresaMicrosoft = function (ObjMicrosoft) {
       factory.refreshToken();
-      return $http.post($rootScope.API + 'Empresa/Microsoft', ObjMicrosoft);
+      return $http.post($rootScope.API + 'enterprise/microsoft', ObjMicrosoft);
     };
 
     factory.putEmpresaFormaPago = function (parametros) {
@@ -89,6 +89,11 @@
     factory.checkRFC = function (ObjRFC) {
       factory.refreshToken();
       return $http.post($rootScope.API + 'Empresa/check', ObjRFC);
+    };
+
+    factory.checkRFCImport = function (ObjRFC) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'enterprise/checkImport/' + ObjRFC);
     };
 
     factory.validarBajaEmpresa = function (Empresa) {

@@ -13,6 +13,7 @@
     $scope.MostrarCorreo = false;
     $scope.CorreoRepetido = false;
     $scope.direccionValidada = false;
+    $scope.selectIndustrias = {};
 
     $scope.init = function () {
       $scope.esNavegadorSoportado();
@@ -32,7 +33,6 @@
 
       EmpresasFactory.getCliente(IdMicrosoft)
         .success(function (Empresa) {
-          console.log(Empresa);
           if (!$scope.direccionValida(Empresa.defaultAddress)) {
             $scope.ShowToast('El cliente no cuenta con toda la información para ser importado, actualiza sus datos entrando a partner center ', 'danger');
             return;
@@ -50,6 +50,14 @@
         .error(function (data, status, headers, config) {
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
+
+        EmpresasFactory.getIndustrias()
+      .success(function (result) {
+        $scope.selectIndustrias = result.data;
+      })
+      .error(function (data, status, headers, config) {
+        $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+      });
     };
 
     $scope.init();
@@ -70,7 +78,7 @@
             $scope.CorreoRepetido = false;
             $scope.MostrarCorreo = false;
           }
-          if (callMeMaybe && $scope.CorreoRepetido === false) {
+          if (callMeMaybe) {
             callMeMaybe();
           }
         })
@@ -84,13 +92,13 @@
     };
     $scope.EmpresaImportar = function () {
       $scope.ValidarRFC();
-      if($scope.Empresa.MonedaPago !== 'Pesos' && $scope.Empresa.MonedaPago !== 'Dólares') {
+      if ($scope.Empresa.MonedaPago !== 'Pesos' && $scope.Empresa.MonedaPago !== 'Dólares') {
         return $scope.ShowToast('Selecciona una moneda de pago.', 'danger');
       }
-      if($scope.Empresa.IdFormaPagoPredilecta != 1 && $scope.Empresa.IdFormaPagoPredilecta != 2) {
+      if ($scope.Empresa.IdFormaPagoPredilecta != 1 && $scope.Empresa.IdFormaPagoPredilecta != 2) {
         return $scope.ShowToast('Selecciona una forma de pago.', 'danger');
       }
-      if($scope.Empresa.MonedaPago === 'Dólares' && $scope.Empresa.IdFormaPagoPredilecta == 1){
+      if ($scope.Empresa.MonedaPago === 'Dólares' && $scope.Empresa.IdFormaPagoPredilecta == 1){
         return $scope.ShowToast('Para pagar con tarjeta es necesario que la moneda sea Pesos.', 'danger');
       }
 
@@ -103,45 +111,19 @@
             $scope.frm.RFC.$invalid = true;
             $scope.frm.RFC.$pristine = false;
             $scope.mensajerfc = result[0].Message;
+
+            EmpresasFactory.checkRFCImport($scope.Empresa.RFC)
+            .success(function (result) {
+              const empresaxempresa = result.datosUf.empresaXEmpresa[0];
+              const empresaexist = result.datosUf.validateExist[0];
+              if (IdEmpresaDistribuidor == empresaxempresa.IdEmpresaDistribuidor) {
+                $scope.abrirModal('avisoModal');
+              } else if (empresaexist.idEmpresa) {
+                $scope.abrirModal('confirmarModal');
+              }
+            });
           } else {
-            UsuariosXEmpresasFactory.getUsuariosXEmpresa(IdEmpresaDistribuidor)
-              .success(function (UsuariosXEmpresas) {
-                if (UsuariosXEmpresas.length === 0) {
-                  $scope.ShowToast('Agrega un administrador, para el distribuidor.', 'danger');
-                } else {
-                  var ObjMicrosoft = {
-                    RFC: $scope.Empresa.RFC,
-                    NombreEmpresa: DatosMicrosoft.companyName,
-                    Direccion: DatosMicrosoft.defaultAddress.addressLine1,
-                    Ciudad: DatosMicrosoft.defaultAddress.city,
-                    Estado: DatosMicrosoft.defaultAddress.state,
-                    CodigoPostal: DatosMicrosoft.defaultAddress.postalCode,
-                    NombreContacto: DatosMicrosoft.firstName,
-                    ApellidosContacto: DatosMicrosoft.lastName,
-                    CorreoContacto: $scope.Empresa.CorreoContacto,
-                    TelefonoContacto: DatosMicrosoft.defaultAddress.phoneNumber,
-                    ZonaImpuesto: 'Normal',
-                    Lada: '52',
-                    IdMicrosoftUF: IdMicrosoft,
-                    DominioMicrosoftUF: Dominio,
-                    IdEmpresaDistribuidor: IdEmpresaDistribuidor,
-                    IdUsuario: UsuariosXEmpresas[0].IdUsuario,
-                    MonedaPago: $scope.Empresa.MonedaPago,
-                    FormaPago: $scope.Empresa.IdFormaPagoPredilecta,
-                  };
-                  EmpresasFactory.postEmpresaMicrosoft(ObjMicrosoft)
-                    .success(function (result) {
-                      $location.path("/Empresas");
-                      $scope.ShowToast('Se esta importando la empresa, por favor espere ', 'success');
-                    })
-                    .error(function (data, status, headers, config) {
-                      $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-                    });
-                }
-              })
-              .error(function (data, status, headers, config) {
-                $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-              });
+            $scope.importar();
           }
         })
         .error(function (data, status, headers, config) {
@@ -149,7 +131,49 @@
         });
     };
 
-    function isNumeric(num) {
+    $scope.importar = function () {
+      UsuariosXEmpresasFactory.getUsuariosXEmpresa(IdEmpresaDistribuidor)
+      .success(function (UsuariosXEmpresas) {
+        if (UsuariosXEmpresas.length === 0) {
+          $scope.ShowToast('Agrega un administrador, para el distribuidor.', 'danger');
+        } else {
+          var ObjMicrosoft = {
+            RFC: $scope.Empresa.RFC,
+            NombreEmpresa: DatosMicrosoft.companyName,
+            Direccion: DatosMicrosoft.defaultAddress.addressLine1,
+            Ciudad: DatosMicrosoft.defaultAddress.city,
+            Estado: DatosMicrosoft.defaultAddress.state,
+            CodigoPostal: DatosMicrosoft.defaultAddress.postalCode,
+            NombreContacto: DatosMicrosoft.firstName,
+            ApellidoPaterno: DatosMicrosoft.lastName,
+            CorreoElectronico: $scope.Empresa.CorreoContacto,
+            TelefonoContacto: DatosMicrosoft.defaultAddress.phoneNumber,
+            ZonaImpuesto: 'Normal',
+            Lada: '52',
+            IdMicrosoftUF: IdMicrosoft,
+            DominioMicrosoftUF: Dominio,
+            IdIndustria: $scope.Empresa.IdIndustria,
+            IdEmpresaDistribuidor: IdEmpresaDistribuidor,
+            IdUsuario: UsuariosXEmpresas[0].IdUsuario,
+            MonedaPago: $scope.Empresa.MonedaPago,
+            IdFormaPagoPredilecta: $scope.Empresa.IdFormaPagoPredilecta
+          };
+          EmpresasFactory.postEmpresaMicrosoft(ObjMicrosoft)
+            .success(function (result) {
+              $location.path('/Empresas');
+              $scope.ShowToast('Se esta importando la empresa, por favor espere ', 'success');
+            })
+            .error(function (data, status, headers, config) {
+              $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+            });
+        }
+      })
+      .error(function (data, status, headers, config) {
+        $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+      });
+    };
+
+    function isNumeric (num) {
       return !isNaN(num);
     }
 
@@ -215,13 +239,13 @@
                       }
                     }
                   }
+
                 }
               }
             }
           } else {
-            $scope.frm.RFC.$invalid = true;
-            $scope.frm.RFC.$pristine = false;
-            $scope.valido = false;
+            $scope.valido = true;
+            $scope.frm.RFC.$invalid = false;
             $scope.mensajerfc = 'Este RFC ya esta registrado como distribuidor.';
           }
         })
@@ -229,7 +253,12 @@
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
     };
-
+    $scope.abrirModal = function (modal) {
+      document.getElementById(modal).style.display = 'block';
+    };
+    $scope.cerrarModal = function (modal) {
+      document.getElementById(modal).style.display = 'none';
+    };
     $scope.ComboRFC = function () {
       EmpresasFactory.checkRFC({ RFC: $scope.Empresa.RFC })
         .success(function (result) {
@@ -310,4 +339,4 @@
   EmpresasCompletarController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'EmpresasFactory', 'EmpresasXEmpresasFactory', 'EstadosFactory', 'UsuariosFactory', 'UsuariosXEmpresasFactory'];
 
   angular.module('marketplace').controller('EmpresasCompletarController', EmpresasCompletarController);
-} ());
+}());
