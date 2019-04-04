@@ -18,6 +18,7 @@
     $scope.usuariosSinDominio = {id:''};
     $scope.finalUser = {};
     $scope.mostrarBoton=0;
+    $scope.actualizoInformacion=0;
     const NOT_FOUND = 404;
 
     $scope.esquemaRenovacionModelo={};
@@ -158,10 +159,10 @@
     };
 
     $scope.updateFinalUserData = function () {
-      if($scope.finalUser.Nombre==""||$scope.finalUser.Nombre== null||
-      $scope.finalUser.CorreoElectronico==""||$scope.finalUser.CorreoElectronico== null||
-      $scope.finalUser.Telefono==""||$scope.finalUser.Telefono==null||
-      $scope.finalUser.Apellidos==""||$scope.finalUser.Apellidos==null
+      if($scope.finalUser.Nombre == "" || $scope.finalUser.Nombre == null ||
+      $scope.finalUser.CorreoElectronico == "" ||$scope.finalUser.CorreoElectronico == null ||
+      $scope.finalUser.Telefono == "" ||$scope.finalUser.Telefono == null ||
+      $scope.finalUser.Apellidos == "" ||$scope.finalUser.Apellidos == null
     ){
         $scope.ShowToast('Ingresa la información completa ó valida por favor  .', 'danger');
       }else{
@@ -171,8 +172,9 @@
       .success(function (respuesta) {
         if (respuesta.Success === 1) {
           $scope.ShowToast('Información Actualizada ','success');
-          location.reload();
-
+          //location.reload();
+          //mostrarBoton=0;
+          $scope.actualizoInformacion = 1;
         } else {
           $scope.ShowToast('No pudimos cargar la información de tu datos ,porfavor intenta mas tarde.', 'danger');
         }
@@ -181,16 +183,21 @@
         $scope.ShowToast('No pudimos cargar la información de tus contactos, por favor intenta de nuevo más tarde.', 'danger');
       });
     }
+    
     };
 
     $scope.selectModal = function () {
 
       console.log("entro a selectModal ");
       console.log("valor mostrar boton ",$scope.mostrarBoton);
+      
+      if($scope.actualizoInformacion==1){
+        
+        $scope.abrirModal('terminosModal');
+      }
       if( $scope.mostrarBoton == 1){
         $scope.abrirModal('formModal');
       }else{
-        console.log('MH');
         $scope.abrirModal('terminosModal');
       }
     };
