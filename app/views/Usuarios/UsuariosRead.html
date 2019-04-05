@@ -1,5 +1,3 @@
-
-  
 <div class="container" ng-swipe-right="" ng-swipe-left="">
   
   <div class="form-group row" >
@@ -72,7 +70,7 @@
           </td>
           <td>
               <div class="form-group" ng-hide="SessionCookie.Nombre===Usuario.Nombre &&SessionCookie.ApellidoPaterno===Usuario.ApellidoPaterno">
-                <button  class="btn btn-danger btn-sm" style="min-width: 0px; height: 40px; margin-top:20px" ng-click="Confirmar(Usuario.IdUsuario)" ng-show="SessionCookie.IdTipoAcceso === 1 || SessionCookie.IdTipoAcceso === 2 || SessionCookie.IdTipoAcceso === 3 || SessionCookie.IdTipoAcceso === 4">Eliminar  <span class="glyphicon glyphicon-trash"></span></button>
+                <button  class="btn btn-danger btn-sm" ng-click="Confirmar(Usuario.IdUsuario)" ng-show="SessionCookie.IdTipoAcceso === 1 || SessionCookie.IdTipoAcceso === 2 || SessionCookie.IdTipoAcceso === 3 || SessionCookie.IdTipoAcceso === 4">Eliminar  <span class="glyphicon glyphicon-trash"></span></button>
               </div>
               <div ng-show="Usuario.Mostrar"class="form-group" style=" margin-top:5px; ">
 
@@ -82,8 +80,7 @@
                 </div>
                 
               </div>
-
-
+          </td>
         </div>
         <div  ng-show="Usuario.Mostrar">
             <label>El Usuario sera dado de baja, ¿Deseas continuar?</label>
