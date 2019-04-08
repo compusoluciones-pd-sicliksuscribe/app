@@ -164,7 +164,7 @@
 
     $scope.calcularPrecioVenta = function (discount) {
       discount = discount || 100;
-      $scope.porcentaje = Number(discount.toString().replace(/[^0-9]+/g, ''));
+      $scope.porcentaje = Number(discount.toString().replace(/[^0-9/.]+/g, ''));
       filteredProducts.forEach(function (product) {
         product.PorcentajeDescuento = discount;
         product.PrecioFinal = product.PrecioNormal - (product.PrecioNormal * ((product.PorcentajeDescuento || 0) * 0.01));
