@@ -641,7 +641,6 @@
     };
 
     $scope.RequestDataVwareProduct= (Producto) => {
-      console.log("tsss",Producto);
       const userName = $scope.SessionCookie.Nombre;
       const userSecondName = $scope.SessionCookie.ApellidoPaterno;
       const userMothersSecond = $scope.SessionCookie.ApellidoMaterno;
@@ -650,7 +649,16 @@
       const productName = Producto.Nombre;
       const productDesciption = Producto.Descripcion;
       const productIdErp = Producto.IdERP;
-      ProductosFactory.postRequestDataVwareProduct({userName,userSecondName,userMothersSecond,userCompanyName,productName,userEmail,productDesciption,productIdErp});
+      ProductosFactory.postRequestDataVwareProduct({userName,userSecondName,userMothersSecond,userCompanyName,productName,userEmail,productDesciption,productIdErp})
+      .success(function (result) {
+        console.log(result);
+        if (!result.success) {
+          $scope.ShowToast('no se pudo mandar la notifiacion intente mas tarde', 'danger');
+        } else {
+          $scope.ShowToast('Se envió tu información al ditribuidor,pronto se pondran en contacto para brindar te información.', 'success');
+          
+        }
+      })
 
     };
   };
