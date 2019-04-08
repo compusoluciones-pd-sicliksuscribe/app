@@ -90,8 +90,14 @@
       return $http.post($rootScope.API + 'r&c-solutions/register-IdERP', IdERP);
     };
 
+    factory.postRequestDataVwareProduct = function (body) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'requestDataVwareProduct', body);
+    };
+
     return factory;
   };
+  
 
   ProductosFactory.$inject = ['$http', '$cookies', '$rootScope'];
 

@@ -639,6 +639,20 @@
     $scope.updateEnterprise = function (Producto) {
       $location.path('/Empresa/ActualizarDominio/' + Producto.IdEmpresaUsuarioFinal);
     };
+
+    $scope.RequestDataVwareProduct= (Producto) => {
+      console.log("tsss",Producto);
+      const userName = $scope.SessionCookie.Nombre;
+      const userSecondName = $scope.SessionCookie.ApellidoPaterno;
+      const userMothersSecond = $scope.SessionCookie.ApellidoMaterno;
+      const userEmail = $scope.SessionCookie.CorreoElectronico;
+      const userCompanyName = $scope.SessionCookie.NombreEmpresa;
+      const productName = Producto.Nombre;
+      const productDesciption = Producto.Descripcion;
+      const productIdErp = Producto.IdERP;
+      ProductosFactory.postRequestDataVwareProduct({userName,userSecondName,userMothersSecond,userCompanyName,productName,userEmail,productDesciption,productIdErp});
+
+    };
   };
 
   ProductosReadController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'ProductosFactory', 'FabricantesFactory', 'TiposProductosFactory', 'PedidoDetallesFactory', 'TipoCambioFactory', 'ProductoGuardadosFactory', 'EmpresasXEmpresasFactory', 'UsuariosFactory', '$anchorScroll'];
