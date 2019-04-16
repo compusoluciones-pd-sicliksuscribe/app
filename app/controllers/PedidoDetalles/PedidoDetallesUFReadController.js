@@ -168,6 +168,10 @@
     };
 
     $scope.init = function () {
+      PedidoDetallesFactory.getUseCFDI()
+        .then(function (result) { 
+          $scope.useCFDI = result.data.useCFDIList;
+        });
       $scope.CheckCookie();
       PedidoDetallesFactory.getPrepararCompraFinalUser(0, $scope.currentDistribuidor.IdEmpresa)
         .then(getEnterprises)
