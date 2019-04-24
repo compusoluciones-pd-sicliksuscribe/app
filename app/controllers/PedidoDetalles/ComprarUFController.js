@@ -95,12 +95,15 @@
     };
 
     $scope.init = function () {
-      if ($scope.currentPath === '/uf/Comprar') {
-        $scope.CheckCookie();
-        confirmarPaypal();
-        $scope.prepararPedidos();
+      if ($rootScope.usoCFDI) {
+        if ($scope.currentPath === '/uf/Comprar') {
+          $scope.CheckCookie();
+          confirmarPaypal();
+          $scope.prepararPedidos();
+        }
+      } else {
+        $location.path('/uf/Carrito');
       }
-      // console.log('$scope.currentDistribuidor' + JSON.stringify($scope.currentDistribuidor.IdEmpresa));
     };
 
     $scope.init();

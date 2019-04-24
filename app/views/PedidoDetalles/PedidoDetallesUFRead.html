@@ -64,7 +64,7 @@
 			</div>
 			<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
 				<label for="" class="">* ¿Uso de CFDI?</label>
-				<select name="useCFDIO" class="form-control" required="" >
+				<select ng-model="opcionCFDI" name="useCFDI" class="form-control" required="" >
 					<option ng-selected="true" value="">Selecciona una opción</option>
                     <option ng-repeat="option in useCFDI" value="{{option.UsoCFDI}}">{{option.Descripcion}}</option>
                 </select>
@@ -203,7 +203,7 @@
 			</div>
 			<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
 				<div class="">
-					<button id="btnSiguiente" type="button" ng-click="next();" class="btn btn-primary btn-block" ng-if="!( Distribuidor.IdFormaPagoPredilecta == undefined || Distribuidor.IdFormaPagoPredilecta == null || (CreditoValido == 0 && isPayingWithCSCredit()) || error === true )" style="background:{{currentDistribuidor.PrimaryColor}} !important">
+					<button id="btnSiguiente" type="button" ng-click="next();" class="btn btn-primary btn-block" ng-if="!( Distribuidor.IdFormaPagoPredilecta == undefined || Distribuidor.IdFormaPagoPredilecta == null || opcionCFDI == null || (CreditoValido == 0 && isPayingWithCSCredit()) || error === true )" style="background:{{currentDistribuidor.PrimaryColor}} !important">
             Siguiente
           </button>
 				</div>

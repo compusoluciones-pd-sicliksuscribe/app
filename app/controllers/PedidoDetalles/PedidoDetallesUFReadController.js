@@ -3,7 +3,7 @@
   const CREDIT_CARD = 1;
   const PAYPAL = 3;
   const CS_CREDIT = 2;
-  var PedidoDetallesUFReadController = function ($scope, $log, $location, $cookies, PedidoDetallesFactory, TipoCambioFactory, EmpresasXEmpresasFactory, EmpresasFactory, PedidosFactory, ComprasUFFactory, $routeParams) {
+  var PedidoDetallesUFReadController = function ($scope, $log, $location, $cookies, PedidoDetallesFactory, TipoCambioFactory, EmpresasXEmpresasFactory, EmpresasFactory, PedidosFactory, ComprasUFFactory, $routeParams, $rootScope) {
     $scope.CreditoValido = 1;
     $scope.error = false;
     $scope.Distribuidor = {};
@@ -388,6 +388,7 @@
     };
 
     $scope.next = function () {
+      $rootScope.usoCFDI = $scope.opcionCFDI;
       if ($scope.isPayingWithCSCredit()) validarCarrito();
       let next = true;
       if (!$scope.PedidoDetalles || $scope.PedidoDetalles.length === 0) next = false;
@@ -424,7 +425,7 @@
     };
   };
 
-  PedidoDetallesUFReadController.$inject = ['$scope', '$log', '$location', '$cookies', 'PedidoDetallesFactory', 'TipoCambioFactory', 'EmpresasXEmpresasFactory', 'EmpresasFactory', 'PedidosFactory', 'ComprasUFFactory', '$routeParams'];
+  PedidoDetallesUFReadController.$inject = ['$scope', '$log', '$location', '$cookies', 'PedidoDetallesFactory', 'TipoCambioFactory', 'EmpresasXEmpresasFactory', 'EmpresasFactory', 'PedidosFactory', 'ComprasUFFactory', '$routeParams', '$rootScope'];
 
   angular.module('marketplace').controller('PedidoDetallesUFReadController', PedidoDetallesUFReadController);
 }());
