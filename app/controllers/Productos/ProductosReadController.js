@@ -172,8 +172,6 @@
       .success(function (respuesta) {
         if (respuesta.Success === 1) {
           $scope.ShowToast('Información Actualizada ','success');
-          //location.reload();
-          //mostrarBoton=0;
           $scope.actualizoInformacion = 1;
         } else {
           $scope.ShowToast('No pudimos cargar la información de tu datos ,porfavor intenta mas tarde.', 'danger');
@@ -188,8 +186,6 @@
 
     $scope.selectModal = function () {
 
-      console.log("entro a selectModal ");
-      console.log("valor mostrar boton ",$scope.mostrarBoton);
       
       if($scope.actualizoInformacion==1){
         
@@ -212,7 +208,6 @@
 
 
     $scope.getDataFinalUserById  = function (IdEmpresa) {
-      console.log($scope.IdEmpresaUsuarioFinalTerminos);
 
       UsuariosFactory.getInformationFinalUser(IdEmpresa)
         .success(function (respuesta) {
@@ -427,7 +422,6 @@
     $scope.validateAgreementCSP = function (producto) {
       return EmpresasXEmpresasFactory.getAcceptanceAgreementByClient(producto.IdEmpresaUsuarioFinal)
       .success(function (result) {
-        console.log('resultado', result);
         if (!result.AceptoTerminosMicrosoft) {
           $scope.ShowToast('No has aceptado los términos y condiciones que necesita microsoft.', 'danger');
           $scope.IdEmpresaUsuarioFinalTerminos = producto.IdEmpresaUsuarioFinal;
