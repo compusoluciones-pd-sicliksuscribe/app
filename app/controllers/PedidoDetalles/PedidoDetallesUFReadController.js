@@ -31,7 +31,6 @@
     const getEnterprises = function () {
       return EmpresasFactory.getEmpresas()
         .then(function (result) {
-        //  console.log('result' + JSON.stringify(result.data[0]));
           $scope.Distribuidor = result.data[0];
         })
         .catch(function (result) {
@@ -166,6 +165,17 @@
       })
       .catch(function (result) { error(result.data); });
     };
+
+    $scope.CambiarUsoCFDI = () => {
+      PedidoDetallesFactory.putUseCFDI($scope.opcionCFDI, $scope.PedidoDetalles[0].IdPedido)
+      .then(function (result) {
+        if (result.data.success) {
+          $scope.ShowToast(result.data.message, 'success');
+        } else $scope.ShowToast(result.data.message, 'danger');
+      })
+      .catch(function (result) { error(result.data); });
+    }
+
 
     $scope.init = function () {
       PedidoDetallesFactory.getUseCFDI()
@@ -388,7 +398,6 @@
     };
 
     $scope.next = function () {
-      $rootScope.usoCFDI = $scope.opcionCFDI;
       if ($scope.isPayingWithCSCredit()) validarCarrito();
       let next = true;
       if (!$scope.PedidoDetalles || $scope.PedidoDetalles.length === 0) next = false;

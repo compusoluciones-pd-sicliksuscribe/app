@@ -95,15 +95,13 @@
     };
 
     $scope.init = function () {
-      if ($rootScope.usoCFDI) {
-        if ($scope.currentPath === '/uf/Comprar') {
-          $scope.CheckCookie();
-          confirmarPaypal();
-          $scope.prepararPedidos();
-        }
-      } else {
-        $location.path('/uf/Carrito');
+      if ($scope.currentPath === '/uf/Comprar') {
+        $scope.CheckCookie();
+        confirmarPaypal();
+        $scope.prepararPedidos();
       }
+      else $location.path('/uf/Carrito');
+      
     };
 
     $scope.init();
