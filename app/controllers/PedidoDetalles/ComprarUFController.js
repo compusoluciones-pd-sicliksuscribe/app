@@ -99,9 +99,7 @@
         $scope.CheckCookie();
         confirmarPaypal();
         $scope.prepararPedidos();
-      }
-      else $location.path('/uf/Carrito');
-      
+      }      
     };
 
     $scope.init();

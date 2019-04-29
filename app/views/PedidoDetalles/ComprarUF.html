@@ -29,7 +29,7 @@
 					<label>Marca de los productos:</label> {{ pedido.NombreFabricante }} <br>
 					<label>Duración del periodo:</label> del {{ pedido.FechaInicio }} al {{ pedido.FechaFin }} <br>
 					<label>Renovación del periodo:</label> {{ pedido.NombreEsquemaRenovacion }} <br>
-					<label>Uso de CFDI:</label> {{ usoCFDI }}
+					<label>Uso de CFDI:</label> {{ pedido.UsoCFDI }}
 
 					<div ng-if="pedido.IdFabricante === 2"><label>Contrato: </label> {{ pedido.ContratoBaseAutodesk || 'Nuevo' }} </div>
 				</div>
