@@ -293,38 +293,39 @@
         </tr>
     </table>
 
-    <div id="formModal" class="modal fade in" tabindex="-1" role="dialog">
+    <div id="formModal" class="modal fade in" tabindex="-1" role="dialog"  >
             
-        <div ng-show="mostrarBoton == 1" ng-hide ="actualizoInformacion==1">
-                <div class="modal-dialog" role="document" >
-                        <div class="modal-content">
+        <div ng-show="mostrarBoton == 1" ng-hide ="actualizoInformacion==1"  >
+                <div class="modal-dialog" role="document">
+                        <div class="modal-content" >
                             <div class="modal-header" >
-                
-                                Actualiza o completa tus datos para poder aceptar los términos
-                                <br/>
+            
+                                
                                 <label>Contacto principal</label>
-                                <hr>
+                                <br/>
+                                
+                                Actualiza o completa tus datos para poder aceptar los términos
                             </div>
-                            <div class="modal-body">
-                                <div class="row">
-                                    <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                            <div class="modal-body" >
+                                <div class="row"  >
+                                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
                         
-                                        <div class="pull-rigth">
+                                        <div >
                                             <label>Nombre *</label>
                                             <input name="Nombre" type="text" ng-model="finalUser.Nombre" class="form-control"  placeholder="" size="255" ng-maxlength="50"
                                             required  pattern="[a-z|A-Z|' ']{1,30}"
-                                            title="Ingresa un nombre propio" />
+                                            title="Ingresa un nombre propio"  />
                                             <b style="color:red" ng-show="finalUser.Nombre.$invalid && !finalUserNombre.$pristine" class="help-block">Ingresa un nombre.</b>
                                             <b style="color:red" ng-show="frm.NombreEmpresa.$invalid && !frm.NombreEmpresa.$pristine" class="help-block">El nombre de empresa es requerido.</b>
                                         </div>
                         
                                     </div>
-                                    <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6" >
                                         <div class="pull-rigth">
                                             <label>Apellidos *</label>
                                             <input name="Apellidos" type="text" ng-model="finalUser.Apellidos" class="form-control" ng-pattern="[a-z|A-Z|' ']{1,30}" placeholder="" size="255" ng-maxlength="80"
                                             required  pattern="[a-zA-' '-Z]{1,30}"
-                                            title="Ingresa un nombre propio"/>
+                                            title="Ingresa un nombre propio" />
                                             <b style="color:red" ng-show="frm.finalUser.Apellidos.$invalid && !frm.Apellidos.$pristine" class="help-block">Ingresa los apellidos.</b>
                                         </div>
                                     </div>
@@ -332,7 +333,7 @@
                                 </div>
                         
                                 <div class="row" >
-                                    <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6" >
                         
                                         <div class="pull-rigth">
                                             <label>Correo electrónico *</label>
@@ -341,7 +342,7 @@
                                             <b style="color:red" ng-show="frm.finalUser.CorreoElectronico.$invalid && !frm.CorreoElectronico.$pristine" class="help-block">Ingresa un correo válido.</b>
                                         </div>
                                     </div>
-                                    <div  class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                                    <div  class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6" >
                                         <div class="pull-rigth">
                                             <label>Número de celular </label>
                                         </div>
@@ -380,7 +381,6 @@
                             *Consultar los Contratos de clientes y mercados de Proveedor de soluciones en la nube de Microsoft
                         </a>
                         </p>
-                        <hr>
                         <div  class="modal-footer">
                             <button   type="button" class="btn btn-success" ng-click="AceptarTerminos(); cerrarModal('terminosModal')" data-dismiss="modal">Aceptar términos</button>
                         </div>
