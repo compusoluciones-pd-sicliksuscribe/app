@@ -12,6 +12,7 @@
     $scope.Renovar = {};
     $scope.terminos = false;
     $scope.SessionCookie = $cookies.getObject('Session');
+    $scope.buttonRenew = 0;
 
     $scope.init = function () {
       $scope.CheckCookie();
@@ -256,6 +257,7 @@
     };
 
     $scope.CancelarPedido = function (Pedido, Detalles) {
+      $scope.buttonRenew = 0;
       $scope.Cancelar = true;
       $scope.guardar = Pedido;
       $scope.form.habilitar = true;
@@ -326,18 +328,24 @@
     };
 
     $scope.Reanudar = function (pedido, detalles) {
+      // $scope.detalles.Activo=1;
+      detalles.Activo=1;
+      $scope.buttonRenew = 1;
+      const renovated = $scope.buttonRenew;
       const order = {
         CargoRealizadoProximoPedido: pedido.CargoRealizadoProximoPedido,
         Activo: 1,
         PorCancelar: 0,
         ResultadoFabricante1: detalles.EstatusFabricante,
         IdTipoProducto: detalles.IdTipoProducto,
-        IdPedidoDetalle: detalles.IdPedidoDetalle
+        IdPedidoDetalle: detalles.IdPedidoDetalle,
+        buttonRenew: renovated ,
       };
       $scope.form.habilitar = true;
       if (detalles.Cantidad !== detalles.CantidadProxima) {
         order.PorActualizarCantidad = 1;
       }
+
       PedidoDetallesFactory.putPedidoDetalle(order)
         .success(function (result) {
           if (!result.success) {
