@@ -146,8 +146,9 @@
                                         
                                         <div class="form-group">
                                             <div ng-if="Producto.IdFabricante !== 6">
-                                            <label for="Cantidad" >*{{Producto.IdFabricante === 5 && Producto.IdTipoProducto !== 4 ? "¿Cuantos empleados hay en la nómina?" : "¿Cuántos quieres?"}}</label>
-                                            a partir de {{Producto.CantidadMinima}} <sapan ng-if="Producto.CantidadMinima != Producto.CantidadMaxima"> a {{Producto.CantidadMaxima}} </sapan>
+                                            <label for="Cantidad" >*{{Producto.IdFabricante === 5 && Producto.IdTipoProducto !== 4 && Producto.IdProductoFabricanteExtra === 'Aperio' ? "¿Cuántos empleados hay en la nómina?" : "¿Cuántos quieres?"}}</label>
+                                            <sapan ng-if="Producto.CantidadMinima === 1 && Producto.CantidadMaxima === 1"> (Licencia única)</sapan>
+                                            <sapan ng-if="Producto.CantidadMinima != Producto.CantidadMaxima"> Disponible de {{Producto.CantidadMinima}} a {{Producto.CantidadMaxima}} </sapan>
 
                                             <div class="input-group">
                                                 <span class="input-group-addon green white">
