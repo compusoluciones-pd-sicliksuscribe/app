@@ -3,7 +3,7 @@
   const CREDIT_CARD = 1;
   const PAYPAL = 3;
   const CS_CREDIT = 2;
-  var PedidoDetallesUFReadController = function ($scope, $log, $location, $cookies, PedidoDetallesFactory, TipoCambioFactory, EmpresasXEmpresasFactory, EmpresasFactory, PedidosFactory, ComprasUFFactory, $routeParams) {
+  var PedidoDetallesUFReadController = function ($scope, $log, $location, $cookies, PedidoDetallesFactory, TipoCambioFactory, EmpresasXEmpresasFactory, EmpresasFactory, PedidosFactory, ComprasUFFactory, $routeParams, $rootScope) {
     $scope.CreditoValido = 1;
     $scope.error = false;
     $scope.Distribuidor = {};
@@ -31,7 +31,6 @@
     const getEnterprises = function () {
       return EmpresasFactory.getEmpresas()
         .then(function (result) {
-        //  console.log('result' + JSON.stringify(result.data[0]));
           $scope.Distribuidor = result.data[0];
         })
         .catch(function (result) {
@@ -167,7 +166,22 @@
       .catch(function (result) { error(result.data); });
     };
 
+    $scope.CambiarUsoCFDI = () => {
+      PedidoDetallesFactory.putUseCFDI($scope.opcionCFDI, $scope.PedidoDetalles[0].IdPedido)
+      .then(function (result) {
+        if (result.data.success) {
+          $scope.ShowToast(result.data.message, 'success');
+        } else $scope.ShowToast(result.data.message, 'danger');
+      })
+      .catch(function (result) { error(result.data); });
+    }
+
+
     $scope.init = function () {
+      PedidoDetallesFactory.getUseCFDI()
+        .then(function (result) { 
+          $scope.useCFDI = result.data.useCFDIList;
+        });
       $scope.CheckCookie();
       PedidoDetallesFactory.getPrepararCompraFinalUser(0, $scope.currentDistribuidor.IdEmpresa)
         .then(getEnterprises)
@@ -420,7 +434,7 @@
     };
   };
 
-  PedidoDetallesUFReadController.$inject = ['$scope', '$log', '$location', '$cookies', 'PedidoDetallesFactory', 'TipoCambioFactory', 'EmpresasXEmpresasFactory', 'EmpresasFactory', 'PedidosFactory', 'ComprasUFFactory', '$routeParams'];
+  PedidoDetallesUFReadController.$inject = ['$scope', '$log', '$location', '$cookies', 'PedidoDetallesFactory', 'TipoCambioFactory', 'EmpresasXEmpresasFactory', 'EmpresasFactory', 'PedidosFactory', 'ComprasUFFactory', '$routeParams', '$rootScope'];
 
   angular.module('marketplace').controller('PedidoDetallesUFReadController', PedidoDetallesUFReadController);
 }());

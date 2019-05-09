@@ -247,6 +247,16 @@
       return $http.post($rootScope.API + 'previouslyOrderToCompare', params);
     };
 
+    factory.getUseCFDI = () => {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'shopping-cart/use-CFDI');
+    };
+
+    factory.putUseCFDI = function (UsoCFDI, IdPedido) {
+      factory.refreshToken();
+      return $http.put($rootScope.API + 'shopping-cart/update-use-CFDI/' + UsoCFDI + '/id-pedido/' + IdPedido);
+    };
+
     return factory;
   };
 
