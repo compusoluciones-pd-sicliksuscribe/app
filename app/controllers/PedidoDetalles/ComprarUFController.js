@@ -99,8 +99,7 @@
         $scope.CheckCookie();
         confirmarPaypal();
         $scope.prepararPedidos();
-      }
-      // console.log('$scope.currentDistribuidor' + JSON.stringify($scope.currentDistribuidor.IdEmpresa));
+      }      
     };
 
     $scope.init();
