@@ -104,23 +104,23 @@
 
     /* Validar los campos de forma que mande el toast sin hacer operaciones en el api */
     $scope.validaActualizar = function (producto) {
-      if (producto.Precio > 9999999) {
+      if (producto.Precio > 9999999 || producto.PrecioRenovacion > 9999999) {
         $scope.ShowToast('Escribe un precio más pequeño, solo números', 'danger');
         return false;
       }
-      if (producto.Precio < 0) {
+      if (producto.Precio < 0 || producto.PrecioRenovacion < 0) {
         $scope.ShowToast('Escribe un precio mayor que cero, solo números', 'danger');
         return false;
       }
-      if (!(producto.Precio) && producto.Precio !== '0' && producto.Precio !== 0) {
+      if ((!(producto.Precio) && producto.Precio !== '0' && producto.Precio !== 0) || (!(producto.PrecioRenovacion) && producto.PrecioRenovacion !== '0' && producto.PrecioRenovacion !== 0)) {
         $scope.ShowToast('Escribe un precio.', 'danger');
         return false;
       }
-      if (!esNumerico(producto.Precio)) {
+      if ((!esNumerico(producto.Precio)) || (!esNumerico(producto.PrecioRenovacion))) {
         $scope.ShowToast('Escribe un precio, solo números', 'danger');
         return false;
       }
-      if (!decimalesValidos(producto.Precio)) {
+      if ((!decimalesValidos(producto.Precio)) || (!decimalesValidos(producto.PrecioRenovacion))) {
         $scope.ShowToast('Escribe máximo dos decimales', 'danger');
         return false;
       }

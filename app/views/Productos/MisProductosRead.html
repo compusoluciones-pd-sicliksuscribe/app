@@ -2,7 +2,7 @@
 	
 	<div class="row">
 		<div class="col-xs-12 col-md-8">
-			<h2 style="float:left;">Mis productos<i class="fa fa-question-circle tourButton" style="cursor:help; float:right; font-size:12px; margin-left:10px; margin-top:10px;" ng-click="IniciarTourMisProductos();"></i></h2>
+			<h2 style="float:left; margin-bottom: 70px">Mis productos<i class="fa fa-question-circle tourButton" style="cursor:help; float:right; font-size:12px; margin-left:10px; margin-top:10px;" ng-click="IniciarTourMisProductos();"></i></h2>
 		</div>
 	</div>
 
@@ -31,7 +31,7 @@
 		</div>
 
 		<div class="col-xs-12 col-md-4 searchOption">
-			<label for="Busqueda">Busqueda</label>
+			<label for="Busqueda">Búsqueda</label>
 			<div class="form-group has-feedback">
 				<input type="text" ng-model="filter" ng-change="search()" class="form-control" size="30" placeholder="Busca productos..." />
 				<i class="form-control-feedback glyphicon glyphicon-search"></i>
@@ -40,16 +40,15 @@
 
 	</div>
 
-	<div class="alert alert-danger">
-		<strong>Nota importante *</strong> Al presionar el botón "Guardar todo", se actualizarán también los productos que ya tienen
-		un precio guardado, asi como los productos no visibles a causa del filtro.. En caso de no querer afectar precios guardados
-		anteriormente o los productos no visibles por el filtro, se recomienda guardar individualmente.<br> **El calculo se realiza
-		conforme el precio y tipo de cambio del proveedor.**
+	<div class="alert alert-danger" style="padding: 6px; margin-top: 10px">
+		<strong>Nota importante *</strong> <br>
+		Al presionar el botón "Guardar todo", se actualizarán también los productos que ya tienen un precio guardado, asi como los productos no visibles a causa del filtro. En caso de no querer afectar precios guardados
+		anteriormente o los productos no visibles por el filtro, se recomienda guardar individualmente.  *El calculo se realiza conforme el precio y tipo de cambio del proveedor.
 	</div>
 
-	<div class="alert alert-warning">
-		<b>Nota*</b> Al activar un producto en "Vender producto", será visible para el usuario final. Si tu cliente cuenta con
-		una suscripción activa de un producto y desactivas el check "Vender producto" se seguirá renovando dicho pedido hasta que
+	<div class="alert alert-warning"  style="padding: 6px">
+		<b>Nota*</b> <br> Al activar un producto en "Vender producto", será visible para el usuario final. <br>Si tu cliente cuenta con
+		una suscripción activa de un producto y desactivas el check "Vender" se seguirá renovando dicho pedido hasta que
 		se cancele su suscripción.
 	</div>
 
@@ -73,17 +72,34 @@
 					<b>Precio CompuSoluciones:</b> {{Producto.PrecioNormal | currency}} {{Producto.MonedaPrecio}}
 				</div>
 
-				<div class="col-xs-12 col-md-2">
+				<br>
+
+				<div class="col-xs-12 col-md-2" style="margin-bottom: 10px; margin-left:50px">
+						<b>Precio Inicial:</b>
 					<input id="Precio" name="Precio" type="number" ng-model="Producto.Precio" class="form-control" step="1" placeholder="Precio de venta" />
 				</div>
 
-				<div class="radio col-xs-6 col-md-2">
-					<label style="margin-right: 8px"><input type="radio" name="Moneda{{Producto.IdProducto}}" value="Dólares" ng-model="Producto.Moneda" required>Dólares</label>
-					<label><input type="radio" name="Moneda{{Producto.IdProducto}}" value="Pesos" ng-model="Producto.Moneda"required>Pesos</label>
+				<div ng-hide="Producto.Fabricante === 'Microsoft'" class="col-xs-12 col-md-2">
+						<b>Precio de Renovación:</b>
+					<input id="Precio" name="Precio" type="number" ng-model="Producto.PrecioRenovacion" class="form-control" step="1" placeholder="Precio de venta" />
 				</div>
 
-				<div class="checkbox col-xs-12 col-md-1" ng-class="{disabled:!Producto.Precio}">
-					<label><input id="Activo" type="checkbox" ng-checked="Producto.Activo" ng-disabled="!Producto.Moneda || !Producto.Precio" ng-true-value="1" ng-false-value="0" ng-model="Producto.Activo" ng-click="Actualizar(Producto);">Vender</label>
+				<br>
+				<br>
+				<br>
+				<br>
+				
+				<div class="col-xs-12 col-md-2" style="margin-bottom: 10px; margin-left:50px">
+					<label style="margin-right: 8px"><input type="radio" name="Moneda{{Producto.IdProducto}}" value="Dólares" ng-model="Producto.Moneda" required>  Dólares</label>
+					<label><input type="radio" name="Moneda{{Producto.IdProducto}}" value="Pesos" ng-model="Producto.Moneda"required> Pesos</label>
+				</div>
+
+				<br>
+				<br>
+				<br>
+
+				<div class="checkbox col-xs-12 col-md-1" ng-class="{disabled:!Producto.Precio}" style="margin-bottom: 10px; margin-left:50px">
+					<label><input id="Activo" type="checkbox" ng-checked="Producto.Activo" ng-disabled="!Producto.Moneda || !Producto.Precio" ng-true-value="1" ng-false-value="0" ng-model="Producto.Activo" ng-click="Actualizar(Producto);"><strong>Vender</strong></label>
 				</div>
 
 				<div class="col-xs-12 col-md-1" style="padding-left: 30px">
