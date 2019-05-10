@@ -141,6 +141,7 @@
       var empresa = { IdFormaPagoPredilecta: IdFormaPago || $scope.Distribuidor.IdFormaPagoPredilecta };
       EmpresasFactory.putEmpresaFormaPago(empresa)
         .then(function (result) {
+          console.log(':(');
           if (result.data.success) {
             $scope.ShowToast(result.data.message, 'success');
             CambiarMoneda();
@@ -207,8 +208,7 @@
           order.Productos.forEach(function (product) {
             if (product.IdTipoProducto === 3) {
               disabled = true;
-              $scope.Distribuidor.IdFormaPago = 2;
-              $scope.Distribuidor.IdFormaPagoPredilecta = 2;
+ 
             }
           });
         });
@@ -270,6 +270,7 @@
 
     $scope.isPayWithPrepaid = function () {
       const IdFormaPago = Number($scope.Distribuidor.IdFormaPagoPredilecta);
+      console.log(IdFormaPago);
       return IdFormaPago === paymentMethods.PREPAY;
     };
 
