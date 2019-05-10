@@ -98,13 +98,6 @@
       return $http.put($rootScope.API + 'finalUserData/', finalUser);
     };
 
-    factory.getInformationFinalUser = function (IdUsuario) {
-      factory.refreshToken();
-      return $http.get($rootScope.API + 'getInfoContactFinalUser/' + IdUsuario);
-    };
-    return factory;
-  };
-
   UsuariosFactory.$inject = ['$http', '$cookies', '$rootScope'];
 
   angular.module('marketplace').factory('UsuariosFactory', UsuariosFactory);
