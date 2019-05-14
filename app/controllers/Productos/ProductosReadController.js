@@ -216,7 +216,7 @@
         });
     };
 
-    const validateComerciaPointData = function (Producto) {
+    const validateISVsData = function (Producto) {
       UsuariosFactory.getUsuariosContacto(Producto.IdEmpresaUsuarioFinal)
         .success(function (respuesta) {
           if (respuesta.success === 1) {
@@ -275,7 +275,7 @@
       $scope.productoSeleccionado = Producto.IdProducto;
       if (Producto.IdFabricante === 2) validateAutodeskData(Producto);
       if (Producto.IdFabricante === 1 && $scope.DominioMicrosoft) validateMicrosoftData(Producto);
-      if (Producto.IdFabricante === 6) validateComerciaPointData(Producto);
+      if (Producto.IdFabricante === 6 || (Producto.IdFabricante === 5  && Producto.IdProductoFabricanteExtra !== 'Aperio')) validateISVsData(Producto);
     };
 
     const estimateLastTier = function (previousTier, currentTier, quantity) {
