@@ -108,6 +108,9 @@
         .then(function () {
           if ($scope.isPayingWithCSCredit()) validarCarrito();
         })
+        .then(function (){
+          if ($scope.isPayWithPrepaid()) CambiarMonedaPrepaid();
+        }) 
         .catch(function (result) {
           error(result.data);
           $location.path('/Productos');
@@ -162,6 +165,18 @@
       })
       .catch(function (result) { error(result.data); });
     };
+
+    var CambiarMonedaPrepaid = function () {
+      const MonedaPago = $scope.Distribuidor.MonedaPago;
+      EmpresasFactory.putEmpresaCambiaMoneda({ MonedaPago })
+      .then(function (result) {
+        if (!result.data.success) {
+          $scope.ShowToast(result.data.message, 'danger');
+        } 
+      })
+      .catch(function (result) { error(result.data); });
+    };
+
 
     $scope.init = function () {
       $scope.CheckCookie();
@@ -260,7 +275,7 @@
 
     $scope.isPayingWithCSCredit = function () {
       const IdFormaPago = Number($scope.Distribuidor.IdFormaPagoPredilecta);
-      return IdFormaPago === paymentMethods.CS_CREDIT;
+      return IdFormaPago === paymentMethods.CS_CREDIT || IdFormaPago === paymentMethods.PREPAY;
     };
 
     $scope.isPayingWithCreditCard = function () {
