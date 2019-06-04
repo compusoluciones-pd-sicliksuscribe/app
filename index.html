@@ -154,8 +154,9 @@
 												<a dropdown-toggle ><span class="fa fa-desktop"></span><div class="text" style="width:65px;">Monitoreo</div><b class="caret"></b></a>
 												<ul class="dropdown-menu yellow" style="background:!important">
 													<li><a ng-click="goToPage('AdministrarSuscripciones');">Monitor</a></li>
-													<li><a ng-click="goToPage('Reportes');">Reportes</a></li>
-													<li><a ng-click="goToPage('MonitorVmware');">Vmware</a></li>
+													<li><a ng-click="goToPage('Reportes');"> Reportes </a></li>
+													<li><a ng-click="goToPage('MonitorVmware');"> Vmware </a></li>
+													<li><a ng-click="goToPage('MonitorAws');"> Amazon </a></li>
 												</ul>
 										</li>
 
@@ -168,6 +169,7 @@
 												<li><a ng-show="SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 4 || SessionCookie.IdTipoAcceso == 7"
 													 ng-click="goToPage('Usuarios');">Mis colaboradores</a></li>												
 												<li><a ng-click="goToPage('MonitorVmware');">Monitor Vmware</a></li>
+												<li><a ng-click="goToPage('MonitorAws');">Monitor Aws</a></li>
 												<li><a ng-click="goToPage('Monitor');">Monitor de pedidos por cliente</a></li>
 												<li id="monitorPagos" ng-show="SessionCookie.IdTipoAcceso == 2"><a ng-click="goToPage('MonitorPagos');">Monitor de pedidos por pagar</a></li>
 												<li id="monitorPagos" ng-show="SessionCookie.IdTipoAcceso == 2 && SessionCookie.IdEmpresa == 110"><a ng-click="goToPage('aplicaciones');">Aplicaciones</a></li>
@@ -544,6 +546,8 @@
 	<script type="text/javascript" src="app/services/SoporteFactory.js"></script>
 	<script type="text/javascript" src="app/controllers/ReportesController.js"></script>
 	<script type="text/javascript" src="app/services/ReportesFactory.js"></script>
+	<script type="text/javascript" src="app/controllers/Aws/MonitorDetalleAwsController.js"></script>
+	<script type="text/javascript" src="app/services/AmazonDataFactory.js"></script>
 	<script type="text/javascript" src="app/services/UsuariosXEmpresasFactory.js"></script>
 	<script type="text/javascript" src="app/controllers/EmpresasXEmpresas/EmpresasXEmpresasReadController.js"></script>
 	<script type="text/javascript" src="app/services/EmpresasXEmpresasFactory.js"></script>

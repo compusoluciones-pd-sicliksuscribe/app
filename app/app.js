@@ -57,6 +57,7 @@
           }
         }
       })
+     
 
       .when('/monitor-soporte', {
         controller: 'SoporteReadController', templateUrl: 'app/views/Soporte/SoporteRead.html',
@@ -321,6 +322,18 @@
         }
       })
 
+      .when('/MonitorAws', {
+        controller: ' MonitorDetalleAwsController', templateUrl: 'app/views/Aws/MonitorDetallesAws.html',
+        resolve: {
+          'check': function ($location, $cookies) {
+            var Session = $cookies.getObject('Session');
+            if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3)) {
+              $location.path('/404');
+            }
+          }
+        }
+      })
+
       .when('/uf/Comprar', {
         controller: 'ComprarUFController', templateUrl: 'app/views/PedidoDetalles/ComprarUF.html',
         resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6 || Session.IdTipoAcceso === 2)) { $location.path('/404'); } } }
@@ -416,6 +429,12 @@
         resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6 || Session.IdTipoAcceso === 7 || Session.IdTipoAcceso === 8)) { $location.path('/404'); } } }
       })
 
+      .when('/MonitorAws', {
+        controller: 'MonitorDetalleAwsController', templateUrl: 'app/views/Aws/MonitorDetalleAws.html',
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); 
+        if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6 || Session.IdTipoAcceso === 7 || Session.IdTipoAcceso === 1)) { $location.path('/404'); } } }
+      })
+
       .when('/Niveles', {
         controller: 'NivelesReadController', templateUrl: 'app/views/Niveles/NivelesRead.html',
         resolve: {
@@ -502,7 +521,8 @@
         resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); 
         if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6 || Session.IdTipoAcceso === 7 || Session.IdTipoAcceso === 1)) { $location.path('/404'); } } }
       })
-
+      
+      
       /* .when('/:Subdominio', { controller: 'UsuariosLoginController', templateUrl: 'app/views/Usuarios/UsuariosLogin.html' }) */
 
       .otherwise({ redirectTo: '/404' });

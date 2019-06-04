@@ -17,6 +17,7 @@ CACHE:
      # app/views/mailing.html
      # app/views/offline.html
      # app/views/Reportes.html
+     # app/views/MonitorDetalleAws.html
      # app/views/Soporte.html
      # app/views/Contacto.html
      # app/views/Sugerencias.html
