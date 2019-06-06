@@ -97,6 +97,8 @@
       factory.refreshToken();
       return $http.put($rootScope.API + 'finalUserData/', finalUser);
     };
+    return factory;
+  };
 
   UsuariosFactory.$inject = ['$http', '$cookies', '$rootScope'];
 

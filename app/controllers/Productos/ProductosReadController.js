@@ -369,8 +369,11 @@
         .success(function (respuesta) {
           if (respuesta.Success === 1) {
             $scope.ShowToast('Información Actualizada ','success');
+            document.getElementById('formModal').style.display = 'none';
+
           } else {
             $scope.ShowToast('No pudimos cargar la información de tu datos ,porfavor intenta mas tarde.', 'danger');
+            document.getElementById('formModal').style.display = 'none';
           }
         })
         .error(function () {
