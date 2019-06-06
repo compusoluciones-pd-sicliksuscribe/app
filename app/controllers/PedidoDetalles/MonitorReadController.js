@@ -183,13 +183,18 @@
         $scope.ShowToast('No se puede actualizar a un numero mayor de suscripciones.', 'danger');
         return;
       }
+      $scope.buttonRenew=0;
+      const renovated = $scope.buttonRenew;
       var PedidoActualizado = {
         IdPedidoDetalle: detalles.IdPedidoDetalle,
         IdEmpresaUsuarioFinal: Params.IdEmpresaUsuarioFinal,
         MonedaCosto: detalles.MonedaPrecio,
         CantidadProxima: detalles.CantidadProxima,
         CargoRealizadoProximoPedido: pedido.CargoRealizadoProximoPedido,
-        PorCancelar: 0
+        PorCancelar: 0,
+        buttonRenew: renovated ,
+        IdProducto:Detalles.IdProducto,
+        IdEmpresaUsuarioFinal:Detalles.IdEmpresaUsuarioFinal,
       };
       if (!detalles.Activo) {
         PedidoActualizado.PorActualizarCantidad = 0;
@@ -257,18 +262,22 @@
     };
 
     $scope.CancelarPedido = function (Pedido, Detalles) {
-      $scope.buttonRenew = 0;
+      
       $scope.Cancelar = true;
       $scope.guardar = Pedido;
       $scope.form.habilitar = true;
       $scope.$emit('LOAD');
+      const renovated = 2;
       const order = {
         CargoRealizadoProximoPedido: Pedido.CargoRealizadoProximoPedido,
         Activo: 0,
         PorCancelar: 1,
         ResultadoFabricante1: Detalles.EstatusFabricante,
         IdTipoProducto: Detalles.IdTipoProducto,
-        IdPedidoDetalle: Detalles.IdPedidoDetalle
+        IdPedidoDetalle: Detalles.IdPedidoDetalle,
+        buttonRenew: renovated ,
+        IdProducto:Detalles.IdProducto,
+        IdEmpresaUsuarioFinal:Detalles.IdEmpresaUsuarioFinal,
       };
       PedidoDetallesFactory.putPedidoDetalle(order)
         .success(function (result) {
@@ -340,7 +349,9 @@
         IdTipoProducto: detalles.IdTipoProducto,
         IdPedidoDetalle: detalles.IdPedidoDetalle,
         buttonRenew: renovated ,
+        IdProducto:detalles.IdProducto,
       };
+      console.log("renovacion ....................",order);
       $scope.form.habilitar = true;
       if (detalles.Cantidad !== detalles.CantidadProxima) {
         order.PorActualizarCantidad = 1;
