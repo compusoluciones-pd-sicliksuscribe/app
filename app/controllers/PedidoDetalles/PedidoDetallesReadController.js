@@ -141,7 +141,6 @@
       var empresa = { IdFormaPagoPredilecta: IdFormaPago || $scope.Distribuidor.IdFormaPagoPredilecta };
       EmpresasFactory.putEmpresaFormaPago(empresa)
         .then(function (result) {
-          console.log(':(');
           if (result.data.success) {
             $scope.ShowToast(result.data.message, 'success');
             CambiarMoneda();
@@ -270,7 +269,6 @@
 
     $scope.isPayWithPrepaid = function () {
       const IdFormaPago = Number($scope.Distribuidor.IdFormaPagoPredilecta);
-      console.log(IdFormaPago);
       return IdFormaPago === paymentMethods.PREPAY;
     };
 
