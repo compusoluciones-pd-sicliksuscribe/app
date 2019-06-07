@@ -269,16 +269,28 @@
       $scope.$emit('LOAD');
       const renovated = 2;
       const order = {
-        CargoRealizadoProximoPedido: Pedido.CargoRealizadoProximoPedido,
+        CargoRealizadoProximoPedido: Number(Pedido.CargoRealizadoProximoPedido),
         Activo: 0,
         PorCancelar: 1,
         ResultadoFabricante1: Detalles.EstatusFabricante,
         IdTipoProducto: Detalles.IdTipoProducto,
-        IdPedidoDetalle: Detalles.IdPedidoDetalle,
-        buttonRenew: renovated ,
-        IdProducto:Detalles.IdProducto,
-        IdEmpresaUsuarioFinal:Detalles.IdEmpresaUsuarioFinal,
+        IdPedidoDetalle: Detalles.IdPedidoDetalle
       };
+
+      if (Pedido.IdFabricante === 1) {
+        PedidoDetallesFactory.putPedidoDetalleMicrosoft(order)
+        .success(function (result) {
+          $scope.ShowToast('Suscripción cancelada.', 'success');
+          $scope.$emit('UNLOAD');
+          $scope.Cancelar = false;
+          $scope.ActualizarMonitor();
+          $scope.form.habilitar = false;
+        })
+        .error(function (data, status, headers, config) {
+          $scope.ShowToast(data.message, 'danger');
+        });
+      }
+      
       PedidoDetallesFactory.putPedidoDetalle(order)
         .success(function (result) {
           $scope.ShowToast('Suscripción cancelada.', 'success');
@@ -337,26 +349,38 @@
     };
 
     $scope.Reanudar = function (pedido, detalles) {
-      // $scope.detalles.Activo=1;
-      detalles.Activo=1;
-      $scope.buttonRenew = 1;
-      const renovated = $scope.buttonRenew;
       const order = {
-        CargoRealizadoProximoPedido: pedido.CargoRealizadoProximoPedido,
+        CargoRealizadoProximoPedido: Number(pedido.CargoRealizadoProximoPedido),
         Activo: 1,
         PorCancelar: 0,
         ResultadoFabricante1: detalles.EstatusFabricante,
         IdTipoProducto: detalles.IdTipoProducto,
-        IdPedidoDetalle: detalles.IdPedidoDetalle,
-        buttonRenew: renovated ,
-        IdProducto:detalles.IdProducto,
+        IdPedidoDetalle: detalles.IdPedidoDetalle
       };
-      console.log("renovacion ....................",order);
       $scope.form.habilitar = true;
       if (detalles.Cantidad !== detalles.CantidadProxima) {
         order.PorActualizarCantidad = 1;
       }
-
+      if (pedido.IdFabricante === 1) {
+        PedidoDetallesFactory.putPedidoDetalleMicrosoft(order)
+        .success(function (result) {
+          if (!result.success) {
+            $scope.ShowToast(result.message, 'danger');
+          } else {
+            $scope.ShowToast('Suscripción reanudada.', 'success');
+          }
+          $scope.form.habilitar = true;
+          $scope.ActualizarMonitor();
+          $scope.form.habilitar = false;
+        })
+        .catch(function (error) {
+          $scope.ShowToast(error.data.message, 'danger');
+          $log.log('data error: ' + error.data.message + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
+          $scope.form.habilitar = true;
+          $scope.ActualizarMonitor();
+          $scope.form.habilitar = false;
+        });
+      }
       PedidoDetallesFactory.putPedidoDetalle(order)
         .success(function (result) {
           if (!result.success) {
