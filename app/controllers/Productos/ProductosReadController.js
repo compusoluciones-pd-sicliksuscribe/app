@@ -18,6 +18,7 @@
     $scope.usuariosSinDominio = {id:''};
     $scope.finalUser = {};
     const NOT_FOUND = 404;
+    $scope.datosCompletosCustomer = true;
 
     $scope.esquemaRenovacionModelo={};
     $scope.EsquemaRenovacion=[
@@ -344,6 +345,11 @@
         });
     };
 
+    $scope.cerrarModal = function (modal) {
+      document.getElementById(modal).style.display = 'none';
+    };
+
+
     const validateCustomerData = ({ ApellidosContacto, CorreoContacto, NombreContacto, TelefonoContacto }) => {
       if (!ApellidosContacto || !CorreoContacto || !NombreContacto || !TelefonoContacto) {
         $scope.finalUser.Nombre = NombreContacto;
@@ -369,6 +375,7 @@
         .success(function (respuesta) {
           if (respuesta.Success === 1) {
             $scope.ShowToast('Información Actualizada ','success');
+            $scope.datosCompletosCustomer = true;
             document.getElementById('formModal').style.display = 'none';
 
           } else {
@@ -389,6 +396,7 @@
           if (!validateCustomerData(result.data[0])) {
             $scope.ShowToast('Completa la información para poder aceptar los términos y condiciones', 'danger');
             document.getElementById('formModal').style.display = 'block';
+            $scope.datosCompletosCustomer = false;
           }
           $scope.ShowToast('No has aceptado los términos y condiciones que necesita microsoft.', 'danger');
           $scope.IdEmpresaUsuarioFinalTerminos = producto.IdEmpresaUsuarioFinal;

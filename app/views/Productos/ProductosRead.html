@@ -274,7 +274,10 @@
                                         <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6" ng-show="SessionCookie.IdTipoAcceso === 1 || SessionCookie.IdTipoAcceso === 2 || SessionCookie.IdTipoAcceso === 3 || SessionCookie.IdTipoAcceso === 4">
                                             <button  ng-click="updateEnterprise(Producto)" ng-show="Producto.IdFabricante === 1 && usuariosSinDominio[Producto.IdEmpresaUsuarioFinal] === false" class="btn btn-primary updateDomain" style="float: center;">Asignar Dominio Microsoft</button>
                                             <button class="btn btn-success addOption" ng-click="previousISVValidate(Producto)" ng-disabled="!frmCantidad.$valid || Producto.IdFabricante === 1 && usuariosSinDominio[Producto.IdEmpresaUsuarioFinal] === false" style="float: center;" ng-hide="((terminos) && (Producto.IdFabricante === 1))">Agregar al carrito</md-button>
-                                            <button class="btn btn-danger addOption" style="float: center;" data-toggle="modal" data-target="#terminosModal" ng-show="((terminos) && (Producto.IdFabricante === 1))">Aceptar términos</md-button>
+                                                <button ng-disabled="!datosCompletosCustomer"  class="btn btn-danger addOption" style="float: center;" data-toggle="modal" data-target="#terminosModal" ng-show="((terminos) && (Producto.IdFabricante === 1))">Aceptar términos</md-button>
+                                        </div>
+                                        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6" ng-show="SessionCookie.IdTipoAcceso === 1 || SessionCookie.IdTipoAcceso === 2 || SessionCookie.IdTipoAcceso === 3 || SessionCookie.IdTipoAcceso === 4">
+                                                <button class="btn btn-primary addOption" style="float: right;" data-toggle="modal" data-target="#formModal" ng-show="((terminos) && (Producto.IdFabricante === 1))">Completar datos</md-button>
                                         </div>
 
                                         
@@ -349,7 +352,8 @@
                         </div>
                     </div>
                     <div  class="modal-footer">
-                            <button   ng-disabled="finalUser.Nombre==null||finalUser.Nombre==''||finalUser.Apellidos==null||finalUser.Apellidos==''||finalUser.CorreoElectronico==''||finalUser.CorreoElectronico==null||finalUser.Telefono==null||finalUser.Telefono==''" type="button" class="btn btn-success" ng-click="updateFinalUserData();cerrarModal('formModal')" data-dismiss="modal">Actualizar Información </button>
+                        <button type="button" class="btn btn-danger" ng-click="cerrarModal('formModal')" data-dismiss="modal">Cerrar </button>
+                        <button   ng-disabled="finalUser.Nombre==null||finalUser.Nombre==''||finalUser.Apellidos==null||finalUser.Apellidos==''||finalUser.CorreoElectronico==''||finalUser.CorreoElectronico==null||finalUser.Telefono==null||finalUser.Telefono==''" type="button" class="btn btn-success" ng-click="updateFinalUserData();cerrarModal('formModal')" data-dismiss="modal">Actualizar Información </button>
                     </div>
                 </div>
             </div>
@@ -371,7 +375,7 @@
                     </a>
                     </p>
                     <div  class="modal-footer">
-                        <button   type="button" class="btn btn-success" ng-click="AceptarTerminos();" data-dismiss="modal">Aceptar términos</button>
+                        <button type="button" class="btn btn-success" ng-click="AceptarTerminos();" data-dismiss="modal">Aceptar términos</button>
                     </div>
                 </div>
             </div>
