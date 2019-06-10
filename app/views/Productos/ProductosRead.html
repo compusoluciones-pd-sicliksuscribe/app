@@ -331,8 +331,8 @@
                 
                                 <div class="pull-rigth">
                                     <label>Correo electrónico *</label>
-                                    <input name="CorreoElectronico" type="mail" ng-model="finalUser.CorreoElectronico" class="form-control" placeholder="" size="255"
-                                    ng-maxlength="255"   ng-pattern="/^[\w]+@{1}[\w]+\.[a-z]{2,3}$/" />
+                                    <input name="CorreoElectronico" type="email" ng-model="finalUser.CorreoElectronico" class="form-control" placeholder="" size="255"
+                                    ng-maxlength="255" />
                                     <b style="color:red" ng-show="frm.finalUser.CorreoElectronico.$invalid && !frm.CorreoElectronico.$pristine" class="help-block">Ingresa un correo válido.</b>
                                 </div>
                             </div>
@@ -343,8 +343,8 @@
                                 <div >
                                     <div >
                                         <div class="pull-rigth">
-                                            <input name="finalUser.Telefono" type="text" ng-model="finalUser.Telefono" ui-mask="(999) 999-9999" ui-mask-placeholder ui-mask-placeholder-char="_" class="form-control" placeholder="" size="255" ng-maxlength="255" required/>
-                                            <b style="color:red" ng-show="frm.finalUser.Telefono.$invalid && !frm.Telefono.$pristine" class="help-block">Ingresa un teléfono válido.</b>
+                                            <input name="Telefono" type="text" ng-model="finalUser.Telefono" ui-mask="(999) 999-9999" ui-mask-placeholder ui-mask-placeholder-char="_" class="form-control" placeholder="" size="255" ng-maxlength="255" required/>
+                                            <b style="color:red" ng-show="frm.Telefono.$invalid && !frm.Telefono.$pristine" class="help-block">Ingresa un teléfono válido.</b>
                                         </div>
                                     </div>
                                 </div>
