@@ -285,6 +285,7 @@
           $scope.Cancelar = false;
           $scope.ActualizarMonitor();
           $scope.form.habilitar = false;
+          if (!result) $scope.ShowToast('Ocurrió un error.', 'danger');
         })
         .error(function (data, status, headers, config) {
           $scope.ShowToast(data.message, 'danger');
@@ -364,8 +365,8 @@
       if (pedido.IdFabricante === 1) {
         PedidoDetallesFactory.putPedidoDetalleMicrosoft(order)
         .success(function (result) {
-          if (!result.success) {
-            $scope.ShowToast(result.message, 'danger');
+          if (!result) {
+            $scope.ShowToast('Ocurrió un error', 'danger');
           } else {
             $scope.ShowToast('Suscripción reanudada.', 'success');
           }
