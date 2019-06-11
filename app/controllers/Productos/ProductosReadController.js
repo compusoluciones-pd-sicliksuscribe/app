@@ -641,17 +641,18 @@
     };
 
     $scope.RequestDataVwareProduct= (Producto) => {
-      const userName = $scope.SessionCookie.Nombre;
-      const userSecondName = $scope.SessionCookie.ApellidoPaterno;
-      const userMothersSecond = $scope.SessionCookie.ApellidoMaterno;
-      const userEmail = $scope.SessionCookie.CorreoElectronico;
-      const userCompanyName = $scope.SessionCookie.NombreEmpresa;
-      const productName = Producto.Nombre;
-      const productDesciption = Producto.Descripcion;
-      const productIdErp = Producto.IdERP;
-      ProductosFactory.postRequestDataVwareProduct({userName,userSecondName,userMothersSecond,userCompanyName,productName,userEmail,productDesciption,productIdErp})
+      const Product = {
+        userName : $scope.SessionCookie.Nombre,
+        userSecondName : $scope.SessionCookie.ApellidoPaterno,
+        userMothersSecond : $scope.SessionCookie.ApellidoMaterno,
+        userEmail : $scope.SessionCookie.CorreoElectronico,
+        userCompanyName : $scope.SessionCookie.NombreEmpresa,
+        productName : Producto.Nombre,
+        productDesciption : Producto.Descripcion,
+        productIdErp : Producto.IdERP,
+      };
+      ProductosFactory.postRequestDataVwareProduct(Product)
       .success(function (result) {
-        console.log(result);
         if (!result.success) {
           $scope.ShowToast('no se pudo mandar la notifiacion intente mas tarde', 'danger');
         } else {
