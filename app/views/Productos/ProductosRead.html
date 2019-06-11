@@ -277,7 +277,7 @@
                                                 <button ng-disabled="!datosCompletosCustomer"  class="btn btn-danger addOption" style="float: center;" data-toggle="modal" data-target="#terminosModal" ng-show="((terminos) && (Producto.IdFabricante === 1))">Aceptar términos</md-button>
                                         </div>
                                         <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6" ng-show="SessionCookie.IdTipoAcceso === 1 || SessionCookie.IdTipoAcceso === 2 || SessionCookie.IdTipoAcceso === 3 || SessionCookie.IdTipoAcceso === 4">
-                                                <button class="btn btn-primary addOption" style="float: right;" data-toggle="modal" data-target="#formModal" ng-show="((terminos) && (Producto.IdFabricante === 1))">Completar datos</md-button>
+                                                <button class="btn btn-primary addOption" style="float: right;" data-toggle="modal" data-target="#formModal" ng-show="((terminos) && (Producto.IdFabricante === 1) && (!datosCompletosCustomer))">Completar datos</md-button>
                                         </div>
 
                                         
@@ -295,7 +295,7 @@
         </tr>
     </table>
 
-    <div id="formModal" class="modal fade in" tabindex="-1" role="dialog"  >
+    <div id="formModal" name="formModal" class="modal fade in" tabindex="-1" role="dialog"  >
         <div>
             <div class="modal-dialog" role="document">
                 <div class="modal-content" >
@@ -312,17 +312,17 @@
                                     <input name="Nombre" type="text" ng-model="finalUser.Nombre" class="form-control"  placeholder="" size="255" ng-maxlength="50"
                                     required  pattern="[a-z|A-Z|' ']{1,30}"
                                     title="Ingresa un nombre propio"  />
-                                    <b style="color:red" ng-show="finalUser.Nombre.$invalid && !finalUserNombre.$pristine" class="help-block">Ingresa un nombre.</b>
-                                    <b style="color:red" ng-show="frm.NombreEmpresa.$invalid && !frm.NombreEmpresa.$pristine" class="help-block">El nombre de empresa es requerido.</b>
+                                    <b style="color:red" ng-show="finalUser.Nombre==null" class="help-block">El formato es incorrecto, revise el nombre</b>
+                         
                                 </div>
                             </div>
                             <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6" >
                                 <div class="pull-rigth">
                                     <label>Apellidos *</label>
-                                    <input name="Apellidos" type="text" ng-model="finalUser.Apellidos" class="form-control" ng-pattern="[a-z|A-Z|' ']{1,30}" placeholder="" size="255" ng-maxlength="80"
-                                    required  pattern="[a-zA-' '-Z]{1,30}"
-                                    title="Ingresa un nombre propio" />
-                                    <b style="color:red" ng-show="frm.finalUser.Apellidos.$invalid && !frm.Apellidos.$pristine" class="help-block">Ingresa los apellidos.</b>
+                                    <input name="Apellidos" type="text" ng-model="finalUser.Apellidos" class="form-control" placeholder="" size="255" ng-maxlength="80"
+                                    required  pattern="[a-z|A-Z|' ']{1,30}"
+                                    title="Ingresa apellidos" />
+                                    <b style="color:red" ng-show="finalUser.Apellidos==null" class="help-block">El formato es incorrecto, revise los apellidos</b>
                                 </div>
                             </div>
                         </div>
@@ -333,7 +333,7 @@
                                     <label>Correo electrónico *</label>
                                     <input name="CorreoElectronico" type="email" ng-model="finalUser.CorreoElectronico" class="form-control" placeholder="" size="255"
                                     ng-maxlength="255" />
-                                    <b style="color:red" ng-show="frm.finalUser.CorreoElectronico.$invalid && !frm.CorreoElectronico.$pristine" class="help-block">Ingresa un correo válido.</b>
+                                    <b style="color:red" ng-show="finalUser.CorreoElectronico==null" class="help-block">El formato es incorrecto, revise el correo</b>
                                 </div>
                             </div>
                             <div  class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6" >
@@ -344,7 +344,7 @@
                                     <div >
                                         <div class="pull-rigth">
                                             <input name="Telefono" type="text" ng-model="finalUser.Telefono" ui-mask="(999) 999-9999" ui-mask-placeholder ui-mask-placeholder-char="_" class="form-control" placeholder="" size="255" ng-maxlength="255" required/>
-                                            <b style="color:red" ng-show="frm.Telefono.$invalid && !frm.Telefono.$pristine" class="help-block">Ingresa un teléfono válido.</b>
+                                            <b style="color:red" ng-show="finalUser.Telefono==null" class="help-block">Ingrese un número válido </b>
                                         </div>
                                     </div>
                                 </div>
