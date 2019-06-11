@@ -360,7 +360,6 @@
       }
       return true;
     }
-    $scope.frm.Telefono = 
     $scope.updateFinalUserData = function () {
       if ($scope.frm.Telefono.$invalid == true) {
         $scope.frm.Telefono.$pristine = false;
