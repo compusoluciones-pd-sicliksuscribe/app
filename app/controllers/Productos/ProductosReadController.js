@@ -361,9 +361,6 @@
       return true;
     }
     $scope.updateFinalUserData = function () {
-      if ($scope.frm.Telefono.$invalid == true) {
-        $scope.frm.Telefono.$pristine = false;
-      }
       if($scope.finalUser.Nombre == "" || $scope.finalUser.Nombre == null ||
       $scope.finalUser.CorreoElectronico == "" ||$scope.finalUser.CorreoElectronico == null ||
       $scope.finalUser.Telefono == "" ||$scope.finalUser.Telefono == null ||
