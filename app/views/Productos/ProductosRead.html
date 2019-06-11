@@ -295,7 +295,7 @@
         </tr>
     </table>
 
-    <div id="formModal" name="formModal" class="modal fade in" tabindex="-1" role="dialog"  >
+    <form id="formModal" name="formModal" class="modal fade in" tabindex="-1" role="dialog"  >
         <div>
             <div class="modal-dialog" role="document">
                 <div class="modal-content" >
@@ -312,7 +312,7 @@
                                     <input name="Nombre" type="text" ng-model="finalUser.Nombre" class="form-control"  placeholder="" size="255" ng-maxlength="50"
                                     required  pattern="[a-z|A-Z|' ']{1,30}"
                                     title="Ingresa un nombre propio"  />
-                                    <b style="color:red" ng-show="finalUser.Nombre==null" class="help-block">El formato es incorrecto, revise el nombre</b>
+                                    <b style="color:red;" ng-show="formModal.Nombre.$invalid && !formModal.Nombre.$pristine" class="help-block" class="help-block">El formato es incorrecto, revise el nombre</b>
                          
                                 </div>
                             </div>
@@ -322,7 +322,7 @@
                                     <input name="Apellidos" type="text" ng-model="finalUser.Apellidos" class="form-control" placeholder="" size="255" ng-maxlength="80"
                                     required  pattern="[a-z|A-Z|' ']{1,30}"
                                     title="Ingresa apellidos" />
-                                    <b style="color:red" ng-show="finalUser.Apellidos==null" class="help-block">El formato es incorrecto, revise los apellidos</b>
+                                    <b style="color:red" ng-show="formModal.Apellidos.$invalid && !formModal.Apellidos.$pristine" class="help-block" class="help-block">El formato es incorrecto, revise los apellidos</b>
                                 </div>
                             </div>
                         </div>
@@ -333,7 +333,7 @@
                                     <label>Correo electrónico *</label>
                                     <input name="CorreoElectronico" type="email" ng-model="finalUser.CorreoElectronico" class="form-control" placeholder="" size="255"
                                     ng-maxlength="255" />
-                                    <b style="color:red" ng-show="finalUser.CorreoElectronico==null" class="help-block">El formato es incorrecto, revise el correo</b>
+                                    <b style="color:red" ng-show="formModal.CorreoElectronico.$invalid && !formModal.CorreoElectronico.$pristine" class="help-block">El formato es incorrecto, revise el correo</b>
                                 </div>
                             </div>
                             <div  class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6" >
@@ -344,7 +344,7 @@
                                     <div >
                                         <div class="pull-rigth">
                                             <input name="Telefono" type="text" ng-model="finalUser.Telefono" ui-mask="(999) 999-9999" ui-mask-placeholder ui-mask-placeholder-char="_" class="form-control" placeholder="" size="255" ng-maxlength="255" required/>
-                                            <b style="color:red" ng-show="finalUser.Telefono==null" class="help-block">Ingrese un número válido </b>
+                                            <b style="color:red" ng-show="formModal.Telefono.$invalid && !formModal.Telefono.$pristine" class="help-block">Ingrese un número válido </b>
                                         </div>
                                     </div>
                                 </div>
@@ -418,6 +418,6 @@
 
     </div>
 
-</div>
+</form>
 
 </div>
