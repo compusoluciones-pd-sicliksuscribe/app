@@ -207,8 +207,7 @@
           order.Productos.forEach(function (product) {
             if (product.IdTipoProducto === 3) {
               disabled = true;
-              $scope.Distribuidor.IdFormaPago = 2;
-              $scope.Distribuidor.IdFormaPagoPredilecta = 2;
+ 
             }
           });
         });
