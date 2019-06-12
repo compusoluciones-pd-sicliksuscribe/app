@@ -52,13 +52,13 @@
 					<div>
 						<input type="radio" name="TipoPago" value="4" ng-model="Distribuidor.IdFormaPagoPredilecta"
 							ng-change="ActualizarFormaPago(4);"> Transferencia (Solo Pesos MXN)
-							<label for="" class="SaldoReal" > <b>Tu Saldo es: {{Distribuidor.Transferencia | currency}}</b> </label>						
+							<label for="" class="SaldoReal" > <b>Tu Saldo es: {{Distribuidor.MonedaPago === 'Pesos' ? Distribuidor.Transferencia : Distribuidor.TransferenciaDolares | currency}}</b> </label>						
 					</div>
 
 				</div>
 			</div>
 			<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
-				<div class="form-group" ng-hide="isPayingWithCreditCard() || hasProtectedExchangeRate() || isPayingWithPaypal() || isPayWithPrepaid()" >
+				<div class="form-group" ng-hide="isPayingWithCreditCard() || hasProtectedExchangeRate() || isPayingWithPaypal()" >
 					<label for="" class="">* ¿Con qué moneda quieres pagarlos?</label>
 					<div class="radio" style="margin-left:20px" >
 						<div>
