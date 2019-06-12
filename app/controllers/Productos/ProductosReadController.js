@@ -691,6 +691,29 @@
     $scope.updateEnterprise = function (Producto) {
       $location.path('/Empresa/ActualizarDominio/' + Producto.IdEmpresaUsuarioFinal);
     };
+
+    $scope.RequestDataVwareProduct= (Producto) => {
+      const Product = {
+        userName : $scope.SessionCookie.Nombre,
+        userSecondName : $scope.SessionCookie.ApellidoPaterno,
+        userMothersSecond : $scope.SessionCookie.ApellidoMaterno,
+        userEmail : $scope.SessionCookie.CorreoElectronico,
+        userCompanyName : $scope.SessionCookie.NombreEmpresa,
+        productName : Producto.Nombre,
+        productDesciption : Producto.Descripcion,
+        productIdErp : Producto.IdERP,
+      };
+      ProductosFactory.postRequestDataVwareProduct(Product)
+      .success(function (result) {
+        if (!result.success) {
+          $scope.ShowToast('no se pudo mandar la notifiacion intente mas tarde', 'danger');
+        } else {
+          $scope.ShowToast('Se envió tu información al ditribuidor,pronto se pondran en contacto para brindar te información.', 'success');
+          
+        }
+      })
+
+    };
   };
 
   ProductosReadController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'ProductosFactory', 'FabricantesFactory', 'TiposProductosFactory', 'PedidoDetallesFactory', 'TipoCambioFactory', 'ProductoGuardadosFactory', 'EmpresasXEmpresasFactory', 'UsuariosFactory', '$anchorScroll'];
