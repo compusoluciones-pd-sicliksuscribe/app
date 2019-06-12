@@ -17,9 +17,8 @@
     $scope.terminos = false;
     $scope.usuariosSinDominio = {id:''};
     $scope.finalUser = {};
-    $scope.mostrarBoton=0;
-    $scope.actualizoInformacion=0;
     const NOT_FOUND = 404;
+    $scope.datosCompletosCustomer = true;
 
     $scope.esquemaRenovacionModelo={};
     $scope.EsquemaRenovacion=[
@@ -156,79 +155,6 @@
         $scope.BuscarProductos.keyword = undefined;
         $scope.BuscarProducto(false);
       }
-    };
-
-    $scope.updateFinalUserData = function () {
-      if($scope.finalUser.Nombre == "" || $scope.finalUser.Nombre == null ||
-      $scope.finalUser.CorreoElectronico == "" ||$scope.finalUser.CorreoElectronico == null ||
-      $scope.finalUser.Telefono == "" ||$scope.finalUser.Telefono == null ||
-      $scope.finalUser.Apellidos == "" ||$scope.finalUser.Apellidos == null
-    ){
-        $scope.ShowToast('Ingresa la información completa ó valida por favor  .', 'danger');
-      }else{
-     var IdFinalUser = $scope.IdEmpresaUsuarioFinalTerminos;
-     $scope.finalUser.IdFinalUser= IdFinalUser;
-      UsuariosFactory.putUpdateFinalUserData( $scope.finalUser )
-      .success(function (respuesta) {
-        if (respuesta.Success === 1) {
-          $scope.ShowToast('Información Actualizada ','success');
-          $scope.actualizoInformacion = 1;
-        } else {
-          $scope.ShowToast('No pudimos cargar la información de tu datos ,porfavor intenta mas tarde.', 'danger');
-        }
-      })
-      .error(function () {
-        $scope.ShowToast('No pudimos cargar la información de tus contactos, por favor intenta de nuevo más tarde.', 'danger');
-      });
-    }
-    
-    };
-
-    $scope.selectModal = function () {
-
-      
-      if($scope.actualizoInformacion==1){
-        
-        $scope.abrirModal('terminosModal');
-      }
-      if( $scope.mostrarBoton == 1){
-        $scope.abrirModal('formModal');
-      }else{
-        $scope.abrirModal('terminosModal');
-      }
-    };
-
-    $scope.abrirModal = function (modal) {
-      document.getElementById(modal).style.display = 'block';
-    };
-    $scope.cerrarModal = function (modal) {
-      document.getElementById(modal).style.display = 'none';
-    };
-
-
-
-    $scope.getDataFinalUserById  = function (IdEmpresa) {
-
-      UsuariosFactory.getInformationFinalUser(IdEmpresa)
-        .success(function (respuesta) {
-          if (respuesta.success === 1) {
-            $scope.finalUser.Nombre=respuesta.data[0].NombreContacto;
-            $scope.finalUser.Apellidos = respuesta.data[0].ApellidosContacto;
-            $scope.finalUser.Telefono = respuesta.data[0].TelefonoContacto;
-            $scope.finalUser.CorreoElectronico = respuesta.data[0].CorreoContacto;
-            if( $scope.finalUser.Nombre===null||$scope.finalUser.Nombre===""||$scope.finalUser.Apellidos===null||$scope.finalUser.Apellidos===""||$scope.finalUser.Telefono===null||$scope.finalUser.Telefono===""||$scope.finalUser.CorreoElectronico===null||$scope.finalUser.CorreoElectronico===""  ){
-              
-              $scope.mostrarBoton=1;
-            }
-
-          } else {
-            $scope.ShowToast('No pudimos cargar la información de tu datos ,porfavor intenta mas tarde.', 'danger');
-          }
-        })
-        .error(function () {
-          $scope.ShowToast('No pudimos cargar la información de tus contactos, por favor intenta de nuevo más tarde.', 'danger');
-        });
-      
     };
 
     $scope.init();
@@ -404,7 +330,7 @@
         PedidoDetallesFactory.acceptAgreement($scope.IdEmpresaUsuarioFinalTerminos)
         .success(function (result) {
           if (!result.success) {
-            $scope.ShowToast('error', 'danger');
+            $scope.ShowToast('Ocurrió un error, favor de contactar a Soporte', 'danger');
           } else {
             $scope.ShowToast('Terminos y condiciones aceptados.', 'success');
             $scope.terminos = false;
@@ -419,10 +345,58 @@
         });
     };
 
+    $scope.cerrarModal = function (modal) {
+      document.getElementById(modal).style.display = 'none';
+    };
+
+
+    const validateCustomerData = ({ ApellidosContacto, CorreoContacto, NombreContacto, TelefonoContacto }) => {
+      if (!ApellidosContacto || !CorreoContacto || !NombreContacto || !TelefonoContacto) {
+        $scope.finalUser.Nombre = NombreContacto;
+        $scope.finalUser.Apellidos = ApellidosContacto;
+        $scope.finalUser.Telefono = TelefonoContacto;
+        $scope.finalUser.CorreoElectronico = CorreoContacto;
+        return false;
+      }
+      return true;
+    }
+    $scope.updateFinalUserData = function () {
+      if($scope.finalUser.Nombre == "" || $scope.finalUser.Nombre == null ||
+      $scope.finalUser.CorreoElectronico == "" ||$scope.finalUser.CorreoElectronico == null ||
+      $scope.finalUser.Telefono == "" ||$scope.finalUser.Telefono == null ||
+      $scope.finalUser.Apellidos == "" ||$scope.finalUser.Apellidos == null
+      ){
+        $scope.ShowToast('Ingresa la información completa ó valida por favor  .', 'danger');
+      } else {
+     var IdFinalUser = $scope.IdEmpresaUsuarioFinalTerminos;
+     $scope.finalUser.IdFinalUser= IdFinalUser;
+      UsuariosFactory.putUpdateFinalUserData( $scope.finalUser )
+        .success(function (respuesta) {
+          if (respuesta.Success === 1) {
+            $scope.ShowToast('Información Actualizada ','success');
+            $scope.datosCompletosCustomer = true;
+            document.getElementById('formModal').style.display = 'none';
+
+          } else {
+            $scope.ShowToast('No pudimos cargar la información de tu datos ,porfavor intenta mas tarde.', 'danger');
+            document.getElementById('formModal').style.display = 'none';
+          }
+        })
+        .error(function () {
+          $scope.ShowToast('No pudimos cargar la información de tus contactos, por favor intenta de nuevo más tarde.', 'danger');
+        });
+      }
+    };
+
     $scope.validateAgreementCSP = function (producto) {
       return EmpresasXEmpresasFactory.getAcceptanceAgreementByClient(producto.IdEmpresaUsuarioFinal)
       .success(function (result) {
         if (!result.AceptoTerminosMicrosoft) {
+          if (!validateCustomerData(result.data[0])) {
+            $scope.ShowToast('Completa la información para poder aceptar los términos y condiciones', 'danger');
+            document.getElementById('formModal').style.display = 'block';
+            $scope.datosCompletosCustomer = false;
+          }
           $scope.ShowToast('No has aceptado los términos y condiciones que necesita microsoft.', 'danger');
           $scope.IdEmpresaUsuarioFinalTerminos = producto.IdEmpresaUsuarioFinal;
           $scope.terminos = true;

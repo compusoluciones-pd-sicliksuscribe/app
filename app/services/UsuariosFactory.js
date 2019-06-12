@@ -97,11 +97,6 @@
       factory.refreshToken();
       return $http.put($rootScope.API + 'finalUserData/', finalUser);
     };
-
-    factory.getInformationFinalUser = function (IdUsuario) {
-      factory.refreshToken();
-      return $http.get($rootScope.API + 'getInfoContactFinalUser/' + IdUsuario);
-    };
     return factory;
   };
 
