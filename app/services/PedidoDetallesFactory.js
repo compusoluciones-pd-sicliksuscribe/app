@@ -102,6 +102,11 @@
       return $http.put($rootScope.API + 'PedidoDetalles', PedidoDetalle);
     };
 
+    factory.putPedidoDetalleMicrosoft = function (PedidoDetalle) {
+      factory.refreshToken();
+      return $http.put($rootScope.API + 'orders/update-status', PedidoDetalle);
+    };
+
     factory.updateProductoAutodesk = function (PedidoDetalle, flag) {
       factory.refreshToken();
       return $http.put($rootScope.API + 'autodesk/subscription/update/' + flag, PedidoDetalle);
