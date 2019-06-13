@@ -12,7 +12,6 @@
     $scope.Renovar = {};
     $scope.terminos = false;
     $scope.SessionCookie = $cookies.getObject('Session');
-    $scope.buttonRenew = 0;
 
     $scope.init = function () {
       $scope.CheckCookie();
@@ -183,8 +182,7 @@
         $scope.ShowToast('No se puede actualizar a un numero mayor de suscripciones.', 'danger');
         return;
       }
-      $scope.buttonRenew=0;
-      const renovated = $scope.buttonRenew;
+
       var PedidoActualizado = {
         IdPedidoDetalle: detalles.IdPedidoDetalle,
         IdEmpresaUsuarioFinal: Params.IdEmpresaUsuarioFinal,
@@ -192,9 +190,6 @@
         CantidadProxima: detalles.CantidadProxima,
         CargoRealizadoProximoPedido: pedido.CargoRealizadoProximoPedido,
         PorCancelar: 0,
-        buttonRenew: renovated ,
-        IdProducto:Detalles.IdProducto,
-        IdEmpresaUsuarioFinal:Detalles.IdEmpresaUsuarioFinal,
       };
       if (!detalles.Activo) {
         PedidoActualizado.PorActualizarCantidad = 0;
@@ -267,7 +262,6 @@
       $scope.guardar = Pedido;
       $scope.form.habilitar = true;
       $scope.$emit('LOAD');
-      const renovated = 2;
       const order = {
         CargoRealizadoProximoPedido: Number(Pedido.CargoRealizadoProximoPedido),
         Activo: 0,
@@ -320,7 +314,6 @@
             $scope.ActualizarMonitor();
             $scope.form.habilitar = false;
           }
-          console.log(result);
         })
         .error(function (error) {
           $scope.ShowToast(error, 'danger');

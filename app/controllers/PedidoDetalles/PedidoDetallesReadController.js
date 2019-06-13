@@ -71,7 +71,7 @@
           maker = 'Compusoluciones';
           break;
         case makers.APERIO:
-          maker = 'Aperio';
+          maker = 'HRWARE';
           break;
         case makers.HP:
           maker = 'HP';

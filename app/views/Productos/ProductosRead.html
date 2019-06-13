@@ -136,15 +136,15 @@
 
 
                         <div class="form-group col-xs-0 col-sm-0 col-md-4 col-lg-4" style="margin:-7px; margin-bottom:10px;">
-                            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-show="BuscarProductos.IdFabricante === 9">
+                            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-show="Producto.IdFabricante === 9">
                                     <div class="row">
                                         <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                                            <button ng-click="RequestDataVwareProduct(Producto)" type="button" class="btn btn-primary">Me interesa</button>
+                                            <button ng-click="RequestDataVmwareProduct(Producto)" type="button" class="btn btn-primary">Me interesa</button>
                                         </div>
                                     </div>
                             </div>
                         </div>
-                        <div class="form-group col-xs-0 col-sm-0 col-md-4 col-lg-4 softBlue" style="margin:-7px; margin-bottom:10px;" ng-hide="BuscarProductos.IdFabricante === 9">
+                        <div class="form-group col-xs-0 col-sm-0 col-md-4 col-lg-4 softBlue" style="margin:-7px; margin-bottom:10px;" ng-hide="Producto.IdFabricante === 9">
 
                             <div class="row"  >
                                 <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -292,27 +292,6 @@
                                         <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6" ng-show="SessionCookie.IdTipoAcceso === 1 || SessionCookie.IdTipoAcceso === 2 || SessionCookie.IdTipoAcceso === 3 || SessionCookie.IdTipoAcceso === 4">
                                                 <button class="btn btn-primary addOption" style="float: right;" data-toggle="modal" data-target="#formModal" ng-show="((terminos) && (Producto.IdFabricante === 1) && (!datosCompletosCustomer))">Completar datos</md-button>
                                         </div>
-
-                            <div class="row"  ng-hide="BuscarProductos.IdFabricante === 9">
-                                    <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                        <div class="row">
-                                            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                                                <button type="button" ng-show="0" ng-click="AgregarGuardados(Producto.IdProducto)" class="btn btn-link btn-block favoriteOption"><span class="glyphicon glyphicon-star"></span> Agregar a favoritos</span></button>
-                                            </div>
-                                            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-show="((terminos) && (Producto.IdFabricante === 1))">
-                                                <p >* Primero debes de aceptar términos y condiciones</p>  
-                                            </div>
-                                            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-show="SessionCookie.IdTipoAcceso === 1 || SessionCookie.IdTipoAcceso === 2 || SessionCookie.IdTipoAcceso === 3 || SessionCookie.IdTipoAcceso === 4">
-                                                    <button  ng-click="updateEnterprise(Producto)" ng-show="Producto.IdFabricante === 1 && usuariosSinDominio[Producto.IdEmpresaUsuarioFinal] === false" class="btn btn-primary updateDomain" style="float: center;">Asignar Dominio Microsoft</button>
-                                                <button class="btn btn-success addOption" ng-click="previousISVValidate(Producto)" ng-disabled="!frmCantidad.$valid || Producto.IdFabricante === 1 && usuariosSinDominio[Producto.IdEmpresaUsuarioFinal] === false" style="float: center;" ng-hide="((terminos) && (Producto.IdFabricante === 1))">Agregar al carrito</md-button>
-                                                <button class="btn btn-danger addOption" style="float: center;" data-toggle="modal" data-target="#terminosModal" ng-show="((terminos) && (Producto.IdFabricante === 1))">Aceptar términos</md-button>
-                                            </div>
-
-                                            
-                                        </div>
-                                    </div>
-                            </div>
-
                                         </form>
 
                             </div>

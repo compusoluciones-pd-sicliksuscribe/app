@@ -692,7 +692,7 @@
       $location.path('/Empresa/ActualizarDominio/' + Producto.IdEmpresaUsuarioFinal);
     };
 
-    $scope.RequestDataVwareProduct= (Producto) => {
+    $scope.RequestDataVmwareProduct= (Producto) => {
       const Product = {
         userName : $scope.SessionCookie.Nombre,
         userSecondName : $scope.SessionCookie.ApellidoPaterno,
@@ -706,9 +706,9 @@
       ProductosFactory.postRequestDataVwareProduct(Product)
       .success(function (result) {
         if (!result.success) {
-          $scope.ShowToast('no se pudo mandar la notifiacion intente mas tarde', 'danger');
+          $scope.ShowToast('No se pudo mandar la notificación intente mas tarde', 'danger');
         } else {
-          $scope.ShowToast('Se envió tu información al ditribuidor,pronto se pondran en contacto para brindar te información.', 'success');
+          $scope.ShowToast('Se envió tu información al distribuidor, pronto se pondrán en contacto para brindar información.', 'success');
           
         }
       })
