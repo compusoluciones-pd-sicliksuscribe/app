@@ -26,14 +26,31 @@
 
   <div class="row" ng-hide="DeshabilitarPagar">
     <div>        
-      <input ng-model="PedidosObj[key].Check" ng-click="pedidosPorPagar(key);" type="radio" name="payType" id="Tarjeta" value="1" checked/> Pagar con Tarjeta
+      <input ng-model="paymethod" ng-click="pedidosPorPagar(key);" type="radio" name="payType" id="Tarjeta" value="1" ng-change="ActualizarFormaPago(1);" checked/> Pagar con Tarjeta
     </div>
     <div>
       <!-- <input type="radio" name="payType" id="PayPal" value="3"/> Pagar con PayPal -->
     </div>
-    <div>
-      <input ng-model="PedidosObj[key].Check" ng-click="pedidosPorPagar(key);" type="radio" name="payType" id="Prepago" value="4"/> Transferencia (Solo Pesos MXN)
-      <label for="" class="SaldoReal" ng-hide="infoEmpresa.Transferencia === 0 || infoEmpresa.Transferencia === null"> &nbsp;<b>Tu Saldo es: {{infoEmpresa.Transferencia | currency}}</b> </label>
+    <div class="form-group row">
+      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+        <input ng-model="paymethod" ng-click="pedidosPorPagar(key);" type="radio" name="payType" id="Prepago" value="4" ng-change="ActualizarFormaPago(4);"/> Transferencia
+      </div>
+      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+        <label for="" class="SaldoReal" ng-hide="isPayingWithCreditCard"> &nbsp;<b>Tu Saldo es: {{Distribuidor.MonedaPago === 'Pesos' ? infoEmpresa.Transferencia : infoEmpresa.TransferenciaDolares | currency}} {{Distribuidor.MonedaPago}}</b> </label>
+        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+            <div class="form-group" ng-hide="isPayingWithCreditCard() || isPayingWithPaypal()" >
+              <label for="" class="">* ¿Con qué moneda quieres pagarlos?</label>
+              <div class="radio" style="margin-left:20px" >
+                <div>
+                  <input id="pesos" type="radio" name="MonedaPago" ng-change="cambiaMoneda('Pesos', key)" value="Pesos" ng-model="Distribuidor.MonedaPago">Pesos
+                </div>
+                <div ng-if="isPayingWithPrepaid()">
+                  <input id="dolares" type="radio" name="MonedaPago"  value="Dólares" ng-model="Distribuidor.MonedaPago" ng-change="cambiaMoneda('Dólares', key)">Dólares
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -42,14 +59,14 @@
     <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
       <label>Tipo de cambio del día: </label> {{TipoCambio | currency: "$":4}} pesos
       <br>
-      <label>Servicio electrónico: </label> {{ServicioElectronico | currency}} pesos
+      <div ng-if="isPayingWithCreditCard()"><label>Servicio electrónico: </label> {{ServicioElectronico | currency}} {{Distribuidor.MonedaPago}}</div>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-      <label>Subtotal: </label> {{Subtotal | currency }} pesos
+      <label>Subtotal: </label> {{Subtotal | currency }} {{Distribuidor.MonedaPago}}
       <br>
-      <label>IVA</label> {{Iva | currency}} pesos
+      <label>IVA</label> {{Iva | currency}} {{Distribuidor.MonedaPago}}
       <br>
-      <label>Total a pagar: </label> {{Total | currency}} pesos
+      <label>Total a pagar: </label> {{Total | currency}} {{Distribuidor.MonedaPago}}
     </div>
   </div>
 

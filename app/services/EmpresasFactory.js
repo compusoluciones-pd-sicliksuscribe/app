@@ -66,6 +66,11 @@
       return $http.put($rootScope.API + 'Empresas/CambiaMoneda', parametros);
     };
 
+    factory.putCambiaMonedaMonitorPXP = function (orders, moneda) {
+      factory.refreshToken();
+      return $http.put($rootScope.API + 'orders/CambiaMonedaPXP/' + moneda, orders);
+    };
+
     factory.putEmpresaCambiaMonedaFinalUser = function (parametros) {
       factory.refreshToken();
       return $http.put($rootScope.API + 'Empresas/CambiaMoneda/FinalUser', parametros);

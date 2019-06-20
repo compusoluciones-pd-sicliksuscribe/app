@@ -182,14 +182,14 @@
       return $http.post($rootScope.API + 'orders/renovations/payments/paypal/1', Pedidos);
     };
 
-    factory.monitorCalculationsPrepaid = function (Pedidos) {
+    factory.monitorCalculationsPrepaid = function (Pedidos, moneda) {
       factory.refreshToken();
-      return $http.post($rootScope.API + 'orders/renovations/payments/prepaid/1', Pedidos);
+      return $http.post($rootScope.API + 'orders/renovations/payments/prepaid/1/' + moneda, Pedidos);
     };
 
-    factory.payWithPrePaid = function (Pedidos) {
+    factory.payWithPrePaid = function (Pedidos, moneda) {
       factory.refreshToken();
-      return $http.post($rootScope.API + 'orders/pay-with-prepaid', Pedidos);
+      return $http.post($rootScope.API + 'orders/pay-with-prepaid/' + moneda, Pedidos);
     };
 
     factory.payWidthCard = function (Pedidos) {
