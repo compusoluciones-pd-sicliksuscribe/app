@@ -10,6 +10,15 @@
     $scope.Total = 0;
     $scope.DeshabilitarPagar = false;
     $scope.todos = 0;
+    $scope.MonedaPago = 'Pesos';
+    $scope.paymethod = 1;
+    const paymentMethods = {
+      CREDIT_CARD: 1,
+      CS_CREDIT: 2,
+      PAYPAL: 3,
+      PREPAY: 4
+    };
+  
     function groupBy (array, f) {
       var groups = {};
       array.forEach(function (o) {
@@ -88,6 +97,44 @@
     };
     $scope.init();
 
+    $scope.isPayingWithCreditCard = function () {
+      const IdFormaPago = $scope.paymethod;
+      return IdFormaPago === paymentMethods.CREDIT_CARD;
+    };
+
+    $scope.isPayingWithPaypal = function () {
+      const IdFormaPago = $scope.paymethod;
+      return IdFormaPago === paymentMethods.PAYPAL;
+    };
+
+    $scope.isPayingWithPrepaid = function () {
+      const IdFormaPago = $scope.paymethod;
+      return IdFormaPago === paymentMethods.PREPAY;
+    };
+
+    $scope.ActualizarFormaPago = function (moneda) {
+      $scope.paymethod = moneda;
+      if ($scope.isPayingWithCreditCard() || $scope.isPayingWithPaypal()) {
+        $scope.MonedaPago = 'Pesos';
+      }
+      CambiarMoneda();
+    };
+
+    const CambiarMoneda = function () {
+      EmpresasFactory.putCambiaMonedaMonitorPXP($scope.PedidosSeleccionadosParaPagar, $scope.MonedaPago)
+      .then(function (result) {
+      })
+      .catch(function (result) { error(result.data); });
+    };
+
+    $scope.CambiarMoneda = function (moneda = "Pesos", key = "") {
+      $scope.MonedaPago = moneda;
+      if (key != "") {
+        $scope.pedidosPorPagar(key);
+      };
+      CambiarMoneda();
+    };
+
     $scope.ActualizarPagoAutomatico = function () {
       EmpresasFactory.updateAutomaticPayment($scope.infoEmpresa.RealizarCargoAutomatico)
         .success(function (result) {
@@ -156,7 +203,7 @@
         $scope.Total = 0;
       }
       if ($scope.PedidosSeleccionadosParaPagar.length !== 0 && document.getElementById('Prepago').checked) {
-        PedidoDetallesFactory.monitorCalculationsPrepaid({ Pedidos: $scope.PedidosSeleccionadosParaPagar })
+        PedidoDetallesFactory.monitorCalculationsPrepaid({ Pedidos: $scope.PedidosSeleccionadosParaPagar }, $scope.MonedaPago)
           .success(function (calculations) {
             if (calculations.total) {
               $scope.Subtotal = calculations.subtotal;
@@ -217,6 +264,7 @@
             $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
           });
       }
+      CambiarMoneda();
     };
 
     $scope.mostrarDetalles = function (key) {
@@ -367,10 +415,10 @@
 
     $scope.preparePrePaid = function () {
       if ($scope.PedidosSeleccionadosParaPagar.length > 0) {
-        PedidoDetallesFactory.payWithPrePaid({ Pedidos: $scope.PedidosSeleccionadosParaPagarPrepaid })
+        PedidoDetallesFactory.payWithPrePaid({ Pedidos: $scope.PedidosSeleccionadosParaPagarPrepaid }, $scope.MonedaPago)
         .success(function (response) {
           if (response.statusCode === 400) {
-            $scope.ShowToast(response.message, 'danger');
+            $scope.ShowToast(response.message.message, 'danger');
           } else {
             $scope.ShowToast('Pago realizado correctamente.', 'success');
             $location.path('/MonitorPagos/refrescar');
