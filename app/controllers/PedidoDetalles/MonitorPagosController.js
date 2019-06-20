@@ -5,12 +5,12 @@
     $scope.PedidosSeleccionadosParaPagarPrepaid = [];
     $scope.PedidosObj = {};
     $scope.ServicioElectronico = 0;
+    $scope.Distribuidor = {};
     $scope.Subtotal = 0;
     $scope.Iva = 0;
     $scope.Total = 0;
     $scope.DeshabilitarPagar = false;
     $scope.todos = 0;
-    $scope.MonedaPago = 'Pesos';
     $scope.paymethod = 1;
     const paymentMethods = {
       CREDIT_CARD: 1,
@@ -59,6 +59,7 @@
       if ($scope.currentPath === '/MonitorPagos') {
         $scope.CheckCookie();
         confirmPayPal();
+        $scope.Distribuidor.MonedaPago = 'Pesos';
       }
       $location.path('/MonitorPagos');
       PedidoDetallesFactory.getPendingOrdersToPay()
@@ -115,24 +116,26 @@
     $scope.ActualizarFormaPago = function (moneda) {
       $scope.paymethod = moneda;
       if ($scope.isPayingWithCreditCard() || $scope.isPayingWithPaypal()) {
-        $scope.MonedaPago = 'Pesos';
+        $scope.Distribuidor.MonedaPago = 'Pesos';
       }
       CambiarMoneda();
     };
 
-    const CambiarMoneda = function () {
-      EmpresasFactory.putCambiaMonedaMonitorPXP($scope.PedidosSeleccionadosParaPagar, $scope.MonedaPago)
+    $scope.CambiarMoneda = CambiarMoneda;
+
+    $scope.cambiaMoneda = function (tipoMoneda, key) {
+      $scope.Distribuidor.MonedaPago = tipoMoneda || 'Pesos';
+      $scope.pedidosPorPagar(key);
+    }
+
+    var CambiarMoneda = function (tipoMoneda, key) {
+      $scope.Distribuidor.MonedaPago = tipoMoneda || 'Pesos';
+      const MonedaPago = $scope.Distribuidor.MonedaPago;
+      $scope.pedidosPorPagar(key);
+      EmpresasFactory.putCambiaMonedaMonitorPXP($scope.PedidosSeleccionadosParaPagar, MonedaPago)
       .then(function (result) {
       })
       .catch(function (result) { error(result.data); });
-    };
-
-    $scope.CambiarMoneda = function (moneda = "Pesos", key = "") {
-      $scope.MonedaPago = moneda;
-      if (key != "") {
-        $scope.pedidosPorPagar(key);
-      };
-      CambiarMoneda();
     };
 
     $scope.ActualizarPagoAutomatico = function () {
@@ -203,7 +206,7 @@
         $scope.Total = 0;
       }
       if ($scope.PedidosSeleccionadosParaPagar.length !== 0 && document.getElementById('Prepago').checked) {
-        PedidoDetallesFactory.monitorCalculationsPrepaid({ Pedidos: $scope.PedidosSeleccionadosParaPagar }, $scope.MonedaPago)
+        PedidoDetallesFactory.monitorCalculationsPrepaid({ Pedidos: $scope.PedidosSeleccionadosParaPagar }, $scope.Distribuidor.MonedaPago)
           .success(function (calculations) {
             if (calculations.total) {
               $scope.Subtotal = calculations.subtotal;
@@ -264,7 +267,6 @@
             $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
           });
       }
-      CambiarMoneda();
     };
 
     $scope.mostrarDetalles = function (key) {
@@ -415,7 +417,7 @@
 
     $scope.preparePrePaid = function () {
       if ($scope.PedidosSeleccionadosParaPagar.length > 0) {
-        PedidoDetallesFactory.payWithPrePaid({ Pedidos: $scope.PedidosSeleccionadosParaPagarPrepaid }, $scope.MonedaPago)
+        PedidoDetallesFactory.payWithPrePaid({ Pedidos: $scope.PedidosSeleccionadosParaPagarPrepaid }, $scope.Distribuidor.MonedaPago)
         .success(function (response) {
           if (response.statusCode === 400) {
             $scope.ShowToast(response.message.message, 'danger');
