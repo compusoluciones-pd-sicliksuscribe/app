@@ -236,9 +236,103 @@
       } catch (error) { }
     };
 
-    $scope.goToPage = function (location) {
+    function createLocationTracker (location) {
+      let locationfstPart;
+      ga(function (tracker) {
+        locationfstPart = tracker.get('location');
+      })
+      ga('set', 'page', locationfstPart + '#/' + location);
+      ga('send', 'pageview');
+    }
+
+    $scope.goToPage = function (location, carousel) {
+      createLocationTracker(location);
+      if (location === 'Productos')
+        ga('send', 'event', 'Catalogo de ' + location, 'Redireccionar', 'Redirigió a: /' + location);
+      else if (carousel) {
+        ga('send', 'event', 'Catalogo de ' + location, 'Redireccionar desde carousel', 'Redirigió a: /' + location);
+      }
+      else
+        ga('send', 'event', location, 'Redireccionar', 'Redirigió a: /' + location);
       $scope.navCollapsed = true;
       $location.path('/' + location);
+    };
+
+    $scope.gaAgregarCarrito = function (producto) {
+      ga('send', 'event', 'Carrito', 'Agregar al carrito', 'Se agregó producto: ' + producto.IdERP + ' - ' + producto.Nombre);
+    };
+
+    $scope.gaFinCompra = function () {
+      createLocationTracker('Comprar');
+      ga('send', 'event', 'Carrito', 'Finalizar compra', 'Detalles del pedido');
+    };
+
+    $scope.gaComprar = function (orders, distribuitorDetails) {
+      $scope.PedidoDetalles = orders;
+      $scope.Distribuidor = distribuitorDetails;
+      let total = 0;
+      let pedidos = '|';
+      orders.forEach(order => {
+        if (order.MonedaPago === 'Pesos') {
+          total += ($scope.calcularTotal(order.IdPedido) / order.TipoCambio);
+        } else {
+          total += $scope.calcularTotal(order.IdPedido);
+        }
+        pedidos = pedidos + String(order.IdPedido) + '|';
+      });
+      createLocationTracker('SuccessOrder');
+      ga('send', 'event', 'Carrito', 'Concretar compra', 'Se realizó la compra. Pedidos: ' + pedidos, Math.floor(total));
+    };
+
+    $scope.gaAceptarCompra = function () {
+      createLocationTracker('');
+      ga('send', 'event', 'Carrito', 'Aceptar compra', 'Se aceptó la compra');
+    }
+
+    $scope.calcularSubTotal = function (IdPedido) {
+      let total = 0;
+      $scope.PedidoDetalles.forEach(function (order) {
+        order.Productos.forEach(function (product) {
+          if (order.IdPedido === IdPedido && !product.PrimeraCompraMicrosoft) {
+            const productPrice = $scope.calculatePriceWithExchangeRate(order, product, 'PrecioUnitario');
+            if (isTiredProduct(product)) {
+              total = total + productPrice;
+            } else {
+              total = total + (productPrice * product.Cantidad);
+            }
+          }
+        });
+      });
+      return total;
+    };
+
+    $scope.calcularTotal = function (IdPedido) {
+      let total = $scope.calcularSubTotal(IdPedido);
+      let iva = 0;
+      if ($scope.Distribuidor.ZonaImpuesto === 'Normal') iva = 0.16 * total;
+      if ($scope.Distribuidor.ZonaImpuesto === 'Nacional') iva = 0.16 * total;
+      if ($scope.Distribuidor.ZonaImpuesto === 'Frontera') iva = 0.11 * total;
+      total = total + iva;
+      return total;
+    };
+
+    $scope.calculatePriceWithExchangeRate = function (order, details, value) {
+      let total = 0;
+      if (order.MonedaPago === 'Pesos' && details.MonedaPrecio === 'Dólares') {
+        total = details[value] * order.TipoCambio;
+      } else if (order.MonedaPago === 'Dólares' && details.MonedaPrecio === 'Pesos' && details.IdProducto !== ELECTRONIC_SERVICE) {
+        total = details[value] / order.TipoCambio;
+      } else {
+        total = details[value];
+      }
+      if (order.IdEsquemaRenovacion === 2 && value === 'PrecioRenovacion') {
+        total *= 12;
+      }
+      return total;
+    };
+
+    const isTiredProduct = function (product) {
+      return product.tieredPrice > 0;
     };
 
     $scope.CerrarSesion = function () {

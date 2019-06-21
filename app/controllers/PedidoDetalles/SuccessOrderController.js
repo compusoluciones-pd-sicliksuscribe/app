@@ -5,6 +5,7 @@
     $scope.Session = $cookies.getObject('Session');
 
     $scope.AceptaPedido = function () {
+      angular.element(document.getElementById('auxScope')).scope().gaAceptarCompra();
       deleteCookie('orderIdsCookie');
       deleteCookie('compararPedidosAnteriores');
       $location.path('/');
