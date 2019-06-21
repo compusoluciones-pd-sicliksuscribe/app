@@ -1,5 +1,5 @@
 (function () {
-  var ProductosReadController = function ($scope, $log, $location, $cookies, $routeParams, ProductosFactory, FabricantesFactory, TiposProductosFactory, PedidoDetallesFactory, TipoCambioFactory, ProductoGuardadosFactory, EmpresasXEmpresasFactory, UsuariosFactory, $anchorScroll) {
+  var ProductosReadController = function ($scope, $log, $location, $cookies, $routeParams, ProductosFactory, AmazonDataFactory, FabricantesFactory, TiposProductosFactory, PedidoDetallesFactory, TipoCambioFactory, ProductoGuardadosFactory, EmpresasXEmpresasFactory, UsuariosFactory, $anchorScroll) {
     var BusquedaURL = $routeParams.Busqueda;
     const HRWAWRE_EXTRA_EMPOLYEES_GROUPING = 1000;
     $scope.BuscarProductos = {};
@@ -713,10 +713,34 @@
         }
       })
 
+      };
+    $scope.RequestDataAwsProduct = (Producto) => {
+      console.log("chingdo por que no sale ");
+      const Product = {
+        userName : $scope.SessionCookie.Nombre,
+        userSecondName : $scope.SessionCookie.ApellidoPaterno,
+        userMothersSecond : $scope.SessionCookie.ApellidoMaterno,
+        userEmail : $scope.SessionCookie.CorreoElectronico,
+        userCompanyName : $scope.SessionCookie.NombreEmpresa,
+        productName : Producto.Nombre,
+        productDesciption : Producto.Descripcion,
+        productIdErp : Producto.IdERP,
+      };
+      AmazonDataFactory.postRequestDataAwsProduct(Product)
+      .success(function (result) {
+        console.log(result);
+        if (!result.success) {
+          $scope.ShowToast('No se pudo mandar la notificación intente mas tarde', 'danger');
+        } else {
+          $scope.ShowToast('Se envió tu información al distribuidor, pronto se pondrán en contacto para brindar información.', 'success');
+          
+        }
+      })
+  
     };
   };
 
-  ProductosReadController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'ProductosFactory', 'FabricantesFactory', 'TiposProductosFactory', 'PedidoDetallesFactory', 'TipoCambioFactory', 'ProductoGuardadosFactory', 'EmpresasXEmpresasFactory', 'UsuariosFactory', '$anchorScroll'];
+  ProductosReadController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'ProductosFactory','AmazonDataFactory', 'FabricantesFactory', 'TiposProductosFactory', 'PedidoDetallesFactory', 'TipoCambioFactory', 'ProductoGuardadosFactory', 'EmpresasXEmpresasFactory', 'UsuariosFactory', '$anchorScroll'];
 
   angular.module('marketplace').controller('ProductosReadController', ProductosReadController);
 }());
