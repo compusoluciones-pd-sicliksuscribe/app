@@ -1,3 +1,4 @@
+
 (function () {
   var AmazonDataFactory = function ($http, $cookies, $rootScope) {
   var factory = {};
@@ -11,15 +12,22 @@
 
   factory.refreshToken();
 
-  factory.getDataConsumptionAws = function () {
+  factory.getDataServiceAws = function () {
     factory.refreshToken();
-    return $http.get($rootScope.API + 'aws/getConsumptionAws');
+    return $http.get($rootScope.API + 'aws/getDataServicesAws');
   };
 
-  factory.postRequestDataAwsProduct= function (body) {
+  factory.getCustomersAws = function () {
     factory.refreshToken();
-    return $http.post($rootScope.API + 'aws/requestDatAwsProducts', body);
+    return $http.get($rootScope.API + 'aws/getCustomersAws');
   };
+
+  factory.getConsolesAws = function (IdCustomer) {
+    factory.refreshToken();
+    return $http.get($rootScope.API + 'aws/getConsolesAws/'+IdCustomer);
+  };
+
+
 
   return factory;
 

@@ -1,28 +1,60 @@
-// (function () {
-//     var MonitorDetalleAwsController = function ($scope, $cookies, $location, AmazonDataFactory) {
-//       console.log("si agarro el controlador ya de perdida xD ");
-//       // $scope.consumptions = {};
+(function () {
+    var MonitorDetalleAwsController = function ($scope, $cookies, $location, AmazonDataFactory) {
+
+      $scope.setCustomer = function(IdCustomer ){
+        $scope.IdCustomer=IdCustomer;
+        AmazonDataFactory.getConsolesAws($scope.IdCustomer)
+            .success(function (ConsolesAws) {
+            $scope.selectConsoles = ConsolesAws;
+            
+            })
+            .error(function (data, status, headers, config) {
+
+            $scope.ShowToast('No pudimos cargar la lista de consolas de Amazon, por favor intenta de nuevo más tarde.', 'danger');
+                });
+                
+            
+        }
       
-//       $scope.init = function () {
-//         $scope.CheckCookie();
+
+    //   $scope.setRfcAndNameEnterprise = function(rfc,name){
+    //     $scope.rfc=rfc;
+    //     $scope.nameEnterprise=name;
+    //   }
+      
+      $scope.init = function () {
+        $scope.IdCustomer = 0;
+        $scope.CheckCookie();
+   
+     AmazonDataFactory.getDataServiceAws()
+    .success(function (Customers) {
+      $scope.selectCustomers = Customers;
+     
+    })
+    .error(function (data, status, headers, config) {
+
+      $scope.ShowToast('No pudimos cargar la lista de consumos, por favor intenta de nuevo más tarde.', 'danger');
+        });
+
+
+
+    AmazonDataFactory.getCustomersAws()
+    .success(function (CustomersAws) {
+      $scope.selectCustomersAws = CustomersAws;
+     
+    })
+    .error(function (data, status, headers, config) {
+
+      $scope.ShowToast('No pudimos cargar la lista de clientes de Amazon, por favor intenta de nuevo más tarde.', 'danger');
+        });
+        
+    };
+   
+    $scope.init();
+    };
+    
+    MonitorDetalleAwsController.$inject = ['$scope', '$cookies', '$location', 'AmazonDataFactory'];
   
-  
-//         AmazonDataFactory.getDataConsumptionAws()
-//         .success(function (Customers) {
-//           $scope.selectCustomersAws = Customers;
-//         })
-//         .error(function (data, status, headers, config) {
-  
-//           $scope.ShowToast('No pudimos cargar la lista de fabricantes, por favor intenta de nuevo más tarde.', 'danger');
-  
-//           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-//         });
-//       };
-//       $scope.init();
-//     };
-  
-//     MonitorDetalleAwsController.$inject = ['$scope', '$cookies', '$location', 'AmazonDataFactory'];
-  
-//     angular.module('marketplace').controller('MonitorDetalleAwsController', MonitorDetalleAwsController);
-//   }());
+    angular.module('marketplace').controller('MonitorDetalleAwsController', MonitorDetalleAwsController);
+  }());
   
