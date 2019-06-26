@@ -27,7 +27,10 @@
     return $http.get($rootScope.API + 'aws/getConsolesAws/'+IdCustomer);
   };
 
-
+  factory.getSearchServiceAws = function (body) {
+    factory.refreshToken();
+    return $http.get($rootScope.API + 'aws/getSearchServiceAws/' + body.IdDistribuidor + '/' + body.IdConsola);
+  };
 
   return factory;
 

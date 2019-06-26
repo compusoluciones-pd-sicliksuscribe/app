@@ -17,16 +17,16 @@
 		<div class="form-group row">
 		  <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" style="float:right";>
 			  <select name="IdCustomer" class="form-control filterOption" ng-model="MonitorIdCustomer" ng-options="CustomerAws.IdDistribuidor  as CustomerAws.NombreEmpresa for CustomerAws in selectCustomersAws"
-				  ng-change="setCustomer(MonitorIdCustomer);">
+				  ng-change="getServicesAws(MonitorIdCustomer);">
 				  <option value="">Todos los Clientes</option> 
 			  </select>
 		  </div>
 		  
         </div>
-        <div class="form-group row" ng-hide="IdCustomer===0">
+        <div class="form-group row" ng-hide="!MonitorIdCustomer">
                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" style="float:right";>
                     <select name="IdConsole" class="form-control filterOption" ng-model="MonitorIdConsole" ng-options="ConsolaAws.IdConsola  as ConsolaAws.NombreConsola for ConsolaAws in selectConsoles"
-                        ng-change="">
+                        ng-change="getServicesAws(MonitorIdCustomer);">
                         <option value="">Todas las consolas </option> 
                     </select>
                 </div>
@@ -50,10 +50,9 @@
 			<th ng-show="SessionCookie.IdTipoAcceso==1 "><b> marketplace </b></th>
 			<th ng-show="SessionCookie.IdTipoAcceso==1 "><b> service </b></th>
 			<th ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3 "><b> total </b></th>
-			<tr ng-repeat="customer in selectCustomers | filter:MonitorIdCustomer | filter: MonitorIdConsole" class="repeat-animation">
-			 
+			<tr ng-repeat="customer in selectServices | filter:MonitorIdCustomer | filter: MonitorIdConsole" class="repeat-animation">
    <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3 ">
-               
+            11111
 				<div class="form-group">
 				  <b><h5>{{customer.RFC}}</h5></b>
                 </div>
@@ -101,9 +100,5 @@
 			</tr>
 		  </table>
 	  </div>
-  
-  </div>
-
-
 </div>
 </div>
