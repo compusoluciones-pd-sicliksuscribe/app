@@ -504,6 +504,7 @@
       })
 
       .when('/Restablecer', { controller: 'UsuariosRestablecerController', templateUrl: 'app/views/Usuarios/UsuariosRestablecer.html' })
+      .when('/CambiarContrasena/:encryptedObject', { controller: 'UsuariosCambiarContrasenaController', templateUrl: 'app/views/Usuarios/UsuariosCambiarContrasena.html' })
 
       /* .when('/:Subdominio', { controller: 'UsuariosLoginController', templateUrl: 'app/views/Usuarios/UsuariosLogin.html' }) */
 
