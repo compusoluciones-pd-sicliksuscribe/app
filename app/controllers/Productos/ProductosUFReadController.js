@@ -9,7 +9,7 @@
     /* $scope.TipoCambioMs = 0; */
     $scope.Mensaje = '...';
     $scope.selectProductos = {};
-
+    
     $scope.BuscarProducto = function (ResetPaginado) {
       $scope.Mensaje = 'Buscando...';
       $scope.BuscarProductos.IdEmpresaDistribuidor = $scope.currentDistribuidor.IdEmpresa;

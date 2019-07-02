@@ -10,6 +10,7 @@
     $scope.currentPath = $location.path();
     $scope.currentDistribuidor = {};
     $scope.currentDistribuidor.UrlLogo = 'images/LogoSVG.svg';
+    $scope.secondaryColor = '';
 
     $scope.ContarProductosCarrito = function () {
       if (!$scope.currentDistribuidor.IdEmpresa) {
@@ -170,6 +171,9 @@
       var arregloCifrasVersion = deviceDetector.browser_version.split('.');
       return arregloCifrasVersion[0];
     }
+    $scope.getColor = function() {
+      $scope.secondaryColor = $scope.currentDistribuidor.SecondaryColor === '#ffffff' ? `background:${$scope.currentDistribuidor.PrimaryColor}` : `background:${$scope.currentDistribuidor.SecondaryColor}`;
+    }
 
     $scope.init = function () {
       if (!validarNavegador(deviceDetector)) {
@@ -180,6 +184,7 @@
         $scope.navCollapsed = true;
         obtenerSubdominio();
         $scope.ActualizarMenu();
+        $scope.getColor();
       }
     };
 
