@@ -17,7 +17,7 @@
         $scope.Pagina = 0;
         $scope.BuscarProductos.Offset = $scope.Pagina * 6;
       }
-      // console.log($scope.BuscarProductos);
+
       ProductosXEmpresaFactory.postBuscarProductosXEmpresa($scope.BuscarProductos)
         .success(function (Productos) {
           if (Productos.success) {
@@ -28,7 +28,8 @@
               item.MonedaCompra = 'Dólares';
               return item;
             });
-            if ($scope.Productos === '') {
+
+            if (!$scope.Productos.data) {
               $scope.Mensaje = 'No encontramos resultados de tu búsqueda...';
               if ($scope.Pagina > 0) {
                 $scope.ShowToast('No encontramos más resultados de esta busqueda, regresaremos a la página anterior.', 'danger');
