@@ -61,6 +61,7 @@
 
     $scope.cambiarDistribuidor = function (Distribuidor, reload) {
       if (Distribuidor) {
+        $scope.getColor();
         var expireDate = new Date();
         expireDate.setTime(expireDate.getTime() + 600 * 60000);
         $cookies.putObject('currentDistribuidor', Distribuidor, { 'expires': expireDate, secure: $rootScope.secureCookie });
@@ -184,8 +185,8 @@
         $scope.navCollapsed = true;
         obtenerSubdominio();
         $scope.ActualizarMenu();
-        $scope.getColor();
       }
+      $scope.getColor();
     };
 
     $scope.init();
