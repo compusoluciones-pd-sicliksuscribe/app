@@ -44,6 +44,7 @@
         $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
       });
 
+      $scope.rfc=$scope.selectServices.RFC;     
       AmazonDataFactory.getConsolesAws(IdCustomer)
       .success(function (ConsolesAws) {
       $scope.selectConsoles = ConsolesAws;
@@ -53,8 +54,13 @@
 
       $scope.ShowToast('No pudimos cargar la lista de consolas de Amazon, por favor intenta de nuevo más tarde.', 'danger');
           });
+          
+      
+
+
 
     };
+
   
    
     $scope.init();
