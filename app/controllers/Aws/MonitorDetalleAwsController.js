@@ -8,12 +8,11 @@
      AmazonDataFactory.getDataServiceAws()
     .success(function (Services) {
       $scope.selectServices = Services;
+      $scope.selectServicesBase = Services;
     })
     .error(function (data, status, headers, config) {
       $scope.ShowToast('No pudimos cargar la lista de consumos, por favor intenta de nuevo más tarde.', 'danger');
     });
-
-
 
     AmazonDataFactory.getCustomersAws()
     .success(function (CustomersAws) {
@@ -27,36 +26,21 @@
         
     };
 
-    $scope.getServicesAws = function (IdCustomer) {
-      const payload = {
-        IdDistribuidor: $scope.MonitorIdCustomer || 'all',
-        IdConsola: $scope.MonitorIdConsole || 'all'
-      };
-      AmazonDataFactory.getSearchServiceAws(payload)
-      .success(function (Services) {
-        $scope.selectServices = Services;
-      })
-      .error(function (data, status, headers, config) {
-        $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
-
-        $scope.ShowToast('No pudimos cargar la lista de solicitudes, por favor intenta de nuevo más tarde.', 'danger');
-
-        $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+    const getFilteredByKey = function (key, value) {
+      return $scope.selectServicesBase.filter(function(e) {
+        return e[key] == value;
       });
+    }
 
-      AmazonDataFactory.getConsolesAws(IdCustomer)
-      .success(function (ConsolesAws) {
-      $scope.selectConsoles = ConsolesAws;
-      
-      })
-      .error(function (data, status, headers, config) {
-
-      $scope.ShowToast('No pudimos cargar la lista de consolas de Amazon, por favor intenta de nuevo más tarde.', 'danger');
-          });
-
+    $scope.getServicesAws = function (IdCustomer) {
+      IdCustomer ? (
+        $scope.selectServices =  getFilteredByKey("IdDistribuidor", IdCustomer),
+        $scope.selectConsoles = [... new Set($scope.selectServices.map(x => x.NombreConsola))]
+       ) : (
+        $scope.selectServices = $scope.selectServicesBase
+       );
     };
   
-   
     $scope.init();
     };
     
