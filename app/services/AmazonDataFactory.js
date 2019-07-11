@@ -29,7 +29,12 @@
 
   factory.getSearchServiceAws = function (body) {
     factory.refreshToken();
-    return $http.get($rootScope.API + 'aws/getSearchServiceAws/' + body.IdDistribuidor + '/' + body.IdConsola);
+    return $http.get($rootScope.API + 'aws/getTotalConsumptionByCustomer/' + body.IdDistribuidor + '/' + body.IdConsola);
+  };
+
+  factory.getConsumptionByCustomer = function (IdCustomer) {
+    factory.refreshToken();
+    return $http.get($rootScope.API + 'aws/getTotalConsumptionByCustomer/'+IdCustomer);
   };
 
   return factory;
