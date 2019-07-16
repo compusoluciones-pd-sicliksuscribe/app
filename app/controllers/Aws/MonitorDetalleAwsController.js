@@ -9,6 +9,7 @@
     .success(function (Services) {
       $scope.selectServices = Services;
       $scope.selectServicesBase = Services;
+      pagination();
     })
     .error(function (data, status, headers, config) {
       $scope.ShowToast('No pudimos cargar la lista de consumos, por favor intenta de nuevo más tarde.', 'danger');
@@ -39,8 +40,22 @@
        ) : (
         $scope.selectServices = $scope.selectServicesBase
        );
+       pagination();
     };
-  
+
+    const pagination = () => {
+      $scope.filtered = []
+      ,$scope.currentPage = 1
+      ,$scope.numPerPage = 10
+      ,$scope.maxSize = 5;
+
+      $scope.$watch('currentPage + numPerPage', function() {
+        var begin = (($scope.currentPage - 1) * $scope.numPerPage)
+        , end = begin + $scope.numPerPage;
+        
+        $scope.filtered = $scope.selectServices.slice(begin, end);
+      });
+    }
     $scope.init();
     };
     
