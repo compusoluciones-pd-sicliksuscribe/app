@@ -726,9 +726,9 @@
         productDesciption : Producto.Descripcion,
         productIdErp : Producto.IdERP,
       };
+
       AmazonDataFactory.postRequestDataAwsProduct(Product)
       .success(function (result) {
-        console.log(result);
         if (!result.success) {
           $scope.ShowToast('No se pudo mandar la notificación intente mas tarde', 'danger');
         } else {
@@ -736,6 +736,12 @@
           
         }
       })
+
+
+      
+
+
+
   
     };
   };

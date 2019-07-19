@@ -12,6 +12,11 @@
 
   factory.refreshToken();
 
+  factory.postRequestDataAwsProduct= function (body) {
+    factory.refreshToken();
+    return $http.post($rootScope.API + 'aws/requestDatAwsProducts', body);
+  };
+  
   factory.getDataServiceAws = function () {
     factory.refreshToken();
     return $http.get($rootScope.API + 'aws/getDataServicesAws');

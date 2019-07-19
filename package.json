@@ -6,7 +6,7 @@
   "dependencies": {
     "angular-colorpicker-directive": "^2.0.0",
     "angularjs-color-picker": "^3.4.8",
-    "serve": "^11.0.1",
+    "serve": "^11.1.0",
     "tinycolor2": "^1.4.1"
   },
   "devDependencies": {
