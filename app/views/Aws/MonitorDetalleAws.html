@@ -50,9 +50,8 @@
 			<th ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3 "><b> total </b></th>
 			<tr ng-repeat="customer in filtered | filter:MonitorIdCustomer | filter: MonitorIdConsole" class="repeat-animation">
    <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3 ">
-            11111
 				<div class="form-group">
-				  <b><h5>{{customer.RFC}}</h5></b>
+				  <b><h5>{{customer.Rfc}}</h5></b>
                 </div>
   
 			  </td>
