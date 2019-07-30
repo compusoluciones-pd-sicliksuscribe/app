@@ -50,8 +50,10 @@
         $scope.Pagina = 0;
         $scope.BuscarProductos.Offset = $scope.Pagina * 6;
       }
-
-      const IdTipoProducto = ($scope.BuscarProductos.IdTipoProducto === '' || $scope.BuscarProductos.IdTipoProducto == null) ? undefined : $scope.BuscarProductos.IdTipoProducto;
+      let IdTipoProducto = ($scope.BuscarProductos.IdTipoProducto === '' || $scope.BuscarProductos.IdTipoProducto == null) ? undefined : $scope.BuscarProductos.IdTipoProducto;
+      if ($scope.BuscarProductos.IdTipoProducto === 'Renovable' &&  $scope.BuscarProductos.IdFabricante !== 2 ) {
+        IdTipoProducto = undefined;
+      }
       $scope.BuscarProductos.IdTipoProducto = IdTipoProducto;
       ProductosFactory.getBuscarProductos($scope.BuscarProductos)
         .success(function (Productos) {
@@ -186,6 +188,7 @@
     const validateAutodeskData = function (Producto) {
       ProductosFactory.getProductContracts(Producto.IdEmpresaUsuarioFinal, Producto.IdProducto)
         .success(function (respuesta) {
+          console.log('RESPUESTA',respuesta)
           if (respuesta.success === 1) {
             Producto.contratos = respuesta.data;
             if (Producto.contratos.length >= 1) {
@@ -201,7 +204,9 @@
             if (Producto.IdAccionAutodesk === 1) Producto.contratos.unshift({ IdPedido: 0, NumeroContrato: 'Nuevo contrato...' });
             setProtectedRebatePrice(Producto.IdEmpresaUsuarioFinal);
           } else {
-            $scope.ShowToast('No pudimos cargar la información de tus contratos, por favor intenta de nuevo más tarde.', 'danger');
+            console.log('Productoooo'+ JSON.stringify(Producto));
+            console.log('Productoooo',Producto.contratos)
+            $scope.ShowToast('3 No pudimos cargar la información de tus contratos, por favor intenta de nuevo más tarde.', 'danger');
           }
         })
         .error(function () {
