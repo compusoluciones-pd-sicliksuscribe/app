@@ -33,9 +33,9 @@
       });
     }
 
-    $scope.getServicesAws = function (IdCustomer) {
-      IdCustomer ? (
-        $scope.selectServices =  getFilteredByKey("IdDistribuidor", IdCustomer),
+    $scope.getServicesAws = function () {
+      this.MonitorIdCustomer ? (
+        $scope.selectServices =  getFilteredByKey("IdDistribuidor", this.MonitorIdCustomer),
         $scope.selectConsoles = [... new Set($scope.selectServices.map(x => x.NombreConsola))]
        ) : (
         $scope.selectServices = $scope.selectServicesBase
@@ -43,6 +43,14 @@
        pagination();
     };
 
+    $scope.getConsoles = function () {
+      this.MonitorIdConsole ? (
+        $scope.selectServices =  getFilteredByKey("NombreConsola", this.MonitorIdConsole)
+       ) : (
+        $scope.selectServices =  getFilteredByKey("IdDistribuidor", this.MonitorIdCustomer)
+       );
+       pagination();
+    };
     const pagination = () => {
       $scope.filtered = []
       ,$scope.currentPage = 1

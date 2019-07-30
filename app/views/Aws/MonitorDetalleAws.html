@@ -17,7 +17,7 @@
 		<div class="form-group row">
 		  <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" style="float:right";>
 			  <select name="IdCustomer" class="form-control filterOption" ng-model="MonitorIdCustomer" ng-options="CustomerAws.IdDistribuidor  as CustomerAws.NombreEmpresa for CustomerAws in selectCustomersAws"
-				  ng-change="getServicesAws(MonitorIdCustomer);">
+				  ng-change="getServicesAws();">
 				  <option value="">Todos los Clientes</option> 
 			  </select>
 		  </div>
@@ -25,7 +25,7 @@
         </div>
         <div class="form-group row" ng-hide="!MonitorIdCustomer">
                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" style="float:right";>
-                    <select name="IdConsole" class="form-control filterOption" ng-model="MonitorIdConsole" ng-options="ConsolaAws as ConsolaAws for ConsolaAws in selectConsoles">
+                    <select name="IdConsole" class="form-control filterOption" ng-model="MonitorIdConsole" ng-options="ConsolaAws as ConsolaAws for ConsolaAws in selectConsoles" ng-change="getConsoles();">
                         <option value="">Todas las consolas </option> 
                     </select>
                 </div>
@@ -45,9 +45,8 @@
 			<th ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3 "><b>RFC</b></th>
 			<th ng-show="SessionCookie.IdTipoAcceso==1 "><b> Cliente </b></th>
 			<th ng-show="SessionCookie.IdTipoAcceso==1 "><b> Consola </b></th>
-			<th ng-show="SessionCookie.IdTipoAcceso==1 "><b> marketplace </b></th>
-			<th ng-show="SessionCookie.IdTipoAcceso==1 "><b> service </b></th>
-			<th ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3 "><b> total </b></th>
+			<th ng-show="SessionCookie.IdTipoAcceso==1 "><b> Service </b></th>
+			<th ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3 "><b> Total </b></th>
 			<tr ng-repeat="customer in filtered | filter:MonitorIdCustomer | filter: MonitorIdConsole" class="repeat-animation">
    <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1" ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3 ">
 				<div class="form-group">
@@ -71,25 +70,18 @@
 				</div>
   
 			  </td>
-			  <td style="word-wrap:break-word"  ng-show="SessionCookie.IdTipoAcceso==1 ">
-  
-				<div class="form-group">
-				  <b><h5>{{customer.marketplace}}</h5></b>
-				</div>
-  
-			  </td>
-  
+
 			 <td  ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3 ">
   
 				<div class="form-group">
-				  <b><h5>{{customer.service}}</h5></b>
+				  <b><h5>{{customer.Service}}</h5></b>
 				</div>
   
 			  </td>
 			  <td style="word-wrap:break-word"  ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3 ">
 			  
 			 <div class="form-group">
-					<b><h5>{{customer.total}}</h5></b>
+					<b><h5>{{customer.Total}}</h5></b>
 				  </div>
 		  
 			  </td>
