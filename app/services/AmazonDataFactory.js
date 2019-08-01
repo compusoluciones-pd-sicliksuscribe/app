@@ -32,6 +32,10 @@
     return $http.get($rootScope.API + 'aws/getSearchServiceAws/' + body.IdDistribuidor + '/' + body.IdConsola);
   };
 
+  factory.createOrdersAws = function () {
+    factory.refreshToken();
+    return $http.get($rootScope.API + 'aws/CreateOrders');
+  };
   return factory;
 
   };

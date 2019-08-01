@@ -7,13 +7,23 @@
 		</div>
 	</div>
 </div>
+
 <div class="container" ng-swipe-right="" ng-swipe-left="">
 	<div class="form-group row">
 	  <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
 		<h2 style="float:left;">Monitor de Consumo  AWS</h2>
 	  </div>
+
 	  <div class="col-xs-12 col-sm-12 col-md-4 col-lg-5   offset:right" style="float:right" >
-		
+		<div class="form-group row">
+			<div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12 " style="padding-rigth: 200; margin-top: 10px;">
+			  <div class="pull-right" ng-show="SessionCookie.IdTipoAcceso === 1 || SessionCookie.IdTipoAcceso === 2">
+				<button ng-click="generateOrdersAws()" class="btn btn-primary newClient">Generar Nuevos Pedidos </button>
+			  </div>
+			</div>
+		</div>
+
+
 		<div class="form-group row">
 		  <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" style="float:right";>
 			  <select name="IdCustomer" class="form-control filterOption" ng-model="MonitorIdCustomer" ng-options="CustomerAws.IdDistribuidor  as CustomerAws.NombreEmpresa for CustomerAws in selectCustomersAws"
@@ -31,13 +41,6 @@
                 </div>
                 
               </div>
-		<div class="form-group row">
-		  <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12 ">
-			<div class="pull-right" ng-show="SessionCookie.IdTipoAcceso === 2 || SessionCookie.IdTipoAcceso === 3">
-			  <button ng-click="" class="btn btn-primary newClient">Nueva Solicitud&nbsp;<span class="glyphicon glyphicon-plus"></span></button>
-			</div>
-		  </div>
-		  </div>
 	  </div>
   </div>
   <div class="table-responsive">

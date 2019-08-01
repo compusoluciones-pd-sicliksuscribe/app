@@ -6,7 +6,7 @@
         $scope.CheckCookie();
    
      AmazonDataFactory.getDataServiceAws()
-    .success(function (Services) {
+      .success(function (Services) {
       $scope.selectServices = Services;
       $scope.selectServicesBase = Services;
       pagination();
@@ -55,7 +55,17 @@
         
         $scope.filtered = $scope.selectServices.slice(begin, end);
       });
+
     }
+    $scope.generateOrdersAws = () => {
+      $scope.createOrders  = AmazonDataFactory.createOrdersAws()
+      if ($scope.createOrders.success) {
+        $scope.ShowToast("ordenes creadas con exito . . ", 'success');
+      } else {
+        $scope.ShowToast("Ocurrio un error por favor intenta mas tarde", 'danger');
+      }
+
+    };
     $scope.init();
     };
     
