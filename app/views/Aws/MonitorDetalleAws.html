@@ -1,10 +1,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <div class="container-fluid" ng-swipe-right="" ng-swipe-left="" ng-show="SessionCookie.IdTipoAcceso != 1">
 	<div class="form-group row text-right">
-		<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
-			<h2 style="float:right;">Monitor de suscripciones y servicios <i class="fa fa-question-circle tourButton" style="float:right; font-size:12px; margin-top:10px; margin-left:10px;"
-				 ng-click="IniciarTourMonitor();"></i></h2>
-		</div>
+		
 	</div>
 </div>
 
@@ -14,17 +11,17 @@
 		<h2 style="float:left;">Monitor de Consumo  AWS</h2>
 	  </div>
 
-	  <div class="col-xs-12 col-sm-12 col-md-4 col-lg-5   offset:right" style="float:right" >
+	  <div class="col-xs-12 col-sm-12 col-md-4 col-lg-5   offset:right" style="float:right"  ng-show="SessionCookie.IdTipoAcceso==1">
 		<div class="form-group row">
 			<div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12 " style="padding-rigth: 200; margin-top: 10px;">
-			  <div class="pull-right" ng-show="SessionCookie.IdTipoAcceso === 1 || SessionCookie.IdTipoAcceso === 2">
+			  <div class="pull-right" ng-show="SessionCookie.IdTipoAcceso === 1">
 				<button ng-click="generateOrdersAws()" class="btn btn-primary newClient">Generar Nuevos Pedidos </button>
 			  </div>
 			</div>
 		</div>
 
 
-		<div class="form-group row">
+		<div class="form-group row"  ng-show="SessionCookie.IdTipoAcceso==1>
 		  <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" style="float:right";>
 			  <select name="IdCustomer" class="form-control filterOption" ng-model="MonitorIdCustomer" ng-options="CustomerAws.IdDistribuidor  as CustomerAws.NombreEmpresa for CustomerAws in selectCustomersAws"
 				  ng-change="getServicesAws(MonitorIdCustomer);">
@@ -43,7 +40,7 @@
               </div>
 	  </div>
   </div>
-  <div class="table-responsive">
+  <div class="table-responsive"  ng-show="SessionCookie.IdTipoAcceso==1" >
 		  <table class="table table-hover table-responsive border-left-right-cero" style="table-layout: fixed;">
 			<th ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3 "><b>RFC</b></th>
 			<th ng-show="SessionCookie.IdTipoAcceso==1 "><b> Cliente </b></th>
@@ -100,8 +97,13 @@
 			</tr>
 		  </table>
 	  </div>
-	  <div style="margin: auto; width: 50%;" >
+	  <div style="margin: auto; width: 50%;" ng-show="SessionCookie.IdTipoAcceso==1" >
 		<pagination class="pager" ng-model="currentPage" total-items="selectServices.length" max-size="maxSize" boundary-links="true"></pagination>
+	  </div>
+
+
+	  <div>
+		  
 	  </div>
 </div>
 </div>
