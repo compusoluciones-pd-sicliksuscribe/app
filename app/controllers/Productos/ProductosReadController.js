@@ -203,8 +203,6 @@
             if (Producto.IdAccionAutodesk === 1) Producto.contratos.unshift({ IdPedido: 0, NumeroContrato: 'Nuevo contrato...' });
             setProtectedRebatePrice(Producto.IdEmpresaUsuarioFinal);
           } else {
-            console.log('Productoooo'+ JSON.stringify(Producto));
-            console.log('Productoooo',Producto.contratos)
             $scope.ShowToast('No pudimos cargar la información de tus contratos, por favor intenta de nuevo más tarde.', 'danger');
           }
         })
