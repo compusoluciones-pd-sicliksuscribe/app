@@ -188,7 +188,6 @@
     const validateAutodeskData = function (Producto) {
       ProductosFactory.getProductContracts(Producto.IdEmpresaUsuarioFinal, Producto.IdProducto)
         .success(function (respuesta) {
-          console.log('RESPUESTA',respuesta)
           if (respuesta.success === 1) {
             Producto.contratos = respuesta.data;
             if (Producto.contratos.length >= 1) {
@@ -206,7 +205,7 @@
           } else {
             console.log('Productoooo'+ JSON.stringify(Producto));
             console.log('Productoooo',Producto.contratos)
-            $scope.ShowToast('3 No pudimos cargar la información de tus contratos, por favor intenta de nuevo más tarde.', 'danger');
+            $scope.ShowToast('No pudimos cargar la información de tus contratos, por favor intenta de nuevo más tarde.', 'danger');
           }
         })
         .error(function () {
