@@ -160,10 +160,14 @@
           };
           EmpresasFactory.postEmpresaMicrosoft(ObjMicrosoft)
             .success(function (result) {
+              if (!result.success) {
+                $scope.ShowToast(result.message, 'danger');
+              }
               $location.path('/Empresas');
               $scope.ShowToast('Se esta importando la empresa, por favor espere ', 'success');
             })
             .error(function (data, status, headers, config) {
+              $scope.ShowToast(data.message, 'danger');
               $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
             });
         }

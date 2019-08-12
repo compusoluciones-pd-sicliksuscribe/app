@@ -188,8 +188,10 @@
         // porcentajeAnterior = $scope.porcentaje;
         $scope.precioCalculado = true;
         $scope.Productos.forEach(function (producto) {
-          producto.Precio = (($scope.porcentaje * producto.PrecioNormal / 100) + producto.PrecioNormal);
-          producto.Precio = Math.round(producto.Precio * 100) / 100;
+          const price = (($scope.porcentaje * producto.PrecioNormal / 100) + producto.PrecioNormal);
+          const roundPrice = Math.round(price * 100) / 100;
+          producto.Precio = roundPrice;
+          producto.PrecioRenovacion = roundPrice;
           producto.Moneda = producto.MonedaPrecio;
           $scope.btnGuardar = false;
         }, this);
@@ -232,7 +234,10 @@
         newP['IdProducto'] = p.IdProducto;
         newP['Moneda'] = p.Moneda;
         newP['Precio'] = p.Precio;
+        newP['PrecioRenovacion'] = p.Precio;
         newP['Activo'] = p.Activo;
+        newP['Fabricante'] = p.Fabricante;
+        newP['IdERP'] = p.IdERP;
         return newP;
       });
       ProductosFactory.putMisProductos(pFormat)

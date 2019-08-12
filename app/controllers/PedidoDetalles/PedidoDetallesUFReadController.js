@@ -90,6 +90,7 @@
     const getOrderDetails = function (validate) {
       return PedidoDetallesFactory.getPedidoDetallesUf($scope.currentDistribuidor.IdEmpresa)
         .then(function (result) {
+          console.log(result);
           if (result.data.success) {
             $scope.PedidoDetalles = result.data.data;
             $scope.PedidoDetalles.forEach(function (elem) {

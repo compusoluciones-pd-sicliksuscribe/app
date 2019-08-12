@@ -420,7 +420,7 @@
         PedidoDetallesFactory.payWithPrePaid({ Pedidos: $scope.PedidosSeleccionadosParaPagarPrepaid }, $scope.Distribuidor.MonedaPago)
         .success(function (response) {
           if (response.statusCode === 400) {
-            $scope.ShowToast(response.message.message, 'danger');
+            $scope.ShowToast(response.message, 'danger');
           } else {
             $scope.ShowToast('Pago realizado correctamente.', 'success');
             $location.path('/MonitorPagos/refrescar');
