@@ -312,7 +312,7 @@
 			<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"></div>
 			<div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
 				<button id="Renovar" class="pull-right btn btn-block btn-primary" style="margin-top: 20px" ng-if="!pedido.AutoRenovable"
-					ng-disabled="(!pedido.Renovacion || pedido.PorRenovar || pedido.Renovado) && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)"
+				ng-disabled="(!pedido.Renovacion || pedido.PorRenovar || pedido.Renovado) && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)"
 					data-toggle="modal" data-target="#renovarModal"
 					ng-click="AgregarContrato(pedido);">
 					Renovar
@@ -430,7 +430,7 @@
 
 					<br>
 
-					<div>
+					<div ng-show="pedido.AutoRenovable">
 						<label>Fecha limite de cancelación: </label>
 						<br/> {{ pedido.FechaCancelacion  }}
 					</div>
