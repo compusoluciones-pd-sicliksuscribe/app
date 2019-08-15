@@ -238,6 +238,8 @@
         newP['Activo'] = p.Activo;
         newP['Fabricante'] = p.Fabricante;
         newP['IdERP'] = p.IdERP;
+        newP['Descripcion'] = p.Descripcion;
+        newP['Nombre'] = p.Nombre;
         return newP;
       });
       ProductosFactory.putMisProductos(pFormat)
