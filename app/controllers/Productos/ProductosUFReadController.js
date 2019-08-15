@@ -277,7 +277,7 @@
         ResultadoFabricante2: Producto.IdProductoPadre,
         Especializacion: Producto.Especializacion,
         IdUsuarioContacto: Producto.IdUsuarioContacto,
-        IdAccionAutodesk: Producto.IdAccionAutodesk
+        IdAccionAutodesk: Producto.IdAccionAutodesk || 0
       };
 
       var NuevoProducto2 = {
