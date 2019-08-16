@@ -1,74 +1,74 @@
 (function () {
-    var MonitorDetalleAwsController = function ($scope, $cookies, $location, AmazonDataFactory) {
+  var MonitorDetalleAwsController = function ($scope, AmazonDataFactory) {
+    $scope.init = function () {
+      $scope.CheckCookie();
 
-      $scope.init = function () {
-        $scope.IdCustomer = 0;
-        $scope.CheckCookie();
-   
-     AmazonDataFactory.getDataServiceAws()
-    .success(function (Services) {
-      $scope.selectServices = Services;
-      $scope.selectServicesBase = Services;
-      pagination();
-    })
-    .error(function (data, status, headers, config) {
-      $scope.ShowToast('No pudimos cargar la lista de consumos, por favor intenta de nuevo más tarde.', 'danger');
-    });
+      AmazonDataFactory.getDataServiceAWS()
+        .success(function (Services) {
+          $scope.selectServices = Services;
+          $scope.selectServicesBase = Services;
 
-    AmazonDataFactory.getCustomersAws()
-    .success(function (CustomersAws) {
-      $scope.selectCustomersAws = CustomersAws;
-     
-    })
-    .error(function (data, status, headers, config) {
-
-      $scope.ShowToast('No pudimos cargar la lista de clientes de Amazon, por favor intenta de nuevo más tarde.', 'danger');
+          $scope.SessionCookie.IdTipoAcceso === 1 ? (
+            pagination()
+          ) : (
+            $scope.getServicesAws($scope.SessionCookie.IdEmpresa)
+          );
+        })
+        .error(() => {
+          $scope.ShowToast('No pudimos cargar la lista de consumos, por favor intenta de nuevo más tarde.', 'danger');
         });
-        
+
+      AmazonDataFactory.getCustomersAWS()
+        .success(function (CustomersAWS) {
+          $scope.selectCustomersAws = CustomersAWS;
+        })
+        .error(() => {
+          $scope.ShowToast('No pudimos cargar la lista de clientes de Amazon, por favor intenta de nuevo más tarde.', 'danger');
+        });
+
     };
 
-    const getFilteredByKey = function (key, value) {
-      return $scope.selectServicesBase.filter(function(e) {
+    const getFilteredByKey = (key, value) => {
+      return $scope.selectServicesBase.filter(function (e) {
         return e[key] == value;
       });
     }
 
-    $scope.getServicesAws = function () {
-      this.MonitorIdCustomer ? (
-        $scope.selectServices =  getFilteredByKey("IdDistribuidor", this.MonitorIdCustomer),
-        $scope.selectConsoles = [... new Set($scope.selectServices.map(x => x.NombreConsola))]
-       ) : (
-        $scope.selectServices = $scope.selectServicesBase
-       );
-       pagination();
+    $scope.getServicesAws = IdCustomer => {
+      IdCustomer ? (
+        $scope.selectServices = getFilteredByKey("IdDistribuidor", IdCustomer),
+        $scope.selectConsoles = [...new Set($scope.selectServices.map(x => x.NombreConsola))],
+        $scope.IdCustomer = IdCustomer
+      ) : (
+        $scope.ShowToast('Seleccione un cliente.', 'danger')
+      );
+
+      pagination();
     };
 
-    $scope.getConsoles = function () {
-      this.MonitorIdConsole ? (
-        $scope.selectServices =  getFilteredByKey("NombreConsola", this.MonitorIdConsole)
-       ) : (
-        $scope.selectServices =  getFilteredByKey("IdDistribuidor", this.MonitorIdCustomer)
-       );
-       pagination();
+    $scope.getConsoles = IdConsole => {
+      IdConsole ? (
+        $scope.selectServices = getFilteredByKey("NombreConsola", IdConsole)
+      ) : (
+        $scope.selectServices = getFilteredByKey("IdDistribuidor", $scope.IdCustomer)
+      );
+      pagination();
     };
+
     const pagination = () => {
-      $scope.filtered = []
-      ,$scope.currentPage = 1
-      ,$scope.numPerPage = 10
-      ,$scope.maxSize = 5;
+      $scope.filtered = [], $scope.currentPage = 1, $scope.numPerPage = 10, $scope.maxSize = 5;
 
-      $scope.$watch('currentPage + numPerPage', function() {
-        var begin = (($scope.currentPage - 1) * $scope.numPerPage)
-        , end = begin + $scope.numPerPage;
-        
+      $scope.$watch('currentPage + numPerPage', function () {
+        var begin = (($scope.currentPage - 1) * $scope.numPerPage),
+          end = begin + $scope.numPerPage;
+
         $scope.filtered = $scope.selectServices.slice(begin, end);
       });
     }
     $scope.init();
-    };
-    
-    MonitorDetalleAwsController.$inject = ['$scope', '$cookies', '$location', 'AmazonDataFactory'];
-  
-    angular.module('marketplace').controller('MonitorDetalleAwsController', MonitorDetalleAwsController);
-  }());
-  
+  };
+
+  MonitorDetalleAwsController.$inject = ['$scope', 'AmazonDataFactory'];
+
+  angular.module('marketplace').controller('MonitorDetalleAwsController', MonitorDetalleAwsController);
+}());

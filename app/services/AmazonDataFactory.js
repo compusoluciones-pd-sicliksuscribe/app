@@ -12,24 +12,24 @@
 
   factory.refreshToken();
 
-  factory.getDataServiceAws = function () {
+  factory.getDataServiceAWS = function () {
     factory.refreshToken();
-    return $http.get($rootScope.API + 'aws/getDataServicesAws');
+    return $http.get($rootScope.API + 'amazonWebServices/getDataServicesAWS');
   };
 
-  factory.getCustomersAws = function () {
+  factory.getCustomersAWS = function () {
     factory.refreshToken();
-    return $http.get($rootScope.API + 'aws/getCustomersAws');
+    return $http.get($rootScope.API + 'amazonWebServices/getCustomersAWS');
   };
 
-  factory.getConsolesAws = function (IdCustomer) {
+  factory.getConsolesAWS = function (IdCustomer) {
     factory.refreshToken();
-    return $http.get($rootScope.API + 'aws/getConsolesAws/'+IdCustomer);
+    return $http.get($rootScope.API + 'amazonWebServices/getConsolesAWS/'+IdCustomer);
   };
 
-  factory.getSearchServiceAws = function (body) {
+  factory.getSearchServiceAWS = function (body) {
     factory.refreshToken();
-    return $http.get($rootScope.API + 'aws/getSearchServiceAws/' + body.IdDistribuidor + '/' + body.IdConsola);
+    return $http.get($rootScope.API + 'amazonWebServices/getSearchServiceAWS/' + body.IdDistribuidor + '/' + body.IdConsola);
   };
 
   return factory;
