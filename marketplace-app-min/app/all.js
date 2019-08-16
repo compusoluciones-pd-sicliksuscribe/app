@@ -8583,7 +8583,7 @@ angular.module('directives.loading', [])
       return $http.get($rootScope.API + 'aws/getConsumptionAws');
     };
 
-    factory.getDataServiceAws = function () {
+    factory.getDataServiceAWS = function () {
       factory.refreshToken();
       return $http.get($rootScope.API + '/aws/getDataServicesAws');
     };

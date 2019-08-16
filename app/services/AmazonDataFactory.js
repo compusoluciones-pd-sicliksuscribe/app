@@ -12,34 +12,30 @@
 
   factory.refreshToken();
 
-  factory.postRequestDataAwsProduct= function (body) {
+  factory.postRequestDataAWSProduct= function (body) {
     factory.refreshToken();
-    return $http.post($rootScope.API + 'aws/requestDatAwsProducts', body);
+    return $http.post($rootScope.API + 'amazonWebServices/requestDataAWSProducts', body);
   };
   
-  factory.getDataServiceAws = function () {
+  factory.getDataServiceAWS = function () {
     factory.refreshToken();
-    return $http.get($rootScope.API + 'aws/getDataServicesAws');
+    return $http.get($rootScope.API + 'amazonWebServices/getDataServicesAWS');
   };
 
-  factory.getCustomersAws = function () {
+  factory.getCustomersAWS = function () {
     factory.refreshToken();
-    return $http.get($rootScope.API + 'aws/getCustomersAws');
+    return $http.get($rootScope.API + 'amazonWebServices/getCustomersAW');
   };
 
-  factory.getConsolesAws = function (IdCustomer) {
+  factory.getConsolesAWS = function (IdCustomer) {
     factory.refreshToken();
-    return $http.get($rootScope.API + 'aws/getConsolesAws/'+IdCustomer);
+    return $http.get($rootScope.API + 'amazonWebServices/getConsolesAWS/'+IdCustomer);
   };
 
-  factory.getSearchServiceAws = function (body) {
-    factory.refreshToken();
-    return $http.get($rootScope.API + 'aws/getTotalConsumptionByCustomer/' + body.IdDistribuidor + '/' + body.IdConsola);
-  };
 
   factory.getConsumptionByCustomer = function (IdCustomer) {
     factory.refreshToken();
-    return $http.get($rootScope.API + 'aws/getTotalConsumptionByCustomer/'+IdCustomer);
+    return $http.get($rootScope.API + 'amazonWebService/getTotalConsumptionByCustomer/'+IdCustomer);
   };
 
   return factory;

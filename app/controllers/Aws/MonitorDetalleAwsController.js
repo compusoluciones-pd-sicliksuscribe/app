@@ -5,7 +5,7 @@
         $scope.IdCustomer = 0;
         $scope.CheckCookie();
    
-     AmazonDataFactory.getDataServiceAws()
+     AmazonDataFactory.getDataServiceAWS()
     .success(function (Services) {
       $scope.selectServices = Services;
     })
@@ -15,7 +15,7 @@
 
 
 
-    AmazonDataFactory.getCustomersAws()
+    AmazonDataFactory.getCustomersAWS()
     .success(function (CustomersAws) {
       $scope.selectCustomersAws = CustomersAws;
      
@@ -45,7 +45,7 @@
       });
 
       $scope.rfc=$scope.selectServices.RFC;     
-      AmazonDataFactory.getConsolesAws(IdCustomer)
+      AmazonDataFactory.getConsolesAWS(IdCustomer)
       .success(function (ConsolesAws) {
       $scope.selectConsoles = ConsolesAws;
       

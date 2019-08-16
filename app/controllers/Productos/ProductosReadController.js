@@ -715,7 +715,6 @@
 
       };
     $scope.RequestDataAwsProduct = (Producto) => {
-      console.log("chingdo por que no sale ");
       const Product = {
         userName : $scope.SessionCookie.Nombre,
         userSecondName : $scope.SessionCookie.ApellidoPaterno,
@@ -727,7 +726,7 @@
         productIdErp : Producto.IdERP,
       };
 
-      AmazonDataFactory.postRequestDataAwsProduct(Product)
+      AmazonDataFactory.postRequestDataAWSProduct(Product)
       .success(function (result) {
         if (!result.success) {
           $scope.ShowToast('No se pudo mandar la notificación intente mas tarde', 'danger');
