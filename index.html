@@ -371,8 +371,11 @@
 										<li class="gris" style="background:{{currentDistribuidor.PrimaryColor}}" ng-show="SessionCookie.Nombre !== undefined" style="padding-right:15px;">
 											<a ng-click="CerrarSesion();"><span class="glyphicon glyphicon-log-out">&nbsp;</span> Cerrar sesión</a>
 										</li>
-
 										<li class="gris" style="background:{{currentDistribuidor.PrimaryColor}}" ng-show="SessionCookie.Nombre == undefined" style="padding-right:15px;">
+											<a id="aIniciarSesion" ng-click="goToPage('Registrarse');"><span class="glyphicon glyphicon-user" style="padding-right:5px;"></span> Registrate</a>
+										</li>
+
+										<li class="gris" style="background:{{currentDistribuidor.PrimaryColor}}; padding-right:15px;" ng-show="SessionCookie.Nombre == undefined" >
 											<a id="aIniciarSesion" ng-click="goToPage('Login');"><span class="glyphicon glyphicon-log-in" style="padding-right:5px;"></span> Iniciar sesión</a>
 										</li>
 
@@ -602,6 +605,7 @@
 	<script type="text/javascript" src="app/controllers/Productos/MisProductosReadController.js"></script>
 	<script type="text/javascript" src="app/controllers/Productos/ConfigurarBaseController.js"></script>
 	<script type="text/javascript" src="app/controllers/Aplicaciones/AplicacionesReadController.js"></script>
+	<script type="text/javascript" src="app/controllers/Registrar/RegistrarEmpresaTuclickController.js"></script>
 	<script type="text/javascript" src="app/services/NivelesDistribuidorFactory.js"></script>
 	<script type="text/javascript" src="app/services/ProductosXEmpresaFactory.js"></script>
 	<script type="text/javascript" src="app/services/ComprasUFFactory.js"></script>

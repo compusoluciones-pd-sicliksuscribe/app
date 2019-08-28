@@ -26,6 +26,11 @@
       return $http.post($rootScope.API + 'Usuarios/Correo', Usuario);
     };
 
+    factory.getCorreoTuclick = function (Usuario) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'tuclick/get-email/'+ Usuario.CorreoElectronico);
+    };
+
     factory.postUsuario = function (Usuario) {
       factory.refreshToken();
       return $http.post($rootScope.API + 'Usuarios', Usuario);
