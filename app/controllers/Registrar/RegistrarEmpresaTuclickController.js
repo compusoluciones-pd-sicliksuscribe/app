@@ -212,7 +212,6 @@
       };
   
       $scope.EmpresaCreate = function () {
-        console.log($scope.currentDistribuidor);
         $scope.Empresa.IdEmpresaDistribuidor = $scope.currentDistribuidor.IdEmpresa;
         UsuariosFactory.getCorreoTuclick($scope.Empresa)
           .success(function (result) {
@@ -222,10 +221,6 @@
               if ($scope.frm.NombreEmpresa.$invalid == true) {
                 $scope.frm.NombreEmpresa.$pristine = false;
               }
-                // if ($scope.frm.DominioMicrosoft.$invalid == true) {
-                //   $scope.frm.DominioMicrosoft.$pristine = false;
-                //   $scope.Empresa.MensajeDominio = 'Ingresa un Dominio.';
-                // }
               if ($scope.frm.Direccion1.$invalid == true) {
                 $scope.frm.Direccion1.$pristine = false;
               }
@@ -260,28 +255,11 @@
               $scope.Empresa.Formulario = true;
               EmpresasFactory.postEmpresaTuclick($scope.Empresa)
                   .success(function (result) {
-                    var re, me, dat;
-                    if (result[0]) {
-                      re = result[0].Success;
-                      me = result[0].Message;
-                      dat = result[0].Dato;
+                    if (result.success) {
+                      document.getElementById('formulario').innerHTML  = '<div style="align:center;"><h1>'+ result.message + '</h1></div>';
+                      $scope.ShowToast(result.message, 'success');
                     } else {
-                      re = result.success;
-                      me = result.message;
-                      dat = result.dato;
-                    }
-                    if (re) {
-                      $scope.loading = false;
-                      $location.path('/Clientes');
-                    } else {
-                      $scope.ShowToast(me, 'danger');
-                      $scope.loading = false;
-                      $scope.Empresa.Formulario = false;
-  
-                      if (dat == 20002) {
-                        $scope.Empresa.DominioMicrosoft = '';
-                        $scope.AlertaDominio = 'El dominio Microsoft ya existe, intenta con uno diferente.';
-                      }
+                      $scope.ShowToast(result.message, 'danger');
                     }
                   })
                   .error(function (error) {
