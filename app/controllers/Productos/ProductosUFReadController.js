@@ -30,12 +30,10 @@
               return item;
             });
 
-            if (!$scope.Productos.data) {
+            if (Productos.data.length <= 0) {
               $scope.Mensaje = 'No encontramos resultados de tu búsqueda...';
-              if ($scope.Pagina > 0) {
-                $scope.ShowToast('No encontramos más resultados de esta busqueda, regresaremos a la página anterior.', 'danger');
-                $scope.PaginadoAtras();
-              }
+              $scope.ShowToast('No encontramos más resultados de esta busqueda, regresaremos a la página anterior.', 'danger');
+              $scope.PaginadoAtras();
             }
           } else {
             $scope.Mensaje = Productos.message;
@@ -447,7 +445,6 @@
       $scope.Pagina = $scope.Pagina + 1;
       $scope.BuscarProductos.Offset = $scope.Pagina * 6;
       $scope.BuscarProducto(false);
-
       $scope.scrollTo('TopPage');
     };
   };
