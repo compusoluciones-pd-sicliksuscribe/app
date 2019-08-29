@@ -131,7 +131,7 @@
                                                 <span class="input-group-addon green white" style="{{secondaryColor}} !important">
                                                 <span class="glyphicon glyphicon-shopping-cart"></span>
                                                 </span>
-                                                <input ng-keypress="revisarProducto(Producto);" id="Cantidad" name="Cantidad" type="number" ng-model="Producto.Cantidad" class="form-control" placeholder="Escribe un número entre {{Producto.CantidadMinima}} y {{Producto.CantidadMaxima}}"
+                                                <input ng-keypress="revisarProducto(Producto);" ng-change="revisarProducto(Producto);" id="Cantidad" name="Cantidad" type="number" ng-model="Producto.Cantidad" class="form-control" placeholder="Escribe un número entre {{Producto.CantidadMinima}} y {{Producto.CantidadMaxima}}"
                                                     max="{{Producto.CantidadMaxima}}" min="{{Producto.CantidadMinima}}" size="5"
                                                     maxlength="5" title="Escribe un número entre {{Producto.CantidadMinima}} y {{Producto.CantidadMaxima}}"
                                                     required/>
