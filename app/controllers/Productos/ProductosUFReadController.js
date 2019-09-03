@@ -32,7 +32,7 @@
 
             if (Productos.data.length <= 0) {
               $scope.Mensaje = 'No encontramos resultados de tu búsqueda...';
-              $scope.ShowToast('No encontramos más resultados de esta busqueda, regresaremos a la página anterior.', 'danger');
+              $scope.ShowToast('No encontramos más resultados de esta búsqueda, regresaremos a la página anterior.', 'danger');
               $scope.PaginadoAtras();
             }
           } else {
@@ -40,8 +40,8 @@
           }
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
-          $scope.ShowToast('No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.', 'danger');
+          $scope.Mensaje = 'No pudimos contactarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.ShowToast('No pudimos contactarnos a la base de datos, por favor intenta de nuevo más tarde.', 'danger');
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
 
@@ -51,7 +51,7 @@
           /* $scope.TipoCambioMs = TipoCambio.DolarMS; */
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.Mensaje = 'No pudimos contactarnos a la base de datos, por favor intenta de nuevo más tarde.';
           $scope.ShowToast('No pudimos obtener el tipo de cambio, por favor intenta una vez más.', 'danger');
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
@@ -65,7 +65,7 @@
           $scope.selectFabricantes = Fabricantes;
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.Mensaje = 'No pudimos contactarnos a la base de datos, por favor intenta de nuevo más tarde.';
           $scope.ShowToast('No pudimos cargar la lista de fabricantes, por favor intenta de nuevo más tarde.', 'danger');
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
@@ -75,7 +75,7 @@
           $scope.selectTiposProductos = TiposProductos;
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.Mensaje = 'No pudimos contactarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
           $scope.ShowToast('No pudimos cargar la lista de tipos de productos, por favor intenta de nuevo más tarde.', 'danger');
 
@@ -87,7 +87,6 @@
       $scope.BuscarProductos.IdTipoProducto = $scope.BuscarProductos.IdTipoProducto;
       $scope.BuscarProductos.Offset = $scope.Pagina * 6;
 
-      // console.log(BusquedaURL);
       if (BusquedaURL !== 'undefined') {
         $scope.BuscarProductos.Busqueda = BusquedaURL;
         $scope.BuscarProducto(false);
@@ -122,7 +121,6 @@
       var IdEmpresaUsuarioFinal = cookie.IdEmpresa;
       ProductosFactory.getProductContractsTuClick(IdEmpresaUsuarioFinal, IdProducto, $scope.currentDistribuidor.IdEmpresa)
         .success(function (respuesta) {
-          console.log('aaaa', respuesta)
           if (respuesta.success === 1) {
             Producto.contratos = respuesta.data;
             if (Producto.contratos.length >= 1) {
@@ -299,7 +297,6 @@
       if (NuevoProducto.IdAccionAutodesk === 1 && Producto.TieneContrato) {
         ProductosFactory.getProductExists(cookie.IdEmpresa, Producto.IdProducto, NuevoProducto.ContratoBaseAutodesk)
         .then(function (result) {
-          console.log(result, 'aaaaaaaaa')
           if (result.data.data.length >= 1) {
             NuevoProducto.IdAccionAutodesk = 2;
           } else {
