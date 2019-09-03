@@ -50,7 +50,6 @@
                     <label>RFC *</label>
                     <input name="RFC" type="text" ng-model="Empresa.RFC" class="form-control" placeholder="" size="255" ng-maxlength="255" ng-model-onblur ng-model-options="{ updateOn: 'blur' }" required="" ng-change="ValidarRFC()" 
                     />
-                    <!--<b style="color:red" ng-show="valido" class="help-block">{{mensajerfc}}</b>-->
                     <b style="color:red" ng-show="frm.RFC.$invalid && !frm.RFC.$pristine" class="help-block">{{mensajerfc}}</b>
                 </div>
 
@@ -73,7 +72,6 @@
                     <label>Estado o provincia *</label>
                     <select name="Estado" ng-model="Empresa.Estado" class="form-control" required="" ng-options = "edo.id as edo.name for edo in Estados">
                     </select>
-                    <!-- <b style="color:red" ng-show="frm.Estado.$invalid && !frm.Estado.$pristine" class="help-block">Selecciona un estado.</b> -->
                 </div>
             </div>
             <div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
@@ -120,7 +118,6 @@
                     ng-maxlength="255"   required="" />
                     <b style="color:red" ng-show="frm.CorreoElectronico.$invalid && !frm.CorreoElectronico.$pristine" class="help-block">Ingresa un correo válido.</b>
                 </div>
-                <!--ng-pattern="/^[a-z]+[a-z0-9._-]+@[a-z]+\.[a-z.]{2,5}$/+\.[a-z.]{2,5}$/"-->
             </div>
             <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
                 <div class="pull-rigth">
@@ -147,11 +144,9 @@
 
         <div class="form-group row">
             <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                <!--<img src="images/loading.gif" style="width:45px;height:45px" ng-show="loading" />-->
             </div>
             <div class="col-xs-0 col-sm-0 col-md-2 col-lg-2">
                 <div class="form-group">
-                    <!--ng-disabled="frm.$invalid ||  Empresa.Formulario"-->
                     <button type="submit" ng-click="EmpresaCreate()" class="btn btn-primary btn-block" ng-if="aceptarButton" style="{{secondaryColor}} !important">Aceptar</button>
                     <br/><b style="color:red">{{AlertaDominio}}</b>
                 </div>
