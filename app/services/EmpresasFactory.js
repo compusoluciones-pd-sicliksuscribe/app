@@ -46,6 +46,11 @@
       return $http.post($rootScope.API + 'enterprise', Empresa);
     };
 
+    factory.postEmpresaTuclick = function (Empresa) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'tuclick/register-enterprise', Empresa);
+    };
+
     factory.postEmpresaMicrosoft = function (ObjMicrosoft) {
       factory.refreshToken();
       return $http.post($rootScope.API + 'enterprise/microsoft', ObjMicrosoft);

@@ -9,7 +9,8 @@
     /* $scope.TipoCambioMs = 0; */
     $scope.Mensaje = '...';
     $scope.selectProductos = {};
-
+    var cookie = $cookies.getObject('Session');
+    
     $scope.BuscarProducto = function (ResetPaginado) {
       $scope.Mensaje = 'Buscando...';
       $scope.BuscarProductos.IdEmpresaDistribuidor = $scope.currentDistribuidor.IdEmpresa;
@@ -17,7 +18,7 @@
         $scope.Pagina = 0;
         $scope.BuscarProductos.Offset = $scope.Pagina * 6;
       }
-      // console.log($scope.BuscarProductos);
+
       ProductosXEmpresaFactory.postBuscarProductosXEmpresa($scope.BuscarProductos)
         .success(function (Productos) {
           if (Productos.success) {
@@ -28,20 +29,19 @@
               item.MonedaCompra = 'Dólares';
               return item;
             });
-            if ($scope.Productos === '') {
+
+            if (Productos.data.length <= 0) {
               $scope.Mensaje = 'No encontramos resultados de tu búsqueda...';
-              if ($scope.Pagina > 0) {
-                $scope.ShowToast('No encontramos más resultados de esta busqueda, regresaremos a la página anterior.', 'danger');
-                $scope.PaginadoAtras();
-              }
+              $scope.ShowToast('No encontramos más resultados de esta búsqueda, regresaremos a la página anterior.', 'danger');
+              $scope.PaginadoAtras();
             }
           } else {
             $scope.Mensaje = Productos.message;
           }
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
-          $scope.ShowToast('No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.', 'danger');
+          $scope.Mensaje = 'No pudimos contactarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.ShowToast('No pudimos contactarnos a la base de datos, por favor intenta de nuevo más tarde.', 'danger');
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
 
@@ -51,7 +51,7 @@
           /* $scope.TipoCambioMs = TipoCambio.DolarMS; */
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.Mensaje = 'No pudimos contactarnos a la base de datos, por favor intenta de nuevo más tarde.';
           $scope.ShowToast('No pudimos obtener el tipo de cambio, por favor intenta una vez más.', 'danger');
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
@@ -65,7 +65,7 @@
           $scope.selectFabricantes = Fabricantes;
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.Mensaje = 'No pudimos contactarnos a la base de datos, por favor intenta de nuevo más tarde.';
           $scope.ShowToast('No pudimos cargar la lista de fabricantes, por favor intenta de nuevo más tarde.', 'danger');
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
@@ -75,7 +75,7 @@
           $scope.selectTiposProductos = TiposProductos;
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.Mensaje = 'No pudimos contactarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
           $scope.ShowToast('No pudimos cargar la lista de tipos de productos, por favor intenta de nuevo más tarde.', 'danger');
 
@@ -87,7 +87,6 @@
       $scope.BuscarProductos.IdTipoProducto = $scope.BuscarProductos.IdTipoProducto;
       $scope.BuscarProductos.Offset = $scope.Pagina * 6;
 
-      // console.log(BusquedaURL);
       if (BusquedaURL !== 'undefined') {
         $scope.BuscarProductos.Busqueda = BusquedaURL;
         $scope.BuscarProducto(false);
@@ -206,7 +205,6 @@
     };
 
     $scope.ValidarDominioMS = function (Producto, Cantidad) {
-      var cookie = $cookies.getObject('Session');
       var IdEmpresaUsuarioFinal = cookie.IdEmpresa;
       if (Producto.IdFabricante === 1) {
         EmpresasFactory.getDominioMsByIdUF(IdEmpresaUsuarioFinal)
@@ -226,6 +224,38 @@
       }
     };
 
+    
+    const postPedidoAutodesk = function (NuevoProducto, NuevoProducto2) {
+      PedidoDetallesFactory.postPedidoDetalleFinalUser(NuevoProducto,  $scope.currentDistribuidor.IdEmpresa)
+      .success(function (PedidoDetalleResult) {
+        if (PedidoDetalleResult.success === 1) {
+          if (NuevoProducto.IdFabricante === 2 && NuevoProducto.IdAccionAutodesk === '2') {
+            ProductosFactory.getBaseSubscription(NuevoProducto.IdProducto)
+              .then(function (result) {
+                $scope.suscripciones = result.data.data;
+                if (result.data.data.length >= 1) {
+                  $location.path("/autodesk/productos/" + NuevoProducto.IdProducto + "/detalle/" + PedidoDetalleResult.data.insertId);
+                }
+              });
+          }
+          $scope.ShowToast(PedidoDetalleResult.message, 'success');
+          NuevoProducto2.IdPedidoDetalle = PedidoDetalleResult.data.insertId;
+          $scope.AgregarComprasUF(NuevoProducto2);
+          $scope.ActualizarMenu();
+          $scope.addPulseCart();
+          setTimeout($scope.removePulseCart, 9000);
+        } else {
+          $scope.ShowToast(PedidoDetalleResult.message, 'danger');
+        }
+      })
+      .error(function (data, status, headers, config) {
+        $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+        $scope.ShowToast('No pudimos agregar este producto a tu carrito de compras, por favor intenta de nuevo más tarde.', 'danger');
+        $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+      });
+    };
+
+
     $scope.AgregarCarrito = function (Producto, Cantidad) {
       if (!Producto.IdProducto) { $scope.ShowToast('Selecciona un producto', 'danger'); return; }
       if (!Cantidad) { $scope.ShowToast('Escribe una cantidad válida', 'danger'); return; }
@@ -243,7 +273,7 @@
         ResultadoFabricante2: Producto.IdProductoPadre,
         Especializacion: Producto.Especializacion,
         IdUsuarioContacto: Producto.IdUsuarioContacto,
-        IdAccionAutodesk: Producto.IdAccionAutodesk
+        IdAccionAutodesk: Producto.IdAccionAutodesk || 0
       };
 
       var NuevoProducto2 = {
@@ -252,6 +282,9 @@
         IdEmpresaDistribuidor: $scope.currentDistribuidor.IdEmpresa,
         MonedaCompra: Producto.MonedaCompra
       };
+      if (NuevoProducto.IdAccionAutodesk === 1 && !Producto.TieneContrato) {
+        return postPedidoAutodesk(NuevoProducto, NuevoProducto2);
+      }
 
       if (!Producto.IdUsuarioContacto && Producto.IdFabricante === 2 && Producto.TieneContrato) {
         const contrato = Producto.contratos
@@ -261,12 +294,21 @@
         NuevoProducto.ContratoBaseAutodesk = contrato.trim();
         // NuevoProducto.IdAccionAutodesk = Producto.IdAccionProductoAutodesk === 1 ? 3 : 2;
       }
-      if (Producto.IdFabricante === 2 && Producto.IdAccionAutodesk === 2 && !Producto.TieneContrato) {
-        return $scope.ShowToast('No cuentas con un contrato para este producto.', 'danger');
+      if (NuevoProducto.IdAccionAutodesk === 1 && Producto.TieneContrato) {
+        ProductosFactory.getProductExists(cookie.IdEmpresa, Producto.IdProducto, NuevoProducto.ContratoBaseAutodesk)
+        .then(function (result) {
+          if (result.data.data.length >= 1) {
+            NuevoProducto.IdAccionAutodesk = 2;
+          } else {
+            NuevoProducto.IdAccionAutodesk = 3;
+          }
+          if (Producto.IdPedidoContrato === 0) { // Cuando se elige la acción de nuevo contrato y existen contratos adicionales disponibles
+            NuevoProducto.IdAccionAutodesk = 1;
+          }
+          return postPedidoAutodesk(NuevoProducto, NuevoProducto2);
+        });
       }
-      if (!NuevoProducto.IdAccionAutodesk) delete NuevoProducto.IdAccionAutodesk;
-      if (NuevoProducto.IdAccionAutodesk === 1 && NuevoProducto.ContratoBaseAutodesk) NuevoProducto.IdAccionAutodesk = 3;
-
+      if (Producto.IdFabricante !== 2) {
       PedidoDetallesFactory.postPedidoDetalleFinalUser(NuevoProducto, $scope.currentDistribuidor.IdEmpresa)
         .success(function (PedidoDetalleResult) {
           if (PedidoDetalleResult.success === 1) {
@@ -296,6 +338,7 @@
 
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
+      }
     };
 
     $scope.AgregarComprasUF = function (NuevoProducto2) {
@@ -399,7 +442,6 @@
       $scope.Pagina = $scope.Pagina + 1;
       $scope.BuscarProductos.Offset = $scope.Pagina * 6;
       $scope.BuscarProducto(false);
-
       $scope.scrollTo('TopPage');
     };
   };

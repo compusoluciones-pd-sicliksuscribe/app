@@ -128,10 +128,10 @@
                                             <label for="Cantidad">* ¿Cuántos quieres?</label> a patir de {{Producto.CantidadMinima}} a {{Producto.CantidadMaxima}}
 
                                             <div class="input-group">
-                                                <span class="input-group-addon green white" style="background:{{currentDistribuidor.SecondaryColor}} !important">
+                                                <span class="input-group-addon green white" style="{{secondaryColor}} !important">
                                                 <span class="glyphicon glyphicon-shopping-cart"></span>
                                                 </span>
-                                                <input ng-keypress="revisarProducto(Producto);" id="Cantidad" name="Cantidad" type="number" ng-model="Producto.Cantidad" class="form-control" placeholder="Escribe un número entre {{Producto.CantidadMinima}} y {{Producto.CantidadMaxima}}"
+                                                <input ng-keypress="revisarProducto(Producto);" ng-change="revisarProducto(Producto);" id="Cantidad" name="Cantidad" type="number" ng-model="Producto.Cantidad" class="form-control" placeholder="Escribe un número entre {{Producto.CantidadMinima}} y {{Producto.CantidadMaxima}}"
                                                     max="{{Producto.CantidadMaxima}}" min="{{Producto.CantidadMinima}}" size="5"
                                                     maxlength="5" title="Escribe un número entre {{Producto.CantidadMinima}} y {{Producto.CantidadMaxima}}"
                                                     required/>
@@ -148,7 +148,7 @@
                                             <p style="color:red" ng-hide="Producto.IdFabricante === 1 || Producto.TieneContrato">*No cuentas con un contrato para este producto.</p>
                                             <label for="contrato" ng-if="Producto.IdFabricante === 2 && Producto.TieneContrato">* Contrato</label>
                                             <div class="input-group" ng-if="Producto.IdFabricante === 2 && Producto.TieneContrato && Producto.IdAccionAutodesk === 1">
-                                                <span class="input-group-addon green white" style="background:{{currentDistribuidor.SecondaryColor}} !important">
+                                                <span class="input-group-addon green white" style="{{secondaryColor}} !important">
                                                     <span class="glyphicon glyphicon-file"></span>
                                                 </span>
                                                 <select id="contrato" name="contrato" class="form-control selectOption ufs" ng-model="Producto.IdPedidoContrato" ng-options="contrato.IdPedido as contrato.NumeroContrato for contrato in Producto.contratos"
@@ -157,7 +157,7 @@
                                                 </select>
                                             </div>
                                             <div class="input-group" ng-if="Producto.IdFabricante === 2 && Producto.TieneContrato && Producto.IdAccionAutodesk === 2">
-                                                <span class="input-group-addon green white" style="background:{{currentDistribuidor.SecondaryColor}} !important">
+                                                <span class="input-group-addon green white" style="{{secondaryColor}} !important">
                                                     <span class="glyphicon glyphicon-file"></span>
                                                 </span>
                                                 <select id="contrato" name="contrato" class="form-control selectOption ufs" ng-model="Producto.IdPedidoContrato" ng-options="contrato.IdPedido as contrato.NumeroContrato for contrato in Producto.contratos"
@@ -167,7 +167,7 @@
                                             <br>
                                             <label for="contacto" ng-if="Producto.IdFabricante === 2 && !Producto.IdPedidoContrato && Producto.IdAccionAutodesk === 1">* Contacto</label>
                                             <div class="input-group" ng-if="Producto.IdFabricante === 2 && !Producto.IdPedidoContrato && Producto.IdAccionAutodesk === 1">
-                                                <span class="input-group-addon green white" style="background:{{currentDistribuidor.SecondaryColor}} !important">
+                                                <span class="input-group-addon green white" style="{{secondaryColor}} !important">
                                                     <span class="glyphicon glyphicon-user"></span>
                                                 </span>
                                                 <select id="contacto" name="IdEmpresaUsuarioFinal" class="form-control selectOption ufs" ng-model="Producto.IdUsuarioContacto"

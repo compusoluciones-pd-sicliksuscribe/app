@@ -284,6 +284,11 @@
         resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 7 || Session.IdTipoAcceso === 3)) { $location.path('/404'); } } }
       })
 
+      .when('/Registrarse', {
+        controller: 'RegistrarEmpresaTuclickController', templateUrl: 'app/views/Registrar/RegistrarEmpresaTuclick.html',
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if ((Session)) { $location.path('/404'); } } }
+      })
+
       .when('/Empresa/ActualizarDominio/:IdEmpresa', {
         controller: 'EmpresasUpdateMicrosoftDomainController', templateUrl: 'app/views/Empresas/EmpresasUpdateMicrosoftDomain.html',
         resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 2)) { $location.path('/404'); } } }

@@ -28,7 +28,11 @@
           if (actualizacion.success) {
             $scope.ShowToast(actualizacion.message, 'success');
           } else {
-            $scope.ShowToast(actualizacion.message, 'danger');
+            if (actualizacion.sqlMessage) {
+              $scope.ShowToast('Error de base de datos, contactar a soporte.', 'danger');
+            } else {
+              $scope.ShowToast(actualizacion.message, 'danger');
+            }
           }
         })
         .error(function (data, status, headers, config) {

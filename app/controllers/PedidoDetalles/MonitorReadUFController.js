@@ -60,7 +60,7 @@
         .then(function (result) {
           if (result.status === 204) {
             $scope.Vacio = 0;
-            $scope.Pedidos = {};
+            $scope.Pedidos = '';
           } else if (result.status === 200) {
             $scope.Pedidos = result.data.data;
             $scope.Vacio = 1;

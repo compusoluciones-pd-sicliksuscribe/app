@@ -10,6 +10,7 @@
     $scope.currentPath = $location.path();
     $scope.currentDistribuidor = {};
     $scope.currentDistribuidor.UrlLogo = 'images/LogoSVG.svg';
+    $scope.secondaryColor = '';
 
     $scope.ContarProductosCarrito = function () {
       if (!$scope.currentDistribuidor.IdEmpresa) {
@@ -60,6 +61,7 @@
 
     $scope.cambiarDistribuidor = function (Distribuidor, reload) {
       if (Distribuidor) {
+        $scope.getColor();
         var expireDate = new Date();
         expireDate.setTime(expireDate.getTime() + 600 * 60000);
         $cookies.putObject('currentDistribuidor', Distribuidor, { 'expires': expireDate, secure: $rootScope.secureCookie });
@@ -170,6 +172,9 @@
       var arregloCifrasVersion = deviceDetector.browser_version.split('.');
       return arregloCifrasVersion[0];
     }
+    $scope.getColor = function() {
+      $scope.secondaryColor = $scope.currentDistribuidor.SecondaryColor === '#ffffff' ? `background:${$scope.currentDistribuidor.PrimaryColor}` : `background:${$scope.currentDistribuidor.SecondaryColor}`;
+    }
 
     $scope.init = function () {
       if (!validarNavegador(deviceDetector)) {
@@ -181,6 +186,7 @@
         obtenerSubdominio();
         $scope.ActualizarMenu();
       }
+      $scope.getColor();
     };
 
     $scope.init();

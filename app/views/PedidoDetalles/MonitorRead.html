@@ -98,7 +98,7 @@
 						<div class="row" ng-hide="detalles.IdTipoProducto !== 1">
 	
 							<div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
-								<h4><b>{{ detalles.Nombre }}</b></h4>
+								<h4><b>{{ detalles.Nombre }}</b><span ng-if="detalles.IdCompraUF" class="badge badge-secondary"> TuClick</span></h4>
 								<label for="">Tipo de producto:</label> {{ detalles.Tipo  }}
 								<br>
 								<label for="">Estatus del pedido:</label> {{detalles.Estatus }}
@@ -116,7 +116,7 @@
 						<div class="row" ng-show="detalles.IdTipoProducto !== 1">
 	
 							<div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
-								<h4><b>{{ detalles.Nombre }}</b></h4>
+								<h4><b>{{ detalles.Nombre }}</b><span ng-if="detalles.IdCompraUF" class="badge badge-secondary"> TuClick</span></h4>
 								<label for="">Fabricante:</label> {{ pedido.Fabricante }}
 								<br>
 								<label for="">Tipo de producto:</label> {{ detalles.Tipo }}
@@ -325,9 +325,8 @@
 				<td>
 
 					<div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
-						<h4><b>{{ detalles.Nombre }}</b></h4>
+						<h4><b>{{ detalles.Nombre }}</b><span ng-if="detalles.IdCompraUF" class="badge badge-secondary">TuClick</span></h4>
 						<ul style="list-style-type:none; padding:0%">
-							<li> <label for="Order">Número de pedido:</label> {{ detalles.IdPedido }} </li>
 							<li> <label for="TipoProducto">Tipo de producto:</label> {{ detalles.Tipo }} </li>
 							<li ng-if="detalles.IdEstatusPedido === 2"> <label for="Estatus">Estatus pedido: </label> Pago pendiente </li>
 							<li ng-if="detalles.IdEstatusPedido === 3"> <label for="Estatus">Estatus pedido: </label> Pagado	</li>
