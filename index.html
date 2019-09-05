@@ -177,7 +177,7 @@
 
 										<li class="gris" ng-show="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 4 || SessionCookie.IdTipoAcceso == 5 || SessionCookie.IdTipoAcceso == 6  || SessionCookie.IdTipoAcceso == 7) && (SessionCookie.LeyoTerminos == 1) && SessionCookie.IdPlanTuClick !== null"
 										 dropdown>
-											<a dropdown-toggle><span class="fa fa-mouse-pointer" aria-hidden="true"></span><div class="text">TuClick</div> <b class="caret"></b></a>
+											<a dropdown-toggle><span class="fa fa-star" aria-hidden="true"></span><div class="text">TuClick</div> <b class="caret"></b></a>
 											<ul class="dropdown-menu gris">
 												<li id="activarMiSitio" ng-show="((SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3) && SessionCookie.IdPlanTuClick !== null)"><a ng-click="goToPage('Configuracion');">Activar mi sitio</a></li>												
 												<li id="actualizarDatos" ng-show="SessionCookie.IdTipoAcceso == 2 && SessionCookie.mFacturacion == 1"><a ng-click="goToPage('actualizar-datos-facturacion');">Mis datos de facturación</a></li>
