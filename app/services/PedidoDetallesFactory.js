@@ -257,9 +257,9 @@
       return $http.get($rootScope.API + 'shopping-cart/use-CFDI');
     };
 
-    factory.putUseCFDI = function (UsoCFDI, IdPedido) {
+    factory.putUseCFDI = function (UsoCFDI, UF) {
       factory.refreshToken();
-      return $http.put($rootScope.API + 'shopping-cart/update-use-CFDI/' + UsoCFDI + '/id-pedido/' + IdPedido);
+      return $http.put($rootScope.API + 'shopping-cart/update-use-CFDI/' + UsoCFDI + '/UF/' + UF);
     };
 
     return factory;
