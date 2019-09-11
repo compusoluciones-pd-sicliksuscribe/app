@@ -22,11 +22,6 @@
     return $http.get($rootScope.API + 'amazonWebServices/getDataServicesAWS');
   };
 
-  factory.getCustomersAWS = function () {
-    factory.refreshToken();
-    return $http.get($rootScope.API + 'amazonWebServices/getCustomersAW');
-  };
-
   factory.getConsolesAWS = function (IdCustomer) {
     factory.refreshToken();
     return $http.get($rootScope.API + 'amazonWebServices/getConsolesAWS/'+IdCustomer);
