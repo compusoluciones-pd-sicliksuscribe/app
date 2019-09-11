@@ -33,7 +33,8 @@
             if (Productos.data.length <= 0) {
               $scope.Mensaje = 'No encontramos resultados de tu búsqueda...';
               $scope.ShowToast('No encontramos más resultados de esta búsqueda, regresaremos a la página anterior.', 'danger');
-              $scope.PaginadoAtras();
+              if ($scope.Pagina)
+                $scope.PaginadoAtras();
             }
           } else {
             $scope.Mensaje = Productos.message;
