@@ -88,7 +88,7 @@
 		
 				<!-- Detalle pedidos AWS -->
 				
-					<div  ng-repeat="pedido in Pedidos " style="margin-top: 50px;">
+					<div  ng-repeat="pedido in Pedidos | filter:PedidoFilter " style="margin-top: 50px;">
 							<div class="row">
 									<ul style="list-style-type:none; padding:0%">
 										<label for="Pedido">Pedido: </label> {{ pedido.IdPedido }} </br>
