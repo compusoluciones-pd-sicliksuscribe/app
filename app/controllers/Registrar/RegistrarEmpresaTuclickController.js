@@ -256,7 +256,7 @@
               EmpresasFactory.postEmpresaTuclick($scope.Empresa)
                   .success(function (result) {
                     if (result.success) {
-                      document.getElementById('formulario').innerHTML  = '<div style="align:center;"><h1>'+ result.message + '</h1></div>';
+                      document.getElementById('formulario').innerHTML  = '<div style="align:center;"><h4>'+ result.message + '</h4></div>';
                       $scope.ShowToast(result.message, 'success');
                     } else {
                       $scope.ShowToast(result.message, 'danger');
