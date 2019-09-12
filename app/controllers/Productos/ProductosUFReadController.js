@@ -31,8 +31,7 @@
             });
 
             if (Productos.data.length <= 0) {
-              $scope.Mensaje = 'No encontramos resultados de tu búsqueda...';
-              $scope.ShowToast('No encontramos más resultados de esta búsqueda, regresaremos a la página anterior.', 'danger');
+              $scope.ShowToast('No encontramos resultados de esta búsqueda.', 'danger');
               if ($scope.Pagina)
                 $scope.PaginadoAtras();
             }
@@ -218,7 +217,7 @@
           }
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
         });
       } else {
         $scope.AgregarCarrito(Producto, Cantidad);
@@ -250,7 +249,7 @@
         }
       })
       .error(function (data, status, headers, config) {
-        $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+        $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
         $scope.ShowToast('No pudimos agregar este producto a tu carrito de compras, por favor intenta de nuevo más tarde.', 'danger');
         $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
       });
