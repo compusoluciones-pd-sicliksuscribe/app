@@ -31,6 +31,7 @@
             });
 
             if (Productos.data.length <= 0) {
+              $scope.Mensaje = 'No encontramos resultados de esta búsqueda.';
               $scope.ShowToast('No encontramos resultados de esta búsqueda.', 'danger');
               if ($scope.Pagina)
                 $scope.PaginadoAtras();
