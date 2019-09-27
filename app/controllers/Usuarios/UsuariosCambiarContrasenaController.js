@@ -9,9 +9,9 @@
       $scope.init();
 
       $scope.CambiarContrasena = function () {
-        if (document.getElementById('CnfrmContrasena').value != '' && document.getElementById('NvaContrasena').value != '') {
-          if (document.getElementById('CnfrmContrasena').value == document.getElementById('NvaContrasena').value){
-            if (document.getElementById('CnfrmContrasena').value.length >= 8 && document.getElementById('NvaContrasena').value.length >= 8){
+        if ($scope.Usuario.CnfrmContrasena !== '' && $scope.Usuario.NvaContrasena !== '') {
+          if ($scope.Usuario.CnfrmContrasena === $scope.Usuario.NvaContrasena){
+            if ($scope.Usuario.CnfrmContrasena.length >= 8 && $scope.Usuario.NvaContrasena.length >= 8){
               UsuariosFactory.postCambiarContrasena($scope.Usuario, $routeParams.encryptedObject)
             .success(function (result) {
               if (result.name === "Error"){$scope.ShowToast(result.message, 'danger');}

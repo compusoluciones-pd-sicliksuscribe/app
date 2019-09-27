@@ -4,19 +4,20 @@
 
     $scope.init = function () {
       $scope.navCollapsed = true;
+      $scope.correoCorrecto = false;
     };
 
     $scope.init();
-
     $scope.RestablecerContrasena = function () {
-      if (document.getElementById('emailForPassReset').value != '' ) {
+      console.log($scope.Usuario.CorreoElectronico, 'hola');
+      if ($scope.Usuario.CorreoElectronico !== undefined ) {
         UsuariosFactory.postRestablecer($scope.Usuario)
           .success(function (result) {
             $scope.Usuario.Respuesta = result.message;
-            if (result.name == 'Error'){$scope.ShowToast(result.message, 'danger');}
+            if (result.name === 'Error'){$scope.ShowToast(result.message, 'danger');}
             else {
               $scope.ShowToast(result.message, 'success');
-              document.getElementById('confirmaRestablecer').disabled = true;
+              $scope.correoCorrecto = true;
             }
           })
           .error(function (data, status, headers, config) {
