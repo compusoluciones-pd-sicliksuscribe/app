@@ -9,7 +9,6 @@
 
     $scope.init();
     $scope.RestablecerContrasena = function () {
-      console.log($scope.Usuario.CorreoElectronico, 'hola');
       if ($scope.Usuario.CorreoElectronico !== undefined ) {
         UsuariosFactory.postRestablecer($scope.Usuario)
           .success(function (result) {
