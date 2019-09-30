@@ -289,6 +289,19 @@
         resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if ((Session)) { $location.path('/404'); } } }
       })
 
+      
+      .when('/Terminos', {
+        controller: 'TerminosYCondicionesController', templateUrl: 'app/views/TuClick/TerminosYCondiciones.html'
+      }) 
+
+      .when('/AvisoPrivacidad', {
+        controller: 'AvisoPrivacidadController', templateUrl: 'app/views/TuClick/AvisoPrivacidad.html',
+      })
+       
+      .when('/DatosContacto', {
+        controller: 'DatosContactoController', templateUrl: 'app/views/TuClick/DatosContacto.html',
+      })
+
       .when('/Empresa/ActualizarDominio/:IdEmpresa', {
         controller: 'EmpresasUpdateMicrosoftDomainController', templateUrl: 'app/views/Empresas/EmpresasUpdateMicrosoftDomain.html',
         resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 2)) { $location.path('/404'); } } }

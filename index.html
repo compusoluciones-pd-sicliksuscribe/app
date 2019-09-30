@@ -447,9 +447,11 @@
 						<div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4  hidden-xs hidden-sm pull-right" style="color:#fff;">
 							<div class="pull-right">
 								<p style="margin-top: 19px">
-									<a ng-if="currentDistribuidor.UrlAvisoPrivacidad" style="color:#fff;" ng-href="{{currentDistribuidor.UrlAvisoPrivacidad}}">Aviso de privacidad</a>				
+									<a ng-if="currentDistribuidor.UrlAvisoPrivacidad" style="color:#fff;" ng-click="goToPage('AvisoPrivacidad');">Aviso de privacidad</a>				
 									&nbsp;  &nbsp; 
-									<a ng-if="currentDistribuidor.UrlContacto"  style="color:#fff;" ng-href="{{currentDistribuidor.UrlContacto}}">Contacto</a>
+									<a ng-if="currentDistribuidor.UrlContacto"  style="color:#fff;" ng-click="goToPage('DatosContacto');">Contacto</a>
+									&nbsp;  &nbsp; 
+									<a ng-if="currentDistribuidor.TerminosYCondiciones"  style="color:#fff;" ng-click="goToPage('Terminos');">Términos y condiciones</a>
 								</p>
 							</div>
 						</div>
@@ -618,6 +620,9 @@
 	<script type="text/javascript" src="scripts/re-tree.js"></script>
 	<script type="text/javascript" src="scripts/classie.js"></script>
 	<script type="text/javascript" src="app/controllers/PedidoDetalles/SuccessOrderController.js"></script>
+	<script type="text/javascript" src="app/controllers/TuClick/TerminosYCondicionesController.js"></script>
+	<script type="text/javascript" src="app/controllers/TuClick/AvisoPrivacidadController.js"></script>
+	<script type="text/javascript" src="app/controllers/TuClick/DatosContactoController.js"></script>
 
 	<script src="scripts/tinycolor2-min.js"></script>
 	<script src="scripts/angularjs-color-picker.min.js"></script>

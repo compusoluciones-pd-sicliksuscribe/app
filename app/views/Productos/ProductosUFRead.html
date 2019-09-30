@@ -162,7 +162,7 @@
                                                 </span>
                                                 <select id="contrato" name="contrato" class="form-control selectOption ufs" ng-model="Producto.IdPedidoContrato" ng-options="contrato.IdPedido as contrato.NumeroContrato for contrato in Producto.contratos"
                                                     ng-change="contractSetted(Producto)" ng-required="contrato.NumeroContrato !== ''">
-                                                    </select>
+                                                </select>
                                             </div>
                                             <br>
                                             <label for="contacto" ng-if="Producto.IdFabricante === 2 && !Producto.IdPedidoContrato && Producto.IdAccionAutodesk === 1">* Contacto</label>
