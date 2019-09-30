@@ -23,8 +23,8 @@
           dismissOnClick: true,
           compileContent: false,
           combineDuplications: true,
-          horizontalPosition: 'right', // right, center, left
-          verticalPosition: 'bottom', // top, bottom,
+          horizontalPosition: 'left', // right, center, left
+          verticalPosition: 'top', // top, bottom,
           maxNumber: 0
         };
 

@@ -410,7 +410,10 @@
       }
       if (!next) {
         $scope.ShowToast('Revisa que tengas al menos un producto y que tenga un cliente seleccionado con crédito válido.', 'warning');
-      } else $location.path('/Comprar');
+      } else {
+        $location.path('/Comprar');
+        angular.element(document.getElementById('auxScope')).scope().gaFinCompra();
+      }
     };
 
     $scope.IniciarTourCarrito = function () {

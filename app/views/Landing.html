@@ -130,7 +130,7 @@
 								<h4 class="titleSlide">{{Promocion.Nombre}}</h4>
 								<p class="textSlide">{{Promocion.Descripcion}}</p><br>
 
-								<button class="btn btn-success" ng-click="goToPage('Productos/{{Promocion.CodigoProducto}}');" style="background:{{currentDistribuidor.SecondaryColor}}"
+								<button class="btn btn-success" ng-click="goToPage('Productos/{{Promocion.CodigoProducto}}', true);" style="background:{{currentDistribuidor.SecondaryColor}}"
 									ng-show="((SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3) && {{Promocion.EsUrl}}===0)">Comprar</button>
 								
 								<a target="_blank" href="//{{Promocion.CodigoProducto}}">

@@ -90,17 +90,28 @@
       factory.refreshToken();
       return $http.get($rootScope.API + 'users-access');
     };
-    
+
     
     factory.putDeleteFinalUser = function (IdUsuario) {
       factory.refreshToken();
       console.log("entro aqui",IdUsuario);
-      return $http.put($rootScope.API + 'BajaUsuarioFinal/'+ IdUsuario);
-  };
+      return $http.put($rootScope.API + 'BajaUsuarioFinal/' + IdUsuario);
+    };
 
     factory.putUpdateFinalUserData = function (finalUser) {
       factory.refreshToken();
       return $http.put($rootScope.API + 'finalUserData/', finalUser);
+    };
+
+    factory.postRestablecer = function (email) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'Usuarios/Restablecer', email);
+    };
+
+    factory.postCambiarContrasena = function ({ NvaContrasena }, encryptedObject) {      
+      factory.refreshToken();
+      const data = Object.assign({}, { NvaContrasena }, { encryptedObject });
+      return $http.post($rootScope.API + 'Usuarios/CambiarContrasena', data);
     };
     return factory;
   };

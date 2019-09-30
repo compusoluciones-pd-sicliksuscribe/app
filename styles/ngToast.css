@@ -15,11 +15,11 @@
   text-align: center;
 }
 .ng-toast.ng-toast--top {
-  top: 0;
+  top: 50px;
   bottom: auto;
 }
 .ng-toast.ng-toast--top .ng-toast__list {
-  top: 0;
+  top: 50px;
   bottom: auto;
 }
 .ng-toast.ng-toast--top.ng-toast--center .ng-toast__list {

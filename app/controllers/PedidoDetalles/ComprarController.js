@@ -64,7 +64,7 @@
         case makers.HP:
           maker = 'HP';
           break;
-          case makers.COMPUCAMPO:
+        case makers.COMPUCAMPO:
           maker = 'Compucampo';
           break;
         default:
@@ -348,6 +348,7 @@
     };
 
     $scope.Comprar = function () {
+      angular.element(document.getElementById('auxScope')).scope().gaComprar($scope.PedidoDetalles, $scope.Distribuidor);
       if ($scope.Distribuidor.IdFormaPagoPredilecta === paymentMethods.CREDIT_CARD) $scope.PagarTarjeta();
       if ($scope.Distribuidor.IdFormaPagoPredilecta === paymentMethods.CS_CREDIT) comprarProductos();
       if ($scope.Distribuidor.IdFormaPagoPredilecta === paymentMethods.CASH) comprarPrePago();
