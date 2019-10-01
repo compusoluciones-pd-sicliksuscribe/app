@@ -17,6 +17,7 @@
       COMPUSOLUCIONES: 3,
       HP: 4,
       APERIO: 5
+      AMAZONWEBSERVICES:10
     };
     $scope.tipoMonedaCambio = $cookies.getObject('compararPedidosAnteriores');
 
@@ -66,6 +67,9 @@
           break;
           case makers.COMPUCAMPO:
           maker = 'Compucampo';
+          break;
+          case markers.AMAZONWEBSERVICES:
+          maker ='Amazon Web Services';
           break;
         default:
           maker = null;
