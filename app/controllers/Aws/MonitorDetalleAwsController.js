@@ -1,73 +1,74 @@
 (function () {
-    var MonitorDetalleAwsController = function ($scope, $cookies, $location, AmazonDataFactory) {
+  var MonitorDetalleAwsController = function ($scope, AmazonDataFactory) {
+    $scope.init = function () {
+      $scope.CheckCookie();
 
-      $scope.init = function () {
-        $scope.IdCustomer = 0;
-        $scope.CheckCookie();
-   
-     AmazonDataFactory.getDataServiceAWS()
-    .success(function (Services) {
-      $scope.selectServices = Services;
-    })
-    .error(function (data, status, headers, config) {
-      $scope.ShowToast('No pudimos cargar la lista de consumos, por favor intenta de nuevo más tarde.', 'danger');
-    });
+      AmazonDataFactory.getDataServiceAWS()
+        .success(function (Services) {
+          $scope.selectServices = Services;
+          $scope.selectServicesBase = Services;
 
-
-
-    AmazonDataFactory.getCustomersAWS()
-    .success(function (CustomersAws) {
-      $scope.selectCustomersAws = CustomersAws;
-     
-    })
-    .error(function (data, status, headers, config) {
-
-      $scope.ShowToast('No pudimos cargar la lista de clientes de Amazon, por favor intenta de nuevo más tarde.', 'danger');
+          $scope.SessionCookie.IdTipoAcceso === 1 ? (
+            pagination()
+          ) : (
+            $scope.getServicesAws($scope.SessionCookie.IdEmpresa)
+          );
+        })
+        .error(() => {
+          $scope.ShowToast('No pudimos cargar la lista de consumos, por favor intenta de nuevo más tarde.', 'danger');
         });
-        
+
+      AmazonDataFactory.getCustomersAWS()
+        .success(function (CustomersAWS) {
+          $scope.selectCustomersAws = CustomersAWS;
+        })
+        .error(() => {
+          $scope.ShowToast('No pudimos cargar la lista de clientes de Amazon, por favor intenta de nuevo más tarde.', 'danger');
+        });
+
     };
 
-    $scope.getServicesAws = function (IdCustomer) {
-      const payload = {
-        IdDistribuidor: $scope.MonitorIdCustomer || 'all',
-        IdConsola: $scope.MonitorIdConsole || 'all'
-      };
-      AmazonDataFactory.getSearchServiceAws(payload)
-      .success(function (Services) {
-        $scope.selectServices = Services;
-      })
-      .error(function (data, status, headers, config) {
-        $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
-
-        $scope.ShowToast('No pudimos cargar la lista de solicitudes, por favor intenta de nuevo más tarde.', 'danger');
-
-        $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+    const getFilteredByKey = (key, value) => {
+      return $scope.selectServicesBase.filter(function (e) {
+        return e[key] == value;
       });
+    }
 
-      $scope.rfc=$scope.selectServices.RFC;     
-      AmazonDataFactory.getConsolesAWS(IdCustomer)
-      .success(function (ConsolesAws) {
-      $scope.selectConsoles = ConsolesAws;
-      
-      })
-      .error(function (data, status, headers, config) {
+    $scope.getServicesAws = IdCustomer => {
+      IdCustomer ? (
+        $scope.selectServices = getFilteredByKey("IdDistribuidor", IdCustomer),
+        $scope.selectConsoles = [...new Set($scope.selectServices.map(x => x.NombreConsola))],
+        $scope.IdCustomer = IdCustomer
+      ) : (
+        $scope.ShowToast('Seleccione un cliente.', 'danger')
+      );
 
-      $scope.ShowToast('No pudimos cargar la lista de consolas de Amazon, por favor intenta de nuevo más tarde.', 'danger');
-          });
-          
-      
-
-
-
+      pagination();
     };
 
-  
-   
+    $scope.getConsoles = IdConsole => {
+      IdConsole ? (
+        $scope.selectServices = getFilteredByKey("NombreConsola", IdConsole)
+      ) : (
+        $scope.selectServices = getFilteredByKey("IdDistribuidor", $scope.IdCustomer)
+      );
+      pagination();
+    };
+
+    const pagination = () => {
+      $scope.filtered = [], $scope.currentPage = 1, $scope.numPerPage = 10, $scope.maxSize = 5;
+
+      $scope.$watch('currentPage + numPerPage', function () {
+        var begin = (($scope.currentPage - 1) * $scope.numPerPage),
+          end = begin + $scope.numPerPage;
+
+        $scope.filtered = $scope.selectServices.slice(begin, end);
+      });
+    }
     $scope.init();
-    };
-    
-    MonitorDetalleAwsController.$inject = ['$scope', '$cookies', '$location', 'AmazonDataFactory'];
-  
-    angular.module('marketplace').controller('MonitorDetalleAwsController', MonitorDetalleAwsController);
-  }());
-  
+  };
+
+  MonitorDetalleAwsController.$inject = ['$scope', 'AmazonDataFactory'];
+
+  angular.module('marketplace').controller('MonitorDetalleAwsController', MonitorDetalleAwsController);
+}());
