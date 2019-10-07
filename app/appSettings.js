@@ -7,6 +7,7 @@ angular.module('marketplace')
     $rootScope.API = 'http://localhost:8080/';
     $rootScope.MAPI = 'http://localhost:8083/';
     $rootScope.dominio = 'localhost';
+    $rootScope.SICLICK_API = 'http://10.3.112.97:8998/'
     // $rootScope.API = 'https://pruebas.compusoluciones.com/';
     // $rootScope.MAPI = 'http://microsoft-api.us-east-1.elasticbeanstalk.com/';
     // $rootScope.dominio = 'clicksuscribe';

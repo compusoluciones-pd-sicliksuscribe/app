@@ -4,6 +4,7 @@
     $routeProvider
 
       .when('/', { controller: 'LandingController', templateUrl: 'app/views/Landing.html' })
+      .when('/siclick/:tokenSiclick', { controller: 'UsuariosLoginController', templateUrl: 'app/views/Landing.html' })
       .when('/index', { controller: 'LandingController', templateUrl: 'app/views/Landing.html' })
       .when('/Login', { controller: 'UsuariosLoginController', templateUrl: 'app/views/Usuarios/UsuariosLogin.html' })
       .when('/Iniciar', { controller: 'UsuariosLoginController', templateUrl: 'app/views/Usuarios/UsuariosLogin.html' })
