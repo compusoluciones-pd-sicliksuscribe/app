@@ -4,6 +4,11 @@
   var factory = {};
   var Session = {};
 
+  factory.postRequestDataAWSProduct = function (Product) {
+    factory.refreshToken();
+    return $http.post($rootScope.API + 'amazonWebServices/requestDataAWSProducts', Product);
+  };
+
   factory.refreshToken = function () {
     Session = $cookies.getObject('Session');
     if (!Session) { Session = { Token: 'no' }; }
@@ -24,7 +29,7 @@
 
   factory.getConsolesAWS = function (IdCustomer) {
     factory.refreshToken();
-    return $http.get($rootScope.API + 'amazonWebServices/getConsolesAWS/'+IdCustomer);
+    return $http.get($rootScope.API + 'amazonWebServices/getConsolesAWS/' + IdCustomer);
   };
 
   factory.getSearchServiceAWS = function (body) {
