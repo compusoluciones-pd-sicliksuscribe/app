@@ -217,7 +217,7 @@
 						<div class="form-group">
 							<label labelfor="aQuitarProducto"></label>
 							<h4>
-								<a id="aQuitarProducto" title="Eliminar" ng-click="QuitarProducto(producto);">
+								<a id="aQuitarProducto" title="Eliminar" ng-click="QuitarProducto(producto);" ng-hide="pedido.IdFabricante === 10">
 									<span class="glyphicon glyphicon-trash" style="cursor:pointer"></span>
 								</a>
 							</h4>

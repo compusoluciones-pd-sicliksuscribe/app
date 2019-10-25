@@ -16,7 +16,7 @@
 			</select>
 		</div>
 	</div>
-
+	
 	<div class="form-group row" ng-show="!(EmpresaSelect === null) || (SessionCookie.IdTipoAcceso === 4 || SessionCookie.IdTipoAcceso === 6)">
 		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
 		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
@@ -84,6 +84,26 @@
 	<div ng-show="Vacio === 0 && EmpresaSelect != ''">
 		<h4>Aún no cuentas con suscripciones o servicios... </h4>
 	</div>
+	<!-- Detalle pedidos AWS -->
+	<div ng-show="BuscarProductos.IdFabricante == 10" class="row">
+		<div  ng-repeat="pedido in Pedidos | filter:PedidoFilter " style="margin-top: 50px;">
+			<div class="row">
+				<ul style="list-style-type:none; padding:0%">
+					<label for="Pedido">Pedido: </label> {{ pedido.IdPedido }} </br>
+					<hr>
+					<h4><label for="Pedido">{{pedido.NombreConsola}}</label></h4>
+					<div class="row"><div  class="col-sm-4"><label for="Pedido" >Fabricante: </label> Amazon Web Services</div> <div  class="col-sm-4"><label for="Fecha inicio"> Consumo Total De  Servicios Aws: </label> {{ pedido.ConsumoAlDia }} </div> <div  class="col-sm-4"><label for="Fecha inicio">Fecha Inicio: </label> {{ pedido.FechaInicio }} </br></div></div>
+					<li ng-if="pedido.IdFormaPago === 2"> <label for="FormaPago">Forma de Pago:</label> Credito Compusoluciónes</li>
+					<li ng-if="pedido.IdFormaPago === 1"> <label for="FormaPago">Forma de Pago:</label> Tarjeta de Crédito</li>
+					<li ng-if="pedido.IdFormaPago === 3"> <label for="FormaPago">Forma de Pago:</label> PayPal</li>
+					<li ng-if="pedido.IdFormaPago === 4"> <label for="FormaPago">Forma de Pago:</label> Transferencia</li>
+					<label for="Moneda">Moneda de Pago: </label> {{ pedido.MonedaPago }}
+					<li ng-if="pedido.IdEsquemaRenovacion === 8"> <label for="FormaPago">Esquema de renovación: </label> Cada día 3 del mes</li>
+					<label for="Fecha inicio">Id Consola: </label> {{ pedido.IdConsola }} 
+				</ul>
+			</div>
+		</div>
+	</div>
 
 	<!-- Detalle pedidos MS -->
 	<div ng-if="(BuscarProductos.IdFabricante === 1  || BuscarProductos.IdFabricante === 5 || BuscarProductos.IdFabricante === 7 || BuscarProductos.IdFabricante === 6) && EmpresaSelect" ng-repeat="pedido in Pedidos | filter:PedidoFilter">	
@@ -98,7 +118,7 @@
 						<div class="row" ng-hide="detalles.IdTipoProducto !== 1">
 	
 							<div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
-								<h4><b>{{ detalles.Nombre }}</b><span ng-if="detalles.IdCompraUF" class="badge badge-secondary"> TuClick</span></h4>
+								<h4><b>{{ detalles.Nombre }}</b></h4>
 								<label for="">Tipo de producto:</label> {{ detalles.Tipo  }}
 								<br>
 								<label for="">Estatus del pedido:</label> {{detalles.Estatus }}
@@ -116,7 +136,7 @@
 						<div class="row" ng-show="detalles.IdTipoProducto !== 1">
 	
 							<div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
-								<h4><b>{{ detalles.Nombre }}</b><span ng-if="detalles.IdCompraUF" class="badge badge-secondary"> TuClick</span></h4>
+								<h4><b>{{ detalles.Nombre }}</b></h4>
 								<label for="">Fabricante:</label> {{ pedido.Fabricante }}
 								<br>
 								<label for="">Tipo de producto:</label> {{ detalles.Tipo }}
@@ -312,7 +332,7 @@
 			<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"></div>
 			<div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
 				<button id="Renovar" class="pull-right btn btn-block btn-primary" style="margin-top: 20px" ng-if="!pedido.AutoRenovable"
-				ng-disabled="(!pedido.Renovacion || pedido.PorRenovar || pedido.Renovado) && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)"
+					ng-disabled="(!pedido.Renovacion || pedido.PorRenovar || pedido.Renovado) && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)"
 					data-toggle="modal" data-target="#renovarModal"
 					ng-click="AgregarContrato(pedido);">
 					Renovar
@@ -325,8 +345,9 @@
 				<td>
 
 					<div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
-						<h4><b>{{ detalles.Nombre }}</b><span ng-if="detalles.IdCompraUF" class="badge badge-secondary">TuClick</span></h4>
+						<h4><b>{{ detalles.Nombre }}</b></h4>
 						<ul style="list-style-type:none; padding:0%">
+							<li> <label for="Order">Número de pedido:</label> {{ detalles.IdPedido }} </li>
 							<li> <label for="TipoProducto">Tipo de producto:</label> {{ detalles.Tipo }} </li>
 							<li ng-if="detalles.IdEstatusPedido === 2"> <label for="Estatus">Estatus pedido: </label> Pago pendiente </li>
 							<li ng-if="detalles.IdEstatusPedido === 3"> <label for="Estatus">Estatus pedido: </label> Pagado	</li>
@@ -429,7 +450,7 @@
 
 					<br>
 
-					<div ng-show="pedido.AutoRenovable">
+					<div>
 						<label>Fecha limite de cancelación: </label>
 						<br/> {{ pedido.FechaCancelacion  }}
 					</div>

@@ -392,7 +392,7 @@
           PedidoDetallesFactory.idOrderComparePaymentCurrency(order)
           .then(function (result) {
             result.data.data.forEach(function (compararPedidosAnteriores) {
-              if (order.MonedaPago === compararPedidosAnteriores.MonedaPago) {
+              if (order.MonedaPago === compararPedidosAnteriores.MonedaPago && order.IdFabricante != 1 ) {
               } else {
                 $cookies.putObject('compararPedidosAnteriores', compararPedidosAnteriores);
                 document.getElementById('modalTipoMoneda').style.display = 'block';

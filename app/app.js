@@ -523,7 +523,11 @@
 
       .when('/Restablecer', { controller: 'UsuariosRestablecerController', templateUrl: 'app/views/Usuarios/UsuariosRestablecer.html' })
       .when('/CambiarContrasena/:encryptedObject', { controller: 'UsuariosCambiarContrasenaController', templateUrl: 'app/views/Usuarios/UsuariosCambiarContrasena.html' })
-
+      .when('/MonitorAws', {
+        controller: 'MonitorDetalleAwsController', templateUrl: 'app/views/Aws/MonitorDetalleAws.html',
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); 
+        if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === 6 || Session.IdTipoAcceso === 7 || Session.IdTipoAcceso === 1)) { $location.path('/404'); } } }
+      })
       /* .when('/:Subdominio', { controller: 'UsuariosLoginController', templateUrl: 'app/views/Usuarios/UsuariosLogin.html' }) */
 
       .otherwise({ redirectTo: '/404' });
