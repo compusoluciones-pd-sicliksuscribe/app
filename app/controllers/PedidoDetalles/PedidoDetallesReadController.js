@@ -17,7 +17,8 @@
       COMPUSOLUCIONES: 3,
       HP: 4,
       APERIO: 5,
-      COMPUCAMPO: 8
+      COMPUCAMPO: 8,
+      AWS: 10
     };
 
     const error = function (error) {
@@ -78,6 +79,9 @@
           break;
         case makers.COMPUCAMPO:
           maker = 'Compucampo';
+          break;
+        case makers.AWS:
+          maker = 'Amazon Web Servies';
           break;
         default:
           maker = null;
@@ -199,7 +203,8 @@
           if ($scope.PedidoDetalles[indexOrder].Productos.length === 0) $scope.PedidoDetalles.splice(indexOrder, 1);
         });
       });
-      return PedidoDetallesFactory.deletePedidoDetalles(PedidoDetalle.IdPedidoDetalle)
+      if (PedidoDetalle.IdFabricante !== makers.AWS) {
+        return PedidoDetallesFactory.deletePedidoDetalles(PedidoDetalle.IdPedidoDetalle)
         .success(function (PedidoDetalleResult) {
           if (!PedidoDetalleResult.success) {
             $scope.ShowToast(PedidoDetalleResult.message, 'danger');
@@ -213,6 +218,9 @@
           $scope.ShowToast('No pudimos quitar el producto seleccionado. Intenta de nuevo más tarde.', 'danger');
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
+      } else {
+        $scope.ShowToast('No pudimos quitar el producto seleccionado, corresponde a un producto de AWS.', 'danger');
+      }
     };
 
     $scope.ValidarFormaPago = function () {

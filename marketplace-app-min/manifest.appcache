@@ -20,6 +20,7 @@ CACHE:
      # app/views/Soporte.html
      # app/views/Contacto.html
      # app/views/Sugerencias.html
+     # app/views/MonitorDetalleAws.html
 
      # app/views/Empresas/EmpresasCompletar.html
      # app/views/Empresas/EmpresasCreate.html

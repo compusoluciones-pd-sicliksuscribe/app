@@ -8,6 +8,7 @@
     "angular-colorpicker-directive": "^2.0.0",
     "angularjs-color-picker": "^3.4.8",
     "autotrack": "^2.4.1",
+    "serve": "^11.1.0",
     "tinycolor2": "^1.4.1"
   },
   "devDependencies": {

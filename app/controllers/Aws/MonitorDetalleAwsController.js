@@ -28,6 +28,7 @@
         return e[key] == value;
       });
     }
+
     $scope.getServicesAws = IdCustomer => {
       IdCustomer ? (
         $scope.selectServices = getFilteredByKey("IdDistribuidor", IdCustomer),
@@ -38,6 +39,7 @@
       );
       pagination();
     };
+
     $scope.getConsoles = IdConsole => {
       IdConsole ? (
         $scope.selectServices = getFilteredByKey("NombreConsola", IdConsole)
@@ -46,16 +48,21 @@
       );
       pagination();
     };
+
     const pagination = () => {
       $scope.filtered = [], $scope.currentPage = 1, $scope.numPerPage = 10, $scope.maxSize = 5;
+
       $scope.$watch('currentPage + numPerPage', function () {
         var begin = (($scope.currentPage - 1) * $scope.numPerPage),
           end = begin + $scope.numPerPage;
+
         $scope.filtered = $scope.selectServices.slice(begin, end);
       });
     }
     $scope.init();
   };
+
   MonitorDetalleAwsController.$inject = ['$scope', 'AmazonDataFactory'];
+
   angular.module('marketplace').controller('MonitorDetalleAwsController', MonitorDetalleAwsController);
 }());
