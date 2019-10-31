@@ -190,16 +190,12 @@
 											</ul>
 										</li>
 
-										<li class="green four" ng-show="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 4 || SessionCookie.IdTipoAcceso == 5 || SessionCookie.IdTipoAcceso == 6 || SessionCookie.IdTipoAcceso == 7) && (SessionCookie.LeyoTerminos == 1)">
-											<a href="#/Usuario/{{SessionCookie.IdUsuario}}"> <span class="glyphicon glyphicon-user"></span>
-												<div class="text">{{SessionCookie.Nombre}} {{SessionCookie.ApellidoPaterno }}
-													<span ng-show="!SessionCookie.ApellidoPaterno">
-														.......
-													</span>
-												</div>
-											</a>
-										</li>
-
+										<li class="green" ng-show="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 4 || SessionCookie.IdTipoAcceso == 5 || SessionCookie.IdTipoAcceso == 6 || SessionCookie.IdTipoAcceso == 7) && (SessionCookie.LeyoTerminos == 1)">
+												<a href="http://10.3.112.113:3000/tablero"><span  style="padding-right:5px;">
+														<img class="imagen" style="height: 16px !important; width: 16px !important;" src="images/favicon_siclick.ico">
+												</span>siclik </a>
+											</li>
+	
 										<li class="red" ng-show="(SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
 											<a ng-click="goToPage('monitor-soporte');"><span class="fa fa-ticket" style="padding-right:5px;"></span> Soporte </a>
 										</li>
@@ -242,9 +238,21 @@
 										<li class="yellow" ng-show="(SessionCookie.Nombre == undefined) || (SessionCookie.IdTipoAcceso == 4 || SessionCookie.IdTipoAcceso == 5 || SessionCookie.IdTipoAcceso == 6)">
 											<a ng-click="goToPage('SoporteCSP');"><span class="fa fa-ticket" style="padding-right:5px;"></span> Soporte CSP</a>
 										</li>
-
-										<li class="red" ng-show="((SessionCookie.Nombre !== undefined) && (SessionCookie.IdTipoAcceso != 1 ))" style="padding-right:15px;">
-											<a ng-click="CerrarSesion();"><span class="glyphicon glyphicon-log-out"></span> Cerrar sesión</a>
+										<li class="red" style="padding-right:5px;" ng-show="((SessionCookie.Nombre !== undefined) &amp;&amp; (SessionCookie.IdTipoAcceso != 1 ))" dropdown>
+											<a dropdown-toggle>
+												<span id="userData" class="glyphicon glyphicon-user"></span>
+												<b class="caret"></b>
+											</a>
+											<ul class="dropdown-menu red">
+												<li id="dataUser" ng-show="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 4 || SessionCookie.IdTipoAcceso == 5 || SessionCookie.IdTipoAcceso == 6 || SessionCookie.IdTipoAcceso == 7) && (SessionCookie.LeyoTerminos == 1)">
+													<a href="#/Usuario/{{SessionCookie.IdUsuario}}"> <span class="glyphicon glyphicon-user"></span>
+														Editar datos
+													</a>
+												</li>
+												<li ng-show="((SessionCookie.Nombre !== undefined) &amp;&amp; (SessionCookie.IdTipoAcceso != 1 ))">
+													<a ng-click="CerrarSesion();"><span class="glyphicon glyphicon-log-out"></span> Cerrar sesión</a>
+												</li>
+											</ul>
 										</li>
 
 										<li class="navColor" ng-show="SessionCookie.Nombre == undefined" style="padding-right:15px;">
@@ -482,6 +490,8 @@
 									<a style="color:#fff;" href="http://www.compusoluciones.com/aviso-de-privacidad/">Aviso de privacidad</a>
 									&nbsp; /&nbsp;
 									<a style="color:#fff;" href="https://www.compusoluciones.com/contacto/">Queremos Escucharte</a>
+									&nbsp; /&nbsp;
+									<a style="color:#fff;" href="http://10.3.112.113:3000/comercio">Siclik</a>
 								</p>
 							</div>
 						</div>
