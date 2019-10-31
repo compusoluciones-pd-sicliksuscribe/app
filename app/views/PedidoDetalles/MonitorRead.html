@@ -172,8 +172,8 @@
 								<div ng-if="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)" class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
 									<label>Consumo: </label>
 									<br/> 
-									<div ng-if="detalles.MonedaPrecio === 'Dólares'">{{ (pedido.TipoCambio * detalles.PrecioUnitario) | currency }} {{ pedido.MonedaPago }} </div>
-									<div ng-if="detalles.MonedaPrecio === 'Pesos'">{{ detalles.PrecioUnitario | currency}} {{pedido.MonedaPago}} </div>
+									<!--<div ng-if="detalles.MonedaPrecio === 'Dólares'">{{ (pedido.TipoCambio * detalles.PrecioUnitario) | currency }} {{ pedido.MonedaPago }} </div> Se quitó la validación por petición de Memo Meza-->
+									<div>{{ detalles.PrecioUnitario | currency}} Dólares </div>
 									<br/> <a href="#/DetallesAzure/{{pedido.IdPedido}}">Ver detalles</a>
 								</div>
 								<div ng-if="(SessionCookie.IdTipoAcceso == 4 || SessionCookie.IdTipoAcceso == 6 || SessionCookie.IdTipoAcceso == 7)"
