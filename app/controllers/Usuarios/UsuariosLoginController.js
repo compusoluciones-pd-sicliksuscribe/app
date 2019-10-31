@@ -21,7 +21,13 @@
     };
 
     const getUserSiclickData = tokenSiclick => {
-      const decodedTokenSiclick = jwtHelper.decodeToken(tokenSiclick);
+      let decodedTokenSiclick = '';
+      try {
+        decodedTokenSiclick = jwtHelper.decodeToken(tokenSiclick);
+      } catch {
+        $scope.ShowToast('Error al iniciar sesión', 'danger');
+        $location.path('/Login');
+      }
       UsuariosFactory.getUserDataSiclick(decodedTokenSiclick, tokenSiclick)
         .success(function (result) {
           const user = {
@@ -30,7 +36,12 @@
           };
           UsuariosFactory.postUsuarioIniciarSessionSiClick(user)
             .success(function (result) {
+              if (result[0].success) {
                 return buildToken(result);
+              } else {
+              $scope.ShowToast('No cuentas con acceso para esta plataforma', 'danger');
+              $location.path('/Login');
+              }
             })
             .error(function (data, status, headers, config) {
               $scope.ShowToast('Error al iniciar sesión', 'danger');
@@ -38,8 +49,8 @@
             });
         })
         .error(function (data, status, headers, config) {
+          location.href = $rootScope.SICLIK_FRONT + "login/suscribe";
           $scope.ShowToast('Error al iniciar sesión', 'danger');
-          $log.log('data error: ' + data + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
     }
 

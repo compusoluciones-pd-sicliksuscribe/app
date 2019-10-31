@@ -121,7 +121,7 @@
 
     factory.getUserDataSiclick = function ({ id }, tokenSiclick) {
       $http.defaults.headers.common['Authorization'] = 'Bearer ' + tokenSiclick;
-      return $http.get($rootScope.SICLICK_API + 'users/' + id);
+      return $http.get($rootScope.SICLIK_API + 'users/' + id);
     };
     return factory;
   };
