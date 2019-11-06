@@ -16,7 +16,7 @@
       AUTODESK: 2,
       COMPUSOLUCIONES: 3,
       HP: 4,
-      APERIO: 5
+      APERIO: 5,
       AMAZONWEBSERVICES:10
     };
     $scope.tipoMonedaCambio = $cookies.getObject('compararPedidosAnteriores');
