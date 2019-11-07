@@ -68,7 +68,7 @@
         case makers.COMPUCAMPO:
           maker = 'Compucampo';
           break;
-          case markers.AMAZONWEBSERVICES:
+          case makers.AMAZONWEBSERVICES:
           maker ='Amazon Web Services';
           break;
         default:
