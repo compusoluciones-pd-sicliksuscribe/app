@@ -46,12 +46,12 @@
       return $http.put($rootScope.API + 'Usuarios', Usuario);
     };
 
-    factory.postUsuarioIniciarSession = function (usuario) {
+    factory.postUsuarioIniciarSesion = function (usuario) {
       factory.refreshToken();
       return $http.post($rootScope.API + 'Usuarios/Login', usuario);
     };
 
-    factory.postUsuarioIniciarSessionSiClick = function (usuario) {
+    factory.postUsuarioIniciarSesionSiClick = function (usuario) {
       factory.refreshToken();
       delete $http.defaults.headers.common['Authorization'];
       return $http.post($rootScope.API + 'Usuarios/LoginSiClick', usuario);

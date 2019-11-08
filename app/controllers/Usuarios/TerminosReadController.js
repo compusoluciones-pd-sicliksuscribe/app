@@ -56,13 +56,13 @@
           Contrasena: $scope.Usuario.Contrasena
         };
 
-      UsuariosFactory.postUsuarioIniciarSession(LoginUsuario)
+      UsuariosFactory.postUsuarioIniciarSesion(LoginUsuario)
         .success(function (resultLogin) {
           if (resultLogin[0].Success == true) {
             UsuariosFactory.putUsuario(UsuarioActualizar)
               .success(function (result) {
                 if (result[0].Success == true) {
-                  UsuariosFactory.postUsuarioIniciarSession(LoginUsuario)
+                  UsuariosFactory.postUsuarioIniciarSesion(LoginUsuario)
                     .success(function (result) {
                       if (result[0].Success == true) {
                         var Session = {};

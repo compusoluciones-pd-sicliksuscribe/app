@@ -34,7 +34,7 @@
             CorreoElectronico: result.email,
             IdERP: decodedTokenSiclick.customer.id
           };
-          UsuariosFactory.postUsuarioIniciarSessionSiClick(user)
+          UsuariosFactory.postUsuarioIniciarSesionSiClick(user)
             .success(function (result) {
               if (result[0].success) {
                 return buildToken(result);
@@ -122,7 +122,7 @@
       $cookies.remove('Pedido');
       $scope.Usuario.IdEmpresa = $scope.currentDistribuidor.IdEmpresa;
       $scope.SessionCookie = {};
-      UsuariosFactory.postUsuarioIniciarSession($scope.Usuario)
+      UsuariosFactory.postUsuarioIniciarSesion($scope.Usuario)
         .success(function (result) {
           return buildToken(result);
         })

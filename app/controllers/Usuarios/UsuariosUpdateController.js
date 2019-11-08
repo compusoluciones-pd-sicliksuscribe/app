@@ -82,7 +82,7 @@
 
           $scope.ShowToast('Datos inválidos, favor de verificar', 'danger');
         } else {
-          UsuariosFactory.postUsuarioIniciarSession($scope.Usuario)
+          UsuariosFactory.postUsuarioIniciarSesion($scope.Usuario)
             .success(function (result) {
               if (result[0].Success == true) {
                 if ($scope.Usuario.ContrasenaNueva != null && $scope.Usuario.ContrasenaNueva != undefined && $scope.Usuario.ContrasenaConfirmar != null && $scope.Usuario.ContrasenaConfirmar != undefined)
@@ -90,7 +90,7 @@
                 UsuariosFactory.putUsuario($scope.Usuario)
                   .success(function (result) {
                     if (result[0].Success == true) {
-                      UsuariosFactory.postUsuarioIniciarSession($scope.Usuario)
+                      UsuariosFactory.postUsuarioIniciarSesion($scope.Usuario)
                         .success(function (result) {
                           if (result[0].Success == true) {
                             var Session = {};
