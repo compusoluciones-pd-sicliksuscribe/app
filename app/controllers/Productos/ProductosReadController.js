@@ -92,16 +92,17 @@
    $scope.CambiarFechaRenovacion = function (Producto) {
     if (Producto.Esquema === 01 || Producto.Esquema === '01'){
       var fecha = new Date();
-      const a = 22;
-      const monthApart = a >= 22 ? 2 : 1;
-      Producto.FechaFinSuscripcion = '22' + "/" + (fecha.getMonth() + monthApart) + "/" +((fecha.getFullYear()));
-      Producto.EsquemaRenovacion ="Cada día 22 del mes";
+      fecha.setMonth(fecha.getMonth() + 1);
+      fecha.setDate(fecha.getDate() - 1);
+      Producto.FechaFinSuscripcion = fecha.getDate() + "/" + (fecha.getMonth() +1)+ "/" + (fecha.getFullYear());
+      Producto.EsquemaRenovacion ="Mensual";
       Producto.IdEsquemaRenovacion='01';
      } 
     
     if (Producto.Esquema === 02 ||Producto.Esquema === '02'){
       var fecha = new Date();
-      Producto.FechaFinSuscripcion = fecha.getDate() + "/" + (fecha.getMonth() +1) + "/" +((fecha.getFullYear()+1));
+      fecha.setDate(fecha.getDate() - 1);
+      Producto.FechaFinSuscripcion = fecha.getDate() + "/" + (fecha.getMonth() +1) + "/" + (fecha.getFullYear()+1);
       Producto.EsquemaRenovacion ='Anual';
       Producto.IdEsquemaRenovacion='02';
       Producto.PrecioNormalAnual = Producto.PrecioNormal * 12;
