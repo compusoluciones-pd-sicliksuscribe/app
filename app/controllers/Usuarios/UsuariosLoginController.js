@@ -36,7 +36,7 @@
           };
           UsuariosFactory.postUsuarioIniciarSesionSiClick(user)
             .success(function (result) {
-              if (result[0].success) {
+              if (result[0].Success) {
                 return buildToken(result);
               } else {
               $scope.ShowToast('No cuentas con acceso para esta plataforma', 'danger');
