@@ -120,8 +120,13 @@
 					<div class="form-group">
 						<label for="IdEmpresaUsuarioFinal">Usuario final:</label> {{ pedido.NombreEmpresa }} <br>
 						<label>Marca de los productos:</label> {{ pedido.NombreFabricante }} <br>
-						<label ng-if="pedido.IdFabricante === 10" >FechaInicio {{ pedido.FechaInicio }} </label> <br>
+<<<<<<< HEAD
+						<label ng-if="pedido.IdFabricante === 10" >Fecha inicio : {{ pedido.FechaInicio }} </label> <br>
 						<label ng-if="pedido.IdFabricante !== 10" >Duración del periodo: del {{ pedido.FechaInicio }} al {{ pedido.FechaFin | date:'yyyy-MM-dd'}}</label> <br>						
+=======
+						<label ng-if="pedido.IdFabricante === 10" >Periodo: del {{ pedido.FechaInicio }} </label> <br>
+                        <label ng-if="pedido.IdFabricante !== 10" >Duración del periodo: del {{ pedido.FechaInicio }} al {{ pedido.FechaFin | date:'yyyy-MM-dd'}}</label> <br> 
+>>>>>>> 93ced89b98506a25647aeba5bdbd641063b2247d
 						<label>Renovación del periodo:</label> {{ pedido.NombreEsquemaRenovacion }}						
 						<div ng-if="pedido.IdFabricante === 2">
 							<label>Contrato: </label> {{ pedido.ContratoBaseAutodesk || 'Nuevo' }} <br>
