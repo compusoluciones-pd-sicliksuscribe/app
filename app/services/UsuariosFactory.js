@@ -51,6 +51,12 @@
       return $http.post($rootScope.API + 'Usuarios/Login', usuario);
     };
 
+    factory.postUsuarioIniciarSesionSiClick = function (usuario) {
+      factory.refreshToken();
+      delete $http.defaults.headers.common['Authorization'];
+      return $http.post($rootScope.API + 'Usuarios/LoginSiClick', usuario);
+    };
+
     factory.postRecuperar = function (usuario) {
       factory.refreshToken();
       return $http.post($rootScope.API + 'Usuarios/Recuperar', usuario);
@@ -94,7 +100,6 @@
     
     factory.putDeleteFinalUser = function (IdUsuario) {
       factory.refreshToken();
-      console.log("entro aqui",IdUsuario);
       return $http.put($rootScope.API + 'BajaUsuarioFinal/' + IdUsuario);
     };
 
@@ -112,6 +117,11 @@
       factory.refreshToken();
       const data = Object.assign({}, { NvaContrasena }, { encryptedObject });
       return $http.post($rootScope.API + 'Usuarios/CambiarContrasena', data);
+    };
+
+    factory.getUserDataSiclick = function ({ id }, tokenSiclick) {
+      $http.defaults.headers.common['Authorization'] = 'Bearer ' + tokenSiclick;
+      return $http.get($rootScope.SICLIK_API + 'users/' + id);
     };
     return factory;
   };
