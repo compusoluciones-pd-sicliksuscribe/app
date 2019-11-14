@@ -92,14 +92,14 @@
 					<label for="Pedido">Pedido: </label> {{ pedido.IdPedido }} </br>
 					<hr>
 					<h4><label for="Pedido">{{pedido.NombreConsola}}</label></h4>
-					<div class="row"><div  class="col-sm-4"><label for="Pedido" >Fabricante: </label> Amazon Web Services</div> <div  class="col-sm-4"><label for="Fecha inicio"> Consumo Total De  Servicios Aws: </label> {{ pedido.ConsumoAlDia }} </div> <div  class="col-sm-4"><label for="Fecha inicio">Fecha Inicio: </label> {{ pedido.FechaInicio }} </br></div></div>
-					<li ng-if="pedido.IdFormaPago === 2"> <label for="FormaPago">Forma de Pago:</label> Credito Compusoluciónes</li>
-					<li ng-if="pedido.IdFormaPago === 1"> <label for="FormaPago">Forma de Pago:</label> Tarjeta de Crédito</li>
-					<li ng-if="pedido.IdFormaPago === 3"> <label for="FormaPago">Forma de Pago:</label> PayPal</li>
-					<li ng-if="pedido.IdFormaPago === 4"> <label for="FormaPago">Forma de Pago:</label> Transferencia</li>
-					<label for="Moneda">Moneda de Pago: </label> {{ pedido.MonedaPago }}
-					<li ng-if="pedido.IdEsquemaRenovacion === 8"> <label for="FormaPago">Esquema de renovación: </label> Cada día 3 del mes</li>
-					<label for="Fecha inicio">Id Consola: </label> {{ pedido.IdConsola }} 
+					<div class="row"><div  class="col-sm-4"><label for="Pedido" >Fabricante: </label> Amazon Web Services</div> <div  class="col-sm-4"><label for="Fecha inicio"> Consumo total de servicios AWS: </label> $ {{ pedido.ConsumoAlDia }}</div> <div  class="col-sm-4"><label for="Fecha inicio">Periodo : </label> {{ pedido.FechaInicio }} </br></div></div>
+					<li ng-if="pedido.IdFormaPago === 2"> <label for="FormaPago">Forma de pago:</label> Crédito CompuSoluciónes</li>
+					<li ng-if="pedido.IdFormaPago === 1"> <label for="FormaPago">Forma de pago:</label> Tarjeta de crédito</li>
+					<li ng-if="pedido.IdFormaPago === 3"> <label for="FormaPago">Forma de pago:</label> Paypal</li>
+					<li ng-if="pedido.IdFormaPago === 4"> <label for="FormaPago">Forma de pago:</label> Transferencia</li>
+					<div class="row"><div  class="col-sm-4"><label for="Moneda">Moneda de pago: </label> {{ pedido.MonedaPago }}</div> <div  class="col-sm-8"><label >Última actualización :</label> {{ pedido.FechaRegistroAWS }}  <br></div></div>
+					<li ng-if="pedido.IdEsquemaRenovacion === 8"> <label for="FormaPago">Esquema de renovación: </label> Mensual </li>
+					<label for="Fecha inicio">Id consola: </label> {{ pedido.IdConsola }} 
 				</ul>
 			</div>
 		</div>
