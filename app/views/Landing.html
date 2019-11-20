@@ -137,8 +137,8 @@
 									<button class="btn btn-success" ng-show="{{Promocion.EsUrl}}===1 && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)" style="background:{{currentDistribuidor.SecondaryColor}}">Aprovecha</button>
 								</a>
 								<br><br>
-								<div class="sliderMessage" ng-show="!(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 4)">
-									Para comprar este producto, ponte en contacto con tu distribuidor
+								<div class="sliderMessage" ng-show="!(currentDistribuidor.IdEmpresa)">
+									Para comprar este producto, ponte en contacto con tu distribuidor {{currentDistribuidor.IdEmpresa}}
 								</div>
 								
 								<!-- Para tuclick -->
@@ -146,7 +146,7 @@
 								ng-show="((SessionCookie.IdTipoAcceso == 4) && {{Promocion.EsUrl}}===0 && SessionCookie.distribuidores)">Comprar</button>
 								<br><br>
 								<a target="_blank" href="//{{Promocion.CodigoProducto}}">
-									<button class="btn btn-success" ng-show="{{Promocion.EsUrl}}===1 && (SessionCookie.IdTipoAcceso == 4)" style="{{secondaryColor}}">Aprovecha</button>
+									<button class="btn btn-success" ng-show="{{Promocion.EsUrl}}===1 && (currentDistribuidor.IdEmpresa)" style="{{secondaryColor}}">Aprovecha</button>
 								</a>
 								<!-- Para tuclick -->
 

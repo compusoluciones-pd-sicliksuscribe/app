@@ -9,7 +9,7 @@ angular.module('marketplace')
     // $rootScope.dominio = 'localhost';
     // $rootScope.SICLIK_API = 'http://10.3.112.97:8998/'
     // $rootScope.SICLIK_FRONT = 'http://10.3.112.113:3000/'
-    $rootScope.SICLIK_FRONT = 'https://siclik.mx/'
+    $rootScope.SICLIK_FRONT = 'https://wwww.siclik.mx/'
     $rootScope.SICLIK_API = 'https://fargate.siclik.mx:8998/'
     $rootScope.API = 'https://pruebas.compusoluciones.com/';
     $rootScope.MAPI = 'http://microsoft-api.us-east-1.elasticbeanstalk.com/';
