@@ -46,6 +46,7 @@
 					<option value="1">Auto Renovables</option>
 					<option value="0">Renovables</option>
 					<option value="2">Cancelados</option>
+					<option value="3">No Renovados</option>
 				</select>
 			</div>
 		</div>
@@ -313,6 +314,7 @@
 			<div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
 				<button id="Renovar" class="pull-right btn btn-block btn-primary" style="margin-top: 20px" ng-if="!pedido.AutoRenovable"
 				ng-disabled="(!pedido.Renovacion || pedido.PorRenovar || pedido.Renovado) && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)"
+				ng-hide="pedido.EstatusContrato === 'notRenewed'"
 					data-toggle="modal" data-target="#renovarModal"
 					ng-click="AgregarContrato(pedido);">
 					Renovar
@@ -376,16 +378,15 @@
 						</ul>
 					</div>
 
-					<div ng-if="detalles.IdTipoProducto !== 3 && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
+					<div ng-if="detalles.IdTipoProducto !== 3 && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3) "
+				    	 ng-hide="pedido.EstatusContrato === 'canceled' || pedido.EstatusContrato === 'notRenewed'">
 						<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
 							<label>Suscripciones: </label> <br>
 							<div style="margin:0; padding:0;" ng-if="detalles.EstatusFabricante !== 'accepted' || (pedido.AutoRenovable && detalles.PagoRenovacion) || (!pedido.AutoRenovable && (!pedido.Renovacion || pedido.PorRenovar))"> {{ detalles.Cantidad }} </div>
-							<!-- <div style="margin:0; padding:0;" ng-if="pedido.Renovacion">{{ pedido.Cantidad }}</div> -->
 							<a ng-click="ActualizarCantidad(detalles.IdPedidoDetalle)" style="text-decoration: none" ng-if="detalles.EstatusFabricante === 'accepted' && ((pedido.AutoRenovable && !detalles.PagoRenovacion) || (!pedido.AutoRenovable && pedido.Renovacion && !pedido.PorRenovar))"> {{ detalles.Cantidad }} &nbsp;
 								<span class="glyphicon glyphicon-triangle-bottom" ng-show="!detalles.MostrarCantidad"></span>
 								<span class="glyphicon glyphicon-triangle-top" ng-show="detalles.MostrarCantidad"></span>
 							</a>
-							<!-- ng-show="detalles.Cantidad !== detalles.CantidadProxima" -->
 							<div style="margin:0; padding:0;"> 
 								<br> <label> Renovación: </label> <br>
 								<div ng-if="!detalles.PorCancelar"> {{  detalles.IdProducto === 3616 ? 25 : detalles.CantidadProxima  }} </div>
@@ -429,13 +430,13 @@
 
 					<br>
 
-					<div ng-show="pedido.AutoRenovable">
+					<div ng-show="pedido.AutoRenovable" ng-hide="pedido.EstatusContrato === 'canceled' || pedido.EstatusContrato === 'notRenewed'" >
 						<label>Fecha limite de cancelación: </label>
 						<br/> {{ pedido.FechaCancelacion  }}
 					</div>
 				</div>
 
-					<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
+					<div ng-hide="pedido.EstatusContrato === 'canceled' || pedido.EstatusContrato === 'notRenewed'" class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
 						<label>Estatus de pedido: </label>
 						<br/>
 						<b> 
