@@ -254,18 +254,18 @@
     $scope.ValidarFormaPago = function () {
       var disabled = false;
       if ($scope.PedidoDetalles) {
+        if (!$scope.PedidoDetalles[0].BanamexCredentials) {
+          $scope.BanamexCredentials = 1;
+        }
+        if (!$scope.PedidoDetalles[0].PaypalCredentials) {
+          $scope.PaypalCredentials = 1;
+        }
         $scope.PedidoDetalles.forEach(function (order) {
           order.Productos.forEach(function (product) {
             if (product.IdTipoProducto === 3) {
               disabled = true;
               $scope.Distribuidor.IdFormaPago = 2;
               $scope.Distribuidor.IdFormaPagoPredilecta = 2;
-            }
-            if (!order.BanamexCredentials) {
-              $scope.BanamexCredentials = 1;
-            }
-            if (!order.PaypalCredentials) {
-              $scope.PaypalCredentials = 1;
             }
           });
         });
