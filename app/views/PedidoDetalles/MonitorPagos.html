@@ -49,11 +49,9 @@
                                     <div>
                                         <input id="pesos" type="radio" name="MonedaPago" ng-change="cambiaMoneda('Pesos', key)" value="Pesos" ng-model="Distribuidor.MonedaPago" class="ng-pristine ng-untouched ng-valid">Pesos
                                     </div>
-                                    <!-- ngIf: isPayingWithPrepaid() -->
                                     <div ng-if="isPayingWithPrepaid()" class="ng-scope" style="">
                                         <input id="dolares" type="radio" name="MonedaPago" value="Dólares" ng-model="Distribuidor.MonedaPago" ng-change="cambiaMoneda('Dólares', key)" class="ng-pristine ng-untouched ng-valid">Dólares
                                     </div>
-                                    <!-- end ngIf: isPayingWithPrepaid() -->
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
