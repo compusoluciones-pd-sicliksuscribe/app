@@ -30,6 +30,9 @@
 								<a target="_blank" href="//{{Promocion.CodigoProducto}}">
 									<button class="btn btn-success" ng-show="{{Promocion.EsUrl}}===1 && (currentDistribuidor.IdEmpresa)" style="{{secondaryColor}}">Aprovecha</button>
 								</a>
+								<a target="_blank">
+									<button ng-click="goToPage('Registrarse');" class="btn btn-success" ng-show="{{Promocion.EsUrl}}=== 0 && !(SessionCookie.IdTipoAcceso)" style="{{secondaryColor}}">Aprovecha</button>
+								</a>
 								<!-- Para tuclick -->
 							</div>
 						</uib-slide>

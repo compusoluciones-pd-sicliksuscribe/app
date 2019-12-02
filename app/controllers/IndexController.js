@@ -160,7 +160,7 @@
       if (deviceDetector.browser === 'firefox' && parseInt(obtenerPrimeraCifraVersionNavegador(deviceDetector)) >= 43) { esSoportado = true; }
       if (deviceDetector.browser === 'safari' && parseInt(obtenerPrimeraCifraVersionNavegador(deviceDetector)) >= 5) { esSoportado = true; }
       if (deviceDetector.browser === 'opera' && parseInt(obtenerPrimeraCifraVersionNavegador(deviceDetector)) >= 34) { esSoportado = true; }
-      if (deviceDetector.browser === 'ms-edge') { esSoportado = true; }
+      if (deviceDetector.browser === 'ms-edge') { esSoportado = false; }
       if (deviceDetector.device === 'android') { esSoportado = true; }
       if (deviceDetector.device === 'ipad') { esSoportado = true; }
       if (deviceDetector.device === 'iphone') { esSoportado = true; }
