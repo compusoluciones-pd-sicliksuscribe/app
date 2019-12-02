@@ -399,9 +399,10 @@
         $scope.PedidoDetalles.forEach(function (order) {
           PedidoDetallesFactory.idOrderComparePaymentCurrency(order)
           .then(function (result) {
+            console.log(result);
             result.data.data.forEach(function (compararPedidosAnteriores) {
-              if (order.MonedaPago === compararPedidosAnteriores.MonedaPago && order.IdFabricante != 1 ) {
-              } else {
+              if (order.MonedaPago !== compararPedidosAnteriores.MonedaPago && order.IdFabricante === 1) {
+                console.log('si entra')
                 $cookies.putObject('compararPedidosAnteriores', compararPedidosAnteriores);
                 document.getElementById('modalTipoMoneda').style.display = 'block';
               }
