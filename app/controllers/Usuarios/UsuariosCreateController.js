@@ -54,7 +54,24 @@
     $scope.UsuarioCreate = function () {
       if ($scope.frm.$valid) {
         delete $scope.Usuario.Formulario;
-        if (Session.IdTipoAcceso !== 2) {
+        if(Session.IdTipoAcceso === 4) {
+          $scope.currentDistribuidor = $cookies.getObject('currentDistribuidor');
+          $scope.Usuario.IdEmpresaDistribuidor = $scope.currentDistribuidor.IdEmpresa;
+          UsuariosFactory.postUsuarioFinal($scope.Usuario)
+            .success(function (result) {
+              if (result.data[0].success == true) {
+                $location.path("/Usuarios/uf");
+                $scope.ShowToast(result.data[0].message, 'success');
+              }
+              else {
+                $scope.ShowToast(result.data[0].message, 'danger');
+              }
+            })
+            .error(function (data, status, headers, config) {
+              $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+            });
+        }
+        else if (Session.IdTipoAcceso !== 2) {
           UsuariosFactory.postUsuario($scope.Usuario)
             .success(function (result) {
               if (result[0].Success == true) {

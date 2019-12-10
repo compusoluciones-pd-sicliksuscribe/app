@@ -67,9 +67,7 @@
     
     $scope.Confirmar = function (IdUsuario) {
       $scope.Usuarios.forEach(function (Usuario) {
-      
         if (Usuario.IdUsuario === IdUsuario) {
-          
           Usuario.Mostrar = !Usuario.Mostrar;
         }
       }, this);
@@ -91,7 +89,6 @@
 
         $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
       });
-        
     };
 
     $scope.MostrarUsuariosEmp = function (IdEmpresa) {

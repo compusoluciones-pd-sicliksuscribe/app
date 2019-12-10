@@ -1,0 +1,66 @@
+<div class="container" ng-swipe-right="" ng-swipe-left="">
+    <div class="form-group row" >
+      <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+        <h2 style="float:left;">Colaboradores
+          <i class="" style="float:right; font-size:12px; margin-top:10px; margin-left:10px;"
+            ng-click="IniciarTourColaborador();"></i>
+        </h2>
+      </div>
+    </div>
+    <div class="form-group row">
+      <div class="col-12 col-md-9">
+        <table class="  table table-hover table-responsive  "  style=" width: 1000% ">
+
+          <th style="cursor:pointer" ng-click="OrdenarPor('Nombre')">
+            <b> &nbsp;Nombre
+              <span class="fa fa-sort"></span>
+            </b>
+            
+          </th>
+          <th>&nbsp;</th>
+      
+          <tr ng-repeat="Usuario in Usuarios | filter:UsuarioFilter | orderBy:sortBy:reverse" class="repeat-animation" class="">
+            <div class="form-group row">
+              <div >
+                <td style="width: 850px;">
+                  <b>
+                    <h3> {{Usuario.Nombre}} {{Usuario.ApellidoPaterno}} {{Usuario.ApellidoMaterno}}</h3>
+                  </b> {{Usuario.CorreoElectronico}}
+                  <br> {{Usuario.Tipo}}, desde el {{Usuario.FechaActivo}}
+                  
+              
+                  <div class="pull-right" ng-show="(!empresaSel == '') && (SessionCookie.IdTipoAcceso !== 1) && (SessionCookie.IdTipoAcceso !== 2) && (SessionCookie.IdTipoAcceso !== 8)">
+                    <h4>
+                      <a href="#/Usuario/{{Usuario.IdUsuario}}">
+                        <span class="glyphicon glyphicon-edit edit"></span>
+                      </a>
+                    </h4>
+                  </div>
+                </td>
+                <td>
+                    <div class="form-group" ng-hide="SessionCookie.Nombre===Usuario.Nombre &&SessionCookie.ApellidoPaterno===Usuario.ApellidoPaterno">
+                      <button  class="btn btn-danger btn-sm" ng-click="Confirmar(Usuario.IdUsuario)" ng-show="SessionCookie.IdTipoAcceso === 1 || SessionCookie.IdTipoAcceso === 2 || SessionCookie.IdTipoAcceso === 3 || SessionCookie.IdTipoAcceso === 4">Eliminar  <span class="glyphicon glyphicon-trash"></span></button>
+                    </div>
+                    <div ng-show="Usuario.Mostrar"class="form-group" style=" margin-top:5px; ">
+      
+                      <div class="form-group">
+                          <button  class="btn btn-warning btn-sm   " style="min-width:0px;height:40px" ng-disabled="form.habilitar" ng-click="BajaUsuario(Usuario.IdUsuario)">Sí</button>
+                          <button class="btn btn-primary btn-sm"  style="min-width:0px;height:40px;" ng-disabled="form.habilitar" ng-click="Confirmar(Usuario.IdUsuario)">No</button>
+                      </div>
+                      
+                    </div>
+                </td>
+              </div>
+              <div  ng-show="Usuario.Mostrar">
+                  <label>El Usuario sera dado de baja, ¿Deseas continuar?</label>
+              </div>
+            </div>
+          </td>
+          </tr>
+        </table>
+      </div>
+      <div class="col-12 col-md-3">
+        <button ng-click="goToPage('Usuario');" class="btn btn-primary newColaborator" style="background:{{currentDistribuidor.PrimaryColor}} !important">Nuevo colaborador&nbsp;<span class="glyphicon glyphicon-plus" ng-hide="SessionCookie.IdTipoAcceso == 8"></span></button>
+      </div>
+    </div>
+</div>
