@@ -299,12 +299,18 @@
         });
     };
 
-    $scope.abrirModal = function (modal) {
+    $scope.validarInfoPedido = function (modal, pedido, detalle) {
+      const CREDITO = 2;
+      if (pedido.IdFormaPagoProxima === CREDITO && pedido.EsOrdenInicial === 0) $scope.abrirModal(modal, pedido);
+      else $scope.CancelarPedido(pedido, detalle);
+    };
+
+    $scope.abrirModal = function (modal, pedido) {
       document.getElementById(modal).style.display = 'block';
-      $scope.fechaInicio = this.pedido.FechaInicio;
+      $scope.fechaInicio = pedido.FechaInicio;
       $scope.nvaFechaFin = new Date();
-      $scope.infoPedido = this.pedido;
-      $scope.infoDetalle = this.pedido.Detalles[0];
+      $scope.infoPedido = pedido;
+      $scope.infoDetalle = pedido.Detalles[0];
     };
 
     $scope.cerrarModal = function (modal) {
