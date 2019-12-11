@@ -257,7 +257,6 @@
     };
 
     $scope.CancelarPedido = function (Pedido, Detalles) {
-      
       $scope.Cancelar = true;
       $scope.guardar = Pedido;
       $scope.form.habilitar = true;
@@ -297,6 +296,17 @@
         .error(function (data, status, headers, config) {
           $scope.ShowToast(data.message, 'danger');
         });
+    };
+    $scope.abrirModal = function (modal) {
+      document.getElementById(modal).style.display = 'block';
+      $scope.fechaInicio = this.pedido.FechaInicio;
+      $scope.nvaFechaFin = new Date();
+      $scope.infoPedido = this.pedido;
+      $scope.infoDetalle = this.pedido.Detalles[0];
+    };
+
+    $scope.cerrarModal = function (modal) {
+      document.getElementById(modal).style.display = 'none';
     };
 
     $scope.CancelarPedidoAutodesk = function (Pedido, Detalles) {
