@@ -299,6 +299,18 @@
         });
     };
 
+    $scope.abrirModal = function (modal) {
+      document.getElementById(modal).style.display = 'block';
+      $scope.fechaInicio = this.pedido.FechaInicio;
+      $scope.nvaFechaFin = new Date();
+      $scope.infoPedido = this.pedido;
+      $scope.infoDetalle = this.pedido.Detalles[0];
+    };
+
+    $scope.cerrarModal = function (modal) {
+      document.getElementById(modal).style.display = 'none';
+    };
+
     $scope.CancelarPedidoAutodesk = function (Pedido, Detalles) {
       $scope.Cancelar = true;
       $scope.guardar = Pedido;
