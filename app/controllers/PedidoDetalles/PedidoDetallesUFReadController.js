@@ -91,6 +91,9 @@
       return PedidoDetallesFactory.getPedidoDetallesUf($scope.currentDistribuidor.IdEmpresa)
         .then(function (result) {
           if (result.data.success) {
+            if (result.data.data[0]) {
+              $scope.opcionCFDI = result.data.data[0].claveCFDI;
+            }
             $scope.PedidoDetalles = result.data.data;
             $scope.PedidoDetalles.forEach(function (elem) {
               elem.Forma = getPaymentMethods(elem.IdFormaPago);
@@ -413,7 +416,9 @@
           });
         });
       }
-      if (!next) {
+      if (!$scope.opcionCFDI) {
+        $scope.ShowToast('Revisa que tengas seleccionado el uso del CFDI', 'warning');
+      } else if (!next) {
         $scope.ShowToast('Revisa que tengas al menos un producto y que tenga un cliente seleccionado con crédito válido.', 'warning');
       } else $location.path('/uf/Comprar');
     };
