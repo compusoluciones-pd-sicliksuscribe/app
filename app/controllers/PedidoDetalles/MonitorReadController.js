@@ -257,7 +257,7 @@
     };
 
     $scope.CancelarPedido = function (Pedido, Detalles) {
-      
+      console.log(Pedido);
       $scope.Cancelar = true;
       $scope.guardar = Pedido;
       $scope.form.habilitar = true;
@@ -268,9 +268,13 @@
         PorCancelar: 1,
         ResultadoFabricante1: Detalles.EstatusFabricante,
         IdTipoProducto: Detalles.IdTipoProducto,
-        IdPedidoDetalle: Detalles.IdPedidoDetalle
+        IdPedidoDetalle: Detalles.IdPedidoDetalle,
+        FechaInicio: Pedido.FechaInicio,
+        FechaFin: new Date(),
+        IdProducto: Detalles.IdProducto,
+        IdEsquemaRenovacion: Pedido.IdEsquemaRenovacion,
+        IdPedido: Pedido.IdPedido
       };
-
       if (Pedido.IdFabricante === 1) {
         PedidoDetallesFactory.putPedidoDetalleMicrosoft(order)
         .success(function (result) {
@@ -284,9 +288,8 @@
         .error(function (data, status, headers, config) {
           $scope.ShowToast(data.message, 'danger');
         });
-      }
-      
-      PedidoDetallesFactory.putPedidoDetalle(order)
+      } else {
+        PedidoDetallesFactory.putPedidoDetalle(order)
         .success(function (result) {
           $scope.ShowToast('Suscripción cancelada.', 'success');
           $scope.$emit('UNLOAD');
@@ -297,6 +300,7 @@
         .error(function (data, status, headers, config) {
           $scope.ShowToast(data.message, 'danger');
         });
+      }
     };
 
     $scope.validarInfoPedido = function (modal, pedido, detalle) {
@@ -307,7 +311,7 @@
 
     $scope.abrirModal = function (modal, pedido) {
       document.getElementById(modal).style.display = 'block';
-      $scope.fechaInicio = pedido.FechaInicio;
+      $scope.fechaInicio = new Date(pedido.FechaInicio);
       $scope.nvaFechaFin = new Date();
       $scope.infoPedido = pedido;
       $scope.infoDetalle = pedido.Detalles[0];

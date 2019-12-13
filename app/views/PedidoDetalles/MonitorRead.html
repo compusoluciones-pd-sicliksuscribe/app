@@ -278,7 +278,7 @@
 									</div>
 									<div class="row">
 										<div class="form-group col-xs-6 col-sm-6 col-md-12 col-lg-12">
-											<button class="btn btn-block btn-warning" ng-disabled="form.habilitar" ng-click="avalidarInfoPedido('cancelationAlert', pedido, detalles) "> Sí </button>
+											<button class="btn btn-block btn-warning" ng-disabled="form.habilitar" ng-click="validarInfoPedido('cancelationAlert', pedido, detalles) "> Sí </button>
 										</div>
 										<div class="form-group col-xs-6 col-sm-6 col-md-12 col-lg-12">
 											<button class="btn btn-block btn-primary" ng-disabled="form.habilitar" ng-click="Confirmar(detalles.IdPedidoDetalle)"> No </button>
@@ -299,7 +299,7 @@
 							<h4 class="modal-title">Cancelación del pedido {{infoPedido.IdPedido}}</h4>
 						</div>
 						<div class="modal-body">
-							<p>Al cancelar este pedido, se suspenderán las licencias asociadas a él. Ademas, el cobro será prorrateado y corresponderá al periodo: {{ fechaInicio | date:'d/MM/yyyy' }} - {{nvaFechaFin | date:'d/MM/yyyy'}}
+							<p>Al cancelar está partida, se suspenderán las licencias asociadas, <b>no</b> podrá reactivar la partida. Ademas, el cobro será prorrateado y corresponderá al periodo: {{fechaInicio | date:'dd/MM/yyyy'}} - {{nvaFechaFin | date:'dd/MM/yyyy'}}
 							</p>
 							<br>
 							<div  class="modal-footer">
