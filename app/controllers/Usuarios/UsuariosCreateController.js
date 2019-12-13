@@ -59,14 +59,18 @@
           $scope.Usuario.IdEmpresaDistribuidor = $scope.currentDistribuidor.IdEmpresa;
           UsuariosFactory.postUsuarioFinal($scope.Usuario)
             .success(function (result) {
-              if (result.data[0].success == true) {
-                $location.path("/Usuarios/uf");
-                $scope.ShowToast(result.data[0].message, 'success');
+              if(!result.statusCode) {
+                if (result.data[0].success == true) {
+                  $location.path("/Usuarios/uf");
+                  $scope.ShowToast(result.data[0].message, 'success');
+                }
+                else {
+                  $scope.ShowToast(result.data[0].message, 'danger');
+                }
+              } else {
+                $scope.ShowToast(result.message, 'danger');
               }
-              else {
-                $scope.ShowToast(result.data[0].message, 'danger');
-              }
-            })
+              })
             .error(function (data, status, headers, config) {
               $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
             });
