@@ -170,19 +170,18 @@
     };
 
     $scope.CambiarUsoCFDI = () => {
-      let  orders = [];
-      $scope.PedidoDetalles.map( order => {
+      let orders = [];
+      $scope.PedidoDetalles.map(order => {
         orders.push(order.IdPedido);
       });
       PedidoDetallesFactory.putUseCFDI($scope.opcionCFDI, orders)
       .then(function (result) {
         if (result.data.success) {
           $scope.ShowToast(result.data.message, 'success');
-        } else $scope.ShowToast(result.data.message, 'danger');
+        } else $scope.ShowToast('Selecciona una opción valida', 'danger');
       })
       .catch(function (result) { error(result.data); });
-    }
-
+    };
 
     $scope.init = function () {
       PedidoDetallesFactory.getUseCFDI()
