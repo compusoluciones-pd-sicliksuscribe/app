@@ -1,7 +1,7 @@
 <div class="container" ng-swipe-right="" ng-swipe-left="">
 <h2>Historial de Pedidos</h2>
 
-        <div class="row">          
+        <div class="row">
           <div class="col-xs-12 col-sm-2">
             <label>Mes</label>
             <select id="Meses" name="Meses" class="form-control selectOption" ng-model="MesActual.id" ng-options="meses.id as meses.mes for meses in Meses"
@@ -26,6 +26,11 @@
                       <input type="text" ng-model="filter" ng-change="search()" class="form-control" size="30" placeholder="Busca Pedidos..." />
                       <i class="form-control-feedback glyphicon glyphicon-search"></i>
                   </div>
+              </div>
+              <div class="col-xs-12 col-sm-2">
+                <label>Descargar reporte</label>
+                <button class="btn btn-primary" ng-show="!detalles.Activo" ng-click="GenerarReporte()">
+                  Descargar </button>
               </div>
         </div>
 

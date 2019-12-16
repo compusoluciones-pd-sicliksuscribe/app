@@ -112,7 +112,7 @@
         </div>
 
         <br>
-        <div class="row" ng-if="Session.IdTipoAcceso != 1">
+        <div class="row" ng-if="Session.IdTipoAcceso != 1 && Session.IdTipoAcceso != 4">
             <div class="col-md-8 col-xs-12 col-lg-8" style="padding: none;">
                 <div class="alert alert-warning">
                     <b>Nota *</b> Si se desea agregar un usuario como contacto (Autodesk) es necesario hacerlo con tipo de acceso "Administrador (Usuario final)" y posteriormente elegir la empresa de la cual será contacto. <br>
@@ -132,7 +132,7 @@
             </div>
             <div class="col-xs-0 col-sm-0 col-md-2 col-lg-2">
                 <div class="form-group">
-                    <button type="button" ng-click="UsuarioCancel()" class="btn btn-warning btn-block" style="background:{{currentDistribuidor.SecondaryColor}} !important">Cancelar</button>
+                    <button type="button" ng-click="UsuarioCancel()" class="btn btn-warning btn-block" style="{{secondaryColor}} !important">Cancelar</button>
                 </div>
             </div>
         </div>

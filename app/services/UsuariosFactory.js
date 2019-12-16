@@ -36,6 +36,11 @@
       return $http.post($rootScope.API + 'Usuarios', Usuario);
     };
 
+    factory.postUsuarioFinal = function (Usuario) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'tuclick/create-user', Usuario);
+    };
+
     factory.postUsuarioCliente = function (Usuario) {
       factory.refreshToken();
       return $http.post($rootScope.API + 'users', Usuario);
