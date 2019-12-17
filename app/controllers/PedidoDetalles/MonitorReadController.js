@@ -257,7 +257,6 @@
     };
 
     $scope.CancelarPedido = function (Pedido, Detalles) {
-      console.log(Pedido);
       $scope.Cancelar = true;
       $scope.guardar = Pedido;
       $scope.form.habilitar = true;
@@ -305,16 +304,16 @@
 
     $scope.validarInfoPedido = function (modal, pedido, detalle) {
       const CREDITO = 2;
-      if (pedido.IdFormaPagoProxima === CREDITO && pedido.EsOrdenInicial === 0) $scope.abrirModal(modal, pedido);
+      if (pedido.IdFormaPagoProxima === CREDITO && pedido.EsOrdenInicial === 0) $scope.abrirModal(modal, pedido, detalle);
       else $scope.CancelarPedido(pedido, detalle);
     };
 
-    $scope.abrirModal = function (modal, pedido) {
+    $scope.abrirModal = function (modal, pedido, detalle) {
       document.getElementById(modal).style.display = 'block';
       $scope.fechaInicio = new Date(pedido.FechaInicio);
       $scope.nvaFechaFin = new Date();
       $scope.infoPedido = pedido;
-      $scope.infoDetalle = pedido.Detalles[0];
+      $scope.infoDetalle = detalle;
     };
 
     $scope.cerrarModal = function (modal) {
@@ -371,7 +370,12 @@
         PorCancelar: 0,
         ResultadoFabricante1: detalles.EstatusFabricante,
         IdTipoProducto: detalles.IdTipoProducto,
-        IdPedidoDetalle: detalles.IdPedidoDetalle
+        IdPedidoDetalle: detalles.IdPedidoDetalle,
+        FechaInicio: pedido.FechaInicio,
+        FechaFin: new Date(),
+        IdProducto: detalles.IdProducto,
+        IdEsquemaRenovacion: pedido.IdEsquemaRenovacion,
+        IdPedido: pedido.IdPedido
       };
       $scope.form.habilitar = true;
       if (detalles.Cantidad !== detalles.CantidadProxima) {
@@ -383,7 +387,7 @@
           if (!result) {
             $scope.ShowToast('Ocurrió un error', 'danger');
           } else {
-            $scope.ShowToast('Suscripción reanudada.', 'success');
+            $scope.ShowToast(result.message, 'danger');
           }
           $scope.form.habilitar = true;
           $scope.ActualizarMonitor();
@@ -396,8 +400,8 @@
           $scope.ActualizarMonitor();
           $scope.form.habilitar = false;
         });
-      }
-      PedidoDetallesFactory.putPedidoDetalle(order)
+      } else {
+        PedidoDetallesFactory.putPedidoDetalle(order)
         .success(function (result) {
           if (!result.success) {
             $scope.ShowToast(result.message, 'danger');
@@ -415,6 +419,7 @@
           $scope.ActualizarMonitor();
           $scope.form.habilitar = false;
         });
+      }
     };
 
     $scope.PedidoDetalleCancel = function () {
