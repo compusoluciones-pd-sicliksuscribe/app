@@ -19,6 +19,7 @@
     $scope.finalUser = {};
     const NOT_FOUND = 404;
     $scope.datosCompletosCustomer = true;
+    $scope.microsoftURI = false;
 
     $scope.esquemaRenovacionModelo={};
     $scope.EsquemaRenovacion=[
@@ -388,6 +389,23 @@
           $scope.ShowToast('No pudimos cargar la información de tus contactos, por favor intenta de nuevo más tarde.', 'danger');
         });
       }
+    };
+
+    $scope.getCustomerAgreement = function () {
+      $scope.loading = true;
+      return EmpresasXEmpresasFactory.getCustomerAgreements()
+      .success(function (result) {
+        $scope.loading = false;
+        if (result.downloadUri) {
+          $scope.downloadURI = result.downloadUri;
+          $scope.displayUri = result.displayUri;
+          $scope.microsoftURI = true;
+        }
+      })
+      .catch(function (error) {
+        $scope.ShowToast(error.data.message, 'danger');
+        $log.log('data error: ' + error.data.message + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
+      });
     };
 
     $scope.validateAgreementCSP = function (producto) {

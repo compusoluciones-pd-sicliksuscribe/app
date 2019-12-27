@@ -56,6 +56,11 @@
       return $http.get($rootScope.API + 'agreements/clients/' + IdEmpresa);
     };
 
+    factory.getCustomerAgreements = function () {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'agreements/get-customer-agreement');
+    };
+
     return factory;
   };
 
