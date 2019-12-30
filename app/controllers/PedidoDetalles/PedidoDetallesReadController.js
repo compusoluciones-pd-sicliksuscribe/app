@@ -369,7 +369,9 @@
       total = total + iva;
       return total;
     };
-
+    $scope.calcularTotalconDescuentoAWS = function (total,descuento) {
+      return total - total * descuento / 100;
+    };
     $scope.calculatePriceWithExchangeRate = function (order, details, value) {
       let total = 0;
       if (order.MonedaPago === 'Pesos' && details.MonedaPrecio === 'Dólares') {
@@ -391,6 +393,12 @@
       return priceWithExchangeRate * product.Cantidad;
     };
 
+    $scope.calcularProductTotalAWS = function (order, product, value) {
+      const priceWithExchangeRate = $scope.calculatePriceWithExchangeRate(order, product, value);
+      if (isTiredProduct(product)) return priceWithExchangeRate;
+      return priceWithExchangeRate * product.Cantidad;
+    };
+
     $scope.next = function () {
       if ($scope.isPayingWithCSCredit()) validarCarrito();
       let next = true;
@@ -402,7 +410,6 @@
             console.log(result);
             result.data.data.forEach(function (compararPedidosAnteriores) {
               if (order.MonedaPago !== compararPedidosAnteriores.MonedaPago && order.IdFabricante === 1) {
-                console.log('si entra')
                 $cookies.putObject('compararPedidosAnteriores', compararPedidosAnteriores);
                 document.getElementById('modalTipoMoneda').style.display = 'block';
               }

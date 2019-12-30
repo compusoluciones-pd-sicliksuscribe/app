@@ -92,12 +92,12 @@
 					<label for="Pedido">Pedido: </label> {{ pedido.IdPedido }} </br>
 					<hr>
 					<h4><label for="Pedido">{{pedido.NombreConsola}}</label></h4>
-					<div class="row"><div  class="col-sm-4"><label for="Pedido" >Fabricante: </label> Amazon Web Services</div> <div  class="col-sm-4"><label for="Fecha inicio"> Consumo total de servicios AWS: </label> $ {{ pedido.ConsumoAlDia }}</div> <div  class="col-sm-4"><label for="Fecha inicio">Periodo : </label> {{ pedido.FechaInicio }} </br></div></div>
+					<div class="row"><div  class="col-sm-4"><label for="Pedido" >Fabricante: </label> Amazon Web Services</div> <div  class="col-sm-4"><label for="Fecha inicio"> Consumo estimado AWS: </label> $ {{ pedido.ConsumoAlDia }}</div> <div  class="col-sm-4"><label for="Fecha inicio">Periodo : </label> {{ pedido.FechaInicio }} </br></div></div>
 					<li ng-if="pedido.IdFormaPago === 2"> <label for="FormaPago">Forma de pago:</label> Crédito CompuSoluciones</li>
 					<li ng-if="pedido.IdFormaPago === 1"> <label for="FormaPago">Forma de pago:</label> Tarjeta de crédito</li>
 					<li ng-if="pedido.IdFormaPago === 3"> <label for="FormaPago">Forma de pago:</label> Paypal</li>
 					<li ng-if="pedido.IdFormaPago === 4"> <label for="FormaPago">Forma de pago:</label> Transferencia</li>
-					<div class="row"><div  class="col-sm-4"><label for="Moneda">Moneda de pago: </label> {{ pedido.MonedaPago }}</div> <div  class="col-sm-8"><label >Última actualización :</label> {{ pedido.FechaUltimaActualizacion }}  <br></div></div>
+					<div class="row"><div  class="col-sm-4"><label for="Moneda">Moneda de pago: </label> {{ pedido.MonedaPago }}</div> <div  class="col-sm-4"><label for="Consumo estimado con descuento">Consumo  con descuento aplicado : </label> {{ pedido.ConsumoAlDia - pedido.Descuento*pedido.ConsumoAlDia/100 }}</div> <div  class="col-sm-4"> <label >Última actualización :</label> {{ pedido.FechaUltimaActualizacion }}  <br></div></div>
 					<li ng-if="pedido.IdEsquemaRenovacion === 8"> <label for="FormaPago">Esquema de renovación: </label> Mensual </li>
 					<label for="Fecha inicio">Id consola: </label> {{ pedido.IdConsola }} 
 				</ul>

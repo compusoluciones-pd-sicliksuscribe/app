@@ -77,6 +77,10 @@
       return maker;
     };
 
+    $scope.calcularTotalconDescuentoAWS = function (total, descuento) {
+      return total - total * descuento / 100;
+    };
+
     const getOrderDetails = function () {
       return PedidoDetallesFactory.getPedidoDetalles()
         .then(function (result) {
@@ -269,6 +273,7 @@
             expireDate.setTime(expireDate.getTime() + 600 * 2000); /* 20 minutos */
             $cookies.putObject('pedidosAgrupados', Datos.data['0'].pedidosAgrupados, { 'expires': expireDate, secure: $rootScope.secureCookie });
             if (Datos.data['0'].total > 0) {
+
               if (Datos.success) {
                 if ($cookies.getObject('pedidosAgrupados')) {
                   Checkout.configure({
