@@ -1,256 +1,247 @@
 <div class="container" ng-swipe-right="" ng-swipe-left="">
 
-	<div class="form-group row">
-		<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
-			<h2 style="float:left;">Carrito de compras <i class="fa fa-question-circle tourButton" style="float:right; font-size:12px; margin-top:10px; margin-left:10px;"
-					ng-click="IniciarTourCarrito();"></i></h2>
-		</div>
-		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+    <div class="form-group row">
+        <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+            <h2 style="float:left;">Carrito de compras <i class="fa fa-question-circle tourButton" style="float:right; font-size:12px; margin-top:10px; margin-left:10px;" ng-click="IniciarTourCarrito();"></i></h2>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 
-		</div>
-	</div>
+        </div>
+    </div>
 
-	<div class="row">
-		<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
-			<p><b>Importante</b></p>
-			<p>Se agruparán y facturarán los productos según el usuario final, marca del producto, esquema de renovación y moneda de
-				pago seleccionada. Una vez realizada la compra, el sistema te enviará la factura del proximo periodo aumáticamente cuando
-				llegue la fecha.</p>
-			<p>Si deseas cancelar tus suscripciones o disminuir cantidades, tienes hasta 4 días antes de la finalización del periodo
-				y lo puedes hacer ingresando al <a href="#/Monitor">monitor de pedidos por cliente</a>.</p>
-		</div>
-		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
-	</div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+            <p><b>Importante</b></p>
+            <p>Se agruparán y facturarán los productos según el usuario final, marca del producto, esquema de renovación y moneda de pago seleccionada. Una vez realizada la compra, el sistema te enviará la factura del proximo periodo aumáticamente cuando
+                llegue la fecha.</p>
+            <p>Si deseas cancelar tus suscripciones o disminuir cantidades, tienes hasta 4 días antes de la finalización del periodo y lo puedes hacer ingresando al <a href="#/Monitor">monitor de pedidos por cliente</a>.</p>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
+    </div>
 
-	<br>
-	<br>
-	<br>
+    <br>
+    <br>
+    <br>
 
-	<div ng-show="!(PedidoDetalles.length > 0)">
-		<h4>No se han agregado productos a tu carrito...</h4>
-	</div>
+    <div ng-show="!(PedidoDetalles.length > 0)">
+        <h4>No se han agregado productos a tu carrito...</h4>
+    </div>
 
-	<div ng-show="PedidoDetalles.length > 0">
+    <div ng-show="PedidoDetalles.length > 0">
 
-		<div class="form-group row">
-			<div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
-				<label for="" class="formaPago">Forma de pago para {{Distribuidor.NombreEmpresa}}: </label>
-				<div class="radio" style="margin-left:20px">
-					<div>
-						<input type="radio" name="TipoPago" value="2" ng-checked="isPayingWithCSCredit()" ng-model="Distribuidor.IdFormaPagoPredilecta" ng-click="ActualizarFormaPago(2);"> Crédito CompuSoluciones
-					</div>
-					<div>
-						<input type="radio" name="TipoPago" value="1" ng-checked="isPayingWithCreditCard()" ng-disabled="ValidarFormaPago()" ng-model="Distribuidor.IdFormaPagoPredilecta"
-							ng-click="ActualizarFormaPago(1);"> Tarjeta bancaria (Solo Pesos MXN)
-					</div>
-					<div ng-show="!ValidarFormaPago()">
-						<input type="radio" name="TipoPago" value="3" ng-disabled="ValidarFormaPago()" ng-model="Distribuidor.IdFormaPagoPredilecta"
-							ng-change="ActualizarFormaPago(3);"> Pago Paypal (Solo Pesos MXN)
-					</div>
+        <div class="form-group row">
+            <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
+                <label for="" class="formaPago">Forma de pago para {{Distribuidor.NombreEmpresa}}: </label>
+                <div class="radio" style="margin-left:20px">
+                    <div>
+                        <input type="radio" name="TipoPago" value="2" ng-checked="isPayingWithCSCredit()" ng-model="Distribuidor.IdFormaPagoPredilecta" ng-click="ActualizarFormaPago(2);"> Crédito CompuSoluciones
+                    </div>
+                    <div>
+                        <input type="radio" name="TipoPago" value="1" ng-checked="isPayingWithCreditCard()" ng-disabled="ValidarFormaPago()" ng-model="Distribuidor.IdFormaPagoPredilecta" ng-click="ActualizarFormaPago(1);"> Tarjeta bancaria (Solo Pesos
+                        MXN)
+                    </div>
+                    <div ng-show="!ValidarFormaPago()">
+                        <input type="radio" name="TipoPago" value="3" ng-disabled="ValidarFormaPago()" ng-model="Distribuidor.IdFormaPagoPredilecta" ng-change="ActualizarFormaPago(3);"> Pago Paypal (Solo Pesos MXN)
+                    </div>
 
-					<!-- TRANSFERENCIA -->
-					<div>
-						<input type="radio" name="TipoPago" value="4" ng-model="Distribuidor.IdFormaPagoPredilecta"
-							ng-change="ActualizarFormaPago(4);"> Transferencia
-							<label for="" class="SaldoReal" > <b>Tu Saldo es: {{Distribuidor.MonedaPago === 'Pesos' ? Distribuidor.Transferencia : Distribuidor.TransferenciaDolares | currency}}</b> </label>						
-					</div>
+                    <!-- TRANSFERENCIA -->
+                    <div>
+                        <input type="radio" name="TipoPago" value="4" ng-model="Distribuidor.IdFormaPagoPredilecta" ng-change="ActualizarFormaPago(4);"> Transferencia
+                        <label for="" class="SaldoReal"> <b>Tu Saldo es: {{Distribuidor.MonedaPago === 'Pesos' ? Distribuidor.Transferencia : Distribuidor.TransferenciaDolares | currency}}</b> </label>
+                    </div>
 
-				</div>
-			</div>
-			<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
-				<div class="form-group" ng-hide="isPayingWithCreditCard() || hasProtectedExchangeRate() || isPayingWithPaypal()" >
-					<label for="" class="">* ¿Con qué moneda quieres pagarlos?</label>
-					<div class="radio" style="margin-left:20px" >
-						<div>
-							<input type="radio" ng-checked="Distribuidor.IdFormaPagoPredilecta" name="MonedaPago" ng-change="CambiarMoneda('Pesos')" value="Pesos" ng-model="Distribuidor.MonedaPago">Pesos
-						</div>
-						<div ng-if="isPayingWithCSCredit()">
-							<input type="radio" name="MonedaPago"  value="Dólares" ng-model="Distribuidor.MonedaPago" ng-change="CambiarMoneda('Dólares')">Dólares
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                <div class="form-group" ng-hide="isPayingWithCreditCard() || hasProtectedExchangeRate() || isPayingWithPaypal()">
+                    <label for="" class="">* ¿Con qué moneda quieres pagarlos?</label>
+                    <div class="radio" style="margin-left:20px">
+                        <div>
+                            <input type="radio" ng-checked="Distribuidor.IdFormaPagoPredilecta" name="MonedaPago" ng-change="CambiarMoneda('Pesos')" value="Pesos" ng-model="Distribuidor.MonedaPago">Pesos
+                        </div>
+                        <div ng-if="isPayingWithCSCredit()">
+                            <input type="radio" name="MonedaPago" value="Dólares" ng-model="Distribuidor.MonedaPago" ng-change="CambiarMoneda('Dólares')">Dólares
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-		<div class="form-group row" ng-show="hasProtectedExchangeRate();">
-			<div class="alert alert-warning">
-				<b>Nota importante *</b> Te notificamos que cuentas con un producto que lleva Tipo de Cambio Protegido. Por lo anterior tu pago debe aplicarse en moneda nacional. <br>
-			</div>
-		</div>
+        <div class="form-group row" ng-show="hasProtectedExchangeRate();">
+            <div class="alert alert-warning">
+                <b>Nota importante *</b> Te notificamos que cuentas con un producto que lleva Tipo de Cambio Protegido. Por lo anterior tu pago debe aplicarse en moneda nacional. <br>
+            </div>
+        </div>
 
-		<div class="form-group row" ng-show="isPayingWithPaypal() && !hasProtectedExchangeRate()">
-			<div class="alert alert-warning">
-				<b>Nota importante *</b> Al haber elegido el método de pago con paypal deberás realizar tu operación en moneda nacional.<br>
-			</div>
-		</div>
-		
-		<div class="form-group row" ng-show="isPayingWithCreditCard() && !hasProtectedExchangeRate()">
-			<div class="alert alert-warning">
-				<b>Nota importante *</b> Al haber elegido el método de pago con tarjeta de crédito deberás realizar tu operación en moneda nacional.<br>
-			</div>
-		</div>
+        <div class="form-group row" ng-show="isPayingWithPaypal() && !hasProtectedExchangeRate()">
+            <div class="alert alert-warning">
+                <b>Nota importante *</b> Al haber elegido el método de pago con paypal deberás realizar tu operación en moneda nacional.<br>
+            </div>
+        </div>
 
-		<div class="form-group row" ng-show="!hasProtectedExchangeRate()">
-			<div class="alert alert-warning">
-				<b>Nota importante *</b> Al haber elegido el método de pago con prepago deberás realizar tu operación en moneda nacional.<br>
-			</div>
-		</div>
+        <div class="form-group row" ng-show="isPayingWithCreditCard() && !hasProtectedExchangeRate()">
+            <div class="alert alert-warning">
+                <b>Nota importante *</b> Al haber elegido el método de pago con tarjeta de crédito deberás realizar tu operación en moneda nacional.<br>
+            </div>
+        </div>
 
-		<div class="form-group row" ng-show="isPayingWithCreditCard()">
-			<div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
-				<b>Nota importante *</b> <br> Para realizar la renovación de tus suscripciones de forma automática por medio de tu tarjeta
-				bancaria es necesario descargar la siguiente carta, llenarla y enviarla a tu equipo de soporte CompuSoluciones. <br>				Descarga tu carta <a target="blank" href="https://s3.amazonaws.com/marketplace.compusoluciones.com/autorizacion_tarjeta.pdf">aquí</a>.
-				(Este proceso solo se realiza una vez)
-			</div>
-		</div>
-		<ul ng-repeat="pedido in PedidoDetalles" class="repeat-animation" style="padding: 0; list-style-type: none;">
+        <div class="form-group row" ng-show="!hasProtectedExchangeRate()">
+            <div class="alert alert-warning">
+                <b>Nota importante *</b> Al haber elegido el método de pago con prepago deberás realizar tu operación en moneda nacional.<br>
+            </div>
+        </div>
 
-			<div class="form-group row" style="background-color:#f5f5f5; padding: 15px; margin-bottom:15px;">
-				<div class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
-					<div class="text-center form-group">
-						<div style="color:#00549F;">
-							<label>Pedido</label>
-							<h4>{{ pedido.IdPedido }}</h4>
-							<br>
-						</div>
-					</div>
-				</div>
-				<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-					<div class="form-group">
-						<label for="IdEmpresaUsuarioFinal">Usuario final:</label> {{ pedido.NombreEmpresa }} <br>
-						<label>Marca de los productos:</label> {{ pedido.NombreFabricante }} <br>
-						<label ng-if="pedido.IdFabricante === 10" >Fecha inicio : {{ pedido.FechaInicio }} </label>
-						<label ng-if="pedido.IdFabricante !== 10" >Duración del periodo: del {{ pedido.FechaInicio }} al {{ pedido.FechaFin | date:'yyyy-MM-dd'}}</label>						
-						<br><label>Renovación del periodo:</label> {{ pedido.NombreEsquemaRenovacion }}						
-						<div ng-if="pedido.IdFabricante === 2">
-							<label>Contrato: </label> {{ pedido.ContratoBaseAutodesk || 'Nuevo' }} <br>
-							<label>Tipo de orden: </label>
-							<span ng-if="pedido.IdAccionAutodesk === 1 && !pedido.Renovado">Orden inicial</span>
-							<span ng-if="(pedido.IdAccionAutodesk === 2 || pedido.IdAccionAutodesk === 3) && !pedido.Renovado">Add-On</span>
-							<span ng-if="(pedido.IdAccionAutodesk === 2 || pedido.IdAccionAutodesk === 3) && pedido.Renovado">Add-On (Renovación)</span>
-							<span ng-if="pedido.IdAccionAutodesk === 4">Renovación</span>
-						</div>
-					</div>
-				</div>
-				<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3" class="form-group" >
+        <div class="form-group row" ng-show="isPayingWithCreditCard()">
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <b>Nota importante *</b> <br> Para realizar la renovación de tus suscripciones de forma automática por medio de tu tarjeta bancaria es necesario descargar la siguiente carta, llenarla y enviarla a tu equipo de soporte CompuSoluciones.
+                <br> Descarga tu carta <a target="blank" href="https://s3.amazonaws.com/marketplace.compusoluciones.com/autorizacion_tarjeta.pdf">aquí</a>. (Este proceso solo se realiza una vez)
+            </div>
+        </div>
+        <ul ng-repeat="pedido in PedidoDetalles" class="repeat-animation" style="padding: 0; list-style-type: none;">
 
-					
-						<div class="form-group">
-							<label>Forma de pago:</label> {{ pedido.Forma }} <br>
-							<label>Tipo de cambio:</label> {{ pedido.TipoCambio | currency: "$":2 }} {{ pedido.MonedaPago }}<br>
-							<label >Subtotal: {{ calcularSubTotal(pedido.IdPedido) | currency }} {{ pedido.MonedaPago }} </label><br>
-							<label>IVA: {{ calcularIVA(pedido.IdPedido) | currency }} {{ pedido.MonedaPago }}</label>
-						
-						</div>
-				</div>
+            <div class="form-group row" style="background-color:#f5f5f5; padding: 15px; margin-bottom:15px;">
+                <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
+                    <div class="text-center form-group">
+                        <div style="color:#00549F;">
+                            <label>Pedido</label>
+                            <h4>{{ pedido.IdPedido }}</h4>
+                            <br>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                    <div class="form-group">
+                        <label for="IdEmpresaUsuarioFinal">Usuario final:</label> {{ pedido.NombreEmpresa }} <br>
+                        <label>Marca de los productos:</label> {{ pedido.NombreFabricante }} <br>
+                        <label ng-if="pedido.IdFabricante === 10">Fecha inicio : {{ pedido.FechaInicio }} </label>
+                        <label ng-if="pedido.IdFabricante !== 10">Duración del periodo: del {{ pedido.FechaInicio }} al {{ pedido.FechaFin | date:'yyyy-MM-dd'}}</label>
+                        <br><label>Renovación del periodo:</label> {{ pedido.NombreEsquemaRenovacion }}
+                        <div ng-if="pedido.IdFabricante === 2">
+                            <label>Contrato: </label> {{ pedido.ContratoBaseAutodesk || 'Nuevo' }} <br>
+                            <label>Tipo de orden: </label>
+                            <span ng-if="pedido.IdAccionAutodesk === 1 && !pedido.Renovado">Orden inicial</span>
+                            <span ng-if="(pedido.IdAccionAutodesk === 2 || pedido.IdAccionAutodesk === 3) && !pedido.Renovado">Add-On</span>
+                            <span ng-if="(pedido.IdAccionAutodesk === 2 || pedido.IdAccionAutodesk === 3) && pedido.Renovado">Add-On (Renovación)</span>
+                            <span ng-if="pedido.IdAccionAutodesk === 4">Renovación</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3" class="form-group">
+                    <div class="form-group">
+                        <label>Forma de pago:</label> {{ pedido.Forma }} <br>
+                        <label>Tipo de cambio:</label> {{ pedido.TipoCambio | currency: "$":2 }} {{ pedido.MonedaPago }}<br>
+                        <label>Subtotal: {{ calcularSubTotal(pedido.IdPedido) | currency }} {{ pedido.MonedaPago }} </label><br>
+                        <label>IVA: {{ calcularIVA(pedido.IdPedido) | currency }} {{ pedido.MonedaPago }}</label>
+                    </div>
+                </div>
 
-				<div class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
-				
-				</div>
+                <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
 
-				<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 pull-right" >
-					<div class="form-group">
-						<label>Total del pedido:</label><br>
-						<span ng-hide ="pedido.IdFabricante === 10 && pedido.DescuentoAWS !== 0">
+                </div>
+
+                <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 pull-right">
+                    <div class="form-group">
+                        <label>Total del pedido:</label><br>
+                        <span>
 						<h5 >{{ calcularTotal(pedido.IdPedido) | currency }}</h5>
 					    </span>
-						<span ng-show="pedido.IdFabricante === 10 && pedido.DescuentoAWS !== 0">
-							{{pedido.DescuentoAWS}}
-								<del style="font-size:11px;"> {{ calculatePriceWithExchangeRate(pedido, producto, 'PrecioSinDescuento') * producto.Cantidad | currency }} {{ calcularTotal(pedido.IdPedido) | currency  }} </del>
-								, <b style="color:#68953B;">  {{ pedido.DescuentoAWS}} % Descuento</b></br>
-								<label>Total del pedido con descuento :</label>
-								<p> {{ calcularTotalconDescuentoAWS(calcularTotal(pedido.IdPedido),pedido.DescuentoAWS)| currency   }}	{{ pedido.MonedaPago }} </p>
-                        </span>
-						<br>
-						<div style="color:red;" ng-show="!pedido.hasCredit && isPayingWithCSCredit()">
-							<span class="glyphicon glyphicon-warning-sign"></span> <b>Cliente sin crédito suficiente.</b>
-							<br> * <a href="#/Clientes" class="form-group" title="Aumenta su crédito"> Aumenta su crédito </a>
-							<br> * Elimina productos de tu carrito.
-						</div>
 
-						<div ng-show="pedido.IdFabricante === 2 && pedido.IdAccionAutodesk === 4">
-							<a title="Elimina del carrito el pedido de renovación." ng-click="removeRenew(pedido);">
-								<span class="glyphicon glyphicon-trash"> </span> Quitar renovación
-							</a>
-						</div>
+                        <br>
+                        <div style="color:red;" ng-show="!pedido.hasCredit && isPayingWithCSCredit()">
+                            <span class="glyphicon glyphicon-warning-sign"></span> <b>Cliente sin crédito suficiente.</b>
+                            <br> * <a href="#/Clientes" class="form-group" title="Aumenta su crédito"> Aumenta su crédito </a>
+                            <br> * Elimina productos de tu carrito.
+                        </div>
 
-					</div>
-				</div>
-			</div>
-			
-			<li ng-repeat="producto in pedido.Productos" style="list-style-type:none;">
-				<div class="form-group row" style="padding: 15px; margin-bottom:15px;">
-					<div class="col-xs-11 col-sm-11 col-md-1 col-lg-1 col-lg-offset-1, col-md-offset-1">
-						<div class="text-center form-group">
-							<img ng-src="{{ producto.Imagen }}" style="width:45px;" width="45">
-						</div>
-					</div>
-					<div class="form-group col-xs-12 col-sm-12 col-md-3 col-lg-3">
-						<div class="form-group">
-							<label for="">Id artículo:</label> {{producto.IdERP}} <br>
-							<label for="">Nombre:</label> {{producto.NombreProducto}} <br>
-							<label for="">Tipo de producto:</label> {{producto.Tipo}} <br>	
-						</div>
-					</div>
-					<div class="form-group col-xs-12 col-sm-12 col-md-3 col-lg-3">
-						<div class="form-group">
-							<label for="">{{producto.IdFabricante == 5 && producto.IdTipoProducto !== 4 ? "Empleados:" : "Cantidad:"}}</label> {{ producto.Cantidad }} <br>
-							<label for="">Precio unitario:</label> {{ calculatePriceWithExchangeRate(pedido, producto, 'PrecioUnitario') | currency }} {{ pedido.MonedaPago }}
-							<br>
-							<label for="">Precio renovación:</label> {{ calculatePriceWithExchangeRate(pedido, producto, 'PrecioRenovacion') | currency}} {{ pedido.MonedaPago }}
-							
-						</div>
-						<div class="form-group" ng-show="producto.IdEsquemaRenovacion === 2 && producto.IdFabricante === 1">
-								<label for="">{{producto.IdFabricante == 5 && producto.IdTipoProducto !== 4 ? "Empleados:" : "Cantidad:"}}</label> {{ producto.Cantidad }} <br>
-								<label for="">Precio primer año:</label> {{ (calculatePriceWithExchangeRate(pedido, producto, 'PrecioUnitario') *descuentoAnual)/100  | currency }} {{ pedido.MonedaPago }}
-						</div>
+                        <div ng-show="pedido.IdFabricante === 2 && pedido.IdAccionAutodesk === 4">
+                            <a title="Elimina del carrito el pedido de renovación." ng-click="removeRenew(pedido);">
+                                <span class="glyphicon glyphicon-trash"> </span> Quitar renovación
+                            </a>
+                        </div>
 
-					</div>
+                    </div>
+                </div>
+            </div>
 
-					<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
-						<div class="form-group">
-							<label for="">Total del producto:</label>
-							<br>
-							<span ng-show="!producto.PrimeraCompraMicrosoft && !producto.DescuentoNivel">
-								{{  calcularProductTotal(pedido, producto, 'PrecioUnitario') | currency }} {{ pedido.MonedaPago }} 
-							</span>
-							<span ng-show="(producto.DescuentoNivel || producto.Descuento) && !producto.PrimeraCompraMicrosoft">
+            <li ng-repeat="producto in pedido.Productos" style="list-style-type:none;">
+                <div class="form-group row" style="padding: 15px; margin-bottom:15px;">
+                    <div class="col-xs-11 col-sm-11 col-md-1 col-lg-1 col-lg-offset-1, col-md-offset-1">
+                        <div class="text-center form-group">
+                            <img ng-src="{{ producto.Imagen }}" style="width:45px;" width="45">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                        <div class="form-group">
+                            <label for="">Id artículo:</label> {{producto.IdERP}} <br>
+                            <label for="">Nombre:</label> {{producto.NombreProducto}} <br>
+                            <label for="">Tipo de producto:</label> {{producto.Tipo}} <br>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                        <div class="form-group">
+                            <label for="">{{producto.IdFabricante == 5 && producto.IdTipoProducto !== 4 ? "Empleados:" : "Cantidad:"}}</label> {{ producto.Cantidad }} <br>
+                            <label ng-hide="pedido.IdFabricante === 10"><label for="">Precio unitario:</label> {{ calculatePriceWithExchangeRate(pedido, producto, 'PrecioUnitario') | currency }} {{ pedido.MonedaPago }}</label>
+                            <label ng-hide="pedido.IdFabricante !== 10"><label for="">Precio del consumo:</label> {{ calculatePriceWithExchangeRate(pedido, producto, 'PrecioUnitario') * 100 / (100 - pedido.DescuentoAWS) | currency }} {{ pedido.MonedaPago}}
+                            </label>
+                            <br>
+                            <label ng-hide="pedido.IdFabricante === 10"><label for="">Precio renovación:</label> {{ calculatePriceWithExchangeRate(pedido, producto, 'PrecioRenovacion') | currency}} {{ pedido.MonedaPago }}</label>
+
+                        </div>
+                        <div class="form-group" ng-show="producto.IdEsquemaRenovacion === 2 && producto.IdFabricante === 1">
+                            <label for="">{{producto.IdFabricante == 5 && producto.IdTipoProducto !== 4 ? "Empleados:" : "Cantidad:"}}</label> {{ producto.Cantidad }} <br>
+                            <label for="">Precio primer año:</label> {{ (calculatePriceWithExchangeRate(pedido, producto, 'PrecioUnitario') *descuentoAnual)/100 | currency }} {{ pedido.MonedaPago }}
+                        </div>
+
+                    </div>
+
+                    <div class="form-group col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                        <div class="form-group">
+                            <label for="">Total del producto:</label>
+                            <br>
+                            <span ng-show="!producto.PrimeraCompraMicrosoft && !producto.DescuentoNivel && producto.IdFabricante !== 10">
+								{{ calcularProductTotal(pedido, producto, 'PrecioUnitario') | currency }} {{ pedido.MonedaPago }}
+                            </span>
+                            <span ng-show="pedido.IdFabricante === 10 ">
+                                <del style="font-size:11px;"> {{ ( calculatePriceWithExchangeRate(pedido, producto, 'PrecioSinDescuento') * producto.Cantidad)  * 100 / (100 - pedido.DescuentoAWS) | currency }} {{ pedido.MonedaPago }}</del>
+                                , <b style="color:#68953B;">{{ pedido.DescuentoAWS}} % Descuento</b></br>
+                                {{ calcularProductTotal(pedido, producto, 'PrecioUnitario') | currency }} {{ pedido.MonedaPago }}
+                            </span>
+                            <span ng-show="(producto.DescuentoNivel || producto.Descuento) && !producto.PrimeraCompraMicrosoft">
 								<del style="font-size:11px;"> {{ calculatePriceWithExchangeRate(pedido, producto, 'PrecioSinDescuento') * producto.Cantidad | currency }} {{ pedido.MonedaPago }} </del>
 								<b style="color:#68953B;"> {{ producto.DescuentoNivel || producto.Descuento }}% Descuento</b>
 								<p> {{ (calculatePriceWithExchangeRate(pedido, producto, 'PrecioUnitario')  * producto.Cantidad).toFixed(2) | currency }}	{{ pedido.MonedaPago }} </p>
                             </span>
-						</div>
-					</div>
-					<div class="col-xs-12 col-sm-12 col-md-1 col-lg-1" ng-hide="pedido.IdFabricante === 2 && pedido.IdAccionAutodesk === 4">
-						<div class="form-group">
-							<label labelfor="aQuitarProducto"></label>
-							<h4>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1" ng-hide="pedido.IdFabricante === 2 && pedido.IdAccionAutodesk === 4">
+                        <div class="form-group">
+                            <label labelfor="aQuitarProducto"></label>
+                            <h4>
 
-								<a id="aQuitarProducto" title="Eliminar" ng-click="QuitarProducto(producto);">
-								    <span class="glyphicon glyphicon-trash" style="cursor:pointer" ng-hide="pedido.IdFabricante ===10"></span>
-								</a>
-							</h4>
-						</div>
-					</div>
-				</div>
-			</li>
-			<hr>
-		</ul>
+                                <a id="aQuitarProducto" title="Eliminar" ng-click="QuitarProducto(producto);">
+                                    <span class="glyphicon glyphicon-trash" style="cursor:pointer" ng-hide="pedido.IdFabricante ===10"></span>
+                                </a>
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <hr>
+        </ul>
 
-		<div class="form-group row">
-			<div class="col-xs-0 col-sm-0 col-md-9 col-lg-9">
-			</div>
-			<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
-				<div class="">
-					<button id="btnSiguiente" type="button" ng-click="next();" class="btn btn-primary btn-block"
-						ng-if="(hasProtectedExchangeRate() && Distribuidor.MonedaPago === 'Pesos'
+        <div class="form-group row">
+            <div class="col-xs-0 col-sm-0 col-md-9 col-lg-9">
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                <div class="">
+                    <button id="btnSiguiente" type="button" ng-click="next();" class="btn btn-primary btn-block" ng-if="(hasProtectedExchangeRate() && Distribuidor.MonedaPago === 'Pesos'
 							|| !hasProtectedExchangeRate()) && !error && ((isPayingWithCSCredit() && CreditoValido) || isPayingWithCreditCard() || isPayingWithPaypal() || isPayWithPrepaid())">
             Siguiente
           </button>
-				</div>
-			</div>
-		</div>
+                </div>
+            </div>
+        </div>
 
-	</div>
+    </div>
 
 </div>

@@ -1,263 +1,256 @@
 <div class="container" ng-swipe-right="" ng-swipe-left="">
 
 
-	<div class="form-group row">
-		<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
-			<h2 style="float:left;">Monitor de suscripciones y servicios <i class="fa fa-question-circle tourButton" style="float:right; font-size:12px; margin-top:10px; margin-left:10px;"
-				 ng-click="IniciarTourMonitor();"></i></h2>
-		</div>
-		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"> 
-			<br/>
-			<label for="Cliente">Clientes:</label>
-			<select id="IdEmpresaUsuarioFinal" name="IdEmpresaUsuarioFinal" class="form-control selectOption" ng-model="EmpresaSelect"
-			 ng-options="Empresa.IdEmpresa as Empresa.NombreEmpresa for Empresa in selectEmpresas" ng-change="ActualizarMonitor();"
-			 ng-show="SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 7">
+    <div class="form-group row">
+        <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+            <h2 style="float:left;">Monitor de suscripciones y servicios <i class="fa fa-question-circle tourButton" style="float:right; font-size:12px; margin-top:10px; margin-left:10px;" ng-click="IniciarTourMonitor();"></i></h2>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+            <br/>
+            <label for="Cliente">Clientes:</label>
+            <select id="IdEmpresaUsuarioFinal" name="IdEmpresaUsuarioFinal" class="form-control selectOption" ng-model="EmpresaSelect" ng-options="Empresa.IdEmpresa as Empresa.NombreEmpresa for Empresa in selectEmpresas" ng-change="ActualizarMonitor();" ng-show="SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 7">
                 <option ng-selected="true" value="">Selecciona un cliente</option>
 			</select>
-		</div>
-	</div>
-	
-	<div class="form-group row" ng-show="!(EmpresaSelect === null) || (SessionCookie.IdTipoAcceso === 4 || SessionCookie.IdTipoAcceso === 6)">
-		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
-		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
-		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" ng-show="!(EmpresaSelect == '') || (SessionCookie.IdTipoAcceso === 4 || SessionCookie.IdTipoAcceso === 6)">
-		<label for="IdFabricante">Fabricantes: </label>
-			<select id="IdFabricante" name="IdFabricante" class="form-control selectOption" ng-model="BuscarProductos.IdFabricante" ng-options="Fabricante.IdFabricante as Fabricante.Nombre for Fabricante in selectFabricantes"
-				ng-change="ActualizarMonitor(); ">
+        </div>
+    </div>
+
+    <div class="form-group row" ng-show="!(EmpresaSelect === null) || (SessionCookie.IdTipoAcceso === 4 || SessionCookie.IdTipoAcceso === 6)">
+        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
+        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
+        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" ng-show="!(EmpresaSelect == '') || (SessionCookie.IdTipoAcceso === 4 || SessionCookie.IdTipoAcceso === 6)">
+            <label for="IdFabricante">Fabricantes: </label>
+            <select id="IdFabricante" name="IdFabricante" class="form-control selectOption" ng-model="BuscarProductos.IdFabricante" ng-options="Fabricante.IdFabricante as Fabricante.Nombre for Fabricante in selectFabricantes" ng-change="ActualizarMonitor(); ">
 					<option ng-selected="true" value="">Selecciona un fabricante</option>
 			</select>
-		</div>
-	</div>
+        </div>
+    </div>
 
-	<div class="form-group row" ng-show="!(EmpresaSelect === null) || (SessionCookie.IdTipoAcceso === 4 || SessionCookie.IdTipoAcceso === 6)">
-		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-			<br>
-			<div class="form-group has-feedback">
-				<input type="text" ng-model="PedidoFilter" class="form-control" size="30" placeholder="Busca un pedido o contrato" />
-				<i class="form-control-feedback glyphicon glyphicon-search"></i>
-			</div>
-		</div>
-		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
-		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-			<div class="form-group has-feedback" ng-if="(SessionCookie.IdTipoAcceso === 4 || SessionCookie.IdTipoAcceso === 6) || BuscarProductos.IdFabricante === 2">
-				<label for="TipoContrato">Tipo de contrato: </label>
-				<select name="Contrato" id="Contrato" class="form-control selectOption" ng-change="ActualizarMonitor();" ng-model="Contrato.tipo">
+    <div class="form-group row" ng-show="!(EmpresaSelect === null) || (SessionCookie.IdTipoAcceso === 4 || SessionCookie.IdTipoAcceso === 6)">
+        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+            <br>
+            <div class="form-group has-feedback">
+                <input type="text" ng-model="PedidoFilter" class="form-control" size="30" placeholder="Busca un pedido o contrato" />
+                <i class="form-control-feedback glyphicon glyphicon-search"></i>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
+        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+            <div class="form-group has-feedback" ng-if="(SessionCookie.IdTipoAcceso === 4 || SessionCookie.IdTipoAcceso === 6) || BuscarProductos.IdFabricante === 2">
+                <label for="TipoContrato">Tipo de contrato: </label>
+                <select name="Contrato" id="Contrato" class="form-control selectOption" ng-change="ActualizarMonitor();" ng-model="Contrato.tipo">
 					<option ng-selected="true" value="all">Todos los contratos</option>
 					<option value="1">Auto Renovables</option>
 					<option value="0">Renovables</option>
 					<option value="2">Cancelados</option>
 				</select>
-			</div>
-		</div>
-	</div>
-	<div class="form-group row" ng-show="(!(EmpresaSelect === null) || (SessionCookie.IdTipoAcceso === 4 || SessionCookie.IdTipoAcceso === 6)) && !terminos">
-		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="(SessionCookie.IdTipoAcceso === 4 || SessionCookie.IdTipoAcceso === 6) || BuscarProductos.IdFabricante === 1">
-			<div class="alert alert-danger" role="alert">
-				<h4 class="alert-heading">Términos y condiciones</h4>
-				<p>Por disposición de Microsoft se debe de aceptar los Contratos de clientes y mercados de Proveedor de soluciones en la nube de Microsoft para poder seguir consumiendo sus productos. La fecha límite para aceptar los términos es el 06 de noviembre del 2018.
-					En caso de no aceptar los términos, no se podrá hacer ningún movimiento en las licencias actuales ni comprar nuevas.
-				</br></br>
-				<a href="https://docs.microsoft.com/partner-center/agreements" class="alert-link"  target="_blank">
+            </div>
+        </div>
+    </div>
+    <div class="form-group row" ng-show="(!(EmpresaSelect === null) || (SessionCookie.IdTipoAcceso === 4 || SessionCookie.IdTipoAcceso === 6)) && !terminos">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="(SessionCookie.IdTipoAcceso === 4 || SessionCookie.IdTipoAcceso === 6) || BuscarProductos.IdFabricante === 1">
+            <div class="alert alert-danger" role="alert">
+                <h4 class="alert-heading">Términos y condiciones</h4>
+                <p>Por disposición de Microsoft se debe de aceptar los Contratos de clientes y mercados de Proveedor de soluciones en la nube de Microsoft para poder seguir consumiendo sus productos. La fecha límite para aceptar los términos es el 06 de
+                    noviembre del 2018. En caso de no aceptar los términos, no se podrá hacer ningún movimiento en las licencias actuales ni comprar nuevas.
+                    </br>
+                    </br>
+                    <a href="https://docs.microsoft.com/partner-center/agreements" class="alert-link" target="_blank">
 					*Consultar los Contratos de clientes y mercados de Proveedor de soluciones en la nube de Microsoft
 				</a>
-				</p>
-				<hr>
-				<p class="mb-0">
-					<button type="button" class="btn btn-success" ng-click="AceptarTerminos(EmpresaSelect)">Aceptar términos</button>
-				</p>
-			</div>
-		</div>
-	</div>
+                </p>
+                <hr>
+                <p class="mb-0">
+                    <button type="button" class="btn btn-success" ng-click="AceptarTerminos(EmpresaSelect)">Aceptar términos</button>
+                </p>
+            </div>
+        </div>
+    </div>
 
-	<div class="form-group row" ng-show="SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 7">
-		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-			<b>Nota importante *</b> <br> Para realizar la renovación de tus suscripciones de forma automática por medio de tu tarjeta
-			bancaria es necesario descargar la siguiente carta, llenarla y enviarla a tu equipo de soporte CompuSoluciones. <br> Descarga
-			tu carta <a target="blank" href="https://s3.amazonaws.com/marketplace.compusoluciones.com/autorizacion_tarjeta.pdf">aquí</a>.
-			(Este proceso solo se realiza una vez). <br> Si quieres realizar tu renovación automática con crédito CompuSoluciones,
-			solo selecciona la opción y valida que tengas crédito disponible pagando las facturas pendientes o aumentando la cantidad
-			de crédito del usuario final.
-		</div>
-	</div>
+    <div class="form-group row" ng-show="SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 7">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <b>Nota importante *</b> <br> Para realizar la renovación de tus suscripciones de forma automática por medio de tu tarjeta bancaria es necesario descargar la siguiente carta, llenarla y enviarla a tu equipo de soporte CompuSoluciones. <br>            Descarga tu carta <a target="blank" href="https://s3.amazonaws.com/marketplace.compusoluciones.com/autorizacion_tarjeta.pdf">aquí</a>. (Este proceso solo se realiza una vez). <br> Si quieres realizar tu renovación automática con crédito CompuSoluciones,
+            solo selecciona la opción y valida que tengas crédito disponible pagando las facturas pendientes o aumentando la cantidad de crédito del usuario final.
+        </div>
+    </div>
 
-	<br>
-	<div ng-show="Vacio === 0 && EmpresaSelect != ''">
-		<h4>Aún no cuentas con suscripciones o servicios... </h4>
-	</div>
-	<!-- Detalle pedidos AWS -->
-	<div ng-show="BuscarProductos.IdFabricante == 10" class="row">
-		<div  ng-repeat="pedido in Pedidos | filter:PedidoFilter " style="margin-top: 50px;">
-			<div class="row">
-				<ul style="list-style-type:none; padding:0%">
-					<label for="Pedido">Pedido: </label> {{ pedido.IdPedido }} </br>
-					<hr>
-					<h4><label for="Pedido">{{pedido.NombreConsola}}</label></h4>
-					<div class="row"><div  class="col-sm-4"><label for="Pedido" >Fabricante: </label> Amazon Web Services</div> <div  class="col-sm-4"><label for="Fecha inicio"> Consumo estimado AWS: </label> $ {{ pedido.ConsumoAlDia }}</div> <div  class="col-sm-4"><label for="Fecha inicio">Periodo : </label> {{ pedido.FechaInicio }} </br></div></div>
-					<li ng-if="pedido.IdFormaPago === 2"> <label for="FormaPago">Forma de pago:</label> Crédito CompuSoluciones</li>
-					<li ng-if="pedido.IdFormaPago === 1"> <label for="FormaPago">Forma de pago:</label> Tarjeta de crédito</li>
-					<li ng-if="pedido.IdFormaPago === 3"> <label for="FormaPago">Forma de pago:</label> Paypal</li>
-					<li ng-if="pedido.IdFormaPago === 4"> <label for="FormaPago">Forma de pago:</label> Transferencia</li>
-					<div class="row"><div  class="col-sm-4"><label for="Moneda">Moneda de pago: </label> {{ pedido.MonedaPago }}</div> <div  class="col-sm-4"><label for="Consumo estimado con descuento">Consumo  con descuento aplicado : </label> {{ pedido.ConsumoAlDia - pedido.Descuento*pedido.ConsumoAlDia/100 }}</div> <div  class="col-sm-4"> <label >Última actualización :</label> {{ pedido.FechaUltimaActualizacion }}  <br></div></div>
-					<li ng-if="pedido.IdEsquemaRenovacion === 8"> <label for="FormaPago">Esquema de renovación: </label> Mensual </li>
-					<label for="Fecha inicio">Id consola: </label> {{ pedido.IdConsola }} 
-				</ul>
-			</div>
-		</div>
-	</div>
+    <br>
+    <div ng-show="Vacio === 0 && EmpresaSelect != ''">
+        <h4>Aún no cuentas con suscripciones o servicios... </h4>
+    </div>
+    <!-- Detalle pedidos AWS -->
+    <div ng-show="BuscarProductos.IdFabricante === 10" class="row">
+        <div ng-repeat="pedido in Pedidos | filter:PedidoFilter " style="margin-top: 50px;">
+            <div class="row">
+                <ul style="list-style-type:none; padding:0%">
+                    <label for="Pedido">Pedido: </label> {{ pedido.IdPedido }}
+                    <hr>
+                    <h4><label for="Pedido">{{pedido.NombreConsola}}</label></h4>
+                    <div class="row">
+                        <div class="col-sm-4"><label for="Pedido">Fabricante: </label> Amazon Web Services</div>
+                        <div class="col-sm-4"><label for="Fecha inicio"> Consumo estimado AWS: </label> $ {{ pedido.ConsumoAlDia }}</div>
+                        <div class="col-sm-4"><label for="Fecha inicio"> Inicio del periodo : </label> {{ pedido.FechaInicio }}</div>
+                        <li class="col-sm-4" ng-if="pedido.IdFormaPago === 2"> <label for="FormaPago"> Forma de pago:</label> Crédito CompuSoluciones</li>
+                        <li class="col-sm-4" ng-if="pedido.IdFormaPago === 1"> <label for="FormaPago"> Forma de pago:</label> Tarjeta de crédito</li>
+                        <li class="col-sm-4" ng-if="pedido.IdFormaPago === 3"> <label for="FormaPago"> Forma de pago:</label> Paypal</li>
+                        <li class="col-sm-4" ng-if="pedido.IdFormaPago === 4"> <label for="FormaPago"> Forma de pago:</label> Transferencia</li>
+                        <div ng-show="pedido.Descuento > 0" class="col-sm-4"><label for="Desccon descuento"> Consumo con descuento: </label> $ {{ pedido.ConsumoAlDia - (pedido.Descuento*pedido.ConsumoAlDia)/100 }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4"><label for="Moneda"> Moneda de pago: </label> {{ pedido.MonedaPago }}</div>
+                        <div class="col-sm-4"> <label> Última actualización :</label> {{ pedido.FechaUltimaActualizacion }} </div>
+                    </div>
+                    <li ng-if="pedido.IdEsquemaRenovacion === 8"> <label for="FormaPago">Esquema de renovación: </label> Mensual </li>
+                    <label for="Fecha inicio">Id consola: {{ pedido.IdConsola }} </label>
+                </ul>
+            </div>
+        </div>
+    </div>
 
-	<!-- Detalle pedidos MS -->
-	<div ng-if="(BuscarProductos.IdFabricante === 1  || BuscarProductos.IdFabricante === 5 || BuscarProductos.IdFabricante === 7 || BuscarProductos.IdFabricante === 6) && EmpresaSelect" ng-repeat="pedido in Pedidos | filter:PedidoFilter">	
-		<div class="row">
-			<div class="col-xs-12 col-sm-4 col-md-3 col-lg-3">
-				<label>Número de pedido:</label> {{ pedido.IdPedido }}
-			</div>
-		</div>
-		<table class="table table-hover table-responsive border-left-right-cero">
-				<tr ng-repeat="detalles in pedido.Detalles" class="repeat-animation">
-					<td>
-						<div class="row" ng-hide="detalles.IdTipoProducto !== 1">
-	
-							<div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
-								<h4><b>{{ detalles.Nombre }}</b></h4>
-								<label for="">Tipo de producto:</label> {{ detalles.Tipo  }}
-								<br>
-								<label for="">Estatus del pedido:</label> {{detalles.Estatus }}
-							</div>
-							<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
-								<label>Cantidad: </label>
-								<br/> {{ detalles.Cantidad }}
-							</div>
-							<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
-								<label>Fecha Solicitud: </label>
-								<br/> {{ pedido.FechaInicio | date:'dd MMMM yyyy' }}
-							</div>
-						</div>
-	
-						<div class="row" ng-show="detalles.IdTipoProducto !== 1">
-	
-							<div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
-								<h4><b>{{ detalles.Nombre }}</b></h4>
-								<label for="">Fabricante:</label> {{ pedido.Fabricante }}
-								<br>
-								<label for="">Tipo de producto:</label> {{ detalles.Tipo }}
-								<br>
-								<div ng-show="(detalles.Activo || pedido.CargoRealizadoProximoPedido === 1) && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 7)"><label for="">Estatus del pedido:</label> {{ pedido.Estatus }}</div>
-								<div ng-show="(pedido.IdFormaPagoProxima === 1 || pedido.IdFormaPagoProxima === 3 || pedido.IdFormaPagoProxima === 4) && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 7)">
-									<label>Estatus de renovación:</label> {{ pedido.EstatusRenovacion }}
-								</div>
-								<div ng-show="(detalles.Activo) && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
-									<label ng-hide="pedido.Bloquear || pedido.CargoRealizadoProximoPedido">Próxima forma de pago:</label>
-								</div>
-								
-								<form ng-hide="pedido.Bloquear || pedido.CargoRealizadoProximoPedido">
-									<div class="row" ng-show="detalles.Activo && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
-										<div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
-											<div class="radio" style="margin-left:20px">
-												<div>
-													<input type="radio" name="FormaPago" value="2" ng-model="pedido.IdFormaPagoProxima" ng-change="ActualizarPago(pedido)" ng-disabled="pedido.IdEstatusPedido !== 3"> 
-													Crédito
-												</div>
-												<div ng-hide="detalles.IdTipoProducto === 3" ng-disabled="">
-													<input type="radio" name="FormaPago" value="1" ng-model="pedido.IdFormaPagoProxima" ng-change="ActualizarPago(pedido)" ng-disabled="pedido.MonedaPagoProxima === 'Dólares' || pedido.IdEstatusPedido !== 3">
-													Tarjeta 
-												</div>
-												<div ng-hide="detalles.IdTipoProducto === 3">
-													<input type="radio" name="FormaPago" value="4" ng-model="pedido.IdFormaPagoProxima" ng-change="ActualizarPago(pedido)" ng-disabled="pedido.MonedaPagoProxima === 'Dólares' || pedido.IdEstatusPedido !== 3">
-													Transferencia
-												</div>
-												<div ng-hide="detalles.IdTipoProducto === 3">
-													<input type="radio" name="FormaPago" value="3" ng-model="pedido.IdFormaPagoProxima" ng-change="ActualizarPago(pedido)" ng-disabled="pedido.MonedaPagoProxima === 'Dólares' || pedido.IdEstatusPedido !== 3">
-													Paypal
-												</div>
-											</div>
-										</div>
-										<div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
-											<div class="radio" style="margin-left:20px">
-												<div>
-													<input type="radio" name="MonedaPago" value="Dólares" ng-model="pedido.MonedaPagoProxima" ng-change="ActualizarMoneda(pedido) "
-														ng-disabled="pedido.IdEstatusPedido !=3 || pedido.IdFormaPagoProxima != 2"> Dólares
-												</div>
-												<div>
-													<input type="radio" name="MonedaPago" value="Pesos" ng-model="pedido.MonedaPagoProxima" ng-change="ActualizarMoneda(pedido)"
-														ng-disabled="pedido.IdEstatusPedido != 3"> Pesos
-												</div>
-											</div>
-										</div>
-									</div>
-								</form>
+    <!-- Detalle pedidos MS -->
+    <div ng-if="(BuscarProductos.IdFabricante === 1  || BuscarProductos.IdFabricante === 5 || BuscarProductos.IdFabricante === 7 || BuscarProductos.IdFabricante === 6) && EmpresaSelect" ng-repeat="pedido in Pedidos | filter:PedidoFilter">
+        <div class="row">
+            <div class="col-xs-12 col-sm-4 col-md-3 col-lg-3">
+                <label>Número de pedido:</label> {{ pedido.IdPedido }}
+            </div>
+        </div>
+        <table class="table table-hover table-responsive border-left-right-cero">
+            <tr ng-repeat="detalles in pedido.Detalles" class="repeat-animation">
+                <td>
+                    <div class="row" ng-hide="detalles.IdTipoProducto !== 1">
 
-							</div>
-							
-							<div class="BajoConsumo" ng-if="detalles.IdTipoProducto === 3">
-								<div ng-if="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)" class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
-									<label>Consumo: </label>
-									<br/> 
-									<div ng-if="detalles.MonedaPrecio === 'Dólares'">{{ (pedido.TipoCambio * detalles.PrecioUnitario) | currency }} {{ pedido.MonedaPago }} </div>
-									<div ng-if="detalles.MonedaPrecio === 'Pesos'">{{ detalles.PrecioUnitario | currency}} {{pedido.MonedaPago}} </div>
-									<br/> <a href="#/DetallesAzure/{{pedido.IdPedido}}">Ver detalles</a>
-								</div>
-								<div ng-if="(SessionCookie.IdTipoAcceso == 4 || SessionCookie.IdTipoAcceso == 6 || SessionCookie.IdTipoAcceso == 7)"
-									class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
-									<label>Bajo consumo </label>
-								</div>
-							</div>
+                        <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                            <h4><b>{{ detalles.Nombre }}</b></h4>
+                            <label for="">Tipo de producto:</label> {{ detalles.Tipo }}
+                            <br>
+                            <label for="">Estatus del pedido:</label> {{detalles.Estatus }}
+                        </div>
+                        <div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                            <label>Cantidad: </label>
+                            <br/> {{ detalles.Cantidad }}
+                        </div>
+                        <div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                            <label>Fecha Solicitud: </label>
+                            <br/> {{ pedido.FechaInicio | date:'dd MMMM yyyy' }}
+                        </div>
+                    </div>
 
-							<div ng-if="detalles.IdTipoProducto !== 3">
-								<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
-									<label>{{ pedido.IdFabricante === 5 ? "Empleados" : "Suscripciones" }}: </label>
-									<br>
-									<div style="margin:0; padding:0;" ng-show="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3) && !pedido.CargoRealizadoProximoPedido && !detalles.PedidoAFabricante"> {{ detalles.Cantidad }} </div> 
-									<a ng-click="ActualizarCantidad(detalles.IdPedidoDetalle)" style="text-decoration: none" 
-									ng-hide="pedido.CargoRealizadoProximoPedido || (!detalles.PedidoAFabricante || detalles.EstatusFabricante === 'FAILED')"> {{ detalles.IdProducto === 3616 ? 25 : detalles.Cantidad }} &nbsp;
+                    <div class="row" ng-show="detalles.IdTipoProducto !== 1">
+
+                        <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                            <h4><b>{{ detalles.Nombre }}</b></h4>
+                            <label for="">Fabricante:</label> {{ pedido.Fabricante }}
+                            <br>
+                            <label for="">Tipo de producto:</label> {{ detalles.Tipo }}
+                            <br>
+                            <div ng-show="(detalles.Activo || pedido.CargoRealizadoProximoPedido === 1) && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 7)"><label for="">Estatus del pedido:</label> {{ pedido.Estatus }}</div>
+                            <div ng-show="(pedido.IdFormaPagoProxima === 1 || pedido.IdFormaPagoProxima === 3 || pedido.IdFormaPagoProxima === 4) && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 7)">
+                                <label>Estatus de renovación:</label> {{ pedido.EstatusRenovacion }}
+                            </div>
+                            <div ng-show="(detalles.Activo) && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
+                                <label ng-hide="pedido.Bloquear || pedido.CargoRealizadoProximoPedido">Próxima forma de pago:</label>
+                            </div>
+
+                            <form ng-hide="pedido.Bloquear || pedido.CargoRealizadoProximoPedido">
+                                <div class="row" ng-show="detalles.Activo && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
+                                    <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                                        <div class="radio" style="margin-left:20px">
+                                            <div>
+                                                <input type="radio" name="FormaPago" value="2" ng-model="pedido.IdFormaPagoProxima" ng-change="ActualizarPago(pedido)" ng-disabled="pedido.IdEstatusPedido !== 3"> Crédito
+                                            </div>
+                                            <div ng-hide="detalles.IdTipoProducto === 3" ng-disabled="">
+                                                <input type="radio" name="FormaPago" value="1" ng-model="pedido.IdFormaPagoProxima" ng-change="ActualizarPago(pedido)" ng-disabled="pedido.MonedaPagoProxima === 'Dólares' || pedido.IdEstatusPedido !== 3">                                                Tarjeta
+                                            </div>
+                                            <div ng-hide="detalles.IdTipoProducto === 3">
+                                                <input type="radio" name="FormaPago" value="4" ng-model="pedido.IdFormaPagoProxima" ng-change="ActualizarPago(pedido)" ng-disabled="pedido.MonedaPagoProxima === 'Dólares' || pedido.IdEstatusPedido !== 3">                                                Transferencia
+                                            </div>
+                                            <div ng-hide="detalles.IdTipoProducto === 3">
+                                                <input type="radio" name="FormaPago" value="3" ng-model="pedido.IdFormaPagoProxima" ng-change="ActualizarPago(pedido)" ng-disabled="pedido.MonedaPagoProxima === 'Dólares' || pedido.IdEstatusPedido !== 3">                                                Paypal
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                                        <div class="radio" style="margin-left:20px">
+                                            <div>
+                                                <input type="radio" name="MonedaPago" value="Dólares" ng-model="pedido.MonedaPagoProxima" ng-change="ActualizarMoneda(pedido) " ng-disabled="pedido.IdEstatusPedido !=3 || pedido.IdFormaPagoProxima != 2">                                                Dólares
+                                            </div>
+                                            <div>
+                                                <input type="radio" name="MonedaPago" value="Pesos" ng-model="pedido.MonedaPagoProxima" ng-change="ActualizarMoneda(pedido)" ng-disabled="pedido.IdEstatusPedido != 3"> Pesos
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+
+                        <div class="BajoConsumo" ng-if="detalles.IdTipoProducto === 3">
+                            <div ng-if="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)" class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                                <label>Consumo: </label>
+                                <br/>
+                                <div ng-if="detalles.MonedaPrecio === 'Dólares'">{{ (pedido.TipoCambio * detalles.PrecioUnitario) | currency }} {{ pedido.MonedaPago }} </div>
+                                <div ng-if="detalles.MonedaPrecio === 'Pesos'">{{ detalles.PrecioUnitario | currency}} {{pedido.MonedaPago}} </div>
+                                <br/> <a href="#/DetallesAzure/{{pedido.IdPedido}}">Ver detalles</a>
+                            </div>
+                            <div ng-if="(SessionCookie.IdTipoAcceso == 4 || SessionCookie.IdTipoAcceso == 6 || SessionCookie.IdTipoAcceso == 7)" class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                                <label>Bajo consumo </label>
+                            </div>
+                        </div>
+
+                        <div ng-if="detalles.IdTipoProducto !== 3">
+                            <div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                                <label>{{ pedido.IdFabricante === 5 ? "Empleados" : "Suscripciones" }}: </label>
+                                <br>
+                                <div style="margin:0; padding:0;" ng-show="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3) && !pedido.CargoRealizadoProximoPedido && !detalles.PedidoAFabricante"> {{ detalles.Cantidad }} </div>
+                                <a ng-click="ActualizarCantidad(detalles.IdPedidoDetalle)" style="text-decoration: none" ng-hide="pedido.CargoRealizadoProximoPedido || (!detalles.PedidoAFabricante || detalles.EstatusFabricante === 'FAILED')"> {{ detalles.IdProducto === 3616 ? 25 : detalles.Cantidad }} &nbsp;
 										<span class="glyphicon glyphicon-triangle-bottom" ng-hide="detalles.MostrarCantidad || detalles.IdProducto === 3616"></span>
 										<span class="glyphicon glyphicon-triangle-top" ng-show="detalles.MostrarCantidad"></span>
 									</a>
-									<div style="margin:0; padding:0;" ng-show="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)"> 
-										<br> <label> Renovación: </label> <br>
-										<div ng-if="!detalles.PorCancelar || (detalles.Activo && pedido.IdFabricante === 1)"> {{  detalles.IdProducto === 3616 ? 25 : detalles.CantidadProxima  }} </div>
-										<div ng-if="!detalles.Activo || detalles.PorCancelar"> No renovar </div>
-									</div>
-									<br/>
-									<div class="row" ng-show="detalles.MostrarCantidad">
-										<div class="form-group col-xs-6 col-sm-6 col-md-12 col-lg-12">
-											<label>Actualizar: </label>
-											<p>El número de {{ pedido.IdFabricante === 5 ? "empleados" : "suscripciones" }} se vera reflejado en la renovación.</p>
-										</div>
-									</div>
+                                <div style="margin:0; padding:0;" ng-show="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
+                                    <br> <label> Renovación: </label> <br>
+                                    <div ng-if="!detalles.PorCancelar || (detalles.Activo && pedido.IdFabricante === 1)"> {{ detalles.IdProducto === 3616 ? 25 : detalles.CantidadProxima }} </div>
+                                    <div ng-if="!detalles.Activo || detalles.PorCancelar"> No renovar </div>
+                                </div>
+                                <br/>
+                                <div class="row" ng-show="detalles.MostrarCantidad">
+                                    <div class="form-group col-xs-6 col-sm-6 col-md-12 col-lg-12">
+                                        <label>Actualizar: </label>
+                                        <p>El número de {{ pedido.IdFabricante === 5 ? "empleados" : "suscripciones" }} se vera reflejado en la renovación.</p>
+                                    </div>
+                                </div>
 
-		
-									<div class="row" ng-show="detalles.MostrarCantidad">
-										<div class="form-group col-xs-6 col-sm-6 col-md-7 col-lg-7">
-											<input type="number" class="form-control" ng-model="detalles.CantidadProxima" min="1" />
-										</div>
-										<div class="form-group col-xs-6 col-sm-6 col-md-5 col-lg-5 ">
-											<h4>
-												<a id="aActualizar" type="submit" title="Guardar" ng-click="ActualizarDetalle(pedido, detalles);" ng-disabled="!frmCantidad.$valid">
-													<span class="fa fa-floppy-o" style="cursor:pointer"></span>
-												</a>
-											</h4>
-										</div>
-									</div>
-								</div>
-							</div>
 
-							<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
-								<ul style="list-style-type:none; padding:0%">
-									<li>
-										<label>Fecha inicio de suscripción: </label>
-										<br/> {{ pedido.FechaInicio | date:'d/MM/yyyy' }} <br/> <br/>
-									</li>
-									<li>
-										<label>Fecha fin de suscripción: </label>
-										<br/> {{ pedido.FechaFin| date:'d/MM/yyyy' }}
-									</li>
-								</ul>
-							</div>
-							
-							<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
-								<label>Estatus de pedido: </label>
-								<br/>
-								<b> 
+                                <div class="row" ng-show="detalles.MostrarCantidad">
+                                    <div class="form-group col-xs-6 col-sm-6 col-md-7 col-lg-7">
+                                        <input type="number" class="form-control" ng-model="detalles.CantidadProxima" min="1" />
+                                    </div>
+                                    <div class="form-group col-xs-6 col-sm-6 col-md-5 col-lg-5 ">
+                                        <h4>
+                                            <a id="aActualizar" type="submit" title="Guardar" ng-click="ActualizarDetalle(pedido, detalles);" ng-disabled="!frmCantidad.$valid">
+                                                <span class="fa fa-floppy-o" style="cursor:pointer"></span>
+                                            </a>
+                                        </h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                            <ul style="list-style-type:none; padding:0%">
+                                <li>
+                                    <label>Fecha inicio de suscripción: </label>
+                                    <br/> {{ pedido.FechaInicio | date:'d/MM/yyyy' }} <br/> <br/>
+                                </li>
+                                <li>
+                                    <label>Fecha fin de suscripción: </label>
+                                    <br/> {{ pedido.FechaFin| date:'d/MM/yyyy' }}
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                            <label>Estatus de pedido: </label>
+                            <br/>
+                            <b> 
 									<div ng-show="detalles.EstatusFabricante === 'accepted'">
 										Aceptado <span class="glyphicon glyphicon-ok" title="{{ detalles.EstatusFabricante }}"> </span>
 									</div>
@@ -268,198 +261,188 @@
 										Procesando... <span class="glyphicon glyphicon-time" title="{{ detalles.EstatusFabricante }}"> </span>
 									</div>
 								</b>
-							</div>
+                        </div>
 
-							<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2" >
-								<button class="btn btn-danger" ng-show="detalles.Activo" ng-click="Confirmar(detalles.IdPedidoDetalle)"
-									ng-disabled="pedido.CargoRealizadoProximoPedido || (!detalles.PedidoAFabricante || detalles.EstatusFabricante === 'FAILED')">
+                        <div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                            <button class="btn btn-danger" ng-show="detalles.Activo" ng-click="Confirmar(detalles.IdPedidoDetalle)" ng-disabled="pedido.CargoRealizadoProximoPedido || (!detalles.PedidoAFabricante || detalles.EstatusFabricante === 'FAILED')">
 									CANCELAR
 								</button>
-								<button class="btn btn-success" ng-show="!detalles.Activo" ng-click="Reanudar(pedido, detalles)"
-									ng-disabled="pedido.CargoRealizadoProximoPedido || (!detalles.PedidoAFabricante || detalles.EstatusFabricante === 'FAILED')">
+                            <button class="btn btn-success" ng-show="!detalles.Activo" ng-click="Reanudar(pedido, detalles)" ng-disabled="pedido.CargoRealizadoProximoPedido || (!detalles.PedidoAFabricante || detalles.EstatusFabricante === 'FAILED')">
 									REANUDAR <p ng-show="pedido.CargoRealizadoProximoPedido && pedido.IdFormaPagoProxima === 4">Renovación pagada</p>
 								</button>
-								<br> <br>
-								<div ng-show="detalles.Mostrar">
-									<div class="row">
-										<div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
-											<label>Se cancelará la suscripción automática, ¿Estás de acuerdo?</label>
-										</div>
-									</div>
-									<div class="row" ng-show="pedido.IdFabricante === 5">
-										<div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
-											<label>Aplica politicas para reanudar servicio despues de cancelar</label>
-										</div>
-									</div>
-									<div class="row" ng-show="pedido.IdFabricante === 5">
-										<div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
-											<label>* se cancelaran tambien los complementos de esta subscripción</label>
-										</div>
-									</div>
-									<div class="row">
-										<div class="form-group col-xs-6 col-sm-6 col-md-12 col-lg-12">
-											<button class="btn btn-block btn-warning" ng-disabled="form.habilitar" ng-click="CancelarPedido(pedido, detalles)"> Sí </button>
-										</div>
-										<div class="form-group col-xs-6 col-sm-6 col-md-12 col-lg-12">
-											<button class="btn btn-block btn-primary" ng-disabled="form.habilitar" ng-click="Confirmar(detalles.IdPedidoDetalle)"> No </button>
-										</div>
-									</div>
-								</div>
-							</div>
+                            <br> <br>
+                            <div ng-show="detalles.Mostrar">
+                                <div class="row">
+                                    <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <label>Se cancelará la suscripción automática, ¿Estás de acuerdo?</label>
+                                    </div>
+                                </div>
+                                <div class="row" ng-show="pedido.IdFabricante === 5">
+                                    <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <label>Aplica politicas para reanudar servicio despues de cancelar</label>
+                                    </div>
+                                </div>
+                                <div class="row" ng-show="pedido.IdFabricante === 5">
+                                    <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <label>* se cancelaran tambien los complementos de esta subscripción</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-xs-6 col-sm-6 col-md-12 col-lg-12">
+                                        <button class="btn btn-block btn-warning" ng-disabled="form.habilitar" ng-click="CancelarPedido(pedido, detalles)"> Sí </button>
+                                    </div>
+                                    <div class="form-group col-xs-6 col-sm-6 col-md-12 col-lg-12">
+                                        <button class="btn btn-block btn-primary" ng-disabled="form.habilitar" ng-click="Confirmar(detalles.IdPedidoDetalle)"> No </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-						</div>
-					</td>
-				</tr>
-			</table>
-	</div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
 
-	<!-- Detalle pedidos Autodesk -->
-	<div ng-if="BuscarProductos.IdFabricante === 2 && EmpresaSelect" ng-repeat="pedido in Pedidos | filter:PedidoFilter" style="margin-top: 50px;">
-		<div class="row">
-			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-				<ul style="list-style-type:none; padding:0%">
-					<li ng-if="pedido.NumeroContrato"> <label for="Contrato">Número de contrato: </label> {{ pedido.NumeroContrato }} </li>
-					<li ng-if="!pedido.NumeroContrato"> <label for="Contrato">Número de contrato: </label> Solicitando contrato... </li>
-					<li> <label for="TipoContrato">Tipo de contrato: </label> {{ pedido.TipoContrato }} </li>
-					<li ng-hide="pedido.EstatusContrato === 'canceled'">  <label for="Esquema">Esquema de renovación: </label> {{ pedido.NombreEsquema }} </li>
-					<li ng-if="pedido.EstatusContrato === 'open'"> <label for="Renovado">Estatus renovación: </label> Abierto </li>
-					<li ng-if="pedido.EstatusContrato === 'renewal'"> <label for="Renovado">Estatus renovación: </label> Renovado </li>
-					<li ng-if="pedido.EstatusContrato === 'processing'"> <label for="Renovado">Estatus renovación: </label> Procesando ... </li>
-					<li ng-if="pedido.EstatusContrato === 'canceled'"> <label for="Renovado">Estatus renovación: </label> Cancelada </li>
-					<li> <label for="FechaInicio">Duración del contrato: </label> {{ pedido.FechaInicio }} <label>-</label> {{ pedido.FechaFin }} </li>
-				</ul>
-			</div>
-			<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"></div>
-			<div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
-				<button id="Renovar" class="pull-right btn btn-block btn-primary" style="margin-top: 20px" ng-if="!pedido.AutoRenovable"
-					ng-disabled="(!pedido.Renovacion || pedido.PorRenovar || pedido.Renovado) && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)"
-					data-toggle="modal" data-target="#renovarModal"
-					ng-click="AgregarContrato(pedido);">
+    <!-- Detalle pedidos Autodesk -->
+    <div ng-if="BuscarProductos.IdFabricante === 2 && EmpresaSelect" ng-repeat="pedido in Pedidos | filter:PedidoFilter" style="margin-top: 50px;">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                <ul style="list-style-type:none; padding:0%">
+                    <li ng-if="pedido.NumeroContrato"> <label for="Contrato">Número de contrato: </label> {{ pedido.NumeroContrato }} </li>
+                    <li ng-if="!pedido.NumeroContrato"> <label for="Contrato">Número de contrato: </label> Solicitando contrato... </li>
+                    <li> <label for="TipoContrato">Tipo de contrato: </label> {{ pedido.TipoContrato }} </li>
+                    <li ng-hide="pedido.EstatusContrato === 'canceled'"> <label for="Esquema">Esquema de renovación: </label> {{ pedido.NombreEsquema }} </li>
+                    <li ng-if="pedido.EstatusContrato === 'open'"> <label for="Renovado">Estatus renovación: </label> Abierto </li>
+                    <li ng-if="pedido.EstatusContrato === 'renewal'"> <label for="Renovado">Estatus renovación: </label> Renovado </li>
+                    <li ng-if="pedido.EstatusContrato === 'processing'"> <label for="Renovado">Estatus renovación: </label> Procesando ... </li>
+                    <li ng-if="pedido.EstatusContrato === 'canceled'"> <label for="Renovado">Estatus renovación: </label> Cancelada </li>
+                    <li> <label for="FechaInicio">Duración del contrato: </label> {{ pedido.FechaInicio }} <label>-</label> {{ pedido.FechaFin }} </li>
+                </ul>
+            </div>
+            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"></div>
+            <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+                <button id="Renovar" class="pull-right btn btn-block btn-primary" style="margin-top: 20px" ng-if="!pedido.AutoRenovable" ng-disabled="(!pedido.Renovacion || pedido.PorRenovar || pedido.Renovado) && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)"
+                    data-toggle="modal" data-target="#renovarModal" ng-click="AgregarContrato(pedido);">
 					Renovar
 				</button>
-			</div>
-		</div>
+            </div>
+        </div>
 
-		<table class="table table-hover table-responsive border-left-right-cero">
-			<tr ng-repeat="detalles in pedido.Detalles" class="repeat-animation">
-				<td>
+        <table class="table table-hover table-responsive border-left-right-cero">
+            <tr ng-repeat="detalles in pedido.Detalles" class="repeat-animation">
+                <td>
 
-					<div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
-						<h4><b>{{ detalles.Nombre }}</b></h4>
-						<ul style="list-style-type:none; padding:0%">
-							<li> <label for="Order">Número de pedido:</label> {{ detalles.IdPedido }} </li>
-							<li> <label for="TipoProducto">Tipo de producto:</label> {{ detalles.Tipo }} </li>
-							<li ng-if="detalles.IdEstatusPedido === 2"> <label for="Estatus">Estatus pedido: </label> Pago pendiente </li>
-							<li ng-if="detalles.IdEstatusPedido === 3"> <label for="Estatus">Estatus pedido: </label> Pagado	</li>
-							<li ng-hide="pedido.EstatusContrato === 'canceled'" ng-if="pedido.AutoRenovable && detalles.PagoRenovacion"> <label for="EstatusRenovacion">Estatus de renovación:</label> Pagado	</li>
-							<li ng-hide="pedido.EstatusContrato === 'canceled'" ng-if="pedido.AutoRenovable && !detalles.PagoRenovacion"> <label for="EstatusRenovacion">Estatus de renovación:</label> Sin renovar </li>
-							<li ng-if="pedido.AutoRenovable && (detalles.Activo) && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
+                    <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                        <h4><b>{{ detalles.Nombre }}</b></h4>
+                        <ul style="list-style-type:none; padding:0%">
+                            <li> <label for="Order">Número de pedido:</label> {{ detalles.IdPedido }} </li>
+                            <li> <label for="TipoProducto">Tipo de producto:</label> {{ detalles.Tipo }} </li>
+                            <li ng-if="detalles.IdEstatusPedido === 2"> <label for="Estatus">Estatus pedido: </label> Pago pendiente </li>
+                            <li ng-if="detalles.IdEstatusPedido === 3"> <label for="Estatus">Estatus pedido: </label> Pagado </li>
+                            <li ng-hide="pedido.EstatusContrato === 'canceled'" ng-if="pedido.AutoRenovable && detalles.PagoRenovacion"> <label for="EstatusRenovacion">Estatus de renovación:</label> Pagado </li>
+                            <li ng-hide="pedido.EstatusContrato === 'canceled'" ng-if="pedido.AutoRenovable && !detalles.PagoRenovacion"> <label for="EstatusRenovacion">Estatus de renovación:</label> Sin renovar </li>
+                            <li ng-if="pedido.AutoRenovable && (detalles.Activo) && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
 
-								<form ng-hide="pedido.EstatusContrato === 'canceled'">
-									<label>Próxima forma de pago:</label>
-									<div class="row" ng-show="detalles.Activo && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
-										<div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
-											<div class="radio" style="margin-left:20px">
-													<div>
-															<input type="radio" name="FormaPago" value="2" ng-model="detalles.IdFormaPagoProxima" ng-change="ActualizarPago(detalles)" ng-disabled="detalles.PagoRenovacion || detalles.EstatusFabricante !== 'accepted'"> 
-															Crédito
-														</div>
-														<div ng-hide="detalles.IdTipoProducto === 3" ng-disabled="">
-															<input type="radio" name="FormaPago" value="1" ng-model="detalles.IdFormaPagoProxima" ng-change="ActualizarPago(detalles)" ng-disabled="detalles.MonedaPagoProxima === 'Dólares' || detalles.PagoRenovacion || detalles.EstatusFabricante !== 'accepted'">
-															Tarjeta 
-														</div>
-														<div ng-hide="detalles.IdTipoProducto === 3">
-															<input type="radio" name="FormaPago" value="4" ng-model="detalles.IdFormaPagoProxima" ng-change="ActualizarPago(detalles)" ng-disabled="detalles.MonedaPagoProxima === 'Dólares' || detalles.PagoRenovacion || detalles.EstatusFabricante !== 'accepted'">
-															Transferencia
-														</div>
-														<div ng-hide="detalles.IdTipoProducto === 3">
-															<input type="radio" name="FormaPago" value="3" ng-model="detalles.IdFormaPagoProxima" ng-change="ActualizarPago(detalles)" ng-disabled="detalles.MonedaPagoProxima === 'Dólares' || detalles.PagoRenovacion || detalles.EstatusFabricante !== 'accepted'">
-															Paypal
-														</div>
-											</div>
-										</div>
-										<div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
-											<div class="radio" style="margin-left:20px">
-												<div>
-													<input type="radio" name="MonedaPago" value="Dólares" ng-model="detalles.MonedaPagoProxima" ng-change="ActualizarMoneda(detalles)"
-														ng-disabled="detalles.IdFormaPagoProxima != 2 || detalles.PagoRenovacion || detalles.EstatusFabricante !== 'accepted'"> Dólares
-												</div>
-												<div>
-													<input type="radio" name="MonedaPago" value="Pesos" ng-model="detalles.MonedaPagoProxima " ng-change="ActualizarMoneda(detalles)"
-														ng-disabled="detalles.PagoRenovacion || detalles.EstatusFabricante !== 'accepted'"> Pesos
-												</div>
-											</div>
-										</div>
-									</div>
-								</form>
+                                <form ng-hide="pedido.EstatusContrato === 'canceled'">
+                                    <label>Próxima forma de pago:</label>
+                                    <div class="row" ng-show="detalles.Activo && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
+                                        <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                                            <div class="radio" style="margin-left:20px">
+                                                <div>
+                                                    <input type="radio" name="FormaPago" value="2" ng-model="detalles.IdFormaPagoProxima" ng-change="ActualizarPago(detalles)" ng-disabled="detalles.PagoRenovacion || detalles.EstatusFabricante !== 'accepted'">                                                    Crédito
+                                                </div>
+                                                <div ng-hide="detalles.IdTipoProducto === 3" ng-disabled="">
+                                                    <input type="radio" name="FormaPago" value="1" ng-model="detalles.IdFormaPagoProxima" ng-change="ActualizarPago(detalles)" ng-disabled="detalles.MonedaPagoProxima === 'Dólares' || detalles.PagoRenovacion || detalles.EstatusFabricante !== 'accepted'">                                                    Tarjeta
+                                                </div>
+                                                <div ng-hide="detalles.IdTipoProducto === 3">
+                                                    <input type="radio" name="FormaPago" value="4" ng-model="detalles.IdFormaPagoProxima" ng-change="ActualizarPago(detalles)" ng-disabled="detalles.MonedaPagoProxima === 'Dólares' || detalles.PagoRenovacion || detalles.EstatusFabricante !== 'accepted'">                                                    Transferencia
+                                                </div>
+                                                <div ng-hide="detalles.IdTipoProducto === 3">
+                                                    <input type="radio" name="FormaPago" value="3" ng-model="detalles.IdFormaPagoProxima" ng-change="ActualizarPago(detalles)" ng-disabled="detalles.MonedaPagoProxima === 'Dólares' || detalles.PagoRenovacion || detalles.EstatusFabricante !== 'accepted'">                                                    Paypal
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                                            <div class="radio" style="margin-left:20px">
+                                                <div>
+                                                    <input type="radio" name="MonedaPago" value="Dólares" ng-model="detalles.MonedaPagoProxima" ng-change="ActualizarMoneda(detalles)" ng-disabled="detalles.IdFormaPagoProxima != 2 || detalles.PagoRenovacion || detalles.EstatusFabricante !== 'accepted'">                                                    Dólares
+                                                </div>
+                                                <div>
+                                                    <input type="radio" name="MonedaPago" value="Pesos" ng-model="detalles.MonedaPagoProxima " ng-change="ActualizarMoneda(detalles)" ng-disabled="detalles.PagoRenovacion || detalles.EstatusFabricante !== 'accepted'">                                                    Pesos
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
 
-							</li>
-						</ul>
-					</div>
+                            </li>
+                        </ul>
+                    </div>
 
-					<div ng-if="detalles.IdTipoProducto !== 3 && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
-						<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
-							<label>Suscripciones: </label> <br>
-							<div style="margin:0; padding:0;" ng-if="detalles.EstatusFabricante !== 'accepted' || (pedido.AutoRenovable && detalles.PagoRenovacion) || (!pedido.AutoRenovable && (!pedido.Renovacion || pedido.PorRenovar))"> {{ detalles.Cantidad }} </div>
-							<!-- <div style="margin:0; padding:0;" ng-if="pedido.Renovacion">{{ pedido.Cantidad }}</div> -->
-							<a ng-click="ActualizarCantidad(detalles.IdPedidoDetalle)" style="text-decoration: none" ng-if="detalles.EstatusFabricante === 'accepted' && ((pedido.AutoRenovable && !detalles.PagoRenovacion) || (!pedido.AutoRenovable && pedido.Renovacion && !pedido.PorRenovar))"> {{ detalles.Cantidad }} &nbsp;
+                    <div ng-if="detalles.IdTipoProducto !== 3 && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
+                        <div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                            <label>Suscripciones: </label> <br>
+                            <div style="margin:0; padding:0;" ng-if="detalles.EstatusFabricante !== 'accepted' || (pedido.AutoRenovable && detalles.PagoRenovacion) || (!pedido.AutoRenovable && (!pedido.Renovacion || pedido.PorRenovar))"> {{ detalles.Cantidad }} </div>
+                            <!-- <div style="margin:0; padding:0;" ng-if="pedido.Renovacion">{{ pedido.Cantidad }}</div> -->
+                            <a ng-click="ActualizarCantidad(detalles.IdPedidoDetalle)" style="text-decoration: none" ng-if="detalles.EstatusFabricante === 'accepted' && ((pedido.AutoRenovable && !detalles.PagoRenovacion) || (!pedido.AutoRenovable && pedido.Renovacion && !pedido.PorRenovar))"> {{ detalles.Cantidad }} &nbsp;
 								<span class="glyphicon glyphicon-triangle-bottom" ng-show="!detalles.MostrarCantidad"></span>
 								<span class="glyphicon glyphicon-triangle-top" ng-show="detalles.MostrarCantidad"></span>
 							</a>
-							<!-- ng-show="detalles.Cantidad !== detalles.CantidadProxima" -->
-							<div style="margin:0; padding:0;"> 
-								<br> <label> Renovación: </label> <br>
-								<div ng-if="!detalles.PorCancelar"> {{  detalles.IdProducto === 3616 ? 25 : detalles.CantidadProxima  }} </div>
-								<div ng-if="!detalles.Activo || detalles.PorCancelar"> No renovar </div>
-							</div>
-							<br/>
-							<div class="row" ng-show="detalles.MostrarCantidad">
-								<div class="form-group col-xs-6 col-sm-6 col-md-12 col-lg-12">
-									<label>Actualizar: </label>
-									<p>El número de suscripciones se vera reflejado en la renovación.</p>
-								</div>
-							</div>
+                            <!-- ng-show="detalles.Cantidad !== detalles.CantidadProxima" -->
+                            <div style="margin:0; padding:0;">
+                                <br> <label> Renovación: </label> <br>
+                                <div ng-if="!detalles.PorCancelar"> {{ detalles.IdProducto === 3616 ? 25 : detalles.CantidadProxima }} </div>
+                                <div ng-if="!detalles.Activo || detalles.PorCancelar"> No renovar </div>
+                            </div>
+                            <br/>
+                            <div class="row" ng-show="detalles.MostrarCantidad">
+                                <div class="form-group col-xs-6 col-sm-6 col-md-12 col-lg-12">
+                                    <label>Actualizar: </label>
+                                    <p>El número de suscripciones se vera reflejado en la renovación.</p>
+                                </div>
+                            </div>
 
-							<div class="row" ng-show="detalles.MostrarCantidad">
-								<div class="form-group col-xs-12 col-sm-12 col-md-8 col-lg-8">
-									<input type="number" class="form-control" ng-model="detalles.CantidadProxima" max="{{ detalles.Cantidad }}" min="1" />
-								</div>
-								<div class="form-group col-xs-6 col-sm-6 col-md-2 col-lg-2">
-									<h4>
-										<a id="aActualizar" type="submit" title="Guardar" ng-click="ActualizarDetalle(pedido, detalles);" ng-disabled="!frmCantidad.$valid">
-											<span class="fa fa-floppy-o" style="cursor:pointer"></span>
-										</a>
-									</h4>
-								</div>
-								<div class="form-group col-xs-6 col-sm-6 col-md-2 col-lg-2" ng-if="!pedido.AutoRenovable">
-									<h4>
-										<a id="pCancelar" type="button" title="No renovar" ng-click="CancelarRenovacion(pedido, detalles);" ng-disabled="!frmCantidad.$valid">
-											<span class="glyphicon glyphicon-trash" style="cursor:pointer"></span>
-										</a>
-									</h4>
-								</div>
-							</div>
-						</div>
-					</div>
+                            <div class="row" ng-show="detalles.MostrarCantidad">
+                                <div class="form-group col-xs-12 col-sm-12 col-md-8 col-lg-8">
+                                    <input type="number" class="form-control" ng-model="detalles.CantidadProxima" max="{{ detalles.Cantidad }}" min="1" />
+                                </div>
+                                <div class="form-group col-xs-6 col-sm-6 col-md-2 col-lg-2">
+                                    <h4>
+                                        <a id="aActualizar" type="submit" title="Guardar" ng-click="ActualizarDetalle(pedido, detalles);" ng-disabled="!frmCantidad.$valid">
+                                            <span class="fa fa-floppy-o" style="cursor:pointer"></span>
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div class="form-group col-xs-6 col-sm-6 col-md-2 col-lg-2" ng-if="!pedido.AutoRenovable">
+                                    <h4>
+                                        <a id="pCancelar" type="button" title="No renovar" ng-click="CancelarRenovacion(pedido, detalles);" ng-disabled="!frmCantidad.$valid">
+                                            <span class="glyphicon glyphicon-trash" style="cursor:pointer"></span>
+                                        </a>
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-					<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
-					<div>
-						<label>Fecha Solicitud: </label>
-						<br/> {{ detalles.FechaActivo | date:'dd MMMM yyyy' }}
-					</div>
+                    <div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                        <div>
+                            <label>Fecha Solicitud: </label>
+                            <br/> {{ detalles.FechaActivo | date:'dd MMMM yyyy' }}
+                        </div>
 
-					<br>
+                        <br>
 
-					<div>
-						<label>Fecha limite de cancelación: </label>
-						<br/> {{ pedido.FechaCancelacion  }}
-					</div>
-				</div>
+                        <div>
+                            <label>Fecha limite de cancelación: </label>
+                            <br/> {{ pedido.FechaCancelacion }}
+                        </div>
+                    </div>
 
-					<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
-						<label>Estatus de pedido: </label>
-						<br/>
-						<b> 
+                    <div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                        <label>Estatus de pedido: </label>
+                        <br/>
+                        <b> 
 							<div ng-show="detalles.EstatusFabricante === 'accepted'">
 								Aceptado <span class="glyphicon glyphicon-ok" title="{{ detalles.EstatusFabricante }}"> </span>
 							</div>
@@ -470,76 +453,73 @@
 								Procesando... <span class="glyphicon glyphicon-time" title="{{ detalles.EstatusFabricante }}"> </span>
 							</div>
 						</b>
-					</div>
-				
+                    </div>
 
-					<div ng-hide="pedido.EstatusContrato === 'canceled'" class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2" ng-if="pedido.AutoRenovable">
-						<button class="btn btn-danger"  type="button" ng-hide="!detalles.Activo"
-							ng-disabled="detalles.PagoRenovacion || detalles.EstatusFabricante !== 'accepted'" ng-click="Confirmar(detalles.IdPedidoDetalle)">
+
+                    <div ng-hide="pedido.EstatusContrato === 'canceled'" class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2" ng-if="pedido.AutoRenovable">
+                        <button class="btn btn-danger" type="button" ng-hide="!detalles.Activo" ng-disabled="detalles.PagoRenovacion || detalles.EstatusFabricante !== 'accepted'" ng-click="Confirmar(detalles.IdPedidoDetalle)">
 							CANCELAR
 						</button>
-						<button class="btn btn-success" style="text-decoration: underline;" type="button" ng-show="pedido.AutoRenovable && !detalles.Activo" ng-disabled="form.habilitar" ng-click="ReanudarPedidoAutodesk(pedido, detalles)">
+                        <button class="btn btn-success" style="text-decoration: underline;" type="button" ng-show="pedido.AutoRenovable && !detalles.Activo" ng-disabled="form.habilitar" ng-click="ReanudarPedidoAutodesk(pedido, detalles)">
 							REANUDAR <p ng-show="pedido.CargoRealizadoProximoPedido && pedido.IdFormaPagoProxima === 4">Renovación pagada</p>						
 						</button>
-						<br> <br>
-						<div ng-show="detalles.Mostrar">
-							<div class="row">
-								<div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
-									<label>Se cancelará la suscripción automática, ¿Estás de acuerdo?</label>
-								</div>
-							</div>
-							<div class="row">
-								<div class="form-group col-xs-6 col-sm-6 col-md-12 col-lg-12">
-									<button class="btn btn-block btn-warning" ng-disabled="form.habilitar" ng-click="CancelarPedidoAutodesk(pedido, detalles)"> Sí </button>
-								</div>
-								<div class="form-group col-xs-6 col-sm-6 col-md-12 col-lg-12">
-									<button class="btn btn-block btn-primary" ng-disabled="form.habilitar" ng-click="Confirmar(detalles.IdPedidoDetalle)"> No </button>
-								</div>
-							</div>
-						</div>
-					</div>
+                        <br> <br>
+                        <div ng-show="detalles.Mostrar">
+                            <div class="row">
+                                <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <label>Se cancelará la suscripción automática, ¿Estás de acuerdo?</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-xs-6 col-sm-6 col-md-12 col-lg-12">
+                                    <button class="btn btn-block btn-warning" ng-disabled="form.habilitar" ng-click="CancelarPedidoAutodesk(pedido, detalles)"> Sí </button>
+                                </div>
+                                <div class="form-group col-xs-6 col-sm-6 col-md-12 col-lg-12">
+                                    <button class="btn btn-block btn-primary" ng-disabled="form.habilitar" ng-click="Confirmar(detalles.IdPedidoDetalle)"> No </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-				</td>
-			</tr>
-		</table>
+                </td>
+            </tr>
+        </table>
 
-			<div id="renovarModal" class="modal fade" tabindex="-1" role="dialog">
-				<div class="modal-dialog" role="document">
-					<div class="modal-content">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-							<h4 class="modal-title">Solicitud de renovación</h4>
-						</div>
-						<div class="modal-body">
-							<div class="form-group has-feedback">
-								<label for="Contacto">*Contacto </label>
-								<select name="Renovar" id="Renovar" class="form-control selectOption" ng-model="Renovar.IdUsuarioContacto" 
-									ng-options="Contacto.IdUsuario as Contacto.Nombre + ' ('+ Contacto.CorreoElectronico +')' for Contacto in Contactos">
+        <div id="renovarModal" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Solicitud de renovación</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group has-feedback">
+                            <label for="Contacto">*Contacto </label>
+                            <select name="Renovar" id="Renovar" class="form-control selectOption" ng-model="Renovar.IdUsuarioContacto" ng-options="Contacto.IdUsuario as Contacto.Nombre + ' ('+ Contacto.CorreoElectronico +')' for Contacto in Contactos">
 									<option ng-selected="true" value="">Selecciona un contacto...</option>
 								</select>
-							</div>
-							<br/> <br/>
-							<div class="form-group">
-								<p>
-									<b>Nota**</b> <br/> <br/>
-									Al dar click en <b>Renovar Contrato</b>, se agregaran al carrito de compras todos los productos que estén incluidos en el
-									contrato con el estatus de <b>Aceptado</b> y con la cantidad de renovaciones en el campo de <b>Renovación</b>.
-								</p>
-							</div>
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-default" data-dismiss="modal">Regresar</button>
-							<button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="SolicitarRenovacion(pedido.IdContrato);">Renovar contrato</button>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div style="visibility: hidden">
-				<div class="md-dialog-container" id="myStaticDialog">
-					<md-dialog>
-					This is a pre-rendered dialog.
-					</md-dialog>
-				</div>
-			</div>
-	</div>
+                        </div>
+                        <br/> <br/>
+                        <div class="form-group">
+                            <p>
+                                <b>Nota**</b> <br/> <br/> Al dar click en <b>Renovar Contrato</b>, se agregaran al carrito de compras todos los productos que estén incluidos en el contrato con el estatus de <b>Aceptado</b> y con la cantidad de renovaciones
+                                en el campo de <b>Renovación</b>.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Regresar</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="SolicitarRenovacion(pedido.IdContrato);">Renovar contrato</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="visibility: hidden">
+            <div class="md-dialog-container" id="myStaticDialog">
+                <md-dialog>
+                    This is a pre-rendered dialog.
+                </md-dialog>
+            </div>
+        </div>
+    </div>
 </div>
