@@ -304,8 +304,26 @@
 
     $scope.validarInfoPedido = function (modal, pedido, detalle) {
       const CREDITO = 2;
-      if (pedido.IdFormaPagoProxima === CREDITO && pedido.EsOrdenInicial === 0) $scope.abrirModal(modal, pedido, detalle);
+      if (pedido.IdFormaPagoProxima === CREDITO && pedido.EsOrdenInicial === 0) {
+        $scope.obtenerProrrateo(pedido, detalle);
+        $scope.abrirModal(modal, pedido, detalle);
+      }
       else $scope.CancelarPedido(pedido, detalle);
+    };
+
+    $scope.obtenerProrrateo = function (pedido, detalle) {
+      const MENSUAL = 1;
+      if (pedido.IdEsquemaRenovacion === MENSUAL) {
+        PedidoDetallesFactory.getProratePriceMonth(pedido, detalle)
+        .success(function (result) {
+          $scope.prorrateo = result.data;
+        });
+      } else {
+        PedidoDetallesFactory.getProratePriceAnnual(pedido, detalle)
+        .success(function (result) {
+          $scope.prorrateo = result.data;
+        });
+      }
     };
 
     $scope.abrirModal = function (modal, pedido, detalle) {
