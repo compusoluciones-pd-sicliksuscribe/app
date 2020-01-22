@@ -228,7 +228,11 @@
 										<label>Fecha inicio de suscripción: </label>
 										<br/> {{ pedido.FechaInicio | date:'d/MM/yyyy' }} <br/> <br/>
 									</li>
-									<li>
+									<li ng-show = "pedido.IdFabricante === 1 && (!detalles.Activo || detalles.PorCancelar)">
+										<label>Fecha cancelación de suscripción: </label>
+										<br/> {{ detalles.ResultadoFabricante2 | date:'yyyy-MM-d' }}
+									</li>
+									<li ng-show = "detalles.Activo || pedido.IdFabricante !== 1">
 										<label>Fecha fin de suscripción: </label>
 										<br/> {{ pedido.FechaFin| date:'d/MM/yyyy' }}
 									</li>
@@ -239,7 +243,7 @@
 								<label>Estatus de pedido: </label>
 								<br/>
 								<b> 
-									<div ng-show="detalles.EstatusFabricante === 'accepted'">
+									<div ng-show="detalles.EstatusFabricante === 'accepted' && detalles.Activo">
 										Aceptado <span class="glyphicon glyphicon-ok" title="{{ detalles.EstatusFabricante }}"> </span>
 									</div>
 									<div ng-show="detalles.EstatusFabricante === 'FAILED'">
@@ -247,6 +251,9 @@
 									</div>
 									<div style="font-style: italic;" ng-show="detalles.EstatusFabricante === null">
 										Procesando... <span class="glyphicon glyphicon-time" title="{{ detalles.EstatusFabricante }}"> </span>
+									</div>
+									<div ng-show="!detalles.Activo || detalles.PorCancelar">
+										Suscripcion cancelada <span class="glyphicon glyphicon-minus-sign" title="{{ detalles.EstatusFabricante }}"> </span>
 									</div>
 								</b>
 							</div>
@@ -256,7 +263,7 @@
 									ng-disabled="pedido.CargoRealizadoProximoPedido || (!detalles.PedidoAFabricante || detalles.EstatusFabricante === 'FAILED')">
 									CANCELAR
 								</button>
-								<button class="btn btn-success" ng-show="!detalles.Activo" ng-click="Reanudar(pedido, detalles)"
+								<button class="btn btn-success" ng-show="!detalles.Activo && pedido.IdFabricante !== 1" ng-click="Reanudar(pedido, detalles)"
 									ng-disabled="pedido.CargoRealizadoProximoPedido || (!detalles.PedidoAFabricante || detalles.EstatusFabricante === 'FAILED')">
 									REANUDAR <p ng-show="pedido.CargoRealizadoProximoPedido && pedido.IdFormaPagoProxima === 4">Renovación pagada</p>
 								</button>
@@ -279,7 +286,7 @@
 									</div>
 									<div class="row">
 										<div class="form-group col-xs-6 col-sm-6 col-md-12 col-lg-12">
-											<button class="btn btn-block btn-warning" ng-disabled="form.habilitar" ng-click="CancelarPedido(pedido, detalles)"> Sí </button>
+											<button class="btn btn-block btn-warning" ng-disabled="form.habilitar" ng-click="validarInfoPedido('cancelationAlert', pedido, detalles) "> Sí </button>
 										</div>
 										<div class="form-group col-xs-6 col-sm-6 col-md-12 col-lg-12">
 											<button class="btn btn-block btn-primary" ng-disabled="form.habilitar" ng-click="Confirmar(detalles.IdPedidoDetalle)"> No </button>
@@ -292,6 +299,42 @@
 					</td>
 				</tr>
 			</table>
+			<div id="cancelationAlert" class="modal fade in" tabindex="-1" role="dialog">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header" >
+							<button type="button" class="close" ng-click="cerrarModal('cancelationAlert');Confirmar(infoDetalle.IdPedidoDetalle);" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<h4 class="modal-title">Cancelación de suscripción para el pedido {{infoPedido.IdPedido}}</h4>
+						</div>
+						<div class="modal-body">
+							<p>Al cancelar esta suscripción, se suspenderán las licencias asociadas, <b>no podrás reactivar la suscripción.</b> Ademas, el cobro será prorrateado.<br><br> La información de la suscripción quedará de la siguiente forma: <hr>
+								<Table cellspacing="20" style="width: 100%;text-align: center; padding: 8px;">
+									<tr>
+										<th style="text-align: center;">Nuevo periodo</th>
+										<th style="text-align: center;">Precio del producto</th>
+										<th style="text-align: center;">Precio prorrateado</th>
+										<th style="text-align: center;">Cantidad</th>
+										<th style="text-align: center;">Precio Total</th>
+									</tr>
+									<tr>
+										<td> {{fechaInicio | date:'dd/MM/yyyy'}} - {{nvaFechaFin | date:'dd/MM/yyyy'}}</td>
+										<td>&#36{{infoDetalle.PrecioNormal}}</td>
+										<td>&#36{{prorrateo}}</td>
+										<td>{{infoDetalle.Cantidad}}</td>
+										<td>&#36{{infoDetalle.Cantidad * prorrateo}}</td>
+									</tr>
+								</Table>
+							</p>
+							<br>
+							<div  class="modal-footer">
+								<button type="button" class="btn btn-success" ng-click="CancelarPedido(infoPedido, infoDetalle)" data-dismiss="modal">Acepto</button>
+								<button type="button" class="btn btn-danger" ng-click="cerrarModal('cancelationAlert');Confirmar(infoDetalle.IdPedidoDetalle);" data-dismiss="modal">Cancelar</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
 	</div>
 
 	<!-- Detalle pedidos Autodesk -->
