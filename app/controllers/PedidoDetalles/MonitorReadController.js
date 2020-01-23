@@ -12,7 +12,7 @@
     $scope.Renovar = {};
     $scope.terminos = false;
     $scope.SessionCookie = $cookies.getObject('Session');
-
+    $scope.finalUser = {};
     $scope.init = function () {
       $scope.CheckCookie();
       FabricantesFactory.getFabricantes()
@@ -80,6 +80,37 @@
     $scope.init();
 
     $scope.ActualizarMonitor = function () {
+      EmpresasXEmpresasFactory.getAcceptanceAgreementByClient($scope.EmpresaSelect)
+      .success(function (result) {
+        $scope.finalUser.Nombre = result.data[0].NombreContacto;
+        $scope.finalUser.Apellidos = result.data[0].ApellidosContacto;
+        $scope.finalUser.Telefono = result.data[0].TelefonoContacto;
+        $scope.finalUser.CorreoElectronico = result.data[0].CorreoContacto;
+        var IdFinalUser = $scope.IdEmpresaUsuarioFinalTerminos;
+        $scope.finalUser.IdFinalUser = IdFinalUser;
+        UsuariosFactory.putUpdateFinalUserData($scope.finalUser)
+           .success(function (respuesta) {
+             if (respuesta.Success === 1) {
+               $scope.datosCompletosCustomer = true;
+               document.getElementById('formModal').style.display = 'none';
+             }
+           });
+        if (!result.AceptoTerminosMicrosoft) {
+          if (!validateCustomerData(result.data[0])) {
+            $scope.ShowToast('Completa la información para poder aceptar los términos y condiciones', 'danger');
+          }
+          $scope.IdEmpresaUsuarioFinalTerminos = $scope.EmpresaSelect;
+          $scope.terminos = true;
+        } 
+      })
+      .catch(function (error) {
+        $scope.ShowToast(error.data.message, 'danger');
+        $log.log('data error: ' + error.data.message + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
+        $scope.form.habilitar = true;
+        $scope.ActualizarMonitor();
+        $scope.form.habilitar = false;
+      });
+
       Params.IdEmpresaUsuarioFinal = $scope.EmpresaSelect;
       if ($scope.EmpresaSelect === null || $scope.EmpresaSelect === undefined) {
         Params.IdEmpresaUsuarioFinal = $cookies.getObject('Session').IdEmpresa;
@@ -479,7 +510,56 @@
         });
     };
 
+    $scope.updateFinalUserData = function () {
+      if ($scope.finalUser.Nombre == "" || $scope.finalUser.Nombre == null ||
+      $scope.finalUser.CorreoElectronico == "" ||$scope.finalUser.CorreoElectronico == null ||
+      $scope.finalUser.Telefono == "" ||$scope.finalUser.Telefono == null ||
+      $scope.finalUser.Apellidos == "" ||$scope.finalUser.Apellidos == null
+      ) {
+        $scope.ShowToast('Ingresa la información completa ó valida por favor  .', 'danger');
+      } else {
+        var IdFinalUser = $scope.IdEmpresaUsuarioFinalTerminos;
+        $scope.finalUser.IdFinalUser = IdFinalUser;
+        UsuariosFactory.putUpdateFinalUserData($scope.finalUser)
+        .success(function (respuesta) {
+          if (respuesta.Success === 1) {
+            $scope.ShowToast('Información Actualizada ','success');
+            $scope.datosCompletosCustomer = true;
+            document.getElementById('formModal').style.display = 'none';
+
+          } else {
+            $scope.ShowToast('No pudimos cargar la información de tu datos ,porfavor intenta mas tarde.', 'danger');
+            document.getElementById('formModal').style.display = 'none';
+          }
+        })
+        .error(function () {
+          $scope.ShowToast('No pudimos cargar la información de tus contactos, por favor intenta de nuevo más tarde.', 'danger');
+        });
+      }
+    };
+
+    const validateCustomerData = ({ ApellidosContacto, CorreoContacto, NombreContacto, TelefonoContacto }) => {
+      if (!ApellidosContacto || !CorreoContacto || !NombreContacto || !TelefonoContacto) {
+        $scope.finalUser.Nombre = NombreContacto;
+        $scope.finalUser.Apellidos = ApellidosContacto;
+        $scope.finalUser.Telefono = TelefonoContacto;
+        $scope.finalUser.CorreoElectronico = CorreoContacto;
+        return false;
+      }
+      return true;
+    }
+
     $scope.AceptarTerminos = function (IdEmpresa) {
+      UsuariosFactory.putUpdateFinalUserData($scope.finalUser)
+      .success(function (respuesta) {
+        console.log(respuesta);
+        if (respuesta.Success === 1) {
+          $scope.ShowToast('Información Actualizada ','success');
+          $scope.datosCompletosCustomer = true;
+          document.getElementById('formModal').style.display = 'none';
+
+        }
+      });
       PedidoDetallesFactory.acceptAgreement(IdEmpresa)
       .success(function (result) {
         if (!result.success) {
