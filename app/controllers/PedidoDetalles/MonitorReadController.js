@@ -257,7 +257,6 @@
     };
 
     $scope.CancelarPedido = function (Pedido, Detalles) {
-      
       $scope.Cancelar = true;
       $scope.guardar = Pedido;
       $scope.form.habilitar = true;
@@ -268,9 +267,13 @@
         PorCancelar: 1,
         ResultadoFabricante1: Detalles.EstatusFabricante,
         IdTipoProducto: Detalles.IdTipoProducto,
-        IdPedidoDetalle: Detalles.IdPedidoDetalle
+        IdPedidoDetalle: Detalles.IdPedidoDetalle,
+        FechaInicio: Pedido.FechaInicio,
+        FechaFin: new Date(),
+        IdProducto: Detalles.IdProducto,
+        IdEsquemaRenovacion: Pedido.IdEsquemaRenovacion,
+        IdPedido: Pedido.IdPedido
       };
-
       if (Pedido.IdFabricante === 1) {
         PedidoDetallesFactory.putPedidoDetalleMicrosoft(order)
         .success(function (result) {
@@ -284,9 +287,8 @@
         .error(function (data, status, headers, config) {
           $scope.ShowToast(data.message, 'danger');
         });
-      }
-      
-      PedidoDetallesFactory.putPedidoDetalle(order)
+      } else {
+        PedidoDetallesFactory.putPedidoDetalle(order)
         .success(function (result) {
           $scope.ShowToast('Suscripción cancelada.', 'success');
           $scope.$emit('UNLOAD');
@@ -297,6 +299,43 @@
         .error(function (data, status, headers, config) {
           $scope.ShowToast(data.message, 'danger');
         });
+      }
+    };
+
+    $scope.validarInfoPedido = function (modal, pedido, detalle) {
+      const CREDITO = 2;
+      if (pedido.IdFormaPagoProxima === CREDITO && pedido.EsOrdenInicial === 0) {
+        $scope.obtenerProrrateo(pedido, detalle);
+        $scope.abrirModal(modal, pedido, detalle);
+      }
+      else $scope.CancelarPedido(pedido, detalle);
+    };
+
+    $scope.obtenerProrrateo = function (pedido, detalle) {
+      const MENSUAL = 1;
+      if (pedido.IdEsquemaRenovacion === MENSUAL) {
+        PedidoDetallesFactory.getProratePriceMonth(pedido, detalle)
+        .success(function (result) {
+          $scope.prorrateo = result.data;
+        });
+      } else {
+        PedidoDetallesFactory.getProratePriceAnnual(pedido, detalle)
+        .success(function (result) {
+          $scope.prorrateo = result.data;
+        });
+      }
+    };
+
+    $scope.abrirModal = function (modal, pedido, detalle) {
+      document.getElementById(modal).style.display = 'block';
+      $scope.fechaInicio = new Date(pedido.FechaInicio);
+      $scope.nvaFechaFin = new Date();
+      $scope.infoPedido = pedido;
+      $scope.infoDetalle = detalle;
+    };
+
+    $scope.cerrarModal = function (modal) {
+      document.getElementById(modal).style.display = 'none';
     };
 
     $scope.CancelarPedidoAutodesk = function (Pedido, Detalles) {
@@ -349,7 +388,12 @@
         PorCancelar: 0,
         ResultadoFabricante1: detalles.EstatusFabricante,
         IdTipoProducto: detalles.IdTipoProducto,
-        IdPedidoDetalle: detalles.IdPedidoDetalle
+        IdPedidoDetalle: detalles.IdPedidoDetalle,
+        FechaInicio: pedido.FechaInicio,
+        FechaFin: new Date(),
+        IdProducto: detalles.IdProducto,
+        IdEsquemaRenovacion: pedido.IdEsquemaRenovacion,
+        IdPedido: pedido.IdPedido
       };
       $scope.form.habilitar = true;
       if (detalles.Cantidad !== detalles.CantidadProxima) {
@@ -361,7 +405,7 @@
           if (!result) {
             $scope.ShowToast('Ocurrió un error', 'danger');
           } else {
-            $scope.ShowToast('Suscripción reanudada.', 'success');
+            $scope.ShowToast(result.message, 'danger');
           }
           $scope.form.habilitar = true;
           $scope.ActualizarMonitor();
@@ -374,8 +418,8 @@
           $scope.ActualizarMonitor();
           $scope.form.habilitar = false;
         });
-      }
-      PedidoDetallesFactory.putPedidoDetalle(order)
+      } else {
+        PedidoDetallesFactory.putPedidoDetalle(order)
         .success(function (result) {
           if (!result.success) {
             $scope.ShowToast(result.message, 'danger');
@@ -393,6 +437,7 @@
           $scope.ActualizarMonitor();
           $scope.form.habilitar = false;
         });
+      }
     };
 
     $scope.PedidoDetalleCancel = function () {

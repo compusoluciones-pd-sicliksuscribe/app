@@ -262,6 +262,16 @@
       return $http.put($rootScope.API + 'shopping-cart/update-use-CFDI/' + UsoCFDI + '/id-pedido/' + IdPedido);
     };
 
+    factory.getProratePriceMonth = function ({FechaInicio}, {PrecioNormal}) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'orders/prorateMonth/fechaInicio/' + FechaInicio + '/precio/' + PrecioNormal);
+    };
+
+    factory.getProratePriceAnnual = function ({FechaInicio}, {PrecioNormal}) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'orders/prorateAnnual/fechaInicio/' + FechaInicio + '/precio/' + PrecioNormal);
+    };
+
     return factory;
   };
 
