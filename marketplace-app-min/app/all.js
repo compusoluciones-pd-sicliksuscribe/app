@@ -322,6 +322,16 @@
         }
       })
 
+      .when('/MonitorAws', {
+        controller: 'MonitorDetalleAwsController', templateUrl: 'app/views/Aws/MonitorDetalleAws.html',
+        resolve: {
+          'check': function ($location, $cookies) {
+            var Session = $cookies.getObject('Session');
+            if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 7)) { $location.path('/404'); }
+          }
+        }
+      })
+
       .when('/Niveles', {
         controller: 'NivelesReadController', templateUrl: 'app/views/Niveles/NivelesRead.html',
         resolve: {
@@ -8561,6 +8571,49 @@ angular.module('directives.loading', [])
       $scope.Titulo = $scope.versiones[selectedIndex].Version;
     };
   };
+  
+  (function () {
+    var AmazonDataFactory = function ($http, $cookies, $rootScope) {
+    var factory = {};
+
+    factory.refreshToken();
+
+    factory.getDataConsumptionAWS = function () {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'amazonWebService/getConsumptionAWS');
+    };
+
+    factory.getDataServiceAWS = function () {
+      factory.refreshToken();
+      return $http.get($rootScope.API + '/amazonWebService/getDataServicesAWS');
+    };
+    return factory;
+
+    };
+    
+    AmazonDataFactory.$inject = ['$http', '$cookies', '$rootScope'];
+
+  angular.module('marketplace').factory('AmazonDataFactory', AmazonDataFactory);
+}());
+(function () {
+  var MonitorDetalleAwsController = function ($scope, $cookies, $location, AmazonDataFactory, PedidoDetallesFactory, $uibModal, $filter, PedidosFactory, EmpresasFactory, UsuariosFactory) {
+    console.log("si agarro el controlador ya de perdida xD ");
+    $scope.consumptions = {};
+    $scope.init = function () {
+      $scope.CheckCookie();
+
+     $scope.consumptions = AmazonDataFactory.getDataConsumptionAws();
+    };
+    $scope.init();
+  };
+
+  MonitorDetalleAwsController.$inject = ['$scope', '$sce', '$cookies', '$location', 'AmazonDataFactory', 'PedidoDetallesFactory', '$uibModal', '$filter', 'FabricantesFactory', 'PedidosFactory', 'EmpresasFactory', 'UsuariosFactory'];
+
+  angular.module('marketplace').controller('MonitorDetalleAwsController', MonitorDetalleAwsController);
+}());
+
+}());
+
 
   VersionController.$inject = ['$scope', '$log', '$location', '$cookies', '$route', 'VersionFactory', '$anchorScroll', '$routeParams'];
   angular.module('marketplace').controller('VersionController', VersionController);
