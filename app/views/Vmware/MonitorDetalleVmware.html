@@ -106,7 +106,7 @@
 							<div ng-if="Periodo.aggregatorPONumber">
 								{{Periodo.aggregatorPONumber}}
 							</div>
-							<div ng-show="!Periodo.aggregatorPONumber && Periodo.collectionStatus === '3'">
+							<div ng-show="Periodo.collectionStatus === '3'">
 								<button type="button" data-toggle="modal" data-target="#monedaPagoModal" class="btn btn-primary btnEnviar" ng-click="generarObjPONumber(header.contractNumber);">Generar</button>
 							</div>
 						</div>
