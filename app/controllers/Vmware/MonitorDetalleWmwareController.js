@@ -89,14 +89,14 @@
         $scope.generateAggPo = Object.assign({}, $scope.generateAggPo, { MonedaPago });
         FabricantesFactory.putVmwarePoNumber($scope.generateAggPo)
           .success(function (data) {
-            // if (data === 'PO Number has been updated.') {
+            if (data.statusCode === 200) {
               $scope.ShowToast('PO number asignado', 'success');
               $('.close').click();
               $scope.searchApi($scope.generateAggPo.CollectionStartMonth);
-            // }
-            // else {
-            //   $scope.ShowToast(data.message, 'danger');
-            // }
+            }
+            else {
+              $scope.ShowToast(data.message, 'danger');
+            }
           }).error(function (data) {
             $scope.url = '';
             $scope.ShowToast(data.message, 'danger');
