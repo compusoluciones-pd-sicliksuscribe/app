@@ -1,0 +1,78 @@
+<style type="text/css">
+  .list-group-item:hover{
+    color: #337ab7;
+    cursor: pointer;
+  }
+</style>
+<div class="container" ng-swipe-right="" ng-swipe-left="">
+
+    <div class="row">
+        <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <h2 style="float:left;">Monitor agente </h2>
+        </div>
+    </div>
+    <div class="row">
+      <div style="float:right;">
+        <span class="glyphicon glyphicon-search fa-2x"  style="float:right;"></span>
+      </div>
+      <div class="form-group col-xs-11 col-sm-11 col-md-6 col-lg-4" style="float:right;">
+          <input class="form-control fa-lg" type="text" placeholder="Buscar"
+          aria-label="Buscar" ng-model="busqueda">
+      </div>
+
+    </div>
+
+    <div class="row">
+      <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+        <div ng-app="myApp" ng-controller="MonitorAgenteController" ng-init="loadCountry()">
+          <label>Distribuidor</label>
+          <input type="text" name="country" id="country" ng-model="country" ng-keyup="complete(country)" class="form-control" placeholder="Seleccionar distribuidor"/>
+          <ul class="list-group">
+            <li class="list-group-item" ng-repeat="countrydata in filterCountry" ng-click="fillTextbox(countrydata)">{{countrydata}}</li>
+          </ul>
+      </div>
+      </div>
+      <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+
+      </div>
+      <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+
+      </div>
+      <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+
+      </div>
+    </div>
+    <div class="row">
+      <table class="table table-hover table-responsive border-left-right-cero" style="table-layout: fixed; ng-controller="MonitorAgenteController"  ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8 ">
+          <tr style="background:#4A7BAB; color:white;">
+            <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><b>Pedido</b></th>
+            <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-2 col-lg-1"><b>ID Distribuidor</b></th>
+            <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><b>Distribuidor</b></th>
+            <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><b>Usuario final</b></th>
+            <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><b>Producto</b></th>
+            <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><b>Cantidad</b></th>
+            <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><b>Cantidad a renovar</b></th>
+            <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><b>Esquema de renovación</b></th>
+            <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><b>Fecha inicio</b></th>
+            <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><b>Fecha fin</b></th>
+          </tr> 
+          <tr ng-repeat="item in filtered | filter: busqueda">
+            <td style="text-align: center">{{item.IdPedido}}</td>
+            <td style="text-align: center">{{item.IdDistribuidor}}</td>
+            <td style="text-align: center">{{item.Distribuidor}}</td>
+            <td style="text-align: center">{{item.UsuarioFinal}}</td>
+            <td style="text-align: center">{{item.Producto}}</td>
+            <td style="text-align: center">{{item.Cantidad}}</td>
+            <td style="text-align: center">{{item.CantidadProxima}}</td>
+            <td style="text-align: center">{{item.EsquemaRenovacion}}</td>
+            <td style="text-align: center">{{item.FechaInicio  | date: 'dd/MM/yyyy' }}</td>
+            <td style="text-align: center">{{item.FechaFin | date: 'dd/MM/yyyy'}}</td>
+
+          </tr>
+        </table>
+        <div style="margin: auto; width: 50%;" >
+          <pagination class="pager" ng-model="currentPage" total-items="lista.length" max-size="maxSize" boundary-links="true"></pagination>
+          </div>
+      
+    </div>
+</div> 
