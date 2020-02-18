@@ -201,18 +201,19 @@
                             <span ng-show="!producto.PrimeraCompraMicrosoft && !producto.DescuentoNivel && producto.IdFabricante !== 10">
 								{{ calcularProductTotal(pedido, producto, 'PrecioUnitario') | currency }} {{ pedido.MonedaPago }}
                             </span>
-                            <span ng-show="pedido.IdFabricante === 10 && pedido.DescuentoAWS && producto.PrecioUnitario && producto.PrecioUnitario > 0">
+                            <span ng-show="pedido.IdFabricante === 10 && pedido.DescuentoAWS && producto.PrecioUnitario && producto.PrecioUnitario > 0 && producto.IdProducto != 74 && producto.IdProducto != 75 && producto.IdProducto != 4023 && producto.IdProducto != 4037  && producto.IdProducto !=4038 && producto.IdProducto != 4039">
                                 <del style="font-size:11px;"> {{ ( calculatePriceWithExchangeRate(pedido, producto, 'PrecioSinDescuento') * producto.Cantidad)  * 100 / (100 - pedido.DescuentoAWS) | currency }} {{ pedido.MonedaPago }}</del>
                                 , <b style="color:#68953B;">{{ pedido.DescuentoAWS}} % Descuento</b></br>
-                                <span >{{ calcularProductTotal(pedido, producto, 'PrecioUnitario') | currency }} {{ pedido.MonedaPago }}</span>
                             </span>
-                            <span ng-if="pedido.IdFabricante === 10 && producto.PrecioUnitario === 0">{{ calcularProductTotal(pedido, producto, 'PrecioUnitario') | currency }} {{ pedido.MonedaPago }}</span>
-
+                            <span ng-if="pedido.IdFabricante === 10 && (producto.PrecioUnitario === 0 || produto.DescuentoAWS === 0)"> {{ calcularProductTotal(pedido, producto, 'PrecioUnitario') | currency }} {{ pedido.MonedaPago }}</span>
+                            <span ng-if="pedido.IdFabricante === 10 && !(producto.PrecioUnitario === 0 || produto.DescuentoAWS === 0)">{{ calcularProductTotal(pedido, producto, 'PrecioUnitario') | currency }} {{ pedido.MonedaPago }}</span>
+                            
                             <span ng-show="(producto.DescuentoNivel || producto.Descuento) && !producto.PrimeraCompraMicrosoft">
 								<del style="font-size:11px;"> {{ calculatePriceWithExchangeRate(pedido, producto, 'PrecioSinDescuento') * producto.Cantidad | currency }} {{ pedido.MonedaPago }} </del>
 								<b style="color:#68953B;"> {{ producto.DescuentoNivel || producto.Descuento }}% Descuento</b>
-								<p> {{ (calculatePriceWithExchangeRate(pedido, producto, 'PrecioUnitario')  * producto.Cantidad).toFixed(2) | currency }}	{{ pedido.MonedaPago }} </p>
+								<p>{{ (calculatePriceWithExchangeRate(pedido, producto, 'PrecioUnitario')  * producto.Cantidad).toFixed(2) | currency }}	{{ pedido.MonedaPago }} </p>
                             </span>
+
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1" ng-hide="pedido.IdFabricante === 2 && pedido.IdAccionAutodesk === 4">
