@@ -100,13 +100,12 @@
 					</div>
 
 					<div class="col-xs-6 col-sm-6 col-md-4 col-lg-3">
-
 						<div class="profile-card__txt">
 							<label for="">Agg PONumber: </label><br>
 							<div ng-if="Periodo.aggregatorPONumber">
 								{{Periodo.aggregatorPONumber}}
 							</div>
-							<div ng-show="Periodo.collectionStatus === '3'">
+							<div ng-show="!Periodo.aggregatorPONumber && Periodo.collectionStatus === '3'">
 								<button type="button" data-toggle="modal" data-target="#monedaPagoModal" class="btn btn-primary btnEnviar" ng-click="generarObjPONumber(header.contractNumber);">Generar</button>
 							</div>
 						</div>
