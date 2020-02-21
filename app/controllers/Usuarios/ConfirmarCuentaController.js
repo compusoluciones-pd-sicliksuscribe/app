@@ -1,8 +1,12 @@
 (function () {
-  var ConfirmarCuentaController = function ($scope, $routeParams, $log, $location, UsuariosFactory) {
+  var ConfirmarCuentaController = function ($scope, $routeParams, $log, $cookies, $location, UsuariosFactory) {
     var encryptedObject = $routeParams.encryptedObject;
     $scope.result = {};
     $scope.encryptedObject = $routeParams.encryptedObject;
+
+    $scope.iniciarSesion = () => {
+      $location.path('/Login');
+    };
 
     $scope.init = function () {
       $scope.navCollapsed = true;
@@ -19,7 +23,7 @@
     $scope.init();
   };
 
-  ConfirmarCuentaController.$inject = ['$scope', '$routeParams', '$log', '$location', 'UsuariosFactory'];
+  ConfirmarCuentaController.$inject = ['$scope', '$cookies', '$routeParams', '$log', '$location', 'UsuariosFactory'];
 
   angular.module('marketplace').controller('ConfirmarCuentaController', ConfirmarCuentaController);
 }());
