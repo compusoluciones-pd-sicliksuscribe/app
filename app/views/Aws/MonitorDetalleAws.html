@@ -20,15 +20,16 @@
             después de estar listo su consumo.
         </div>
     </div>
+    <div ng-hide="DeshabilitarPagar" >
     <div class="form-group row" ng-hide="!MonitorIdCustomer && SessionCookie.IdTipoAcceso==1">
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" style="float:right" ;>
             <select name="IdConsole" class="form-control filterOption" ng-model="MonitorIdConsole" ng-options="ConsolaAws as ConsolaAws for ConsolaAws in selectConsoles  | orderBy" ng-change="getConsoles(MonitorIdConsole);">
-                <option value="">Todas las consolas </option>
+                <option ng-disabled="true" value="">Selecciona una consola </option>
             </select>
         </div>
     </div>
-    <div class="table-responsive">
-        <table class="table table-hover table-responsive border-left-right-cero" style="table-layout: fixed;">
+    <div class="table-responsive"  ng-hide="DeshabilitarPagar" >
+        <table class="table table-hover table-responsive border-left-right-cero" style="table-layout: fixed;" ng-hide="!filtered">
             <th ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso == 3"><b>RFC</b></th>
             <th ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso == 3"><b> Cliente </b></th>
             <th ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso == 3"><b> Consola </b></th>
@@ -73,8 +74,18 @@
             </tr>
         </table>
     </div>
+        <div ng-if="!customer">
+            <div class="row">
+                <div class="col-xs-12 col-sm-4 col-md-6 col-lg-6">
+                    <h3 style="float:left;">No tienes consolas AWS...</h3>
+                </div>
+            </div>
+        </div>
+    
     <div style="margin: auto; width: 50%;">
         <pagination class="pager" ng-model="currentPage" total-items="selectServices.length" max-size="maxSize" boundary-links="true"></pagination>
     </div>
+
+</div>
 </div>
 </div>

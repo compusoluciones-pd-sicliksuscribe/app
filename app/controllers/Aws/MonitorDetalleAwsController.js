@@ -1,5 +1,6 @@
 (function () {
   var MonitorDetalleAwsController = function ($scope, AmazonDataFactory) {
+    $scope.DeshabilitarPagar = false;
     $scope.init = function () {
       $scope.CheckCookie();
       AmazonDataFactory.getDataServiceAWS()
