@@ -531,6 +531,12 @@
 
       /* .when('/:Subdominio', { controller: 'UsuariosLoginController', templateUrl: 'app/views/Usuarios/UsuariosLogin.html' }) */
 
+      .when('/MonitorAgente', {
+        controller: 'MonitorAgenteController', templateUrl: 'app/views/MonitorAgente/MonitorAgente.html',
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); 
+        if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 8)) { $location.path('/404'); } } }
+      })
+
       .otherwise({ redirectTo: '/404' });
   });
 }());

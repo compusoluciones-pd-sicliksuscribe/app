@@ -1,36 +1,52 @@
 /* eslint-disable no-return-assign */
 (function () {
   var MonitorAgenteController = function ($scope, $log, $location, $cookies, $routeParams, MonitorAgenteFactory, $anchorScroll, lodash) {
-    $scope.countryList = ['Afghanistan', 'Albania'];
-    $scope.complete = function (string) {
-      if (string) {
-        var output = [];
-        angular.forEach($scope.countryList, function (country) {
-          if (country.toLowerCase().indexOf(string.toLowerCase()) >= 0) {
-            output.push(country);
-          }
-        });
-        $scope.filterCountry = output;
-      } else $scope.filterCountry = null;
-    };
-
-    $scope.fillTextbox = function (string) {
-      $scope.country = string;
-      $scope.filterCountry = null;
-    };
 
     const getFilteredByKey = function (key, value) {
-      return $scope.selectServicesBase.filter(function (e) {
+      return $scope.listaAux.filter(function (e) {
         return e[key] === value;
       });
     };
+    $scope.filtrar = (campo, valor) => {
+      let filtro = {};
+      let enArreglo = false;
+      let posicion = -1;
+      filtro.campo = campo;
+      filtro.valor = valor;
+      for (let i = 0; i < $scope.filtros.length; i++) {
+        if ($scope.filtros[i].campo === campo) {
+          enArreglo = true;
+          if (valor !== null) {
+            $scope.filtros[i].valor = valor;
+          } else {
+            posicion = i;
+          }
+          break;
+        } else {
+          enArreglo = false;
+        }
+      };
+      if (posicion >= 0) {
+        $scope.filtros.splice(posicion, 1);
+      }
+      if (!enArreglo) {
+        $scope.filtros.push(filtro);
+      }
+      $scope.listaAux = $scope.lista;
+      $scope.filtros.forEach(element => {
+        $scope.listaAux = getFilteredByKey(element.campo, element.valor);
+      });
+      actualizarCamposFiltro();
+      pagination();
+    };
 
-    const getAgentes = function () {
-      console.log(':D');
+    const getMonitorData = function () {
       return MonitorAgenteFactory.getOrdersMonitor()
         .then(result => {
-          console.log(result.data.data);
           $scope.lista = result.data.data;
+          $scope.listaAux = $scope.lista;
+          $scope.filtros = [];
+          actualizarCamposFiltro();
           pagination();
         })
         .catch(function () {
@@ -38,22 +54,43 @@
         });
     };
 
+    const actualizarCamposFiltro = () => {
+      $scope.distribuidores = [];
+      $scope.ufs = [];
+      $scope.esquemas = [];
+      $scope.agentes = [];
+      $scope.listaAux.forEach(element => {
+        if ($scope.distribuidores.indexOf(element.Distribuidor) === -1) {
+          $scope.distribuidores.push(element.Distribuidor);
+        }
+        if ($scope.ufs.indexOf(element.UsuarioFinal) === -1) {
+          $scope.ufs.push(element.UsuarioFinal);
+        }
+        if ($scope.agentes.indexOf(element.Agente) === -1) {
+          $scope.agentes.push(element.Agente);
+        }
+        if ($scope.esquemas.indexOf(element.EsquemaRenovacion) === -1) {
+          $scope.esquemas.push(element.EsquemaRenovacion);
+        }
+      });
+    }
+
     const pagination = () => {
-      $scope.filtered = []
-      , $scope.currentPage = 1
-      , $scope.numPerPage = 10
-      , $scope.maxSize = 5;
+      $scope.filtered = [];
+      $scope.currentPage = 1;
+      $scope.numPerPage = 10;
+      $scope.maxSize = 5;
 
       $scope.$watch('currentPage + numPerPage', function () {
-        var begin = (($scope.currentPage - 1) * $scope.numPerPage),
+        let begin = (($scope.currentPage - 1) * $scope.numPerPage),
           end = begin + $scope.numPerPage;
-
-        $scope.filtered = $scope.lista.slice(begin, end);
+        $scope.filtered = $scope.listaAux.slice(begin, end);
+        
       });
     };
 
     $scope.init = function () {
-      getAgentes();
+      getMonitorData();
     };
 
     $scope.init();

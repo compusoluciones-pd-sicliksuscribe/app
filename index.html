@@ -153,7 +153,7 @@
 										<li class="yellow" ng-show="(SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 8) && (SessionCookie.LeyoTerminos == 1)" dropdown>
 												<a dropdown-toggle ><span class="fa fa-desktop"></span><div class="text" style="width:65px;">Monitoreo</div><b class="caret"></b></a>
 												<ul class="dropdown-menu yellow" style="background:!important">
-													<li><a ng-click="goToPage('AdministrarSuscripciones');">Monitor</a></li>
+													<li><a ng-click="goToPage('MonitorAgente');">Monitor Agente</a></li>
 													<li><a ng-click="goToPage('Reportes');">Reportes</a></li>
 													<li><a ng-click="goToPage('MonitorVmware');">Vmware</a></li>
 												</ul>
@@ -636,6 +636,8 @@
 	<script type="text/javascript" src="app/controllers/TuClick/AvisoPrivacidadController.js"></script>
 	<script type="text/javascript" src="app/controllers/TuClick/DatosContactoController.js"></script>
 	<script type="text/javascript" src="app/controllers/Usuarios/UsuarioReadUFController.js"></script>
+	<script type="text/javascript" src="app/controllers/MonitorAgente/MonitorAgenteController.js"></script>
+	<script type="text/javascript" src="app/services/MonitorAgenteFactory.js"></script>
 
 	<script src="scripts/tinycolor2-min.js"></script>
 	<script src="scripts/angularjs-color-picker.min.js"></script>
