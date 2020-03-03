@@ -451,10 +451,10 @@
         const { exists } = result.data;
         if (!exists) {
           $scope.AgregarCarrito(producto, producto.Cantidad, producto.IdPedidocontrato);
+          return ProductosFactory.postIdERP(producto.IdEmpresaUsuarioFinal);
         } else {
           $scope.ShowToast('Este usuario ya cuenta con un registro de este producto, contacta a tu administrador.', 'danger');
         }
-        return ProductosFactory.postIdERP(producto.IdERP);
       });
     };
 
