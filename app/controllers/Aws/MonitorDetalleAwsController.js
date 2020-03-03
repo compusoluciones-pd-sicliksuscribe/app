@@ -23,7 +23,6 @@
         })
         .error(() => {
           if ($scope.SessionCookie.IdTipoAcceso === 2 ||$scope.SessionCookie.IdTipoAcceso === 3){
-            $scope.selectCustomersAws = CustomersAWS;
           }
           $scope.ShowToast('No pudimos cargar la lista de clientes de Amazon, por favor intenta de nuevo más tarde.', 'danger');
         });
