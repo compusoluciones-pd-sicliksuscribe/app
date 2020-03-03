@@ -102,7 +102,7 @@
                                                                 <label>Agente Amazon Renovación : </label>
                                                                 
                                                                 <div class="input-group">
-                                                                    <input name="agenteAmazonRenovacion" type="text" ng-change="cambiarBotonAgenteAmazon(Empresa)" ng-model="Empresa.AgenteAmazonRenovacion" ng-pattern="/^[a-zA-ZñÑáéíóúü\s]{0,10}$/" class="form-control"  placeholder="Agente Amazon Renovación" size="255" ng-maxlength="45"  ng-disabled="SessionCookie.IdTipoAcceso !== 1"/>
+                                                                    <input name="AgenteAmazon" type="text" ng-change="cambiarBotonAgenteAmazon(Empresa)" ng-model="Empresa.AgenteAmazon" ng-pattern="/^[a-zA-ZñÑáéíóúü\s]{0,10}$/" class="form-control"  placeholder="Agente Amazon Renovación" size="255" ng-maxlength="45"  ng-disabled="SessionCookie.IdTipoAcceso !== 1"/>
                                                                     <span ng-show="Empresa.cambiaAgente" style="padding-left: 15px;" class="input-group-btn">
                                                                         <h3 style="margin: 0;"><a title="Guardar Agentes" ng-click="ActualizarAgentes(Empresa)"><span class="fa fa-floppy-o"></span></a></h3>
                                                                     </span>
