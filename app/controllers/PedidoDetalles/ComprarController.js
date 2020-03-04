@@ -16,7 +16,8 @@
       AUTODESK: 2,
       COMPUSOLUCIONES: 3,
       HP: 4,
-      APERIO: 5
+      APERIO: 5,
+      AMAZONWEBSERVICES:10
     };
     $scope.tipoMonedaCambio = $cookies.getObject('compararPedidosAnteriores');
 
@@ -67,10 +68,17 @@
         case makers.COMPUCAMPO:
           maker = 'Compucampo';
           break;
+          case makers.AMAZONWEBSERVICES:
+          maker ='Amazon Web Services';
+          break;
         default:
           maker = null;
       }
       return maker;
+    };
+
+    $scope.calcularTotalconDescuentoAWS = function (total, descuento) {
+      return total - total * descuento / 100;
     };
 
     const getOrderDetails = function () {
@@ -265,6 +273,7 @@
             expireDate.setTime(expireDate.getTime() + 600 * 2000); /* 20 minutos */
             $cookies.putObject('pedidosAgrupados', Datos.data['0'].pedidosAgrupados, { 'expires': expireDate, secure: $rootScope.secureCookie });
             if (Datos.data['0'].total > 0) {
+
               if (Datos.success) {
                 if ($cookies.getObject('pedidosAgrupados')) {
                   Checkout.configure({

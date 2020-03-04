@@ -64,6 +64,7 @@
       $location.path('/MonitorPagos');
       PedidoDetallesFactory.getPendingOrdersToPay()
         .success(function (ordersToPay) {
+          console.log("orders to pay ",ordersToPay);
           $scope.Pedidos = ordersToPay.data;
           if (!ordersToPay.data || ordersToPay.data.length === 0) {
             return $scope.DeshabilitarPagar = true;

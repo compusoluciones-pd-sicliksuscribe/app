@@ -138,9 +138,18 @@
                            
                             <br>
                         </div>
+                        <div class="form-group col-xs-0 col-sm-0 col-md-4 col-lg-4" style="margin:-7px; margin-bottom:10px  position: absolute top: 300px;">
+                            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-show="Producto.IdFabricante === 10">
+                                    <div class="row">
+                                        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                            <button ng-click="RequestDataAwsProduct(Producto)" type="button" class="btn btn-primary">Me interesa</button>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
 
 
-                        <div class="form-group col-xs-0 col-sm-0 col-md-4 col-lg-4" style="margin:-7px; margin-bottom:10px;">
+                        <div class="form-group col-xs-0 col-sm-0 col-md-4 col-lg-4" style="margin:-7px; margin-bottom:10px  position: absolute top: 300px;">
                             <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-show="Producto.IdFabricante === 9">
                                     <div class="row">
                                         <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
@@ -149,7 +158,7 @@
                                     </div>
                             </div>
                         </div>
-                        <div class="form-group col-xs-0 col-sm-0 col-md-4 col-lg-4 softBlue" style="margin:-7px; margin-bottom:10px;" ng-hide="Producto.IdFabricante === 9">
+                        <div class="form-group col-xs-0 col-sm-0 col-md-4 col-lg-4 softBlue" style="margin:-7px; margin-bottom:10px;" ng-hide="Producto.IdFabricante === 9 || Producto.IdFabricante === 10 ">
 
                             <div class="row"  >
                                 <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -160,7 +169,7 @@
                                     <form name="frmCantidad" id="frmCantidad">
                                         
                                         <div class="form-group">
-                                            <div ng-if="Producto.IdFabricante !== 6">
+                                            <div ng-if="Producto.IdFabricante !== 6 ">
                                             <label for="Cantidad" >*{{Producto.IdFabricante === 5 && Producto.IdTipoProducto !== 4 && Producto.IdProductoFabricanteExtra === 'Aperio' ? "¿Cuántos empleados hay en la nómina?" : "¿Cuántos quieres?"}}</label>
                                             <sapan ng-if="Producto.CantidadMinima === 1 && Producto.CantidadMaxima === 1"> (Licencia única)</sapan>
                                             <sapan ng-if="Producto.CantidadMinima != Producto.CantidadMaxima"> Disponible de {{Producto.CantidadMinima}} a {{Producto.CantidadMaxima}} </sapan>
