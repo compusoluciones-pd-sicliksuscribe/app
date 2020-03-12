@@ -85,9 +85,9 @@
       return $http.get($rootScope.API + 'r&c-solutions/validate-user/' + email);
     };
 
-    factory.postIdERP = function (IdERP) {
+    factory.postIdERP = function () {
       factory.refreshToken();
-      return $http.post($rootScope.API + 'r&c-solutions/register-IdERP', IdERP);
+      return $http.post($rootScope.API + 'r&c-solutions/postIdERP');
     };
 
     factory.postRequestDataVwareProduct = function (body) {
@@ -97,7 +97,6 @@
 
     return factory;
   };
-  
 
   ProductosFactory.$inject = ['$http', '$cookies', '$rootScope'];
 
