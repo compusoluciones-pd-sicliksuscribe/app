@@ -98,11 +98,11 @@
                 <br>
                 <label>Cliente:</label> {{PedidosObj[key].NombreEmpresa}}
                 <br>
-                <label>Fecha límite de pago: </label> {{PedidosObj[key].FechaFin| date:'yyyy-MM-dd'}}
+                <label>Fecha límite de pago: </label> {{PedidosObj[key].IdFabricante = 1 ? PedidosObj[key].FechaLimitePagoMS : PedidosObj[key].FechaFin | date:'yyyy-MM-dd'}}
                 <br>
                 <label>Tipo de Cambio: </label> {{PedidosObj[key].TipoCambio | currency: "$":4}}
                 <br>
-                <label>Periodo a pagar: </label> {{PedidosObj[key].FechaFin| date:'yyyy-MM-dd'}} - {{PedidosObj[key].FechaFinProximo| date:'yyyy-MM-dd'}}
+                <label>Periodo a pagar: </label> {{PedidosObj[key].IdFabricante = 1 ? PedidosObj[key].FechaInicioProximoMS : PedidosObj[key].FechaFin| date:'yyyy-MM-dd'}} - {{PedidosObj[key].FechaFinProximo| date:'yyyy-MM-dd'}}
                 <br>
                 <label>Precio renovación: </label> {{obtenerSubTotal(key) | currency}} pesos
                 <a ng-click="mostrarDetalles(key) " style="text-decoration: none">ver detalles 

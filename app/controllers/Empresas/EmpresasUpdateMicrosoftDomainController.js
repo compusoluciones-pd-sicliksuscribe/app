@@ -73,7 +73,6 @@
       } else {
         EmpresasFactory.changeDomain($scope.Empresa.IdEmpresa, enterprise)
         .success(function (result) {
-          Session.NombreEmpresa = $scope.Empresa.NombreEmpresa;
           $cookies.putObject('Session', Session, { secure: $rootScope.secureCookie });
           $scope.ActualizarDatosSession();
           $location.path('/index');
