@@ -1,0 +1,89 @@
+<style type="text/css">
+  .list-group-item:hover{
+    color: #337ab7;
+    cursor: pointer;
+  }
+</style>
+<div ng-app="myApp" ng-controller="MonitorAgenteController">
+<div class="container" ng-swipe-right="" ng-swipe-left="">
+
+    <div class="row">
+        <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <h2 style="float:left;">Monitor agente </h2>
+        </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+          <label>Distribuidor</label>
+          <select name="distribuidor" class="form-control filterOption" placeholder="Buscar" ng-model="distribuidor" ng-options="distribuidor for distribuidor in distribuidores" 
+				    ng-change="filtrar('Distribuidor', distribuidor)">
+				    <option value="">Todos los clientes</option> 
+			    </select>
+      </div>
+      <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+          <label>Usuario final</label>
+          <select name="usuarioFinal" class="form-control filterOption" ng-model="usuarioFinal" ng-options="usuarioFinal for usuarioFinal in ufs" 
+				    ng-change="filtrar('UsuarioFinal', usuarioFinal)">
+				    <option value="">Todos los UFs</option> 
+			    </select>
+      </div>
+      <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+          <label>Agente</label>
+          <select name="agente" class="form-control filterOption" ng-model="agente" ng-options="agente for agente in agentes" 
+				    ng-change="filtrar('Agente', agente)">
+				    <option value="">Todos los agentes</option> 
+			    </select>
+      </div>
+      <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+          <label>Esquema de renovación</label>
+          <select name="esquema" class="form-control filterOption" ng-model="esquema" ng-options="esquema for esquema in esquemas" 
+				    ng-change="filtrar('EsquemaRenovacion', esquema)">
+				    <option value="">Todos los esquemas</option> 
+			    </select>
+      </div>
+      <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+
+      </div>
+      <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+
+      </div>
+      <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+
+      </div>
+    </div>
+    <div class="row">
+      <table class="table table-hover table-responsive border-left-right-cero" style="table-layout: fixed;"  ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8 ">
+          <tr style="background:#4A7BAB; color:white;">
+            <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><b>Pedido</b></th>
+            <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-2 col-lg-1"><b>ID Distribuidor</b></th>
+            <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><b>Distribuidor</b></th>
+            <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><b>Usuario final</b></th>
+            <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><b>Producto</b></th>
+            <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><b>Cantidad</b></th>
+            <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><b>Cantidad a renovar</b></th>
+            <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><b>Esquema de renovación</b></th>
+            <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><b>Fecha inicio</b></th>
+            <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><b>Fecha fin</b></th>
+          </tr> 
+          <tr ng-repeat="item in filtered" class="repeat-animation">
+            <td style="text-align: center">{{item.IdPedido}}</td>
+            <td style="text-align: center">{{item.IdDistribuidor}}</td>
+            <td style="text-align: center">{{item.Distribuidor}}</td>
+            <td style="text-align: center">{{item.UsuarioFinal}}</td>
+            <td style="text-align: center">{{item.Producto}}</td>
+            <td style="text-align: center">{{item.Cantidad}}</td>
+            <td style="text-align: center">{{item.CantidadProxima}}</td>
+            <td style="text-align: center">{{item.EsquemaRenovacion}}</td>
+            <td style="text-align: center">{{item.FechaInicio  | date: 'dd/MM/yyyy' }}</td>
+            <td style="text-align: center">{{item.FechaFin | date: 'dd/MM/yyyy'}}</td>
+
+          </tr>
+        </table>
+        <div style="margin: auto; text-align: center;" >
+          <pagination class="pager" ng-model="currentPage" total-items="listaAux.length" max-size="maxSize" boundary-links="true"></pagination>
+          </div>
+      
+    </div>
+</div> 
+</div>
