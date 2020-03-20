@@ -80,6 +80,7 @@
 
           </tr>
         </table>
+        <div ng-show="filtered.length === 0" style = "text-align:center"><h4>No se encontraron resultados.</h4></div>        
         <div style="margin: auto; text-align: center;" >
           <pagination class="pager" ng-model="currentPage" total-items="listaAux.length" max-size="maxSize" boundary-links="true"></pagination>
           </div>
