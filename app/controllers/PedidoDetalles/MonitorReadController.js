@@ -270,7 +270,7 @@
         IdTipoProducto: Detalles.IdTipoProducto,
         IdPedidoDetalle: Detalles.IdPedidoDetalle,
         FechaInicio: Pedido.FechaInicio,
-        FechaFin: hoy.getFullYear() + '-' + (hoy.getUTCMonth() + 1).toString().padStart(2, 0) + '-' + hoy.getDay().toString().padStart(2, 0),
+        FechaFin: hoy.getFullYear() + '-' + (hoy.getUTCMonth() + 1).toString().padStart(2, 0) + '-' + hoy.getDate().toString().padStart(2, 0),
         IdProducto: Detalles.IdProducto,
         IdEsquemaRenovacion: Pedido.IdEsquemaRenovacion,
         IdPedido: Pedido.IdPedido
