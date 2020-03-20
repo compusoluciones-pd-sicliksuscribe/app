@@ -261,6 +261,7 @@
       $scope.guardar = Pedido;
       $scope.form.habilitar = true;
       $scope.$emit('LOAD');
+      const hoy = new Date();
       const order = {
         CargoRealizadoProximoPedido: Number(Pedido.CargoRealizadoProximoPedido),
         Activo: 0,
@@ -269,7 +270,7 @@
         IdTipoProducto: Detalles.IdTipoProducto,
         IdPedidoDetalle: Detalles.IdPedidoDetalle,
         FechaInicio: Pedido.FechaInicio,
-        FechaFin: new Date(),
+        FechaFin: hoy.getFullYear() + '-' + (hoy.getUTCMonth() + 1).toString().padStart(2, 0) + '-' + hoy.getDay().toString().padStart(2, 0),
         IdProducto: Detalles.IdProducto,
         IdEsquemaRenovacion: Pedido.IdEsquemaRenovacion,
         IdPedido: Pedido.IdPedido
@@ -304,7 +305,7 @@
 
     $scope.validarInfoPedido = function (modal, pedido, detalle) {
       const CREDITO = 2;
-      if (pedido.IdFormaPagoProxima === CREDITO && pedido.EsOrdenInicial === 0) {
+      if (pedido.IdFormaPagoProxima === CREDITO && pedido.EsOrdenInicial === 0 && pedido.IdEsquemaRenovacion === 1) {
         $scope.obtenerProrrateo(pedido, detalle);
         $scope.abrirModal(modal, pedido, detalle);
       }

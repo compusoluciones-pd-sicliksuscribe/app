@@ -11,10 +11,14 @@
       let filtro = {};
       let enArreglo = false;
       let posicion = -1;
+      let conservarFiltroUF = false;
       filtro.campo = campo;
       filtro.valor = valor;
       for (let i = 0; i < $scope.filtros.length; i++) {
         if ($scope.filtros[i].campo === campo) {
+          if (campo === 'Distribuidor') {
+            $scope.filtrar('UsuarioFinal', null);
+          }
           enArreglo = true;
           if (valor !== null) {
             $scope.filtros[i].valor = valor;
@@ -23,20 +27,26 @@
           }
           break;
         } else {
-          enArreglo = false;
+          if (valor === null) enArreglo = true;
+          else enArreglo = false;
         }
       };
       if (posicion >= 0) {
         $scope.filtros.splice(posicion, 1);
       }
       if (!enArreglo) {
-        $scope.filtros.push(filtro);
+        if (campo === 'Distribuidor') {
+          $scope.filtrar('UsuarioFinal', null);
+        }
+        if (valor !== null) $scope.filtros.push(filtro);
       }
       $scope.listaAux = $scope.lista;
       $scope.filtros.forEach(element => {
+        if (element.campo === 'UsuarioFinal') conservarFiltroUF = true;
         $scope.listaAux = getFilteredByKey(element.campo, element.valor);
       });
-      actualizarCamposFiltro();
+      if (!conservarFiltroUF) actualizarCamposFiltro();
+      if ($scope.filtros.length === 0) $scope.form.usuarioFinal = '';
       pagination();
     };
 
@@ -59,12 +69,9 @@
       $scope.ufs = [];
       $scope.esquemas = [];
       $scope.agentes = [];
-      $scope.listaAux.forEach(element => {
+      $scope.lista.forEach(element => {
         if ($scope.distribuidores.indexOf(element.Distribuidor) === -1) {
           $scope.distribuidores.push(element.Distribuidor);
-        }
-        if ($scope.ufs.indexOf(element.UsuarioFinal) === -1) {
-          $scope.ufs.push(element.UsuarioFinal);
         }
         if ($scope.agentes.indexOf(element.Agente) === -1) {
           $scope.agentes.push(element.Agente);
@@ -73,7 +80,12 @@
           $scope.esquemas.push(element.EsquemaRenovacion);
         }
       });
-    }
+      $scope.listaAux.forEach(element => {
+        if ($scope.ufs.indexOf(element.UsuarioFinal) === -1) {
+          $scope.ufs.push(element.UsuarioFinal);
+        }
+      });
+    };
 
     const pagination = () => {
       $scope.filtered = [];
