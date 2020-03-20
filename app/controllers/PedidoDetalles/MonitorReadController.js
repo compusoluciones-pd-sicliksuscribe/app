@@ -278,7 +278,11 @@
       if (Pedido.IdFabricante === 1) {
         PedidoDetallesFactory.putPedidoDetalleMicrosoft(order)
         .success(function (result) {
-          $scope.ShowToast('Suscripción cancelada.', 'success');
+          if (result.success === 0) {
+            $scope.ShowToast(result.message, 'danger');
+          } else {
+            $scope.ShowToast('Suscripción cancelada.', 'success');
+          }
           $scope.$emit('UNLOAD');
           $scope.Cancelar = false;
           $scope.ActualizarMonitor();
