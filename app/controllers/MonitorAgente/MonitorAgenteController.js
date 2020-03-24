@@ -8,6 +8,7 @@
       });
     };
     $scope.filtrar = (campo, valor) => {
+      console.log('-----', campo, valor);
       let filtro = {};
       let enArreglo = false;
       let posicion = -1;
@@ -46,7 +47,7 @@
         $scope.listaAux = getFilteredByKey(element.campo, element.valor);
       });
       if (!conservarFiltroUF) actualizarCamposFiltro();
-      if ($scope.filtros.length === 0) $scope.form.usuarioFinal = '';
+      if ($scope.filtros.length === 0) $scope.usuarioF = '';
       pagination();
     };
 
