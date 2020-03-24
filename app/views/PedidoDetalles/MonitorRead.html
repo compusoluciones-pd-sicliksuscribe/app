@@ -246,9 +246,13 @@
                                     <label>Fecha inicio de suscripción: </label>
                                     <br/> {{ pedido.FechaInicio | date:'d/MM/yyyy' }} <br/> <br/>
                                 </li>
-                                <li>
+                                <li ng-show = "pedido.IdFabricante === 1 && !detalles.Activo">
+                                    <label>Fecha cancelación de suscripción: </label>
+                                    <br/> {{ detalles.ResultadoFabricante2 | date:'d/MM/yyyy' }}
+                                </li>
+                                <li ng-show = "detalles.Activo">
                                     <label>Fecha fin de suscripción: </label>
-                                    <br/> {{ pedido.FechaFin| date:'d/MM/yyyy' }}
+                                    <br/> {{ pedido.FechaFin | date:'d/MM/yyyy' }}
                                 </li>
                             </ul>
                         </div>
@@ -257,7 +261,7 @@
                             <label>Estatus de pedido: </label>
                             <br/>
                             <b> 
-									<div ng-show="detalles.EstatusFabricante === 'accepted'">
+									<div ng-show="detalles.EstatusFabricante === 'accepted' && detalles.Activo">
 										Aceptado <span class="glyphicon glyphicon-ok" title="{{ detalles.EstatusFabricante }}"> </span>
 									</div>
 									<div ng-show="detalles.EstatusFabricante === 'FAILED'">
@@ -266,8 +270,8 @@
 									<div style="font-style: italic;" ng-show="detalles.EstatusFabricante === null">
 										Procesando... <span class="glyphicon glyphicon-time" title="{{ detalles.EstatusFabricante }}"> </span>
 									</div>
-									<div ng-show="!detalles.Activo || detalles.PorCancelar">
-										Suscripcion cancelada <span class="glyphicon glyphicon-minus-sign" title="{{ detalles.EstatusFabricante }}"> </span>
+									<div ng-show="!detalles.Activo">
+										Suscripción cancelada <span class="glyphicon glyphicon-minus-sign" title="{{ detalles.EstatusFabricante }}"> </span>
 									</div>
 								</b>
                         </div>
@@ -276,7 +280,7 @@
                             <button class="btn btn-danger" ng-show="detalles.Activo" ng-click="Confirmar(detalles.IdPedidoDetalle)" ng-disabled="pedido.CargoRealizadoProximoPedido || (!detalles.PedidoAFabricante || detalles.EstatusFabricante === 'FAILED')">
 									CANCELAR
 								</button>
-                            <button class="btn btn-success" ng-show="!detalles.Activo" ng-click="Reanudar(pedido, detalles)" ng-disabled="pedido.CargoRealizadoProximoPedido || (!detalles.PedidoAFabricante || detalles.EstatusFabricante === 'FAILED')">
+                            <button class="btn btn-success" ng-show="!detalles.Activo && pedido.IdFabricante !== 1" ng-click="Reanudar(pedido, detalles)" ng-disabled="pedido.CargoRealizadoProximoPedido || (!detalles.PedidoAFabricante || detalles.EstatusFabricante === 'FAILED')">
 									REANUDAR <p ng-show="pedido.CargoRealizadoProximoPedido && pedido.IdFormaPagoProxima === 4">Renovación pagada</p>
 								</button>
                             <br> <br>
