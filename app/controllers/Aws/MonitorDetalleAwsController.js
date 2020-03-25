@@ -22,9 +22,9 @@
           $scope.selectCustomersAws = CustomersAWS;
         })
         .error(() => {
-          if ($scope.SessionCookie.IdTipoAcceso === 2 ||$scope.SessionCookie.IdTipoAcceso === 3){
-          }
-          $scope.ShowToast('No pudimos cargar la lista de clientes de Amazon, por favor intenta de nuevo más tarde.', 'danger');
+          if ($scope.SessionCookie.IdTipoAcceso === 1) {
+            $scope.ShowToast('No pudimos cargar la lista de clientes de Amazon, por favor intenta de nuevo más tarde.', 'danger');
+        }
         });
     };
     const getFilteredByKey = (key, value) => {
@@ -35,7 +35,7 @@
 
     $scope.getServicesAws = IdCustomer => {
       IdCustomer ? (
-        $scope.selectServices = getFilteredByKey("IdDistribuidor", IdCustomer),
+        $scope.selectServices = getFilteredByKey('IdDistribuidor', IdCustomer),
         $scope.selectConsoles = [...new Set($scope.selectServices.map(x => x.NombreConsola))],
         $scope.IdCustomer = IdCustomer
       ) : (
@@ -46,19 +46,22 @@
 
     $scope.getConsoles = IdConsole => {
       IdConsole ? (
-        $scope.selectServices = getFilteredByKey("NombreConsola", IdConsole)
+        $scope.selectServices = getFilteredByKey('NombreConsola', IdConsole)
       ) : (
-        $scope.selectServices = getFilteredByKey("IdDistribuidor", $scope.IdCustomer)
+        $scope.selectServices = getFilteredByKey('IdDistribuidor', $scope.IdCustomer)
       );
       pagination();
     };
 
     const pagination = () => {
-      $scope.filtered = [], $scope.currentPage = 1, $scope.numPerPage = 10, $scope.maxSize = 5;
+      $scope.filtered = [];
+      $scope.currentPage = 1;
+      $scope.numPerPage = 10;
+      $scope.maxSize = 5;
 
-      $scope.$watch('currentPage + numPerPage', function () {
-        var begin = (($scope.currentPage - 1) * $scope.numPerPage),
-          end = begin + $scope.numPerPage;
+      $scope.$watch('currentPag + numPerPage', function () {
+        let begin = (($scope.currentPage - 1) * $scope.numPerPage);
+        let end = begin + $scope.numPerPage;
 
         $scope.filtered = $scope.selectServices.slice(begin, end);
       });
