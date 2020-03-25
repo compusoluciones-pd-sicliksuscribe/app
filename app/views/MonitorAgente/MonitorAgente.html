@@ -23,19 +23,26 @@
       </div>
       <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
           <label>Usuario final</label>
-          <select name="usuarioFinal" class="form-control filterOption" ng-model="form.usuarioFinal" ng-options="usuarioFinal for usuarioFinal in ufs" 
-				    ng-change="filtrar('UsuarioFinal', form.usuarioFinal)">
+          <select name="usuarioFinal" class="form-control filterOption" ng-model="usuarioF" ng-options="usuarioFinal for usuarioFinal in ufs" 
+				    ng-change="filtrar('UsuarioFinal', usuarioF)">
 				    <option value="">Todos los UFs</option> 
 			    </select>
       </div>
-      <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+      <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
           <label>Agente</label>
           <select name="agente" class="form-control filterOption" ng-model="agente" ng-options="agente for agente in agentes" 
 				    ng-change="filtrar('Agente', agente)">
 				    <option value="">Todos los agentes</option> 
 			    </select>
       </div>
-      <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+      <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
+        <label>Forma de pago</label>
+        <select name="formaPago" class="form-control filterOption" ng-model="formaP" ng-options="formaPago for formaPago in formasPago" 
+          ng-change="filtrar('Forma', formaP)">
+          <option value="">Todas las formas</option> 
+        </select>
+      </div>
+      <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
           <label>Esquema de renovación</label>
           <select name="esquema" class="form-control filterOption" ng-model="esquema" ng-options="esquema for esquema in esquemas" 
 				    ng-change="filtrar('EsquemaRenovacion', esquema)">
@@ -62,6 +69,7 @@
             <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><b>Producto</b></th>
             <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><b>Cantidad</b></th>
             <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><b>Cantidad a renovar</b></th>
+            <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><b>Forma de Pago</b></th>
             <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><b>Esquema de renovación</b></th>
             <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><b>Fecha inicio</b></th>
             <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><b>Fecha fin</b></th>
@@ -74,6 +82,7 @@
             <td style="text-align: center">{{item.Producto}}</td>
             <td style="text-align: center">{{item.Cantidad}}</td>
             <td style="text-align: center">{{item.CantidadProxima}}</td>
+            <td style="text-align: center">{{item.Forma}}</td>
             <td style="text-align: center">{{item.EsquemaRenovacion}}</td>
             <td style="text-align: center">{{item.FechaInicio  | date: 'dd/MM/yyyy' }}</td>
             <td style="text-align: center">{{item.FechaFin | date: 'dd/MM/yyyy'}}</td>
