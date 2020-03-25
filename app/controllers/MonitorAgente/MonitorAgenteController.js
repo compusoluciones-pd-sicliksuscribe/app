@@ -8,7 +8,6 @@
       });
     };
     $scope.filtrar = (campo, valor) => {
-      console.log('-----', campo, valor);
       let filtro = {};
       let enArreglo = false;
       let posicion = -1;
@@ -70,12 +69,16 @@
       $scope.ufs = [];
       $scope.esquemas = [];
       $scope.agentes = [];
+      $scope.formasPago = [];
       $scope.lista.forEach(element => {
         if ($scope.distribuidores.indexOf(element.Distribuidor) === -1) {
           $scope.distribuidores.push(element.Distribuidor);
         }
         if ($scope.agentes.indexOf(element.Agente) === -1) {
           $scope.agentes.push(element.Agente);
+        }
+        if ($scope.formasPago.indexOf(element.Forma) === -1) {
+          $scope.formasPago.push(element.Forma);
         }
         if ($scope.esquemas.indexOf(element.EsquemaRenovacion) === -1) {
           $scope.esquemas.push(element.EsquemaRenovacion);

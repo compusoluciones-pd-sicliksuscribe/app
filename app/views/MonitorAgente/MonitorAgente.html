@@ -28,14 +28,21 @@
 				    <option value="">Todos los UFs</option> 
 			    </select>
       </div>
-      <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+      <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
           <label>Agente</label>
           <select name="agente" class="form-control filterOption" ng-model="agente" ng-options="agente for agente in agentes" 
 				    ng-change="filtrar('Agente', agente)">
 				    <option value="">Todos los agentes</option> 
 			    </select>
       </div>
-      <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+      <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
+        <label>Forma de pago</label>
+        <select name="formaPago" class="form-control filterOption" ng-model="formaP" ng-options="formaPago for formaPago in formasPago" 
+          ng-change="filtrar('Forma', formaP)">
+          <option value="">Todas las formas</option> 
+        </select>
+      </div>
+      <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
           <label>Esquema de renovación</label>
           <select name="esquema" class="form-control filterOption" ng-model="esquema" ng-options="esquema for esquema in esquemas" 
 				    ng-change="filtrar('EsquemaRenovacion', esquema)">
