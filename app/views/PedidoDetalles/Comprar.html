@@ -46,7 +46,8 @@
             </div>
             <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
                 <div class="form-group">
-                    <label for="IdEmpresaUsuarioFinal">Usuario final:</label> {{ pedido.NombreEmpresa }} <br>
+                    <div ng-if="pedido.IdFabricante !== 10"><label for="IdEmpresaUsuarioFinal">Usuario final:&nbsp;</label>{{ pedido.NombreEmpresa }}</div>
+                        <div ng-if="pedido.IdFabricante === 10"><label for="IdEmpresaUsuarioFinal">Consola:&nbsp;</label>{{ pedido.NombreConsola }}<br></div>
                     <label>Marca de los productos:</label> {{ pedido.NombreFabricante }} <br>
                     <label>Duración del periodo: del {{ pedido.FechaInicio }} al {{ pedido.FechaFin  }}</label> <br>
 

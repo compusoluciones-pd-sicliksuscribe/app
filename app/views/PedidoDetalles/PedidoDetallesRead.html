@@ -111,7 +111,8 @@
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
                     <div class="form-group">
-                        <label for="IdEmpresaUsuarioFinal">Usuario final:</label> {{ pedido.NombreEmpresa }} <br>
+                        <div ng-if="pedido.IdFabricante !== 10"><label for="IdEmpresaUsuarioFinal">Usuario final:&nbsp;</label>{{ pedido.NombreEmpresa }}</div>
+                        <div ng-if="pedido.IdFabricante === 10"><label for="IdEmpresaUsuarioFinal">Consola:&nbsp;</label>{{ pedido.NombreConsola }}<br></div>
                         <label>Marca de los productos:</label> {{ pedido.NombreFabricante }} <br>
                         <label ng-if="pedido.IdFabricante === 10">Fecha inicio : {{ pedido.FechaInicio }} </label>
                         <label ng-if="pedido.IdFabricante !== 10">Duración del periodo: del {{ pedido.FechaInicio }} al {{ pedido.FechaFin | date:'yyyy-MM-dd'}}</label>
@@ -201,7 +202,7 @@
                             <span ng-show="!producto.PrimeraCompraMicrosoft && !producto.DescuentoNivel && producto.IdFabricante !== 10">
 								{{ calcularProductTotal(pedido, producto, 'PrecioUnitario') | currency }} {{ pedido.MonedaPago }}
                             </span>
-                            <span ng-show="pedido.IdFabricante === 10 && pedido.DescuentoAWS && producto.PrecioUnitario && producto.PrecioUnitario > 0 && producto.IdProducto != 74 && producto.IdProducto != 75 && producto.IdProducto != 4023 && producto.IdProducto != 4037  && producto.IdProducto !=4038 && producto.IdProducto != 4039">
+                            <span ng-show="pedido.IdFabricante === 10 && pedido.DescuentoAWS && producto.PrecioUnitario && producto.PrecioUnitario > 0 && producto.IdProducto != 74 && producto.IdProducto != 4023 && producto.IdProducto != 4061  && producto.IdProducto !=4062 && producto.IdProducto != 4084 && producto.IdProducto != 4084">
                                 <del style="font-size:11px;"> {{ ( calculatePriceWithExchangeRate(pedido, producto, 'PrecioSinDescuento') * producto.Cantidad)  * 100 / (100 - pedido.DescuentoAWS) | currency }} {{ pedido.MonedaPago }}</del>
                                 , <b style="color:#68953B;">{{ pedido.DescuentoAWS}} % Descuento</b></br>
                             </span>
