@@ -20,6 +20,8 @@
     const NOT_FOUND = 404;
     $scope.datosCompletosCustomer = true;
     $scope.microsoftURI = false;
+    const azure = 75;
+    const azurePlan = 4105;
 
     $scope.esquemaRenovacionModelo={};
     $scope.EsquemaRenovacion=[
@@ -274,11 +276,15 @@
       }
     };
 
-    $scope.revisarProducto = function (Producto) {
-      $scope.DominioMicrosoft = $scope.selectEmpresas.filter(function (item) {
+    const getIdMicrosoft = Producto => {
+      return $scope.selectEmpresas.filter(function (item) {
         if (Producto.IdEmpresaUsuarioFinal === item.IdEmpresa) return item;
         return false;
       })[0].IdMicrosoftUF;
+    };
+
+    $scope.revisarProducto = function (Producto) {
+      $scope.DominioMicrosoft = getIdMicrosoft(Producto);
       $scope.usuariosSinDominio[Producto.IdEmpresaUsuarioFinal] = $scope.DominioMicrosoft !== null;
       $scope.productoSeleccionado = Producto.IdProducto;
       if (Producto.IdFabricante === 2) validateAutodeskData(Producto);
@@ -434,9 +440,30 @@
       });
     };
 
+    $scope.validateAzure = function (producto) {
+      console.log(producto);
+      const azureIdERP = producto.IdERP === 'MS-AZ-R-0.' ? 'MS-AZR-0145P' : producto.IdERP;
+      const customerId =  getIdMicrosoft(producto);
+      return ProductosFactory.getValidateAzure(customerId, azureIdERP)
+        .success(function (result) {
+        if (result.success) return $scope.AgregarCarrito(producto, producto.Cantidad, producto.IdPedidocontrato);
+        $scope.ShowToast(result.message, 'danger');
+      })
+      .catch(function (error) {
+        $scope.ShowToast(error.data.message, 'danger');
+        $log.log('data error: ' + error.data.message + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
+        $scope.form.habilitar = true;
+        $scope.ActualizarMonitor();
+        $scope.form.habilitar = false;
+      });
+    }
+
     $scope.previousISVValidate = function (producto) {
       if (producto.IdFabricante !== 6) {
         if (producto.IdFabricante === 1) {
+          if (producto.IdProducto === azure || producto.IdProducto === azurePlan) {
+            return $scope.validateAzure(producto);
+          }
           return $scope.validateAgreementCSP(producto);
         } 
         else if (producto.IdFabricante === 7) {

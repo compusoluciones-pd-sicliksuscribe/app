@@ -95,6 +95,11 @@
       return $http.post($rootScope.API + 'requestDataVwareProduct', body);
     };
 
+    factory.getValidateAzure = function (customerId, productIdERP) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'microsoft/get-azure-subs/' + customerId + '/' + productIdERP);
+    };
+
     return factory;
   };
   
