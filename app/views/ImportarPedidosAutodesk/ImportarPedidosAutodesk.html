@@ -1,0 +1,219 @@
+<div class="container" ng-swipe-right="" ng-swipe-left="">
+    <div class="row">
+        <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <h2 style="float:left;">Importación pedidos Autodesk </h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <h4 style="float:left;">Datos del pedido </h2>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+            <label>Distribuidor</label>
+            <select name="distribuidor" class="form-control" ng-model="distribuidor" ng-options="distribuidor for distribuidor in distribuidores" >
+                <option value="">Distribuidores</option> 
+            </select>
+        </div>
+        <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+            <label>Usuario Finale</label>
+            <select name="distribuidor" class="form-control"  ng-model="usuarioF" ng-options="usuarioFinal for usuarioFinal in ufs" >
+                <option value="">Usuarios Finales</option> 
+            </select>
+        </div>
+        <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
+            <label>Número de contrato</label>
+            <Input name="contrato" class="form-control" ng-model="contrato" >
+        </div>
+        <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
+            <label>Contacto</label>
+            <select name="contacto" class="form-control" ng-model="contacto" ng-options="contacto for contacto in contactos" >
+                <option value="">Contactos</option> 
+            </select>
+        </div>
+        <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
+            <label>Esquema renovación</label>
+            <select name="esquema" class="form-control" ng-model="esquema" ng-options="esquema for esquema in esquemas" >
+                <option value="">Esquemas</option> 
+            </select>
+        </div>
+        <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+            <label>Fecha inicio</label>
+            <Input type="date" name="fechaInicio" class="form-control" ng-model="fechaInicio" >
+        </div>
+        <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+            <label>Fecha fin</label>
+            <Input type="date" name="fechaFin" class="form-control" ng-model="fechaFin" >
+        </div>
+        <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
+            <label>Forma de pago</label>
+            <select name="fomaPago" class="form-control" ng-model="formaPago" ng-options="formaPago for formaPago in formasPago" >
+                <option value="">Formas de pago</option> 
+            </select>
+        </div>
+        <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
+            <label>Moneda de pago</label>
+            <select name="monedaPago" class="form-control" ng-model="monedaPago" ng-options="monedaPago for monedaPago in monedasPago" >
+                <option value="">Monedas</option> 
+            </select>
+        </div>
+        <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
+            <label>Tipo de cambio</label>
+            <Input name="tipoCambio" class="form-control" ng-model="tipoCambio" >
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <h4 style="float:left;">Datos de los productos </h2>
+        </div>
+    </div>
+    
+    <hr>
+
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="background-color: rgba(219, 218, 218, 0.425);padding-top: 1em; margin-bottom: 3px; border-bottom: 1 solid rgba(32, 32, 32, 0.719);">
+        <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+            <label>SKU</label>
+            <Input name="sku" class="form-control" ng-model="sku" >
+        </div>
+        <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
+            <label>Cantidad</label>
+            <Input name="cantidad" class="form-control" ng-model="cantidad" >
+        </div>
+        <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
+            <label>Cantidad proxima</label>
+            <Input name="cantidadProx" class="form-control" ng-model="cantidadProx" >
+        </div>
+        <div class="form-group col-xs-1 col-sm-1 col-md-1 col-lg-1" style="float:right; margin-top: 2em;">
+            <input type="checkbox" name="seleccion" value="seleccionado">
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="background-color: rgba(219, 218, 218, 0.425);padding-top: 1em; margin-bottom: 3px; border-bottom: 1 solid rgba(32, 32, 32, 0.719);">
+        <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+            <label>SKU</label>
+            <Input name="sku" class="form-control" ng-model="sku" >
+        </div>
+        <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
+            <label>Cantidad</label>
+            <Input type="number" name="cantidad" class="form-control" ng-model="cantidad" >
+        </div>
+        <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
+            <label>Cantidad proxima</label>
+            <Input type="number" name="cantidadProx" class="form-control" ng-model="cantidadProx" >
+        </div>
+        <div class="form-group col-xs-1 col-sm-1 col-md-1 col-lg-1" style="float:right; margin-top: 2em;">
+            <input type="checkbox" name="seleccion" value="seleccionado">
+        </div>
+    </div>
+
+    <div class="row">
+        <button style="float:right; margin: 1em;" ng-click="añadirProducto('Usuario');" class="btn btn-success newColaborator" style="background: !important">
+            <span class="glyphicon glyphicon-download-alt" ng-hide="SessionCookie.IdTipoAcceso == 8"></span>
+            &nbsp;Importar Pedido
+        </button>
+        <button style="float:right; margin: 1em;" ng-click="añadirProducto('Usuario');" class="btn btn-warning newColaborator" style="background: !important">
+            <span class="glyphicon glyphicon-minus" ng-hide="SessionCookie.IdTipoAcceso == 8"></span>
+            &nbsp;Quitar producto
+        </button>
+        <button style="float:right; margin: 1em;" ng-click="añadirProducto('Usuario');" class="btn btn-primary newColaborator" style="background: !important">
+            <span class="glyphicon glyphicon-plus" ng-hide="SessionCookie.IdTipoAcceso == 8"></span>
+            &nbsp;Añadir producto
+        </button> 
+    </div>
+</div>
+
+
+    <!-- <div class="row">
+        <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <h2 style="float:left;">Monitor agente </h2>
+        </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+          <label>Distribuidor</label>
+          <select name="distribuidor" class="form-control filterOption" placeholder="Buscar" ng-model="distribuidor" ng-options="distribuidor for distribuidor in distribuidores" 
+				    ng-change="filtrar('Distribuidor', distribuidor)">
+				    <option value="">Todos los clientes</option> 
+			    </select>
+      </div>
+      <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+          <label>Usuario final</label>
+          <select name="usuarioFinal" class="form-control filterOption" ng-model="usuarioF" ng-options="usuarioFinal for usuarioFinal in ufs" 
+				    ng-change="filtrar('UsuarioFinal', usuarioF)">
+				    <option value="">Todos los UFs</option> 
+			    </select>
+      </div>
+      <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
+          <label>Agente</label>
+          <select name="agente" class="form-control filterOption" ng-model="agente" ng-options="agente for agente in agentes" 
+				    ng-change="filtrar('Agente', agente)">
+				    <option value="">Todos los agentes</option> 
+			    </select>
+      </div>
+      <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
+        <label>Forma de pago</label>
+        <select name="formaPago" class="form-control filterOption" ng-model="formaP" ng-options="formaPago for formaPago in formasPago" 
+          ng-change="filtrar('Forma', formaP)">
+          <option value="">Todas las formas</option> 
+        </select>
+      </div>
+      <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
+          <label>Esquema de renovación</label>
+          <select name="esquema" class="form-control filterOption" ng-model="esquema" ng-options="esquema for esquema in esquemas" 
+				    ng-change="filtrar('EsquemaRenovacion', esquema)">
+				    <option value="">Todos los esquemas</option> 
+			    </select>
+      </div>
+      <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+
+      </div>
+      <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+
+      </div>
+      <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+
+      </div>
+    </div>
+    <div class="row">
+      <table class="table table-hover table-responsive border-left-right-cero" style="table-layout: fixed;"  ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8 ">
+          <tr style="background:#4A7BAB; color:white;">
+            <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><b>Pedido</b></th>
+            <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-2 col-lg-1"><b>ID Distribuidor</b></th>
+            <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><b>Distribuidor</b></th>
+            <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><b>Usuario final</b></th>
+            <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><b>Producto</b></th>
+            <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><b>Cantidad</b></th>
+            <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><b>Cantidad a renovar</b></th>
+            <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><b>Forma de Pago</b></th>
+            <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><b>Esquema de renovación</b></th>
+            <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><b>Fecha inicio</b></th>
+            <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><b>Fecha fin</b></th>
+          </tr> 
+          <tr ng-repeat="item in filtered" class="repeat-animation">
+            <td style="text-align: center">{{item.IdPedido}}</td>
+            <td style="text-align: center">{{item.IdDistribuidor}}</td>
+            <td style="text-align: center">{{item.Distribuidor}}</td>
+            <td style="text-align: center">{{item.UsuarioFinal}}</td>
+            <td style="text-align: center">{{item.Producto}}</td>
+            <td style="text-align: center">{{item.Cantidad}}</td>
+            <td style="text-align: center">{{item.CantidadProxima}}</td>
+            <td style="text-align: center">{{item.Forma}}</td>
+            <td style="text-align: center">{{item.EsquemaRenovacion}}</td>
+            <td style="text-align: center">{{item.FechaInicio  | date: 'dd/MM/yyyy' }}</td>
+            <td style="text-align: center">{{item.FechaFin | date: 'dd/MM/yyyy'}}</td>
+
+          </tr>
+        </table>
+        <div ng-show="filtered.length === 0" style = "text-align:center"><h4>No se encontraron resultados.</h4></div>        
+        <div style="margin: auto; text-align: center;" >
+          <pagination class="pager" ng-model="currentPage" total-items="listaAux.length" max-size="maxSize" boundary-links="true"></pagination>
+          </div>
+      
+    </div>
+</div> 
+</div> -->

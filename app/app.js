@@ -567,6 +567,12 @@
         if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 8)) { $location.path('/404'); } } }
       })
 
+      .when('/ImportacionesAutodesk', {
+        controller: '', templateUrl: 'app/views/ImportarPedidosAutodesk/ImportarPedidosAutodesk.html',
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); 
+        if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 8)) { $location.path('/404'); } } }
+      })
+
       .otherwise({ redirectTo: '/404' });
   });
 }());

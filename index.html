@@ -145,6 +145,10 @@
 											</a>
 										</li>
 
+										<li class="orange" ng-show="(SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 8) && (SessionCookie.LeyoTerminos == 1)" dropdown>
+											<a ng-click="goToPage('ImportacionesAutodesk');">Importar Pedidos Autodesk</a>
+										</li>
+
 										<li class="yellow" ng-show="(SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 8) && (SessionCookie.LeyoTerminos == 1 )">
 											<a ng-click="goToPage('Empresas');"><span class="fa fa-building-o" style="padding-right:5px;"></span> Distribuidores</a>
 										</li>
@@ -695,7 +699,7 @@
 			m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
 		})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-		ga('create', 'UA-75218308-1', {'cookieDomain': 'none'}); 
+		ga('create', 'UA-75218308-2', {'cookieDomain': 'none'}); 
 		
 		ga('set', 'page', '/' + location);
       	ga('send', 'pageview');
