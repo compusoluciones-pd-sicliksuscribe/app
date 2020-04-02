@@ -22,6 +22,8 @@
     $scope.microsoftURI = false;
     const azure = 75;
     const azurePlan = 4105;
+    const MONTHLY = 01;
+    $scope.azureSeat = '';
 
     $scope.esquemaRenovacionModelo={};
     $scope.EsquemaRenovacion=[
@@ -439,14 +441,25 @@
         $scope.form.habilitar = false;
       });
     };
+    
+    $scope.enviarNotificacionAzurePlanSeat = function () {
+      alert('se mandará tu notificación (mensaje provicional mientras hago la ruta bby)')
+      return true;
+    };
 
     $scope.validateAzure = function (producto) {
-      console.log(producto);
       const azureIdERP = producto.IdERP === 'MS-AZ-R-0.' ? $rootScope.IdERPAzure : producto.IdERP;
       const customerId =  getIdMicrosoft(producto);
       return ProductosFactory.getValidateAzure(customerId, azureIdERP)
         .success(function (result) {
-        if (result.success) return $scope.AgregarCarrito(producto, producto.Cantidad, producto.IdPedidocontrato);
+        if (result.success) {
+          if (result.isAnAzurePlanSeat) {
+            $scope.azureSeat = producto;
+            document.getElementById('formModalAzurePlan').style.display = 'block';
+            return false;
+          }
+          return $scope.AgregarCarrito(producto, producto.Cantidad, producto.IdPedidocontrato);
+        }
         $scope.ShowToast(result.message, 'danger');
       })
       .catch(function (error) {
@@ -462,6 +475,10 @@
       if (producto.IdFabricante !== 6) {
         if (producto.IdFabricante === 1) {
           if (producto.IdProducto === azure || producto.IdProducto === azurePlan) {
+            if (Number(producto.IdEsquemaRenovacion) !== MONTHLY) {
+              $scope.ShowToast('Este producto no se puede comprar anual', 'danger');
+              return false;
+            }
             return $scope.validateAzure(producto);
           }
           return $scope.validateAgreementCSP(producto);

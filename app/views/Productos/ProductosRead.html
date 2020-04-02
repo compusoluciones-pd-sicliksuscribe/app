@@ -436,6 +436,32 @@
 
         </div>
     </div>
+    <div id="formModalAzurePlan" class="modal fade in" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" >
+                    <button type="button" ng-click="cerrarModal('formModalAzurePlan')" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Asiento AzurePlan</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Al presionar <strong>Aceptar</strong>, se mandará una notificación a nuestro equipo de soporte
+                        para agregar una suscripción adicional a su Azure Plan.
+                    </br>Nuestro equipo se pondrán en contacto lo antes posible.
+                    </br>Se puede consultar el consumo por consola del plan en el monitor de pedidos por cliente.
+                    </a>
+                    </br></br>
+                    </p>
+                    <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <img src="images/loading.gif" style="width:45px;height:45px" ng-show="loading-plan"/>
+                    </div>
+                    <div  class="modal-footer">
+                        <button type="button" class="btn btn-danger" ng-click="cerrarModal('formModalAzurePlan')" data-dismiss="modal">Cerrar </button>
+                        <button type="button" class="btn btn-success" ng-click="enviarNotificacionAzurePlanSeat();" data-dismiss="modal">Aceptar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     </div>
 
