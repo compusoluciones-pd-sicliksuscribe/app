@@ -285,6 +285,14 @@
       })[0].IdMicrosoftUF;
     };
 
+    const getNameUFMicrosoft = Producto => {
+      return $scope.selectEmpresas.filter(function (item) {
+        if (Producto.IdEmpresaUsuarioFinal === item.IdEmpresa) return item;
+        return false;
+      })[0].NombreEmpresa;
+    };
+
+
     $scope.revisarProducto = function (Producto) {
       $scope.DominioMicrosoft = getIdMicrosoft(Producto);
       $scope.usuariosSinDominio[Producto.IdEmpresaUsuarioFinal] = $scope.DominioMicrosoft !== null;
@@ -443,18 +451,35 @@
     };
     
     $scope.enviarNotificacionAzurePlanSeat = function () {
-      alert('se mandará tu notificación (mensaje provicional mientras hago la ruta bby)')
-      return true;
+      return ProductosFactory.postSeatAzurePlan($scope.azureSeat)
+        .success(function (result) {
+        if (result.success) {
+          $scope.ShowToast('¡Petición realizada exitosamente, llegará la confirmación por correo electrónico!','success');
+          document.getElementById('formModalAzurePlan').style.display = 'none';
+          return true;
+        }
+        $scope.ShowToast(result.message, 'danger');
+        return false;
+      })
+      .catch(function (error) {
+        $scope.ShowToast(error.data.message, 'danger');
+        $log.log('data error: ' + error.data.message + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
+        $scope.form.habilitar = true;
+        $scope.ActualizarMonitor();
+        $scope.form.habilitar = false;
+      });
     };
 
     $scope.validateAzure = function (producto) {
-      const azureIdERP = producto.IdERP === 'MS-AZ-R-0.' ? $rootScope.IdERPAzure : producto.IdERP;
+      const azureIdERP = producto.IdERP === 'MS-AZ-R-0.' ? $rootScope.IdERPAzure : $rootScope.IdERPAzurePlan;
       const customerId =  getIdMicrosoft(producto);
+      const nombreEmpresaUF = getNameUFMicrosoft(producto);
+      console.log($scope.selectEmpresas);
       return ProductosFactory.getValidateAzure(customerId, azureIdERP)
         .success(function (result) {
         if (result.success) {
           if (result.isAnAzurePlanSeat) {
-            $scope.azureSeat = producto;
+            $scope.azureSeat = Object.assign({}, producto, { IdSubs: result.data[0].id }, { NombreEmpresaUF: nombreEmpresaUF });
             document.getElementById('formModalAzurePlan').style.display = 'block';
             return false;
           }

@@ -100,6 +100,11 @@
       return $http.get($rootScope.API + 'microsoft/get-azure-subs/' + customerId + '/' + productIdERP);
     };
 
+    factory.postSeatAzurePlan = function (body) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'azure/add-seat', body);
+    };
+
     return factory;
   };
   
