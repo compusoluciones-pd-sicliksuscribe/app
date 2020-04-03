@@ -81,7 +81,7 @@
           maker = 'Compucampo';
           break;
         case makers.AWS:
-          maker = 'Amazon Web Servies';
+          maker = 'Amazon Web Services';
           break;
         default:
           maker = null;
