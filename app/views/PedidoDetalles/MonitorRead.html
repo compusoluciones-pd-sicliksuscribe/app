@@ -258,22 +258,31 @@
                         </div>
 
                         <div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
-                            <label>Estatus de pedido: </label>
-                            <br/>
-                            <b> 
-									<div ng-show="detalles.EstatusFabricante === 'accepted' && detalles.Activo">
-										Aceptado <span class="glyphicon glyphicon-ok" title="{{ detalles.EstatusFabricante }}"> </span>
-									</div>
-									<div ng-show="detalles.EstatusFabricante === 'FAILED'">
-										Error al procesar	<span class="glyphicon glyphicon-remove" title="{{ detalles.EstatusFabricante }}"> </span>
-									</div>
-									<div style="font-style: italic;" ng-show="detalles.EstatusFabricante === null">
-										Procesando... <span class="glyphicon glyphicon-time" title="{{ detalles.EstatusFabricante }}"> </span>
-									</div>
-									<div ng-show="!detalles.Activo">
-										Suscripción cancelada <span class="glyphicon glyphicon-minus-sign" title="{{ detalles.EstatusFabricante }}"> </span>
-									</div>
-								</b>
+                            <ul style="list-style-type:none; padding:0%">
+                                <li>
+                                    <label>Estatus de pedido: </label>
+                                    <div ng-show="detalles.EstatusFabricante === 'accepted' && detalles.Activo">
+                                        Aceptado <span class="glyphicon glyphicon-ok" title="{{ detalles.EstatusFabricante }}"> </span>
+                                    </div>
+                                    <div ng-show="detalles.EstatusFabricante === 'FAILED'">
+                                        Error al procesar	<span class="glyphicon glyphicon-remove" title="{{ detalles.EstatusFabricante }}"> </span>
+                                    </div>
+                                    <div style="font-style: italic;" ng-show="detalles.EstatusFabricante === null">
+                                        Procesando... <span class="glyphicon glyphicon-time" title="{{ detalles.EstatusFabricante }}"> </span>
+                                    </div>
+                                    <div ng-show="!detalles.Activo">
+                                        Suscripción cancelada <span class="glyphicon glyphicon-minus-sign" title="{{ detalles.EstatusFabricante }}"> </span>
+                                    </div>
+                                </li>
+                                <li ng-show="pedido.IdFormaPagoProxima == 4">
+                                    <br><label>Renovación: </label>
+                                    <div ng-show="pedido.CargoRealizadoProximoPedido == 1">
+                                        <span style="font-size: 100%;" class="label label-success">Pagado</span>
+                                    </div>
+                                    <div ng-show="pedido.CargoRealizadoProximoPedido !== 1">
+                                        <span style="font-size: 100%;" class="label label-warning">Pendiente de pago</span>
+                                    </div>
+                                </li>
                         </div>
 
                         <div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
