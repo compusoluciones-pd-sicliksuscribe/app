@@ -274,7 +274,7 @@
                                         Suscripción cancelada <span class="glyphicon glyphicon-minus-sign" title="{{ detalles.EstatusFabricante }}"> </span>
                                     </div>
                                 </li>
-                                <li ng-show="pedido.IdFormaPagoProxima == 4">
+                                <li ng-show="pedido.IdFormaPagoProxima !== 2">
                                     <br><label>Renovación: </label>
                                     <div ng-show="pedido.CargoRealizadoProximoPedido == 1">
                                         <span style="font-size: 100%;" class="label label-success">Pagado</span>
