@@ -26,7 +26,6 @@
       }
     };
     $scope.AreaChart = function () {
-      console.log('')
         // Set new default font family and font color to mimic Bootstrap's default styling
 
       function numberFormat (number, decimals, decPoint, thousandsSep) {
@@ -141,15 +140,43 @@
               }
             }
           },
-          onClick: graphClickEvent // al dar click en cualquier punto de la gráfica llama a esta función
+          'onClick': graphClickEvent // al dar click en cualquier punto de la gráfica llama a esta función
         }
       });
+    };
+    $scope.algo = [{ // le estoy pasando de forma forzada el cambio, para que se muestre en la tabla pero no lo hace
+      name: 'Prueba 1',
+      percent: '33'
+    },
+    {
+      name: 'Prueba 2',
+      percent: '47'
+    },
+    {
+      name: 'Prueba 3',
+      percent: '20'
+    }];
+    $scope.algo2 = [{ // le estoy pasando de forma forzada el cambio, para que se muestre en la tabla pero no lo hace
+      name: 'Prueba 1',
+      percent: '36'
+    },
+    {
+      name: 'Prueba 2',
+      percent: '46'
+    },
+    {
+      name: 'Prueba 3',
+      percent: '26'
+    }];
+
+    $scope.si = function () {
+      $scope.enterpriseDatas = $scope.algo2;
     };
 
     $scope.init = function () {
       $scope.CheckCookie();
       $scope.AreaChart();
-      $scope.enterpriseDatas = $scope.enterpriseData['Ene']; // esto es la simulación de lo que debería de recibir del back
+      $scope.enterpriseDatas = $scope.algo; // esto es la simulación de lo que debería de recibir del back
     };
     $scope.init();
   };
