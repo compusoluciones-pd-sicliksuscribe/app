@@ -56,8 +56,12 @@
       return $http.post($rootScope.API + 'autodesk/contracts/renew/tuclick/' + currentDistribuidor, contractData);
     };
 
+    factory.postInsertOrderWithOutaffecting = function (orders) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'orders/insert-order-without-affecting/' , orders);
+    };
     return factory;
-  };
+  }
 
   PedidosFactory.$inject = ['$http', '$cookies', '$rootScope'];
 
