@@ -1,0 +1,46 @@
+<link href="../../../styles/css/sb-admin-2.min.css" rel="stylesheet">
+<div id="content-wrapper" class="d-flex flex-column">
+  <!-- Main Content -->
+    <div id="content">
+        <div class="container-fluid">
+            <!-- Content Row -->
+            <div class="row">
+                <!-- Area Chart -->
+                <div class="col-xl-8 col-lg-7">
+                    <div class="card shadow mb-4">
+                        <!-- Card Header - Dropdown -->
+                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
+                        </div>
+                        <!-- Card Body -->
+                        <div class="card-body">
+                            <div class="chart-area"  style="height: 320px !important;">
+                            <canvas id="myAreaChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pie Chart -->
+                <div class="row row-cols-2">
+                    <div class="col-xl-4 col-lg-5">
+                        <!-- Project Card Example -->
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Projects</h6>
+                            </div>
+                            <div class="ex1">
+                                <div class="card-body" ng-repeat="emp in enterpriseDatas">
+                                    <h4 class="small font-weight-bold"> {{ emp.name }} <span class="float-right">{{ emp.percent }}%</span></h4>
+                                    <div class="progress mb-4">
+                                        <div class="progress-bar bg-danger" role="progressbar" style="width:{{emp.percent}}%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
