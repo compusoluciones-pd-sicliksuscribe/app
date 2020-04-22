@@ -1,60 +1,42 @@
 (function () {
   var UsoAzureController = function ($scope, $sce, $cookies, $location, EmpresasXEmpresasFactory, $uibModal, $filter, FabricantesFactory, PedidosFactory, EmpresasFactory, UsuariosFactory) {
-    $scope.SessionCookie = $cookies.getObject('Session');
-    $scope.enterpriseDatas = '';
-    $scope.enterpriseDatas = [{
-      name: 'Prueba 1',
-      percent: '23'
-    },
-    {
-      name: 'Prueba 2',
-      percent: '40'
-    },
-    {
-      name: 'Prueba 3',
-      percent: '37'
-    }];
-    $scope.b = [{
-      name: 'Prueba 1',
-      percent: '33'
-    },
-    {
-      name: 'Prueba 2',
-      percent: '33'
-    },
-    {
-      name: 'Prueba 3',
-      percent: '34'
-    }];
-    // $scope.enterpriseData = {
-    //   'Ene': ,
-    //   'Feb': [{
-    //     name: 'Prueba 1',
-    //     percent: '33'
-    //   },
-    //   {
-    //     name: 'Prueba 2',
-    //     percent: '47'
-    //   },
-    //   {
-    //     name: 'Prueba 3',
-    //     percent: '20'
-    //   }]
-    // };
+    function graphClickEvent (evt) {
+      var activePoints = $scope.myLineChart.getElementsAtEvent(evt);
+      if (activePoints.length > 0) {
+    // get the internal index of slice in pie chart
+        var clickedElementindex = activePoints[0]['_index'];
 
+    // get specific label by index
+        var label = $scope.myLineChart.data.labels[clickedElementindex];
+
+    // get value by index
+        var value = $scope.myLineChart.data.datasets[0].data[clickedElementindex];
+        $scope.enterpriseDatas = [{ // le estoy pasando de forma forzada el cambio, para que se muestre en la tabla pero no lo hace
+          name: 'Prueba 1',
+          percent: '33'
+        },
+        {
+          name: 'Prueba 2',
+          percent: '47'
+        },
+        {
+          name: 'Prueba 3',
+          percent: '20'
+        }];
+      }
+    };
     $scope.AreaChart = function () {
+      console.log('')
         // Set new default font family and font color to mimic Bootstrap's default styling
-      Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
-      Chart.defaults.global.defaultFontColor = '#858796';
 
-      function numberFormat (number, decimals, dec_point, thousands_sep) {
+      function numberFormat (number, decimals, decPoint, thousandsSep) {
         // *     example: numberFormat(1234.56, 2, ',', ' ');
         // *     return: '1 234,56'
         number = (number + '').replace(',', '').replace(' ', '');
         var n = !isFinite(+number) ? 0 : +number,
           prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
-          sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
-          dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+          sep = (typeof thousandsSep === 'undefined') ? ',' : thousandsSep,
+          dec = (typeof decPoint === 'undefined') ? '.' : decPoint,
           s = '',
           toFixedFix = function (n, prec) {
             var k = Math.pow(10, prec);
@@ -158,35 +140,16 @@
                 return datasetLabel + ': $' + numberFormat(tooltipItem.yLabel);
               }
             }
-          }
+          },
+          onClick: graphClickEvent // al dar click en cualquier punto de la gráfica llama a esta función
         }
       });
-    };
-
-    $scope.ya = function () {
-      $scope.enterpriseDatas = $scope.b;
-      console.log($scope.enterpriseDatas);
-    };
-
-    document.getElementById('myAreaChart').onclick = function (evt) {
-      $scope.ya();
-      var activePoints = $scope.myLineChart.getElementsAtEvent(evt);
-
-      if (activePoints.length > 0) {
-      // get the internal index of slice in pie chart
-        var clickedElementindex = activePoints[0]['_index'];
-
-      // get specific label by index
-        var label = $scope.myLineChart.data.labels[clickedElementindex];
-
-      // get value by index
-        var value = $scope.myLineChart.data.datasets[0].data[clickedElementindex];
-      }
     };
 
     $scope.init = function () {
       $scope.CheckCookie();
       $scope.AreaChart();
+      $scope.enterpriseDatas = $scope.enterpriseData['Ene']; // esto es la simulación de lo que debería de recibir del back
     };
     $scope.init();
   };
