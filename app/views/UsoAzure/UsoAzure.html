@@ -15,7 +15,7 @@
                         <!-- Card Body -->
                         <div class="card-body">
                             <div class="chart-area"  style="height: 320px !important;">
-                            <canvas id="myAreaChart"></canvas>
+                            <canvas id="myAreaChart" ng-click="actualizeTable()"></canvas>
                             </div>
                         </div>
                     </div>
@@ -30,17 +30,16 @@
                                 <h6 class="m-0 font-weight-bold text-primary">Projects</h6>
                             </div>
                             <div class="ex1">
-                                <div class="card-body" ng-repeat="emp in enterpriseDatas track by $index">
+                                <div class="card-body" ng-repeat="emp in enterpriseData track by $index">
                                     <h4 class="small font-weight-bold"> {{ emp.name }} <span class="float-right">{{ emp.percent }}%</span></h4>
                                     <div class="progress mb-4">
-                                        <div class="progress-bar bg-danger" role="progressbar" style="width:{{emp.percent}}%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                                        <div class="progress-bar {{emp.color}}" role="progressbar" style="width:{{emp.percent}}%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <button ng-click="si()"> Alogggo</button>
             </div>
         </div>
     </div>

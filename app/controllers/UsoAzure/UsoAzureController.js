@@ -1,5 +1,84 @@
 (function () {
   var UsoAzureController = function ($scope, $sce, $cookies, $location, EmpresasXEmpresasFactory, $uibModal, $filter, FabricantesFactory, PedidosFactory, EmpresasFactory, UsuariosFactory) {
+    $scope.datoActual = '';
+    $scope.primerDato = [{ // le estoy pasando de forma forzada el cambio, para que se muestre en la tabla pero no lo hace
+      name: 'Prueba 1',
+      percent: '33',
+      color: 'bg-dark'
+    },
+    {
+      name: 'Prueba 2',
+      percent: '57',
+      color: 'bg-light'
+    },
+    {
+      name: 'Prueba 3',
+      percent: '20',
+      color: 'bg-info'
+    }];
+    $scope.enterpriseDataSimulado = {
+      'Jan': [{
+        name: 'Prueba 1',
+        percent: '33',
+        color: 'bg-success'
+      },
+      {
+        name: 'Prueba 2',
+        percent: '57',
+        color: 'bg-secondary'
+      },
+      {
+        name: 'Prueba 3',
+        percent: '20',
+        color: 'bg-primary'
+      }],
+      'Feb': [{
+        name: 'Prueba 1',
+        percent: '33',
+        color: 'bg-warning'
+      },
+      {
+        name: 'Prueba 2',
+        percent: '47',
+        color: 'bg-danger'
+      },
+      {
+        name: 'Prueba 3',
+        percent: '20',
+        color: 'bg-success'
+      }],
+      'Mar': [{
+        name: 'Prueba 1',
+        percent: '13',
+        color: 'bg-secondary'
+      },
+      {
+        name: 'Prueba 2',
+        percent: '17',
+        color: 'bg-primary'
+      },
+      {
+        name: 'Prueba 3',
+        percent: '10',
+        color: 'bg-dark'
+      }],
+      'Apr': [{
+        name: 'Prueba 1',
+        percent: '53',
+        color: 'bg-light'
+      },
+      {
+        name: 'Prueba 2',
+        percent: '57',
+        color: 'bg-info'
+      },
+      {
+        name: 'Prueba 3',
+        percent: '50',
+        color: 'bg-warning'
+      }]
+    };
+
     function graphClickEvent (evt) {
       var activePoints = $scope.myLineChart.getElementsAtEvent(evt);
       if (activePoints.length > 0) {
@@ -11,18 +90,7 @@
 
     // get value by index
         var value = $scope.myLineChart.data.datasets[0].data[clickedElementindex];
-        $scope.enterpriseDatas = [{ // le estoy pasando de forma forzada el cambio, para que se muestre en la tabla pero no lo hace
-          name: 'Prueba 1',
-          percent: '33'
-        },
-        {
-          name: 'Prueba 2',
-          percent: '47'
-        },
-        {
-          name: 'Prueba 3',
-          percent: '20'
-        }];
+        $scope.datoActual = $scope.enterpriseDataSimulado[label];
       }
     };
     $scope.AreaChart = function () {
@@ -58,7 +126,7 @@
       $scope.myLineChart = new Chart(ctx, {
         type: 'line',
         data: {
-          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+          labels: ['Jan', 'Feb', 'Mar', 'Apr'],
           datasets: [{
             label: 'Earnings',
             lineTension: 0.3,
@@ -72,7 +140,7 @@
             pointHoverBorderColor: 'rgba(78, 115, 223, 1)',
             pointHitRadius: 10,
             pointBorderWidth: 2,
-            data: [0, 10000, 5000, 15000, 10000, 20000, 15000, 25000, 20000, 30000, 25000, 40000]
+            data: [10000, 5000, 15000, 10000]
           }]
         },
         options: {
@@ -144,39 +212,15 @@
         }
       });
     };
-    $scope.algo = [{ // le estoy pasando de forma forzada el cambio, para que se muestre en la tabla pero no lo hace
-      name: 'Prueba 1',
-      percent: '33'
-    },
-    {
-      name: 'Prueba 2',
-      percent: '47'
-    },
-    {
-      name: 'Prueba 3',
-      percent: '20'
-    }];
-    $scope.algo2 = [{ // le estoy pasando de forma forzada el cambio, para que se muestre en la tabla pero no lo hace
-      name: 'Prueba 1',
-      percent: '36'
-    },
-    {
-      name: 'Prueba 2',
-      percent: '46'
-    },
-    {
-      name: 'Prueba 3',
-      percent: '26'
-    }];
 
-    $scope.si = function () {
-      $scope.enterpriseDatas = $scope.algo2;
+    $scope.actualizeTable = function () {
+      $scope.enterpriseData = $scope.datoActual;
     };
 
     $scope.init = function () {
       $scope.CheckCookie();
       $scope.AreaChart();
-      $scope.enterpriseDatas = $scope.algo; // esto es la simulación de lo que debería de recibir del back
+      $scope.enterpriseData = $scope.primerDato; // esto es la simulación de lo que debería de recibir del back
     };
     $scope.init();
   };
