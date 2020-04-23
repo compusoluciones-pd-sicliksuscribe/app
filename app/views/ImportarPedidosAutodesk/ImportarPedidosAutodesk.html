@@ -1,7 +1,8 @@
+<div ng-app="myApp" ng-controller="ImportarPedidosAutodeskController">
 <div class="container" ng-swipe-right="" ng-swipe-left="">
     <div class="row">
         <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <h2 style="float:left;">Importación pedidos Autodesk </h2>
+            <h2 style="float:left;">Importación de pedidos Autodesk </h2>
         </div>
     </div>
 
@@ -14,15 +15,17 @@
     <div class="row">
         <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
             <label>Distribuidor</label>
-            <select name="distribuidor" class="form-control" ng-model="distribuidor" ng-options="distribuidor for distribuidor in distribuidores" >
-                <option value="">Distribuidores</option> 
-            </select>
+            <input type = "text" name = "distribuidor" placeholder="Escribe el nombre del distribuidor" class="form-control" ng-model="distribuidor" ng-keyup="completarDist(distribuidor)" ng-blur="completarDist('')"/>
+            <ul class="list-group" ng-model = "ocultarOpcionesDist" ng-hide = "ocultarOpcionesDist" style="position:absolute; z-index: 1;">
+            <li style="background-color: white;" class="list-group-item" ng-repeat = "infoDist in filtroDistribuidor track by $index" ng-click = "llenarTextBoxDist(infoDist)">{{infoDist}}</li>
+            </ul>
         </div>
         <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
-            <label>Usuario Finale</label>
-            <select name="distribuidor" class="form-control"  ng-model="usuarioF" ng-options="usuarioFinal for usuarioFinal in ufs" >
-                <option value="">Usuarios Finales</option> 
-            </select>
+            <label>Usuario Final</label>
+            <input type = "text" name = "usuarioF" placeholder="Escribe el nombre del usuario final" class="form-control" ng-model="usuarioF" ng-keyup="completarUF(usuarioF)" ng-blur="completarUF('')"/>
+            <ul class="list-group" ng-model = "ocultarOpcionesUF" ng-hide = "ocultarOpcionesUF" style="position:absolute; z-index: 1;">
+            <li style="background-color: white;" class="list-group-item" ng-repeat = "infoUF in filtroUsuarioFinal track by $index" ng-click = "llenarTextBoxUF(infoUF)">{{infoUF}}</li>
+            </ul>
         </div>
         <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
             <label>Número de contrato</label>
@@ -111,19 +114,20 @@
     </div>
 
     <div class="row">
-        <button style="float:right; margin: 1em;" ng-click="añadirProducto('Usuario');" class="btn btn-success newColaborator" style="background: !important">
+        <button style="float:right; margin: 1em;" ng-click="" class="btn btn-success newColaborator" style="background: !important">
             <span class="glyphicon glyphicon-download-alt" ng-hide="SessionCookie.IdTipoAcceso == 8"></span>
             &nbsp;Importar Pedido
         </button>
-        <button style="float:right; margin: 1em;" ng-click="añadirProducto('Usuario');" class="btn btn-warning newColaborator" style="background: !important">
+        <button style="float:right; margin: 1em;" ng-click="" class="btn btn-warning newColaborator" style="background: !important">
             <span class="glyphicon glyphicon-minus" ng-hide="SessionCookie.IdTipoAcceso == 8"></span>
             &nbsp;Quitar producto
         </button>
-        <button style="float:right; margin: 1em;" ng-click="añadirProducto('Usuario');" class="btn btn-primary newColaborator" style="background: !important">
+        <button style="float:right; margin: 1em;" ng-click="" class="btn btn-primary newColaborator" style="background: !important">
             <span class="glyphicon glyphicon-plus" ng-hide="SessionCookie.IdTipoAcceso == 8"></span>
             &nbsp;Añadir producto
         </button> 
     </div>
+</div>
 </div>
 
 
