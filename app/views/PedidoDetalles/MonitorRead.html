@@ -148,9 +148,6 @@
                             <label for="">Tipo de producto:</label> {{ detalles.Tipo }}
                             <br>
                             <div ng-show="(detalles.Activo || pedido.CargoRealizadoProximoPedido === 1) && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 7)"><label for="">Estatus del pedido:</label> {{ pedido.Estatus }}</div>
-                            <div ng-show="(pedido.IdFormaPagoProxima === 1 || pedido.IdFormaPagoProxima === 3 || pedido.IdFormaPagoProxima === 4) && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 7)">
-                                <label>Estatus de renovación:</label> {{ pedido.EstatusRenovacion }}
-                            </div>
                             <div ng-show="(detalles.Activo) && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
                                 <label ng-hide="pedido.Bloquear || pedido.CargoRealizadoProximoPedido">Próxima forma de pago:</label>
                             </div>
