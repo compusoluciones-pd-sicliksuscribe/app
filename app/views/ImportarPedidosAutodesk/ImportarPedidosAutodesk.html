@@ -1,3 +1,14 @@
+<style>
+    input[type=number]::-webkit-outer-spin-button,
+    input[type=number]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    input[type=number] {
+        -moz-appearance:textfield;
+    }
+</style>
+
 <div ng-app="myApp" ng-controller="ImportarPedidosAutodeskController">
 <div class="container" ng-swipe-right="" ng-swipe-left="">
     <div class="row">
@@ -12,60 +23,66 @@
         </div>
     </div>
     <hr>
+    <!-- <form> -->
     <div class="row">
         <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
             <label>Distribuidor</label>
-            <input type = "text" name = "distribuidor" placeholder="Escribe el nombre del distribuidor" class="form-control" ng-model="distribuidor" ng-keyup="completarDist(distribuidor)" ng-blur="completarDist('')"/>
+            <input type = "text" name = "distribuidor" placeholder="Escribe el nombre del distribuidor" class="form-control" ng-model="distribuidor" ng-keyup="completarDist(distribuidor)" required/>
             <ul class="list-group" ng-model = "ocultarOpcionesDist" ng-hide = "ocultarOpcionesDist" style="position:absolute; z-index: 1;">
             <li style="background-color: white;" class="list-group-item" ng-repeat = "infoDist in filtroDistribuidor track by $index" ng-click = "llenarTextBoxDist(infoDist)">{{infoDist}}</li>
             </ul>
         </div>
         <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
             <label>Usuario Final</label>
-            <input type = "text" name = "usuarioF" placeholder="Escribe el nombre del usuario final" class="form-control" ng-model="usuarioF" ng-keyup="completarUF(usuarioF)" ng-blur="completarUF('')"/>
+            <input type = "text" name = "usuarioF" placeholder="Escribe el nombre del usuario final" class="form-control" ng-model="usuarioF" ng-keyup="completarUF(usuarioF)" required/>
             <ul class="list-group" ng-model = "ocultarOpcionesUF" ng-hide = "ocultarOpcionesUF" style="position:absolute; z-index: 1;">
             <li style="background-color: white;" class="list-group-item" ng-repeat = "infoUF in filtroUsuarioFinal track by $index" ng-click = "llenarTextBoxUF(infoUF)">{{infoUF}}</li>
             </ul>
         </div>
         <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
             <label>Número de contrato</label>
-            <Input name="contrato" class="form-control" ng-model="contrato" >
+            <Input type="number" maxlength="12" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" name="contrato" class="form-control" ng-model="contrato" required>
         </div>
         <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
             <label>Contacto</label>
-            <select name="contacto" class="form-control" ng-model="contacto" ng-options="contacto for contacto in contactos" >
+            <select name="contacto" class="form-control" ng-model="contacto" ng-options="contact.Nombre + ' ( ' + contact.CorreoElectronico + ' )' for contact in contactos" required>
                 <option value="">Contactos</option> 
             </select>
         </div>
         <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
             <label>Esquema renovación</label>
-            <select name="esquema" class="form-control" ng-model="esquema" ng-options="esquema for esquema in esquemas" >
+            <select name="esquema" class="form-control" ng-model="esquema" ng-options="esquema.Nombre for esquema in esquemasLista" ng-change="definirPeriodo()" required>
                 <option value="">Esquemas</option> 
             </select>
         </div>
         <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
             <label>Fecha inicio</label>
-            <Input type="date" name="fechaInicio" class="form-control" ng-model="fechaInicio" >
+            <Input type="date" name="fechaInicio" class="form-control" ng-model="fechaInicio" ng-change="definirPeriodo()" required>
         </div>
         <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
             <label>Fecha fin</label>
-            <Input type="date" name="fechaFin" class="form-control" ng-model="fechaFin" >
+            <Input type="date" name="fechaFin" class="form-control" ng-model="fechaFin" disabled>
         </div>
         <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
             <label>Forma de pago</label>
-            <select name="fomaPago" class="form-control" ng-model="formaPago" ng-options="formaPago for formaPago in formasPago" >
-                <option value="">Formas de pago</option> 
+            <select name="fomaPago" class="form-control" ng-model="formaPago" required>
+                <option value="" selected>Formas de pago</option> 
+                <option value="1">Tarjeta</option> 
+                <option value="2">Credito</option> 
+                <option value="4">Trasferencia</option> 
             </select>
         </div>
         <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
             <label>Moneda de pago</label>
-            <select name="monedaPago" class="form-control" ng-model="monedaPago" ng-options="monedaPago for monedaPago in monedasPago" >
-                <option value="">Monedas</option> 
+            <select name="monedaPago" class="form-control" ng-model="monedaPago" required>
+                <option value="" selected>Monedas</option> 
+                <option value="Pesos">Pesos</option> 
+                <option value="Dólares">Dólares</option> 
             </select>
         </div>
         <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
             <label>Tipo de cambio</label>
-            <Input name="tipoCambio" class="form-control" ng-model="tipoCambio" >
+            <Input name="tipoCambio" type="number" class="form-control" ng-model="tipoCambio" required>
         </div>
 
     </div>
@@ -77,23 +94,8 @@
     </div>
     
     <hr>
-
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="background-color: rgba(219, 218, 218, 0.425);padding-top: 1em; margin-bottom: 3px; border-bottom: 1 solid rgba(32, 32, 32, 0.719);">
-        <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
-            <label>SKU</label>
-            <Input name="sku" class="form-control" ng-model="sku" >
-        </div>
-        <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
-            <label>Cantidad</label>
-            <Input name="cantidad" class="form-control" ng-model="cantidad" >
-        </div>
-        <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
-            <label>Cantidad proxima</label>
-            <Input name="cantidadProx" class="form-control" ng-model="cantidadProx" >
-        </div>
-        <div class="form-group col-xs-1 col-sm-1 col-md-1 col-lg-1" style="float:right; margin-top: 2em;">
-            <input type="checkbox" name="seleccion" value="seleccionado">
-        </div>
+    <div ng-repeat="detail in detalles">
+        <div ng-bind-html-unsafe="detail"></div>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="background-color: rgba(219, 218, 218, 0.425);padding-top: 1em; margin-bottom: 3px; border-bottom: 1 solid rgba(32, 32, 32, 0.719);">
         <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
@@ -113,20 +115,25 @@
         </div>
     </div>
 
+    <button style="float:right; margin: 1em;" ng-click="" class="btn btn-warning newColaborator" style="background: !important">
+        <span class="glyphicon glyphicon-minus" ng-hide="SessionCookie.IdTipoAcceso == 8"></span>
+        &nbsp;Quitar producto
+    </button>
+    <button style="float:right; margin: 1em;" ng-click="agregarProducto()" class="btn btn-primary" style="background: !important">
+        <span class="glyphicon glyphicon-plus" ng-hide="SessionCookie.IdTipoAcceso == 8"></span>
+        &nbsp;Añadir producto
+    </button> 
+
     <div class="row">
-        <button style="float:right; margin: 1em;" ng-click="" class="btn btn-success newColaborator" style="background: !important">
+        <button type="submit" style="float:right; margin: 1em;" ng-click="" class="btn btn-success newColaborator" style="background: !important">
             <span class="glyphicon glyphicon-download-alt" ng-hide="SessionCookie.IdTipoAcceso == 8"></span>
             &nbsp;Importar Pedido
         </button>
-        <button style="float:right; margin: 1em;" ng-click="" class="btn btn-warning newColaborator" style="background: !important">
-            <span class="glyphicon glyphicon-minus" ng-hide="SessionCookie.IdTipoAcceso == 8"></span>
-            &nbsp;Quitar producto
-        </button>
-        <button style="float:right; margin: 1em;" ng-click="" class="btn btn-primary newColaborator" style="background: !important">
-            <span class="glyphicon glyphicon-plus" ng-hide="SessionCookie.IdTipoAcceso == 8"></span>
-            &nbsp;Añadir producto
-        </button> 
+    <!-- </form> -->
     </div>
+        
+    
+   
 </div>
 </div>
 
