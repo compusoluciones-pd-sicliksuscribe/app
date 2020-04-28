@@ -30,7 +30,7 @@
         $scope.MPNID = $scope.orderIdsCookie[0].IdMicrosoftDist;
         PedidoDetallesFactory.getMPIDInformation(parseInt($scope.MPNID))
         .success(function (response) {
-          response.Status === 'active' ? $scope.isMPNIDActive = true : $scope.isMPNIDActive = false;
+          response.data.status === 'active' ? $scope.isMPNIDActive = true : $scope.isMPNIDActive = false;
           if (!$scope.isMPNIDActive) $scope.abrirModal('isValidMPNIDModal');
         })
         .error(function (data, status, headers, config) {
