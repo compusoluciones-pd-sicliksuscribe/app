@@ -489,7 +489,8 @@
         Especializacion: Producto.Especializacion,
         IdUsuarioContacto: Producto.IdUsuarioContacto,
         IdAccionAutodesk: Producto.IdAccionAutodesk,
-        IdERP: Producto.IdERP
+        IdERP: Producto.IdERP,
+        Plazo: Producto.Plazo
       };
       if (NuevoProducto.IdAccionAutodesk === 1 && !Producto.TieneContrato) {
         return postPedidoAutodesk(NuevoProducto, Producto);
