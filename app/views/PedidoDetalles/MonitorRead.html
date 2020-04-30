@@ -148,9 +148,6 @@
                             <label for="">Tipo de producto:</label> {{ detalles.Tipo }}
                             <br>
                             <div ng-show="(detalles.Activo || pedido.CargoRealizadoProximoPedido === 1) && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 7)"><label for="">Estatus del pedido:</label> {{ pedido.Estatus }}</div>
-                            <div ng-show="(pedido.IdFormaPagoProxima === 1 || pedido.IdFormaPagoProxima === 3 || pedido.IdFormaPagoProxima === 4) && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 7)">
-                                <label>Estatus de renovación:</label> {{ pedido.EstatusRenovacion }}
-                            </div>
                             <div ng-show="(detalles.Activo) && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
                                 <label ng-hide="pedido.Bloquear || pedido.CargoRealizadoProximoPedido">Próxima forma de pago:</label>
                             </div>
@@ -258,22 +255,31 @@
                         </div>
 
                         <div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
-                            <label>Estatus de pedido: </label>
-                            <br/>
-                            <b> 
-									<div ng-show="detalles.EstatusFabricante === 'accepted' && detalles.Activo">
-										Aceptado <span class="glyphicon glyphicon-ok" title="{{ detalles.EstatusFabricante }}"> </span>
-									</div>
-									<div ng-show="detalles.EstatusFabricante === 'FAILED'">
-										Error al procesar	<span class="glyphicon glyphicon-remove" title="{{ detalles.EstatusFabricante }}"> </span>
-									</div>
-									<div style="font-style: italic;" ng-show="detalles.EstatusFabricante === null">
-										Procesando... <span class="glyphicon glyphicon-time" title="{{ detalles.EstatusFabricante }}"> </span>
-									</div>
-									<div ng-show="!detalles.Activo">
-										Suscripción cancelada <span class="glyphicon glyphicon-minus-sign" title="{{ detalles.EstatusFabricante }}"> </span>
-									</div>
-								</b>
+                            <ul style="list-style-type:none; padding:0%">
+                                <li>
+                                    <label>Estatus de pedido: </label>
+                                    <div ng-show="detalles.EstatusFabricante === 'accepted' && detalles.Activo">
+                                        Aceptado <span class="glyphicon glyphicon-ok" title="{{ detalles.EstatusFabricante }}"> </span>
+                                    </div>
+                                    <div ng-show="detalles.EstatusFabricante === 'FAILED'">
+                                        Error al procesar	<span class="glyphicon glyphicon-remove" title="{{ detalles.EstatusFabricante }}"> </span>
+                                    </div>
+                                    <div style="font-style: italic;" ng-show="detalles.EstatusFabricante === null">
+                                        Procesando... <span class="glyphicon glyphicon-time" title="{{ detalles.EstatusFabricante }}"> </span>
+                                    </div>
+                                    <div ng-show="!detalles.Activo">
+                                        Suscripción cancelada <span class="glyphicon glyphicon-minus-sign" title="{{ detalles.EstatusFabricante }}"> </span>
+                                    </div>
+                                </li>
+                                <li ng-show="pedido.IdFormaPagoProxima !== 2">
+                                    <br><label>Renovación: </label>
+                                    <div ng-show="pedido.CargoRealizadoProximoPedido == 1">
+                                        <span style="font-size: 100%;" class="label label-success">Pagado</span>
+                                    </div>
+                                    <div ng-show="pedido.CargoRealizadoProximoPedido !== 1">
+                                        <span style="font-size: 100%;" class="label label-warning">Pendiente de pago</span>
+                                    </div>
+                                </li>
                         </div>
 
                         <div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
@@ -302,7 +308,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-xs-6 col-sm-6 col-md-12 col-lg-12">
-                                        <button class="btn btn-block btn-warning" ng-disabled="form.habilitar" ng-click="CancelarPedido(pedido, detalles)"> Sí </button>
+                                        <button class="btn btn-block btn-warning" ng-disabled="form.habilitar" ng-click="validarInfoPedido('cancelationAlert', pedido, detalles) "> Sí </button>
                                     </div>
                                     <div class="form-group col-xs-6 col-sm-6 col-md-12 col-lg-12">
                                         <button class="btn btn-block btn-primary" ng-disabled="form.habilitar" ng-click="Confirmar(detalles.IdPedidoDetalle)"> No </button>
@@ -315,6 +321,43 @@
                 </td>
             </tr>
         </table>
+
+        <div id="cancelationAlert" class="modal fade in" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" >
+                        <button type="button" class="close" ng-click="cerrarModal('cancelationAlert');Confirmar(infoDetalle.IdPedidoDetalle);" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Cancelación de suscripción para el pedido {{infoPedido.IdPedido}}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Al cancelar esta suscripción, se suspenderán las licencias asociadas, <b>no podrás reactivar la suscripción.</b> Ademas, el cobro será prorrateado.<br><br> La información de la suscripción quedará de la siguiente forma: <hr>
+                            <Table cellspacing="20" style="width: 100%;text-align: center; padding: 8px;">
+                                <tr>
+                                    <th style="text-align: center;">Nuevo periodo</th>
+                                    <th style="text-align: center;">Precio del producto</th>
+                                    <th style="text-align: center;">Precio prorrateado</th>
+                                    <th style="text-align: center;">Cantidad</th>
+                                    <th style="text-align: center;">Precio Total</th>
+                                </tr>
+                                <tr>
+                                    <td> {{fechaInicio | date:'dd/MM/yyyy'}} - {{nvaFechaFin | date:'dd/MM/yyyy'}}</td>
+                                    <td>&#36{{infoDetalle.PrecioNormal}}</td>
+                                    <td>&#36{{prorrateo}}</td>
+                                    <td>{{infoDetalle.Cantidad}}</td>
+                                    <td style="color: rgb(5, 146, 5);"><b>&#36{{infoDetalle.Cantidad * prorrateo}}</b></td>
+                                </tr>
+                            </Table>
+                        </p>
+                        <br>
+                        <div  class="modal-footer">
+                            <button type="button" class="btn btn-success" ng-click="CancelarPedido(infoPedido, infoDetalle)" data-dismiss="modal">Acepto</button>
+                            <button type="button" class="btn btn-danger" ng-click="cerrarModal('cancelationAlert');Confirmar(infoDetalle.IdPedidoDetalle);" data-dismiss="modal">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <!-- Detalle pedidos Autodesk -->
