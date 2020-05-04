@@ -30,7 +30,25 @@
         });
     };
 
+    const conjuntarDetalles = function () {
+      let detalles = [];
+      $scope.visible.forEach(function (elemento, index) {
+        let detalle = {};
+        if (elemento) {
+          detalle.SKU = $scope.sku[index];
+          detalle.Cantidad = $scope.cantidad[index];
+          detalle.CantidadProx = $scope.cantidadProx[index];
+          detalles.push(detalle);
+        }
+      });
+      return detalles;
+    };
+
     $scope.init = function () {
+      $scope.visible = [true, false, false, false, false];
+      $scope.sku = ['', '', '', '', ''];
+      $scope.cantidad = ['', '', '', '', ''];
+      $scope.cantidadProx = ['', '', '', '', ''];
       $scope.contadorDetalles = 1;
       $scope.detalles = [];
       getSuppliers();
@@ -40,7 +58,7 @@
 
     $scope.init();
 
-    $scope.completarDist = function (cadenaDist) {
+    $scope.completarDist = function (cadenaDist = '') {
       let resultado = [];
       $scope.resultadoDistribuidor = [];
 
@@ -49,7 +67,7 @@
         if (distribuidor.NombreEmpresa.toLowerCase().indexOf(cadenaDist.toLowerCase()) >= 0) {
           resultado.push(distribuidor.NombreEmpresa);
           $scope.resultadoDistribuidor.push(distribuidor);
-        } 
+        }
         if (cadenaDist === '') {
           $scope.ocultarOpcionesDist = true;
         }
@@ -65,21 +83,22 @@
       $scope.usuarioF = '';
     };
 
-    $scope.completarUF = function (cadenaUF) {
+    $scope.completarUF = function (cadenaUF = '') {
       let resultado = [];
       $scope.resultadoUF = [];
-
-      $scope.ocultarOpcionesUF = false;
-      $scope.ufsListaAux.forEach(uf => {
-        if (uf.NombreEmpresa.toLowerCase().indexOf(cadenaUF.toLowerCase()) >= 0) {
-          resultado.push(uf.NombreEmpresa);
-          $scope.resultadoUF.push(uf);
-        }
-        if (cadenaUF === '') {
-          $scope.ocultarOpcionesUF = true;
-        }
-      });
-      $scope.filtroUsuarioFinal = resultado;
+      if ($scope.ufsListaAux) {
+        $scope.ocultarOpcionesUF = false;
+        $scope.ufsListaAux.forEach(uf => {
+          if (uf.NombreEmpresa.toLowerCase().indexOf(cadenaUF.toLowerCase()) >= 0) {
+            resultado.push(uf.NombreEmpresa);
+            $scope.resultadoUF.push(uf);
+          }
+          if (cadenaUF === '') {
+            $scope.ocultarOpcionesUF = true;
+          }
+        });
+        $scope.filtroUsuarioFinal = resultado;
+      };
     };
 
     $scope.llenarTextBoxUF = function (infoUF) {
@@ -99,8 +118,6 @@
         const ANUAL = 2;
         const CADA2ANIOS = 4;
         const CADA3ANIOS = 5;
-        console.log($scope.esquema);
-        console.log($scope.fechaInicio);
         $scope.fechaFin = new Date();
         switch ($scope.esquema.IdEsquemaRenovacion) {
           case MENSUAL:
@@ -120,6 +137,41 @@
         }
         $scope.fechaFin.setDate($scope.fechaInicio.getDate() - 1);
       }
+    };
+
+    $scope.agregarProducto = function () {
+      for (let contador = 0; contador < $scope.visible.length; contador++) {
+        if (!$scope.visible[contador]) {
+          $scope.visible[contador] = true;
+          break;
+        }
+      }
+    };
+
+    $scope.quitarProducto = function () {
+      for (let contador = $scope.visible.length - 1; contador > 0; contador--) {
+        if ($scope.visible[contador]) {
+          $scope.visible[contador] = false;
+          break;
+        }
+      }
+    };
+
+    $scope.conjuntarInformacion = function () {
+      const infoPedido = {
+        IdEmpresaDistribuidor: $scope.distribuidorSeleccionado.IdEmpresa,
+        IdEmpresaUsuarioFinal: $scope.ufSeleccionado.IdEmpresa,
+        NumeroContrato: $scope.contrato,
+        IdUsuarioContacto: $scope.contacto.IdUsuario,
+        CorreoContacto: $scope.contacto.CorreoElectronico,
+        FechaInicio: $scope.fechaInicio,
+        FechaFin: $scope.fechaFin,
+        IdFormaPago: $scope.formaPago,
+        MonedaPago: $scope.monedaPago,
+        IdEsquemaRenovacion: $scope.esquema.IdEsquemaRenovacion,
+        TipoCambio: $scope.tipoCambio,
+        Detalles: conjuntarDetalles()
+      };
     };
   };
 

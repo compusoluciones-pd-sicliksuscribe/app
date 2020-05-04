@@ -23,7 +23,7 @@
         </div>
     </div>
     <hr>
-    <!-- <form> -->
+    <form ng-submit="conjuntarInformacion()">
     <div class="row">
         <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
             <label>Distribuidor</label>
@@ -67,8 +67,7 @@
             <label>Forma de pago</label>
             <select name="fomaPago" class="form-control" ng-model="formaPago" required>
                 <option value="" selected>Formas de pago</option> 
-                <option value="1">Tarjeta</option> 
-                <option value="2">Credito</option> 
+                <option value="2">Crédito</option> 
                 <option value="4">Trasferencia</option> 
             </select>
         </div>
@@ -82,7 +81,7 @@
         </div>
         <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
             <label>Tipo de cambio</label>
-            <Input name="tipoCambio" type="number" class="form-control" ng-model="tipoCambio" required>
+            <Input name="tipoCambio" type="number" step="0.01" class="form-control" ng-model="tipoCambio" required>
         </div>
 
     </div>
@@ -94,137 +93,98 @@
     </div>
     
     <hr>
-    <div ng-repeat="detail in detalles">
-        <div ng-bind-html-unsafe="detail"></div>
-    </div>
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="background-color: rgba(219, 218, 218, 0.425);padding-top: 1em; margin-bottom: 3px; border-bottom: 1 solid rgba(32, 32, 32, 0.719);">
-        <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
-            <label>SKU</label>
-            <Input name="sku" class="form-control" ng-model="sku" >
-        </div>
-        <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
-            <label>Cantidad</label>
-            <Input type="number" name="cantidad" class="form-control" ng-model="cantidad" >
-        </div>
-        <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
-            <label>Cantidad proxima</label>
-            <Input type="number" name="cantidadProx" class="form-control" ng-model="cantidadProx" >
-        </div>
-        <div class="form-group col-xs-1 col-sm-1 col-md-1 col-lg-1" style="float:right; margin-top: 2em;">
-            <input type="checkbox" name="seleccion" value="seleccionado">
-        </div>
-    </div>
-
-    <button style="float:right; margin: 1em;" ng-click="" class="btn btn-warning newColaborator" style="background: !important">
-        <span class="glyphicon glyphicon-minus" ng-hide="SessionCookie.IdTipoAcceso == 8"></span>
-        &nbsp;Quitar producto
-    </button>
-    <button style="float:right; margin: 1em;" ng-click="agregarProducto()" class="btn btn-primary" style="background: !important">
-        <span class="glyphicon glyphicon-plus" ng-hide="SessionCookie.IdTipoAcceso == 8"></span>
-        &nbsp;Añadir producto
-    </button> 
-
     <div class="row">
-        <button type="submit" style="float:right; margin: 1em;" ng-click="" class="btn btn-success newColaborator" style="background: !important">
-            <span class="glyphicon glyphicon-download-alt" ng-hide="SessionCookie.IdTipoAcceso == 8"></span>
-            &nbsp;Importar Pedido
-        </button>
-    <!-- </form> -->
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="float: right;">
+            <button  type="button" style="float: right; margin: 1em;" ng-click="agregarProducto()" class="btn btn-primary" style="background: !important">
+                <span class="glyphicon glyphicon-plus" ></span>
+                &nbsp;Añadir producto
+            </button>
+            <button type="button" style="float: right; margin: 1em;" ng-click="quitarProducto()" class="btn btn-warning " style="background: !important">
+                <span class="glyphicon glyphicon-minus" ></span>
+                &nbsp;Quitar producto
+            </button>
+            <button type="submit" style="float:right; margin: 1em;" ng-click="" class="btn btn-success " style="background: !important">
+                <span class="glyphicon glyphicon-download-alt"></span>
+                &nbsp;Importar Pedido
+            </button>
+        </div>
+
+        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="background-color: rgba(219, 218, 218, 0.425);padding-top: 1em; margin-bottom: 3px; border-bottom: 1 solid rgba(32, 32, 32, 0.719); " ng-show="visible[0]">
+            <div class="form-group col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                <label>SKU</label>
+                <Input name="sku" class="form-control" ng-model="sku[0]" >
+            </div>
+            <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                <label>Cantidad</label>
+                <Input type="number" name="cantidad" class="form-control" ng-model="cantidad[0]" >
+            </div>
+            <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                <label>Cantidad proxima</label>
+                <Input type="number" name="cantidadProx" class="form-control" ng-model="cantidadProx[0]" >
+            </div>
+        </div>
+
+        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="background-color: rgba(219, 218, 218, 0.425);padding-top: 1em; margin-bottom: 3px; border-bottom: 1 solid rgba(32, 32, 32, 0.719);" ng-show="visible[1]">
+            <div class="form-group col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                <label>SKU</label>
+                <Input name="sku" class="form-control" ng-model="sku[1]" >
+            </div>
+            <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                <label>Cantidad</label>
+                <Input type="number" name="cantidad" class="form-control" ng-model="cantidad[1]" >
+            </div>
+            <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                <label>Cantidad proxima</label>
+                <Input type="number" name="cantidadProx" class="form-control" ng-model="cantidadProx[1]" >
+            </div>
+        </div>
+
+        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="background-color: rgba(219, 218, 218, 0.425);padding-top: 1em; margin-bottom: 3px; border-bottom: 1 solid rgba(32, 32, 32, 0.719);" ng-show="visible[2]">
+            <div class="form-group col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                <label>SKU</label>
+                <Input name="sku" class="form-control" ng-model="sku[2]" >
+            </div>
+            <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                <label>Cantidad</label>
+                <Input type="number" name="cantidad" class="form-control" ng-model="cantidad[2]" >
+            </div>
+            <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                <label>Cantidad proxima</label>
+                <Input type="number" name="cantidadProx" class="form-control" ng-model="cantidadProx[2]" >
+            </div>
+        </div>
+
+        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="background-color: rgba(219, 218, 218, 0.425);padding-top: 1em; margin-bottom: 3px; border-bottom: 1 solid rgba(32, 32, 32, 0.719);" ng-show="visible[3]">
+            <div class="form-group col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                <label>SKU</label>
+                <Input name="sku" class="form-control" ng-model="sku[3]" >
+            </div>
+            <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                <label>Cantidad</label>
+                <Input type="number" name="cantidad" class="form-control" ng-model="cantidad[3]" >
+            </div>
+            <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                <label>Cantidad proxima</label>
+                <Input type="number" name="cantidadProx" class="form-control" ng-model="cantidadProx[3]" >
+            </div>
+        </div>
+
+        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="background-color: rgba(219, 218, 218, 0.425);padding-top: 1em; margin-bottom: 3px; border-bottom: 1 solid rgba(32, 32, 32, 0.719);" ng-show="visible[4]">
+            <div class="form-group col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                <label>SKU</label>
+                <Input name="sku" class="form-control" ng-model="sku[4]" >
+            </div>
+            <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                <label>Cantidad</label>
+                <Input type="number" name="cantidad" class="form-control" ng-model="cantidad[4]" >
+            </div>
+            <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                <label>Cantidad proxima</label>
+                <Input type="number" name="cantidadProx" class="form-control" ng-model="cantidadProx[4]" >
+            </div>
+        </div>
     </div>
-        
-    
+    </form>
    
 </div>
 </div>
-
-
-    <!-- <div class="row">
-        <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <h2 style="float:left;">Monitor agente </h2>
-        </div>
-    </div>
-
-    <div class="row">
-      <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
-          <label>Distribuidor</label>
-          <select name="distribuidor" class="form-control filterOption" placeholder="Buscar" ng-model="distribuidor" ng-options="distribuidor for distribuidor in distribuidores" 
-				    ng-change="filtrar('Distribuidor', distribuidor)">
-				    <option value="">Todos los clientes</option> 
-			    </select>
-      </div>
-      <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
-          <label>Usuario final</label>
-          <select name="usuarioFinal" class="form-control filterOption" ng-model="usuarioF" ng-options="usuarioFinal for usuarioFinal in ufs" 
-				    ng-change="filtrar('UsuarioFinal', usuarioF)">
-				    <option value="">Todos los UFs</option> 
-			    </select>
-      </div>
-      <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
-          <label>Agente</label>
-          <select name="agente" class="form-control filterOption" ng-model="agente" ng-options="agente for agente in agentes" 
-				    ng-change="filtrar('Agente', agente)">
-				    <option value="">Todos los agentes</option> 
-			    </select>
-      </div>
-      <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
-        <label>Forma de pago</label>
-        <select name="formaPago" class="form-control filterOption" ng-model="formaP" ng-options="formaPago for formaPago in formasPago" 
-          ng-change="filtrar('Forma', formaP)">
-          <option value="">Todas las formas</option> 
-        </select>
-      </div>
-      <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
-          <label>Esquema de renovación</label>
-          <select name="esquema" class="form-control filterOption" ng-model="esquema" ng-options="esquema for esquema in esquemas" 
-				    ng-change="filtrar('EsquemaRenovacion', esquema)">
-				    <option value="">Todos los esquemas</option> 
-			    </select>
-      </div>
-      <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
-
-      </div>
-      <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
-
-      </div>
-      <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
-
-      </div>
-    </div>
-    <div class="row">
-      <table class="table table-hover table-responsive border-left-right-cero" style="table-layout: fixed;"  ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8 ">
-          <tr style="background:#4A7BAB; color:white;">
-            <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><b>Pedido</b></th>
-            <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-2 col-lg-1"><b>ID Distribuidor</b></th>
-            <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><b>Distribuidor</b></th>
-            <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><b>Usuario final</b></th>
-            <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><b>Producto</b></th>
-            <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><b>Cantidad</b></th>
-            <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><b>Cantidad a renovar</b></th>
-            <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><b>Forma de Pago</b></th>
-            <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><b>Esquema de renovación</b></th>
-            <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><b>Fecha inicio</b></th>
-            <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><b>Fecha fin</b></th>
-          </tr> 
-          <tr ng-repeat="item in filtered" class="repeat-animation">
-            <td style="text-align: center">{{item.IdPedido}}</td>
-            <td style="text-align: center">{{item.IdDistribuidor}}</td>
-            <td style="text-align: center">{{item.Distribuidor}}</td>
-            <td style="text-align: center">{{item.UsuarioFinal}}</td>
-            <td style="text-align: center">{{item.Producto}}</td>
-            <td style="text-align: center">{{item.Cantidad}}</td>
-            <td style="text-align: center">{{item.CantidadProxima}}</td>
-            <td style="text-align: center">{{item.Forma}}</td>
-            <td style="text-align: center">{{item.EsquemaRenovacion}}</td>
-            <td style="text-align: center">{{item.FechaInicio  | date: 'dd/MM/yyyy' }}</td>
-            <td style="text-align: center">{{item.FechaFin | date: 'dd/MM/yyyy'}}</td>
-
-          </tr>
-        </table>
-        <div ng-show="filtered.length === 0" style = "text-align:center"><h4>No se encontraron resultados.</h4></div>        
-        <div style="margin: auto; text-align: center;" >
-          <pagination class="pager" ng-model="currentPage" total-items="listaAux.length" max-size="maxSize" boundary-links="true"></pagination>
-          </div>
-      
-    </div>
-</div> 
-</div> -->
