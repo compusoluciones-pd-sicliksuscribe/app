@@ -42,19 +42,34 @@
 
     const conjuntarDetalles = function () {
       let detalles = [];
+      let camposCompletos = true;
       $scope.visible.forEach(function (elemento, index) {
         let detalle = {};
         if (elemento) {
-          detalle.SKU = $scope.sku[index];
-          detalle.Cantidad = $scope.cantidad[index];
-          detalle.CantidadProx = $scope.cantidadProx[index];
+          if ($scope.sku[index] !== '') detalle.SKU = $scope.sku[index];
+          else {
+            camposCompletos = false;
+            $scope.ShowToast('Campo SKU vacio.', 'danger');
+          }
+          if ($scope.cantidad[index]) detalle.Cantidad = $scope.cantidad[index];
+          else {
+            camposCompletos = false;
+            $scope.ShowToast('Campo cantidad vacio.', 'danger');
+          }
+          if ($scope.cantidadProx[index]) detalle.CantidadProx = $scope.cantidadProx[index];
+          else {
+            camposCompletos = false;
+            $scope.ShowToast('Campo cantidad proxima vacio.', 'danger');
+          }
           detalles.push(detalle);
         }
       });
+      if (camposCompletos) $scope.formularioCompleto = true;
       return detalles;
     };
 
     $scope.init = function () {
+      $scope.formularioCompleto = false;
       $scope.visible = [true, false, false, false, false];
       $scope.sku = ['', '', '', '', ''];
       $scope.cantidad = ['', '', '', '', ''];
@@ -209,6 +224,9 @@
         TipoCambio: $scope.tipoCambio,
         Detalles: conjuntarDetalles()
       };
+      if ($scope.formularioCompleto) {
+        ImportarPedidosAutodeskFactory.importarPedido(infoPedido);
+      }
     };
   };
 

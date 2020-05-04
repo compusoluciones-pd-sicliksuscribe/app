@@ -31,6 +31,11 @@
       return $http.get($rootScope.API + 'autodesk/products');
     };
 
+    factory.importarPedido = function (infoPedido) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'autodesk/importar-pedido', infoPedido);
+    };
+
     return factory;
   };
   ImportarPedidosAutodeskFactory.$inject = ['$http', '$cookies', '$rootScope'];
