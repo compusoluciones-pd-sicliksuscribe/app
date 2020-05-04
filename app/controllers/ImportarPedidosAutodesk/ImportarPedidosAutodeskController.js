@@ -30,6 +30,16 @@
         });
     };
 
+    const getProducts = function () {
+      return ImportarPedidosAutodeskFactory.getProducts()
+        .then(result => {
+          $scope.productosLista = result.data;
+        })
+        .catch(function () {
+          $scope.ShowToast('No pudimos cargar la lista de productos, por favor intenta de nuevo más tarde.', 'danger');
+        });
+    };
+
     const conjuntarDetalles = function () {
       let detalles = [];
       $scope.visible.forEach(function (elemento, index) {
@@ -49,11 +59,13 @@
       $scope.sku = ['', '', '', '', ''];
       $scope.cantidad = ['', '', '', '', ''];
       $scope.cantidadProx = ['', '', '', '', ''];
+      $scope.estadoSKU = [{color: 'rgb(0, 0, 0)'}, {color: 'rgb(0, 0, 0)'}, {color: 'rgb(0, 0, 0)'}, {color: 'rgb(0, 0, 0)'}, {color: 'rgb(0, 0, 0)'}];
       $scope.contadorDetalles = 1;
       $scope.detalles = [];
       getSuppliers();
       getFinalUsers();
       getEsquemas();
+      getProducts();
     };
 
     $scope.init();
@@ -154,6 +166,31 @@
           $scope.visible[contador] = false;
           break;
         }
+      }
+    };
+
+    $scope.editar = function (textbox) {
+      $scope.estadoSKU[textbox] = {color: 'rgb(0, 0, 0)'};
+    };
+
+    $scope.validarSKU = function (sku, textbox) {
+      let contador = 0;
+      let esUtilizado = false;
+      let skuValido = $scope.productosLista.find(function (elemento) {
+        return elemento.IdERP === sku;
+      });
+      $scope.sku.forEach(function (elemento) {
+        if (elemento === sku) contador++;
+      });
+      if (contador > 1) esUtilizado = true;
+      if (!skuValido) {
+        $scope.estadoSKU[textbox] = {color: 'rgb(230, 6, 6)'};
+        $scope.ShowToast('SKU no valido. Revisalo e intenta de nuevo.', 'danger');
+      } else if (esUtilizado) {
+        $scope.estadoSKU[textbox] = {color: 'rgb(230, 6, 6)'};
+        $scope.ShowToast('El SKU ya esta siendo utilizado, no puede ser registrado mas de una vez.', 'danger');
+      } else {
+        $scope.estadoSKU[textbox] = {color: 'rgb(5, 192, 86)'};
       }
     };
 

@@ -109,10 +109,10 @@
             </button>
         </div>
 
-        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="background-color: rgba(219, 218, 218, 0.425);padding-top: 1em; margin-bottom: 3px; border-bottom: 1 solid rgba(32, 32, 32, 0.719); " ng-show="visible[0]">
+        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="background-color: rgba(219, 218, 218, 0.425);padding-top: 1em; margin-bottom: 3px; border-bottom: 1 solid rgba(32, 32, 32, 0.719); " ng-show="visible[0]" >
             <div class="form-group col-xs-5 col-sm-5 col-md-5 col-lg-5">
                 <label>SKU</label>
-                <Input name="sku" class="form-control" ng-model="sku[0]" >
+                <Input name="sku" class="form-control" ng-model="sku[0]" ng-style="estadoSKU[0]" ng-blur="validarSKU(sku[0], 0)" ng-focus="editar(0)">
             </div>
             <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
                 <label>Cantidad</label>
@@ -127,7 +127,7 @@
         <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="background-color: rgba(219, 218, 218, 0.425);padding-top: 1em; margin-bottom: 3px; border-bottom: 1 solid rgba(32, 32, 32, 0.719);" ng-show="visible[1]">
             <div class="form-group col-xs-5 col-sm-5 col-md-5 col-lg-5">
                 <label>SKU</label>
-                <Input name="sku" class="form-control" ng-model="sku[1]" >
+                <Input name="sku" class="form-control"  ng-model="sku[1]" ng-style="estadoSKU[1]" ng-blur="validarSKU(sku[1], 1) " ng-focus="editar(1)">
             </div>
             <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
                 <label>Cantidad</label>
@@ -142,7 +142,7 @@
         <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="background-color: rgba(219, 218, 218, 0.425);padding-top: 1em; margin-bottom: 3px; border-bottom: 1 solid rgba(32, 32, 32, 0.719);" ng-show="visible[2]">
             <div class="form-group col-xs-5 col-sm-5 col-md-5 col-lg-5">
                 <label>SKU</label>
-                <Input name="sku" class="form-control" ng-model="sku[2]" >
+                <Input name="sku" class="form-control" ng-model="sku[2]" ng-style="estadoSKU[2]" ng-blur="validarSKU(sku[2], 2)" ng-focus="editar(2)">
             </div>
             <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
                 <label>Cantidad</label>
@@ -157,7 +157,7 @@
         <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="background-color: rgba(219, 218, 218, 0.425);padding-top: 1em; margin-bottom: 3px; border-bottom: 1 solid rgba(32, 32, 32, 0.719);" ng-show="visible[3]">
             <div class="form-group col-xs-5 col-sm-5 col-md-5 col-lg-5">
                 <label>SKU</label>
-                <Input name="sku" class="form-control" ng-model="sku[3]" >
+                <Input name="sku" class="form-control" ng-model="sku[3]" ng-style="estadoSKU[3]" ng-blur="validarSKU(sku[3], 3)" ng-focus="editar(3)">
             </div>
             <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
                 <label>Cantidad</label>
@@ -172,7 +172,7 @@
         <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="background-color: rgba(219, 218, 218, 0.425);padding-top: 1em; margin-bottom: 3px; border-bottom: 1 solid rgba(32, 32, 32, 0.719);" ng-show="visible[4]">
             <div class="form-group col-xs-5 col-sm-5 col-md-5 col-lg-5">
                 <label>SKU</label>
-                <Input name="sku" class="form-control" ng-model="sku[4]" >
+                <Input name="sku" class="form-control" ng-model="sku[4]" ng-style="estadoSKU[4]" ng-blur="validarSKU(sku[4], 4)" ng-focus="editar(4)">
             </div>
             <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
                 <label>Cantidad</label>

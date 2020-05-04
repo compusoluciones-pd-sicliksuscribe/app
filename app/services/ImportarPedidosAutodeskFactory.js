@@ -26,6 +26,11 @@
       return $http.get($rootScope.API + 'autodesk/renovation-scheme');
     };
 
+    factory.getProducts = function () {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'autodesk/products');
+    };
+
     return factory;
   };
   ImportarPedidosAutodeskFactory.$inject = ['$http', '$cookies', '$rootScope'];
