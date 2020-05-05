@@ -1,83 +1,11 @@
 (function () {
-  var UsoAzureController = function ($scope, $sce, $cookies, $location, EmpresasXEmpresasFactory, $uibModal, $filter, FabricantesFactory, PedidosFactory, EmpresasFactory, UsuariosFactory) {
+  var UsoAzureController = function ($scope, $sce, $cookies, $location, UsoAzureFactory, $uibModal, $filter, FabricantesFactory, PedidosFactory, EmpresasFactory, UsuariosFactory) {
     $scope.datoActual = '';
-    $scope.primerDato = [{ // le estoy pasando de forma forzada el cambio, para que se muestre en la tabla pero no lo hace
-      name: 'Prueba 1',
-      percent: '33',
-      color: 'bg-dark'
-    },
-    {
-      name: 'Prueba 2',
-      percent: '57',
-      color: 'bg-light'
-    },
-    {
-      name: 'Prueba 3',
-      percent: '20',
-      color: 'bg-info'
-    }];
-    $scope.enterpriseDataSimulado = {
-      'Jan': [{
-        name: 'Prueba 1',
-        percent: '33',
-        color: 'bg-success'
-      },
-      {
-        name: 'Prueba 2',
-        percent: '57',
-        color: 'bg-secondary'
-      },
-      {
-        name: 'Prueba 3',
-        percent: '20',
-        color: 'bg-primary'
-      }],
-      'Feb': [{
-        name: 'Prueba 1',
-        percent: '33',
-        color: 'bg-warning'
-      },
-      {
-        name: 'Prueba 2',
-        percent: '47',
-        color: 'bg-danger'
-      },
-      {
-        name: 'Prueba 3',
-        percent: '20',
-        color: 'bg-success'
-      }],
-      'Mar': [{
-        name: 'Prueba 1',
-        percent: '13',
-        color: 'bg-secondary'
-      },
-      {
-        name: 'Prueba 2',
-        percent: '17',
-        color: 'bg-primary'
-      },
-      {
-        name: 'Prueba 3',
-        percent: '10',
-        color: 'bg-dark'
-      }],
-      'Apr': [{
-        name: 'Prueba 1',
-        percent: '53',
-        color: 'bg-light'
-      },
-      {
-        name: 'Prueba 2',
-        percent: '57',
-        color: 'bg-info'
-      },
-      {
-        name: 'Prueba 3',
-        percent: '50',
-        color: 'bg-warning'
-      }]
-    };
+    $scope.dataByMonth = '';
+    $scope.Distribuidor = 0;
+    $scope.Cliente = 0;
+    $scope.selectClientes = [];
+    $scope.Suscripcion = 0;
 
     function graphClickEvent (evt) {
       var activePoints = $scope.myLineChart.getElementsAtEvent(evt);
@@ -90,10 +18,10 @@
 
     // get value by index
         var value = $scope.myLineChart.data.datasets[0].data[clickedElementindex];
-        $scope.datoActual = $scope.enterpriseDataSimulado[label];
+        $scope.datoActual = $scope.dataByMonth[label];
       }
     };
-    $scope.AreaChart = function () {
+    $scope.AreaChart = function (resultData) {
         // Set new default font family and font color to mimic Bootstrap's default styling
 
       function numberFormat (number, decimals, decPoint, thousandsSep) {
@@ -122,11 +50,11 @@
       }
 
     // Area Chart Example
-      var ctx = document.getElementById('myAreaChart');
+    var ctx = document.getElementById('myAreaChart');
       $scope.myLineChart = new Chart(ctx, {
         type: 'line',
         data: {
-          labels: ['Jan', 'Feb', 'Mar', 'Apr'],
+          labels: resultData.monthList,
           datasets: [{
             label: 'Earnings',
             lineTension: 0.3,
@@ -140,7 +68,7 @@
             pointHoverBorderColor: 'rgba(78, 115, 223, 1)',
             pointHitRadius: 10,
             pointBorderWidth: 2,
-            data: [10000, 5000, 15000, 10000]
+            data: resultData.totalList
           }]
         },
         options: {
@@ -217,15 +145,67 @@
       $scope.enterpriseData = $scope.datoActual;
     };
 
+    $scope.filterClients = function () {
+      console.log($scope.Distribuidor);
+      $scope.selectDistribuidor.map(enterprise => {
+        if (Number(enterprise.IdEmpresa) === Number($scope.Distribuidor)) {
+          $scope.selectClientes = enterprise.UF;
+        }
+      });
+      if(!$scope.Distribuidor) $scope.selectClientes = [];
+      $scope.clearTable();
+    };
+
+    $scope.getEnterprises = function () {
+      const data = {
+        "distId": $scope.Distribuidor,
+        "customerId": $scope.Cliente,
+        "subsId": 0, // se simula próximo a desarrollarse
+        "year": 2020
+      };
+      UsoAzureFactory.getEnterprises(data)
+          .success(function (result) {
+            $scope.selectDistribuidor = result;
+          })
+          .error(function (data) {
+            $scope.ShowToast(data.message, 'danger');
+          });
+    };
+
+    $scope.clearTable = function () {
+      document.getElementById("chartContainer").innerHTML = '&nbsp;';
+      document.getElementById("chartContainer").innerHTML = '<canvas id="myAreaChart"  ng-click="actualizeTable()"/>';
+
+      $scope.getDataToChart();
+    };
+
+    $scope.getDataToChart = function () {
+      const data = {
+        "distId": $scope.Distribuidor || 0,
+        "customerId": $scope.Cliente || 0,
+        "subsId": 0, // se simula, proximo a desarrollarse
+        "year": 2020
+      };
+      UsoAzureFactory.getDataChart(data)
+          .success(function (result) {
+            $scope.AreaChart(result);
+            $scope.enterpriseData = result.generalData; // esto es la simulación de lo que debería de recibir del back
+            $scope.dataByMonth = result.dataByMonth;
+          })
+          .error(function (data) {
+            $scope.ShowToast(data.message, 'danger');
+          });
+    };
+
     $scope.init = function () {
       $scope.CheckCookie();
-      $scope.AreaChart();
-      $scope.enterpriseData = $scope.primerDato; // esto es la simulación de lo que debería de recibir del back
+      $scope.getEnterprises();
+      $scope.getDataToChart();
     };
     $scope.init();
   };
 
-  UsoAzureController.$inject = ['$scope', '$sce', '$cookies', '$location', 'EmpresasXEmpresasFactory', '$uibModal', '$filter', 'FabricantesFactory', 'PedidosFactory', 'EmpresasFactory', 'UsuariosFactory'];
+  UsoAzureController.$inject = ['$scope', '$sce', '$cookies', '$location', 'UsoAzureFactory', '$uibModal', '$filter', 'FabricantesFactory', 'PedidosFactory', 'EmpresasFactory', 'UsuariosFactory'];
 
   angular.module('marketplace').controller('UsoAzureController', UsoAzureController);
 }());

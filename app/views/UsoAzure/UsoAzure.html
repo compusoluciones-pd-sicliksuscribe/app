@@ -5,6 +5,32 @@
         <div class="container-fluid">
             <!-- Content Row -->
             <div class="row">
+                <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        <label for="Distribuidor">Distribuidor:</label><br>
+                        <select name="Distribuidor" class="form-control" ng-model="Distribuidor" ng-options="Distribuidor.IdEmpresa as Distribuidor.NombreEmpresa for Distribuidor in selectDistribuidor"
+                            ng-change="filterClients();">
+                            <option ng-selected="true" value="">Todos los distribuidores</option>
+                        </select>
+                        <br>
+                        <label for="uf">Cliente:</label><br>
+                        <select name="uf" class="form-control" ng-model="Cliente" ng-options="Clientes.IdEmpresa as Clientes.NombreEmpresa for Clientes in selectClientes"
+                            ng-change="clearTable();">
+                            <option ng-selected="true" value="">Todos los clientes</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4" >
+                    </div>
+                    <div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2" >
+                        <label for="uf">Año:</label>
+                        <select name="anio" class="form-control" ng-model="anios"
+                            ng-change="BuscarProducto(true);">
+                            <option ng-selected="true" value="2020">2020</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                </div>
                 <!-- Area Chart -->
                 <div class="col-xl-8 col-lg-7">
                     <div class="card shadow mb-4">
@@ -13,14 +39,13 @@
                             <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
                         </div>
                         <!-- Card Body -->
-                        <div class="card-body">
-                            <div class="chart-area"  style="height: 320px !important;">
-                            <canvas id="myAreaChart" ng-click="actualizeTable()"></canvas>
+                        <div class="card-body" ng-click="actualizeTable()">
+                            <div class="chart-area"  style="height: 320px !important;" id = "chartContainer">
+                                <canvas id="myAreaChart"></canvas>
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <!-- Pie Chart -->
                 <div class="row row-cols-2">
                     <div class="col-xl-4 col-lg-5">
@@ -30,7 +55,7 @@
                                 <h6 class="m-0 font-weight-bold text-primary">Projects</h6>
                             </div>
                             <div class="ex1">
-                                <div class="card-body" ng-repeat="emp in enterpriseData track by $index">
+                                <div id = "barras" class="card-body" ng-repeat="emp in enterpriseData">
                                     <h4 class="small font-weight-bold"> {{ emp.name }} <span class="float-right">{{ emp.percent }}%</span></h4>
                                     <div class="progress mb-4">
                                         <div class="progress-bar {{emp.color}}" role="progressbar" style="width:{{emp.percent}}%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
