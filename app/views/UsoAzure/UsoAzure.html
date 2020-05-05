@@ -32,7 +32,7 @@
                 <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 </div>
                 <!-- Area Chart -->
-                <div class="col-xl-8 col-lg-7">
+                <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
                     <div class="card shadow mb-4">
                         <!-- Card Header - Dropdown -->
                         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -47,22 +47,44 @@
                     </div>
                 </div>
                 <!-- Pie Chart -->
-                <div class="row row-cols-2">
-                    <div class="col-xl-4 col-lg-5">
-                        <!-- Project Card Example -->
-                        <div class="card shadow mb-4">
-                            <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">Projects</h6>
-                            </div>
-                            <div class="ex1">
-                                <div id = "barras" class="card-body" ng-repeat="emp in enterpriseData">
-                                    <h4 class="small font-weight-bold"> {{ emp.name }} <span class="float-right">{{ emp.percent }}%</span></h4>
-                                    <div class="progress mb-4">
-                                        <div class="progress-bar {{emp.color}}" role="progressbar" style="width:{{emp.percent}}%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
+                <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" style="margin-top: 20px;">
+                    <!-- Project Card Example -->
+                    <div ng-show = "!Cliente"  class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Projects</h6>
+                        </div>
+                        <div class="ex1">
+                            <div id = "barras" class="card-body" ng-repeat="emp in enterpriseData">
+                                <h4 class="small font-weight-bold"> {{ emp.name }} <span class="float-right">{{ emp.percent }}%</span></h4>
+                                <div class="progress mb-4">
+                                    <div class="progress-bar {{emp.color}}" role="progressbar" style="width:{{emp.percent}}%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div ng-show = "Cliente" class="outer">
+                        <canvas id="chartJSContainer"></canvas>
+                        <canvas id="secondContainer"></canvas>
+                        <p class="percent">
+                            89%
+                        </p>
+                    </div>
+                    <div ng-show = "Cliente" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
+                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+                            <div class=" background-yellow"></div>
+                        </div>
+                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 label-budget">
+                            Budget
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6"></div>
+                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+                            <div class=" background-green"></div>
+                        </div>
+                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 label-budget">
+                            Usado
+                        </div>
+                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 label-budget"></div>
                     </div>
                 </div>
             </div>

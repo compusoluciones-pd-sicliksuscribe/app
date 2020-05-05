@@ -687,5 +687,56 @@ a, a:hover {
       @media screen and (max-width: 576px) {
         .profile-card-form__bottom {
           flex-wrap: wrap; } }
+          
+.percent {
+  position: absolute;
+      left: 50%;
+      transform: translate(-50%, 0);
+      font-size: 80px;
+      bottom: 0;
+      /* margin-bottom: 200px; */
+  }
+  .outer {
+    position: relative;
+    width: 100%;
+    height: 200px;
+  }
+  canvas {
+    position: absolute;
+  }
+
+  .background-yellow {
+    background-color: rgba(255, 164, 46, 1);
+    width: 15px;
+    height: 15px;
+    margin-top: 150px;
+  }
+
+  .background-green {
+    background-color: rgba(46, 204, 113, 1);
+    width: 15px;
+    height: 15px;
+    margin-top: 150px;
+  }
+
+  .label-budget {
+    margin-top: 150px;
+  }
+
+  @media screen and (max-width: 768px) {
+    .percent {
+       margin-bottom: 20px;
+    }
+    .background-yellow {
+      margin-top: 0px;
+    }
+    .background-green {
+      margin-top: 0px;
+    }
+    .label-budget {
+      margin-top: 0px;
+    }
+  }
+  
 
 /*# sourceMappingURL=style.css.map */

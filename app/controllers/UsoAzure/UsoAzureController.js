@@ -140,6 +140,78 @@
         }
       });
     };
+    $scope.budgetCharts = function () {
+      var options1 = {
+        type: 'doughnut',
+        data: {
+          labels: ["Budget"],
+          datasets: [
+          {
+                      label: '# of Votes',
+                      data: [100],
+                      backgroundColor: [
+                          'rgba(255, 164, 46, 1)',
+                      ],
+                      borderColor: [
+                          'rgba(255, 255, 255 ,1)',
+                      ],
+                      borderWidth: 5
+                  }
+          ]
+        },
+        options: {
+        rotation: 1 * Math.PI,
+                  circumference: 1 * Math.PI,
+                  legend: {
+                      display: false
+                  },
+                  tooltip: {
+                      enabled: false
+                  },
+                  cutoutPercentage: 95
+        }
+      }
+      
+      var ctx1 = document.getElementById('chartJSContainer').getContext('2d');
+      new Chart(ctx1, options1);
+      
+      var options2 = {
+        type: 'doughnut',
+        data: {
+        labels: ["", "Orange", ""],
+                  datasets: [
+                    {
+                          data: [85, 1, 15],
+                          backgroundColor: [
+                              "rgba(46, 204, 113, 1)",
+                              "rgba(255,255,255,1)",
+                                "rgba(0,0,0,0)",
+                          ],
+                          borderColor: [
+                          'rgba(0, 0, 0 ,0)',
+                          'rgba(46, 204, 113, 1)',
+                          'rgba(0, 0, 0 ,0)'
+                      ],
+                      borderWidth: 3
+                        
+                      }]
+        },
+        options: {
+          cutoutPercentage: 95,
+          rotation: 1 * Math.PI,
+            circumference: 1 * Math.PI,
+                  legend: {
+                      display: false
+                  },
+                  tooltips: {
+                      enabled: false
+                  }
+        }
+      }
+      
+      var ctx2 = document.getElementById('secondContainer').getContext('2d');
+      new Chart(ctx2, options2);
+    }
 
     $scope.actualizeTable = function () {
       $scope.enterpriseData = $scope.datoActual;
@@ -175,7 +247,7 @@
     $scope.clearTable = function () {
       document.getElementById("chartContainer").innerHTML = '&nbsp;';
       document.getElementById("chartContainer").innerHTML = '<canvas id="myAreaChart"  ng-click="actualizeTable()"/>';
-
+      if ($scope.Cliente) $scope.budgetCharts();
       $scope.getDataToChart();
     };
 
