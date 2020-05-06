@@ -144,13 +144,14 @@
       var options1 = {
         type: 'doughnut',
         data: {
-          labels: ["Budget"],
+          labels: ["Gastado","Pendiente"],
           datasets: [
           {
                       label: '# of Votes',
-                      data: [100],
+                      data: [95,5],
                       backgroundColor: [
-                          'rgba(255, 164, 46, 1)',
+                          'rgba(46, 204, 113, 1)',
+                          'rgba(255, 164, 46, 1)'
                       ],
                       borderColor: [
                           'rgba(255, 255, 255 ,1)',
@@ -160,57 +161,52 @@
           ]
         },
         options: {
-        rotation: 1 * Math.PI,
+                rotation: 1 * Math.PI,
                   circumference: 1 * Math.PI,
-                  legend: {
-                      display: false
-                  },
-                  tooltip: {
-                      enabled: false
-                  },
-                  cutoutPercentage: 95
+              
+                  cutoutPercentage: 85
         }
       }
       
-      var ctx1 = document.getElementById('chartJSContainer').getContext('2d');
+      var ctx1 = document.getElementById('myChart').getContext('2d');
       new Chart(ctx1, options1);
       
-      var options2 = {
-        type: 'doughnut',
-        data: {
-        labels: ["", "Orange", ""],
-                  datasets: [
-                    {
-                          data: [85, 1, 15],
-                          backgroundColor: [
-                              "rgba(46, 204, 113, 1)",
-                              "rgba(255,255,255,1)",
-                                "rgba(0,0,0,0)",
-                          ],
-                          borderColor: [
-                          'rgba(0, 0, 0 ,0)',
-                          'rgba(46, 204, 113, 1)',
-                          'rgba(0, 0, 0 ,0)'
-                      ],
-                      borderWidth: 3
+      // var options2 = {
+      //   type: 'doughnut',
+      //   data: {
+      //   labels: ["", "Orange", ""],
+      //             datasets: [
+      //               {
+      //                     data: [85, 1, 15],
+      //                     backgroundColor: [
+      //                         "rgba(46, 204, 113, 1)",
+      //                         "rgba(255,255,255,1)",
+      //                           "rgba(0,0,0,0)",
+      //                     ],
+      //                     borderColor: [
+      //                     'rgba(0, 0, 0 ,0)',
+      //                     'rgba(46, 204, 113, 1)',
+      //                     'rgba(0, 0, 0 ,0)'
+      //                 ],
+      //                 borderWidth: 3
                         
-                      }]
-        },
-        options: {
-          cutoutPercentage: 95,
-          rotation: 1 * Math.PI,
-            circumference: 1 * Math.PI,
-                  legend: {
-                      display: false
-                  },
-                  tooltips: {
-                      enabled: false
-                  }
-        }
-      }
+      //                 }]
+      //   },
+      //   options: {
+      //     cutoutPercentage: 95,
+      //     rotation: 1 * Math.PI,
+      //       circumference: 1 * Math.PI,
+      //             legend: {
+      //                 display: false
+      //             },
+      //             tooltips: {
+      //                 enabled: false
+      //             }
+      //   }
+      // }
       
-      var ctx2 = document.getElementById('secondContainer').getContext('2d');
-      new Chart(ctx2, options2);
+      // var ctx2 = document.getElementById('secondContainer').getContext('2d');
+      // new Chart(ctx2, options2);
     }
 
     $scope.actualizeTable = function () {
