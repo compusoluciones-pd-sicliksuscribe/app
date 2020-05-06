@@ -36,7 +36,7 @@
                     <div class="card shadow mb-4">
                         <!-- Card Header - Dropdown -->
                         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                            <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Consumo</h6>
                         </div>
                         <!-- Card Body -->
                         <div class="card-body" ng-click="actualizeTable()">
@@ -47,11 +47,12 @@
                     </div>
                 </div>
                 <!-- Pie Chart -->
-                <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" style="margin-top: 20px;">
+                <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
                     <!-- Project Card Example -->
-                    <div ng-show = "!Cliente"  class="card shadow mb-4">
+                    <div ng-show = "!Cliente"  class="card shadow mb-4" style="height: 395px;">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Projects</h6>
+                            <h6 ng-if = "!Distribuidor" class="m-0 font-weight-bold text-primary">Consumo por distribuidor</h6>
+                            <h6 ng-if = "Distribuidor" class="m-0 font-weight-bold text-primary">Consumo por cliente</h6>
                         </div>
                         <div class="ex1">
                             <div id = "barras" class="card-body" ng-repeat="emp in enterpriseData">
@@ -62,50 +63,32 @@
                             </div>
                         </div>
                     </div>
-                    <div ng-show = "Cliente" class="outer">
-                        <canvas id="chartJSContainer"></canvas>
-                        <canvas id="secondContainer"></canvas>
-                        <p class="percent">
-                            89%
-                        </p>
-                    </div>
-                    <div ng-show = "Cliente" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
-                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-                            <div class=" background-yellow"></div>
+                    <div ng-show = "Cliente" class="outer" >
+                        <p class="label-budget">Budget</p>
+                        <div id = "budgetContainer">
+                            <canvas id="budgetChart" style="margin-top: 20px;"></canvas>
                         </div>
-                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 label-budget">
-                            Budget
-                        </div>
-                        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5"></div>
-                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-                            <div class=" background-green"></div>
-                        </div>
-                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 label-budget">
-                            Usado
-                        </div>
-                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 label-budget"></div>
                     </div>
                 </div>
-                <div class="container" ng-swipe-right="" ng-swipe-left="" ng-show="MostrarMensaje">
-                    <div clas="row">
-                      <a href="#/Monitor">Regresar</a>
-                    </div>
+                <div class="container details-table" ng-swipe-right="" ng-swipe-left="" ng-show="MostrarMensaje">
                     <div class="form-group row">
                       <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
                         <h2 style="float:left;">No se encontraron detalles.</h2>
                       </div>
                     </div>
                   </div>
-                <div ng-show="!MostrarMensaje" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-top: 20px;">
+                <div ng-show="!MostrarMensaje && UsageDetails.length > 0" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 details-table">
                     <b>Nota *</b> Esta información es solo un aproximado y puede no ser la mas actual.
                 </div>
-                <div ng-show="!MostrarMensaje" class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div ng-show="!MostrarMensaje && UsageDetails.length > 0" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 details-table">
+                    <p style="font-size: 15px;">Consumo del mes: {{mes}}</p>
+                </div>
+                <div ng-show="!MostrarMensaje && UsageDetails.length > 0" class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <table class="table table-hover table-responsive border-left-right-cero">
                         <th><b>Recurso</b></th>
                         <th><b>Utilizado </b></th>
                         <th><b>Costo estimado </b></th>
-                        <tr ng-repeat="usage in UsageDetails | filter:EmpresaFilter | orderBy:sortBy:reverse" class="repeat-animation">
+                        <tr ng-repeat="usage in UsageDetails" class="repeat-animation">
                           <td class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
                     
                             <div class="form-group">

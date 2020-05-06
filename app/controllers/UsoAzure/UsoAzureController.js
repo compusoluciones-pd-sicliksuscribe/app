@@ -6,7 +6,7 @@
     $scope.Cliente = 0;
     $scope.selectClientes = [];
     $scope.Suscripcion = 0;
-    $scope.MostrarMensaje = true;
+    $scope.MostrarMensaje = false;
 
     function graphClickEvent (evt) {
       var activePoints = $scope.myLineChart.getElementsAtEvent(evt);
@@ -142,77 +142,45 @@
         }
       });
     };
-    $scope.budgetCharts = function () {
+
+    $scope.budgetCharts = function (budget) {
+      let budgetRestante = 0;
+      if (!budget.length) 
+        return $scope.ShowToast('Sin budget asignado', 'danger');
+      const { percentUsed } = budget[0];
+      if (percentUsed > 100) {
+        budgetRestante = 0;
+      } else {
+        budgetRestante = 100 - percentUsed;
+      }
       var options1 = {
         type: 'doughnut',
         data: {
-          labels: ["Budget"],
+          labels: ["Utilizado","Disponible"],
           datasets: [
           {
                       label: '# of Votes',
-                      data: [100],
+                      data: [percentUsed, budgetRestante],
                       backgroundColor: [
-                          'rgba(255, 164, 46, 1)',
+                          'rgba(255, 161, 0, 1)',
+                          'rgba(63, 156, 53, 1)'
                       ],
                       borderColor: [
-                          'rgba(255, 255, 255 ,1)',
+                          'rgba(217, 215, 213, 1)',
                       ],
                       borderWidth: 5
                   }
           ]
         },
         options: {
-        rotation: 1 * Math.PI,
-                  circumference: 1 * Math.PI,
-                  legend: {
-                      display: false
-                  },
-                  tooltip: {
-                      enabled: false
-                  },
-                  cutoutPercentage: 95
-        }
-      }
-      
-      var ctx1 = document.getElementById('chartJSContainer').getContext('2d');
-      new Chart(ctx1, options1);
-      
-      var options2 = {
-        type: 'doughnut',
-        data: {
-        labels: ["", "Orange", ""],
-                  datasets: [
-                    {
-                          data: [85, 1, 15],
-                          backgroundColor: [
-                              "rgba(46, 204, 113, 1)",
-                              "rgba(255,255,255,1)",
-                                "rgba(0,0,0,0)",
-                          ],
-                          borderColor: [
-                          'rgba(0, 0, 0 ,0)',
-                          'rgba(46, 204, 113, 1)',
-                          'rgba(0, 0, 0 ,0)'
-                      ],
-                      borderWidth: 3
-                        
-                      }]
-        },
-        options: {
-          cutoutPercentage: 95,
           rotation: 1 * Math.PI,
-            circumference: 1 * Math.PI,
-                  legend: {
-                      display: false
-                  },
-                  tooltips: {
-                      enabled: false
-                  }
+          circumference: 1 * Math.PI, 
+          cutoutPercentage: 85
         }
       }
       
-      var ctx2 = document.getElementById('secondContainer').getContext('2d');
-      new Chart(ctx2, options2);
+      var ctx1 = document.getElementById('budgetChart').getContext('2d');
+      new Chart(ctx1, options1);
     }
 
     $scope.actualizeTable = function () {
@@ -220,13 +188,14 @@
     };
 
     $scope.filterClients = function () {
-      console.log($scope.Distribuidor);
+      $scope.selectClientes = [];
+      $scope.Cliente = 0;
+      $scope.UsageDetails = [];
       $scope.selectDistribuidor.map(enterprise => {
         if (Number(enterprise.IdEmpresa) === Number($scope.Distribuidor)) {
           $scope.selectClientes = enterprise.UF;
         }
       });
-      if(!$scope.Distribuidor) $scope.selectClientes = [];
       $scope.clearTable();
     };
 
@@ -249,7 +218,10 @@
     $scope.clearTable = function () {
       document.getElementById("chartContainer").innerHTML = '&nbsp;';
       document.getElementById("chartContainer").innerHTML = '<canvas id="myAreaChart"  ng-click="actualizeTable()"/>';
-      if ($scope.Cliente) $scope.budgetCharts();
+      
+      document.getElementById("budgetContainer").innerHTML = '&nbsp;';
+      document.getElementById("budgetContainer").innerHTML = '<canvas id="budgetChart" style="margin-top: 20px;"></canvas>';
+
       $scope.getDataToChart();
     };
 
@@ -265,6 +237,19 @@
             $scope.AreaChart(result);
             $scope.enterpriseData = result.generalData; // esto es la simulación de lo que debería de recibir del back
             $scope.dataByMonth = result.dataByMonth;
+            if ($scope.Cliente) {
+              const monthsName = {
+                1 : 'Enero', 2 : 'Febrero', 3 : 'Marzo', 4 : 'Abril', 5 : 'Mayo', 6 : 'Junio',
+                7 : 'Julio', 8 : 'Agosto', 9 : 'Septiembre', 10 : 'Octubre', 11 : 'Noviembre', 12 : 'Diciembre'
+              };
+              $scope.MostrarMensaje = result.azureDetails.length ? true : false;
+              $scope.UsageDetails = result.azureDetails;
+              $scope.MostrarMensaje = false;
+              var date = new Date();
+              var month = date.getMonth() + 1;
+              $scope.mes = monthsName[month];
+              $scope.budgetCharts(result.budget);
+            }
           })
           .error(function (data) {
             $scope.ShowToast(data.message, 'danger');
@@ -272,6 +257,20 @@
     };
 
     $scope.getAzureDetails = function (month) {
+      const monthsName = {
+        'Ene': 'Enero',
+        'Feb': 'Febrero',
+        'Mar': 'Marzo',
+        'Abr': 'Abril',
+        'May': 'Mayo',
+        'Jun': 'Junio',
+        'Jul': 'Julio',
+        'Ago': 'Agosto',
+        'Sep': 'Septiembre',
+        'Oct': 'Octubre',
+        'Nov': 'Noviembre',
+        'Dic': 'Diciembre'
+      };
       const months = {
         'Ene': 1,
         'Feb': 2,
@@ -301,6 +300,7 @@
             } else {
               $scope.UsageDetails = result;
               $scope.MostrarMensaje = false;
+              $scope.mes = monthsName[month];
             }
           })
           .error(function (data) {

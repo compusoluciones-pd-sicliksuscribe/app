@@ -700,6 +700,7 @@ a, a:hover {
     position: relative;
     width: 100%;
     height: 200px;
+    transform: translate(8%, 0);
   }
   canvas {
     position: absolute;
@@ -709,20 +710,27 @@ a, a:hover {
     background-color: rgba(255, 164, 46, 1);
     width: 15px;
     height: 15px;
-    margin-top: 150px;
+    float:left;
   }
 
   .background-green {
     background-color: rgba(46, 204, 113, 1);
     width: 15px;
     height: 15px;
-    margin-top: 150px;
+    float:left;
+
   }
 
-  .label-budget {
-    margin-top: 150px;
+  .label-budget { 
+    transform: translate(40%, 0);
+    font-size: 25px;
+    margin-top: 10px;
   }
 
+  .details-table {
+    margin-top: 50px;
+  }
+ 
   @media screen and (max-width: 768px) {
     .percent {
        margin-bottom: 20px;
@@ -733,8 +741,8 @@ a, a:hover {
     .background-green {
       margin-top: 0px;
     }
-    .label-budget {
-      margin-top: 0px;
+    .outer {
+    transform: translate(0%, 0);
     }
   }
   

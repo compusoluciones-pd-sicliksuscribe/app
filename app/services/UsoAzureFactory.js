@@ -20,6 +20,11 @@
         factory.refreshToken();
         return $http.post($rootScope.API + 'azure-usage/distributors', chartData);
       };
+  
+      factory.getDetails = function (chartData) {
+        factory.refreshToken();
+        return $http.post($rootScope.API + 'azure-usage/details', chartData);
+      };
 
       return factory;
     };

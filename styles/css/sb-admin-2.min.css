@@ -310,7 +310,7 @@
 	background-color: transparent !important;
   }
   div.ex1 {
-	height: 320px;
+	height: 100%;
 	overflow: auto !important;
   }
   .float-left {
