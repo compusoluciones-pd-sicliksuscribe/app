@@ -6,6 +6,7 @@
     $scope.Cliente = 0;
     $scope.selectClientes = [];
     $scope.Suscripcion = 0;
+    $scope.MostrarMensaje = true;
 
     function graphClickEvent (evt) {
       var activePoints = $scope.myLineChart.getElementsAtEvent(evt);
@@ -20,6 +21,7 @@
         var value = $scope.myLineChart.data.datasets[0].data[clickedElementindex];
         $scope.datoActual = $scope.dataByMonth[label];
       }
+      if ($scope.Cliente) $scope.getAzureDetails(label);
     };
     $scope.AreaChart = function (resultData) {
         // Set new default font family and font color to mimic Bootstrap's default styling
@@ -263,6 +265,43 @@
             $scope.AreaChart(result);
             $scope.enterpriseData = result.generalData; // esto es la simulación de lo que debería de recibir del back
             $scope.dataByMonth = result.dataByMonth;
+          })
+          .error(function (data) {
+            $scope.ShowToast(data.message, 'danger');
+          });
+    };
+
+    $scope.getAzureDetails = function (month) {
+      const months = {
+        'Ene': 1,
+        'Feb': 2,
+        'Mar': 3,
+        'Abr': 4,
+        'May': 5,
+        'Jun': 6,
+        'Jul': 7,
+        'Ago': 8,
+        'Sep': 9,
+        'Oct': 10,
+        'Nov': 11,
+        'Dic': 12
+      };
+      const data = {
+        "distId": $scope.Distribuidor || 0,
+        "customerId": $scope.Cliente || 0,
+        "subsId": 0, // se simula, proximo a desarrollarse
+        "year": 2020,
+        "month": months[month],
+      };
+      UsoAzureFactory.getDetails(data)
+          .success(function (result) {
+            if (result.errorCode) {
+              $scope.UsageDetails = [];
+              $scope.MostrarMensaje = true;
+            } else {
+              $scope.UsageDetails = result;
+              $scope.MostrarMensaje = false;
+            }
           })
           .error(function (data) {
             $scope.ShowToast(data.message, 'danger');

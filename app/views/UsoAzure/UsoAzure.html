@@ -2,7 +2,7 @@
 <div id="content-wrapper" class="d-flex flex-column">
   <!-- Main Content -->
     <div id="content">
-        <div class="container-fluid">
+        <div class="container">
             <!-- Content Row -->
             <div class="row">
                 <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -77,15 +77,58 @@
                         <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 label-budget">
                             Budget
                         </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6"></div>
+                        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5"></div>
                         <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
                             <div class=" background-green"></div>
                         </div>
                         <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 label-budget">
                             Usado
                         </div>
-                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 label-budget"></div>
+                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 label-budget"></div>
                     </div>
+                </div>
+                <div class="container" ng-swipe-right="" ng-swipe-left="" ng-show="MostrarMensaje">
+                    <div clas="row">
+                      <a href="#/Monitor">Regresar</a>
+                    </div>
+                    <div class="form-group row">
+                      <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+                        <h2 style="float:left;">No se encontraron detalles.</h2>
+                      </div>
+                    </div>
+                  </div>
+                <div ng-show="!MostrarMensaje" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-top: 20px;">
+                    <b>Nota *</b> Esta información es solo un aproximado y puede no ser la mas actual.
+                </div>
+                <div ng-show="!MostrarMensaje" class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <table class="table table-hover table-responsive border-left-right-cero">
+                        <th><b>Recurso</b></th>
+                        <th><b>Utilizado </b></th>
+                        <th><b>Costo estimado </b></th>
+                        <tr ng-repeat="usage in UsageDetails | filter:EmpresaFilter | orderBy:sortBy:reverse" class="repeat-animation">
+                          <td class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+                    
+                            <div class="form-group">
+                              <b><h4>{{usage.Categoria}} {{usage.Subcategoria}} {{usage.Nombre}}</h4></b>
+                            </div>
+                    
+                          </td>
+                          <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                    
+                            <div class="form-group">
+                              <b><h5>{{usage.Utilizado}} {{usage.Unidad}}</h5></b>
+                            </div>
+                    
+                          </td>
+                          <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                    
+                            <div class="form-group">
+                              <b><h5>{{usage.Total | currency}} Dólares</h5></b>
+                            </div>
+                    
+                          </td>
+                        </tr>
+                      </table>
                 </div>
             </div>
         </div>
