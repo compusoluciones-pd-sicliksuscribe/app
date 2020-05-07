@@ -272,6 +272,11 @@
       return $http.get($rootScope.API + 'orders/prorateAnnual/fechaInicio/' + FechaInicio + '/precio/' + PrecioNormal);
     };
 
+    factory.getMPIDInformation = function (MPNID) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'microsoft/validateMPNID/' + MPNID);
+    };
+
     return factory;
   };
 
