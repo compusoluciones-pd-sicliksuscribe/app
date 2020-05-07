@@ -9,9 +9,8 @@
 
     $scope.init = function () {
       let empresaActual = '';
-      if (Session.IdTipoAcceso === 1) empresaActual = { NombreEmpresa: 'CompuSoluciones', IdEmpresa: 1 };
+      if (Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 8) empresaActual = { NombreEmpresa: 'CompuSoluciones', IdEmpresa: 1 };
       if (Session.IdTipoAcceso === 2) empresaActual = { NombreEmpresa: Session.NombreEmpresa, IdEmpresa: Session.IdEmpresa };
-      if (Session.IdTipoAcceso === 8) empresaActual = { NombreEmpresa: 'CompusolucionesLectura', IdEmpresa: 8 };
       $scope.CheckCookie();
       if (Session.IdTipoAcceso !== 2) {
         EmpresasFactory.getEmpresas()
