@@ -33,7 +33,7 @@
 
     factory.importarPedido = function (infoPedido) {
       factory.refreshToken();
-      return $http.post($rootScope.API + 'autodesk/importar-pedido', infoPedido);
+      return $http.post($rootScope.API + 'autodesk/orders/import', infoPedido);
     };
 
     return factory;

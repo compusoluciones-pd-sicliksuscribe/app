@@ -26,7 +26,7 @@
           $scope.esquemasLista = result.data;
         })
         .catch(function () {
-          $scope.ShowToast('No pudimos cargar la lista de esquema de renovación, por favor intenta de nuevo más tarde.', 'danger');
+          $scope.ShowToast('No pudimos cargar la lista de esquemas de renovación, por favor intenta de nuevo más tarde.', 'danger');
         });
     };
 
@@ -49,17 +49,17 @@
           if ($scope.sku[index] !== '') detalle.SKU = $scope.sku[index];
           else {
             camposCompletos = false;
-            $scope.ShowToast('Campo SKU vacio.', 'danger');
+            $scope.ShowToast('Campo SKU vacío.', 'danger');
           }
           if ($scope.cantidad[index]) detalle.Cantidad = $scope.cantidad[index];
           else {
             camposCompletos = false;
-            $scope.ShowToast('Campo cantidad vacio.', 'danger');
+            $scope.ShowToast('Campo cantidad vacío.', 'danger');
           }
           if ($scope.cantidadProx[index]) detalle.CantidadProx = $scope.cantidadProx[index];
           else {
             camposCompletos = false;
-            $scope.ShowToast('Campo cantidad proxima vacio.', 'danger');
+            $scope.ShowToast('Campo cantidad próxima vacío.', 'danger');
           }
           detalles.push(detalle);
         }
@@ -200,10 +200,10 @@
       if (contador > 1) esUtilizado = true;
       if (!skuValido) {
         $scope.estadoSKU[textbox] = {color: 'rgb(230, 6, 6)'};
-        $scope.ShowToast('SKU no valido. Revisalo e intenta de nuevo.', 'danger');
+        $scope.ShowToast('SKU no válido. Revísalo e intenta de nuevo.', 'danger');
       } else if (esUtilizado) {
         $scope.estadoSKU[textbox] = {color: 'rgb(230, 6, 6)'};
-        $scope.ShowToast('El SKU ya esta siendo utilizado, no puede ser registrado mas de una vez.', 'danger');
+        $scope.ShowToast('El SKU ya está siendo utilizado, no puede ser registrado más de una vez.', 'danger');
       } else {
         $scope.estadoSKU[textbox] = {color: 'rgb(5, 192, 86)'};
       }
