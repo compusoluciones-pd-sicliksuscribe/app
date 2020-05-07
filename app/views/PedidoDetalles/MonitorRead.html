@@ -185,7 +185,7 @@
 
 							<div ng-if="detalles.IdTipoProducto !== 3">
 								<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
-									<label>{{ pedido.IdFabricante === 5 ? "Empleados" : "Suscripciones" }}: </label>
+									<label>{{ pedido.IdFabricante === 5 ? "Empleados" : pedido.IdFabricante === 11 ? "Créditos" :"Suscripciones" }}: </label>
 									<br>
 									<div style="margin:0; padding:0;" ng-show="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3) && !pedido.CargoRealizadoProximoPedido && !detalles.PedidoAFabricante"> {{ detalles.Cantidad }} </div> 
 									<a ng-click="ActualizarCantidad(detalles.IdPedidoDetalle)" style="text-decoration: none" 
@@ -193,7 +193,7 @@
 										<span class="glyphicon glyphicon-triangle-bottom" ng-hide="detalles.MostrarCantidad || detalles.IdProducto === 3616"></span>
 										<span class="glyphicon glyphicon-triangle-top" ng-show="detalles.MostrarCantidad"></span>
 									</a>
-									<div style="margin:0; padding:0;" ng-show="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)"> 
+									<div style="margin:0; padding:0;" ng-show="((SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3) && pedido.IdFabricante !== 11)"> 
 										<br> <label> Renovación: </label> <br>
 										<div ng-if="!detalles.PorCancelar || (detalles.Activo && pedido.IdFabricante === 1)"> {{  detalles.IdProducto === 3616 ? 25 : detalles.CantidadProxima  }} </div>
 										<div ng-if="!detalles.Activo || detalles.PorCancelar"> No renovar </div>
@@ -259,7 +259,7 @@
 							</div>
 
 							<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2" >
-								<button class="btn btn-danger" ng-show="detalles.Activo" ng-click="Confirmar(detalles.IdPedidoDetalle)"
+								<button class="btn btn-danger" ng-show="detalles.Activo && pedido.IdFabricante !== 11" ng-click="Confirmar(detalles.IdPedidoDetalle)"
 									ng-disabled="pedido.CargoRealizadoProximoPedido || (!detalles.PedidoAFabricante || detalles.EstatusFabricante === 'FAILED')">
 									CANCELAR
 								</button>
@@ -421,7 +421,7 @@
 						</ul>
 					</div>
 
-					<div ng-if="detalles.IdTipoProducto !== 3 && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3) "
+					<div ng-if="(detalles.IdTipoProducto !== 3 && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)"
 				    	 ng-hide="pedido.EstatusContrato === 'canceled' || pedido.EstatusContrato === 'notRenewed'">
 						<div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
 							<label>Suscripciones: </label> <br>
