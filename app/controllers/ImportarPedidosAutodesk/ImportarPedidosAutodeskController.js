@@ -49,17 +49,17 @@
           if ($scope.sku[index] !== '') detalle.SKU = $scope.sku[index];
           else {
             camposCompletos = false;
-            $scope.ShowToast('Campo SKU vacío.', 'danger');
+            $scope.ShowToast('Campo SKU, vacío.', 'danger');
           }
           if ($scope.cantidad[index]) detalle.Cantidad = $scope.cantidad[index];
           else {
             camposCompletos = false;
-            $scope.ShowToast('Campo cantidad vacío.', 'danger');
+            $scope.ShowToast('Campo cantidad, vacío.', 'danger');
           }
           if ($scope.cantidadProx[index]) detalle.CantidadProx = $scope.cantidadProx[index];
           else {
             camposCompletos = false;
-            $scope.ShowToast('Campo cantidad próxima vacío.', 'danger');
+            $scope.ShowToast('Campo cantidad próxima, vacío.', 'danger');
           }
           detalles.push(detalle);
         }
@@ -209,6 +209,21 @@
       }
     };
 
+    $scope.validarEntrada = function (campo, valor) {
+      const teclaPresionada = String.fromCharCode(event.keyCode);
+      const teclaPresionadaEsUnNumero = Number.isInteger(parseInt(teclaPresionada));
+      let cadena = '';
+      let esTeclaNoAdmitida;
+      if (campo === 'contrato') esTeclaNoAdmitida = !teclaPresionadaEsUnNumero;
+      else {
+        if (!valor) valor = '';
+        teclaPresionada !== '.' ? cadena = valor.concat(teclaPresionada) : cadena = valor;
+        esTeclaNoAdmitida = teclaPresionada !== '.' && !teclaPresionadaEsUnNumero;
+        if (cadena.indexOf('.') >= 0 && teclaPresionada === '.') esTeclaNoAdmitida = true;
+      }
+      if (esTeclaNoAdmitida) event.preventDefault();
+    };
+
     $scope.conjuntarInformacion = function () {
       const infoPedido = {
         IdEmpresaDistribuidor: $scope.distribuidorSeleccionado.IdEmpresa,
@@ -221,13 +236,14 @@
         IdFormaPago: $scope.formaPago,
         MonedaPago: $scope.monedaPago,
         IdEsquemaRenovacion: $scope.esquema.IdEsquemaRenovacion,
-        TipoCambio: $scope.tipoCambio,
+        TipoCambio: parseFloat($scope.tipoCambio),
         Detalles: conjuntarDetalles()
       };
       if ($scope.formularioCompleto) {
         ImportarPedidosAutodeskFactory.importarPedido(infoPedido);
       }
     };
+
   };
 
   ImportarPedidosAutodeskController.$inject =

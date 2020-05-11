@@ -28,20 +28,20 @@
         <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
             <label>Distribuidor</label>
             <input type = "text" name = "distribuidor" placeholder="Escribe el nombre del distribuidor" class="form-control" ng-model="distribuidor" ng-keyup="completarDist(distribuidor)" required/>
-            <ul class="list-group" ng-model = "ocultarOpcionesDist" ng-hide = "ocultarOpcionesDist" style="position:absolute; z-index: 1;">
+            <ul class="list-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-model = "ocultarOpcionesDist" ng-hide = "ocultarOpcionesDist" style="position:absolute; z-index: 1; padding-right:2em;">
             <li style="background-color: white;" class="list-group-item" ng-repeat = "infoDist in filtroDistribuidor track by $index" ng-click = "llenarTextBoxDist(infoDist)">{{infoDist}}</li>
             </ul>
         </div>
         <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
             <label>Usuario final</label>
             <input type = "text" name = "usuarioF" placeholder="Escribe el nombre del usuario final" class="form-control" ng-model="usuarioF" ng-keyup="completarUF(usuarioF)" required/>
-            <ul class="list-group" ng-model = "ocultarOpcionesUF" ng-hide = "ocultarOpcionesUF" style="position:absolute; z-index: 1;">
+            <ul class="list-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-model = "ocultarOpcionesUF" ng-hide = "ocultarOpcionesUF" style="position:absolute; z-index: 1;padding-right:2em;">
             <li style="background-color: white;" class="list-group-item" ng-repeat = "infoUF in filtroUsuarioFinal track by $index" ng-click = "llenarTextBoxUF(infoUF)">{{infoUF}}</li>
             </ul>
         </div>
         <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
             <label>Número de contrato</label>
-            <Input type="number" maxlength="12" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" name="contrato" class="form-control" ng-model="contrato" required>
+            <Input type="number" maxlength="12" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" name="contrato" class="form-control" ng-model="contrato" ng-keypress="validarEntrada('contrato', contrato)" required>
         </div>
         <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
             <label>Contacto</label>
@@ -81,7 +81,7 @@
         </div>
         <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
             <label>Tipo de cambio</label>
-            <Input name="tipoCambio" type="number" step="0.01" class="form-control" ng-model="tipoCambio" required>
+            <Input name="tipoCambio" maxlength="8" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" class="form-control" ng-model="tipoCambio" ng-keypress="validarEntrada('tipoCambio', tipoCambio)" required>
         </div>
 
     </div>
