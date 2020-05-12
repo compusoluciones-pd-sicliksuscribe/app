@@ -1,4 +1,6 @@
 <link href="../../../styles/css/sb-admin-2.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.22/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
 <div id="content-wrapper" class="d-flex flex-column">
   <!-- Main Content -->
     <div id="content">
@@ -7,17 +9,30 @@
             <div class="row">
                 <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                        <label for="Distribuidor">Distribuidor:</label><br>
-                        <select name="Distribuidor" class="form-control" ng-model="Distribuidor" ng-options="Distribuidor.IdEmpresa as Distribuidor.NombreEmpresa for Distribuidor in selectDistribuidor"
-                            ng-change="filterClients();">
-                            <option ng-selected="true" value="">Todos los distribuidores</option>
-                        </select>
+                        <input type="button" name="Hola" value="Descargar" ng-click = "pdf()">
+                        <div ng-show = "!esDist">
+                            <label for="Distribuidor">Distribuidor:</label><br>
+                            <select name="Distribuidor" class="form-control" ng-model="Distribuidor" ng-options="Distribuidor.IdEmpresa as Distribuidor.NombreEmpresa for Distribuidor in selectDistribuidor"
+                                ng-change="filterClients();">
+                                <option ng-selected="true" value="">Todos los distribuidores</option>
+                            </select>
+                        </div>
                         <br>
-                        <label for="uf">Cliente:</label><br>
-                        <select name="uf" class="form-control" ng-model="Cliente" ng-options="Clientes.IdEmpresa as Clientes.NombreEmpresa for Clientes in selectClientes"
-                            ng-change="clearTable();">
-                            <option ng-selected="true" value="">Todos los clientes</option>
-                        </select>
+                        <div>
+                            <label for="uf">Cliente:</label><br>
+                            <select name="uf" class="form-control" ng-model="Cliente" ng-options="Clientes.IdEmpresa as Clientes.NombreEmpresa for Clientes in selectClientes"
+                                ng-change="clearTable();">
+                                <option ng-selected="true" value="">Todos los clientes</option>
+                            </select>
+                        </div>
+                        
+                        <div ng-show = "consoles">
+                            <label for="uf">Consolas:</label><br>
+                            <select name="uf" class="form-control" ng-model="Console" ng-options="Consoles.IdSuscripcion as Consoles.NombreConsola for Consoles in totalConsoles"
+                                ng-change="clearTable();">
+                                <option ng-selected="true" value="">Todas las consolas</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4" >
                     </div>
@@ -30,6 +45,16 @@
                     </div>
                 </div>
                 <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                </div>
+                <div ng-show = "!esDist" class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <ul class="nav nav-pills nav-fill">
+                        <li class="nav-item">
+                          <a class="nav-link active" ng-click = "changeAzure('global')">Azure Global</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" ng-click = "changeAzure('plan')">Azure Plan</a>
+                        </li>
+                    </ul>
                 </div>
                 <!-- Area Chart -->
                 <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
@@ -83,7 +108,7 @@
                 <div ng-show="!MostrarMensaje && UsageDetails.length > 0" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 details-table">
                     <p style="font-size: 15px;">Consumo del mes: {{mes}}</p>
                 </div>
-                <div ng-show="!MostrarMensaje && UsageDetails.length > 0" class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div ng-show="!MostrarMensaje && UsageDetails.length > 0 && azureActual === 'global'" class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <table class="table table-hover table-responsive border-left-right-cero">
                         <th><b>Recurso</b></th>
                         <th><b>Utilizado </b></th>
@@ -100,6 +125,44 @@
                     
                             <div class="form-group">
                               <b><h5>{{usage.Utilizado}} {{usage.Unidad}}</h5></b>
+                            </div>
+                    
+                          </td>
+                          <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                    
+                            <div class="form-group">
+                              <b><h5>{{usage.Total | currency}} Dólares</h5></b>
+                            </div>
+                    
+                          </td>
+                        </tr>
+                      </table>
+                </div>
+                <div ng-show="!MostrarMensaje && UsageDetails.length > 0 && azureActual === 'plan'" class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <table class="table table-hover table-responsive border-left-right-cero">
+                        <th><b>Recurso</b></th>
+                        <th><b>Entitlement </b></th>
+                        <th><b>Grupo </b></th>
+                        <th><b>Costo estimado </b></th>
+                        <tr ng-repeat="usage in UsageDetails" class="repeat-animation">
+                          <td class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+                    
+                            <div class="form-group">
+                              <b><h4>{{usage.resourceName}} {{usage.resourceType}}</h4></b>
+                            </div>
+                    
+                          </td>
+                          <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                    
+                            <div class="form-group">
+                              <b><h5>{{usage.entitlementName}}</h5></b>
+                            </div>
+                    
+                          </td>
+                          <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                    
+                            <div class="form-group">
+                                <b><h4>{{usage.resourceGroupName}} {{usage.name}}</h4></b>
                             </div>
                     
                           </td>

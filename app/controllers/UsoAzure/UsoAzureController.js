@@ -3,10 +3,16 @@
     $scope.datoActual = '';
     $scope.dataByMonth = '';
     $scope.Distribuidor = 0;
+    $scope.Console = 0;
     $scope.Cliente = 0;
     $scope.selectClientes = [];
     $scope.Suscripcion = 0;
     $scope.MostrarMensaje = false;
+    $scope.esDist = 0;
+    $scope.totalConsoles = [];
+    $scope.consoles = false;
+    $scope.UnicoCliente = 0;
+    $scope.azureActual = 'global';
 
     function graphClickEvent (evt) {
       var activePoints = $scope.myLineChart.getElementsAtEvent(evt);
@@ -193,26 +199,52 @@
       $scope.UsageDetails = [];
       $scope.selectDistribuidor.map(enterprise => {
         if (Number(enterprise.IdEmpresa) === Number($scope.Distribuidor)) {
+          if (enterprise.UF.length === 1) {
+            $scope.UnicoCliente = 1;
+          }
           $scope.selectClientes = enterprise.UF;
+          if ($scope.UnicoCliente) 
+            $scope.Cliente = enterprise.UF[0].IdEmpresa;
         }
       });
       $scope.clearTable();
     };
 
+    const getParams = () => ({
+      "distId": $scope.Distribuidor,
+      "customerId": $scope.Cliente,
+      "subsId": $scope.Console || 0,
+      "year": 2020
+    });
+
+    const enterprisesResult = result => {
+      $scope.selectDistribuidor = result;
+      if ($scope.esDist) {
+        $scope.filterClients();
+      } else {
+        $scope.clearTable();
+      }
+    }
+
     $scope.getEnterprises = function () {
-      const data = {
-        "distId": $scope.Distribuidor,
-        "customerId": $scope.Cliente,
-        "subsId": 0, // se simula próximo a desarrollarse
-        "year": 2020
-      };
-      UsoAzureFactory.getEnterprises(data)
-          .success(function (result) {
-            $scope.selectDistribuidor = result;
-          })
-          .error(function (data) {
-            $scope.ShowToast(data.message, 'danger');
-          });
+      const data = getParams();
+      if ($scope.azureActual === 'global') {
+        UsoAzureFactory.getEnterprises(data)
+            .success(function (result) {
+              enterprisesResult(result);
+            })
+            .error(function (data) {
+              $scope.ShowToast(data.message, 'danger');
+            });
+      } else {
+        UsoAzureFactory.getEnterprisesPlan(data)
+            .success(function (result) {
+              enterprisesResult(result);
+            })
+            .error(function (data) {
+              $scope.ShowToast(data.message, 'danger');
+            });
+      }
     };
 
     $scope.clearTable = function () {
@@ -225,74 +257,88 @@
       $scope.getDataToChart();
     };
 
+    const dataChartResult = result => {
+      $scope.AreaChart(result);
+      $scope.enterpriseData = result.generalData;
+      $scope.dataByMonth = result.dataByMonth;
+      if ($scope.Cliente) {
+        const monthsName = {
+          1 : 'Enero', 2 : 'Febrero', 3 : 'Marzo', 4 : 'Abril', 5 : 'Mayo', 6 : 'Junio',
+          7 : 'Julio', 8 : 'Agosto', 9 : 'Septiembre', 10 : 'Octubre', 11 : 'Noviembre', 12 : 'Diciembre'
+        };
+        $scope.MostrarMensaje = result.azureDetails.length ? true : false;
+        $scope.UsageDetails = result.azureDetails;
+        $scope.MostrarMensaje = false;
+        var date = new Date();
+        var month = date.getMonth() + 1;
+        $scope.mes = monthsName[month];
+        if (result.consoles.length > 1) {
+          $scope.consoles = true;
+          $scope.totalConsoles = result.consoles;
+        } else {
+          $scope.consoles = false;
+          $scope.totalConsoles = [];
+        }
+        $scope.budgetCharts(result.budget);
+      }
+    }
+
     $scope.getDataToChart = function () {
-      const data = {
-        "distId": $scope.Distribuidor || 0,
-        "customerId": $scope.Cliente || 0,
-        "subsId": 0, // se simula, proximo a desarrollarse
-        "year": 2020
-      };
-      UsoAzureFactory.getDataChart(data)
-          .success(function (result) {
-            $scope.AreaChart(result);
-            $scope.enterpriseData = result.generalData; // esto es la simulación de lo que debería de recibir del back
-            $scope.dataByMonth = result.dataByMonth;
-            if ($scope.Cliente) {
-              const monthsName = {
-                1 : 'Enero', 2 : 'Febrero', 3 : 'Marzo', 4 : 'Abril', 5 : 'Mayo', 6 : 'Junio',
-                7 : 'Julio', 8 : 'Agosto', 9 : 'Septiembre', 10 : 'Octubre', 11 : 'Noviembre', 12 : 'Diciembre'
+      const data = getParams();
+      if ($scope.azureActual === 'global') {
+        UsoAzureFactory.getDataChart(data)
+            .success(function (result) {
+              dataChartResult(result);
+            })
+            .error(function (data) {
+              $scope.ShowToast(data.message, 'danger');
+            });
+      } else {
+        UsoAzureFactory.getDataChartPlan(data)
+            .success(function (result) {
+              dataChartResult(result);
+            })
+            .error(function (data) {
+              $scope.ShowToast(data.message, 'danger');
+            });
+      }
+    };
+  
+    $scope.pdf = function () {
+      html2canvas(document.getElementById('MarketPlaceBody'), {
+          logging: true, letterRendering: 1, allowTaint: false, useCORS: false,
+          onrendered: function (canvas) {
+              var data = canvas.toDataURL();
+              var docDefinition = {
+                  content: [{
+                      image: data,
+                      width: 500,
+                  }]
               };
-              $scope.MostrarMensaje = result.azureDetails.length ? true : false;
-              $scope.UsageDetails = result.azureDetails;
-              $scope.MostrarMensaje = false;
-              var date = new Date();
-              var month = date.getMonth() + 1;
-              $scope.mes = monthsName[month];
-              $scope.budgetCharts(result.budget);
-            }
-          })
-          .error(function (data) {
-            $scope.ShowToast(data.message, 'danger');
-          });
+              pdfMake.createPdf(docDefinition).download("test.pdf");
+          }
+      });
     };
 
     $scope.getAzureDetails = function (month) {
       const monthsName = {
-        'Ene': 'Enero',
-        'Feb': 'Febrero',
-        'Mar': 'Marzo',
-        'Abr': 'Abril',
-        'May': 'Mayo',
-        'Jun': 'Junio',
-        'Jul': 'Julio',
-        'Ago': 'Agosto',
-        'Sep': 'Septiembre',
-        'Oct': 'Octubre',
-        'Nov': 'Noviembre',
+        'Ene': 'Enero', 'Feb': 'Febrero', 'Mar': 'Marzo', 'Abr': 'Abril', 'May': 'Mayo', 'Jun': 'Junio',
+        'Jul': 'Julio', 'Ago': 'Agosto', 'Sep': 'Septiembre', 'Oct': 'Octubre', 'Nov': 'Noviembre',
         'Dic': 'Diciembre'
       };
       const months = {
-        'Ene': 1,
-        'Feb': 2,
-        'Mar': 3,
-        'Abr': 4,
-        'May': 5,
-        'Jun': 6,
-        'Jul': 7,
-        'Ago': 8,
-        'Sep': 9,
-        'Oct': 10,
-        'Nov': 11,
-        'Dic': 12
+        'Ene': 1, 'Feb': 2, 'Mar': 3, 'Abr': 4, 'May': 5, 'Jun': 6,
+        'Jul': 7, 'Ago': 8, 'Sep': 9, 'Oct': 10, 'Nov': 11, 'Dic': 12
       };
       const data = {
         "distId": $scope.Distribuidor || 0,
         "customerId": $scope.Cliente || 0,
-        "subsId": 0, // se simula, proximo a desarrollarse
+        "subsId": $scope.Console || 0, // se simula, proximo a desarrollarse
         "year": 2020,
         "month": months[month],
       };
-      UsoAzureFactory.getDetails(data)
+      if ($scope.azureActual === 'global') {
+        UsoAzureFactory.getDetails(data)
           .success(function (result) {
             if (result.errorCode) {
               $scope.UsageDetails = [];
@@ -306,12 +352,42 @@
           .error(function (data) {
             $scope.ShowToast(data.message, 'danger');
           });
+        } else {
+          UsoAzureFactory.getDetailsPlan(data)
+          .success(function (result) {
+            if (result.errorCode) {
+              $scope.UsageDetails = [];
+              $scope.MostrarMensaje = true;
+            } else {
+              $scope.UsageDetails = result;
+              $scope.MostrarMensaje = false;
+              $scope.mes = monthsName[month];
+            }
+          })
+          .error(function (data) {
+            $scope.ShowToast(data.message, 'danger');
+          });
+        }
+    };
+
+    $scope.changeAzure = function (azure) {
+      $scope.azureActual = azure;
+      $scope.Cliente = 0;
+      $scope.Distribuidor = 0;
+      $scope.Console = 0;
+      $scope.UsageDetails = [];
+      $scope.consoles = false;
+      $scope.getEnterprises();
     };
 
     $scope.init = function () {
       $scope.CheckCookie();
+      $scope.currentDistribuidor = $cookies.getObject('Session');
+      $scope.esDist = $scope.currentDistribuidor.IdEmpresa;
+      if ($scope.currentDistribuidor.IdEmpresa) {
+        $scope.Distribuidor = $scope.currentDistribuidor.IdEmpresa;
+      }
       $scope.getEnterprises();
-      $scope.getDataToChart();
     };
     $scope.init();
   };
