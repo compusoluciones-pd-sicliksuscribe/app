@@ -25,16 +25,21 @@
     };
 
     $scope.init = function () {
+      const MICROSOFT = 1;
       if ($scope.currentPath === '/SuccessOrder') {
         $scope.CheckCookie();
-        $scope.MPNID = $scope.orderIdsCookie[0].IdMicrosoftDist;
-        PedidoDetallesFactory.getMPIDInformation(parseInt($scope.MPNID))
-        .success(function (response) {
-          response.data.status === 'active' ? $scope.isMPNIDActive = true : $scope.isMPNIDActive = false;
-          if (!$scope.isMPNIDActive) $scope.abrirModal('isValidMPNIDModal');
-        })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        $scope.orderIdsCookie.forEach(elemento => {
+          if (elemento.IdFabricante === MICROSOFT) {
+            $scope.MPNID = elemento.IdMicrosoftDist;
+            PedidoDetallesFactory.getMPIDInformation(parseInt($scope.MPNID))
+            .success(function (response) {
+              response.data.status === 'active' ? $scope.isMPNIDActive = true : $scope.isMPNIDActive = false;
+              if (!$scope.isMPNIDActive) $scope.abrirModal('isValidMPNIDModal');
+            })
+            .error(function (data, status, headers, config) {
+              $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+            });
+          }
         });
       }
     };
