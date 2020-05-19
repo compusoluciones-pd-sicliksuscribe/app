@@ -29,7 +29,7 @@
 	<div class="form-group row">
 		<div class="col-xs-12 col-sm-5 col-md-4 col-lg-3" style="float:right">
 			<div class="col-xs-12 col-sm-3 col-md-3 col-lg-2 ">
-				<label class="labelMes" for="firsDate">Fecha: </label>
+				<label class="labelMonth" for="firsDate">Fecha: </label>
 			</div>
 			<div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
 				<input class="form-control" type="month" name="firstDate" ng-model="firstDate" min="2018-11" ng-value="afterDate"
@@ -106,7 +106,7 @@
 								{{Periodo.aggregatorPONumber}}
 							</div>
 							<div ng-show="!Periodo.aggregatorPONumber && Periodo.collectionStatus === '3'">
-								<button type="button" data-toggle="modal" data-target="#monedaPagoModal" class="btn btn-primary btnEnviar" ng-click="generarObjPONumber(header.contractNumber);">Generar</button>
+								<button type="button" data-toggle="modal" data-target="#monedaPagoModal" class="btn btn-primary btnSend" ng-click="generarObjPONumber(header.contractNumber);">Generar</button>
 							</div>
 						</div>
 					</div>

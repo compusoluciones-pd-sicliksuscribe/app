@@ -36,24 +36,24 @@ body
 
 /*colors classes*/
 
-.principalBlue{
+.principalBlueColor{
     background:$blue;
 }
 
-.skyblue{
-    background:$skyBlue;
+.skyBlueColor{
+    background:$skyBlueColor;
 }
 
-.kingBlue{
+.kingBlueColor{
     background:#012b50;
 }
 
-.otherBlue{
+.blueColor{
     background:#3bbcc4;
 
 }
 
-.softBlue{
+.softBlueColor{
  background:#e5e5e5;
  /*background:#A1CFFD;*/ 
 }
@@ -63,7 +63,7 @@ body
 
 }
 
-.specialBlue{
+.specialBlueColor{
     background:#4b7bab;
 }
 
@@ -84,7 +84,7 @@ body
     color:#fff;
 }
 
-.gris{
+.grayColor{
     background:#4c4c4c;
 }
 
@@ -159,7 +159,7 @@ header.smaller img{
 }
 
 
-.AutocadProducts{
+.autocadProducts{
     height:400px;
     background: transparent;
     margin-top:-160px;
@@ -181,13 +181,13 @@ header.smaller img{
     }
 }
 
-.distintivo{
+.distinctive{
     margin-top:10px;
     margin-left:10px;
     position:absolute;
     
 }
-.distintivo img{
+.distinctive img{
     max-width: 130px;
 }
 
@@ -329,7 +329,7 @@ option{
     padding-left:5px;
 }
 
-.gris .text{
+.grayColor .text{
     text-overflow: ellipsis; /* will make [...] at the end */
     width: 82px; /* change to your preferences */
     white-space: nowrap; /* paragraph to one line */
@@ -344,13 +344,13 @@ option{
     }
 }
 
-.gris{
+.grayColor{
     .text:hover{
         text-decoration: underline; 
     }
 }
 
-.gris{
+.grayColor{
         .glyphicon{
             float:left;
         }
@@ -404,7 +404,7 @@ option{
 .helpStart {
 
 &:hover{
-    background: $skyBlue;
+    background: $skyBlueColor;
 }
 
 }
@@ -562,7 +562,7 @@ option{
 
 @media screen and (max-width: 1150px) {
     
-        .distintivo{
+        .distinctive{
         display:none !important;
     }
     
@@ -601,7 +601,7 @@ option{
         height:auto;
     }
     
-    .AutocadProducts{
+    .autocadProducts{
         height:auto;
         
         .productOne{
@@ -672,7 +672,7 @@ option{
             
 // div loading/cargando
 
-.divCargando {
+.divLoading {
         
             display:table;
             position: fixed;
