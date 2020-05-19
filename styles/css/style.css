@@ -183,7 +183,7 @@ option {
 }
 
 .grayColor {
-  background: red;
+  background: #4c4c4c;
 }
 
 .grayColor .text:hover {
