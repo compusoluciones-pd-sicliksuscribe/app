@@ -16,7 +16,8 @@
       AUTODESK: 2,
       COMPUSOLUCIONES: 3,
       HP: 4,
-      APERIO: 5
+      APERIO: 5,
+      IBM: 11
     };
     $scope.tipoMonedaCambio = $cookies.getObject('compararPedidosAnteriores');
 
@@ -66,6 +67,9 @@
           break;
         case makers.COMPUCAMPO:
           maker = 'Compucampo';
+          break;
+        case makers.IBM:
+          maker = 'IBM';
           break;
         default:
           maker = null;
