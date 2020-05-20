@@ -17,7 +17,8 @@
       COMPUSOLUCIONES: 3,
       HP: 4,
       APERIO: 5,
-      COMPUCAMPO: 8
+      COMPUCAMPO: 8,
+      IBM: 11
     };
 
     const error = function (error) {
@@ -78,6 +79,9 @@
           break;
         case makers.COMPUCAMPO:
           maker = 'Compucampo';
+          break;
+        case makers.IBM:
+          maker = 'IBM';
           break;
         default:
           maker = null;
