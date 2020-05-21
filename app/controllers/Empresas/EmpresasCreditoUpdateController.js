@@ -47,7 +47,37 @@
     $scope.EmpresaCancel = function () {
       $location.path("/Empresas");
     };
+
+    //BUDGET
+
+    $scope.EmpresaUpdateBudget = function () {
+      var Empresa =
+        {
+          IdEmpresa: $scope.Empresa.IdEmpresa,
+          Cliente: $scope.Empresa.IdERP,
+          Anticipo: $scope.Empresa.Anticipo,
+          TipoAnticipo: $scope.Empresa.TipoAnticipo
+        };
+
+      console.log("Empresa");
+      console.log(Empresa);
+
+      // EmpresasFactory.putEmpresa(Empresa)
+      //   .success(function (result) {
+      //     if (result.success === 1) {
+      //       $scope.ShowToast(result.message, 'success');
+      //       $location.path("/Empresas");
+      //     } else {
+      //       $scope.ShowToast(result.message, 'danger');
+      //     }
+      //   })
+      //   .error(function (data, status, headers, config) {
+      //     $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+      //   });
+    };
   };
+
+  
 
   EmpresasCreditoUpdateController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'EmpresasFactory'];
 
