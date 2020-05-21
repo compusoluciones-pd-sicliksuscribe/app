@@ -26,6 +26,7 @@
     // get value by index
         var value = $scope.myLineChart.data.datasets[0].data[clickedElementindex];
         $scope.datoActual = $scope.dataByMonth[label];
+        $scope.monthsToShow = label;
       }
       if ($scope.Cliente) $scope.getAzureDetails(label);
     };
@@ -211,8 +212,8 @@
     };
 
     const getParams = () => ({
-      "distId": $scope.Distribuidor,
-      "customerId": $scope.Cliente,
+      "distId": $scope.Distribuidor || 0,
+      "customerId": $scope.Cliente || 0,
       "subsId": $scope.Console || 0,
       "year": 2020
     });
@@ -254,6 +255,7 @@
       document.getElementById("budgetContainer").innerHTML = '&nbsp;';
       document.getElementById("budgetContainer").innerHTML = '<canvas id="budgetChart" style="margin-top: 20px;"></canvas>';
 
+      $scope.consoles = false;
       $scope.getDataToChart();
     };
 
@@ -261,6 +263,7 @@
       $scope.AreaChart(result);
       $scope.enterpriseData = result.generalData;
       $scope.dataByMonth = result.dataByMonth;
+      $scope.monthsToShow = result.monthList.length === 1 ? result.monthList[0] : `${result.monthList[0]} - ${result.monthList[result.monthList.length - 1]}`;
       if ($scope.Cliente) {
         const monthsName = {
           1 : 'Enero', 2 : 'Febrero', 3 : 'Marzo', 4 : 'Abril', 5 : 'Mayo', 6 : 'Junio',

@@ -438,7 +438,15 @@
           $scope.IdEmpresaUsuarioFinalTerminos = producto.IdEmpresaUsuarioFinal;
           $scope.terminos = true;
         } else {
-          return $scope.AgregarCarrito(producto, producto.Cantidad, producto.IdPedidocontrato);
+          if (producto.IdProducto === azure || producto.IdProducto === azurePlan) {
+            if (Number(producto.IdEsquemaRenovacion) !== MONTHLY) {
+              $scope.ShowToast('Este producto no se puede comprar anual', 'danger');
+              return false;
+            }
+            return $scope.validateAzure(producto);
+          } else {
+            return $scope.AgregarCarrito(producto, producto.Cantidad, producto.IdPedidocontrato);
+          }
         }
       })
       .catch(function (error) {
@@ -470,6 +478,35 @@
       });
     };
 
+    $scope.aceptarTransicion = function () {
+      const customerId =  getIdMicrosoft($scope.actualProduct);
+      const bodyRequest = {
+        "customerId": customerId,
+        "productFamily": "azure"
+      }
+      $scope.loading_tran = true;
+      return ProductosFactory.upgradeAzure(bodyRequest)
+        .success(function (result) {
+        $scope.loading_tran = false;
+        if (result.success) {
+          $scope.ShowToast('¡Petición realizada exitosamente!','success');
+          document.getElementById('formModalTransicion').style.display = 'none';
+          return true;
+        }
+        $scope.ShowToast(result.message.message, 'danger');
+        return false;
+      })
+      .catch(function (error) {
+        $scope.loading_tran = false;
+        $scope.ShowToast(error.data.message, 'danger');
+        $log.log('data error: ' + error.data.message + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
+        $scope.form.habilitar = true;
+        $scope.ActualizarMonitor();
+        $scope.form.habilitar = false;
+      });
+
+    };
+
     $scope.validateAzure = function (producto) {
       const azureIdERP = producto.IdERP === 'MS-AZ-R-0.' ? $rootScope.IdERPAzure : $rootScope.IdERPAzurePlan;
       const customerId =  getIdMicrosoft(producto);
@@ -485,6 +522,11 @@
           }
           return $scope.AgregarCarrito(producto, producto.Cantidad, producto.IdPedidocontrato);
         }
+        if (result.message === 'No puedes comprar Azure Plan, debes de transicionar tu suscripción actual de Azure') {
+          $scope.actualProduct = producto;
+          document.getElementById('formModalTransicion').style.display = 'block';
+          return false;
+        }
         $scope.ShowToast(result.message, 'danger');
       })
       .catch(function (error) {
@@ -499,13 +541,6 @@
     $scope.previousISVValidate = function (producto) {
       if (producto.IdFabricante !== 6) {
         if (producto.IdFabricante === 1) {
-          if (producto.IdProducto === azure || producto.IdProducto === azurePlan) {
-            if (Number(producto.IdEsquemaRenovacion) !== MONTHLY) {
-              $scope.ShowToast('Este producto no se puede comprar anual', 'danger');
-              return false;
-            }
-            return $scope.validateAzure(producto);
-          }
           return $scope.validateAgreementCSP(producto);
         } 
         else if (producto.IdFabricante === 7) {

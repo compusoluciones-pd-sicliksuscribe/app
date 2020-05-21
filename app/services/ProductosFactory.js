@@ -105,6 +105,11 @@
       return $http.post($rootScope.API + 'azure/add-seat', body);
     };
 
+    factory.upgradeAzure = function (body) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'azure/upgrade-product', body);
+    };
+
     return factory;
   };
   

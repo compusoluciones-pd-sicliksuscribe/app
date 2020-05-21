@@ -9,7 +9,6 @@
             <div class="row">
                 <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                        <input type="button" name="Hola" value="Descargar" ng-click = "pdf()">
                         <div ng-show = "!esDist">
                             <label for="Distribuidor">Distribuidor:</label><br>
                             <select name="Distribuidor" class="form-control" ng-model="Distribuidor" ng-options="Distribuidor.IdEmpresa as Distribuidor.NombreEmpresa for Distribuidor in selectDistribuidor"
@@ -36,13 +35,14 @@
                     </div>
                     <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4" >
                     </div>
-                    <div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2" >
+                    <!-- Se comenta para cuando se desarrolle ruta de años con uso, actualmente solo hay de 2020 -->
+                    <!-- <div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2" >
                         <label for="uf">Año:</label>
                         <select name="anio" class="form-control" ng-model="anios"
                             ng-change="BuscarProducto(true);">
                             <option ng-selected="true" value="2020">2020</option>
                         </select>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 </div>
@@ -76,8 +76,8 @@
                     <!-- Project Card Example -->
                     <div ng-show = "!Cliente"  class="card shadow mb-4" style="height: 395px;">
                         <div class="card-header py-3">
-                            <h6 ng-if = "!Distribuidor" class="m-0 font-weight-bold text-primary">Consumo por distribuidor</h6>
-                            <h6 ng-if = "Distribuidor" class="m-0 font-weight-bold text-primary">Consumo por cliente</h6>
+                            <h6 ng-if = "!Distribuidor" class="m-0 font-weight-bold text-primary">Consumo por distribuidor (Periodo: {{monthsToShow}})</h6>
+                            <h6 ng-if = "Distribuidor" class="m-0 font-weight-bold text-primary">Consumo por cliente (Periodo: {{monthsToShow}})</h6>
                         </div>
                         <div class="ex1">
                             <div id = "barras" class="card-body" ng-repeat="emp in enterpriseData">
