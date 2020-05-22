@@ -166,21 +166,21 @@
       }
     };
 
-    $scope.agregarProducto = function () {
-      for (let contador = 0; contador < $scope.visible.length; contador++) {
-        if (!$scope.visible[contador]) {
-          $scope.visible[contador] = true;
-          break;
-        }
-      }
-    };
-
-    $scope.quitarProducto = function () {
-      for (let contador = $scope.visible.length - 1; contador > 0; contador--) {
-        if ($scope.visible[contador]) {
-          $scope.visible[contador] = false;
-          break;
-        }
+    $scope.obtenerSKUs = function (NumeroContrato) {
+      if ($scope.distribuidorSeleccionado.IdEmpresa) {
+        ImportarPedidosAutodeskFactory.getSKUData($scope.distribuidorSeleccionado.IdEmpresa, NumeroContrato)
+        .then(result => {
+          if (result.data.data.error === 1) {
+            $scope.ShowToast(result.data.data.message, 'danger');
+          } else {
+            result.data.forEach((element, index) => {
+              $scope.visible[index] = true;
+              $scope.sku[index] = element.sku;
+              $scope.cantidad[index] = element.quantity;
+              $scope.validarSKU(element.sku, index);
+            });
+          }
+        });
       }
     };
 
@@ -240,10 +240,17 @@
         Detalles: conjuntarDetalles()
       };
       if ($scope.formularioCompleto) {
-        ImportarPedidosAutodeskFactory.importarPedido(infoPedido);
+        ImportarPedidosAutodeskFactory.importarPedido(infoPedido)
+          .then(result => {
+            result.data.data.error === 1
+             ? $scope.ShowToast(result.data.data.message, 'danger')
+             : $scope.ShowToast('El pedido se ha registrado de forma correcta.', 'success');
+          })
+          .catch(result => {
+            $scope.ShowToast('Hubo un error durante la importación del pedido.', 'danger');
+          });
       }
     };
-
   };
 
   ImportarPedidosAutodeskController.$inject =

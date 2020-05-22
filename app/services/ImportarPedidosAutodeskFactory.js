@@ -36,6 +36,11 @@
       return $http.post($rootScope.API + 'autodesk/orders/import', infoPedido);
     };
 
+    factory.getSKUData = function (IdEmpresaDistribuidor, numeroContrato) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'autodesk/orders/getSKUData/' + IdEmpresaDistribuidor + '/' + numeroContrato);
+    };
+
     return factory;
   };
   ImportarPedidosAutodeskFactory.$inject = ['$http', '$cookies', '$rootScope'];
