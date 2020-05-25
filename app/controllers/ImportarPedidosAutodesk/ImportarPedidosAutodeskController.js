@@ -68,6 +68,28 @@
       return detalles;
     };
 
+    const reiniciarCamposSKU = function () {
+      $scope.visible = [true, false, false, false, false];
+      $scope.sku = ['', '', '', '', ''];
+      $scope.cantidad = ['', '', '', '', ''];
+      $scope.cantidadProx = ['', '', '', '', ''];
+      $scope.estadoSKU = [{color: 'rgb(0, 0, 0)'}, {color: 'rgb(0, 0, 0)'}, {color: 'rgb(0, 0, 0)'}, {color: 'rgb(0, 0, 0)'}, {color: 'rgb(0, 0, 0)'}];
+    };
+
+    const vaciarFormulario = function () {
+      reiniciarCamposSKU();
+      $scope.distribuidor = '';
+      $scope.usuarioF = '';
+      $scope.contrato = '';
+      $scope.contacto = '';
+      $scope.esquema = '';
+      $scope.fechaInicio = '';
+      $scope.fechaFin = '';
+      $scope.formaPago = '';
+      $scope.monedaPago = '';
+      $scope.tipoCambio = '';
+    };
+
     $scope.init = function () {
       $scope.formularioCompleto = false;
       $scope.visible = [true, false, false, false, false];
@@ -167,12 +189,14 @@
     };
 
     $scope.obtenerSKUs = function (NumeroContrato) {
-      if ($scope.distribuidorSeleccionado.IdEmpresa) {
+      if ($scope.distribuidorSeleccionado) {
         ImportarPedidosAutodeskFactory.getSKUData($scope.distribuidorSeleccionado.IdEmpresa, NumeroContrato)
         .then(result => {
-          if (result.data.data.error === 1) {
+          if (result.data.data) {
             $scope.ShowToast(result.data.data.message, 'danger');
+            reiniciarCamposSKU();
           } else {
+            reiniciarCamposSKU();
             result.data.forEach((element, index) => {
               $scope.visible[index] = true;
               $scope.sku[index] = element.sku;
@@ -200,7 +224,7 @@
       if (contador > 1) esUtilizado = true;
       if (!skuValido) {
         $scope.estadoSKU[textbox] = {color: 'rgb(230, 6, 6)'};
-        $scope.ShowToast('SKU no válido. Revísalo e intenta de nuevo.', 'danger');
+        $scope.ShowToast('SKU no válido. Es posible que no esté registrado en ClickSuscribe.', 'danger');
       } else if (esUtilizado) {
         $scope.estadoSKU[textbox] = {color: 'rgb(230, 6, 6)'};
         $scope.ShowToast('El SKU ya está siendo utilizado, no puede ser registrado más de una vez.', 'danger');
@@ -242,9 +266,12 @@
       if ($scope.formularioCompleto) {
         ImportarPedidosAutodeskFactory.importarPedido(infoPedido)
           .then(result => {
-            result.data.data.error === 1
-             ? $scope.ShowToast(result.data.data.message, 'danger')
-             : $scope.ShowToast('El pedido se ha registrado de forma correcta.', 'success');
+            if (result.data.data.error === 1) {
+              $scope.ShowToast(result.data.data.message, 'danger');
+            } else {
+              $scope.ShowToast('El pedido se ha registrado de forma correcta.', 'success');
+              vaciarFormulario();
+            }
           })
           .catch(result => {
             $scope.ShowToast('Hubo un error durante la importación del pedido.', 'danger');
