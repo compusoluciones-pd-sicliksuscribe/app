@@ -90,6 +90,11 @@
       $scope.tipoCambio = '';
     };
 
+    const esFechaInicioValida = function () {
+      const hoy = new Date();
+      return $scope.fechaInicio <= hoy;
+    };
+
     $scope.init = function () {
       $scope.formularioCompleto = false;
       $scope.visible = [true, false, false, false, false];
@@ -161,36 +166,44 @@
         });
     };
 
-    $scope.definirPeriodo = function () {
+    $scope.definirPeriodo = function (reiniciar = false) {
+      const campoFechaInicio = reiniciar;
+      if (campoFechaInicio) {
+        $scope.fechaFin = '';
+        $scope.fechaInicio = '';
+      }
       if ($scope.fechaInicio && $scope.esquema) {
-        const MENSUAL = 1;
-        const ANUAL = 2;
-        const CADA2ANIOS = 4;
-        const CADA3ANIOS = 5;
-        $scope.fechaFin = new Date();
-        switch ($scope.esquema.IdEsquemaRenovacion) {
-          case MENSUAL:
-            $scope.fechaFin.setMonth($scope.fechaInicio.getMonth() + 1);
-            break;
-          case ANUAL:
-            $scope.fechaFin.setFullYear($scope.fechaInicio.getFullYear() + 1);
-            break;
-          case CADA2ANIOS:
-            $scope.fechaFin.setFullYear($scope.fechaInicio.getFullYear() + 2);
-            break;
-          case CADA3ANIOS:
-            $scope.fechaFin.setFullYear($scope.fechaInicio.getFullYear() + 3);
-            break;
-          default:
-            $scope.fechaFin = new Date();
+        if (esFechaInicioValida()) {
+          const ANUAL = 2;
+          const CADA2ANIOS = 4;
+          const CADA3ANIOS = 5;
+          switch ($scope.esquema.IdEsquemaRenovacion) {
+            case ANUAL:
+              $scope.fechaFin = $scope.fechaInicio;
+              $scope.fechaFin.setFullYear($scope.fechaInicio.getFullYear() + 1);
+              break;
+            case CADA2ANIOS:
+              $scope.fechaFin = $scope.fechaInicio;
+              $scope.fechaFin.setFullYear($scope.fechaInicio.getFullYear() + 2);
+              break;
+            case CADA3ANIOS:
+              $scope.fechaFin = $scope.fechaInicio;
+              $scope.fechaFin.setFullYear($scope.fechaInicio.getFullYear() + 3);
+              break;
+            default:
+              $scope.fechaFin = $scope.fechaInicio;
+          }
+          $scope.fechaFin.setDate($scope.fechaInicio.getDate() - 1);
+        } else {
+          $scope.ShowToast('La fecha inicio no puede ser mayor al día de hoy.', 'danger');
+          $scope.fechaFin = '';
+          $scope.fechaInicio = '';
         }
-        $scope.fechaFin.setDate($scope.fechaInicio.getDate() - 1);
       }
     };
 
     $scope.obtenerSKUs = function (NumeroContrato) {
-      if ($scope.distribuidorSeleccionado) {
-        ImportarPedidosAutodeskFactory.getSKUData($scope.distribuidorSeleccionado.IdEmpresa, NumeroContrato)
+      ImportarPedidosAutodeskFactory.getSKUData(NumeroContrato)
         .then(result => {
           if (result.data.data) {
             $scope.ShowToast(result.data.data.message, 'danger');
@@ -205,7 +218,6 @@
             });
           }
         });
-      }
     };
 
     $scope.editar = function (textbox) {
