@@ -876,14 +876,16 @@ a.button.disabled {
   cursor: default;
 }
 .bkng-tb-cntnt {
-  float: left;
-  width: 800px;
+  /* float: left; */
+  
 }
 .bkng-tb-cntnt a.button {
   color: #fff;
   float: right;
   font-size: 18px;
   padding: 5px 20px;
+  margin-bottom: 12px;
+  margin-right: 12px;
   width: auto;
 }
 .bkng-tb-cntnt a.button.o {
@@ -913,7 +915,7 @@ a.button.disabled {
 }
 .pymnts {
   float: left;
-  width: 800px;
+  
 }
 .pymnts * {
   float: left;
@@ -921,7 +923,7 @@ a.button.disabled {
 
 .sctn-row {
   margin-bottom: 35px;
-  width: 800px;
+  
 }
 .sctn-col {
   width: 375px;
@@ -929,14 +931,14 @@ a.button.disabled {
 .sctn-col.l {
   width: 425px;
 }
-.sctn-col input {
+.nameAndNumber input {
   border: 1px solid #ccc;
   font-size: 18px;
   line-height: 24px;
   padding: 10px 12px;
-  width: 333px;
+  width: 95%;
 }
-.sctn-col label {
+.nameAndNumber label {
   font-size: 24px;
   line-height: 24px;
   margin-bottom: 10px;
@@ -955,11 +957,11 @@ a.button.disabled {
   float: right;
 }
 .pymnts-sctn {
-  width: 800px;
+  
 }
 .pymnt-itm {
   margin: 0 0 3px;
-  width: 800px;
+  
 }
 .pymnt-itm h2 {
   background-color: #e9e9e9;
@@ -967,7 +969,7 @@ a.button.disabled {
   line-height: 24px;
   margin: 0;
   padding: 28px 0 28px 20px;
-  width: 780px;
+  width: 100%
 }
 .pymnt-itm.active h2 {
   background-color: gray;
@@ -997,23 +999,23 @@ a.button.disabled {
 .pymnt-cntnt div.sctn-row div.sctn-col input {
   width: 303px;
 }
-.pymnt-cntnt div.sctn-row div.sctn-col.half {
+div.nameAndNumber.half {
   width: 155px;
 }
-.pymnt-cntnt div.sctn-row div.sctn-col.half.l {
+div.nameAndNumber.half.l {
   float: left;
   width: 190px;
 }
-.pymnt-cntnt div.sctn-row div.sctn-col.half input {
+div.nameAndNumber.half input {
   width: 113px;
 }
-.pymnt-cntnt div.sctn-row div.sctn-col.cvv {
+ div.nameAndNumber.cvv {
   background-image: url("../../images/open-pay/cvv.png");
   background-position: 156px center;
   background-repeat: no-repeat;
   padding-bottom: 30px;
 }
-.pymnt-cntnt div.sctn-row div.sctn-col.cvv div.sctn-col.half input {
+div.nameAndNumber.cvv div.nameAndNumber.half input {
   width: 110px;
 }
 .openpay {
@@ -1046,7 +1048,7 @@ a.button.disabled {
   float: left;
   height: 80px;
   margin: 20px 0;
-  width: 800px;
+  
 }
 .card-expl div {
   background-position: left 45px;
@@ -1054,12 +1056,12 @@ a.button.disabled {
   height: 70px;
   padding-top: 10px;
 }
-.card-expl div.debit {
+div.debit {
   background-image: url("../../images/open-pay/cards2.png");
   margin-left: 20px;
   width: 540px;
 }
-.card-expl div.credit {
+div.credit {
   background-image: url("../../images/open-pay/cards1.png");
   border-right: 1px solid #ccc;
   margin-left: 30px;
@@ -1068,6 +1070,22 @@ a.button.disabled {
 .card-expl h4 {
   font-weight: 400;
   margin: 0;
+}
+
+.w100{
+  width: 100% !important;
+}
+
+.paddingTop{
+  padding-top: 12px;
+}
+
+.grayBorder{
+  border-right: 1px solid #ccc;
+}
+
+.grayBackground{
+  background-color: #e9e9e9;
 }
 
 /* Open Pay */
