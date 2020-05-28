@@ -87,7 +87,6 @@
       $scope.fechaFin = '';
       $scope.formaPago = '';
       $scope.monedaPago = '';
-      $scope.tipoCambio = '';
     };
 
     const esFechaInicioValida = function () {
@@ -173,6 +172,7 @@
         $scope.fechaInicio = '';
       }
       if ($scope.fechaInicio && $scope.esquema) {
+        const auxFechaInicio = new Date($scope.fechaInicio);
         if (esFechaInicioValida()) {
           const ANUAL = 2;
           const CADA2ANIOS = 4;
@@ -181,17 +181,21 @@
             case ANUAL:
               $scope.fechaFin = $scope.fechaInicio;
               $scope.fechaFin.setFullYear($scope.fechaInicio.getFullYear() + 1);
+              $scope.fechaInicio = auxFechaInicio;
               break;
             case CADA2ANIOS:
               $scope.fechaFin = $scope.fechaInicio;
               $scope.fechaFin.setFullYear($scope.fechaInicio.getFullYear() + 2);
+              $scope.fechaInicio = auxFechaInicio;
               break;
             case CADA3ANIOS:
               $scope.fechaFin = $scope.fechaInicio;
               $scope.fechaFin.setFullYear($scope.fechaInicio.getFullYear() + 3);
+              $scope.fechaInicio = auxFechaInicio;
               break;
             default:
               $scope.fechaFin = $scope.fechaInicio;
+              $scope.fechaInicio = auxFechaInicio;
           }
           $scope.fechaFin.setDate($scope.fechaInicio.getDate() - 1);
         } else {
@@ -206,7 +210,7 @@
       ImportarPedidosAutodeskFactory.getSKUData(NumeroContrato)
         .then(result => {
           if (result.data.data) {
-            $scope.ShowToast(result.data.data.message, 'danger');
+            $scope.ShowToast('Error de conexión, intenta de nuevo más tarde.', 'danger');
             reiniciarCamposSKU();
           } else {
             reiniciarCamposSKU();
@@ -272,7 +276,6 @@
         IdFormaPago: $scope.formaPago,
         MonedaPago: $scope.monedaPago,
         IdEsquemaRenovacion: $scope.esquema.IdEsquemaRenovacion,
-        TipoCambio: parseFloat($scope.tipoCambio),
         Detalles: conjuntarDetalles()
       };
       if ($scope.formularioCompleto) {
