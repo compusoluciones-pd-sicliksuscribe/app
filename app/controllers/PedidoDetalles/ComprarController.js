@@ -5,6 +5,7 @@
     $scope.Distribuidor = {};
     const ELECTRONIC_SERVICE = 74;
     $scope.error = false;
+    $scope.CREDIT_CARD = 1;
     const paymentMethods = {
       CREDIT_CARD: 1,
       CS_CREDIT: 2,
@@ -20,6 +21,12 @@
       AMAZONWEBSERVICES:10
     };
     $scope.tipoMonedaCambio = $cookies.getObject('compararPedidosAnteriores');
+    $scope.errorName = false;
+    $scope.name = '';
+    $scope.card = '';
+    $scope.errorDate = '';
+    $scope.year = '';
+    $scope.month = '';
 
     const error = function (message) {
       $scope.ShowToast(!message ? 'Ha ocurrido un error, intentelo mas tarde.' : message, 'danger');
@@ -182,6 +189,7 @@
     $scope.init = function () {
       if ($scope.currentPath === '/Comprar') {
         $scope.CheckCookie();
+        $scope.Distribuidor.IdFormaPagoPredilecta = 1;
         confirmarPaypal();
         $scope.prepararPedidos();
       }
@@ -265,63 +273,100 @@
       $location.path('/Carrito');
     };
 
+    $scope.cerrarModal = modal => {
+      document.getElementById(modal).style.display = 'none';
+    }
+    $("#card").keyup(function(){              
+      var ta      =   $("#card");
+      letras      =   ta.val().replace(/ /g, "");
+      ta.val(letras)
+}); 
+
+    $('#pay-button').on('click', function(event) {
+      $scope.errorName = 0;
+      $scope.errorCard = 0;
+      $scope.errorDate = 0;
+      $scope.dateError = '';
+      $scope.errorCardMessage = '';
+      if ($scope.name.length <= 0) {
+        $scope.errorName = 1;
+      }
+      if ($scope.card.length <= 0) {
+        $scope.errorCard = 1;
+        $scope.errorCardMessage = '*Requerido';
+      }
+      if ($scope.month.length <= 0) {
+        $scope.errorDate = 1;
+        $scope.dateError = '*Mes requerido';
+      }
+      if ($scope.year.length <= 0) {
+        $scope.errorDate = 1;
+        $scope.dateError = '*Año requerido';
+      }
+      event.preventDefault();
+      $("#pay-button").prop( "disabled", true);
+      OpenPay.token.extractFormAndCreate('payment-form', success_callbak, error_callbak);              
+
+    });
+
+    // $scope.pagar = () => {
+    //   OpenPay.token.extractFormAndCreate('payment-form', success_callbak, error_callbak);
+    // }
+
+    function success_callbak (response) {
+      console.log(response);
+    };
+
+    $scope.checkErrors = errors => {
+      errors.forEach(er => {
+        if (er === 'holder_name is required') {
+          $scope.ShowToast('El nombre es requerido', 'danger');
+        }
+        if (er === 'card_number is required') {
+          $scope.ShowToast('El número de tarjeta es requerido', 'danger');
+        }
+        if (er === 'expiration_year expiration_month is required') {
+          $scope.ShowToast('La fecha de expiración es requerida', 'danger');
+        }
+        if (er === 'card_number length is invalid') {
+          $scope.ShowToast('El número de su tarjeta es inválido', 'danger');
+        }
+        if (er === 'The card number verification digit is invalid') {
+          $scope.ShowToast('El número de verificacion de su tarjeta es inválido', 'danger');
+        }
+        if (er === 'The CVV2 security code is required') {
+          $scope.ShowToast('El código de seguridad CVV2 es requerido', 'danger');
+        }
+        if (er === 'valid expirations months are 01 to 12') {
+          $scope.ShowToast('Los meses de expiración válidos son de 01 a 12', 'danger');
+        }
+      })
+    }
+
+    async function error_callbak (error) {
+      const test = error.data.description;
+      var arr = await test.split(",").map(function(item) {
+        return item.trim();
+      });
+      return $scope.checkErrors(arr);
+    }
+
     $scope.PagarTarjeta = function () { // tarjeta de credito
       if ($scope.Distribuidor.IdFormaPagoPredilecta === 1) {
-        PedidoDetallesFactory.getPrepararTarjetaCredito()
-          .success(function (Datos) {
-            var expireDate = new Date();
-            expireDate.setTime(expireDate.getTime() + 600 * 2000); /* 20 minutos */
-            $cookies.putObject('pedidosAgrupados', Datos.data['0'].pedidosAgrupados, { 'expires': expireDate, secure: $rootScope.secureCookie });
-            if (Datos.data['0'].total > 0) {
-
-              if (Datos.success) {
-                if ($cookies.getObject('pedidosAgrupados')) {
-                  Checkout.configure({
-                    merchant: Datos.data['0'].merchant,
-                    session: { id: Datos.data['0'].session_id },
-                    order:
-                    {
-                      amount: Datos.data['0'].total,
-                      currency: Datos.data['0'].moneda,
-                      description: 'Pago tarjeta bancaria',
-                      id: Datos.data['0'].pedidos
-                    },
-                    interaction:
-                    {
-                      merchant:
-                      {
-                        name: 'CompuSoluciones',
-                        address:
-                        {
-                          line1: 'CompuSoluciones y Asociados, S.A. de C.V.',
-                          line2: 'Av. Mariano Oterno No. 1105',
-                          line3: 'Col. Rinconada del Bosque C.P. 44530',
-                          line4: 'Guadalajara, Jalisco. México'
-                        },
-
-                        email: 'order@yourMerchantEmailAddress.com',
-                        phone: '+1 123 456 789 012'
-                      },
-                      displayControl: { billingAddress: 'HIDE', orderSummary: 'SHOW' },
-                      locale: 'es_MX',
-                      theme: 'default'
-                    }
-                  });
-                  Checkout.showLightbox();
-                } else {
-                  $scope.ShowToast('No pudimos comenzar con tu proceso de pago, favor de intentarlo una vez más.', 'danger');
-                }
-              } else {
-                $scope.ShowToast('No pudimos comenzar con tu proceso de pago, favor de intentarlo una vez más.', 'danger');
-              }
-            } else {
-              $scope.ShowToast('Algo salio mal con el pago con tarjeta bancaria, favor de intentarlo una vez más.', 'danger');
-            }
-          })
-          .error(function (data, status, headers, config) {
-            const error = !data.message ? 'Ocurrio un error al procesar la solicitud. Intentalo de nuevo.' : data.message;
-            $scope.ShowToast(error, 'danger');
-          });
+        OpenPay.setId('mzdtln0bmtms6o3kck8f');
+        OpenPay.setApiKey('pk_f0660ad5a39f4912872e24a7a660370c');
+        OpenPay.setSandboxMode(true);
+        $scope.deviceSessionId = OpenPay.deviceData.setup("payment-form", "device_session_id");
+          // document.getElementById('modalPagoTC').style.display = 'block';
+        // PedidoDetallesFactory.getPrepararTarjetaCredito()
+        //   .success(function (Datos) {
+        //     console.log(Datos);
+        //     document.getElementById('modalPagoTC').style.display = 'block';
+        //   })
+        //   .error(function (data, status, headers, config) {
+        //     const error = !data.message ? 'Ocurrio un error al procesar la solicitud. Intentalo de nuevo.' : data.message;
+        //     $scope.ShowToast(error, 'danger');
+        //   });
       }
     };
 
