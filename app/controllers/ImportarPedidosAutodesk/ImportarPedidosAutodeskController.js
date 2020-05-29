@@ -284,7 +284,7 @@
             if (result.data.data.error === 1) {
               $scope.ShowToast(result.data.data.message, 'danger');
             } else {
-              $scope.ShowToast('El pedido se ha registrado de forma correcta.', 'success');
+              $scope.ShowToast(`La información se ha importado en el pedido ${result.data.data.IdPedido}.`, 'success');
               vaciarFormulario();
             }
           })
