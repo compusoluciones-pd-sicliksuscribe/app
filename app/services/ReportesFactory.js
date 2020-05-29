@@ -16,9 +16,9 @@
       return $http.get($rootScope.API + 'Reportes');
     };
 
-    factory.getGenerarReporte = function (IdReporte) {
+    factory.getGenerarReporte = function (IdReporte, IdEmpresaDistribuidor = 0) {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'GenerarReporte/' + IdReporte);
+      return $http.get($rootScope.API + 'GenerarReporte/' + IdReporte + '/' + IdEmpresaDistribuidor);
     };
 
     return factory;

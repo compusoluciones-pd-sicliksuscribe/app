@@ -1,9 +1,10 @@
 (function () {
-  var ReportesController = function ($scope, $log, $location, $cookies, ReportesFactory) {
+  var ReportesController = function ($scope, $log, $location, $cookies, ReportesFactory, EmpresasFactory) {
 
     $scope.perfil = $cookies.getObject('Session');
 
     $scope.reportesSel = '';
+    $scope.selectDist = false;
 
     $scope.init = function () {
       $scope.navCollapsed = true;
@@ -23,33 +24,52 @@
 
     var maxSize = 5000;
 
-    $scope.GenerarReporte = function (params) {
-      ReportesFactory.getGenerarReporte($scope.reporteSel)
-        .success(function (result) {
-          if (result) {
-            for (var i = 0; i < $scope.reportesSel.length; i++) {
-              if ($scope.reportesSel[i].IdReporte === $scope.reporteSel) {
-                var d = new Date();
-                var sDate = ('0' + d.getDate()).slice(-2) + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + d.getFullYear() + ' ' + ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
-                var NombreReporte = $scope.reportesSel[i].NombreReporte + '_' + sDate;
+    function getEnterprises () {
+      EmpresasFactory.getEmpresasMs()
+      .success(function (result) {
+        if (result) {
+          $scope.distribuitors = result.data;
+        }
+      })
+      .error(function (data, status, headers, config) {
+        $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+      });
+    };
 
-                var repeat = Math.ceil(result.data[0].length / maxSize);
-                for (var j = 0; j < repeat; j++) {
-                  var start = j * maxSize;
-                  var end = start + maxSize;
-                  var parte = result.data[0].slice(start, end);
-                  var number = j + 1;
-                  NombreReporte = NombreReporte + '_' + number;
-                  $scope.JSONToCSVConvertor(parte, NombreReporte, true);
+    $scope.GenerarReporte = function (params) {
+      console.log($scope.reporteSel);
+      if ($scope.reporteSel === 34 && !$scope.selectDist) {
+        getEnterprises();
+        $scope.selectDist = true;
+      } else {
+        if ($scope.reporteSel !== 34) $scope.selectDist = false;
+        ReportesFactory.getGenerarReporte($scope.reporteSel, $scope.distSelect)
+          .success(function (result) {
+            if (result) {
+              for (var i = 0; i < $scope.reportesSel.length; i++) {
+                if ($scope.reportesSel[i].IdReporte === $scope.reporteSel) {
+                  var d = new Date();
+                  var sDate = ('0' + d.getDate()).slice(-2) + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + d.getFullYear() + ' ' + ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
+                  var NombreReporte = $scope.reportesSel[i].NombreReporte + '_' + sDate;
+
+                  var repeat = Math.ceil(result.data[0].length / maxSize);
+                  for (var j = 0; j < repeat; j++) {
+                    var start = j * maxSize;
+                    var end = start + maxSize;
+                    var parte = result.data[0].slice(start, end);
+                    var number = j + 1;
+                    NombreReporte = NombreReporte + '_' + number;
+                    $scope.JSONToCSVConvertor(parte, NombreReporte, true);
+                  }
+                  return;
                 }
-                return;
               }
             }
-          }
-        })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
+          })
+          .error(function (data, status, headers, config) {
+            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          });
+      }
     };
 
     $scope.JSONToCSVConvertor = function (JSONData, ReportTitle, ShowLabel) {
@@ -122,7 +142,7 @@
     };
   };
 
-  ReportesController.$inject = ['$scope', '$log', '$location', '$cookies', 'ReportesFactory'];
+  ReportesController.$inject = ['$scope', '$log', '$location', '$cookies', 'ReportesFactory', 'EmpresasFactory'];
 
   angular.module('marketplace').controller('ReportesController', ReportesController);
 }());
