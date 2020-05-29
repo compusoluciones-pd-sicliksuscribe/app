@@ -65,6 +65,7 @@
         }
       });
       if (camposCompletos) $scope.formularioCompleto = true;
+      else $scope.formularioCompleto = false;
       return detalles;
     };
 
@@ -210,7 +211,7 @@
       ImportarPedidosAutodeskFactory.getSKUData(NumeroContrato)
         .then(result => {
           if (result.data.data) {
-            $scope.ShowToast('Error de conexión, intenta de nuevo más tarde.', 'danger');
+            $scope.ShowToast(result.data.data.message, 'danger');
             reiniciarCamposSKU();
           } else {
             reiniciarCamposSKU();
