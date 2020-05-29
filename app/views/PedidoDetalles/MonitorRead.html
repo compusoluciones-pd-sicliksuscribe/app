@@ -450,7 +450,7 @@
 
                         <br>
 
-                        <div ng-show="pedido.AutoRenovable" ng-hide="pedido.EstatusContrato === 'canceled' || pedido.EstatusContrato === 'notRenewed'" >
+                        <div ng-if="pedido.AutoRenovable" ng-hide="pedido.EstatusContrato === 'canceled' || pedido.EstatusContrato === 'notRenewed'" >
                             <label>Fecha limite de cancelación: </label>
                             <br/> {{ pedido.FechaCancelacion  }}
                         </div>
