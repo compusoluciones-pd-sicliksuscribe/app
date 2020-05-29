@@ -1,0 +1,178 @@
+<style>
+    input[type=number]::-webkit-outer-spin-button,
+    input[type=number]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    input[type=number] {
+        -moz-appearance:textfield;
+    }
+</style>
+
+<div ng-app="myApp" ng-controller="ImportarPedidosAutodeskController">
+<div class="container" ng-swipe-right="" ng-swipe-left="">
+    <div class="row">
+        <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <h2 style="float:left;">Importación de pedidos Autodesk </h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <h4 style="float:left;">Datos del pedido </h2>
+        </div>
+    </div>
+    <hr>
+    <form ng-submit="conjuntarInformacion()">
+    <div class="row">
+        <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+            <label>Distribuidor</label>
+            <input type = "text" name = "distribuidor" placeholder="Escribe el nombre del distribuidor" class="form-control" ng-model="distribuidor" ng-keyup="completarDist(distribuidor)" required/>
+            <ul class="list-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-model = "ocultarOpcionesDist" ng-hide = "ocultarOpcionesDist" style="position:absolute; z-index: 1; padding-right:2em;">
+            <li style="background-color: white;" class="list-group-item" ng-repeat = "infoDist in filtroDistribuidor track by $index" ng-click = "llenarTextBoxDist(infoDist)">{{infoDist}}</li>
+            </ul>
+        </div>
+        <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+            <label>Usuario final</label>
+            <input type = "text" name = "usuarioF" placeholder="Escribe el nombre del usuario final" class="form-control" ng-model="usuarioF" ng-keyup="completarUF(usuarioF)" required/>
+            <ul class="list-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-model = "ocultarOpcionesUF" ng-hide = "ocultarOpcionesUF" style="position:absolute; z-index: 1;padding-right:2em;">
+            <li style="background-color: white;" class="list-group-item" ng-repeat = "infoUF in filtroUsuarioFinal track by $index" ng-click = "llenarTextBoxUF(infoUF)">{{infoUF}}</li>
+            </ul>
+        </div>
+        <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
+            <label>Número de contrato</label>
+            <Input type="number" maxlength="12" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" name="contrato" class="form-control" ng-model="contrato" ng-keypress="validarEntrada('contrato', contrato)" ng-blur="obtenerSKUs(contrato)" required>
+        </div>
+        <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
+            <label>Contacto</label>
+            <select name="contacto" class="form-control" ng-model="contacto" ng-options="contact.Nombre + ' ( ' + contact.CorreoElectronico + ' )' for contact in contactos" required>
+                <option value="" disabled>Contactos</option> 
+            </select>
+        </div>
+        <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
+            <label>Esquema renovación</label>
+            <select name="esquema" class="form-control" ng-model="esquema" ng-options="esquema.Nombre for esquema in esquemasLista" ng-change="definirPeriodo(true)" required>
+                <option value="" disabled>Esquemas</option> 
+            </select>
+        </div>
+        <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+            <label>Fecha inicio</label>
+            <Input type="date" name="fechaInicio" class="form-control" ng-model="fechaInicio" ng-change="definirPeriodo()" required>
+        </div>
+        <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+            <label>Fecha fin</label>
+            <Input type="date" name="fechaFin" class="form-control" ng-model="fechaFin" disabled>
+        </div>
+        <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
+            <label>Forma de pago</label>
+            <select name="fomaPago" class="form-control" ng-model="formaPago" required>
+                <option value="" selected disabled>Formas de pago</option> 
+                <option value="2">Crédito</option> 
+                <option value="4">Trasferencia</option> 
+            </select>
+        </div>
+        <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
+            <label>Moneda de pago</label>
+            <select name="monedaPago" class="form-control" ng-model="monedaPago" required>
+                <option value="" selected disabled>Monedas</option> 
+                <option value="Pesos">Pesos</option> 
+                <option value="Dólares">Dólares</option> 
+            </select>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <h4 style="float:left;">Datos de los productos </h2>
+        </div>
+    </div>
+    
+    <hr>
+    <div class="row">
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="float: right;">
+            <button type="submit" style="float:right; margin: 1em;" ng-click="" class="btn btn-success " style="background: !important">
+                <span class="glyphicon glyphicon-download-alt"></span>
+                &nbsp;Importar pedido
+            </button>
+        </div>
+
+        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="background-color: rgba(236, 235, 235, 0.363);padding-top: 1em; margin-bottom: 3px; border-bottom: 1 solid rgba(32, 32, 32, 0.719); " ng-show="visible[0]" >
+            <div class="form-group col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                <label>SKU</label>
+                <Input name="sku" class="form-control" ng-model="sku[0]" ng-style="estadoSKU[0]" ng-blur="validarSKU(sku[0], 0)" ng-focus="editar(0)" disabled>
+            </div>
+            <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                <label>Cantidad</label>
+                <Input type="number" name="cantidad" class="form-control" ng-model="cantidad[0]" disabled>
+            </div>
+            <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                <label>Cantidad próxima</label>
+                <Input type="number" name="cantidadProx" class="form-control" ng-model="cantidadProx[0]" >
+            </div>
+        </div>
+
+        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="background-color: rgba(236, 235, 235, 0.363);padding-top: 1em; margin-bottom: 3px; border-bottom: 1 solid rgba(32, 32, 32, 0.719);" ng-show="visible[1]">
+            <div class="form-group col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                <label>SKU</label>
+                <Input name="sku" class="form-control"  ng-model="sku[1]" ng-style="estadoSKU[1]" ng-blur="validarSKU(sku[1], 1) " ng-focus="editar(1)" disabled>
+            </div>
+            <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                <label>Cantidad</label>
+                <Input type="number" name="cantidad" class="form-control" ng-model="cantidad[1]" disabled>
+            </div>
+            <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                <label>Cantidad próxima</label>
+                <Input type="number" name="cantidadProx" class="form-control" ng-model="cantidadProx[1]" >
+            </div>
+        </div>
+
+        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="background-color: rgba(236, 235, 235, 0.363);padding-top: 1em; margin-bottom: 3px; border-bottom: 1 solid rgba(32, 32, 32, 0.719);" ng-show="visible[2]">
+            <div class="form-group col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                <label>SKU</label>
+                <Input name="sku" class="form-control" ng-model="sku[2]" ng-style="estadoSKU[2]" ng-blur="validarSKU(sku[2], 2)" ng-focus="editar(2)" disabled>
+            </div>
+            <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                <label>Cantidad</label>
+                <Input type="number" name="cantidad" class="form-control" ng-model="cantidad[2]" disabled>
+            </div>
+            <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                <label>Cantidad próxima</label>
+                <Input type="number" name="cantidadProx" class="form-control" ng-model="cantidadProx[2]" >
+            </div>
+        </div>
+
+        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="background-color: rgba(236, 235, 235, 0.363);padding-top: 1em; margin-bottom: 3px; border-bottom: 1 solid rgba(32, 32, 32, 0.719);" ng-show="visible[3]">
+            <div class="form-group col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                <label>SKU</label>
+                <Input name="sku" class="form-control" ng-model="sku[3]" ng-style="estadoSKU[3]" ng-blur="validarSKU(sku[3], 3)" ng-focus="editar(3)" disabled>
+            </div>
+            <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                <label>Cantidad</label>
+                <Input type="number" name="cantidad" class="form-control" ng-model="cantidad[3]" disabled>
+            </div>
+            <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                <label>Cantidad próxima</label>
+                <Input type="number" name="cantidadProx" class="form-control" ng-model="cantidadProx[3]" >
+            </div>
+        </div>
+
+        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="background-color: rgba(236, 235, 235, 0.363);padding-top: 1em; margin-bottom: 3px; border-bottom: 1 solid rgba(32, 32, 32, 0.719);" ng-show="visible[4]">
+            <div class="form-group col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                <label>SKU</label>
+                <Input name="sku" class="form-control" ng-model="sku[4]" ng-style="estadoSKU[4]" ng-blur="validarSKU(sku[4], 4)" ng-focus="editar(4)" disabled>
+            </div>
+            <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                <label>Cantidad</label>
+                <Input type="number" name="cantidad" class="form-control" ng-model="cantidad[4]" disabled>
+            </div>
+            <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                <label>Cantidad próxima</label>
+                <Input type="number" name="cantidadProx" class="form-control" ng-model="cantidadProx[4]" >
+            </div>
+        </div>
+    </div>
+    </form>
+   
+</div>
+</div>
