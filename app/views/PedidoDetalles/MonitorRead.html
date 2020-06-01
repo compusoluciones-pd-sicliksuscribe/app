@@ -127,7 +127,7 @@
                             <h4><b>{{ detalles.Nombre }}</b></h4>
                             <label for="">Tipo de producto:</label> {{ detalles.Tipo }}
                             <br>
-                            <label for="">Estatus del pedido:</label> {{detalles.Estatus }}
+                            <label for="">Estatus del pedido:</label> {{detalles.Estatus }} 
                         </div>
                         <div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
                             <label>Cantidad: </label>
@@ -269,6 +269,9 @@
                                     </div>
                                     <div ng-show="!detalles.Activo">
                                         Suscripción cancelada <span class="glyphicon glyphicon-minus-sign" title="{{ detalles.EstatusFabricante }}"> </span>
+                                    </div>
+                                    <div ng-show="detalles.EstatusMPNID && detalles.Activo">
+                                        MPNID no válido <span class="glyphicon glyphicon-alert" title="{{ detalles.EstatusFabricante }}"> </span>
                                     </div>
                                 </li>
                                 <li ng-show="pedido.IdFormaPagoProxima !== 2">

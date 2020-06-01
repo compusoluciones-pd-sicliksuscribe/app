@@ -169,6 +169,7 @@
 													<li><a ng-click="goToPage('MonitorAws');">Amazon Web Services</a></li>
 													<li><a ng-click="goToPage('AdministrarSuscripciones');">Microsoft</a></li>
 													<li><a ng-click="goToPage('MonitorMicrosoft');">Monitor Microsoft</a></li>
+													<li><a ng-click="goToPage('MonitorMPN');">Actualizar MPNID</a></li>
 													<li><a ng-click="goToPage('Reportes');">Reportes</a></li>
 													<li><a ng-click="goToPage('MonitorVmware');">VMware</a></li>
 												</ul>
@@ -660,6 +661,8 @@
 	<script type="text/javascript" src="app/controllers/Usuarios/UsuarioReadUFController.js"></script>
 	<script type="text/javascript" src="app/controllers/MonitorAgente/MonitorAgenteController.js"></script>
 	<script type="text/javascript" src="app/services/MonitorAgenteFactory.js"></script>
+	<script type="text/javascript" src="app/controllers/MonitorMPN/MonitorMPNController.js"></script>
+	<script type="text/javascript" src="app/services/MonitorMPNFactory.js"></script>
 
 	<script src="scripts/tinycolor2-min.js"></script>
 	<script src="scripts/angularjs-color-picker.min.js"></script>
@@ -695,7 +698,7 @@
 			m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
 		})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-		ga('create', 'UA-75218308-1', {'cookieDomain': 'none'}); 
+		ga('create', 'UA-75218308-2', {'cookieDomain': 'none'}); 
 		
 		ga('set', 'page', '/' + location);
       	ga('send', 'pageview');
