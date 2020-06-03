@@ -1,9 +1,10 @@
 (function () {
-  var ComprarController = function ($scope, $log, $rootScope, $location, $cookies, PedidoDetallesFactory, TipoCambioFactory, PedidosFactory, EmpresasFactory, $route) {
+  var ComprarController = function ($scope, $log, $rootScope, $location, $cookies, PedidoDetallesFactory, UsuariosFactory, PedidosFactory, EmpresasFactory, jwtHelper, $route) {
     $scope.currentPath = $location.path();
     $scope.PedidoDetalles = {};
     $scope.Distribuidor = {};
     const ELECTRONIC_SERVICE = 74;
+    const CLICKSUSCRIBE = 2;
     $scope.error = false;
     $scope.CREDIT_CARD = 1;
     const paymentMethods = {
@@ -27,6 +28,7 @@
     $scope.errorDate = '';
     $scope.year = '';
     $scope.month = '';
+    $scope.session = $cookies.getObject('Session');
 
     const error = function (message) {
       $scope.ShowToast(!message ? 'Ha ocurrido un error, intentelo mas tarde.' : message, 'danger');
@@ -276,11 +278,12 @@
     $scope.cerrarModal = modal => {
       document.getElementById(modal).style.display = 'none';
     }
+    
     $("#card").keyup(function(){              
       var ta      =   $("#card");
       letras      =   ta.val().replace(/ /g, "");
       ta.val(letras)
-}); 
+    }); 
 
     $('#pay-button').on('click', function(event) {
       $scope.errorName = 0;
@@ -306,15 +309,166 @@
       event.preventDefault();
       $("#pay-button").prop( "disabled", true);
       OpenPay.token.extractFormAndCreate('payment-form', success_callbak, error_callbak);              
-
     });
 
-    // $scope.pagar = () => {
-    //   OpenPay.token.extractFormAndCreate('payment-form', success_callbak, error_callbak);
-    // }
+    $scope.getPrincipalToken = async () => {
+      const credentials = {
+        customerId: "",
+        email: $rootScope.SICLIK_USER,
+        password: $rootScope.SICLIK_PASS
+      };
+      return UsuariosFactory.getSiclikToken(credentials)
+        .then(async function (tokenResult) {
+          var tokenPayload = jwtHelper.decodeToken(tokenResult.data.accessToken);
+          return Object.assign({}, { tokenPayload }, tokenResult.data)
+        })
+        .catch(function (result) { return result; });
+    };
 
-    function success_callbak (response) {
-      console.log(response);
+    $scope.getSiclikToken = async (principalToken) => {
+      return UsuariosFactory.getTokenWithRefreshToken(principalToken, principalToken.tokenPayload)
+        .then(function (tokenRefResult) {
+          return tokenRefResult.data.accessToken;
+          })
+          .catch(function (error) {
+            $scope.ShowToast('Surgió un error, contactar a soporte o intentar más tarde.', 'danger');
+        });
+    };
+
+    $scope.getOpenPayCustomerId = siclikToken => {
+      const userData = {
+        name: $scope.session.Nombre,
+        lastName: $scope.session.ApellidoPaterno,
+        email: $scope.session.CorreoElectronico,
+        phoneNumber: "",
+        externalId: String($scope.session.IdUsuario),
+        platform: CLICKSUSCRIBE
+      };
+      return UsuariosFactory.createOpenPayUser(siclikToken, userData)
+      .then(function (resultCreate) {
+        return resultCreate.data.openpayCustomerId;
+      });
+    }
+    
+    $scope.PagarTarjeta = function (sourceId, openpayCustomerId, siclikToken) { // tarjeta de credito
+      if ($scope.Distribuidor.IdFormaPagoPredilecta === 1) {
+        OpenPay.setId('mgp4crl0qu5nxy0ed2af');
+        OpenPay.setApiKey('pk_9f2f5b3c557045298d7df2c67fe378fe');
+        OpenPay.setSandboxMode(true);
+        $scope.deviceSessionId = OpenPay.deviceData.setup("payment-form", "device_session_id");
+        PedidoDetallesFactory.getPrepararTarjetaCredito()
+          .success(function (resultTC) {
+            $scope.amount = resultTC.data[0].amount;
+            $scope.currency = resultTC.data[0].currency;
+          })
+          .error(function (data, status, headers, config) {
+            const error = !data.message ? 'Ocurrio un error al procesar la solicitud. Intentalo de nuevo.' : data.message;
+            $scope.ShowToast(error, 'danger');
+          });
+      }
+    };
+
+    const getCardPaymentError = error => {
+      switch (error) {
+        case 1612:
+          return 'El monto transacción esta fuera de los limites permitidos.';
+        case 1618:
+          return 'El número de intentos de cargo es mayor al permitido.';
+        case 1623:
+          return 'El número de tarjeta es invalido.';
+        case 1624:
+          return 'La fecha de expiración de la tarjeta es anterior a la fecha actual.';
+        case 1625:
+          return 'El código de seguridad de la tarjeta (CVV2) no fue proporcionado.';
+        case 1626:
+          return 'El número de tarjeta es de prueba, solamente puede usarse en Sandbox.';
+        case 1627:
+          return 'La tarjeta no es valida para pago con puntos.';        
+        case 1628:
+          return 'El código de seguridad de la tarjeta (CVV2) es inválido.';
+        case 1629:
+          return 'Autenticación 3D Secure fallida.';
+        case 1630:
+          return 'Tipo de tarjeta no soportada.';
+        case 1631:
+          return 'La tarjeta fue declinada.';
+        case 1632:
+          return 'La tarjeta ha expirado.';
+        case 1633:
+          return 'La tarjeta no tiene fondos suficientes.';
+        case 1634:
+          return 'La tarjeta ha sido identificada como una tarjeta robada.';
+        case 1635:
+          return 'La tarjeta ha sido rechazada por el sistema antifraudes.';
+        case 1636:
+          return 'La operación no esta permitida para este cliente o esta.';
+        case 1637:
+          return 'La tarjeta fue declinada.';        
+        case 1638:
+          return 'La tarjeta no es soportada en transacciones en línea.';
+        case 1639:
+          return 'La tarjeta fue reportada como perdida.';
+        case 1640:
+          return 'El banco ha restringido la tarjeta.';
+        case 1641:
+          return 'El banco ha solicitado que la tarjeta sea retenida. Contacte al banco.';
+        case 1642:
+          return 'Se requiere solicitar al banco autorización para realizar este pago.';
+        default:
+          return 'Ocurrió un error, contactar a soporte.';
+      }
+    }
+
+    async function success_callbak (response) {
+      const principalToken = await $scope.getPrincipalToken();
+      const siclikToken = await $scope.getSiclikToken(principalToken);
+      const openpayCustomerId = await $scope.getOpenPayCustomerId(siclikToken)
+        .catch(() => {
+          const user = String($scope.session.IdUsuario);
+          return UsuariosFactory.getOpenPayUser(siclikToken, user)
+          .then(function (resultGetCustomer) {
+            return resultGetCustomer.data.openpayCustomerId;
+          })
+          .catch(function (error) { 
+            $scope.ShowToast('Surgió un error, contactar a soporte o intentar más tarde.', 'danger');
+          });
+        });
+        const bodyRequest = {
+          deviceSessionId: $scope.deviceSessionId,
+          sourceId: response.data.id,
+          openpayCustomerId,
+        };
+        PedidosFactory.payWithCardOpenpay(bodyRequest)
+        .then(function (resultPayment) {
+          if (resultPayment.data.success) {
+            $cookies.remove('pedidosAgrupados');
+            $('#modalPagoTC').modal('hide');
+            $scope.cerrarModal('modalPagoTC');
+            PedidoDetallesFactory.getComprar()
+            .success(function (compra) {
+              if (compra) {
+                $scope.ActualizarMenu();
+                orderCookie(compra);
+              } else {
+                $location.path('/Carrito');
+                $scope.ShowToast(compra.message, 'danger');
+              }
+            })
+            .error(function (data, status, headers, config) {
+              $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+            });
+          } else {
+            if (resultPayment.data.statusCode) {
+              const cardError = getCardPaymentError(resultPayment.data.error.code);
+              $scope.ShowToast(cardError, 'danger');
+            } else {
+              $scope.ShowToast('Surgió un error, contactar a soporte o intentar más tarde.', 'danger');
+            }
+          }
+        })
+        .catch(function (error) { 
+          $scope.ShowToast('Surgió un error, contactar a soporte o intentar más tarde.', 'danger');
+        });
     };
 
     $scope.checkErrors = errors => {
@@ -350,25 +504,6 @@
       });
       return $scope.checkErrors(arr);
     }
-
-    $scope.PagarTarjeta = function () { // tarjeta de credito
-      if ($scope.Distribuidor.IdFormaPagoPredilecta === 1) {
-        OpenPay.setId('mzdtln0bmtms6o3kck8f');
-        OpenPay.setApiKey('pk_f0660ad5a39f4912872e24a7a660370c');
-        OpenPay.setSandboxMode(true);
-        $scope.deviceSessionId = OpenPay.deviceData.setup("payment-form", "device_session_id");
-          // document.getElementById('modalPagoTC').style.display = 'block';
-        // PedidoDetallesFactory.getPrepararTarjetaCredito()
-        //   .success(function (Datos) {
-        //     console.log(Datos);
-        //     document.getElementById('modalPagoTC').style.display = 'block';
-        //   })
-        //   .error(function (data, status, headers, config) {
-        //     const error = !data.message ? 'Ocurrio un error al procesar la solicitud. Intentalo de nuevo.' : data.message;
-        //     $scope.ShowToast(error, 'danger');
-        //   });
-      }
-    };
 
     const getActualSubdomain = function () {
       let subdomain = window.location.href;
@@ -485,7 +620,7 @@
     };
   };
 
-  ComprarController.$inject = ['$scope', '$log', '$rootScope', '$location', '$cookies', 'PedidoDetallesFactory', 'TipoCambioFactory', 'PedidosFactory', 'EmpresasFactory', '$route'];
+  ComprarController.$inject = ['$scope', '$log', '$rootScope', '$location', '$cookies', 'PedidoDetallesFactory', 'UsuariosFactory', 'PedidosFactory', 'EmpresasFactory', 'jwtHelper', '$route'];
 
   angular.module('marketplace').controller('ComprarController', ComprarController);
 }());
