@@ -7,8 +7,6 @@ angular.module('marketplace')
   $rootScope.MAPI = 'http://localhost:8083/';
   $rootScope.PAGOS = 'http://localhost:8443/';
   $rootScope.dominio = 'localhost';
-  $rootScope.SICLIK_USER = 'osestrad@compusoluciones.com';
-  $rootScope.SICLIK_PASS = 'holahola2671';
   // $rootScope.SICLIK_API = 'http://10.3.112.97:8998/'
   $rootScope.SICLIK_FRONT = 'http://10.3.112.113:3000/'
   // $rootScope.SICLIK_FRONT = 'https://wwww.siclik.mx/'

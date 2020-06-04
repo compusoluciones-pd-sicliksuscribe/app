@@ -311,22 +311,8 @@
       OpenPay.token.extractFormAndCreate('payment-form', success_callbak, error_callbak);              
     });
 
-    $scope.getPrincipalToken = async () => {
-      const credentials = {
-        customerId: "",
-        email: $rootScope.SICLIK_USER,
-        password: $rootScope.SICLIK_PASS
-      };
-      return UsuariosFactory.getSiclikToken(credentials)
-        .then(async function (tokenResult) {
-          var tokenPayload = jwtHelper.decodeToken(tokenResult.data.accessToken);
-          return Object.assign({}, { tokenPayload }, tokenResult.data)
-        })
-        .catch(function (result) { return result; });
-    };
-
-    $scope.getSiclikToken = async (principalToken) => {
-      return UsuariosFactory.getTokenWithRefreshToken(principalToken, principalToken.tokenPayload)
+    $scope.getSiclikToken = async () => {
+      return UsuariosFactory.getTokenSiclik()
         .then(function (tokenRefResult) {
           return tokenRefResult.data.accessToken;
           })
@@ -420,8 +406,7 @@
     }
 
     async function success_callbak (response) {
-      const principalToken = await $scope.getPrincipalToken();
-      const siclikToken = await $scope.getSiclikToken(principalToken);
+      const siclikToken = await $scope.getSiclikToken();
       const openpayCustomerId = await $scope.getOpenPayCustomerId(siclikToken)
         .catch(() => {
           const user = String($scope.session.IdUsuario);
