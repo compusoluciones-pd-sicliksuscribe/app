@@ -46,7 +46,7 @@
 
                     <!-- TRANSFERENCIA -->
                     <div>
-                        <input type="radio" name="TipoPago" value="4" ng-model="Distribuidor.IdFormaPagoPredilecta" ng-change="ActualizarFormaPago(4);"> Transferencia
+                        <input type="radio" name="TipoPago" ng-checked="isPayWithPrepaid()" value="4" ng-model="Distribuidor.IdFormaPagoPredilecta" ng-change="ActualizarFormaPago(4);"> Transferencia
                         <label for="" class="SaldoReal"> <b>Tu Saldo es: {{Distribuidor.MonedaPago === 'Pesos' ? Distribuidor.Transferencia : Distribuidor.TransferenciaDolares | currency}}</b> </label>
                     </div>
 

@@ -112,9 +112,6 @@
         .then(function () {
           if ($scope.isPayingWithCSCredit()) validarCarrito();
         })
-        .then(function (){
-          if ($scope.isPayWithPrepaid()) CambiarMonedaPrepaid();
-        }) 
         .catch(function (result) {
           error(result.data);
           $location.path('/Productos');
@@ -151,7 +148,6 @@
           if (result.data.success) {
             $scope.ShowToast(result.data.message, 'success');
             CambiarMoneda();
-            getOrderDetails(true);
           } else $scope.ShowToast(result.data.message, 'danger');
         })
         .catch(function (result) { error(result.data); });
@@ -282,7 +278,7 @@
 
     $scope.isPayingWithCSCredit = function () {
       const IdFormaPago = Number($scope.Distribuidor.IdFormaPagoPredilecta);
-      return IdFormaPago === paymentMethods.CS_CREDIT || IdFormaPago === paymentMethods.PREPAY;
+      return IdFormaPago === paymentMethods.CS_CREDIT;
     };
 
     $scope.isPayingWithCreditCard = function () {

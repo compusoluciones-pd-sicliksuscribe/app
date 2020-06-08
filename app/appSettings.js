@@ -7,6 +7,7 @@ angular.module('marketplace')
   $rootScope.MAPI = 'http://localhost:8083/';
   $rootScope.PAGOS = 'http://localhost:8443/';
   $rootScope.dominio = 'localhost';
+  $rootScope.sandbox = true;
   // $rootScope.SICLIK_API = 'http://10.3.112.97:8998/'
   $rootScope.SICLIK_FRONT = 'http://10.3.112.113:3000/'
   // $rootScope.SICLIK_FRONT = 'https://wwww.siclik.mx/'
@@ -15,4 +16,5 @@ angular.module('marketplace')
   // $rootScope.MAPI = 'http://microsoft-api.us-east-1.elasticbeanstalk.com/';
   // $rootScope.dominio = 'clicksuscribe';
   // $rootScope.secureCookie = true;
+  // $rootScope.sandbox = false;
 });

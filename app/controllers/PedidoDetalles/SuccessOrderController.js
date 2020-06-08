@@ -1,5 +1,5 @@
 (function () {
-  var SuccessOrderController = function ($scope, $log, $rootScope, $location, $cookies, $route, PedidoDetallesFactory) {
+  var SuccessOrderController = function ($scope, $sce, $log, $rootScope, $location, $cookies, $route, PedidoDetallesFactory) {
     $scope.currentPath = $location.path();
     $scope.orderIdsCookie = $cookies.getObject('orderIdsCookie').data || $cookies.getObject('orderIdsCookie');
     $scope.Session = $cookies.getObject('Session');
@@ -28,19 +28,25 @@
       const MICROSOFT = 1;
       if ($scope.currentPath === '/SuccessOrder') {
         $scope.CheckCookie();
-        $scope.orderIdsCookie.forEach(elemento => {
-          if (elemento.IdFabricante === MICROSOFT) {
-            $scope.MPNID = elemento.IdMicrosoftDist;
-            PedidoDetallesFactory.getMPIDInformation(parseInt($scope.MPNID))
-            .success(function (response) {
-              response.data.status === 'active' ? $scope.isMPNIDActive = true : $scope.isMPNIDActive = false;
-              if (!$scope.isMPNIDActive) $scope.abrirModal('isValidMPNIDModal');
-            })
-            .error(function (data, status, headers, config) {
-              $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-            });
-          }
-        });
+        if ($scope.orderIdsCookie.MetodoPago === 'Transferencia') {
+          $scope.url = $sce.trustAsResourceUrl($scope.orderIdsCookie.urlFile);
+          $scope.spei = true;
+        } else {
+          $scope.spei = false;
+          $scope.orderIdsCookie.forEach(elemento => {
+            if (elemento.IdFabricante === MICROSOFT) {
+              $scope.MPNID = elemento.IdMicrosoftDist;
+              PedidoDetallesFactory.getMPIDInformation(parseInt($scope.MPNID))
+              .success(function (response) {
+                response.data.status === 'active' ? $scope.isMPNIDActive = true : $scope.isMPNIDActive = false;
+                if (!$scope.isMPNIDActive) $scope.abrirModal('isValidMPNIDModal');
+              })
+              .error(function (data, status, headers, config) {
+                $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+              });
+            }
+          });
+        }
       }
     };
 
@@ -50,6 +56,6 @@
       document.cookie = CookieName + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     }
   };
-  SuccessOrderController.$inject = ['$scope', '$log', '$rootScope', '$location', '$cookies', '$route', 'PedidoDetallesFactory'];
+  SuccessOrderController.$inject = ['$scope','$sce', '$log', '$rootScope', '$location', '$cookies', '$route', 'PedidoDetallesFactory'];
   angular.module('marketplace').controller('SuccessOrderController', SuccessOrderController);
 })();

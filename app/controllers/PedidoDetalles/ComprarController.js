@@ -86,6 +86,13 @@
       return maker;
     };
 
+    const keyAntifraude = () => {
+      OpenPay.setId('mgp4crl0qu5nxy0ed2af');
+      OpenPay.setApiKey('pk_9f2f5b3c557045298d7df2c67fe378fe');
+      if ($rootScope.sandbox) OpenPay.setSandboxMode(true);
+      $scope.deviceSessionId = OpenPay.deviceData.setup("payment-form", "device_session_id");
+    }
+
     $scope.calcularTotalconDescuentoAWS = function (total, descuento) {
       return total - total * descuento / 100;
     };
@@ -120,7 +127,7 @@
         });
     };
 
-    const orderCookie = orderIdsCookie => {
+    const orderCookie = (orderIdsCookie) => {
       const cookie = $cookies.putObject('orderIdsCookie', orderIdsCookie, { secure: $rootScope.secureCookie });
       const location = $location.path('/SuccessOrder');
       const resultOrderidCookie = [{cookie, location}];
@@ -139,15 +146,42 @@
         });
     };
 
-    const comprarPrePago = function () { // transferencia
-      PedidoDetallesFactory.getComprar()
-        .then(function (orderIdsCookie) {
-          if (orderIdsCookie) {
+    const getOpenPayCustomer = async siclikToken => {
+      return $scope.getOpenPayCustomerId(siclikToken)
+        .catch(() => {
+          const user = String($scope.session.IdUsuario);
+          return UsuariosFactory.getOpenPayUser(siclikToken, user)
+          .then(function (resultGetCustomer) {
+            return resultGetCustomer.data.openpayCustomerId;
+          })
+          .catch(function (error) { 
+            $scope.ShowToast('Surgió un error, contactar a soporte o intentar más tarde.', 'danger');
+          });
+      });
+    }
+
+    const comprarPrePago = async function () { // transferencia
+      keyAntifraude();
+      const siclikToken = await $scope.getSiclikToken();
+      const openpayCustomerId = await getOpenPayCustomer(siclikToken);
+      const body = {
+        openpayCustomerId,
+        deviceSessionId: $scope.deviceSessionId,
+      }
+      PedidosFactory.payWithSpeiOpenpay(body)
+        .then(function (speiResult) {
+          if (speiResult.data.success) {
             $scope.ActualizarMenu();
-            orderCookie(orderIdsCookie);
+            speiResult.data.data.MetodoPago = 'Transferencia';
+            orderCookie(speiResult.data);
           } else {
+            $scope.ShowToast('Ocurrio un error intente más tarde.', 'danger');
             $location.path('/Carrito');
           }
+        })
+        .catch(function (result) {
+          $scope.ShowToast('Ocurrio un error intente más tarde.', 'danger');
+          $location.path('/Carrito/e');
         });
     };
 
@@ -338,10 +372,7 @@
     
     $scope.PagarTarjeta = function (sourceId, openpayCustomerId, siclikToken) { // tarjeta de credito
       if ($scope.Distribuidor.IdFormaPagoPredilecta === 1) {
-        OpenPay.setId('mgp4crl0qu5nxy0ed2af');
-        OpenPay.setApiKey('pk_9f2f5b3c557045298d7df2c67fe378fe');
-        OpenPay.setSandboxMode(true);
-        $scope.deviceSessionId = OpenPay.deviceData.setup("payment-form", "device_session_id");
+        keyAntifraude();
         PedidoDetallesFactory.getPrepararTarjetaCredito()
           .success(function (resultTC) {
             $scope.amount = resultTC.data[0].amount;
@@ -407,17 +438,7 @@
 
     async function success_callbak (response) {
       const siclikToken = await $scope.getSiclikToken();
-      const openpayCustomerId = await $scope.getOpenPayCustomerId(siclikToken)
-        .catch(() => {
-          const user = String($scope.session.IdUsuario);
-          return UsuariosFactory.getOpenPayUser(siclikToken, user)
-          .then(function (resultGetCustomer) {
-            return resultGetCustomer.data.openpayCustomerId;
-          })
-          .catch(function (error) { 
-            $scope.ShowToast('Surgió un error, contactar a soporte o intentar más tarde.', 'danger');
-          });
-        });
+      const openpayCustomerId = await getOpenPayCustomer(siclikToken);
         const bodyRequest = {
           deviceSessionId: $scope.deviceSessionId,
           sourceId: response.data.id,
