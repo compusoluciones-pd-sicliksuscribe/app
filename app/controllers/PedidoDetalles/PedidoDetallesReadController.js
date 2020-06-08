@@ -3,13 +3,15 @@
     $scope.CreditoValido = 1;
     $scope.error = false;
     $scope.Distribuidor = {};
+    $scope.errorStore = false;
     const ON_DEMAND = 3;
     const ELECTRONIC_SERVICE = 74;
     const paymentMethods = {
       CREDIT_CARD: 1,
       CS_CREDIT: 2,
       PAYPAL: 3,
-      PREPAY: 4
+      PREPAY: 4,
+      STORE: 5,
     };
     const makers = {
       MICROSOFT: 1,
@@ -21,6 +23,7 @@
       AWS: 10
     };
 
+    const MAX_PAY_IN_STORE = 29999.99;
     const error = function (error) {
       $scope.ShowToast(!error ? 'Ha ocurrido un error, intentelo mas tarde.' : error.message, 'danger');
       $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
@@ -89,6 +92,19 @@
       return maker;
     };
 
+    const validateTotalOrder = () => {
+      let totalOrders = 0;
+      $scope.PedidoDetalles.forEach(order => {
+        totalOrders += $scope.calcularTotal(order.IdPedido)
+      })
+      if (totalOrders > MAX_PAY_IN_STORE) {
+        $scope.ShowToast('Ocurrio para pagar en tienda la cantidad debe ser menor a 29,999.99', 'danger');
+        $scope.errorStore = true;
+        return false;
+      }
+      return true;
+    };
+
     const getOrderDetails = function (validate) {
       return PedidoDetallesFactory.getPedidoDetalles()
         .then(function (result) {
@@ -111,6 +127,9 @@
         })
         .then(function () {
           if ($scope.isPayingWithCSCredit()) validarCarrito();
+        })
+        .then(function () {
+          if ($scope.isPayingInStore()) validateTotalOrder();
         })
         .catch(function (result) {
           error(result.data);
@@ -143,6 +162,7 @@
 
     var ActualizarFormaPago = function (IdFormaPago) {
       var empresa = { IdFormaPagoPredilecta: IdFormaPago || $scope.Distribuidor.IdFormaPagoPredilecta };
+
       EmpresasFactory.putEmpresaFormaPago(empresa)
         .then(function (result) {
           if (result.data.success) {
@@ -226,7 +246,6 @@
           order.Productos.forEach(function (product) {
             if (product.IdTipoProducto === 3) {
               disabled = true;
- 
             }
           });
         });
@@ -289,6 +308,11 @@
     $scope.isPayWithPrepaid = function () {
       const IdFormaPago = Number($scope.Distribuidor.IdFormaPagoPredilecta);
       return IdFormaPago === paymentMethods.PREPAY;
+    };
+
+    $scope.isPayingInStore = function () {
+      const IdFormaPago = Number($scope.Distribuidor.IdFormaPagoPredilecta);
+      return IdFormaPago === paymentMethods.STORE;
     };
 
     $scope.hasProtectedExchangeRate = function () {
