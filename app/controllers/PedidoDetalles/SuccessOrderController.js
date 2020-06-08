@@ -28,7 +28,7 @@
       const MICROSOFT = 1;
       if ($scope.currentPath === '/SuccessOrder') {
         $scope.CheckCookie();
-        if ($scope.orderIdsCookie.MetodoPago === 'Transferencia') {
+        if ($scope.orderIdsCookie.MetodoPago === 'Transferencia' || $scope.orderIdsCookie.MetodoPago === 'Pago en tienda') {
           $scope.url = $sce.trustAsResourceUrl($scope.orderIdsCookie.urlFile);
           $scope.spei = true;
         } else {

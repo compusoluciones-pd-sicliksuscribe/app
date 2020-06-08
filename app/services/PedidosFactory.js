@@ -62,11 +62,16 @@
       return $http.post($rootScope.API + 'open-pay/pay-with-card', bodyReq);
     };
     
-
     factory.payWithSpeiOpenpay = function (bodyReq) {
       delete $http.defaults.headers.common['Authorization'];
       factory.refreshToken();
       return $http.post($rootScope.API + 'open-pay/pay-with-spei', bodyReq);
+    };
+    
+    factory.payInStore = function (bodyReq) {
+      delete $http.defaults.headers.common['Authorization'];
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'open-pay/pay-in-store', bodyReq);
     };
     
     return factory;

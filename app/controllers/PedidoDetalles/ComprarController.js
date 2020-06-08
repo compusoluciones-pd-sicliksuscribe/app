@@ -11,7 +11,8 @@
       CREDIT_CARD: 1,
       CS_CREDIT: 2,
       PAYPAL: 3,
-      CASH: 4
+      CASH: 4,
+      STORE: 5
     };
     const makers = {
       MICROSOFT: 1,
@@ -542,11 +543,37 @@
         });
     };
 
+    const comprarEnTienda = async function() { // En tienda
+      keyAntifraude();
+      const siclikToken = await $scope.getSiclikToken();
+      const openpayCustomerId = await getOpenPayCustomer(siclikToken);
+      const body = {
+        openpayCustomerId,
+        deviceSessionId: $scope.deviceSessionId,
+      }
+      PedidosFactory.payInStore(body)
+        .then(function (speiResult) {
+          if (speiResult.data.success) {
+            $scope.ActualizarMenu();
+            speiResult.data.data.MetodoPago = 'Pago en tienda';
+            orderCookie(speiResult.data);
+          } else {
+            $scope.ShowToast('Ocurrio un error intente más tarde.', 'danger');
+            $location.path('/Carrito');
+          }
+        })
+        .catch(function (result) {
+          $scope.ShowToast('Ocurrio un error intente más tarde.', 'danger');
+          $location.path('/Carrito/e');
+        });
+    };
+
     $scope.Comprar = function () {
       angular.element(document.getElementById('auxScope')).scope().gaComprar($scope.PedidoDetalles, $scope.Distribuidor);
       if ($scope.Distribuidor.IdFormaPagoPredilecta === paymentMethods.CREDIT_CARD) $scope.PagarTarjeta();
       if ($scope.Distribuidor.IdFormaPagoPredilecta === paymentMethods.CS_CREDIT) comprarProductos();
       if ($scope.Distribuidor.IdFormaPagoPredilecta === paymentMethods.CASH) comprarPrePago();
+      if ($scope.Distribuidor.IdFormaPagoPredilecta === paymentMethods.STORE) comprarEnTienda();
       if ($scope.Distribuidor.IdFormaPagoPredilecta === paymentMethods.PAYPAL) $scope.prepararPaypal();
     };
 
