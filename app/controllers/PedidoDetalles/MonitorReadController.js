@@ -47,7 +47,6 @@
             $scope.Pedidos = '';
           } else if (result.status === 200) {
             $scope.Pedidos = result.data.data;
-            console.log($scope.Pedidos);
             $scope.Vacio = 1;
           }
         })
