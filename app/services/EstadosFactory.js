@@ -21,6 +21,10 @@
       return $http.get($rootScope.API + 'Estados/' + IdEstado);
     };
 
+    factory.getEstadosDiccionario = function (clave) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'Estados/Diccionario/' + clave);
+    };
     return factory;
   };
 

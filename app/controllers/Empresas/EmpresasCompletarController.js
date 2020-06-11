@@ -39,6 +39,12 @@
           }
           $scope.direccionValidada = true;
           DatosMicrosoft = Empresa;
+          EstadosFactory.getEstadosDiccionario(Empresa.defaultAddress.state.toUpperCase())
+            .success(function (resultado) { 
+              if (resultado.length === 1) {
+                DatosMicrosoft.defaultAddress.state = resultado[0].Estado;
+              }
+            });
           if (!Empresa.email) {
             $scope.MostrarCorreo = true;
           } else {
