@@ -77,17 +77,20 @@
           <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
             <div class="form-group">
               <div class="pull-rigth">
+                <label for="Credito"
+                >Crédito en Azure - {{Empresa.MovimientoAzure}} pesos MXN.</label
+              ><br>
                 <label>Tipo de anticipo </label>
                 <select name="TipoAnticipo" class="form-control" ng-model="Empresa.TipoAnticipo">
                   <option
                     selected
-					value=""
+					          value=""
                     ng-disabled="true"
                     ng-selected="true"
                     >Selecciona un tipo Anticipo</option
                   >
-                  <option selected value="Credito">Crédito</option>
-                  <option selected value="Transferencia">Transferencia</option>
+                  <option value="2" >Crédito</option>
+                  <option value=4>Transferencia</option>
 				</select>
 				<br>
 				<input
