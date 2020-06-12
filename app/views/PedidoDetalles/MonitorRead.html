@@ -234,7 +234,11 @@
 									</li>
 									<li ng-show = "detalles.Activo || pedido.IdFabricante !== 1">
 										<label>Fecha fin de suscripción: </label>
-										<br/> {{ pedido.FechaFin| date:'d/MM/yyyy' }}
+										<br/> {{ pedido.FechaFin| date:'d/MM/yyyy' }} <br/> <br/>
+									</li>
+									<li ng-show = "pedido.IdFabricante == 11">
+										<label>Periodo de vigencia </label>
+										<br/> {{ detalles.InicioPlazo| date:'d/MM/yyyy'}} - {{ detalles.FinPlazo| date:'d/MM/yyyy'}}
 									</li>
 								</ul>
 							</div>
