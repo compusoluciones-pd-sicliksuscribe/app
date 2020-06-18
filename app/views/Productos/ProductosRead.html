@@ -189,6 +189,7 @@
                                             <p style="color:red" ng-show="frmCantidad.Cantidad.$error.maxlength">Máximo 5 dígitos</p>
                                             <p style="color:red" ng-show="frmCantidad.Cantidad.$error.min">Mínimo {{Producto.CantidadMinima}}</p>
                                             <p style="color:red" ng-show="frmCantidad.Cantidad.$error.max">Máximo {{Producto.CantidadMaxima}}</p>
+                                            </form>
 
                                             <label for="IdEmpresaUsuarioFinal">* ¿Para quiénes son?</label> 
                                             <a href="#/Empresa" class="form-group" title="Nuevo cliente" ng-show="SessionCookie.IdTipoAcceso === 1 || SessionCookie.IdTipoAcceso === 2 || SessionCookie.IdTipoAcceso === 3 || SessionCookie.IdTipoAcceso === 4" style="background-blend-mode: initial">
@@ -207,18 +208,40 @@
                                                     <option ng-selected="true" value="">Selecciona un cliente...</option>
                                                 </select>
                                             </div>
-                                            <br>                                
                                             <label style="color:red" for="DominioMicrosoft" ng-show="Producto.IdFabricante === 1 && usuariosSinDominio[Producto.IdEmpresaUsuarioFinal] === false">*No cuentas con un Dominio de Microsoft para este producto.</label>&nbsp;                                            
-                                            <label for="contrato" ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2">* Contrato</label>
-                                                    <div class="input-group" ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2 && Producto.IdAccionAutodesk === 1">
-                                                <span class="input-group-addon green white">
-                                                    <span class="glyphicon glyphicon-file"></span>
-                                                </span>
-                                                <select id="contrato" name="contrato" class="form-control selectOption ufs" ng-model="Producto.IdPedidoContrato" ng-options="contrato.IdPedido as contrato.NumeroContrato for contrato in Producto.contratos"
-                                                    ng-change="contractSetted(Producto)" ng-required="contrato.NumeroContrato !== ''">
-                                                    <option ng-disabled="" ng-selected="true" ng-value="0">Nuevo contrato...</option>
-                                                </select>
+                                            <div ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2">
+                                                <label for="contrato" >* Contrato</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-addon green white">
+                                                <span class="glyphicon glyphicon-file"></span>
+                                            </span>
+                                            <select id="contrato" name="contrato" class="form-control selectOption ufs" ng-model="Producto.IdPedidoContrato" ng-options="contrato.IdPedido as contrato.NumeroContrato for contrato in Producto.contratos"
+                                                ng-change="contractSetted(Producto)" ng-required="contrato.NumeroContrato !== ''">
+                                                <option ng-disabled="" ng-selected="true" ng-value="0">Nuevo contrato...</option>
+                                            </select>
+                                        </div>
+                                    </div>    
+                                    <form name="frmPlazo" id="frmPlazo">
+                                        
+                                        <div class="form-group">
+                                            <div ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 11" >
+                                                <label for="Plazo" >* Plazo </label>
+                                                <sapan> Disponible de 1 a 60 meses</sapan>
                                             </div>
+
+                                            <div ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 11" class="input-group">
+                                                <span class="input-group-addon green white">
+                                                <span class="glyphicon  glyphicon-hourglass"></span>
+                                                </span>
+                                                <input id="Cantidad" name="Cantidad" type="number" ng-model="Producto.Plazo" class="form-control" placeholder="Elige el plazo en meses deseado..."
+                                                    max="60" min="{{Producto.CantidadMinima}}" size="5"
+                                                    maxlength="2" title="Número de meses"
+                                                    required/>
+                                            </div>
+                                           </div>
+                                            <p style="color:red" ng-show="frmPlazo.Cantidad.$error.maxlength">Máximo 2 dígitos</p>
+                                            <p style="color:red" ng-show="frmPlazo.Cantidad.$error.min">Mínimo 1</p>
+                                            <p style="color:red" ng-show="frmPlazo.Cantidad.$error.max">Máximo 60</p>            
                                             <div ng-hide="Producto.IdFabricante !== 1 || Producto.IdTipoProducto === 6" >
                                                 <label for="IdEmpresaUsuarioFinal">* Tipo de renovación</label> (Mensual/Anual) 
                                                 <div class="input-group" style="width:100%;" >
@@ -241,12 +264,11 @@
                                                     </select>
                                             </div>
                                             <div ng-if="(Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2  && !Producto.IdPedidoContrato && Producto.IdAccionAutodesk === 1) 
-                                            ||  Producto.IdFabricante === 6 || (Producto.IdFabricante === 5  && Producto.IdProductoFabricanteExtra !== 'Aperio') " >
-                                                <br>   
+                                            ||  Producto.IdFabricante === 6 || (Producto.IdFabricante === 5  && Producto.IdProductoFabricanteExtra !== 'Aperio') || (Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 11)" >
                                                 <label for="contacto" >* Contacto</label>
                                             </div>
                                             <div class="input-group" ng-if="(Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2 && !Producto.IdPedidoContrato && Producto.IdAccionAutodesk === 1) 
-                                            ||  Producto.IdFabricante === 6 || (Producto.IdFabricante === 5  && Producto.IdProductoFabricanteExtra !== 'Aperio')">
+                                            ||  Producto.IdFabricante === 6 || (Producto.IdFabricante === 5  && Producto.IdProductoFabricanteExtra !== 'Aperio') || Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 11">
                                                 <span class="input-group-addon green white">
                                                     <span class="glyphicon glyphicon-user"></span>
                                                 </span>
@@ -255,7 +277,7 @@
                                                     ng-required="!Producto.IdPedidoContrato">
                                                     <option ng-selected="true" value="">Selecciona un contacto...</option>
                                                 </select>
-                                            </div>                                    
+                                            </div>                                
                                             <div ng-show="Producto.MostrarMensajeP" style="color:red;">
 
                                                 <label>* No cuentas con suscripciones para este producto.</label>&nbsp;

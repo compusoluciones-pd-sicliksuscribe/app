@@ -17,7 +17,8 @@
       COMPUSOLUCIONES: 3,
       HP: 4,
       APERIO: 5,
-      AMAZONWEBSERVICES:10
+      AMAZONWEBSERVICES:10,
+      IBM: 11
     };
     $scope.tipoMonedaCambio = $cookies.getObject('compararPedidosAnteriores');
 
@@ -68,8 +69,11 @@
         case makers.COMPUCAMPO:
           maker = 'Compucampo';
           break;
-          case makers.AMAZONWEBSERVICES:
-          maker ='Amazon Web Services';
+        case makers.AMAZONWEBSERVICES:
+          maker = 'Amazon Web Services';
+          break;
+        case makers.IBM:
+          maker = 'IBM';
           break;
         default:
           maker = null;

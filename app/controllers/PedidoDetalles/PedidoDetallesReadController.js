@@ -18,7 +18,8 @@
       HP: 4,
       APERIO: 5,
       COMPUCAMPO: 8,
-      AWS: 10
+      AWS: 10,
+      IBM: 11
     };
 
     const error = function (error) {
@@ -83,6 +84,9 @@
         case makers.AWS:
           maker = 'Amazon Web Services';
           break;
+        case makers.IBM:
+          maker = 'IBM';
+          break;
         default:
           maker = null;
       }
@@ -112,7 +116,7 @@
         .then(function () {
           if ($scope.isPayingWithCSCredit()) validarCarrito();
         })
-        .then(function (){
+        .then(function () {
           if ($scope.isPayWithPrepaid()) CambiarMonedaPrepaid();
         }) 
         .catch(function (result) {
@@ -230,7 +234,6 @@
           order.Productos.forEach(function (product) {
             if (product.IdTipoProducto === 3) {
               disabled = true;
- 
             }
           });
         });
