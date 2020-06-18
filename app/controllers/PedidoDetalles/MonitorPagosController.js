@@ -1,5 +1,5 @@
 (function () {
-  var MonitorPagos = function ($scope, $log, $rootScope, $cookies, $location, $uibModal, $filter, PedidoDetallesFactory, EmpresasFactory, PedidosFactory) {
+  var MonitorPagos = function ($scope, $log, $rootScope, $cookies, $location, $uibModal, $filter, PedidoDetallesFactory, EmpresasFactory, UsuariosFactory, PedidosFactory) {
     $scope.PedidoSeleccionado = 0;
     $scope.PedidosSeleccionadosParaPagar = [];
     $scope.PedidosSeleccionadosParaPagarPrepaid = [];
@@ -12,12 +12,21 @@
     $scope.DeshabilitarPagar = false;
     $scope.todos = 0;
     $scope.paymethod = 1;
+    $scope.name = '';
+    $scope.card = '';    
+    $scope.errorDate = '';
+    $scope.year = '';
+    $scope.month = '';
     const paymentMethods = {
       CREDIT_CARD: 1,
       CS_CREDIT: 2,
       PAYPAL: 3,
       PREPAY: 4
     };
+  
+    $scope.session = $cookies.getObject('Session');
+    
+    const CLICKSUSCRIBE = 2;
   
     function groupBy (array, f) {
       var groups = {};
@@ -114,12 +123,10 @@
       return IdFormaPago === paymentMethods.PREPAY;
     };
 
-    $scope.ActualizarFormaPago = function (moneda) {
-      $scope.paymethod = moneda;
-      if ($scope.isPayingWithCreditCard() || $scope.isPayingWithPaypal()) {
-        $scope.Distribuidor.MonedaPago = 'Pesos';
-      }
-      CambiarMoneda();
+    $scope.CREDIT_CARD = 1;
+
+    $scope.ActualizarFormaPago = function (metodoPago) {
+      $scope.paymethod = metodoPago;
     };
 
     $scope.CambiarMoneda = CambiarMoneda;
@@ -225,26 +232,7 @@
             $scope.ShowToast('No pudimos realizar los cálculos, por favor intenta de nuevo más tarde.', 'danger');
           });
       }
-      // if ($scope.PedidosSeleccionadosParaPagar.length !== 0 && document.getElementById('PayPal').checked) {
-      //   PedidoDetallesFactory.monitorCalculationsPayPal({ Pedidos: $scope.PedidosSeleccionadosParaPagar })
-      //     .success(function (calculations) {
-      //       if (calculations.total) {
-      //         $scope.ServicioElectronico = calculations.electronicService;
-      //         $scope.Subtotal = calculations.subtotal;
-      //         $scope.Iva = calculations.iva;
-      //         $scope.Total = calculations.total;
-      //       } else {
-      //         $scope.ServicioElectronico = 0;
-      //         $scope.Subtotal = 0;
-      //         $scope.Iva = 0;
-      //         $scope.Total = 0;
-      //       }
-      //     })
-      //     .error(function (data, status, headers, config) {
-      //       $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
-      //       $scope.ShowToast('No pudimos realizar los cálculos, por favor intenta de nuevo más tarde.', 'danger');
-      //     });
-      // }
+
       if ($scope.PedidosSeleccionadosParaPagar.length !== 0 && document.getElementById('Tarjeta').checked) {
         PedidoDetallesFactory.monitorCalculations({ Pedidos: $scope.PedidosSeleccionadosParaPagar })
           .success(function (calculations) {
@@ -287,50 +275,158 @@
         $scope.preparePrePaid();
       }
     };
+    
+    $scope.getSiclikToken = async () => {
+      return UsuariosFactory.getTokenSiclik()
+        .then(function (tokenRefResult) {
+          return tokenRefResult.data.accessToken;
+          })
+          .catch(function (error) {
+            $scope.ShowToast('Surgió un error, contactar a soporte o intentar más tarde.', 'danger');
+        });
+    };
+    
+    $scope.getOpenPayCustomerId = siclikToken => {
+      const userData = {
+        name: $scope.session.Nombre,
+        lastName: $scope.session.ApellidoPaterno,
+        email: $scope.session.CorreoElectronico,
+        phoneNumber: "",
+        externalId: String($scope.session.IdUsuario),
+        platform: CLICKSUSCRIBE
+      };
+      return UsuariosFactory.createOpenPayUser(siclikToken, userData)
+      .then(function (resultCreate) {
+        return resultCreate.data.openpayCustomerId;
+      });
+    }
+
+    
+    const getOpenPayCustomer = async siclikToken => {
+      return $scope.getOpenPayCustomerId(siclikToken)
+        .catch(() => {
+          const user = String($scope.session.IdUsuario);
+          return UsuariosFactory.getOpenPayUser(siclikToken, user)
+          .then(function (resultGetCustomer) {
+            return resultGetCustomer.data.openpayCustomerId;
+          })
+          .catch(function (error) { 
+            $scope.ShowToast('Surgió un error, contactar a soporte o intentar más tarde.', 'danger');
+          });
+      });
+    }
+  
+    $("#card").keyup(function(){              
+      var ta      =   $("#card");
+      letras      =   ta.val().replace(/ /g, "");
+      ta.val(letras)
+    }); 
+
+    $('#pay-button').on('click', function(event) {
+      $scope.errorName = 0;
+      $scope.errorCard = 0;
+      $scope.errorDate = 0;
+      $scope.dateError = '';
+      $scope.errorCardMessage = '';
+      if ($scope.name.length <= 0) {
+        $scope.errorName = 1;
+      }
+      if ($scope.card.length <= 0) {
+        $scope.errorCard = 1;
+        $scope.errorCardMessage = '*Requerido';
+      }
+      if ($scope.month.length <= 0) {
+        $scope.errorDate = 1;
+        $scope.dateError = '*Mes requerido';
+      }
+      if ($scope.year.length <= 0) {
+        $scope.errorDate = 1;
+        $scope.dateError = '*Año requerido';
+      }
+      event.preventDefault();
+      $("#pay-button").prop( "disabled", true);
+      OpenPay.token.extractFormAndCreate('payment-form', success_callbak, error_callbak);              
+    });
+
+    async function success_callbak (response) {
+      const siclikToken = await $scope.getSiclikToken();
+      const openpayCustomerId = await getOpenPayCustomer(siclikToken);
+        const bodyRequest = {
+          deviceSessionId: $scope.deviceSessionId,
+          sourceId: response.data.id,
+          openpayCustomerId,
+          Pedidos: $scope.PedidosSeleccionadosParaPagar,
+        };
+        PedidosFactory.payWithCardMonitorOpenpay(bodyRequest)
+        .then(function (resultPayment) {
+          if (resultPayment.data.success) {
+            $('#modalPagoTC').modal('hide');
+            $scope.ShowToast(resultPayment.data.message, 'success');
+            $scope.init();
+          } else {
+            if (resultPayment.data.statusCode) {
+              const cardError = getCardPaymentError(resultPayment.data.error.code);
+              $scope.ShowToast(cardError, 'danger');
+            } else {
+              $scope.ShowToast('Surgió un error, contactar a soporte o intentar más tarde.', 'danger');
+            }
+          }
+        })
+        .catch(function (error) { 
+          $scope.ShowToast('Surgió un error, contactar a soporte o intentar más tarde.', 'danger');
+        });
+    }
+    $scope.checkErrors = errors => {
+      errors.forEach(er => {
+        if (er === 'holder_name is required') {
+          $scope.ShowToast('El nombre es requerido', 'danger');
+        }
+        if (er === 'card_number is required') {
+          $scope.ShowToast('El número de tarjeta es requerido', 'danger');
+        }
+        if (er === 'expiration_year expiration_month is required') {
+          $scope.ShowToast('La fecha de expiración es requerida', 'danger');
+        }
+        if (er === 'card_number length is invalid') {
+          $scope.ShowToast('El número de su tarjeta es inválido', 'danger');
+        }
+        if (er === 'The card number verification digit is invalid') {
+          $scope.ShowToast('El número de verificacion de su tarjeta es inválido', 'danger');
+        }
+        if (er === 'The CVV2 security code is required') {
+          $scope.ShowToast('El código de seguridad CVV2 es requerido', 'danger');
+        }
+        if (er === 'valid expirations months are 01 to 12') {
+          $scope.ShowToast('Los meses de expiración válidos son de 01 a 12', 'danger');
+        }
+      })
+    }
+
+    async function error_callbak (error) {
+      const test = error.data.description;
+      var arr = await test.split(",").map(function(item) {
+        return item.trim();
+      });
+      return $scope.checkErrors(arr);
+    }
+    
+    const keyAntifraude = () => {
+      OpenPay.setId('mgp4crl0qu5nxy0ed2af');
+      OpenPay.setApiKey('pk_9f2f5b3c557045298d7df2c67fe378fe');
+      if ($rootScope.sandbox) OpenPay.setSandboxMode(true);
+      $scope.deviceSessionId = OpenPay.deviceData.setup("payment-form", "device_session_id");
+    }
 
     $scope.pagar = function () {
       if ($scope.PedidosSeleccionadosParaPagar.length > 0) {
+        keyAntifraude();
         PedidoDetallesFactory.payWidthCard({ Pedidos: $scope.PedidosSeleccionadosParaPagar })
           .success(function (Datos) {
             var expireDate = new Date();
             expireDate.setTime(expireDate.getTime() + 600 * 2000);
-            Datos.data["0"].pedidosAgrupados[0].TipoCambio = $scope.TipoCambio;
-            $cookies.putObject('pedidosAgrupados', Datos.data["0"].pedidosAgrupados, { 'expires': expireDate, secure: $rootScope.secureCookie });
             if (Datos.success) {
-              if ($cookies.getObject('pedidosAgrupados')) {
-
-                Checkout.configure({
-                  merchant: Datos.data["0"].merchant,
-                  session: { id: Datos.data["0"].session_id },
-                  order:
-                  {
-                    amount: Datos.data['0'].total,
-                    currency: Datos.data["0"].moneda,
-                    description: 'Pago tarjeta bancaria',
-                    id: Datos.data["0"].pedidos,
-                  },
-                  interaction:
-                  {
-                    merchant:
-                    {
-                      name: 'CompuSoluciones',
-                      address:
-                      {
-                        line1: 'CompuSoluciones y Asociados, S.A. de C.V.',
-                        line2: 'Av. Mariano Oterno No. 1105',
-                        line3: 'Col. Rinconada del Bosque C.P. 44530',
-                        line4: 'Guadalajara, Jalisco. México'
-                      },
-                      email: 'order@yourMerchantEmailAddress.com',
-                      phone: '+1 123 456 789 012',
-                    },
-                    displayControl: { billingAddress: 'HIDE', orderSummary: 'SHOW' },
-                    locale: 'es_MX',
-                    theme: 'default'
-                  }
-                });
-                Checkout.showLightbox();
-              }
+              $scope.amount = Datos.data[0].amount;
+              $scope.currency = Datos.data[0].currency;
             }
           })
           .error(function (data, status, headers, config) {
@@ -349,71 +445,6 @@
       let subdomain = window.location.href;
       subdomain = subdomain.replace('/#/MonitorPagos', '');
       return subdomain;
-    };
-
-    // $scope.preparePayPal = function () {
-    //   if ($scope.PedidosSeleccionadosParaPagar.length > 0) {
-    //     const actualSubdomain = getActualSubdomain();
-    //     PedidoDetallesFactory.payWithPaypal({ Pedidos: $scope.PedidosSeleccionadosParaPagar })
-    //     .success(function (response) {
-    //       var expireDate = new Date();
-    //       expireDate.setTime(expireDate.getTime() + 600 * 2000);
-    //       const paypalNextPayment = {
-    //         electronicServiceByOrder: response.data.electronicServiceByOrder,
-    //         TipoCambio: $scope.TipoCambio
-    //       };
-    //       $cookies.putObject('paypalNextPayment', paypalNextPayment, { expires: expireDate, secure: $rootScope.secureCookie });
-    //       $cookies.putObject('orderIds', $scope.PedidosSeleccionadosParaPagar, { expires: expireDate, secure: $rootScope.secureCookie });
-    //       PedidoDetallesFactory.preparePayPal({ orderIds: $scope.PedidosSeleccionadosParaPagar, url: 'MonitorPagos', actualSubdomain })
-    //         .then(function (response) {
-    //           if (response.data.state === 'created') {
-    //             const paypal = response.data.links.filter(function (item) {
-    //               if (item.method === 'REDIRECT') return item.href;
-    //             })[0];
-    //             location.href = paypal.href;
-    //           } else {
-    //             $scope.ShowToast('Ocurrio un error al procesar el pago.', 'danger');
-    //           }
-    //         });
-    //     })
-    //     .catch(function (response) {
-    //       $scope.ShowToast('Ocurrio un error al procesar el pago. de tipo: ' + response.data.message, 'danger');
-    //     });
-    //   } else {
-    //     $scope.ShowToast('Selecciona al menos un pedido para pagar.', 'danger');
-    //   }
-    // };
-
-    $scope.ComprarConPayPal = function (resultPaypal) {
-      const paypalNextPayment = $cookies.getObject('paypalNextPayment');
-      const TipoCambio = paypalNextPayment.TipoCambio;
-      const electronicServiceByOrder = paypalNextPayment.electronicServiceByOrder;
-      const PedidosAgrupados = electronicServiceByOrder.map(function (order) {
-        return Object.assign({}, order, { TipoCambio });
-      });
-      const datosPayPal = {
-        TarjetaResultIndicator: resultPaypal.paymentId,
-        TarjetaSessionVersion: resultPaypal.PayerID,
-        PedidosAgrupados
-      };
-      if (datosPayPal.PedidosAgrupados) {
-        PedidosFactory.patchPaymentInformation(datosPayPal)
-          .success(function (compra) {
-            $cookies.remove('pedidosAgrupados');
-            $cookies.remove('TipoCambio');
-            $cookies.remove('electronicServiceByOrder');
-            if (compra.success === 1) {
-              $scope.ShowToast(compra.message, 'success');
-              $location.path('/MonitorPagos/refrescar');
-            }
-          })
-          .error(function (data, status, headers, config) {
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-          });
-      } else {
-        $scope.ShowToast('Algo salió mal con tu pedido, por favor ponte en contacto con tu equipo de soporte CompuSoluciones para más información.', 'danger');
-        $location.path('/MonitorPagos/e');
-      }
     };
 
     $scope.preparePrePaid = function () {
@@ -435,7 +466,7 @@
       }
     };
   };
-  MonitorPagos.$inject = ['$scope', '$log', '$rootScope', '$cookies', '$location', '$uibModal', '$filter', 'PedidoDetallesFactory', 'EmpresasFactory', 'PedidosFactory'];
+  MonitorPagos.$inject = ['$scope', '$log', '$rootScope', '$cookies', '$location', '$uibModal', '$filter', 'PedidoDetallesFactory', 'EmpresasFactory', 'UsuariosFactory', 'PedidosFactory'];
 
   angular.module('marketplace').controller('MonitorPagos', MonitorPagos);
 }());

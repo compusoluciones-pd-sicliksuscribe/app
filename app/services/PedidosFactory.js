@@ -74,6 +74,12 @@
       return $http.post($rootScope.API + 'open-pay/pay-in-store', bodyReq);
     };
     
+    factory.payWithCardMonitorOpenpay = function (bodyReq) {
+      delete $http.defaults.headers.common['Authorization'];
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'open-pay/pay-with-card-monitor', bodyReq);
+    };
+
     return factory;
   };
 
