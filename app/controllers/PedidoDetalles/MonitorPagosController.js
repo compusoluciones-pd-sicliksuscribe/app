@@ -1,5 +1,5 @@
 (function () {
-  var MonitorPagos = function ($scope, $log, $rootScope, $cookies, $location, $uibModal, $filter, PedidoDetallesFactory, EmpresasFactory, UsuariosFactory, PedidosFactory) {
+  var MonitorPagos = function ($scope, $sce, $log, $rootScope, $cookies, $location, $uibModal, $filter, PedidoDetallesFactory, EmpresasFactory, UsuariosFactory, PedidosFactory) {
     $scope.PedidoSeleccionado = 0;
     $scope.PedidosSeleccionadosParaPagar = [];
     $scope.PedidosSeleccionadosParaPagarPrepaid = [];
@@ -127,23 +127,7 @@
 
     $scope.ActualizarFormaPago = function (metodoPago) {
       $scope.paymethod = metodoPago;
-    };
-
-    $scope.CambiarMoneda = CambiarMoneda;
-
-    $scope.cambiaMoneda = function (tipoMoneda, key) {
-      $scope.Distribuidor.MonedaPago = tipoMoneda || 'Pesos';
-      $scope.pedidosPorPagar(key);
-    }
-
-    var CambiarMoneda = function (tipoMoneda, key) {
-      $scope.Distribuidor.MonedaPago = tipoMoneda || 'Pesos';
-      const MonedaPago = $scope.Distribuidor.MonedaPago;
-      $scope.pedidosPorPagar(key);
-      EmpresasFactory.putCambiaMonedaMonitorPXP($scope.PedidosSeleccionadosParaPagar, MonedaPago)
-      .then(function (result) {
-      })
-      .catch(function (result) { error(result.data); });
+      $scope.Distribuidor.MonedaPago ='Pesos';
     };
 
     $scope.ActualizarPagoAutomatico = function () {
@@ -269,8 +253,6 @@
     $scope.checkPayment = function () {
       if (document.getElementById('Tarjeta').checked) {
         $scope.pagar();
-      // } else if (document.getElementById('PayPal').checked) {
-      //   $scope.preparePayPal();
       } else if (document.getElementById('Prepago').checked) {
         $scope.preparePrePaid();
       }
@@ -447,26 +429,42 @@
       return subdomain;
     };
 
-    $scope.preparePrePaid = function () {
+    $scope.cerrarModal = () => {
+      $('#modalPagoPDF').modal('hide');
+      $scope.init();
+    }
+
+    $scope.preparePrePaid = async function () {
       if ($scope.PedidosSeleccionadosParaPagar.length > 0) {
-        PedidoDetallesFactory.payWithPrePaid({ Pedidos: $scope.PedidosSeleccionadosParaPagarPrepaid }, $scope.Distribuidor.MonedaPago)
-        .success(function (response) {
-          if (response.statusCode === 400) {
-            $scope.ShowToast(response.message, 'danger');
-          } else {
-            $scope.ShowToast('Pago realizado correctamente.', 'success');
-            $location.path('/MonitorPagos/refrescar');
-          }
-        })
-        .catch(function (response) {
-          $scope.ShowToast('Algo salió mal con tu pedido, por favor ponte en contacto con tu equipo de soporte CompuSoluciones para más información.', 'danger');
-        });
+        keyAntifraude();
+        const siclikToken = await $scope.getSiclikToken();
+        const openpayCustomerId = await getOpenPayCustomer(siclikToken);
+        const body = {
+          openpayCustomerId,
+          deviceSessionId: $scope.deviceSessionId,
+          Pedidos: $scope.PedidosSeleccionadosParaPagar,
+          Moneda: $scope.Distribuidor.MonedaPago,
+        }
+        PedidosFactory.payWithSpeiOpenpayMonitor(body)
+          .then(function (speiResult) {
+            if (speiResult.data.success) {
+              $('#modalPagoPDF').modal('show');
+              $scope.url = $sce.trustAsResourceUrl(speiResult.data.data.urlFile);
+              $scope.ShowToast(speiResult.data.message, 'success');
+            } else {
+              $scope.ShowToast('Ocurrio un error intente más tarde.', 'danger');
+            }
+          })
+          .catch(function (result) {
+            $scope.ShowToast('Ocurrio un error intente más tarde.', 'danger');
+          });
       } else {
         $scope.ShowToast('Selecciona al menos un pedido para pagar.', 'danger');
       }
     };
+  
   };
-  MonitorPagos.$inject = ['$scope', '$log', '$rootScope', '$cookies', '$location', '$uibModal', '$filter', 'PedidoDetallesFactory', 'EmpresasFactory', 'UsuariosFactory', 'PedidosFactory'];
+  MonitorPagos.$inject = ['$scope', '$sce', '$log', '$rootScope', '$cookies', '$location', '$uibModal', '$filter', 'PedidoDetallesFactory', 'EmpresasFactory', 'UsuariosFactory', 'PedidosFactory'];
 
   angular.module('marketplace').controller('MonitorPagos', MonitorPagos);
 }());

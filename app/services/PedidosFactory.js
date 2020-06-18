@@ -79,6 +79,12 @@
       factory.refreshToken();
       return $http.post($rootScope.API + 'open-pay/pay-with-card-monitor', bodyReq);
     };
+    
+    factory.payWithSpeiOpenpayMonitor = function (bodyReq) {
+      delete $http.defaults.headers.common['Authorization'];
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'open-pay/pay-with-spei-monitor', bodyReq);
+    };
 
     return factory;
   };
