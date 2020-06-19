@@ -273,7 +273,7 @@
                                     <div ng-show="!detalles.Activo">
                                         Suscripción cancelada <span class="glyphicon glyphicon-minus-sign" title="{{ detalles.EstatusFabricante }}"> </span>
                                     </div>
-                                    <div ng-show="detalles.EstatusMPNID && detalles.Activo">
+                                    <div ng-show="detalles.EstatusMPNID && detalles.Activo && pedido.IdFabricante !== 11">
                                         MPNID no válido <span class="glyphicon glyphicon-alert" title="{{ detalles.EstatusFabricante }}"> </span>
                                     </div>
                                 </li>
