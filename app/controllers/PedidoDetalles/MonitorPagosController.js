@@ -21,7 +21,8 @@
       CREDIT_CARD: 1,
       CS_CREDIT: 2,
       PAYPAL: 3,
-      PREPAY: 4
+      PREPAID: 4,
+      STORE: 5
     };
   
     $scope.session = $cookies.getObject('Session');
@@ -120,7 +121,7 @@
 
     $scope.isPayingWithPrepaid = function () {
       const IdFormaPago = $scope.paymethod;
-      return IdFormaPago === paymentMethods.PREPAY;
+      return IdFormaPago === paymentMethods.PREPAID;
     };
 
     $scope.CREDIT_CARD = 1;
@@ -197,7 +198,7 @@
         $scope.Iva = 0;
         $scope.Total = 0;
       }
-      if ($scope.PedidosSeleccionadosParaPagar.length !== 0 && document.getElementById('Prepago').checked) {
+      if ($scope.PedidosSeleccionadosParaPagar.length !== 0 && ($scope.paymethod === paymentMethods.PREPAID || $scope.paymethod === paymentMethods.STORE)) {
         PedidoDetallesFactory.monitorCalculationsPrepaid({ Pedidos: $scope.PedidosSeleccionadosParaPagar }, $scope.Distribuidor.MonedaPago)
           .success(function (calculations) {
             if (calculations.total) {
@@ -255,6 +256,8 @@
         $scope.pagar();
       } else if (document.getElementById('Prepago').checked) {
         $scope.preparePrePaid();
+      } else if ($scope.paymethod === paymentMethods.STORE) {
+        $scope.payInStore();
       }
     };
     
@@ -446,6 +449,35 @@
           Moneda: $scope.Distribuidor.MonedaPago,
         }
         PedidosFactory.payWithSpeiOpenpayMonitor(body)
+          .then(function (speiResult) {
+            if (speiResult.data.success) {
+              $('#modalPagoPDF').modal('show');
+              $scope.url = $sce.trustAsResourceUrl(speiResult.data.data.urlFile);
+              $scope.ShowToast(speiResult.data.message, 'success');
+            } else {
+              $scope.ShowToast('Ocurrio un error intente más tarde.', 'danger');
+            }
+          })
+          .catch(function (result) {
+            $scope.ShowToast('Ocurrio un error intente más tarde.', 'danger');
+          });
+      } else {
+        $scope.ShowToast('Selecciona al menos un pedido para pagar.', 'danger');
+      }
+    };
+  
+    $scope.payInStore = async function () {
+      if ($scope.PedidosSeleccionadosParaPagar.length > 0) {
+        keyAntifraude();
+        const siclikToken = await $scope.getSiclikToken();
+        const openpayCustomerId = await getOpenPayCustomer(siclikToken);
+        const body = {
+          openpayCustomerId,
+          deviceSessionId: $scope.deviceSessionId,
+          Pedidos: $scope.PedidosSeleccionadosParaPagar,
+          Moneda: $scope.Distribuidor.MonedaPago,
+        }
+        PedidosFactory.payInStoreOpenpayMonitor(body)
           .then(function (speiResult) {
             if (speiResult.data.success) {
               $('#modalPagoPDF').modal('show');

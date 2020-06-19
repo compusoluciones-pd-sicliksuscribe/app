@@ -85,6 +85,12 @@
       factory.refreshToken();
       return $http.post($rootScope.API + 'open-pay/pay-with-spei-monitor', bodyReq);
     };
+    
+    factory.payInStoreOpenpayMonitor = function (bodyReq) {
+      delete $http.defaults.headers.common['Authorization'];
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'open-pay/pay-in-store-monitor', bodyReq);
+    };
 
     return factory;
   };

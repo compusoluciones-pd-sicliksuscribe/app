@@ -27,17 +27,15 @@
     </div>
 
     <div class="row" ng-hide="DeshabilitarPagar">
-        <div>
-            <input ng-model="paymethod" ng-click="pedidosPorPagar(key);" type="radio" name="payType" id="Tarjeta" value="1" ng-change="ActualizarFormaPago(1);" checked/> Pagar con Tarjeta
-        </div>
-        <div>
-            <!-- <input type="radio" name="payType" id="PayPal" value="3"/> Pagar con PayPal -->
-        </div>
-        <div class="form-group row">
-            <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
-                <input ng-model="paymethod" ng-click="pedidosPorPagar(key);" type="radio" name="payType" id="Prepago" value="4" ng-change="ActualizarFormaPago(4);" /> Transferencia
-            </div>
-        </div>
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <input ng-model="paymethod" ng-click="pedidosPorPagar(key);" type="radio" name="payType" id="Tarjeta" value="1" ng-change="ActualizarFormaPago(1);" checked/> Pagar con Tarjeta
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <input ng-model="paymethod" ng-click="pedidosPorPagar(key);" type="radio" name="payType" id="Prepago" value="4" ng-change="ActualizarFormaPago(4);" /> Transferencia
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <input ng-model="paymethod" ng-click="pedidosPorPagar(key);" type="radio" name="payType" id="Tienda" value="5" ng-change="ActualizarFormaPago(5);" /> Pago en tienda
+      </div>
     </div>
 
     <hr>
