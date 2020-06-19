@@ -202,8 +202,9 @@
                             <div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
                                 <label>{{ pedido.IdFabricante === 5 ? "Empleados" : pedido.IdFabricante === 11 ? "Créditos" :"Suscripciones" }}: </label>
                                 <br>
+                                <div style="margin:0; padding:0;" ng-show="pedido.IdFabricante === 11"> {{ detalles.Cantidad }} </div>
                                 <div style="margin:0; padding:0;" ng-show="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3) && !pedido.CargoRealizadoProximoPedido && !detalles.PedidoAFabricante"> {{ detalles.Cantidad }} </div>
-                                <a ng-click="ActualizarCantidad(detalles.IdPedidoDetalle)" style="text-decoration: none" ng-hide="pedido.CargoRealizadoProximoPedido || (!detalles.PedidoAFabricante || detalles.EstatusFabricante === 'FAILED')"> {{ detalles.IdProducto === 3616 ? 25 : detalles.Cantidad }} &nbsp;
+                                <a ng-click="ActualizarCantidad(detalles.IdPedidoDetalle)" style="text-decoration: none" ng-hide="pedido.CargoRealizadoProximoPedido || (!detalles.PedidoAFabricante || detalles.EstatusFabricante === 'FAILED') || pedido.IdFabricante === 11"> {{ detalles.IdProducto === 3616 ? 25 : detalles.Cantidad }} &nbsp;
 										<span class="glyphicon glyphicon-triangle-bottom" ng-hide="detalles.MostrarCantidad || detalles.IdProducto === 3616 || pedido.IdFabricante === 11"></span>
 										<span class="glyphicon glyphicon-triangle-top" ng-show="detalles.MostrarCantidad"></span>
 									</a>
