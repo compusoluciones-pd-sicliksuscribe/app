@@ -188,6 +188,11 @@
       return $http.put($rootScope.API + 'enterprise/setAzureMovement', Empresa);
     };
 
+    factory.getBudgetAzure = function (IdEmpresa) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'enterprise/getAzureMovement/' + IdEmpresa);
+    };
+
     return factory;
   };
 
