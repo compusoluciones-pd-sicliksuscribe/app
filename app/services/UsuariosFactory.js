@@ -128,6 +128,11 @@
       $http.defaults.headers.common['Authorization'] = 'Bearer ' + tokenSiclick;
       return $http.get($rootScope.SICLIK_API + 'users/' + id);
     };
+
+    factory.postContact = function (Usuario) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'Usuarios/create-user', Usuario);
+    };
     return factory;
   };
 

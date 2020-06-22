@@ -294,6 +294,88 @@
           });
       }
     };
+
+    $scope.abrirModal = function (modal) {
+      document.getElementById(modal).style.display = 'block';
+    };
+
+    $scope.cerrarModal = function (modal) {
+      document.getElementById(modal).style.display = 'none';
+    };
+
+    $scope.completarDistModal = function (cadenaDist = '') {
+      let resultado = [];
+      $scope.resultadoDistribuidorModal = [];
+      $scope.ocultarOpcionesDistModal = false;
+      $scope.distribuidoresLista.forEach(distribuidor => {
+        if (distribuidor.NombreEmpresa.toLowerCase().indexOf(cadenaDist.toLowerCase()) >= 0) {
+          resultado.push(distribuidor.NombreEmpresa);
+          $scope.resultadoDistribuidorModal.push(distribuidor);
+        }
+        if (cadenaDist === '') $scope.ocultarOpcionesDistModal = true;
+      });
+      $scope.filtroDistribuidorModal = resultado;
+    };
+
+    $scope.llenarTextBoxDistModal = function (infoDist) {
+      $scope.Usuario.Distribuidor = infoDist;
+      $scope.distribuidorSeleccionadoModal = $scope.resultadoDistribuidorModal.find(elemento => elemento.NombreEmpresa === infoDist);
+      $scope.ocultarOpcionesDistModal = true;
+      $scope.ufsListaAuxModal = $scope.ufsLista.filter(uf => uf.IdEmpresaDistribuidor === $scope.distribuidorSeleccionadoModal.IdEmpresa);
+      $scope.Usuario.Empresauf = '';
+    };
+
+    $scope.completarUFModal = function (cadenaUF = '') {
+      let resultado = [];
+      $scope.resultadoUFModal = [];
+      if ($scope.ufsListaAuxModal) {
+        $scope.ocultarOpcionesUFModal = false;
+        $scope.ufsListaAuxModal.forEach(uf => {
+          if (uf.NombreEmpresa.toLowerCase().indexOf(cadenaUF.toLowerCase()) >= 0) {
+            resultado.push(uf.NombreEmpresa);
+            $scope.resultadoUFModal.push(uf);
+          }
+          if (cadenaUF === '') {
+            $scope.ocultarOpcionesUFModal = true;
+          }
+        });
+        $scope.filtroUsuarioFinalModal = resultado;
+      };
+    };
+
+    $scope.llenarTextBoxUFModal = function (infoUF) {
+      $scope.Usuario.Empresauf = infoUF;
+      $scope.ufSeleccionadoModal = $scope.resultadoUFModal.find(elemento => elemento.NombreEmpresa === infoUF);
+      $scope.ocultarOpcionesUFModal = true;
+    };
+
+    $scope.conjuntarInformacionModal = function () {
+      const ADMIN_END_USER = 4;
+      if ($scope.distribuidorSeleccionadoModal && $scope.ufSeleccionadoModal) {
+        const infoContacto = {
+          IdEmpresaDistribuidor: $scope.distribuidorSeleccionadoModal.IdEmpresa,
+          IdEmpresaUsuarioFinal: $scope.ufSeleccionadoModal.IdEmpresa,
+          Nombre: $scope.Usuario.Nombre,
+          ApellidoPaterno: $scope.Usuario.ApellidoPaterno,
+          ApellidoMaterno: $scope.Usuario.ApellidoMaterno,
+          CorreoElectronico: $scope.Usuario.CorreoElectronico,
+          Lada: $scope.Usuario.Lada,
+          Telefono: $scope.Usuario.Telefono,
+          IdTipoAcceso: ADMIN_END_USER
+        };
+        UsuariosFactory.postContact(infoContacto)
+          .success(function (result) {
+            result.data.error === 0
+              ? $scope.ShowToast(` ${result.message}.`, 'success')
+              : $scope.ShowToast(`Hubo un error al tratar de registrar el contacto: ${result.data.message}.`, 'danger');
+          })
+          .catch(result => {
+            $scope.ShowToast(`Hubo un error al tratar de registrar el contacto: ${result.data.message}.`, 'danger');
+          });
+      } else {
+        $scope.ShowToast('Asegurese de registrar distribuidor y usuario final', 'warning');
+      }
+    };
   };
 
   ImportarPedidosAutodeskController.$inject =
