@@ -753,5 +753,65 @@ a, a:hover {
     background-color: #337ab7 !important;
   }
 
+  #collapseClientes>ul>li>a{
+    list-style: none;
+    color: #FFF;
+    text-decoration: none;
+  } 
+  
+  #collapseClientes>ul>li{
+    list-style: none;
+    color: #FFF;
+  } 
 
+  .collapseClass {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  display: none;
+  float: left;
+  min-width: 160px;
+  padding: 5px 0;
+  margin: 2px 0 0;
+  font-size: 14px;
+  text-align: left;
+  list-style: none;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0,0,0,.15);
+  border-radius: 4px;
+  -webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);
+  box-shadow: 0 6px 12px rgba(0,0,0,.175);
+  }
+
+  .collapseClass>li>a{
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: 400;
+    line-height: 1.42857143;
+    color: #FFF;
+    white-space: nowrap;
+  }
+
+  .navbar-nav>li>.collapseClass{
+    margin-top: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+
+  @media (max-width: 767px){
+.navbar-nav .collapseClass {
+  position: static;
+  float: none;
+  width: auto;
+  margin-top: 0;
+  background-color: transparent;
+  border: 0;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+}
 /*# sourceMappingURL=style.css.map */
