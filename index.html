@@ -160,7 +160,7 @@
 
 										<li id="menuEmpresa" class="yellow one" ng-show="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 4 || SessionCookie.IdTipoAcceso == 5 || SessionCookie.IdTipoAcceso == 6  || SessionCookie.IdTipoAcceso == 7) && (SessionCookie.LeyoTerminos == 1)"
 										 dropdown>
-											<a id="hola" role="button" data-toggle="collapse" data-target="#collapseEmpresa" aria-expanded="true" aria-controls="collapseEmpresa"><span id="hola" class="fa fa-building-o"></span><div id="hola" class="text">{{ SessionCookie.NombreEmpresa | limitTo: 10}} {{SessionCookie.NombreEmpresa.length > 10 ? '...' : ''}}</div> <b id="hola" class="caret"></b></a>
+											<a id="collapseEmpresaId" role="button" data-toggle="collapse" data-target="#collapseEmpresa" aria-expanded="true" aria-controls="collapseEmpresa"><span id="collapseEmpresaId" class="fa fa-building-o"></span><div id="collapseEmpresaId" class="text">{{ SessionCookie.NombreEmpresa | limitTo: 10}} {{SessionCookie.NombreEmpresa.length > 10 ? '...' : ''}}</div> <b id="collapseEmpresaId" class="caret"></b></a>
 											<ul class="collapseClass yellow" id="collapseEmpresa" aria-expanded="false" aria-controls="collapseEmpresa">
 												<li ng-show="SessionCookie.IdTipoAcceso == 4"><a href="#/Empresa/{{SessionCookie.IdEmpresa}}">Actualizar {{ SessionCookie.NombreEmpresa }}</a></li>
 												<li ng-show="SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 7">

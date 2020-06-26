@@ -461,7 +461,7 @@
   };
 
   $('body').click(function (evt) {    
-    if (evt.target.id !== 'hola' && evt.target.id !== 'Clientes' ){
+    if (evt.target.id !== 'collapseEmpresaId' && evt.target.id !== 'Clientes' ){
       var botonOn = document.getElementById('collapseEmpresa');
       var botonOn2 = document.getElementById('collapseClientes');
       botonOn.classList.remove('in', 'show');
