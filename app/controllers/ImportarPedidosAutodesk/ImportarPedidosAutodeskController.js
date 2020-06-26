@@ -1,5 +1,5 @@
 (function () {
-  var ImportarPedidosAutodeskController = function ($scope, $log, $location, $cookies, $routeParams, ImportarPedidosAutodeskFactory, UsuariosFactory, $anchorScroll, lodash) {
+  var ImportarPedidosAutodeskController = function ($scope, $log, $location, $cookies, $routeParams, ImportarPedidosAutodeskFactory, UsuariosFactory, EstadosFactory, EmpresasFactory, $anchorScroll, lodash) {
     const getSuppliers = function () {
       return ImportarPedidosAutodeskFactory.getAutodeskSuppliers()
         .then(result => {
@@ -38,6 +38,26 @@
         .catch(function () {
           $scope.ShowToast('No pudimos cargar la lista de productos, por favor intenta de nuevo más tarde.', 'danger');
         });
+    };
+
+    const getEstados = function () {
+      EstadosFactory.getEstados()
+      .success(function (result) {
+        $scope.EstadoOptions = result;
+      })
+      .error(function (data, status, headers, config) {
+        $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+      });
+    };
+
+    const getIndustrias = function () {
+      EmpresasFactory.getIndustrias()
+      .success(function (result) {
+        $scope.selectIndustrias = result.data;
+      })
+      .error(function (data, status, headers, config) {
+        $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+      });
     };
 
     const conjuntarDetalles = function () {
@@ -95,6 +115,34 @@
       return $scope.fechaInicio <= hoy;
     };
 
+    const limipiarModalContacto = function () {
+      $scope.Usuario.Empresauf = undefined;
+      $scope.Usuario.Distribuidor = undefined;
+      $scope.Usuario.Nombre = undefined;
+      $scope.Usuario.ApellidoPaterno = undefined;
+      $scope.Usuario.ApellidoMaterno = undefined;
+      $scope.Usuario.CorreoElectronico = undefined;
+      $scope.Usuario.Lada = undefined;
+      $scope.Usuario.Telefono = undefined;
+    };
+
+    const limipiarModalEmpresa = function () {
+      $scope.Empresa.Distribuidor = undefined;
+      $scope.Empresa.NombreEmpresa = undefined;
+      $scope.Empresa.Direccion = undefined;
+      $scope.Empresa.Ciudad = undefined;
+      $scope.Empresa.Estado = undefined;
+      $scope.Empresa.CodigoPostal = undefined;
+      $scope.Empresa.IdIndustria = undefined;
+      $scope.Empresa.Nombre = undefined;
+      $scope.Empresa.ApellidoPaterno = undefined;
+      $scope.Empresa.RFC = undefined;
+      $scope.Empresa.CorreoElectronico = undefined;
+      $scope.Empresa.Lada = undefined;
+      $scope.Empresa.Telefono = undefined;
+      $scope.Empresa.IdAutodeskUF = undefined;
+    };
+
     $scope.init = function () {
       $scope.formularioCompleto = false;
       $scope.visible = [true, false, false, false, false];
@@ -108,6 +156,8 @@
       getFinalUsers();
       getEsquemas();
       getProducts();
+      getIndustrias();
+      getEstados();
     };
 
     $scope.init();
@@ -301,6 +351,7 @@
 
     $scope.cerrarModal = function (modal) {
       document.getElementById(modal).style.display = 'none';
+      getFinalUsers();
     };
 
     $scope.completarDistModal = function (cadenaDist = '') {
@@ -365,9 +416,12 @@
         };
         UsuariosFactory.postContact(infoContacto)
           .success(function (result) {
-            result.data.error === 0
-              ? $scope.ShowToast(` ${result.message}.`, 'success')
-              : $scope.ShowToast(`Hubo un error al tratar de registrar el contacto: ${result.data.message}.`, 'danger');
+            if (result.data.error === 0) {
+              $scope.ShowToast(` ${result.message}.`, 'success');
+              limipiarModalContacto();
+            } else {
+              $scope.ShowToast(`Hubo un error al tratar de registrar el contacto: ${result.data.message}.`, 'danger');
+            }
           })
           .catch(result => {
             $scope.ShowToast(`Hubo un error al tratar de registrar el contacto: ${result.data.message}.`, 'danger');
@@ -376,10 +430,69 @@
         $scope.ShowToast('Asegurese de registrar distribuidor y usuario final', 'warning');
       }
     };
+
+    $scope.completarDistModalEmpresa = function (cadenaDist = '') {
+      let resultado = [];
+      $scope.resultadoDistribuidorModalEmpresa = [];
+      $scope.ocultarOpcionesDistModalEmpresa = false;
+      $scope.distribuidoresLista.forEach(distribuidor => {
+        if (distribuidor.NombreEmpresa.toLowerCase().indexOf(cadenaDist.toLowerCase()) >= 0) {
+          resultado.push(distribuidor.NombreEmpresa);
+          $scope.resultadoDistribuidorModalEmpresa.push(distribuidor);
+        }
+        if (cadenaDist === '') $scope.ocultarOpcionesDistModalEmpresa = true;
+      });
+      $scope.filtroDistribuidorModalEmpresa = resultado;
+    };
+
+    $scope.llenarTextBoxDistModalEmpresa = function (infoDist) {
+      $scope.Empresa.Distribuidor = infoDist;
+      $scope.distribuidorSeleccionadoModalEmpresa = $scope.resultadoDistribuidorModalEmpresa.find(elemento => elemento.NombreEmpresa === infoDist);
+      $scope.ocultarOpcionesDistModalEmpresa = true;
+    };
+
+    $scope.conjuntarInformacionModalEmpresa = function () {
+      if ($scope.distribuidorSeleccionadoModalEmpresa) {
+        const infoEmpresa = {
+          IdEmpresaDistribuidor: $scope.distribuidorSeleccionadoModalEmpresa.IdEmpresa,
+          NombreEmpresa: $scope.Empresa.NombreEmpresa,
+          Direccion: $scope.Empresa.Direccion,
+          Ciudad: $scope.Empresa.Ciudad,
+          Estado: $scope.Empresa.Estado,
+          CodigoPostal: $scope.Empresa.CodigoPostal,
+          IdIndustria: $scope.Empresa.IdIndustria,
+          Nombre: $scope.Empresa.Nombre,
+          ApellidoPaterno: $scope.Empresa.ApellidoPaterno,
+          RFC: $scope.Empresa.RFC,
+          CorreoElectronico: $scope.Empresa.CorreoElectronico,
+          Lada: $scope.Empresa.Lada,
+          Telefono: $scope.Empresa.Telefono,
+          IdAutodeskUF: $scope.Empresa.IdAutodeskUF,
+          ZonaImpuesto: 'Normal',
+          PorcentajeCredito: '00.00',
+          PorcentajeSaldoFavor: '00.00'
+        };
+        ImportarPedidosAutodeskFactory.postEmpresa(infoEmpresa)
+          .success(function (result) {
+            console.log(result);
+            if (result.data.error === 0) {
+              $scope.ShowToast(` ${result.message}.`, 'success');
+              limipiarModalEmpresa();
+            } else {
+              $scope.ShowToast(`Hubo un error al tratar de registrar la empresa: ${result.data.message}.`, 'danger');
+            }
+          })
+          .catch(result => {
+            $scope.ShowToast(`Hubo un error al tratar de registrar la empresa: ${result.data.message}.`, 'danger');
+          });
+      } else {
+        $scope.ShowToast('Asegurese de registrar un distribuidor', 'warning');
+      }
+    };
   };
 
   ImportarPedidosAutodeskController.$inject =
-      ['$scope', '$log', '$location', '$cookies', '$routeParams', 'ImportarPedidosAutodeskFactory', 'UsuariosFactory', '$anchorScroll'];
+      ['$scope', '$log', '$location', '$cookies', '$routeParams', 'ImportarPedidosAutodeskFactory', 'UsuariosFactory', 'EstadosFactory', 'EmpresasFactory', '$anchorScroll'];
 
   angular.module('marketplace').controller('ImportarPedidosAutodeskController', ImportarPedidosAutodeskController);
 }());

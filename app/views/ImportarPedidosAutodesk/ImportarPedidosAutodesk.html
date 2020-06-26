@@ -95,13 +95,17 @@
     <hr>
     <div class="row">
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="float: right;">
-            <button type="submit" style="float:right; margin: 1em;" ng-click="" class="btn btn-success " style="background: !important">
+            <button type="submit" style="float:right; margin: .5em;" ng-click="" class="btn btn-success " style="background: !important">
                 <span class="glyphicon glyphicon-download-alt"></span>
                 &nbsp;Importar pedido
             </button>
-            <button type="button" style="float:right; margin: 1em;" ng-click="abrirModal('nuevoContacto');" class="btn btn-primary " style="background: !important">
-                <span class="glyphicon glyphicon glyphicon-plus-sign"></span>
+            <button type="button" style="float:right; padding: .7em -.5em; margin: .5em .4em;" ng-click="abrirModal('nuevoContacto');" class="btn btn-primary " style="background: !important">
+                <span class="glyphicon glyphicon glyphicon glyphicon-user"></span>
                 &nbsp;Nuevo contacto
+            </button>
+            <button type="button" style=" padding: .9em 3.2em .9em 1.2em; margin: .5em .5em; margin-left:3.2em;" ng-click="abrirModal('nuevoUF');" class="btn btn-info " style="background: !important">
+                <span class="glyphicon glyphicon glyphicon glyphicon-briefcase"></span>
+                &nbsp;Nuevo UF
             </button>
         </div>
 
@@ -241,5 +245,105 @@
             </div>
         </div>
     </div>
+</div>
+
+<div id="nuevoUF" class="modal fade in" tabindex="-1" role="dialog" >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="margin: auto; top: -15em;">
+            <div class="modal-header" >
+                <button type="button" class="close" ng-click="cerrarModal('nuevoUF');" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Nueva empresa usuario final</h4>
+            </div>
+            <div class="modal-body" style="margin-bottom: 26em;">
+                <p>Registre aquí la información del usuario final (uf) y de contacto.</p> 
+                <div class="alert alert-warning" role="alert">
+                    *Si necesitas registrar mas contactos para un uf, da click en el botón <b>Nuevo contacto</b> del formulario principal.
+                </div><hr>
+                    <div class="form-group col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        <label>Nombre de la empresa </label>
+                        <input name="NombreEmpresa" type="text" placeholder="Nombre de la empresa" ng-model="Empresa.NombreEmpresa" class="form-control" />
+                    </div>
+                    <div class="form-group col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                        <label>Dirección </label>
+                        <input name="Direccion1" type="text" placeholder="Dirección" ng-model="Empresa.Direccion" class="form-control" size="255" ng-maxlength="255" />
+                    </div>
+                    <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                        <label>Ciudad </label>
+                    <input name="Ciudad" type="text" ng-model="Empresa.Ciudad" class="form-control" placeholder="Ciudad" size="255" ng-maxlength="255"/>
+                    </div>
+                    <div class="form-group col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        <label>Estado o provincia </label>
+                    <select name="Estado" ng-model="Empresa.Estado" class="form-control" required="">
+                        <option ng-selected="true" value="">Selecciona uno ..</option>
+                        <option ng-repeat="option in EstadoOptions" value="{{option.Nombre}}">{{option.Nombre}}</option>
+                    </select>
+                    </div>
+                    <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                        <label>Código postal </label>
+                        <input name="Postal" type="text" ng-model="Empresa.CodigoPostal" class="form-control" placeholder="CodigoPostal" size="5" ng-maxlength="5" ng-minlength="5"
+                        ng-pattern="/^\d+$/"/>
+                    </div>
+                    <div class="form-group col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                        <label>Industria</label>
+                        <select name="IdIndustria"  class="form-control filterOption" ng-mouseover=""  ng-model="Empresa.IdIndustria" ng-options="+(Industria.IdIndustria) as Industria.Industria for Industria in selectIndustrias"
+                        ng-change="">
+                        <option value="">Selecciona uno ..
+                                <span ng-show="true" class="animate-show">
+                                        <a>
+                                            {{selectIndustrias.Descripcion}}
+                                        </a>
+                                    </span>
+                        </option>    
+                        </select>
+                    </div>    
+
+                    <div class="form-group col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        <label>Nombre contacto</label>
+                        <Input name="Nombre" type="text" ng-model="Empresa.Nombre" class="form-control" ng-pattern="/[a-zA-Z]$/" placeholder="Nombre" size="255" ng-maxlength="45" required>
+                    </div>
+                    <div class="form-group col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        <label>Apellidos</label>
+                        <Input name="ApellidoPaterno" type="text" ng-model="Empresa.ApellidoPaterno" class="form-control" ng-pattern="/[a-zA-Z]$/" placeholder="Apellido paterno" size="255" ng-maxlength="30">
+                    </div>
+                    <div class="form-group col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        <label>RFC</label>
+                        <Input name="ApellidoMaterno" type="text" ng-model="Empresa.RFC" class="form-control" ng-pattern="/[a-zA-Z]$/" placeholder="RFC" size="255" ng-maxlength="30" >
+                    </div>
+                    <div class="form-group col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <label>Correo electrónico</label>
+                        <Input name="CorreoElectronico" type="email" ng-model="Empresa.CorreoElectronico" class="form-control" placeholder="Correo electrónico" size="255" ng-maxlength="50" ng-pattern="/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/" required>
+                    </div>
+                    <div class="form-group col-xs-6 col-sm-6 col-md-6 col-lg-6" style="margin-bottom: 0em;">
+                        <label>Número celular</label>
+                    </div>
+                    <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2 ">
+                        <input class="form-control" name="Lada" ui-mask="+99" ui-mask-placeholder type="text" ng-model="Empresa.Lada"   placeholder="" size="255" ng-maxlength="255" >
+                    </div>
+                    <div class="form-group col-xs-4 col-sm-4 col-md-4 col-lg-4 ">
+                        <input class="form-control col-xs-3 col-sm-3 col-md-3 col-lg-3" name="Telefono" type="text" ng-model="Empresa.Telefono" ui-mask="(999) 999-9999" ui-mask-placeholder ui-mask-placeholder-char="_" placeholder="" size="255" ng-maxlength="255" required="">
+                    </div>
+
+                    <div class="form-group col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <label>Distribuidor relacionado</label>
+                        <input type = "text" name = "distribuidorModalEmpresa" placeholder="Escribe el nombre del distribuidor" class="form-control" ng-model="Empresa.Distribuidor" ng-keyup="completarDistModalEmpresa(Empresa.Distribuidor)" required/>
+                        <ul class="list-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-model = "ocultarOpcionesDistModalEmpresa" ng-hide = "ocultarOpcionesDistModalEmpresa" style="position:absolute; z-index: 1; padding-right:2em;">
+                        <li style="background-color: white;" class="list-group-item" ng-repeat = "infoDistModalEmpresa in filtroDistribuidorModalEmpresa track by $index" ng-click = "llenarTextBoxDistModalEmpresa(infoDistModalEmpresa)">{{infoDistModalEmpresa}}</li>
+                        </ul>
+                    </div>
+
+                    <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                        <label>CSN </label>
+                        <input name="IdAutodeskUF" type="Number" ng-model="Empresa.IdAutodeskUF" class="form-control" placeholder="Customer Specific Numbers" ng-pattern="/^\d+$/"/>
+                    </div>
+                
+            </div>
+            <br>
+            <div  class="modal-footer">
+                <button type="submit" class="btn btn-success" ng-click="conjuntarInformacionModalEmpresa()" data-dismiss="modal">Registrar</button>
+                <button type="button" class="btn btn-danger" ng-click="cerrarModal('nuevoUF');" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
 </div>
 </div>
