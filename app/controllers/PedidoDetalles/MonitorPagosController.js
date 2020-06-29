@@ -1,8 +1,7 @@
 (function () {
-  var MonitorPagos = function ($scope, $sce, $log, $rootScope, $cookies, $location, $uibModal, $filter, PedidoDetallesFactory, EmpresasFactory, UsuariosFactory, PedidosFactory) {
+  var MonitorPagos = function ($scope, $sce, $log, $rootScope, $cookies, $location, $window, $uibModal, $filter, PedidoDetallesFactory, EmpresasFactory, UsuariosFactory, PedidosFactory) {
     $scope.PedidoSeleccionado = 0;
     $scope.PedidosSeleccionadosParaPagar = [];
-    $scope.PedidosSeleccionadosParaPagarPrepaid = [];
     $scope.PedidosObj = {};
     $scope.ServicioElectronico = 0;
     $scope.Distribuidor = {};
@@ -17,6 +16,7 @@
     $scope.errorDate = '';
     $scope.year = '';
     $scope.month = '';
+    $scope.tienda = true;
     const paymentMethods = {
       CREDIT_CARD: 1,
       CS_CREDIT: 2,
@@ -66,16 +66,21 @@
     };
 
     $scope.init = function () {
-      if ($scope.currentPath === '/MonitorPagos') {
-        $scope.CheckCookie();
-        confirmPayPal();
-        $scope.Distribuidor.MonedaPago = 'Pesos';
-      }
-      $location.path('/MonitorPagos');
+      $scope.CheckCookie();
+      confirmPayPal();
+      $scope.Distribuidor.MonedaPago = 'Pesos';
       PedidoDetallesFactory.getPendingOrdersToPay()
         .success(function (ordersToPay) {
-          console.log("orders to pay ",ordersToPay);
           $scope.Pedidos = ordersToPay.data;
+          const today = new Date();
+          $scope.Pedidos.forEach(order => {
+            const fecha2 = new Date(order.FechaFin);
+            let resta = fecha2.getTime() - today.getTime();
+            const days = Math.round(resta/ (1000*60*60*24));
+            if (days <= 1) {
+              $scope.tienda = false;
+            }
+          })
           if (!ordersToPay.data || ordersToPay.data.length === 0) {
             return $scope.DeshabilitarPagar = true;
           }
@@ -176,7 +181,6 @@
             for (var x = 0; x < $scope.PedidosSeleccionadosParaPagar.length; x++) {
               if (key == $scope.PedidosSeleccionadosParaPagar[x]) {
                 $scope.PedidosSeleccionadosParaPagar.splice(x, 1);
-                $scope.PedidosSeleccionadosParaPagarPrepaid.splice(x, 1);
               }
             }
             $scope.Pedidos[y].Seleccionado = 0;
@@ -186,7 +190,6 @@
               TipoCambio: $scope.Pedidos[y].TipoCambio,
             };
             $scope.PedidosSeleccionadosParaPagar.push(key);
-            $scope.PedidosSeleccionadosParaPagarPrepaid.push(pedido);
             $scope.Pedidos[y].Seleccionado = 1;
           }
           break;
@@ -345,6 +348,7 @@
         PedidosFactory.payWithCardMonitorOpenpay(bodyRequest)
         .then(function (resultPayment) {
           if (resultPayment.data.success) {
+            $scope.PedidosSeleccionadosParaPagar = [];
             $('#modalPagoTC').modal('hide');
             $scope.ShowToast(resultPayment.data.message, 'success');
             $scope.init();
@@ -432,10 +436,13 @@
       return subdomain;
     };
 
-    $scope.cerrarModal = () => {
-      $('#modalPagoPDF').modal('hide');
-      $scope.init();
-    }
+    const orderCookie = (orderIdsCookie, MetodoPago) => {
+      const completeData = Object.assign({}, orderIdsCookie.data, { path: 'monitor'}, { MetodoPago });
+      const cookie = $cookies.putObject('orderIdsCookie', completeData, { secure: $rootScope.secureCookie });
+      const location = $location.path('/SuccessOrder');
+      const resultOrderidCookie = [{cookie, location}];
+      return resultOrderidCookie;
+    };
 
     $scope.preparePrePaid = async function () {
       if ($scope.PedidosSeleccionadosParaPagar.length > 0) {
@@ -451,8 +458,7 @@
         PedidosFactory.payWithSpeiOpenpayMonitor(body)
           .then(function (speiResult) {
             if (speiResult.data.success) {
-              $('#modalPagoPDF').modal('show');
-              $scope.url = $sce.trustAsResourceUrl(speiResult.data.data.urlFile);
+              orderCookie(speiResult.data, 'Transferencia');
               $scope.ShowToast(speiResult.data.message, 'success');
             } else {
               $scope.ShowToast('Ocurrio un error intente más tarde.', 'danger');
@@ -467,36 +473,41 @@
     };
   
     $scope.payInStore = async function () {
+      console.log($scope.PedidosSeleccionadosParaPagar);
       if ($scope.PedidosSeleccionadosParaPagar.length > 0) {
-        keyAntifraude();
-        const siclikToken = await $scope.getSiclikToken();
-        const openpayCustomerId = await getOpenPayCustomer(siclikToken);
-        const body = {
-          openpayCustomerId,
-          deviceSessionId: $scope.deviceSessionId,
-          Pedidos: $scope.PedidosSeleccionadosParaPagar,
-          Moneda: $scope.Distribuidor.MonedaPago,
-        }
-        PedidosFactory.payInStoreOpenpayMonitor(body)
-          .then(function (speiResult) {
-            if (speiResult.data.success) {
-              $('#modalPagoPDF').modal('show');
-              $scope.url = $sce.trustAsResourceUrl(speiResult.data.data.urlFile);
-              $scope.ShowToast(speiResult.data.message, 'success');
-            } else {
+        if ($scope.Total < 29999) {
+          keyAntifraude();
+          const siclikToken = await $scope.getSiclikToken();
+          const openpayCustomerId = await getOpenPayCustomer(siclikToken);
+          const body = {
+            openpayCustomerId,
+            deviceSessionId: $scope.deviceSessionId,
+            Pedidos: $scope.PedidosSeleccionadosParaPagar,
+            Moneda: $scope.Distribuidor.MonedaPago,
+          }
+          PedidosFactory.payInStoreOpenpayMonitor(body)
+            .then(function (speiResult) {
+              if (speiResult.data.success) {
+                orderCookie(speiResult.data, 'Pago en tienda');
+                $scope.ShowToast(speiResult.data.message, 'success');
+              } else {
+                $scope.ShowToast(speiResult.data.message, 'danger');
+                $scope.ShowToast('Ocurrio un error intente más tarde.', 'danger');
+              }
+            })
+            .catch(function (result) {
               $scope.ShowToast('Ocurrio un error intente más tarde.', 'danger');
-            }
-          })
-          .catch(function (result) {
-            $scope.ShowToast('Ocurrio un error intente más tarde.', 'danger');
-          });
+            });
+        } else {
+          $scope.ShowToast('La compra en tienda no debe ser mayor a 29,999.', 'danger');
+        }
       } else {
         $scope.ShowToast('Selecciona al menos un pedido para pagar.', 'danger');
       }
     };
   
   };
-  MonitorPagos.$inject = ['$scope', '$sce', '$log', '$rootScope', '$cookies', '$location', '$uibModal', '$filter', 'PedidoDetallesFactory', 'EmpresasFactory', 'UsuariosFactory', 'PedidosFactory'];
+  MonitorPagos.$inject = ['$scope', '$sce', '$log', '$rootScope', '$cookies', '$location', '$window', '$uibModal', '$filter', 'PedidoDetallesFactory', 'EmpresasFactory', 'UsuariosFactory', 'PedidosFactory'];
 
   angular.module('marketplace').controller('MonitorPagos', MonitorPagos);
 }());

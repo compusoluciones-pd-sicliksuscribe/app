@@ -34,7 +34,8 @@
           <input ng-model="paymethod" ng-click="pedidosPorPagar(key);" type="radio" name="payType" id="Prepago" value="4" ng-change="ActualizarFormaPago(4);" /> Transferencia
       </div>
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-          <input ng-model="paymethod" ng-click="pedidosPorPagar(key);" type="radio" name="payType" id="Tienda" value="5" ng-change="ActualizarFormaPago(5);" /> Pago en tienda
+          <input ng-disabled="!tienda" ng-model="paymethod" ng-click="pedidosPorPagar(key);" type="radio" name="payType" id="Tienda" value="5" ng-change="ActualizarFormaPago(5);" /> Pago en tienda
+          <br><label ng-show="!tienda">El pago en tienda no está disponible porque cuentas con un pedido que vence en menos de 2 días.</label>
       </div>
     </div>
 
@@ -349,32 +350,6 @@
                         </div>
                       </div>
                     </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Modal PDF -->
-      <div id="modalPagoPDF" class="modal fade in"  role="dialog">
-        <div class="modal-dialog modal-lg">
-          <!-- Modal content-->
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" ng-click = "cerrarModal()" class="close">
-                &times;
-              </button>
-              <h4 class="modal-title">Open Pay</h4>
-            </div>
-            <div class="modal-body">
-              <div class="row">
-                <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
-                  <p>Puedes descargar el archivo para realizar tu pago, o consultarlo en la notificación que te enviamos vía correo electrónico.</p>
-                </div>
-                <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
-                  <div class="embed-responsive embed-responsive-16by9">
-                    <iframe class="embed-responsive-item" ng-src="{{url}}" allowfullscreen></iframe>
                   </div>
                 </div>
               </div>

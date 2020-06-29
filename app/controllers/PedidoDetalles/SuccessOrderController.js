@@ -8,6 +8,10 @@
       angular.element(document.getElementById('auxScope')).scope().gaAceptarCompra();
       deleteCookie('orderIdsCookie');
       deleteCookie('compararPedidosAnteriores');
+      console.log($scope.monitor);
+      if ($scope.monitor) {
+        $location.path('/MonitorPagos');
+      }
       $location.path('/');
     };
 
@@ -29,8 +33,10 @@
       if ($scope.currentPath === '/SuccessOrder') {
         $scope.CheckCookie();
         if ($scope.orderIdsCookie.MetodoPago === 'Transferencia' || $scope.orderIdsCookie.MetodoPago === 'Pago en tienda') {
+          $scope.pedidos = $scope.orderIdsCookie.order_ids;
           $scope.url = $sce.trustAsResourceUrl($scope.orderIdsCookie.urlFile);
           $scope.spei = true;
+          $scope.monitor = $scope.orderIdsCookie.path ? true : false;
         } else {
           $scope.spei = false;
           $scope.orderIdsCookie.forEach(elemento => {
