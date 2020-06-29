@@ -98,13 +98,13 @@
 .principalProducts h4 {
   color: #4a4a4a;
   text-align: left;
-  font-size: 39px;
+  font-size: 30px;
   width: 400px; }
 
 .principalProducts p {
   width: 50%;
   text-align: left;
-  font-size: 18px;
+  font-size: 15px;
   color: #494949; }
 
 .principalProducts button {
@@ -116,7 +116,7 @@
   background-color: #6b9b39; }
 
 .carousel-inner {
-  height: 400px; }
+  height: 350px; }
 
 .carousel-indicators {
   bottom: -60px; }
@@ -134,7 +134,7 @@
   border: 1px solid #434343; }
 
 .carousel-caption {
-  top: 65px; }
+  top: 0px; }
 
 .brands {
   text-align: right;
@@ -146,8 +146,12 @@
   padding-right: 20px; }
 
 .sliderMessage {
-  width: 200px;
+  width: 50%;
   color: #000;
-  text-align: left; }
+  text-align: center; }
+
+.divHeight{
+  height:400px;
+}
 
 /*# sourceMappingURL=landing.css.map */
