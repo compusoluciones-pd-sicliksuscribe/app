@@ -5,7 +5,7 @@
         <h3 ng-hide = "spei">Tu compra generó los siguientes pedidos:</h3>
         <h3 ng-show = "spei">Tu SPEI se generó para los siguientes pedidos:</h3>
         <div ng-repeat="pedido in pedidos">
-            {{pedido.IdPedido}}
+            {{pedido.IdPedido || pedido}}
         </div>
         <br>
     </div>

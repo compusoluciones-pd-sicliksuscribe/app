@@ -283,7 +283,7 @@
                         </div>
 
                         <div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
-                            <button class="btn btn-danger" ng-show="detalles.Activo" ng-click="Confirmar(detalles.IdPedidoDetalle)" ng-disabled="pedido.CargoRealizadoProximoPedido || (!detalles.PedidoAFabricante || detalles.EstatusFabricante === 'FAILED')">
+                            <button class="btn btn-danger" ng-show="detalles.Activo" ng-click="Confirmar(detalles.IdPedidoDetalle)" ng-disabled="pedido.CargoRealizadoProximoPedido || (!detalles.PedidoAFabricante || detalles.EstatusFabricante === 'FAILED') || pedido.Estatus ==='Esperando pago openpay'">
 									CANCELAR
 								</button>
                             <button class="btn btn-success" ng-show="!detalles.Activo && pedido.IdFabricante !== 1" ng-click="Reanudar(pedido, detalles)" ng-disabled="pedido.CargoRealizadoProximoPedido || (!detalles.PedidoAFabricante || detalles.EstatusFabricante === 'FAILED')">
@@ -374,6 +374,7 @@
                     <li ng-if="pedido.EstatusContrato === 'processing'"> <label for="Renovado">Estatus renovación: </label> Procesando ... </li>
                     <li ng-if="pedido.EstatusContrato === 'canceled'"> <label for="Renovado">Estatus renovación: </label> Cancelada </li>
                     <li> <label for="FechaInicio">Duración del contrato: </label> {{ pedido.FechaInicio }} <label>-</label> {{ pedido.FechaFin }} </li>
+                    <li> <label>Estatus del pedido: </label> {{ pedido.Estatus }} </li>
                 </ul>
             </div>
             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"></div>
