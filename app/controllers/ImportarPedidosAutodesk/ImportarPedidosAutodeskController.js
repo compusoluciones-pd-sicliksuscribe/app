@@ -455,6 +455,7 @@
     };
 
     $scope.conjuntarInformacionModalEmpresa = function () {
+      $scope.deshabilitado = true;
       if ($scope.distribuidorSeleccionadoModalEmpresa) {
         const infoEmpresa = {
           IdEmpresaDistribuidor: $scope.distribuidorSeleccionadoModalEmpresa.IdEmpresa,
@@ -466,7 +467,7 @@
           IdIndustria: $scope.Empresa.IdIndustria,
           Nombre: $scope.Empresa.Nombre,
           ApellidoPaterno: $scope.Empresa.ApellidoPaterno,
-          RFC: $scope.Empresa.RFC,
+          RFC: $scope.Empresa.RFC ? $scope.Empresa.RFC : 'XXXX0000XXXX',
           CorreoElectronico: $scope.Empresa.CorreoElectronico,
           Lada: $scope.Empresa.Lada,
           Telefono: $scope.Empresa.Telefono,
@@ -481,15 +482,18 @@
             if (result.data.error === 0) {
               $scope.ShowToast(` ${result.message}.`, 'success');
               limipiarModalEmpresa();
+              $scope.deshabilitado = false;
             } else {
               $scope.ShowToast(`Hubo un error al tratar de registrar la empresa: ${result.data.message}.`, 'danger');
             }
           })
           .catch(result => {
             $scope.ShowToast(`Hubo un error al tratar de registrar la empresa: ${result.data.message}.`, 'danger');
+            $scope.deshabilitado = false;
           });
       } else {
         $scope.ShowToast('Asegurese de registrar un distribuidor', 'warning');
+        $scope.deshabilitado = false;
       }
     };
   };
