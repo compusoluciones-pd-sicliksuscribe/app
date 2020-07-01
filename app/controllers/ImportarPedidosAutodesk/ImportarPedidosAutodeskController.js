@@ -108,6 +108,7 @@
       $scope.fechaFin = '';
       $scope.formaPago = '';
       $scope.monedaPago = '';
+      $scope.csnUF = '';
     };
 
     const esFechaInicioValida = function () {
@@ -265,7 +266,8 @@
             reiniciarCamposSKU();
           } else {
             reiniciarCamposSKU();
-            result.data.forEach((element, index) => {
+            $scope.csnUF = result.data.CSNUF;
+            result.data.items.forEach((element, index) => {
               $scope.visible[index] = true;
               $scope.sku[index] = element.sku;
               $scope.cantidad[index] = element.quantity;
@@ -327,6 +329,7 @@
         IdFormaPago: $scope.formaPago,
         MonedaPago: $scope.monedaPago,
         IdEsquemaRenovacion: $scope.esquema.IdEsquemaRenovacion,
+        CSN: $scope.csnUF,
         Detalles: conjuntarDetalles()
       };
       if ($scope.formularioCompleto) {
