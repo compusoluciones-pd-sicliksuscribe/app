@@ -30,6 +30,8 @@
     $scope.year = '';
     $scope.month = '';
     $scope.session = $cookies.getObject('Session');
+    $scope.anios = [{nombre:'Año',valor:'default'},{nombre:'2020',valor:20},{nombre:'2021',valor:21},{nombre:'2022',valor:22},{nombre:'2023',valor:23},{nombre:'2024',valor:24},{nombre:'2025',valor:25}];
+    $scope.meses = [{nombre:'Mes',valor:'default'},{nombre:'Enero',valor: '01'},{nombre:'Febrero',valor: '02'},{nombre:'Marzo',valor: '03'},{nombre:'Abril',valor: '04'},{nombre:'Mayo',valor: '05'},{nombre:'Junio',valor: '06'},{nombre:'Julio',valor: '07'},{nombre:'Agosto',valor: '08'},{nombre:'Septiembre',valor: '09'},{nombre:'Octubre',valor: '10'},{nombre:'Noviembre',valor: '11'},{nombre:'Diciembre',valor: '12'}]
 
     const error = function (message) {
       $scope.ShowToast(!message ? 'Ha ocurrido un error, intentelo mas tarde.' : message, 'danger');
@@ -320,31 +322,33 @@
       ta.val(letras)
     }); 
 
-    $('#pay-button').on('click', function(event) {
-      $scope.errorName = 0;
-      $scope.errorCard = 0;
-      $scope.errorDate = 0;
-      $scope.dateError = '';
-      $scope.errorCardMessage = '';
-      if ($scope.name.length <= 0) {
-        $scope.errorName = 1;
-      }
-      if ($scope.card.length <= 0) {
-        $scope.errorCard = 1;
-        $scope.errorCardMessage = '*Requerido';
-      }
-      if ($scope.month.length <= 0) {
-        $scope.errorDate = 1;
-        $scope.dateError = '*Mes requerido';
-      }
-      if ($scope.year.length <= 0) {
-        $scope.errorDate = 1;
-        $scope.dateError = '*Año requerido';
-      }
-      event.preventDefault();
-      $("#pay-button").prop( "disabled", true);
-      OpenPay.token.extractFormAndCreate('payment-form', success_callbak, error_callbak);              
-    });
+    // $('#pay-button').on('click', function(event) {
+    //   console.log("$scope.name.length", $scope.name.length)
+    //   console.log("$scope.card.length", $scope.card.length)
+    //   $scope.errorName = 0;
+    //   $scope.errorCard = 0;
+    //   $scope.errorDate = 0;
+    //   $scope.dateError = '';
+    //   $scope.errorCardMessage = '';
+    //   if ($scope.name.length <= 0) {
+    //     $scope.errorName = 1;
+    //   }
+    //   if ($scope.card.length <= 0) {
+    //     $scope.errorCard = 1;
+    //     $scope.errorCardMessage = '*Requerido';
+    //   }
+    //   // if ($scope.month.length <= 0) {
+    //   //   $scope.errorDate = 1;
+    //   //   $scope.dateError = '*Mes requerido';
+    //   // }
+    //   // if ($scope.year.length <= 0) {
+    //   //   $scope.errorDate = 1;
+    //   //   $scope.dateError = '*Año requerido';
+    //   // }
+    //   event.preventDefault();
+    //   $("#pay-button").prop( "disabled", true);
+    //   //OpenPay.token.extractFormAndCreate('payment-form', success_callbak, error_callbak);              
+    // });
 
     $scope.getSiclikToken = async () => {
       return UsuariosFactory.getTokenSiclik()
@@ -636,6 +640,57 @@
       }
     };
 
+    $.validator.addMethod("valueNotEquals", function(value, element, arg){
+      return arg !== value;
+     }, "Value must not equal arg.");
+
+
+      $('#payment-form').validate({
+          rules: {
+            name: { 
+              required: true,
+            },
+            cardNumber: {
+                   required: true,
+                   number: true,
+                   maxlength: 19,
+                   minlength: 16
+               },
+            month: { valueNotEquals: "default" },
+            year: { valueNotEquals: "default" },
+            cvv: {
+              required: true,
+              number: true,
+              maxlength: 3,
+              minlength: 3
+
+            }
+          },
+          messages: {
+              name: {
+                  required: "Es requerido*",
+
+              },          
+              cardNumber: {
+                   required: "Es requerido*",
+                   number: "Solo se permiten números*",
+                   maxlength: "Máximo 19 digitos",
+                   minlength: "Mínimo 16 digitos"
+               },
+               month: { valueNotEquals: "Selecciona un mes" },
+               year: { valueNotEquals: "Selecciona un año" },
+               cvv: {
+                required: "Es requerido*",
+                number: "Solo se permiten números*",
+                maxlength: "Máximo 3 digitos",
+                minlength: "Mínimo 3 digitos",
+              }
+           },
+           submitHandler: function (form) {
+              alert("todos")
+         }
+      });
+  
     var modal = document.getElementById('modalTipoMoneda');
 
     $scope.modalNotificacionComprar = function () {

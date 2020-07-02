@@ -137,7 +137,7 @@ option {
   /* Hidden by default */
   position: fixed;
   /* Sit on top */
-  padding-top: 200px;
+  padding-top: 0;
   /* Location of the box */
   left: 0;
   top: 0;
@@ -849,7 +849,7 @@ option {
 /* Media Queries*/
 
 /* Open Pay */
-a.button {
+input.button {
   border-radius: 5px 5px 5px 5px;
   -webkit-border-radius: 5px 5px 5px 5px;
   -moz-border-radius: 5px 5px 5px 5px;
@@ -868,10 +868,10 @@ a.button {
   background: linear-gradient(top,  #E51F04 0%,#A60000 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#E51F04', endColorstr='#A60000',GradientType=0 );
 }
-a.button i {
+input.button i {
   margin-right: 10px;
 }
-a.button.disabled {
+input.button.disabled {
   background: none repeat scroll 0 0 #ccc;
   cursor: default;
 }
@@ -879,7 +879,7 @@ a.button.disabled {
   /* float: left; */
   
 }
-.bkng-tb-cntnt a.button {
+.bkng-tb-cntnt input.button {
   color: #fff;
   float: right;
   font-size: 18px;
@@ -888,29 +888,29 @@ a.button.disabled {
   margin-right: 12px;
   width: auto;
 }
-.bkng-tb-cntnt a.button.o {
+.bkng-tb-cntnt input.button.o {
   background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
   color: #e51f04;
   border: 1px solid #e51f04;
 }
-.bkng-tb-cntnt a.button i {
+.bkng-tb-cntnt input.button i {
   color: #fff;
 }
-.bkng-tb-cntnt a.button.o i {
+.bkng-tb-cntnt input.button.o i {
   color: #e51f04;
 }
-.bkng-tb-cntnt a.button.right i {
+.bkng-tb-cntnt input.button.right i {
   float: right;
   margin: 2px 0 0 10px;
 }
-.bkng-tb-cntnt a.button.left {
+.bkng-tb-cntnt input.button.left {
   float: left;
 }
-.bkng-tb-cntnt a.button.disabled.o {
+.bkng-tb-cntnt input.button.disabled.o {
   border-color: #ccc;
   color: #ccc;
 }
-.bkng-tb-cntnt a.button.disabled.o i {
+.bkng-tb-cntnt input.button.disabled.o i {
   color: #ccc;
 }
 .pymnts {
@@ -931,7 +931,7 @@ a.button.disabled {
 .sctn-col.l {
   width: 425px;
 }
-.nameAndNumber input {
+.nameAndNumber input, select {
   border: 1px solid #ccc;
   font-size: 18px;
   line-height: 24px;
@@ -984,6 +984,10 @@ a.button.disabled {
   display: block;
   padding: 0 0 30px;
   width: 100%;
+}
+form label.error {
+  color: #ff0000;
+  font-size:12px;
 }
 
 .pymnt-cntnt div.sctn-row {

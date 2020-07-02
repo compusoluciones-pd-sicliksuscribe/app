@@ -170,7 +170,7 @@
               <div class="row">
                 <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
                   <div class="w100">
-                    <form action="#" method="POST" id="payment-form">
+                    <form id ="payment-form">
                       <input type="hidden" name="token_id" id="token_id" />
                       <!-- <input type="hidden" name="device_session_id" id="device_session_id" /> -->
                       <div class="grayBackground pymnt-itm card active">
@@ -229,20 +229,18 @@
                             <label class="paddingTop">Nombre del titular</label>
                             <input
                               type="text"
-                              ng-model="name"
+                            
                               placeholder="Como aparece en la tarjeta"
-                              autocomplete="off"
                               data-openpay-card="holder_name"
-                            /><a ng-show="errorName == 1">*Requerido</a>
+                              id="name" name="name"
+                            />
                           </div>
   
                           <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12 nameAndNumber">
                             <label class="paddingTop">Número de tarjeta</label>
                             <input
                               type="text"
-                              id = "card"
-                              ng-model = "card"
-                              autocomplete="off"
+                              id="cardNumber" name="cardNumber"                              
                               data-openpay-card="card_number"
                             /><a ng-show="errorCard">{{errorCardMessage}}</a>
                           </div>
@@ -257,30 +255,25 @@
                             <div class="row">
                               <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
                                 <div class="nameAndNumber half l">
-                                  <input
-                                    type="text"
-                                    ng-model = "month"
-                                    placeholder="Mes"
-                                    data-openpay-card="expiration_month"
-                                  />
+                                  <select                                 
+                                  data-openpay-card="expiration_month"
+                                  id="month" name="month"
+                                  >
+                                    <option ng-repeat="mes in meses" value="{{mes.valor}}">{{mes.nombre}}</option>                                    
+                                </select>
                                 </div>
                               </div>
                               <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
                                 <div class="nameAndNumber half l">
-                                  <input
-                                    type="text"
-                                    ng-model = "year"
-                                    placeholder="Año"
+                                  <select                                   
                                     data-openpay-card="expiration_year"
-                                  />
+                                    id="year" name="year"
+                                  >
+                                  <option ng-repeat="anio in anios" value="{{anio.valor}}">{{anio.nombre}}</option>                                       
+                                  </select>
                                 </div>
                               </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12 col-lg-12 col-sm-6 col-xs-6">
-                                    <a ng-show="errorDate">{{dateError}}</a>
-                                </div>
-                            </div>
+                            </div>                            
                           </div>
   
                           <div
@@ -290,11 +283,10 @@
                             <div class="row">
                               <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
                                 <input
-                                  type="text"
-                                  ng-model = "security_number"
-                                  placeholder="3 dígitos"
-                                  autocomplete="off"
+                                  type="text"                                 
+                                  placeholder="3 dígitos"                                  
                                   data-openpay-card="cvv2"
+                                  id="cvv" name="cvv"
                                 />
                               </div>
                               <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
@@ -362,7 +354,7 @@
                           ></div>
                           <div class="col-md-2 col-lg-2 col-sm-2 col-xs-2">
                             <div class="bkng-tb-cntnt">
-                              <a class="button text-right" id="pay-button">Pagar</a>
+                              <input type="submit" class="button text-right" id="pay-button" value="Pagar"/>
                             </div>
                           </div>
                         </div>
