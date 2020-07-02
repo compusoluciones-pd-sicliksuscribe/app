@@ -406,6 +406,7 @@
                             <li> <label for="TipoProducto">Tipo de producto:</label> {{ detalles.Tipo }} </li>
                             <li ng-if="detalles.IdEstatusPedido === 2"> <label for="Estatus">Estatus pedido: </label> Pago pendiente </li>
                             <li ng-if="detalles.IdEstatusPedido === 3"> <label for="Estatus">Estatus pedido: </label> Pagado </li>
+                            <li ng-if="detalles.PedidoImportado === 1 && (detalles.IdEstatusPedido === 3 || detalles.IdEstatusPedido === 2)"> <span style="font-size: 100%;" class="label label-primary">Importado</span>
                             <li ng-hide="pedido.EstatusContrato === 'canceled'" ng-if="pedido.AutoRenovable && detalles.PagoRenovacion"> <label for="EstatusRenovacion">Estatus de renovación:</label> Pagado </li>
                             <li ng-hide="pedido.EstatusContrato === 'canceled'" ng-if="pedido.AutoRenovable && !detalles.PagoRenovacion"> <label for="EstatusRenovacion">Estatus de renovación:</label> Sin renovar </li>
                             <li ng-if="pedido.AutoRenovable && (detalles.Activo) && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
