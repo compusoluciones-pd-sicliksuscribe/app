@@ -322,34 +322,6 @@
       ta.val(letras)
     }); 
 
-    // $('#pay-button').on('click', function(event) {
-    //   console.log("$scope.name.length", $scope.name.length)
-    //   console.log("$scope.card.length", $scope.card.length)
-    //   $scope.errorName = 0;
-    //   $scope.errorCard = 0;
-    //   $scope.errorDate = 0;
-    //   $scope.dateError = '';
-    //   $scope.errorCardMessage = '';
-    //   if ($scope.name.length <= 0) {
-    //     $scope.errorName = 1;
-    //   }
-    //   if ($scope.card.length <= 0) {
-    //     $scope.errorCard = 1;
-    //     $scope.errorCardMessage = '*Requerido';
-    //   }
-    //   // if ($scope.month.length <= 0) {
-    //   //   $scope.errorDate = 1;
-    //   //   $scope.dateError = '*Mes requerido';
-    //   // }
-    //   // if ($scope.year.length <= 0) {
-    //   //   $scope.errorDate = 1;
-    //   //   $scope.dateError = '*Año requerido';
-    //   // }
-    //   event.preventDefault();
-    //   $("#pay-button").prop( "disabled", true);
-    //   //OpenPay.token.extractFormAndCreate('payment-form', success_callbak, error_callbak);              
-    // });
-
     $scope.getSiclikToken = async () => {
       return UsuariosFactory.getTokenSiclik()
         .then(function (tokenRefResult) {
@@ -483,6 +455,7 @@
     };
 
     $scope.checkErrors = errors => {
+      console.log(errors);
       errors.forEach(er => {
         if (er === 'holder_name is required') {
           $scope.ShowToast('El nombre es requerido', 'danger');
@@ -504,6 +477,9 @@
         }
         if (er === 'valid expirations months are 01 to 12') {
           $scope.ShowToast('Los meses de expiración válidos son de 01 a 12', 'danger');
+        }
+        if (er === 'The expiration date has expired') {
+          $scope.ShowToast('La fecha ha expirado', 'danger');
         }
       })
     }
@@ -663,7 +639,6 @@
               number: true,
               maxlength: 3,
               minlength: 3
-
             }
           },
           messages: {
@@ -686,8 +661,8 @@
                 minlength: "Mínimo 3 digitos",
               }
            },
-           submitHandler: function (form) {
-              alert("todos")
+           submitHandler: function () {
+              OpenPay.token.extractFormAndCreate('payment-form', success_callbak, error_callbak); 
          }
       });
   
