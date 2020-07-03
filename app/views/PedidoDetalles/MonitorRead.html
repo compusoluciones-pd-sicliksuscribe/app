@@ -374,20 +374,20 @@
                 <ul style="list-style-type:none; padding:0%">
                     <li ng-if="pedido.NumeroContrato"> <label for="Contrato">Número de contrato: </label> {{ pedido.NumeroContrato }} </li>
                     <li ng-if="!pedido.NumeroContrato"> <label for="Contrato">Número de contrato: </label> Solicitando contrato... </li>
-                    <li> <label for="TipoContrato">Tipo de contrato: </label> {{ pedido.TipoContrato }} </li>
                     <li ng-hide="pedido.EstatusContrato === 'canceled'"> <label for="Esquema">Esquema de renovación: </label> {{ pedido.NombreEsquema }} </li>
-                    <li ng-if="pedido.EstatusContrato === 'open'"> <label for="Renovado">Estatus renovación: </label> Abierto </li>
-                    <li ng-if="pedido.EstatusContrato === 'renewal'"> <label for="Renovado">Estatus renovación: </label> Renovado </li>
-                    <li ng-if="pedido.EstatusContrato === 'processing'"> <label for="Renovado">Estatus renovación: </label> Procesando ... </li>
-                    <li ng-if="pedido.EstatusContrato === 'canceled'"> <label for="Renovado">Estatus renovación: </label> Cancelada </li>
-                    <li> <label for="FechaInicio">Duración del contrato: </label> {{ pedido.FechaInicio }} <label>-</label> {{ pedido.FechaFin }} </li>
+                    <li ng-if="pedido.EstatusContrato === 'ready'"> <label for="Renovado">Estatus renovación: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-success">Listo para renovar</span></li>
+                    <li ng-if="pedido.EstatusContrato === 'renewal'"> <label for="Renovado">Estatus renovación: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-primary">Renovado</span></li>
+                    <li ng-if="pedido.EstatusContrato === 'processing'"><label for="Renovado">Estatus renovación: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-info">Pendiente</span></li>
+                    <li ng-if="pedido.EstatusContrato === 'unready'"><label for="Renovado">Estatus renovación: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-default">Aun no puede ser renovado</span></li>
+                    <li> <label for="FechaInicio">Duración del contrato: </label> {{ pedido.FechaInicio | date:'d/MM/yyyy' }} <label>-</label> {{ pedido.FechaFin | date:'d/MM/yyyy'}} </li>
+                    <li ng-if="pedido.EstatusContrato === 'processing'"><hr><h5 class="alert alert-info text-info"><b>Este contrato será renovado. El cambio se verá reflejado al terminar el periodo actual.</b></h5></li>
                 </ul>
             </div>
             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"></div>
 			<div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
 				<button id="Renovar" class="pull-right btn btn-block btn-primary" style="margin-top: 20px" ng-if="!pedido.AutoRenovable"
-				ng-disabled="(!pedido.Renovacion || pedido.PorRenovar || pedido.Renovado) && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)"
-				ng-hide="pedido.EstatusContrato === 'notRenewed'"
+				ng-disabled="(pedido.EstatusContrato === 'unready') && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)"
+				ng-hide="pedido.EstatusContrato === 'notRenewed' || pedido.EstatusContrato === 'processing'"
 					data-toggle="modal" data-target="#renovarModal"
 					ng-click="AgregarContrato(pedido);">
 					Renovar
@@ -406,7 +406,7 @@
                             <li> <label for="TipoProducto">Tipo de producto:</label> {{ detalles.Tipo }} </li>
                             <li ng-if="detalles.IdEstatusPedido === 2"> <label for="Estatus">Estatus pedido: </label> Pago pendiente </li>
                             <li ng-if="detalles.IdEstatusPedido === 3"> <label for="Estatus">Estatus pedido: </label> Pagado </li>
-                            <li ng-if="detalles.PedidoImportado === 1 && (detalles.IdEstatusPedido === 3 || detalles.IdEstatusPedido === 2)"> <span style="font-size: 100%;" class="label label-primary">Importado</span>
+                            <li ng-if="detalles.PedidoImportado === 1"> <span style="font-size: 100%; padding-top: .3em;" class="label label-primary">Importado</span>
                             <li ng-hide="pedido.EstatusContrato === 'canceled'" ng-if="pedido.AutoRenovable && detalles.PagoRenovacion"> <label for="EstatusRenovacion">Estatus de renovación:</label> Pagado </li>
                             <li ng-hide="pedido.EstatusContrato === 'canceled'" ng-if="pedido.AutoRenovable && !detalles.PagoRenovacion"> <label for="EstatusRenovacion">Estatus de renovación:</label> Sin renovar </li>
                             <li ng-if="pedido.AutoRenovable && (detalles.Activo) && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
@@ -496,15 +496,9 @@
                     <div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
                         <div>
                             <label>Fecha Solicitud: </label>
-                            <br/> {{ detalles.FechaActivo | date:'dd MMMM yyyy' }}
+                            <br/> {{ detalles.FechaActivo | date:'d/MM/yyyy' }}
                         </div>
-
                         <br>
-
-                        <div ng-if="pedido.AutoRenovable" ng-hide="pedido.EstatusContrato === 'canceled' || pedido.EstatusContrato === 'notRenewed'" >
-                            <label>Fecha limite de cancelación: </label>
-                            <br/> {{ pedido.FechaCancelacion  }}
-                        </div>
                     </div>
 
                     <div ng-hide="pedido.EstatusContrato === 'canceled' || pedido.EstatusContrato === 'notRenewed'" class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
