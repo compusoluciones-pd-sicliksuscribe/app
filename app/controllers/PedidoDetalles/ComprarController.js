@@ -1,5 +1,5 @@
 (function () {
-  var ComprarController = function ($scope, $log, $rootScope, $location, $cookies, PedidoDetallesFactory, UsuariosFactory, PedidosFactory, EmpresasFactory, jwtHelper, $route) {
+  var ComprarController = function ($scope, $log, $rootScope, $location, $cookies, PedidoDetallesFactory, UsuariosFactory, PedidosFactory, EmpresasFactory, jwtHelper, $route,ngToast) {
     $scope.currentPath = $location.path();
     $scope.PedidoDetalles = {};
     $scope.Distribuidor = {};
@@ -22,6 +22,7 @@
       APERIO: 5,
       AMAZONWEBSERVICES:10
     };
+    $scope.monthCard=0
     $scope.tipoMonedaCambio = $cookies.getObject('compararPedidosAnteriores');
     $scope.errorName = false;
     $scope.name = '';
@@ -37,6 +38,14 @@
       $scope.ShowToast(!message ? 'Ha ocurrido un error, intentelo mas tarde.' : message, 'danger');
       $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
     };
+     $scope.ShowME = function (Mensaje, className) {
+       /* className = "success", "info", "warning" or "danger"*/
+       ngToast.create({
+         className: className,
+         content: '' + Mensaje + '',
+         dismissButton: true
+       });
+     };
 
     const getPaymentMethods = function (id) {
       let paymentMethod = '';
@@ -455,41 +464,43 @@
     };
 
     $scope.checkErrors = errors => {
-      console.log(errors);
       errors.forEach(er => {
         if (er === 'holder_name is required') {
           $scope.ShowToast('El nombre es requerido', 'danger');
+          printError('El nombre es requerido', 'alert-danger');
         }
         if (er === 'card_number is required') {
-          $scope.ShowToast('El número de tarjeta es requerido', 'danger');
+          printError('El número de tarjeta es requerido', 'alert-danger');
         }
         if (er === 'expiration_year expiration_month is required') {
-          $scope.ShowToast('La fecha de expiración es requerida', 'danger');
+          printError('La fecha de expiración es requerida', 'alert-danger');
         }
         if (er === 'card_number length is invalid') {
-          $scope.ShowToast('El número de su tarjeta es inválido', 'danger');
+          printError('El número de su tarjeta es inválido', 'alert-danger');
         }
         if (er === 'The card number verification digit is invalid') {
-          $scope.ShowToast('El número de verificacion de su tarjeta es inválido', 'danger');
+          printError('El número de verificacion de su tarjeta es inválido', 'alert-danger');
         }
         if (er === 'The CVV2 security code is required') {
-          $scope.ShowToast('El código de seguridad CVV2 es requerido', 'danger');
+          printError('El código de seguridad CVV2 es requerido', ' alert-danger');
         }
-        if (er === 'valid expirations months are 01 to 12') {
-          $scope.ShowToast('Los meses de expiración válidos son de 01 a 12', 'danger');
+        if (er === 'valid expirations months are 01 to 12') {          
+          printError('Los meses de expiración válidos son de 01 a 12', ' alert-danger');
         }
         if (er === 'The expiration date has expired') {
-          $scope.ShowToast('La fecha ha expirado', 'danger');
+           printError('La fecha ha expirado', ' alert-danger');
         }
+
       })
     }
 
     async function error_callbak (error) {
-      const test = error.data.description;
-      var arr = await test.split(",").map(function(item) {
-        return item.trim();
-      });
-      return $scope.checkErrors(arr);
+       const test = error.data.description;
+       var arr = await test.split(",").map(function(item) {
+         return item.trim();
+       });
+       return $scope.checkErrors(arr);  
+     
     }
 
     const getActualSubdomain = function () {
@@ -497,6 +508,10 @@
       subdomain = subdomain.replace('/#/Comprar', '');
       return subdomain;
     };
+
+    function printError (messageError, className) {
+      $('#responseDiv').html(messageError).removeClass("ocultar").removeClass().addClass(`alert ${className}`)
+    }
 
     $scope.prepararPaypal = function () {
       const orderIds = $scope.PedidoDetalles.map(function (result) {
@@ -621,6 +636,22 @@
      }, "Value must not equal arg.");
 
 
+     $.validator.addMethod("dateValidation", function(value, element, params) {
+       
+      let minMonth = new Date().getMonth() + 1;
+      let minYear = new Date().getFullYear();
+
+      let month = parseInt(params.formMonth[0].value, 10);
+      let year = parseInt(params.formYear[0].value, 10);
+      year = year + 2000;
+
+      if ((year > minYear) || ((year === minYear) && (month >= minMonth))) {
+          return true;
+      } else {
+          return false;
+      }
+}, "La fecha de expiración de tu tarjeta es incorrecta.");
+
       $('#payment-form').validate({
           rules: {
             name: { 
@@ -632,8 +663,14 @@
                    maxlength: 19,
                    minlength: 16
                },
-            month: { valueNotEquals: "default" },
-            year: { valueNotEquals: "default" },
+               ccexpmonth: { valueNotEquals: "default" },
+            ccexpyear: { 
+              valueNotEquals: "default" ,
+              dateValidation: { 
+                formMonth: $('#ccexpmonth'),
+                formYear:  $('#ccexpyear'),
+              }
+          },
             cvv: {
               required: true,
               number: true,
@@ -652,8 +689,10 @@
                    maxlength: "Máximo 19 digitos",
                    minlength: "Mínimo 16 digitos"
                },
-               month: { valueNotEquals: "Selecciona un mes" },
-               year: { valueNotEquals: "Selecciona un año" },
+               ccexpmonth: { valueNotEquals: "Selecciona un mes" },
+               ccexpyear: { 
+                 valueNotEquals: "Selecciona un año",
+               },
                cvv: {
                 required: "Es requerido*",
                 number: "Solo se permiten números*",
@@ -661,10 +700,11 @@
                 minlength: "Mínimo 3 digitos",
               }
            },
-           submitHandler: function () {
+           submitHandler: function (form) {
               OpenPay.token.extractFormAndCreate('payment-form', success_callbak, error_callbak); 
          }
       });
+  
   
     var modal = document.getElementById('modalTipoMoneda');
 
@@ -683,7 +723,7 @@
     };
   };
 
-  ComprarController.$inject = ['$scope', '$log', '$rootScope', '$location', '$cookies', 'PedidoDetallesFactory', 'UsuariosFactory', 'PedidosFactory', 'EmpresasFactory', 'jwtHelper', '$route'];
+  ComprarController.$inject = ['$scope', '$log', '$rootScope', '$location', '$cookies', 'PedidoDetallesFactory', 'UsuariosFactory', 'PedidosFactory', 'EmpresasFactory', 'jwtHelper', '$route', 'ngToast'];
 
   angular.module('marketplace').controller('ComprarController', ComprarController);
 }());
