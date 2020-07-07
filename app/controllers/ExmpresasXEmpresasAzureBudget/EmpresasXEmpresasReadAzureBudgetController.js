@@ -41,9 +41,10 @@
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
 
-        EmpresasFactory.getBudgetAzure()
+      EmpresasFactory.getBudgetAzure()
         .success(function (Empresa) {
           if (Empresa.data[0] !== undefined) {
+            $scope.Validacion = 1;
             if (Empresa.data[0].Cantidad !== null) {
               $scope.CreditoDisponible = Empresa.data[0].Cantidad;
             } else {
@@ -51,6 +52,8 @@
             }
           } else {
             $scope.CreditoDisponible = 0;
+            $scope.Validacion = 0;
+            $scope.ShowToast('No cuentas con Azure Budget', 'danger');
           }
         })
         .error(function (data, status, headers, config) {

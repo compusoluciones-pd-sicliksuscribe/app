@@ -49,8 +49,6 @@
 
       EmpresasFactory.putEmpresa(Empresa)
         .success(function (result) {
-          console.log('RESULT putEmpresa');
-          console.log(result);
           if (result.success === 1) {
             $scope.ShowToast(result.message, 'success');
             $location.path('/Empresas');
@@ -104,14 +102,11 @@
           MetodoPago: Number($scope.Empresa.TipoAnticipo)
         };
 
-      console.log('EmpresaBudgetAzure');
-      console.log(EmpresaBudgetAzure);
       var validacion = ValidarObjetoFormulario(EmpresaBudgetAzure);
+
       if (validacion.Correcto) {
         EmpresasFactory.putBudgetAzure(EmpresaBudgetAzure)
          .success(function (result) {
-           console.log('RESULT');
-           console.log(result);
            if (result[0].Success === true) {
              $scope.ShowToast(result[0].Message, 'success');
              $location.path('/Empresas');
