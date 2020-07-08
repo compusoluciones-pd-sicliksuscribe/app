@@ -190,6 +190,16 @@
         }
       })
 
+      .when('/DescuentoPromoAzure/:IdEmpresa', {
+        controller: 'EmpresaAzurePromoController', templateUrl: 'app/views/Empresas/EmpresaAzurePromo.html',
+        resolve: {
+          'check': function ($location, $cookies) {
+            var Session = $cookies.getObject('Session');
+            if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 8)) { $location.path('/404'); }
+          }
+        }
+      })
+
       .when('/Monitor', {
         controller: 'MonitorReadController', templateUrl: 'app/views/PedidoDetalles/MonitorRead.html',
         resolve: {

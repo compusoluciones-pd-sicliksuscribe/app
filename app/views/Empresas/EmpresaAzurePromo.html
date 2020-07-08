@@ -1,0 +1,87 @@
+<div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+        <h2>Administrador de proyectos</h2>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 form-group">
+        <label for="Busqueda">&nbsp;</label>
+        <div class="has-feedback">
+          <input name="Busqueda" type="text" ng-model="EmpresaFilter" class="form-control" size="30" placeholder="Busca un cliente..."
+          />
+          <i class="form-control-feedback glyphicon glyphicon-search"></i>
+        </div>
+      </div>
+    </div>
+    <div ng-show="!(Empresas.length > 0)">
+      <br>
+      <h4>El distribuidor no tiene clientes...</h4>
+    </div>
+  
+    <div ng-show="Empresas.length > 0">
+  
+      <div class="row" ng-show="0">
+        <div class="col-xs-12 col-sm-12 col-md-offset-8 col-md-4 col-lg-4" style="display:flex; align-items:center; margin-bottom:16px">
+          <div class="form-group">
+            <label labelfor="Cantidad" title="Tipo de cambio protegido.">Cambiar tipo de cambio para todos: </label>
+            <div class="input-group">
+              <span class="input-group-addon" style="border-radius: 0;">$</span>
+              <input id="Cantidad" name="Cantidad" type="text" ng-model="RPTodos" class="form-control" value="0" step="1000" placeholder="Tipo de cambio protegido."
+              />
+            </div>
+            <div ng-show="MostrarMensajeError">
+              <p style="color:red">Ingresa una cantidad valida.</p>
+            </div>
+          </div>
+          <span class="fa fa-floppy-o" style="cursor:pointer; color: #337ab7; font-size:24px; margin-left:5px; padding-right:8px; padding-top:8px"
+            title="Guardar" ng-click="ActualizarTodos();" ng-show="!frmCantidad.Cantidad.$error.max"></span>
+        </div>
+      </div>
+  
+      <div class="table-responsive ">
+  
+        <table class="table table-hover border-left-right-cero">
+          <thead>
+            <tr style="font-size:14px">
+              <th>Nombre</th>
+              <th>Descuento promo</th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="Empresa in Empresas | filter : EmpresaFilter" class="repeat-animation">
+              <td>
+                <h3 style="color:#00549F;">{{Empresa.NombreEmpresa}}</h3>
+                <h5>
+                  <b>RFC: </b>{{Empresa.RFC}}
+                  <b style="margin-left: 16px">Fecha activo: </b>{{Empresa.FechaActivo | date:'dd/MM/yyyy'}}</h5>
+              </td>
+              <td style="vertical-align: middle">
+                <div class="input-group">
+                  <span class="input-group-addon" style="border-radius: 0;">$</span> 
+                  <input id="Cantidad" name="Cantidad" type="text" ng-model="Empresa.DescuentoPromo" class="form-control" value="0" step="1000"
+                    placeholder="Descuento promo." maxlength="1" ng-disabled="SessionCookie.IdTipoAcceso !== 1" />
+                </div>
+                <div ng-show="Empresa.MostrarMensajeError">
+                  <p style="color:red">Ingresa una cantidad valida.</p>
+                </div>
+              </td>            
+              <td style="vertical-align: middle">
+                <span class="fa fa-floppy-o" ng-show="SessionCookie.IdTipoAcceso === 1" title="Guardar promo" ng-click="UpdatePromo(Empresa);"
+                  style="cursor:pointer; color: #337ab7; font-size:24px; margin-left: -10px"></span>
+              </td>
+              <td style="vertical-align: middle">
+                <span class="fa fa-times" ng-show="SessionCookie.IdTipoAcceso === 1 && Empresa.DescuentoPromo" title="Quitar promo" ng-click="removerPromo(Empresa);"
+                  style="cursor:pointer; color: #337ab7; font-size:24px;margin-left: -10px"></span>
+              </td>
+            </tr>
+          </tbody>
+  
+        </table>
+  
+      </div>
+      <b>Número total de clientes:</b> {{ Empresas.length }}.
+  
+    </div>
+  
+  </div>
