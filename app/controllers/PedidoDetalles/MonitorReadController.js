@@ -205,7 +205,7 @@
           CantidadProxima: detalles.CantidadProxima,
           IdPedidoDetalle: detalles.IdPedidoDetalle,
           IdEmpresaUsuarioFinal: Params.IdEmpresaUsuarioFinal,
-          IdPedido: pedido.IdPedido
+          IdPedido: pedido.IdContrato ? detalles.IdPedido : pedido.IdPedido
         };
         PedidoDetallesFactory.updateSubscriptionNextQuantity(detail)
           .then(function (updateResult) {
