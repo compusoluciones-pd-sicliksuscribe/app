@@ -378,12 +378,14 @@
                     <li ng-if="pedido.EstatusContrato === 'ready'"> <label for="Renovado">Estatus renovación: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-success">Listo para renovar</span></li>
                     <li ng-if="pedido.EstatusContrato === 'renewal'"> <label for="Renovado">Estatus renovación: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-primary">Renovado</span></li>
                     <li ng-if="pedido.EstatusContrato === 'processing'"><label for="Renovado">Estatus renovación: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-info">Pendiente</span></li>
-                    <li ng-if="pedido.EstatusContrato === 'unready'"><label for="Renovado">Estatus renovación: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-default" data-toggle="tooltip" data-placement="top" title="Periodo de renovación: 90 días previo a su fecha de termino.">Aun no puede ser renovado</span></li>
+                    <li ng-if="pedido.EstatusContrato === 'unready'"><label for="Renovado">Estatus renovación: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-default" data-toggle="tooltip" data-placement="top" title="Periodo de renovación: 90 días previo a su fecha de termino.">Aún no puede ser renovado</span></li>
                     <li ng-if="pedido.EstatusContrato === 'in-cart'"><label for="Renovado">Estatus renovación: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-warning">En carrito</span></li>
                     <li> <label for="FechaInicio">Duración del contrato: </label> {{ pedido.FechaInicio | date:'d/MM/yyyy' }} <label>-</label> {{ pedido.FechaFin | date:'d/MM/yyyy'}} </li>
-                    <li ng-if="pedido.EstatusContrato === 'in-cart'"><hr><h5 class="alert alert-info text-info" style="border-left: .6em solid;"><b>El pedido para la renovación se encuentra en el carrito. Realice el pago para continuar el proceso de renovación.</b></h5></li>
-                    <li ng-if="pedido.EstatusContrato === 'processing'"><hr><h5 class="alert alert-info text-info"><b>Este contrato será renovado. El cambio se verá reflejado al terminar el periodo actual.</b></h5></li>
                 </ul>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="pedido.EstatusContrato === 'in-cart' || pedido.EstatusContrato === 'processing'">
+                <div ng-if="pedido.EstatusContrato === 'in-cart'"><hr><h5 class="alert alert-info text-info" style="border-left: .6em solid; width: 100%;"><b>El pedido para la renovación se encuentra en el carrito. Realice el pago para continuar el proceso de renovación.</b></h5></div>
+                <div ng-if="pedido.EstatusContrato === 'processing'"><hr><h5 class="alert alert-info text-info" style="border-left: .6em solid;"><b>Este contrato será renovado. El cambio se verá reflejado al terminar el periodo actual.</b></h5></div>
             </div>
             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"></div>
 			<div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
