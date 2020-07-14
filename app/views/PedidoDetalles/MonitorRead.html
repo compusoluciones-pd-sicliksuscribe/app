@@ -378,17 +378,20 @@
                     <li ng-if="pedido.EstatusContrato === 'ready'"> <label for="Renovado">Estatus renovación: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-success">Listo para renovar</span></li>
                     <li ng-if="pedido.EstatusContrato === 'renewal'"> <label for="Renovado">Estatus renovación: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-primary">Renovado</span></li>
                     <li ng-if="pedido.EstatusContrato === 'processing'"><label for="Renovado">Estatus renovación: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-info">Pendiente</span></li>
-                    <li ng-if="pedido.EstatusContrato === 'unready'"><label for="Renovado">Estatus renovación: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-default">Aun no puede ser renovado</span></li>
+                    <li ng-if="pedido.EstatusContrato === 'unready'"><label for="Renovado">Estatus renovación: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-default" data-toggle="tooltip" data-placement="top" title="Periodo de renovación: 90 días previo a su fecha de termino.">Aún no puede ser renovado</span></li>
+                    <li ng-if="pedido.EstatusContrato === 'in-cart'"><label for="Renovado">Estatus renovación: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-warning">En carrito</span></li>
                     <li> <label for="FechaInicio">Duración del contrato: </label> {{ pedido.FechaInicio | date:'d/MM/yyyy' }} <label>-</label> {{ pedido.FechaFin | date:'d/MM/yyyy'}} </li>
-                    <li ng-if="pedido.EstatusContrato === 'processing'"><hr><h5 class="alert alert-info text-info"><b>Este contrato será renovado. El cambio se verá reflejado al terminar el periodo actual.</b></h5></li>
                 </ul>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="pedido.EstatusContrato === 'in-cart' || pedido.EstatusContrato === 'processing'">
+                <div ng-if="pedido.EstatusContrato === 'in-cart'"><hr><h5 class="alert alert-info text-info" style="border-left: .6em solid; width: 100%;"><b>El pedido para la renovación se encuentra en el carrito. Realice el pago para continuar el proceso de renovación.</b></h5></div>
+                <div ng-if="pedido.EstatusContrato === 'processing'"><hr><h5 class="alert alert-info text-info" style="border-left: .6em solid;"><b>Este contrato será renovado. El cambio se verá reflejado al terminar el periodo actual.</b></h5></div>
             </div>
             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"></div>
 			<div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
 				<button id="Renovar" class="pull-right btn btn-block btn-primary" style="margin-top: 20px" ng-if="!pedido.AutoRenovable"
-				ng-disabled="(pedido.EstatusContrato === 'unready') && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)"
-				ng-hide="pedido.EstatusContrato === 'notRenewed' || pedido.EstatusContrato === 'processing'"
-					data-toggle="modal" data-target="#renovarModal"
+                ng-hide="pedido.EstatusContrato !== 'ready'"
+                data-toggle="modal" data-target="#renovarModal"
 					ng-click="AgregarContrato(pedido);">
 					Renovar
 				</button>
@@ -451,13 +454,12 @@
 				    	 ng-hide="pedido.EstatusContrato === 'canceled' || pedido.EstatusContrato === 'notRenewed'">
                         <div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
                             <label>Suscripciones: </label> <br>
-                            <div style="margin:0; padding:0;" ng-if="detalles.EstatusFabricante !== 'accepted' || (pedido.AutoRenovable && detalles.PagoRenovacion) || (!pedido.AutoRenovable && (!pedido.Renovacion || pedido.PorRenovar))"> {{ detalles.Cantidad }} </div>
+                            <div style="margin:0; padding:0;" ng-if="detalles.EstatusFabricante !== 'accepted' || pedido.PorActivar"> {{ detalles.Cantidad }} </div>
                             
-                            <a ng-click="ActualizarCantidad(detalles.IdPedidoDetalle)" style="text-decoration: none" ng-if="detalles.EstatusFabricante === 'accepted' && ((pedido.AutoRenovable && !detalles.PagoRenovacion) || (!pedido.AutoRenovable && pedido.Renovacion && !pedido.PorRenovar))"> {{ detalles.Cantidad }} &nbsp;
+                            <a ng-click="ActualizarCantidad(detalles.IdPedidoDetalle)" style="text-decoration: none" ng-if="detalles.EstatusFabricante === 'accepted' && !pedido.PorActivar"> {{ detalles.Cantidad }} &nbsp;
 								<span class="glyphicon glyphicon-triangle-bottom" ng-show="!detalles.MostrarCantidad"></span>
 								<span class="glyphicon glyphicon-triangle-top" ng-show="detalles.MostrarCantidad"></span>
 							</a>
-                            <!-- ng-show="detalles.Cantidad !== detalles.CantidadProxima" -->
                             <div style="margin:0; padding:0;">
                                 <br> <label> Renovación: </label> <br>
                                 <div ng-if="!detalles.PorCancelar"> {{ detalles.IdProducto === 3616 ? 25 : detalles.CantidadProxima }} </div>
@@ -467,7 +469,7 @@
                             <div class="row" ng-show="detalles.MostrarCantidad">
                                 <div class="form-group col-xs-6 col-sm-6 col-md-12 col-lg-12">
                                     <label>Actualizar: </label>
-                                    <p>El número de suscripciones se vera reflejado en la renovación.</p>
+                                    <p>El número de suscripciones se verá reflejado en la renovación.</p>
                                 </div>
                             </div>
 
