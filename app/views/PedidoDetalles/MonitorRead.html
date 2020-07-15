@@ -454,9 +454,9 @@
 				    	 ng-hide="pedido.EstatusContrato === 'canceled' || pedido.EstatusContrato === 'notRenewed'">
                         <div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
                             <label>Suscripciones: </label> <br>
-                            <div style="margin:0; padding:0;" ng-if="detalles.EstatusFabricante !== 'accepted' || pedido.PorActivar"> {{ detalles.Cantidad }} </div>
+                            <div style="margin:0; padding:0;" ng-if="detalles.EstatusFabricante !== 'accepted' || pedido.PorActivar || pedido.EstatusContrato !== 'ready'"> {{ detalles.Cantidad }} </div>
                             
-                            <a ng-click="ActualizarCantidad(detalles.IdPedidoDetalle)" style="text-decoration: none" ng-if="detalles.EstatusFabricante === 'accepted' && !pedido.PorActivar"> {{ detalles.Cantidad }} &nbsp;
+                            <a ng-click="ActualizarCantidad(detalles.IdPedidoDetalle)" style="text-decoration: none" ng-if="detalles.EstatusFabricante === 'accepted' && !pedido.PorActivar && pedido.EstatusContrato === 'ready'"> {{ detalles.Cantidad }} &nbsp;
 								<span class="glyphicon glyphicon-triangle-bottom" ng-show="!detalles.MostrarCantidad"></span>
 								<span class="glyphicon glyphicon-triangle-top" ng-show="detalles.MostrarCantidad"></span>
 							</a>
