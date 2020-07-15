@@ -6,7 +6,6 @@
     $scope.PorcentajeAzureBudget = 100;
     $scope.CreditoRepartidoPorcentajeTotal = 0;
 
-
     String.prototype.splice = function (idx, rem, s) {
       return (this.slice(0, idx) + s + this.slice(idx + Math.abs(rem)));
     };
@@ -24,7 +23,7 @@
           Empresa.maxlength = false;
         }
       }
-    }
+    };
 
     $scope.init = function () {
       $scope.CheckCookie();
@@ -67,15 +66,22 @@
       $scope.sortBy = Atributo;
       $scope.reverse = !$scope.reverse;
     };
-    
 
     $scope.ActualizarCredito = function (Empresa) {
+      const EmpresaActualizar = {
+        IdEmpresasXEmpresa: Empresa.IdEmpresasXEmpresa,
+        PorcentajeAzureBudget: Empresa.PorcentajeAzureBudget,
+        IdEmpresa: Empresa.IdEmpresa,
+        NombreEmpresa: Empresa.NombreEmpresa,
+      };
+      if (EmpresaActualizar.PorcentajeAzureBudget === null) EmpresaActualizar.PorcentajeAzureBudget = 0;
+
       var total = 0;
       if (Empresa.PorcentajeAzureBudget != undefined && Empresa.PorcentajeAzureBudget != null) {
         if (Empresa.PorcentajeAzureBudget < 0) {
           $scope.ShowToast('Cantidad no válida', 'danger');
           return;
-        } else  if ($scope.CreditoRepartidoPorcentajeTotal > 100) {
+        } else if ($scope.CreditoRepartidoPorcentajeTotal > 100) {
           $scope.ShowToast('Sobrepasas el 100 por ciento', 'danger');
           return false;
         } else {
@@ -85,14 +91,12 @@
         Empresa.PorcentajeAzureBudget = 0;
       }
 
-      EmpresasXEmpresasFactory.putEmpresasXEmpresa(Empresa)
-        .success(function (data) {
-          if (data[0].Success == true) {
-            $scope.ShowToast(data[0].Message, 'success');
-
-            var parametros = { IdEmpresaUsuarioFinal: Empresa.IdEmpresa };
+      EmpresasXEmpresasFactory.putEmpresasXEmpresaAzureBudget(EmpresaActualizar)
+        .success(function (resultado) {
+          if (resultado.success === true  || resultado.success === 1) {
+            $scope.ShowToast(resultado.message, 'success');
           } else {
-            $scope.ShowToast(data[0].Message, 'danger');
+            $scope.ShowToast(resultado.message, 'danger');
 
             $scope.init();
           }
@@ -105,28 +109,28 @@
 
     const CreditoRepartidoPorcentaje = () => {
       let totalAsignadoPorcentaje = 0;
-      
+
       if ($scope.Empresas !== undefined) {
         $scope.Empresas.map(empresa => {
           if (empresa.PorcentajeAzureBudget != undefined && empresa.PorcentajeAzureBudget != null) {
             totalAsignadoPorcentaje += empresa.PorcentajeAzureBudget;
           }
-        })
+        });
       }
       $scope.CreditoRepartidoPorcentajeTotal = totalAsignadoPorcentaje;
-    }
+    };
 
     const CreditoPorRepartirPorcentaje = () => {
       let totalPorRepartirPorcentaje = 100;
       if ($scope.Empresas !== undefined) {
         $scope.Empresas.map(empresa => {
-          if(empresa.PorcentajeAzureBudget != undefined && empresa.PorcentajeAzureBudget != null) {
+          if (empresa.PorcentajeAzureBudget != undefined && empresa.PorcentajeAzureBudget != null) {
             totalPorRepartirPorcentaje -= empresa.PorcentajeAzureBudget;
           }
-        })
+        });
       }
       $scope.PorcentajeAzureBudget = totalPorRepartirPorcentaje;
-    }
+    };
 
     $scope.CreditoRepartido = function () {
       $scope.CreditoRepartidoTotal = (($scope.CreditoDisponible * $scope.CreditoRepartidoPorcentajeTotal) / 100).toFixed(4);
@@ -140,38 +144,38 @@
       $scope.Tour = new Tour({
         steps: [
           {
-            element: ".newClient",
-            placement: "bottom",
-            title: "Agrega nuevos clientes",
-            content: "Da de alta un nuevo cliente y asígnale crédito para Click suscribe.",
+            element: '.newClient',
+            placement: 'bottom',
+            title: 'Agrega nuevos clientes',
+            content: 'Da de alta un nuevo cliente y asígnale crédito para Click suscribe.',
             template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>"
           },
           {
-            element: ".totalCredit",
-            placement: "bottom",
-            title: "Crédito total",
-            content: "El crédito total que tienes en Click suscribe para hacer compras o renovar suscripciones.",
+            element: '.totalCredit',
+            placement: 'bottom',
+            title: 'Crédito total',
+            content: 'El crédito total que tienes en Click suscribe para hacer compras o renovar suscripciones.',
             template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>"
           },
           {
-            element: ".asignCredit",
-            placement: "bottom",
-            title: "Crédito total asignado",
-            content: "Cantidad que ya se repartió entre tus clientes.",
+            element: '.asignCredit',
+            placement: 'bottom',
+            title: 'Crédito total asignado',
+            content: 'Cantidad que ya se repartió entre tus clientes.',
             template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>"
           },
           {
-            element: ".giveCredit",
-            placement: "bottom",
-            title: "Crédito por repartir",
-            content: "Cantidad disponible o pendiente por repartir entre tus clientes.",
+            element: '.giveCredit',
+            placement: 'bottom',
+            title: 'Crédito por repartir',
+            content: 'Cantidad disponible o pendiente por repartir entre tus clientes.',
             template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>"
           },
           {
-            element: ".pesosCredit",
-            placement: "left",
-            title: "Asigna crédito",
-            content: "Asígnale crédito a cada cliente en base a tu monto total.",
+            element: '.pesosCredit',
+            placement: 'left',
+            title: 'Asigna crédito',
+            content: 'Asígnale crédito a cada cliente en base a tu monto total.',
             template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>"
           }
         ],
