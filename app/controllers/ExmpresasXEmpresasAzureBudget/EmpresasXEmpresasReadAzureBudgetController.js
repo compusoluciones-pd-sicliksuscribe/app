@@ -16,7 +16,7 @@
       $scope.CreditoRepartido();
       $scope.CreditoPorRepartir();
       if (Empresa !== undefined) {
-        if ($scope.CreditoRepartidoPorcentajeTotal > 100) {
+        if ($scope.CreditoRepartidoPorcentajeTotal > 100 || Empresa.PorcentajeAzureBudget === undefined) {
           $scope.ShowToast('No puedes repartir una cantidad mayor al 100 %', 'danger');
           Empresa.maxlength = true;
         } else {
@@ -73,6 +73,7 @@
         PorcentajeAzureBudget: Empresa.PorcentajeAzureBudget,
         IdEmpresa: Empresa.IdEmpresa,
         NombreEmpresa: Empresa.NombreEmpresa,
+        token: Empresa.token
       };
       if (EmpresaActualizar.PorcentajeAzureBudget === null) EmpresaActualizar.PorcentajeAzureBudget = 0;
 
@@ -81,7 +82,7 @@
         if (Empresa.PorcentajeAzureBudget < 0) {
           $scope.ShowToast('Cantidad no válida', 'danger');
           return;
-        } else if ($scope.CreditoRepartidoPorcentajeTotal > 100) {
+        } else if ($scope.CreditoRepartidoPorcentajeTotal > 100 ) {
           $scope.ShowToast('Sobrepasas el 100 por ciento', 'danger');
           return false;
         } else {
