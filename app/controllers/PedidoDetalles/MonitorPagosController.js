@@ -24,6 +24,9 @@
       PREPAID: 4,
       STORE: 5
     };
+    $scope.anios = [{nombre:'Año',valor:'default'},{nombre:'2020',valor:20},{nombre:'2021',valor:21},{nombre:'2022',valor:22},{nombre:'2023',valor:23},{nombre:'2024',valor:24},{nombre:'2025',valor:25}];
+    $scope.meses = [{nombre:'Mes',valor:'default'},{nombre:'Enero',valor: '01'},{nombre:'Febrero',valor: '02'},{nombre:'Marzo',valor: '03'},{nombre:'Abril',valor: '04'},{nombre:'Mayo',valor: '05'},{nombre:'Junio',valor: '06'},{nombre:'Julio',valor: '07'},{nombre:'Agosto',valor: '08'},{nombre:'Septiembre',valor: '09'},{nombre:'Octubre',valor: '10'},{nombre:'Noviembre',valor: '11'},{nombre:'Diciembre',valor: '12'}]
+
   
     $scope.session = $cookies.getObject('Session');
     
@@ -310,31 +313,79 @@
       ta.val(letras)
     }); 
 
-    $('#pay-button').on('click', function(event) {
-      $scope.errorName = 0;
-      $scope.errorCard = 0;
-      $scope.errorDate = 0;
-      $scope.dateError = '';
-      $scope.errorCardMessage = '';
-      if ($scope.name.length <= 0) {
-        $scope.errorName = 1;
+    $.validator.addMethod("valueNotEquals", function(value, element, arg){
+      return arg !== value;
+     }, "Value must not equal arg.");
+
+
+     $.validator.addMethod("dateValidation", function(value, element, params) {
+       
+      let minMonth = new Date().getMonth() + 1;
+      let minYear = new Date().getFullYear();
+
+      let month = parseInt(params.formMonth[0].value, 10);
+      let year = parseInt(params.formYear[0].value, 10);
+      year = year + 2000;
+
+      if ((year > minYear) || ((year === minYear) && (month >= minMonth))) {
+          return true;
+      } else {
+          return false;
       }
-      if ($scope.card.length <= 0) {
-        $scope.errorCard = 1;
-        $scope.errorCardMessage = '*Requerido';
-      }
-      if ($scope.month.length <= 0) {
-        $scope.errorDate = 1;
-        $scope.dateError = '*Mes requerido';
-      }
-      if ($scope.year.length <= 0) {
-        $scope.errorDate = 1;
-        $scope.dateError = '*Año requerido';
-      }
-      event.preventDefault();
-      $("#pay-button").prop( "disabled", true);
-      OpenPay.token.extractFormAndCreate('payment-form', success_callbak, error_callbak);              
-    });
+}, "La fecha de expiración de tu tarjeta es incorrecta.");
+
+      $('#payment-form').validate({
+          rules: {
+            name: { 
+              required: true,
+            },
+            cardNumber: {
+                   required: true,
+                   number: true,
+                   maxlength: 19,
+                   minlength: 16
+               },
+               ccexpmonth: { valueNotEquals: "default" },
+            ccexpyear: { 
+              valueNotEquals: "default" ,
+              dateValidation: { 
+                formMonth: $('#ccexpmonth'),
+                formYear:  $('#ccexpyear'),
+              }
+          },
+            cvv: {
+              required: true,
+              number: true,
+              maxlength: 3,
+              minlength: 3
+            }
+          },
+          messages: {
+              name: {
+                  required: "Es requerido*",
+
+              },          
+              cardNumber: {
+                   required: "Es requerido*",
+                   number: "Solo se permiten números*",
+                   maxlength: "Máximo 19 digitos",
+                   minlength: "Mínimo 16 digitos"
+               },
+               ccexpmonth: { valueNotEquals: "Selecciona un mes" },
+               ccexpyear: { 
+                 valueNotEquals: "Selecciona un año",
+               },
+               cvv: {
+                required: "Es requerido*",
+                number: "Solo se permiten números*",
+                maxlength: "Máximo 3 digitos",
+                minlength: "Mínimo 3 digitos",
+              }
+           },
+           submitHandler: function (form) {
+              OpenPay.token.extractFormAndCreate('payment-form', success_callbak, error_callbak); 
+         }
+      });
 
     async function success_callbak (response) {
       const siclikToken = await $scope.getSiclikToken();
@@ -365,29 +416,35 @@
           $scope.ShowToast('Surgió un error, contactar a soporte o intentar más tarde.', 'danger');
         });
     }
+
     $scope.checkErrors = errors => {
       errors.forEach(er => {
         if (er === 'holder_name is required') {
           $scope.ShowToast('El nombre es requerido', 'danger');
+          printError('El nombre es requerido', 'alert-danger');
         }
         if (er === 'card_number is required') {
-          $scope.ShowToast('El número de tarjeta es requerido', 'danger');
+          printError('El número de tarjeta es requerido', 'alert-danger');
         }
         if (er === 'expiration_year expiration_month is required') {
-          $scope.ShowToast('La fecha de expiración es requerida', 'danger');
+          printError('La fecha de expiración es requerida', 'alert-danger');
         }
         if (er === 'card_number length is invalid') {
-          $scope.ShowToast('El número de su tarjeta es inválido', 'danger');
+          printError('El número de su tarjeta es inválido', 'alert-danger');
         }
         if (er === 'The card number verification digit is invalid') {
-          $scope.ShowToast('El número de verificacion de su tarjeta es inválido', 'danger');
+          printError('El número de verificacion de su tarjeta es inválido', 'alert-danger');
         }
         if (er === 'The CVV2 security code is required') {
-          $scope.ShowToast('El código de seguridad CVV2 es requerido', 'danger');
+          printError('El código de seguridad CVV2 es requerido', ' alert-danger');
         }
-        if (er === 'valid expirations months are 01 to 12') {
-          $scope.ShowToast('Los meses de expiración válidos son de 01 a 12', 'danger');
+        if (er === 'valid expirations months are 01 to 12') {          
+          printError('Los meses de expiración válidos son de 01 a 12', ' alert-danger');
         }
+        if (er === 'The expiration date has expired') {
+           printError('La fecha ha expirado', ' alert-danger');
+        }
+
       })
     }
 
@@ -443,6 +500,10 @@
       const resultOrderidCookie = [{cookie, location}];
       return resultOrderidCookie;
     };
+
+    function printError (messageError, className) {
+      $('#responseDiv').html(messageError).removeClass("ocultar").removeClass().addClass(`alert ${className}`)
+    }
 
     $scope.preparePrePaid = async function () {
       if ($scope.PedidosSeleccionadosParaPagar.length > 0) {
