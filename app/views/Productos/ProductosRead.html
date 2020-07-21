@@ -467,17 +467,30 @@
             <div class="modal-content">
                 <div class="modal-header" >
                     <button type="button" ng-click="cerrarModal('formModalTransicion')" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Asiento AzurePlan</h4>
+                    <h4 class="modal-title">Transición a Azure Plan</h4>
                 </div>
                 <div class="modal-body">
-                    <iframe ng-src="TuClick.pdf" style="height: 500px; width: 100%;"></iframe>
+                    <iframe ng-src="Azure Plan.pdf" style="height: 500px; width: 100%;"></iframe>
                     <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <img src="images/loading.gif" style="width:45px;height:45px" ng-show="loading_tran"/>
                     </div>
                 </div>
                 <div  class="modal-footer">
-                    <button type="button" class="btn btn-danger" ng-click="cerrarModal('formModalTransicion')" data-dismiss="modal">Cerrar </button>
-                    <button type="button" class="btn btn-success" ng-click="aceptarTransicion();" data-dismiss="modal">Aceptar</button>
+                    <div class="row">
+                        <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-show="mostrar">
+                            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" >
+                                <label>Se realizará la transición a AzurePlan, ¿Estás de acuerdo?</label>
+                                <button class="btn btn-warning" ng-click="aceptarTransicion() "> Sí </button>
+                                <button class="btn btn-primary" ng-click="cerrarModal('formModalTransicion')"> No </button>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-show="!mostrar">
+                            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <button type="button" class="btn btn-danger" ng-click="cerrarModal('formModalTransicion')" data-dismiss="modal">Cerrar </button>
+                                <button type="button" class="btn btn-success" ng-click="mostrarOpciones();" data-dismiss="modal">Aceptar Transición</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

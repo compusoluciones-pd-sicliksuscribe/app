@@ -24,6 +24,7 @@
     const azurePlan = 4105;
     const MONTHLY = 01;
     $scope.azureSeat = '';
+    $scope.mostrar = 0;
 
     $scope.esquemaRenovacionModelo={};
     $scope.EsquemaRenovacion=[
@@ -367,6 +368,7 @@
 
     $scope.cerrarModal = function (modal) {
       document.getElementById(modal).style.display = 'none';
+      $scope.mostrar = 0;
     };
 
 
@@ -478,6 +480,10 @@
       });
     };
 
+    $scope.mostrarOpciones = function () {
+      $scope.mostrar = 1;
+    };
+
     $scope.aceptarTransicion = function () {
       const customerId =  getIdMicrosoft($scope.actualProduct);
       const bodyRequest = {
@@ -524,6 +530,7 @@
         }
         if (result.message === 'No puedes comprar Azure Plan, debes de transicionar tu suscripción actual de Azure') {
           $scope.actualProduct = producto;
+          $scope.ShowToast(result.message, 'danger');
           document.getElementById('formModalTransicion').style.display = 'block';
           return false;
         }
