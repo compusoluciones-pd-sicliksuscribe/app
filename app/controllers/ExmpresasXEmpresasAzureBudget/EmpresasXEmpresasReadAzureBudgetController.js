@@ -69,12 +69,12 @@
 
     $scope.ActualizarCredito = function (Empresa) {
       const EmpresaActualizar = {
-        IdEmpresasXEmpresa: Empresa.IdEmpresasXEmpresa,
         PorcentajeAzureBudget: Empresa.PorcentajeAzureBudget,
-        IdEmpresa: Empresa.IdEmpresa,
-        NombreEmpresa: Empresa.NombreEmpresa,
-        token: Empresa.token
+        IdEmpresaDistribuidor: Empresa.IdEmpresaDistribuidor,
+        IdEmpresaUsuarioFinal: Empresa.IdEmpresa,
+
       };
+
       if (EmpresaActualizar.PorcentajeAzureBudget === null) EmpresaActualizar.PorcentajeAzureBudget = 0;
 
       var total = 0;
