@@ -225,6 +225,16 @@ button a:hover {
 .btn-success:hover {
   background: #3e5d1f; }
 
+  .btn-successSave {
+    min-width: 90px;
+    background: #68953B;
+    color:#ffffff;
+    border-color: transparent; }
+  
+  .btn-successSave:hover {
+    background: #3e5d1f;
+    color:#ffffff; }
+  
 .btn-link {
   min-width: 150px;
   height: 45px;

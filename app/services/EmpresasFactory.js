@@ -193,6 +193,11 @@
       return $http.get($rootScope.API + 'enterprise/getAzureMovement');
     };
 
+    factory.getBudgetAzureByEnterprise = function (IdEmpresaDistribuidor) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'enterprise/getAzureMovement/' + IdEmpresaDistribuidor);
+    };
+
     return factory;
   };
 
