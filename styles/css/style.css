@@ -234,6 +234,10 @@ button a:hover {
   .btn-successSave:hover {
     background: #3e5d1f;
     color:#ffffff; }
+
+    .btn-successSave:focus {
+      background: #3e5d1f;
+      color:#ffffff; }
   
 .btn-link {
   min-width: 150px;

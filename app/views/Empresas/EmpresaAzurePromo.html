@@ -84,7 +84,7 @@
                           <span class="input-group-addon">%</span>
                           <input  id="Cantidad" name="Cantidad" type="number" pattern="[0-9.]*" ng-model="Empresa.PorcentajeAzureBudget" class="form-control" 
                                   value="0" min="0" step="1" placeholder="Porcentaje asignado" ng-change="actualizarCantidades(Empresa)"
-                                  min="0" size="3" maxlength="3" ng-disabled="!Validacion"/>
+                                  min="0" size="3" maxlength="3" ng-disabled="!Validacion" oninput="validity.valid||(value='');"/>
                       </div>
                       
                       <br>
