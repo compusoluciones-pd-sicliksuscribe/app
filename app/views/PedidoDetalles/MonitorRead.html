@@ -38,8 +38,9 @@
             <div class="form-group has-feedback" ng-if="(SessionCookie.IdTipoAcceso === 4 || SessionCookie.IdTipoAcceso === 6) || BuscarProductos.IdFabricante === 2">
                 <label for="TipoContrato">Tipo de contrato: </label>
                 <select name="Contrato" id="Contrato" class="form-control selectOption" ng-change="ActualizarMonitor();" ng-model="Contrato.tipo">
-					<option value="0">Renovables</option>
-					<option value="3">No Renovados</option>
+                    <option value="" selected hidden></option>
+					<option ng-selected="true" value="1">Renovables</option>
+					<option value="0">No Renovados</option>
 				</select>
 			</div>
 		</div>
