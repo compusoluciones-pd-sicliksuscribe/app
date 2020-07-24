@@ -4,7 +4,7 @@
       cursor: pointer;
     }
   </style>
-  <div ng-app="myApp" ng-controller="ParticionPedidoController">
+  <div ng-app="myApp" ng-controller="ParticionPedidosController">
   <div class="container" ng-swipe-right="" ng-swipe-left="">
   
       <div class="row">
@@ -18,46 +18,45 @@
             <span class="glyphicon glyphicon-search fa-2x"  style="float:right;"></span>
         </div>
         <div class="form-group col-xs-11 col-sm-11 col-md-6 col-lg-4" style="float:right;">
-            <input class="form-control fa-lg" type="text" placeholder="Buscar por nombre de distribuidor"aria-label="Buscar" ng-model="busqueda" ng-keyup = "buscar(busqueda)">
+            <input class="form-control fa-lg" type="text" placeholder="Buscar por ID de pedido"aria-label="Buscar" ng-model="busqueda" ng-keyup = "buscar(busqueda)">
         </div>
       </div>
+      <hr>
       <div class="row">
-        <table class="table table-hover table-responsive border-left-right-cero"   ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==8 ">
-            <tr style="background:#4A7BAB; color:white;">
-              <th style="word-wrap:break-word; text-align:center; padding-top: 1.4em;" class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><b>ID Pedido</b></th>
-              <th style="word-wrap:break-word; text-align:center; padding-top: 1.4em;" class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><b>Distribuidor</b></th>
-              <th style="word-wrap:break-word; text-align:center; padding-top: 1.4em;" class="col-xs-12 col-sm-12 col-md-3 col-lg-2"><b>Usuario final</b></th>
-              <th style="word-wrap:break-word; text-align:center; padding-top: 1.4em;" class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><b>Num. contrato</b></th>
-              <th style="word-wrap:break-word; text-align:center; padding-top: 1.4em;" class="col-xs-12 col-sm-12 col-md-1 col-lg-2"><b>SKU</b></th>
-              <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><b>Cantidad actual</b></th>
-              <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><b>Cantidad proxima</b></th>
-              <th style="word-wrap:break-word; text-align:center;" class="col-xs-12 col-sm-12 col-md-3 col-lg-2"><b></b></th>
-              
-            </tr> 
-            <tr ng-repeat="item in filtered" class="repeat-animation">
-              <td style="text-align: center;">{{item.IdERP}}</td>
-              <td style="text-align: center;">{{item.RFC}}</td>
-              <td style="text-align: center;">{{item.NombreEmpresa}}</td>
-              <td style="text-align: center;">
-                <input class="form-control fa-lg" type="text" ng-value="item.IdMicrosoftDist" ng-model="mpn" >
-              </td>
-              <td style="width: 20%">
-                
-                  <button style="margin: 0em 1em 0em 1em;" class="btn btn-warning " ng-click="verificarMPN(mpn)">
-									  Verificar
-                  </button>
-                  <button class="btn btn-success " ng-click="actializarMPN({{item.IdEmpresa}}, mpn)">
-									  Actualizar
-                  </button>
-                
-              </td>
-  
-            </tr>
-          </table>
-          <div ng-show="filtered.length === 0" style = "text-align:center"><h4>No se encontraron resultados.</h4></div>        
-          <div style="margin: auto; text-align: center;" >
-            <pagination class="pager" ng-model="currentPage" total-items="listaDist.length" max-size="maxSize" boundary-links="true"></pagination>
-            </div>
+        <div class="row cotainer" ng-repeat="item in filtered">
+          <div style="background-color: rgba(220, 220, 220, 0.4); padding: 1.5em">
+            <ul style="list-style-type:none; padding:0%">
+              <li> <label>No. Pedido</label><br> <h4 style="font-weight: bold" class="text-primary">{{ item.IdPedido }}</h4> </li>
+              <li> <label>Distribuidor:</label> {{ item.Distribuidor }} </li>
+              <li> <label>Usuario final:</label> {{ item.UsuarioFinal }} </li>
+              <li> <label>Número de contrato:</label> {{ item.NumeroContrato }} </li>
+            </ul>
+            <button style="position: relative; float: right; bottom: 3.2em;" class="btn btn-success" ng-click="confirmarParticion(item.IdPedido)">
+              Confirmar partición
+            </button>
+          </div>
+          <div style="margin-top: 2em; text-align: center;">
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3"><label>SKU Actual:</label></div>
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3"><label>SKU Renovación:</label></div>
+            <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><label>Cantidad:</label></div>
+            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"><label>Cantidad próxima:</label></div>
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" ><label>Número de serie:</label></div>
+          </div>
+          <hr class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <div ng-repeat="detalle in item.Detalles" style=" text-align: center;">
+              <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="margin-bottom: .8em;">{{ detalle.SKU_Actual }} </div>
+              <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="margin-bottom: .8em;"> {{ detalle.SKU_Renovacion }} </div>
+              <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1" style="margin-bottom: .8em;"> {{ detalle.Cantidad }} </div>
+              <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="margin-bottom: .8em;"> {{ detalle.CantidadProxima }} </div>
+              <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="margin-bottom: .8em;"> {{ detalle.NumeroSerie }} </div>
+          </div>
+          <br><hr class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        </div>
+
+        <div ng-show="filtered.length === 0" style = "text-align:center"><h4>No se encontraron resultados.</h4></div>        
+        <div style="margin: auto; text-align: center;" >
+          <pagination class="pager" ng-model="currentPage" total-items="listaDist.length" max-size="maxSize" boundary-links="true"></pagination>
+        </div>
         
       </div>
   </div> 
