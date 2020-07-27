@@ -88,15 +88,11 @@
       if (Params.IdFabricante === 1) {
         $scope.Contrato.tipo = 'all';
       }
-      Params.AutoRenovable = $scope.Contrato.tipo || 'all';
+      Params.EstatusContrato = $scope.Contrato.tipo || 'all';
       if (Params.IdFabricante && $scope.EmpresaSelect) {
         getOrderPerCustomer(Params);
-        if (Params.IdFabricante === 2) {
-          if ($scope.Contrato.tipo === 2) {
-            getOrderPerCustomer(Params);
-          }
-          getContactUsers();
-        }
+        if (Params.IdFabricante === 2) getContactUsers();
+
       }
       getTerminos($scope.EmpresaSelect);
     };
