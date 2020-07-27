@@ -3,9 +3,13 @@
     const getMonitorData = function () {
       return ParticionPedidosFactory.getPedidosParticionados()
           .then(result => {
-            $scope.ordenes = result.data;
-            $scope.ordenesAux = result.data;
-            pagination();
+            if (result.data.success === 0) {
+              $scope.ShowToast(`Hubo un problema al obtener los datos: ${result.data.message}.`, 'danger');
+            } else {
+              $scope.ordenes = result.data.data.orders;
+              $scope.ordenesAux = result.data.data.orders;
+              pagination();
+            }
           })
           .catch(function () {
             $scope.ShowToast('No fue posible obtener los datos de los pedidos, por favor intenta de nuevo más tarde.', 'danger');
@@ -34,9 +38,7 @@
     $scope.buscar = function (valor) {
       let resultados = [];
       $scope.ordenesAux.forEach(orden => {
-        if (orden.NombreEmpresa.toLowerCase().indexOf(valor.toLowerCase()) >= 0) {
-          resultados.push(orden);
-        }
+        if (orden.IdPedido.toString().indexOf(valor) >= 0) resultados.push(orden);
       });
       $scope.ordenes = resultados;
       pagination();
