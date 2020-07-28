@@ -382,12 +382,12 @@
                 </ul>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="pedido.EstatusContrato === 'in-cart' || pedido.EstatusContrato === 'processing'">
-                <div ng-if="pedido.EstatusContrato === 'in-cart'"><hr><h5 class="alert alert-info text-info" style="border-left: .6em solid; width: 100%;"><b>El pedido para la renovación se encuentra en el carrito. Realice el pago para continuar el proceso de renovación.</b></h5></div>
+                <div ng-if="pedido.EstatusContrato === 'in-cart'"><hr><h5 class="alert alert-warning text-warning" style="border-left: .6em solid; width: 100%;"><b>El pedido para la renovación se encuentra en el carrito. Realice el pago para continuar el proceso de renovación.</b></h5></div>
                 <div ng-if="pedido.EstatusContrato === 'processing'"><hr><h5 class="alert alert-info text-info" style="border-left: .6em solid;"><b>Este contrato será renovado. El cambio se verá reflejado al terminar el periodo actual.</b></h5></div>
             </div>
             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"></div>
 			<div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
-				<button id="Renovar" class="pull-right btn btn-block btn-primary" style="margin-top: 20px" ng-if="!pedido.AutoRenovable"
+				<button id="Renovar" class="pull-right btn btn-block btn-primary" style="margin-top: 20px"
                 ng-hide="pedido.EstatusContrato !== 'ready'"
                 data-toggle="modal" data-target="#renovarModal"
 					ng-click="AgregarContrato(pedido);">
@@ -564,7 +564,7 @@
                         <br/> <br/>
                         <div class="form-group">
                             <p>
-                                <b>Nota**</b> <br/> <br/> Al dar click en <b>Renovar Contrato</b>, se agregaran al carrito de compras todos los productos que estén incluidos en el contrato con el estatus de <b>Aceptado</b> y con la cantidad de renovaciones
+                                <b>Nota**</b> <br/> <br/> Al dar click en <b>Renovar Contrato</b>, se agregarán al carrito de compras todos los productos que estén incluidos en el contrato con el estatus de <b>Aceptado</b> y con la cantidad de renovaciones
                                 en el campo de <b>Renovación</b>.
                             </p>
                         </div>
