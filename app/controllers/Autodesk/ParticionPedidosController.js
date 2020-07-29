@@ -43,6 +43,13 @@
       $scope.ordenes = resultados;
       pagination();
     };
+
+    $scope.confirmarParticion = function (IdPedido) {
+      ParticionPedidosFactory.confirmarParticion(IdPedido)
+        .then(result => {
+          console.log(result);
+        });
+    };
   };
 
   ParticionPedidosController.$inject =

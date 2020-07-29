@@ -26,12 +26,12 @@
         <div class="row cotainer" ng-repeat="item in filtered">
           <div style="background-color: rgba(220, 220, 220, 0.4); padding: 1.5em">
             <ul style="list-style-type:none; padding:0%">
-              <li> <label>No. Pedido</label><br> <h4 style="font-weight: bold" class="text-primary">{{ item.IdPedido }}</h4> </li>
+              <li> <label>Número de pedido:</label> {{ item.IdPedido }} </li>
               <li> <label>Distribuidor:</label> {{ item.Distribuidor }} </li>
               <li> <label>Usuario final:</label> {{ item.UsuarioFinal }} </li>
               <li> <label>Número de contrato:</label> {{ item.NumeroContrato }} </li>
             </ul>
-            <button style="position: relative; float: right; bottom: 3.2em;" class="btn btn-success" ng-click="confirmarParticion(item.IdPedido)">
+            <button style="position: relative; float: right; bottom: 3.2em;" class="btn btn-success" ng-click="confirmarParticion({{ item.IdPedido }})">
               Confirmar partición
             </button>
           </div>
