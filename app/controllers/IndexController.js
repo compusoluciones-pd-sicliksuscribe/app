@@ -152,7 +152,7 @@
       }
     };
 
-    /* Valida si el navegador que esta usando el usuario es soportado por las tecnologías de click suscribe*/
+    /* Valida si el navegador que está usando el usuario es soportado por las tecnologías de click suscribe*/
     function validarNavegador (deviceDetector) {
       var esSoportado = false;
       if (deviceDetector.browser === 'ie' && parseInt(obtenerPrimeraCifraVersionNavegador(deviceDetector)) >= 9) { esSoportado = true; }
@@ -167,7 +167,7 @@
       return esSoportado;
     }
 
-    /* Obtiene la primera cifra de la versión del navegador que esta usando el usaurio*/
+    /* Obtiene la primera cifra de la versión del navegador que está usando el usaurio*/
     function obtenerPrimeraCifraVersionNavegador (deviceDetector) {
       var arregloCifrasVersion = deviceDetector.browser_version.split('.');
       return arregloCifrasVersion[0];

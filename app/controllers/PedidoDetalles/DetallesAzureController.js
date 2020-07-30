@@ -26,7 +26,7 @@
           $scope.FechaActualizacion = usage.data[0].FechaActivo;
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
           $scope.ShowToast('No pudimos cargar la lista de fabricantes, por favor intenta de nuevo más tarde.', 'danger');
 

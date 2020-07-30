@@ -164,7 +164,7 @@
                 $scope.ShowToast(result.message, 'danger');
               }
               $location.path('/Empresas');
-              $scope.ShowToast('Se esta importando la empresa, por favor espere ', 'success');
+              $scope.ShowToast('Se está importando la empresa, por favor espere ', 'success');
             })
             .error(function (data, status, headers, config) {
               $scope.ShowToast(data.message, 'danger');
@@ -250,7 +250,7 @@
           } else {
             $scope.valido = true;
             $scope.frm.RFC.$invalid = false;
-            $scope.mensajerfc = 'Este RFC ya esta registrado como distribuidor.';
+            $scope.mensajerfc = 'Este RFC ya está registrado como distribuidor.';
           }
         })
         .error(function (data, status, headers, config) {
@@ -331,7 +331,7 @@
             $scope.frm.RFC.$invalid = true;
             $scope.frm.RFC.$pristine = false;
             $scope.valido = false;
-            $scope.mensajerfc = 'Este RFC ya esta registrado como distribuidor.';
+            $scope.mensajerfc = 'Este RFC ya está registrado como distribuidor.';
           }
         })
         .error(function (data, status, headers, config) {

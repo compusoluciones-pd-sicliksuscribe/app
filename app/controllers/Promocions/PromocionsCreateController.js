@@ -68,7 +68,7 @@
           }
         })
         .error(function (data, status, headers, config) {
-          $scope.ShowToast('Error al intentar subir la imagen.', 'danger');
+          $scope.ShowToast('Error al intentar subir la imágen.', 'danger');
         });
     };
 

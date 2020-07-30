@@ -13,7 +13,7 @@
           }
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
           $scope.ShowToast('No pudimos cargar la información de tu sitio, por favor intenta de nuevo más tarde.', 'danger');
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
@@ -36,7 +36,7 @@
           }
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
           $scope.ShowToast('No pudimos cargar la lista de productos, por favor intenta de nuevo más tarde.', 'danger');
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
@@ -102,7 +102,7 @@
       item.file.name = $scope.IdEmpresa.toString() + '.' + extension[1];
     };
 
-    /** Subo la imágen y establesco la liga para ser guardada despues si no hay errores **/
+    /** Subo la imágen y establesco la liga para ser guardada después si no hay errores **/
     function subirImagen (fileItem, data) {
       var fileChooser = document.getElementById('fileUploadImagen');
       var file = fileChooser.files[0];

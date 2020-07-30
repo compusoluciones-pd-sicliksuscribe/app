@@ -597,7 +597,7 @@ angular.module('directives.loading', [])
       }
     };
 
-    /* Valida si el navegador que esta usando el usuario es soportado por las tecnologías de click suscribe*/
+    /* Valida si el navegador que está usando el usuario es soportado por las tecnologías de click suscribe*/
     function validarNavegador (deviceDetector) {
       var esSoportado = false;
       if (deviceDetector.browser === 'ie' && parseInt(obtenerPrimeraCifraVersionNavegador(deviceDetector)) >= 9) { esSoportado = true; }
@@ -612,7 +612,7 @@ angular.module('directives.loading', [])
       return esSoportado;
     }
 
-    /* Obtiene la primera cifra de la versión del navegador que esta usando el usaurio*/
+    /* Obtiene la primera cifra de la versión del navegador que está usando el usaurio*/
     function obtenerPrimeraCifraVersionNavegador (deviceDetector) {
       var arregloCifrasVersion = deviceDetector.browser_version.split('.');
       return arregloCifrasVersion[0];
@@ -2327,8 +2327,8 @@ angular.module('directives.loading', [])
     const IdDescuento = $routeParams.IdDescuento;
 
     const error = function (error) {
-      $scope.ShowToast(!error ? 'Ha ocurrido un error, intentelo mas tarde.' : error.message, 'danger');
-      $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+      $scope.ShowToast(!error ? 'Ha ocurrido un error, inténtelo más tarde.' : error.message, 'danger');
+      $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
     };
 
     const setPagination = function () {
@@ -2471,8 +2471,8 @@ angular.module('directives.loading', [])
     let searchTimeout;
 
     var error = function (error) {
-      $scope.ShowToast(!error ? 'Ha ocurrido un error, intentelo mas tarde.' : error.message, 'danger');
-      $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+      $scope.ShowToast(!error ? 'Ha ocurrido un error, inténtelo más tarde.' : error.message, 'danger');
+      $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
     };
 
     var setPagination = function () {
@@ -2501,7 +2501,7 @@ angular.module('directives.loading', [])
           if (result.data.success === 1) {
             $scope.ShowToast(result.data.message, 'success');
           } else {
-            $scope.ShowToast('No se pudo actualizar el descuento, reviza que la cantidad sea un numero entero.', 'danger');
+            $scope.ShowToast('No se pudo actualizar el descuento, revisa que la cantidad sea un número entero.', 'danger');
           }
         })
         .catch(function (result) { error(result.data); });
@@ -2768,7 +2768,7 @@ angular.module('directives.loading', [])
           }
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
           $scope.ShowToast('No pudimos cargar la información de tu sitio, por favor intenta de nuevo más tarde.', 'danger');
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
@@ -2787,7 +2787,7 @@ angular.module('directives.loading', [])
           }
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
           $scope.ShowToast('No pudimos cargar la lista de productos, por favor intenta de nuevo más tarde.', 'danger');
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
@@ -2816,7 +2816,7 @@ angular.module('directives.loading', [])
       item.file.name = $scope.IdEmpresa.toString() + '.' + extension[1];
     };
 
-    /** Subo la imágen y establesco la liga para ser guardada despues si no hay errores **/
+    /** Subo la imágen y establesco la liga para ser guardada después si no hay errores **/
     function subirImagen(fileItem, data) {
       var fileChooser = document.getElementById('fileUploadImagen');
       var file = fileChooser.files[0];
@@ -3002,7 +3002,7 @@ angular.module('directives.loading', [])
                   EmpresasFactory.postEmpresaMicrosoft(ObjMicrosoft)
                     .success(function (result) {
                       $location.path("/Empresas");
-                      $scope.ShowToast('Se esta importando la empresa, por favor espere ', 'success');
+                      $scope.ShowToast('Se está importando la empresa, por favor espere ', 'success');
                     })
                     .error(function (data, status, headers, config) {
                       $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
@@ -3092,7 +3092,7 @@ angular.module('directives.loading', [])
             $scope.frm.RFC.$invalid = true;
             $scope.frm.RFC.$pristine = false;
             $scope.valido = false;
-            $scope.mensajerfc = 'Este RFC ya esta registrado como distribuidor.';
+            $scope.mensajerfc = 'Este RFC ya está registrado como distribuidor.';
           }
         })
         .error(function (data, status, headers, config) {
@@ -3168,7 +3168,7 @@ angular.module('directives.loading', [])
             $scope.frm.RFC.$invalid = true;
             $scope.frm.RFC.$pristine = false;
             $scope.valido = false;
-            $scope.mensajerfc = 'Este RFC ya esta registrado como distribuidor.';
+            $scope.mensajerfc = 'Este RFC ya está registrado como distribuidor.';
           }
         })
         .error(function (data, status, headers, config) {
@@ -3294,7 +3294,7 @@ angular.module('directives.loading', [])
             $scope.frm.RFC.$invalid = true;
             $scope.frm.RFC.$pristine = false;
             $scope.valido = false;
-            $scope.mensajerfc = 'Este RFC ya esta registrado como distribuidor.';
+            $scope.mensajerfc = 'Este RFC ya está registrado como distribuidor.';
           }
         })
         .error(function (data, status, headers, config) {
@@ -3390,7 +3390,7 @@ angular.module('directives.loading', [])
             $scope.frm.RFC.$invalid = true;
             $scope.frm.RFC.$pristine = false;
             $scope.valido = false;
-            $scope.mensajerfc = 'Este RFC ya esta registrado como distribuidor.';
+            $scope.mensajerfc = 'Este RFC ya está registrado como distribuidor.';
           }
         })
         .error(function (data, status, headers, config) {
@@ -3402,7 +3402,7 @@ angular.module('directives.loading', [])
       UsuariosFactory.getCorreo($scope.Empresa)
         .success(function (result) {
           if (result[0].Success == 0) {
-            $scope.AlertaDominio = 'El Correo ya esta registrado, intenta con un correo diferente.';
+            $scope.AlertaDominio = 'El Correo ya está registrado, intenta con un correo diferente.';
           } else {
             if (($scope.frm.$invalid || $scope.Empresa.Formulario) == true || $scope.valido == false) {
               if ($scope.frm.NombreEmpresa.$invalid == true) {
@@ -3757,8 +3757,8 @@ angular.module('directives.loading', [])
     $scope.Niveles = [];
 
     var error = function (error) {
-      $scope.ShowToast(!error ? 'Ha ocurrido un error, intentelo mas tarde.' : error.message, 'danger');
-      $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+      $scope.ShowToast(!error ? 'Ha ocurrido un error, inténtelo más tarde.' : error.message, 'danger');
+      $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
     };
 
     var obtenerEmpresas = function () {
@@ -4679,7 +4679,7 @@ angular.module('directives.loading', [])
           $scope.levels = result.data.data;
         })
         .catch(function(result) {
-          $scope.ShowToast(!result.data ? 'Ha ocurrido un error, intentelo mas tarde.' : result.data.message, 'danger');
+          $scope.ShowToast(!result.data ? 'Ha ocurrido un error, inténtelo más tarde.' : result.data.message, 'danger');
         });
     };
 
@@ -4707,7 +4707,7 @@ angular.module('directives.loading', [])
         })
         .then(function(result) { $scope.ShowToast(result.data.message, 'success')})
         .catch(function(result) {
-          $scope.ShowToast(!result.data ? 'Ha ocurrido un error, intentelo mas tarde.' : result.data.message, 'danger');
+          $scope.ShowToast(!result.data ? 'Ha ocurrido un error, inténtelo más tarde.' : result.data.message, 'danger');
         });
     };
 
@@ -4721,7 +4721,7 @@ angular.module('directives.loading', [])
           $scope.init();
         })
         .catch(function(result) {
-          $scope.ShowToast(!data ? 'Ha ocurrido un error, intentelo mas tarde.' : result.data.message, 'danger');
+          $scope.ShowToast(!data ? 'Ha ocurrido un error, inténtelo más tarde.' : result.data.message, 'danger');
         });
     }
 
@@ -4826,8 +4826,8 @@ angular.module('directives.loading', [])
     $scope.error = false;
 
     const error = function (message) {
-      $scope.ShowToast(!message ? 'Ha ocurrido un error, intentelo mas tarde.' : message, 'danger');
-      $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+      $scope.ShowToast(!message ? 'Ha ocurrido un error, inténtelo más tarde.' : message, 'danger');
+      $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
     };
 
     const getOrderDetails = function () {
@@ -4976,7 +4976,7 @@ angular.module('directives.loading', [])
                   $scope.ShowToast('No pudimos comenzar con tu proceso de pago, favor de intentarlo una vez más.', 'danger');
                 }
               } else {
-                $scope.ShowToast('Algo salio mal con el pago con tarjeta bancaria, favor de intentarlo una vez más.', 'danger');
+                $scope.ShowToast('Algo salió mal con el pago con tarjeta bancaria, favor de intentarlo una vez más.', 'danger');
               }
             } else {
               $scope.pedidosAgrupados = Datos.data['0'].pedidosAgrupados;
@@ -5191,7 +5191,7 @@ angular.module('directives.loading', [])
           $scope.FechaActualizacion = usage.data[0].FechaActivo;
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
           $scope.ShowToast('No pudimos cargar la lista de fabricantes, por favor intenta de nuevo más tarde.', 'danger');
 
@@ -5243,7 +5243,7 @@ angular.module('directives.loading', [])
           $scope.TipoCambio = ordersToPay.data[0].TipoCambio;
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
           $scope.ShowToast('No pudimos cargar los pedidos por pagar, por favor intenta de nuevo más tarde.', 'danger');
 
@@ -5256,7 +5256,7 @@ angular.module('directives.loading', [])
             $scope.infoEmpresa = empresa[0];
           })
           .error(function (data, status, headers, config) {
-            $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+            $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
             $scope.ShowToast('No pudimos cargar la información, por favor intenta de nuevo más tarde.', 'danger');
 
@@ -5275,7 +5275,7 @@ angular.module('directives.loading', [])
           }
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
           $scope.ShowToast('No pudimos cargar la información, por favor intenta de nuevo más tarde.', 'danger');
 
@@ -5344,7 +5344,7 @@ angular.module('directives.loading', [])
             }
           })
           .error(function (data, status, headers, config) {
-            $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+            $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
             $scope.ShowToast('No pudimos realizar los cálculos, por favor intenta de nuevo más tarde.', 'danger');
 
@@ -5410,7 +5410,7 @@ angular.module('directives.loading', [])
             }
           })
           .error(function (data, status, headers, config) {
-            $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+            $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
             $scope.ShowToast('No pudimos conectarnos con el banco, por favor intenta de nuevo más tarde.', 'danger');
 
@@ -5445,7 +5445,7 @@ angular.module('directives.loading', [])
           $scope.selectFabricantes = Fabricantes;
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
           $scope.ShowToast('No pudimos cargar la lista de fabricantes, por favor intenta de nuevo más tarde.', 'danger');
 
@@ -5563,7 +5563,7 @@ angular.module('directives.loading', [])
           }
         })
         .error(function (data, status, headers, config) {
-          $scope.ShowToast('No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde', 'danger');
+          $scope.ShowToast('No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde', 'danger');
 
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
@@ -5585,7 +5585,7 @@ angular.module('directives.loading', [])
           }
         })
         .error(function (data, status, headers, config) {
-          $scope.ShowToast('No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde', 'danger');
+          $scope.ShowToast('No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde', 'danger');
 
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
@@ -5597,7 +5597,7 @@ angular.module('directives.loading', [])
         return false;
       }
       if (Pedido.CantidadProxima > Pedido.Cantidad) {
-        $scope.ShowToast('No se puede actualizar a un numero mayor de suscripciones.', 'danger');
+        $scope.ShowToast('No se puede actualizar a un número mayor de suscripciones.', 'danger');
         return;
       }
       var PedidoActualizado =
@@ -5631,7 +5631,7 @@ angular.module('directives.loading', [])
           }
         })
         .error(function (data, status, headers, config) {
-          $scope.ShowToast('No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde', 'danger');
+          $scope.ShowToast('No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde', 'danger');
 
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
@@ -5737,8 +5737,8 @@ angular.module('directives.loading', [])
     $scope.Distribuidor = {};
 
     const error = function (error) {
-      $scope.ShowToast(!error ? 'Ha ocurrido un error, intentelo mas tarde.' : error.message, 'danger');
-      $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+      $scope.ShowToast(!error ? 'Ha ocurrido un error, inténtelo más tarde.' : error.message, 'danger');
+      $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
     };
 
     const getEnterprises = function () {
@@ -5763,7 +5763,7 @@ angular.module('directives.loading', [])
               });
             });
             if ($scope.error) {
-              $scope.ShowToast('Ocurrio un error al procesar sus productos del carrito. Favor de contactar a soporte de CompuSoluciones.', 'danger');
+              $scope.ShowToast('Ocurrió un error al procesar sus productos del carrito. Favor de contactar a soporte de CompuSoluciones.', 'danger');
             }
             if (!validate) {
               $scope.ValidarFormaPago();
@@ -6010,7 +6010,7 @@ angular.module('directives.loading', [])
           element: '.formaPago',
           placement: 'rigth',
           title: 'Forma de pago del distribuidor',
-          content: 'Selecciona la forma de pago predilecta para tu empresa, esta es una configuración única para toda la compañia. Si seleccionas pago con tarjeta bancaria tendrás que tener tus pedidos en pesos MXN, si requieres pagar en dolares USD podrás utilizar crédito CompuSoluciones.',
+          content: 'Selecciona la forma de pago predilecta para tu empresa, esta es una configuración única para toda la compañia. Si seleccionas pago con tarjeta bancaria tendrás que tener tus pedidos en pesos MXN, si requieres pagar en dólares USD podrás utilizar crédito CompuSoluciones.',
           template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>"
         }],
 
@@ -6262,7 +6262,7 @@ angular.module('directives.loading', [])
           $scope.Productos = misProductos.data;
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
           $scope.ShowToast('No pudimos cargar la lista de productos, por favor intenta de nuevo más tarde.', 'danger');
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
@@ -6335,7 +6335,7 @@ angular.module('directives.loading', [])
           }
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
           $scope.ShowToast('No pudimos cargar la lista de productos, por favor intenta de nuevo más tarde.', 'danger');
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
           $scope.init();
@@ -6399,7 +6399,7 @@ angular.module('directives.loading', [])
           }
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
           $scope.ShowToast('No pudimos cargar la lista de productos, por favor intenta de nuevo más tarde.', 'danger');
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
@@ -6491,9 +6491,9 @@ angular.module('directives.loading', [])
           }
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
-          $scope.ShowToast('No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.', 'danger');
+          $scope.ShowToast('No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.', 'danger');
 
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
@@ -6504,7 +6504,7 @@ angular.module('directives.loading', [])
           $scope.TipoCambioMs = TipoCambio.DolarMS;
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
           $scope.ShowToast('No pudimos obtener el tipo de cambio, por favor intenta una vez más.', 'danger');
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
@@ -6518,7 +6518,7 @@ angular.module('directives.loading', [])
           $scope.selectFabricantes = Fabricantes;
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
           $scope.ShowToast('No pudimos cargar la lista de fabricantes, por favor intenta de nuevo más tarde.', 'danger');
 
@@ -6530,7 +6530,7 @@ angular.module('directives.loading', [])
           $scope.selectTiposProductos = TiposProductos;
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
           $scope.ShowToast('No pudimos cargar la lista de tipos de productos, por favor intenta de nuevo más tarde.', 'danger');
 
@@ -6731,7 +6731,7 @@ angular.module('directives.loading', [])
           }
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
           $scope.ShowToast('No pudimos agregar este producto a tu carrito de compras, por favor intenta de nuevo más tarde.', 'danger');
 
@@ -6750,7 +6750,7 @@ angular.module('directives.loading', [])
           }
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
           $scope.ShowToast('No se pudo agregar este producto en la lista, por favor intenta de nuevo más tarde.', 'danger');
 
@@ -6928,8 +6928,8 @@ angular.module('directives.loading', [])
           }
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
-          $scope.ShowToast('No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.', 'danger');
+          $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.ShowToast('No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.', 'danger');
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
 
@@ -6939,7 +6939,7 @@ angular.module('directives.loading', [])
           /* $scope.TipoCambioMs = TipoCambio.DolarMS; */
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
           $scope.ShowToast('No pudimos obtener el tipo de cambio, por favor intenta una vez más.', 'danger');
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
@@ -6953,7 +6953,7 @@ angular.module('directives.loading', [])
           $scope.selectFabricantes = Fabricantes;
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
           $scope.ShowToast('No pudimos cargar la lista de fabricantes, por favor intenta de nuevo más tarde.', 'danger');
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
@@ -6963,7 +6963,7 @@ angular.module('directives.loading', [])
           $scope.selectTiposProductos = TiposProductos;
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
           $scope.ShowToast('No pudimos cargar la lista de tipos de productos, por favor intenta de nuevo más tarde.', 'danger');
 
@@ -7067,7 +7067,7 @@ angular.module('directives.loading', [])
           }
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
           $scope.ShowToast('No pudimos agregar este producto a tu carrito de compras, por favor intenta de nuevo más tarde.', 'danger');
 
@@ -7227,7 +7227,7 @@ angular.module('directives.loading', [])
           }
         })
         .error(function (data, status, headers, config) {
-          $scope.ShowToast('Error al intentar subir la imagen.', 'danger');
+          $scope.ShowToast('Error al intentar subir la imágen.', 'danger');
         });
     };
 
@@ -7622,7 +7622,7 @@ angular.module('directives.loading', [])
             }
           })
           .error(function (data, status, headers, config) {
-            $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+            $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
             $scope.ShowToast('No pudimos enviar tu solicitud, por favor intenta de nuevo más tarde.', 'danger');
 
@@ -7649,7 +7649,7 @@ angular.module('directives.loading', [])
           $scope.Solicitudes = Solicitudes.data;
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
           $scope.ShowToast('No pudimos cargar la lista de solicitudes, por favor intenta de nuevo más tarde.', 'danger');
 
@@ -7684,7 +7684,7 @@ angular.module('directives.loading', [])
             $scope.Soporte.IdEstatus = resultado.data[0].IdEstatus.toString();
           }
         }).error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
           $scope.ShowToast('No pudimos cargar los datos del detalle, por favor intenta de nuevo más tarde.', 'danger');
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
@@ -7694,7 +7694,7 @@ angular.module('directives.loading', [])
             $scope.combo = resultado.data;
           }
         }).error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
           $scope.ShowToast('No pudimos cargar la lista de status, por favor intenta de nuevo más tarde.', 'danger');
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
@@ -7704,7 +7704,7 @@ angular.module('directives.loading', [])
             $scope.selectCategorias = resultado.data;
           }
         }).error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
           $scope.ShowToast('No pudimos cargar la lista de status, por favor intenta de nuevo más tarde.', 'danger');
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
@@ -7714,7 +7714,7 @@ angular.module('directives.loading', [])
             $scope.selectFabricantes = resultado.data;
           }
         }).error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
           $scope.ShowToast('No pudimos cargar la lista de status, por favor intenta de nuevo más tarde.', 'danger');
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
@@ -7736,7 +7736,7 @@ angular.module('directives.loading', [])
           }
           })
           .error(function (data, status, headers, config) {
-            $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+            $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
             $scope.ShowToast('No pudimos enviar tu solicitud, por favor intenta de nuevo más tarde.', 'danger');
             $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
           });

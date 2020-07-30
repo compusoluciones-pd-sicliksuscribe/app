@@ -84,7 +84,7 @@
           $scope.TipoCambioMs = TipoCambio.DolarMS;
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
           $scope.ShowToast('No pudimos obtener el tipo de cambio, por favor intenta una vez más.', 'danger');
         });
     };
@@ -119,7 +119,7 @@
           $scope.selectFabricantes = Fabricantes;
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
           $scope.ShowToast('No pudimos cargar la lista de fabricantes, por favor intenta de nuevo más tarde.', 'danger');
 
@@ -131,7 +131,7 @@
           $scope.selectTiposProductos = TiposProductos;
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
           $scope.ShowToast('No pudimos cargar la lista de tipos de productos, por favor intenta de nuevo más tarde.', 'danger');
 
@@ -382,7 +382,7 @@
             document.getElementById('formModal').style.display = 'none';
 
           } else {
-            $scope.ShowToast('No pudimos cargar la información de tu datos ,porfavor intenta mas tarde.', 'danger');
+            $scope.ShowToast('No pudimos cargar la información de tu datos ,porfavor intenta más tarde.', 'danger');
             document.getElementById('formModal').style.display = 'none';
           }
         })
@@ -531,7 +531,7 @@
           }
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
           $scope.ShowToast('No pudimos agregar este producto a tu carrito de compras, por favor intenta de nuevo más tarde.', 'danger');
 
@@ -562,7 +562,7 @@
         }
       })
       .error(function (data, status, headers, config) {
-        $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+        $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
         $scope.ShowToast('No pudimos agregar este producto a tu carrito de compras, por favor intenta de nuevo más tarde.', 'danger');
         $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
       });
@@ -579,7 +579,7 @@
           }
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
           $scope.ShowToast('No se pudo agregar este producto en la lista, por favor intenta de nuevo más tarde.', 'danger');
 
@@ -729,7 +729,7 @@
       ProductosFactory.postRequestDataVwareProduct(Product)
       .success(function (result) {
         if (!result.success) {
-          $scope.ShowToast('No se pudo mandar la notificación intente mas tarde', 'danger');
+          $scope.ShowToast('No se pudo mandar la notificación intente más tarde', 'danger');
         } else {
           $scope.ShowToast('Se envió tu información al distribuidor, pronto se pondrán en contacto para brindar información.', 'success');
           
@@ -752,7 +752,7 @@
       AmazonDataFactory.postRequestDataAWSProduct(Product)
       .success(function (result) {
         if (!result.success) {
-          $scope.ShowToast('No se pudo mandar la notificación intente mas tarde', 'danger');
+          $scope.ShowToast('No se pudo mandar la notificación intente más tarde', 'danger');
         } else {
           $scope.ShowToast('Se envió tu información al distribuidor, pronto se pondrán en contacto para brindar información.', 'success');
           

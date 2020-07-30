@@ -24,8 +24,8 @@
     };
 
     const error = function (error) {
-      $scope.ShowToast(!error ? 'Ha ocurrido un error, intentelo mas tarde.' : error.message, 'danger');
-      $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+      $scope.ShowToast(!error ? 'Ha ocurrido un error, inténtelo más tarde.' : error.message, 'danger');
+      $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
     };
 
     const getEnterprises = function () {
@@ -103,7 +103,7 @@
               });
             });
             if ($scope.error) {
-              $scope.ShowToast('Ocurrio un error al procesar sus productos del carrito. Favor de contactar a soporte de CompuSoluciones.', 'danger');
+              $scope.ShowToast('Ocurrió un error al procesar sus productos del carrito. Favor de contactar a soporte de CompuSoluciones.', 'danger');
             }
             if (!validate) {
               $scope.ValidarFormaPago();
@@ -429,7 +429,7 @@
           element: '.formaPago',
           placement: 'rigth',
           title: 'Forma de pago del distribuidor',
-          content: 'Selecciona la forma de pago predilecta para tu empresa, esta es una configuración única para toda la compañia. Si seleccionas pago con tarjeta bancaria tendrás que tener tus pedidos en pesos MXN, si requieres pagar en dolares USD podrás utilizar crédito CompuSoluciones.',
+          content: 'Selecciona la forma de pago predilecta para tu empresa, esta es una configuración única para toda la compañia. Si seleccionas pago con tarjeta bancaria tendrás que tener tus pedidos en pesos MXN, si requieres pagar en dólares USD podrás utilizar crédito CompuSoluciones.',
           template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>"
         }],
 

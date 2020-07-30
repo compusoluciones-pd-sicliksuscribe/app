@@ -63,7 +63,7 @@
         });
         $scope.ShowToast(result.data.message, 'success');
       }).catch(function (result) {
-        $scope.ShowToast('No se realizarón los cambios, intentalo mas tarde.', 'danger');
+        $scope.ShowToast('No se realizaron los cambios, inténtalo más tarde.', 'danger');
       });
     };
 
