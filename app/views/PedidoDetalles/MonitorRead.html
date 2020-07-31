@@ -92,14 +92,14 @@
                             <b style="color:#68953B;" ng-if="pedido.Descuento">, {{ pedido.Descuento }} % Descuento</b>
                             <span ng-if="!pedido.Descuento"> $ {{ pedido.ConsumoAlDia - (pedido.Descuento*pedido.ConsumoAlDia)/100 }} {{pedido.MonedaPago}}</span>
                         </div>
-                        <div class="col-sm-4"><label for="Fecha inicio"> Inicio del periodo : </label> {{ pedido.FechaInicio }}</div>
+                        <div class="col-sm-4"><label for="Fecha inicio"> Inicio del periodo : </label> {{ pedido.FechaInicio | date:'dd/MM/yyyy' }}</div>
                         <li class="col-sm-4" ng-if="pedido.IdFormaPago === 2"> <label for="FormaPago"> Forma de pago:</label> Crédito CompuSoluciones</li>
                         <li class="col-sm-4" ng-if="pedido.IdFormaPago === 1"> <label for="FormaPago"> Forma de pago:</label> Tarjeta de crédito</li>
                         <li class="col-sm-4" ng-if="pedido.IdFormaPago === 3"> <label for="FormaPago"> Forma de pago:</label> Paypal</li>
                         <li class="col-sm-4" ng-if="pedido.IdFormaPago === 4"> <label for="FormaPago"> Forma de pago:</label> Transferencia</li>
                         <div class="col-sm-4" ng-if="pedido.Descuento"> <label>Consumo con descuento:</label> $ {{ pedido.ConsumoAlDia - (pedido.Descuento*pedido.ConsumoAlDia)/100 }} {{pedido.MonedaPago}}</div>
-                        <div class="col-sm-4" ng-if="pedido.Descuento"> <label> Última actualización :</label> {{ pedido.FechaUltimaActualizacion }} </div>
-                        <div class="col-sm-4 col-md-offset-4" ng-if="!pedido.Descuento"> <label> Última actualización :</label> {{ pedido.FechaUltimaActualizacion }} </div>
+                        <div class="col-sm-4" ng-if="pedido.Descuento"> <label> Última actualización :</label> {{ pedido.FechaUltimaActualizacion | date:'dd/MM/yyyy hh:mm:ss' }} </div>
+                        <div class="col-sm-4 col-md-offset-4" ng-if="!pedido.Descuento"> <label> Última actualización :</label> {{ pedido.FechaUltimaActualizacion | date:'d/MM/yyyy'}} </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-4"><label for="Moneda"> Moneda de pago: </label> {{ pedido.MonedaPago }}</div>
