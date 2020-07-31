@@ -45,9 +45,10 @@
     };
 
     $scope.confirmarParticion = function (IdPedido) {
-      ParticionPedidosFactory.confirmarParticion(IdPedido)
+      ParticionPedidosFactory.confirmarParticion({IdPedido})
         .then(result => {
-          console.log(result);
+          result.data.success ? $scope.ShowToast('Partición confirmada.', 'success')
+          : $scope.ShowToast('Hubo un error al tratar de confirmar la partición, intentelo más tarde.', 'danger');
         });
     };
   };
