@@ -488,10 +488,10 @@
 
     async function error_callbak (error) {
        const errorDescription = error.data.description;
-       var arr = await errorDescription.split(",").map(function(item) {
+       var errorName = await errorDescription.split(",").map(function(item) {
          return item.trim();
        });
-       return $scope.checkErrors(arr);  
+       return $scope.checkErrors(errorName);  
      
     }
 
