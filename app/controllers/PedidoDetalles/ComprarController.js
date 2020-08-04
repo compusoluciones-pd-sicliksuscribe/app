@@ -1,5 +1,5 @@
 (function () {
-  var ComprarController = function ($scope, $log, $rootScope, $location, $cookies, PedidoDetallesFactory, UsuariosFactory, PedidosFactory, EmpresasFactory, jwtHelper, $route,ngToast) {
+  var ComprarController = function ($scope, $log, $rootScope, $location, $cookies, PedidoDetallesFactory, UsuariosFactory, PedidosFactory, EmpresasFactory, jwtHelper, $route, ngToast) {
     $scope.currentPath = $location.path();
     $scope.PedidoDetalles = {};
     $scope.Distribuidor = {};
@@ -22,7 +22,7 @@
       APERIO: 5,
       AMAZONWEBSERVICES:10
     };
-    $scope.monthCard=0
+    $scope.monthCard = 0
     $scope.tipoMonedaCambio = $cookies.getObject('compararPedidosAnteriores');
     $scope.errorName = false;
     $scope.name = '';
@@ -38,14 +38,6 @@
       $scope.ShowToast(!message ? 'Ha ocurrido un error, intentelo mas tarde.' : message, 'danger');
       $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
     };
-     $scope.ShowME = function (Mensaje, className) {
-       /* className = "success", "info", "warning" or "danger"*/
-       ngToast.create({
-         className: className,
-         content: '' + Mensaje + '',
-         dismissButton: true
-       });
-     };
 
     const getPaymentMethods = function (id) {
       let paymentMethod = '';
@@ -495,8 +487,8 @@
     }
 
     async function error_callbak (error) {
-       const test = error.data.description;
-       var arr = await test.split(",").map(function(item) {
+       const errorDescription = error.data.description;
+       var arr = await errorDescription.split(",").map(function(item) {
          return item.trim();
        });
        return $scope.checkErrors(arr);  
