@@ -97,7 +97,7 @@
       var EmpresaBudgetAzure =
         {
           Cliente: $scope.Empresa.IdERP,
-          IdEmpresa: IdEmpresa,
+          IdEmpresaDistribuidor: IdEmpresa,
           Cantidad: $scope.Empresa.Anticipo,
           MetodoPago: Number($scope.Empresa.TipoAnticipo)
         };
@@ -107,11 +107,11 @@
       if (validacion.Correcto) {
         EmpresasFactory.putBudgetAzure(EmpresaBudgetAzure)
          .success(function (result) {
-           if (result[0].Success === true) {
-             $scope.ShowToast(result[0].Message, 'success');
+           if (result.success === true) {
+             $scope.ShowToast(result.message, 'success');
              $location.path('/Empresas');
            } else {
-             $scope.ShowToast(result[0].Message, 'danger');
+             $scope.ShowToast(result.message, 'danger');
            }
          })
          .error(function (data, status, headers, config) {
