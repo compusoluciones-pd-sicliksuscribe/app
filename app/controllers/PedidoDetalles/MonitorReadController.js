@@ -47,6 +47,12 @@
             $scope.Pedidos = '';
           } else if (result.status === 200) {
             $scope.Pedidos = result.data.data;
+            $scope.Pedidos.forEach(pedido => {
+              pedido.Detalles.forEach(detalle => {
+                detalle.NumeroSerie && detalle.EstatusFabricante === 'accepted' && detalle.PedidoAFabricante
+                ? pedido.listoRenovar = 1 : pedido.listoRenovar = 0;
+              });
+            });
             $scope.Vacio = 1;
           }
         })
