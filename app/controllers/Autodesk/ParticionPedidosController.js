@@ -19,7 +19,7 @@
     const pagination = () => {
       $scope.filtered = [];
       $scope.currentPage = 1;
-      $scope.numPerPage = 10;
+      $scope.numPerPage = 5;
       $scope.maxSize = 5;
 
       $scope.$watch('currentPage + numPerPage', function () {
