@@ -44,11 +44,13 @@
       pagination();
     };
 
-    $scope.confirmarParticion = function (IdPedido) {
-      ParticionPedidosFactory.confirmarParticion({IdPedido})
+    $scope.confirmarParticion = function (IdPedido, detalles) {
+      ParticionPedidosFactory.confirmarParticion({IdPedido, detalles})
         .then(result => {
-          result.data.success ? $scope.ShowToast('Partición confirmada.', 'success')
+          result.data[0].success ? $scope.ShowToast('Partición confirmada.', 'success')
           : $scope.ShowToast('Hubo un error al tratar de confirmar la partición, intentelo más tarde.', 'danger');
+          $scope.init();
+          $scope.ngOnInit();
         });
     };
   };
