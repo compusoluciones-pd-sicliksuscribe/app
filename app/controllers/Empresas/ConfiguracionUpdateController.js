@@ -102,7 +102,7 @@
       item.file.name = $scope.IdEmpresa.toString() + '.' + extension[1];
     };
 
-    /** Subo la imágen y establesco la liga para ser guardada después si no hay errores **/
+    /** Subo la imagen y establesco la liga para ser guardada después si no hay errores **/
     function subirImagen (fileItem, data) {
       var fileChooser = document.getElementById('fileUploadImagen');
       var file = fileChooser.files[0];

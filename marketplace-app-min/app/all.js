@@ -2816,7 +2816,7 @@ angular.module('directives.loading', [])
       item.file.name = $scope.IdEmpresa.toString() + '.' + extension[1];
     };
 
-    /** Subo la imágen y establesco la liga para ser guardada después si no hay errores **/
+    /** Subo la imagen y establesco la liga para ser guardada después si no hay errores **/
     function subirImagen(fileItem, data) {
       var fileChooser = document.getElementById('fileUploadImagen');
       var file = fileChooser.files[0];
@@ -7227,7 +7227,7 @@ angular.module('directives.loading', [])
           }
         })
         .error(function (data, status, headers, config) {
-          $scope.ShowToast('Error al intentar subir la imágen.', 'danger');
+          $scope.ShowToast('Error al intentar subir la imsgen.', 'danger');
         });
     };
 
