@@ -454,7 +454,7 @@
                             <label>Suscripciones: </label> <br>
                             <div style="margin:0; padding:0;" ng-if="detalles.EstatusFabricante !== 'accepted' || pedido.PorActivar || pedido.EstatusContrato !== 'ready'"> {{ detalles.Cantidad }} </div>
                             
-                            <a ng-click="ActualizarCantidad(detalles.IdPedidoDetalle)" style="text-decoration: none" ng-if="detalles.EstatusFabricante === 'accepted' && !pedido.PorActivar && pedido.EstatusContrato === 'ready'"> {{ detalles.Cantidad }} &nbsp;
+                            <a ng-click="ActualizarCantidad(detalles.IdPedidoDetalle)" style="text-decoration: none" ng-if="detalles.EstatusFabricante === 'accepted' && !pedido.PorActivar && pedido.EstatusContrato === 'ready' &&  pedido.listoRenovar"> {{ detalles.Cantidad }} &nbsp;
 								<span class="glyphicon glyphicon-triangle-bottom" ng-show="!detalles.MostrarCantidad"></span>
 								<span class="glyphicon glyphicon-triangle-top" ng-show="detalles.MostrarCantidad"></span>
 							</a>
