@@ -219,6 +219,10 @@
       }
       PedidoDetallesFactory.putPedidoDetalle(PedidoActualizado)
         .success(function (PedidoDetalleSuccess) {
+          PedidoDetallesFactory.postPartitionFlag(pedido)
+          .catch(function (result) {
+            $scope.ShowToast(result.data.message, 'danger');
+          });
           if (PedidoDetalleSuccess.success) {
             detalles.MostrarCantidad = 0;
             detalles.PorCancelar = 0;
@@ -249,6 +253,10 @@
       };
       PedidoDetallesFactory.putPedidoDetalle(params)
         .then(function (result) {
+          PedidoDetallesFactory.postPartitionFlag(pedido)
+          .catch(function (result) {
+            $scope.ShowToast(result.data.message, 'danger');
+          });
           detalles.PorCancelar = 1;
           detalles.MostrarCantidad = 0;
           $scope.ShowToast(result.data.message, 'success');

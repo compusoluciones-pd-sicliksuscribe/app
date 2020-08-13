@@ -277,6 +277,11 @@
       return $http.get($rootScope.API + 'microsoft/validateMPNID/' + MPNID);
     };
 
+    factory.postPartitionFlag = function (pedido) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'autodesk/update-quantity', pedido);
+    };
+
     return factory;
   };
 
