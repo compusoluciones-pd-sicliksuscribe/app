@@ -108,7 +108,7 @@
                             <span ng-show="Producto.PorcentajeDescuento == 0 && Producto.IdFabricante !== 5 && Producto.Esquema != '02'">
                                 {{Producto.PrecioNormal | currency: "$" : 2}} {{Producto.MonedaPrecio}}
                             </span>
-                            <span ng-show="Producto.PorcentajeDescuento == 0 && Producto.IdFabricante !== 5 && Producto.Esquema != '01'">
+                            <span ng-show="Producto.PorcentajeDescuento == 0 && Producto.IdFabricante !== 5 && Producto.Esquema != '01' && Producto.PrecioNormalAnual">
                                 {{Producto.PrecioNormalAnual | currency: "$" : 2}} {{Producto.MonedaPrecio}}
                             </span>
                             <span ng-show="Producto.IdFabricante === 5 && Producto.IdTipoProducto === 4">
