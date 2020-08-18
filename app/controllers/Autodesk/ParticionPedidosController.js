@@ -8,25 +8,11 @@
             } else {
               $scope.ordenes = result.data.data.orders;
               $scope.ordenesAux = result.data.data.orders;
-              pagination();
             }
           })
           .catch(function () {
             $scope.ShowToast('No fue posible obtener los datos de los pedidos, por favor intenta de nuevo más tarde.', 'danger');
           });
-    };
-
-    const pagination = () => {
-      $scope.filtered = [];
-      $scope.currentPage = 1;
-      $scope.numPerPage = 5;
-      $scope.maxSize = 5;
-
-      $scope.$watch('currentPage + numPerPage', function () {
-        let begin = (($scope.currentPage - 1) * $scope.numPerPage),
-          end = begin + $scope.numPerPage;
-        $scope.filtered = $scope.ordenes.slice(begin, end);
-      });
     };
 
     $scope.init = function () {
@@ -41,7 +27,6 @@
         if (orden.IdPedido.toString().indexOf(valor) >= 0) resultados.push(orden);
       });
       $scope.ordenes = resultados;
-      pagination();
     };
 
     $scope.confirmarParticion = function (IdPedido, detalles) {

@@ -23,7 +23,7 @@
       </div>
       <hr>
       <div class="row">
-        <div class="row cotainer" ng-repeat="item in filtered">
+        <div class="row cotainer" ng-repeat="item in ordenes">
           <div style="background-color: rgba(220, 220, 220, 0.4); padding: 1.5em">
             <ul style="list-style-type:none; padding:0%">
               <li> <label>Número de pedido:</label> {{ item.IdPedido }} </li>
@@ -55,10 +55,7 @@
           <br><hr class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         </div>
 
-        <div ng-show="filtered.length === 0" style = "text-align:center"><h4>No se encontraron resultados.</h4></div>        
-        <div style="margin: auto; text-align: center;" >
-          <pagination  ng-show="filtered.length > 0" class="pager" ng-model="currentPage" total-items="listaDist.length" max-size="maxSize" boundary-links="true" ></pagination>
-        </div>
+        <div ng-show="!ordenes.length" style = "text-align:center"><h4>No se encontraron resultados.</h4></div>        
         
       </div>
   </div> 
