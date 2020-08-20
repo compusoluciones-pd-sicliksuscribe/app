@@ -47,6 +47,12 @@
             $scope.Pedidos = '';
           } else if (result.status === 200) {
             $scope.Pedidos = result.data.data;
+            $scope.Pedidos.forEach(pedido => {
+              pedido.Detalles.forEach(detalle => {
+                detalle.NumeroSerie && detalle.EstatusFabricante === 'accepted' && detalle.PedidoAFabricante
+                ? pedido.listoRenovar = 1 : pedido.listoRenovar = 0;
+              });
+            });
             $scope.Vacio = 1;
           }
         })
@@ -88,15 +94,11 @@
       if (Params.IdFabricante === 1) {
         $scope.Contrato.tipo = 'all';
       }
-      Params.AutoRenovable = $scope.Contrato.tipo || 'all';
+      Params.EstatusContrato = $scope.Contrato.tipo || 'all';
       if (Params.IdFabricante && $scope.EmpresaSelect) {
         getOrderPerCustomer(Params);
-        if (Params.IdFabricante === 2) {
-          if ($scope.Contrato.tipo === 2) {
-            getOrderPerCustomer(Params);
-          }
-          getContactUsers();
-        }
+        if (Params.IdFabricante === 2) getContactUsers();
+
       }
       getTerminos($scope.EmpresaSelect);
     };
@@ -205,7 +207,7 @@
           CantidadProxima: detalles.CantidadProxima,
           IdPedidoDetalle: detalles.IdPedidoDetalle,
           IdEmpresaUsuarioFinal: Params.IdEmpresaUsuarioFinal,
-          IdPedido: pedido.IdPedido
+          IdPedido: pedido.IdContrato ? detalles.IdPedido : pedido.IdPedido
         };
         PedidoDetallesFactory.updateSubscriptionNextQuantity(detail)
           .then(function (updateResult) {
@@ -217,6 +219,10 @@
       }
       PedidoDetallesFactory.putPedidoDetalle(PedidoActualizado)
         .success(function (PedidoDetalleSuccess) {
+          PedidoDetallesFactory.postPartitionFlag(pedido)
+          .catch(function (result) {
+            $scope.ShowToast(result.data.message, 'danger');
+          });
           if (PedidoDetalleSuccess.success) {
             detalles.MostrarCantidad = 0;
             detalles.PorCancelar = 0;
@@ -247,6 +253,10 @@
       };
       PedidoDetallesFactory.putPedidoDetalle(params)
         .then(function (result) {
+          PedidoDetallesFactory.postPartitionFlag(pedido)
+          .catch(function (result) {
+            $scope.ShowToast(result.data.message, 'danger');
+          });
           detalles.PorCancelar = 1;
           detalles.MostrarCantidad = 0;
           $scope.ShowToast(result.data.message, 'success');

@@ -1,0 +1,62 @@
+<style type="text/css">
+    .list-group-item:hover{
+      color: #337ab7;
+      cursor: pointer;
+    }
+  </style>
+  <div ng-app="myApp" ng-controller="ParticionPedidosController">
+  <div class="container" ng-swipe-right="" ng-swipe-left="">
+  
+      <div class="row">
+          <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+              <h2 style="float:left;">Pedidos por particionar para su renovación </h2>
+          </div>
+      </div>
+  
+      <div class="row">
+        <div style="float:right;">
+            <span class="glyphicon glyphicon-search fa-2x"  style="float:right;"></span>
+        </div>
+        <div class="form-group col-xs-11 col-sm-11 col-md-6 col-lg-4" style="float:right;">
+            <input class="form-control fa-lg" type="text" placeholder="Buscar por ID de pedido"aria-label="Buscar" ng-model="busqueda" ng-keyup = "buscar(busqueda)">
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="row cotainer" ng-repeat="item in ordenes">
+          <div style="background-color: rgba(220, 220, 220, 0.4); padding: 1.5em">
+            <ul style="list-style-type:none; padding:0%">
+              <li> <label>Número de pedido:</label> {{ item.IdPedido }} </li>
+              <li> <label>Distribuidor:</label> {{ item.Distribuidor }} </li>
+              <li> <label>Usuario final:</label> {{ item.UsuarioFinal }} </li>
+              <li> <label>Número de contrato:</label> {{ item.NumeroContrato }} </li>
+            </ul>
+            <button style="position: relative; float: right; bottom: 3.2em;" class="btn btn-success" ng-click="confirmarParticion({{ item.IdPedido }}, {{ item.Detalles }})">
+              Confirmar partición
+            </button>
+          </div>
+          <div style="margin-top: 2em; text-align: center;">
+            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"><label>Pedido anterior:</label></div>
+            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"><label>SKU Actual:</label></div>
+            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"><label>SKU Renovación:</label></div>
+            <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><label>Cantidad:</label></div>
+            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"><label>Cantidad próxima:</label></div>
+            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" ><label>Número de serie:</label></div>
+          </div>
+          <hr class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <div ng-repeat="detalle in item.Detalles" style=" text-align: center;">
+              <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="margin-bottom: .8em;">{{ detalle.IdPedidoPadre }} </div>
+              <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="margin-bottom: .8em;">{{ detalle.SKU_Actual }} </div>
+              <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="margin-bottom: .8em;"> {{ detalle.SKU_Renovacion }} </div>
+              <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1" style="margin-bottom: .8em;"> {{ detalle.Cantidad }} </div>
+              <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="margin-bottom: .8em;"> {{ detalle.CantidadProxima }} </div>
+              <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="margin-bottom: .8em;"> {{ detalle.NumeroSerie ? detalle.NumeroSerie : "-" }} </div>
+          </div>
+          <br><hr class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        </div>
+
+        <div ng-show="!ordenes.length" style = "text-align:center"><h4>No se encontraron resultados.</h4></div>        
+        
+      </div>
+  </div> 
+  </div>

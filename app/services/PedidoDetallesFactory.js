@@ -78,7 +78,7 @@
 
     factory.getOrderPerCustomer = function (customer) {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'monitor/orders-per-customer/' + customer.IdEmpresaUsuarioFinal + '/maker/' + customer.IdFabricante + '/type/' + customer.AutoRenovable);
+      return $http.get($rootScope.API + 'monitor/orders-per-customer/' + customer.IdEmpresaUsuarioFinal + '/maker/' + customer.IdFabricante + '/type/' + customer.EstatusContrato);
     };
 
     factory.getOrderPerCustomerTuClick = function (customer) {
@@ -275,6 +275,11 @@
     factory.getMPIDInformation = function (MPNID) {
       factory.refreshToken();
       return $http.get($rootScope.API + 'microsoft/validateMPNID/' + MPNID);
+    };
+
+    factory.postPartitionFlag = function (pedido) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'autodesk/update-quantity', pedido);
     };
 
     return factory;
