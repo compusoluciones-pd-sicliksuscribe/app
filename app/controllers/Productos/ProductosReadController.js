@@ -69,12 +69,12 @@
         })
         .error(function (data, status, headers, config) {
           if (status === NOT_FOUND && $scope.Pagina > 0) {
-            $scope.ShowToast('No se encontraron más resultados para la busqueda.', 'danger');
+            $scope.ShowToast('No se encontraron más resultados para la búsqueda.', 'danger');
             $scope.PaginadoAtras();
           } else {
             $scope.Productos = [];
             $scope.Mensaje = 'Sin resultados para mostrar.';
-            $scope.ShowToast('No se encontraron resultados para la busqueda.', 'danger');
+            $scope.ShowToast('No se encontraron resultados para la búsqueda.', 'danger');
           }
         });
 
