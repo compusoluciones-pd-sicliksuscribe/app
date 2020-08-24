@@ -202,6 +202,8 @@
         if (Number(enterprise.IdEmpresa) === Number($scope.Distribuidor)) {
           if (enterprise.UF.length === 1) {
             $scope.UnicoCliente = 1;
+          } else {
+            $scope.UnicoCliente = 0;
           }
           $scope.selectClientes = enterprise.UF;
           if ($scope.UnicoCliente) 
@@ -254,8 +256,9 @@
       
       document.getElementById("budgetContainer").innerHTML = '&nbsp;';
       document.getElementById("budgetContainer").innerHTML = '<canvas id="budgetChart" style="margin-top: 20px;"></canvas>';
-
-      $scope.consoles = false;
+      console.log($scope.Console);
+      // debugger;
+      // $scope.consoles = false;
       $scope.getDataToChart();
     };
 
