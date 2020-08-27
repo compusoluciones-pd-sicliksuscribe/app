@@ -2,23 +2,25 @@
 	<section class="principalProducts">
 		<div class="container-fluid">
 			<div>
-				<div style="height:500px;">
+				<div class="divHeight">
 					<uib-carousel interval="5000" no-wrap="false">
 						<uib-slide ng-repeat="Promocion in Promociones | limitTo: 100" active="slide.active">
 							<div class="img-responsive">
 								<img class="imageBanner" ng-src="{{Promocion.Url}}" style="float:right; margin-right:10%; width:600px; height:400px;">
 							</div>
-							<div class="carousel-caption" style="height:500px;">
+							<div class="carousel-caption" class="">
 								<h4 class="titleSlide">{{Promocion.Nombre}}</h4>
 								<p class="textSlide">{{Promocion.Descripcion}}</p><br>
 
 								<button class="btn btn-success" ng-click="goToPage('Productos/{{Promocion.CodigoProducto}}', true);" style="{{secondaryColor}}"
 									ng-show="((SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3) && {{Promocion.EsUrl}}===0)">Comprar</button>
+									
+								<div>
+									<a target="_blank" href="//{{Promocion.CodigoProducto}}">
+										<button class="btn btn-success" ng-show="{{Promocion.EsUrl}}===1 && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)" style="{{secondaryColor}}">Aprovecha</button>				
+									</a>
+								</div>
 								
-								<a target="_blank" href="//{{Promocion.CodigoProducto}}">
-									<button class="btn btn-success" ng-show="{{Promocion.EsUrl}}===1 && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)" style="{{secondaryColor}}">Aprovecha</button>
-								</a>
-								<br><br>
 								<div class="sliderMessage" ng-show="!(currentDistribuidor.IdEmpresa)">
 									Para comprar este producto, ponte en contacto con tu distribuidor {{currentDistribuidor.IdEmpresa}}
 								</div>
@@ -29,9 +31,11 @@
 								<br><br>
 								<a target="_blank" href="//{{Promocion.CodigoProducto}}">
 									<button class="btn btn-success" ng-show="{{Promocion.EsUrl}}===1 && (currentDistribuidor.IdEmpresa)" style="{{secondaryColor}}">Aprovecha</button>
+									
 								</a>
 								<a target="_blank">
 									<button ng-click="goToPage('Registrarse');" class="btn btn-success" ng-show="{{Promocion.EsUrl}}=== 0 && !(SessionCookie.IdTipoAcceso)" style="{{secondaryColor}}">Aprovecha</button>
+									
 								</a>
 								<!-- Para tuclick -->
 							</div>
