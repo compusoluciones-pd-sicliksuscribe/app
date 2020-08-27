@@ -215,7 +215,7 @@
                                 <div class="row" ng-show="detalles.MostrarCantidad">
                                     <div class="form-group col-xs-6 col-sm-6 col-md-12 col-lg-12">
                                         <label>Actualizar: </label>
-                                        <p>El número de {{ pedido.IdFabricante === 5 ? "empleados" : "suscripciones" }} se vera reflejado en la renovación.</p>
+                                        <p>El número de {{ pedido.IdFabricante === 5 ? "empleados" : "suscripciones" }} se verá reflejado en la renovación.</p>
                                     </div>
                                 </div>
 
@@ -303,7 +303,7 @@
                                 </div>
                                 <div class="row" ng-show="pedido.IdFabricante === 5">
                                     <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                        <label>Aplica politicas para reanudar servicio despues de cancelar</label>
+                                        <label>Aplica politicas para reanudar servicio después de cancelar</label>
                                     </div>
                                 </div>
                                 <div class="row" ng-show="pedido.IdFabricante === 5">
@@ -501,6 +501,11 @@
                             <br/> {{ detalles.FechaActivo | date:'d/MM/yyyy' }}
                         </div>
                         <br>
+
+                        <div ng-if="pedido.AutoRenovable" ng-hide="pedido.EstatusContrato === 'canceled' || pedido.EstatusContrato === 'notRenewed'" >
+                            <label>Fecha límite de cancelación: </label>
+                            <br/> {{ pedido.FechaCancelacion  }}
+                        </div>
                     </div>
 
                     <div ng-hide="pedido.EstatusContrato === 'canceled' || pedido.EstatusContrato === 'notRenewed'" class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">

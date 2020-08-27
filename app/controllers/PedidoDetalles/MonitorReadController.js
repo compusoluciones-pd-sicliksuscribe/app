@@ -151,7 +151,7 @@
           }
         })
         .error(function (data, status, headers, config) {
-          $scope.ShowToast('No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde', 'danger');
+          $scope.ShowToast('No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde', 'danger');
         });
     };
 
@@ -171,7 +171,7 @@
           }
         })
         .error(function (data, status, headers, config) {
-          $scope.ShowToast('No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde', 'danger');
+          $scope.ShowToast('No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde', 'danger');
         });
     };
 
@@ -181,7 +181,7 @@
         return false;
       }
       if (pedido.IdFabricante !== 5 && (detalles.CantidadProxima > detalles.Cantidad) && pedido.IdFabricante !== 7) {
-        $scope.ShowToast('No se puede actualizar a un numero mayor de suscripciones.', 'danger');
+        $scope.ShowToast('No se puede actualizar a un número mayor de suscripciones.', 'danger');
         return;
       }
 
@@ -232,7 +232,7 @@
           }
         })
         .error(function (data, status, headers, config) {
-          $scope.ShowToast('No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde', 'danger');
+          $scope.ShowToast('No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde', 'danger');
         });
     };
 

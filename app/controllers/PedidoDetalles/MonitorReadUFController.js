@@ -185,7 +185,7 @@
           }
         })
         .error(function (data, status, headers, config) {
-          $scope.ShowToast('No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde', 'danger');
+          $scope.ShowToast('No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde', 'danger');
         });
     };
 
@@ -205,7 +205,7 @@
           }
         })
         .error(function (data, status, headers, config) {
-          $scope.ShowToast('No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde', 'danger');
+          $scope.ShowToast('No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde', 'danger');
         });
     };
 
@@ -215,7 +215,7 @@
         return false;
       }
       if (detalles.CantidadProxima > detalles.Cantidad) {
-        $scope.ShowToast('No se puede actualizar a un numero mayor de suscripciones.', 'danger');
+        $scope.ShowToast('No se puede actualizar a un número mayor de suscripciones.', 'danger');
         return;
       }
       var PedidoActualizado = {
@@ -246,7 +246,7 @@
           }
         })
         .error(function (data, status, headers, config) {
-          $scope.ShowToast('No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde', 'danger');
+          $scope.ShowToast('No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde', 'danger');
         });
     };
 

@@ -16,8 +16,8 @@
     let searchTimeout;
 
     var error = function (error) {
-      $scope.ShowToast(!error ? 'Ha ocurrido un error, intentelo mas tarde.' : error.message, 'danger');
-      $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+      $scope.ShowToast(!error ? 'Ha ocurrido un error, inténtelo más tarde.' : error.message, 'danger');
+      $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
     };
 
     var setPagination = function () {
@@ -46,7 +46,7 @@
           if (result.data.success === 1) {
             $scope.ShowToast(result.data.message, 'success');
           } else {
-            $scope.ShowToast('No se pudo actualizar el descuento, reviza que la cantidad sea un de 0.01 a 100', 'danger');
+            $scope.ShowToast('No se pudo actualizar el descuento, revisa que la cantidad sea un de 0.01 a 100', 'danger');
           }
         })
         .catch(function (result) { error(result.data); });

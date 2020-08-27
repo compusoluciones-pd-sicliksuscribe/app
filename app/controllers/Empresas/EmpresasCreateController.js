@@ -120,7 +120,7 @@
             $scope.frm.RFC.$invalid = true;
             $scope.frm.RFC.$pristine = false;
             $scope.valido = false;
-            $scope.mensajerfc = 'Este RFC ya esta registrado como distribuidor.';
+            $scope.mensajerfc = 'Este RFC ya está registrado como distribuidor.';
           }
         })
         .error(function (data, status, headers, config) {
@@ -218,7 +218,7 @@
             $scope.frm.RFC.$invalid = true;
             $scope.frm.RFC.$pristine = false;
             $scope.valido = false;
-            $scope.mensajerfc = 'Este RFC ya esta registrado como distribuidor.';
+            $scope.mensajerfc = 'Este RFC ya está registrado como distribuidor.';
           }
         })
         .error(function (data, status, headers, config) {
@@ -230,7 +230,7 @@
       UsuariosFactory.getCorreo($scope.Empresa)
         .success(function (result) {
           if (result[0].Success == 0) {
-            $scope.AlertaDominio = 'El Correo ya esta registrado, intenta con un correo diferente.';
+            $scope.AlertaDominio = 'El Correo ya está registrado, intenta con un correo diferente.';
           } else {
             if ($scope.frm.NombreEmpresa.$invalid == true) {
               $scope.frm.NombreEmpresa.$pristine = false;

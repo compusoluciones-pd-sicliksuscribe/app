@@ -37,12 +37,12 @@
               $location.path('/MonitorPagos/uf');
             }
             if (response.data.state === 'failed') {
-              $scope.ShowToast('Ocurrio un error al intentar confirmar la compra con Paypal. Intentalo mas tarde.', 'danger');
+              $scope.ShowToast('Ocurrió un error al intentar confirmar la compra con Paypal. Intentalo más tarde.', 'danger');
               $location.path('/MonitorPagos/uf');
             }
           })
           .catch(function (response) {
-            $scope.ShowToast('Ocurrio un error de tipo: "' + response.data.message + '". Contacte con soporte de Compusoluciones.', 'danger');
+            $scope.ShowToast('Ocurrió un error de tipo: "' + response.data.message + '". Contacte con soporte de Compusoluciones.', 'danger');
             $location.path('/MonitorPagos/uf');
           });
       }
@@ -68,7 +68,7 @@
           $scope.TipoCambio = ordersToPay.data[0].TipoCambio;
         })
         .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+          $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
           $scope.ShowToast('No pudimos cargar los pedidos por pagar, por favor intenta de nuevo más tarde.', 'danger');
 
@@ -81,7 +81,7 @@
             $scope.infoEmpresa = empresa[0];
           })
           .error(function (data, status, headers, config) {
-            $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+            $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
             $scope.ShowToast('No pudimos cargar la información, por favor intenta de nuevo más tarde.', 'danger');
 
@@ -99,7 +99,7 @@
     //       }
     //     })
     //     .error(function (data, status, headers, config) {
-    //       $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+    //       $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
     //       $scope.ShowToast('No pudimos cargar la información, por favor intenta de nuevo más tarde.', 'danger');
 
@@ -168,7 +168,7 @@
             }
           })
           .error(function (data, status, headers, config) {
-            $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+            $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
             $scope.ShowToast('No pudimos realizar los cálculos, por favor intenta de nuevo más tarde.', 'danger');
 
@@ -191,7 +191,7 @@
             }
           })
           .error(function (data, status, headers, config) {
-            $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+            $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
             $scope.ShowToast('No pudimos realizar los cálculos, por favor intenta de nuevo más tarde.', 'danger');
 
@@ -272,7 +272,7 @@
             }
           })
           .error(function (data, status, headers, config) {
-            $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+            $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
             $scope.ShowToast('No pudimos conectarnos con el banco, por favor intenta de nuevo más tarde.', 'danger');
 
@@ -313,13 +313,13 @@
                   })[0];
                   location.href = paypal.href;
                 } else {
-                  $scope.ShowToast('Ocurrio un error al procesar el pago.', 'danger');
+                  $scope.ShowToast('Ocurrió un error al procesar el pago.', 'danger');
                 }
               }
             });
         })
         .catch(function (response) {
-          $scope.ShowToast('Ocurrio un error al procesar el pago. de tipo: ' + response.data.message, 'danger');
+          $scope.ShowToast('Ocurrió un error al procesar el pago. de tipo: ' + response.data.message, 'danger');
         });
       } else {
         $scope.ShowToast('Selecciona al menos un pedido para pagar.', 'danger');

@@ -13,7 +13,7 @@
           $scope.levels = result.data.data;
         })
         .catch(function (result) {
-          $scope.ShowToast(!result.data ? 'Ha ocurrido un error, intentelo mas tarde.' : result.data.message, 'danger');
+          $scope.ShowToast(!result.data ? 'Ha ocurrido un error, inténtelo más tarde.' : result.data.message, 'danger');
         });
     };
 
@@ -41,7 +41,7 @@
         })
         .then(function (result) { $scope.ShowToast(result.data.message, 'success'); })
         .catch(function (result) {
-          $scope.ShowToast(!result.data ? 'Ha ocurrido un error, intentelo mas tarde.' : result.data.message, 'danger');
+          $scope.ShowToast(!result.data ? 'Ha ocurrido un error, inténtelo más tarde.' : result.data.message, 'danger');
         });
     };
 
@@ -55,7 +55,7 @@
           $scope.init();
         })
         .catch(function (result) {
-          $scope.ShowToast(!result.data ? 'Ha ocurrido un error, intentelo mas tarde.' : result.data.message, 'danger');
+          $scope.ShowToast(!result.data ? 'Ha ocurrido un error, inténtelo más tarde.' : result.data.message, 'danger');
         });
     };
 

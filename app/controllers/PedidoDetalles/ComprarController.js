@@ -23,8 +23,8 @@
     $scope.tipoMonedaCambio = $cookies.getObject('compararPedidosAnteriores');
 
     const error = function (message) {
-      $scope.ShowToast(!message ? 'Ha ocurrido un error, intentelo mas tarde.' : message, 'danger');
-      $scope.Mensaje = 'No pudimos contectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+      $scope.ShowToast(!message ? 'Ha ocurrido un error, inténtelo más tarde.' : message, 'danger');
+      $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
     };
 
     const getPaymentMethods = function (id) {
@@ -175,10 +175,10 @@
               PedidosFactory.putPedido(datosPaypal)
                 .then(comprarProductos);
             }
-            if (response.data.state === 'failed') $scope.ShowToast('Ocurrio un error al intentar confirmar la compra con Paypal. Intentalo mas tarde.', 'danger');
+            if (response.data.state === 'failed') $scope.ShowToast('Ocurrió un error al intentar confirmar la compra con Paypal. Intentalo más tarde.', 'danger');
           })
           .catch(function (response) {
-            $scope.ShowToast('Ocurrio un error de tipo: "' + response.data.message + '". Contacte con soporte de Compusoluciones.', 'danger');
+            $scope.ShowToast('Ocurrió un error de tipo: "' + response.data.message + '". Contacte con soporte de Compusoluciones.', 'danger');
           });
       }
     };
@@ -319,11 +319,11 @@
                 $scope.ShowToast('No pudimos comenzar con tu proceso de pago, favor de intentarlo una vez más.', 'danger');
               }
             } else {
-              $scope.ShowToast('Algo salio mal con el pago con tarjeta bancaria, favor de intentarlo una vez más.', 'danger');
+              $scope.ShowToast('Algo salió mal con el pago con tarjeta bancaria, favor de intentarlo una vez más.', 'danger');
             }
           })
           .error(function (data, status, headers, config) {
-            const error = !data.message ? 'Ocurrio un error al procesar la solicitud. Intentalo de nuevo.' : data.message;
+            const error = !data.message ? 'Ocurrió un error al procesar la solicitud. Intentalo de nuevo.' : data.message;
             $scope.ShowToast(error, 'danger');
           });
       }
@@ -352,11 +352,11 @@
             })[0];
             location.href = paypal.href;
           } else {
-            $scope.ShowToast('Ocurrio un error al procesar el pago.', 'danger');
+            $scope.ShowToast('Ocurrió un error al procesar el pago.', 'danger');
           }
         })
         .catch(function (response) {
-          $scope.ShowToast('Ocurrio un error al procesar el pago. de tipo: ' + response.data.message, 'danger');
+          $scope.ShowToast('Ocurrió un error al procesar el pago. de tipo: ' + response.data.message, 'danger');
         });
     };
 
