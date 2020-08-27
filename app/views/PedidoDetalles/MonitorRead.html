@@ -208,7 +208,7 @@
 									</a>
                                 <div style="margin:0; padding:0;" ng-show="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3) && pedido.IdFabricante !== 11">
                                     <br> <label> Renovación: </label> <br>
-                                    <div ng-if="!detalles.PorCancelar || (detalles.Activo && pedido.IdFabricante === 1)"> {{ detalles.IdProducto === 3616 ? 25 : detalles.CantidadProxima }} </div>
+                                    <div ng-if="!detalles.PorCancelar"> {{ detalles.IdProducto === 3616 ? 25 : detalles.CantidadProxima }} </div>
                                     <div ng-if="!detalles.Activo || detalles.PorCancelar"> No renovar </div>
                                 </div>
                                 <br/>
@@ -224,10 +224,17 @@
                                     <div class="form-group col-xs-6 col-sm-6 col-md-7 col-lg-7">
                                         <input type="number" class="form-control" ng-model="detalles.CantidadProxima" min="1" />
                                     </div>
-                                    <div class="form-group col-xs-6 col-sm-6 col-md-5 col-lg-5 ">
+                                    <div class="form-group col-xs-6 col-sm-6 col-md-2 col-lg-2 ">
                                         <h4>
                                             <a id="aActualizar" type="submit" title="Guardar" ng-click="ActualizarDetalle(pedido, detalles);" ng-disabled="!frmCantidad.$valid">
                                                 <span class="fa fa-floppy-o" style="cursor:pointer"></span>
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div class="form-group col-xs-6 col-sm-6 col-md-2 col-lg-2" ng-if="!pedido.AutoRenovable">
+                                        <h4>
+                                            <a id="pCancelar" type="button" title="No renovar" ng-click="CancelarRenovacion(pedido, detalles);" ng-disabled="!frmCantidad.$valid">
+                                                <span class="glyphicon glyphicon-trash" style="cursor:pointer"></span>
                                             </a>
                                         </h4>
                                     </div>
