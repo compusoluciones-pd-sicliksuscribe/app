@@ -231,7 +231,7 @@
                                             </a>
                                         </h4>
                                     </div>
-                                    <div class="form-group col-xs-6 col-sm-6 col-md-2 col-lg-2" ng-if="!pedido.AutoRenovable">
+                                    <div class="form-group col-xs-6 col-sm-6 col-md-2 col-lg-2" ng-if="pedido.IdFormaPagoProxima === 2">
                                         <h4>
                                             <a id="pCancelar" type="button" title="No renovar" ng-click="CancelarRenovacion(pedido, detalles);" ng-disabled="!frmCantidad.$valid">
                                                 <span class="glyphicon glyphicon-trash" style="cursor:pointer"></span>
