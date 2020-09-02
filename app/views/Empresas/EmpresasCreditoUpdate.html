@@ -78,7 +78,7 @@
             <div class="form-group">
               <div class="pull-rigth">
                 <label for="Credito" ng-if="EmpresaBudget > 0"
-                >Crédito en Azure - {{EmpresaBudget}} pesos MXN.</label
+                >Crédito en Azure - {{EmpresaBudget | currency}} pesos MXN.</label
               ><br>
                 <label>Tipo de anticipo </label>
                 <select name="TipoAnticipo" class="form-control" ng-model="Empresa.TipoAnticipo">
