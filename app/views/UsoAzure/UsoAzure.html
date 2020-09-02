@@ -20,7 +20,7 @@
                         <div>
                             <label for="uf">Cliente:</label><br>
                             <select name="uf" class="form-control" ng-model="Cliente" ng-options="Clientes.IdEmpresa as Clientes.NombreEmpresa for Clientes in selectClientes"
-                                ng-change="clearTable();">
+                                ng-change="clearTable(1);">
                                 <option ng-selected="true" value="">Todos los clientes</option>
                             </select>
                         </div>
@@ -28,7 +28,7 @@
                         <div ng-show = "consoles">
                             <label for="uf">Consolas:</label><br>
                             <select name="uf" class="form-control" ng-model="Console" ng-options="Consoles.IdSuscripcion as Consoles.NombreConsola for Consoles in totalConsoles"
-                                ng-change="clearTable();">
+                                ng-change="clearTable(0);">
                                 <option ng-selected="true" value="">Todas las consolas</option>
                             </select>
                         </div>

@@ -210,7 +210,7 @@
             $scope.Cliente = enterprise.UF[0].IdEmpresa;
         }
       });
-      $scope.clearTable();
+      $scope.clearTable(1);
     };
 
     const getParams = () => ({
@@ -250,15 +250,17 @@
       }
     };
 
-    $scope.clearTable = function () {
+    $scope.clearTable = function (flag) {
       document.getElementById("chartContainer").innerHTML = '&nbsp;';
       document.getElementById("chartContainer").innerHTML = '<canvas id="myAreaChart"  ng-click="actualizeTable()"/>';
       
       document.getElementById("budgetContainer").innerHTML = '&nbsp;';
       document.getElementById("budgetContainer").innerHTML = '<canvas id="budgetChart" style="margin-top: 20px;"></canvas>';
-      console.log($scope.Console);
-      // debugger;
-      // $scope.consoles = false;
+
+      if (Number(flag)) {
+        $scope.Console = 0;
+        $scope.consoles = false;
+      }
       $scope.getDataToChart();
     };
 
@@ -278,9 +280,12 @@
         var date = new Date();
         var month = date.getMonth() + 1;
         $scope.mes = monthsName[month];
+        console.log($scope.consoles);
         if (result.consoles.length > 1) {
-          $scope.consoles = true;
           $scope.totalConsoles = result.consoles;
+          $scope.consoles = true;
+        } else if($scope.Console) {
+          $scope.consoles = true;
         } else {
           $scope.consoles = false;
           $scope.totalConsoles = [];
@@ -302,6 +307,8 @@
       } else {
         UsoAzureFactory.getDataChartPlan(data)
             .success(function (result) {
+              if (result.statusCode) 
+                return $scope.ShowToast(result.message, 'danger');
               dataChartResult(result);
             })
             .error(function (data) {

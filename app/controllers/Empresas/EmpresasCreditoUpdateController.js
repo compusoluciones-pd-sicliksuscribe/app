@@ -20,7 +20,7 @@
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
 
-      EmpresasFactory.getBudgetAzure(IdEmpresa)
+      EmpresasFactory.getBudgetAzureByEnterprise(IdEmpresa)
       .success(function (Empresa) {
         if (Empresa.data[0] !== undefined) {
           if (Empresa.data[0].Cantidad !== null) {
@@ -109,7 +109,7 @@
          .success(function (result) {
            if (result.success === true) {
              $scope.ShowToast(result.message, 'success');
-             $location.path('/Empresas');
+            //  $location.path('/Empresas');
            } else {
              $scope.ShowToast(result.message, 'danger');
            }
