@@ -46,7 +46,7 @@
                 </div>
                 <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 </div>
-                <div ng-show = "!esDist" class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" id="azureTabs">
+                <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" id="azureTabs">
                   <ul class="nav nav-pills">
                     <li class="active">
                       <a data-toggle="tab" ng-click="changeAzure('global')">Azure Global</a>
@@ -79,7 +79,7 @@
                             <h6 ng-if = "!Distribuidor" class="m-0 font-weight-bold text-primary">Consumo por distribuidor (Periodo: {{monthsToShow}})</h6>
                             <h6 ng-if = "Distribuidor" class="m-0 font-weight-bold text-primary">Consumo por cliente (Periodo: {{monthsToShow}})</h6>
                         </div>
-                        <div class="ex1">
+                        <div class="ex1" >
                             <div id = "barras" class="card-body" ng-repeat="emp in enterpriseData">
                                 <h4 class="small font-weight-bold"> {{ emp.name }} <span class="float-right">{{ emp.percent }}%</span></h4>
                                 <div class="progress mb-4">

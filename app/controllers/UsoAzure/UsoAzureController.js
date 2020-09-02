@@ -14,6 +14,8 @@
     $scope.UnicoCliente = 0;
     $scope.azureActual = 'global';
 
+    $scope.currentDistribuidor = $cookies.getObject('Session');
+  
     function graphClickEvent (evt) {
       var activePoints = $scope.myLineChart.getElementsAtEvent(evt);
       if (activePoints.length > 0) {
@@ -234,6 +236,10 @@
       if ($scope.azureActual === 'global') {
         UsoAzureFactory.getEnterprises(data)
             .success(function (result) {
+              if (result.statusCode) {
+                $scope.clearTable(2);
+                return $scope.ShowToast(result.message, 'danger');
+              }
               enterprisesResult(result);
             })
             .error(function (data) {
@@ -242,6 +248,10 @@
       } else {
         UsoAzureFactory.getEnterprisesPlan(data)
             .success(function (result) {
+              if (result.statusCode) {
+                $scope.clearTable(2);
+                return $scope.ShowToast(result.message, 'danger');
+              }
               enterprisesResult(result);
             })
             .error(function (data) {
@@ -261,7 +271,12 @@
         $scope.Console = 0;
         $scope.consoles = false;
       }
-      $scope.getDataToChart();
+
+      if (Number(flag) === 2) {
+        $scope.enterpriseData = [];
+        return false;
+      }
+        $scope.getDataToChart();
     };
 
     const dataChartResult = result => {
@@ -280,7 +295,6 @@
         var date = new Date();
         var month = date.getMonth() + 1;
         $scope.mes = monthsName[month];
-        console.log($scope.consoles);
         if (result.consoles.length > 1) {
           $scope.totalConsoles = result.consoles;
           $scope.consoles = true;
@@ -299,6 +313,8 @@
       if ($scope.azureActual === 'global') {
         UsoAzureFactory.getDataChart(data)
             .success(function (result) {
+              if (result.statusCode) 
+                return $scope.ShowToast(result.message, 'danger');
               dataChartResult(result);
             })
             .error(function (data) {
@@ -386,7 +402,8 @@
     $scope.changeAzure = function (azure) {
       $scope.azureActual = azure;
       $scope.Cliente = 0;
-      $scope.Distribuidor = 0;
+      if (!$scope.esDist)
+        $scope.Distribuidor = 0;
       $scope.Console = 0;
       $scope.UsageDetails = [];
       $scope.consoles = false;
@@ -395,7 +412,6 @@
 
     $scope.init = function () {
       $scope.CheckCookie();
-      $scope.currentDistribuidor = $cookies.getObject('Session');
       $scope.esDist = $scope.currentDistribuidor.IdEmpresa;
       if ($scope.currentDistribuidor.IdEmpresa) {
         $scope.Distribuidor = $scope.currentDistribuidor.IdEmpresa;
