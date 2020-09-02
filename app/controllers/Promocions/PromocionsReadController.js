@@ -9,10 +9,17 @@
       PromocionsFactory.getPromocions($scope.SessionCookie.IdEmpresa)
         .success(function (Promocions) {
           $scope.Promocions = Promocions;
+          $scope.Promocions.forEach(element => {
+            let newDate= element.FechaActivo;
+            newDate = newDate.split(' ')[0];
+            element.FechaActivo = newDate;
+          });
         })
         .error(function (data, status, headers, config) {
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
+
+
     };
 
     $scope.init();

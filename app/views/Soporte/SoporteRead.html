@@ -127,7 +127,7 @@
             <td ng-show="SessionCookie.IdTipoAcceso==1 || SessionCookie.IdTipoAcceso==2 || SessionCookie.IdTipoAcceso==3 ">
 
               <div class="form-group">
-                <b><h5>{{soporte.FechaSolicitud}}</h5></b>
+                <b><h5>{{soporte.FechaSolicitud | date: 'dd/MM/yyyy'}}</h5></b>
               </div>
               
             </td>
