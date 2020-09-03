@@ -1,5 +1,5 @@
 (function () {
-  var UsoAzureController = function ($scope, $sce, $cookies, $location, UsoAzureFactory, $uibModal, $filter, FabricantesFactory, PedidosFactory, EmpresasFactory, UsuariosFactory) {
+  var UsoAzureController = function ($scope, $routeParams, $cookies, $location, UsoAzureFactory, $uibModal, $filter, FabricantesFactory, PedidosFactory, EmpresasFactory, UsuariosFactory) {
     $scope.datoActual = '';
     $scope.dataByMonth = '';
     $scope.Distribuidor = 0;
@@ -12,7 +12,9 @@
     $scope.totalConsoles = [];
     $scope.consoles = false;
     $scope.UnicoCliente = 0;
+    $scope.month = false;
     $scope.azureActual = 'global';
+    const NO_ENTERPRISE_DATA = 2;
 
     $scope.currentDistribuidor = $cookies.getObject('Session');
   
@@ -198,7 +200,7 @@
 
     $scope.filterClients = function () {
       $scope.selectClientes = [];
-      $scope.Cliente = 0;
+      $scope.Cliente = Number($routeParams.IdEmpresaUsuarioFinal) || 0;
       $scope.UsageDetails = [];
       $scope.selectDistribuidor.map(enterprise => {
         if (Number(enterprise.IdEmpresa) === Number($scope.Distribuidor)) {
@@ -208,7 +210,9 @@
             $scope.UnicoCliente = 0;
           }
           $scope.selectClientes = enterprise.UF;
-          if ($scope.UnicoCliente) 
+          if ($routeParams.IdEmpresaUsuarioFinal) {
+            $scope.Cliente = Number($routeParams.IdEmpresaUsuarioFinal) || 0;
+          } else if ($scope.UnicoCliente) 
             $scope.Cliente = enterprise.UF[0].IdEmpresa;
         }
       });
@@ -267,12 +271,14 @@
       document.getElementById("budgetContainer").innerHTML = '&nbsp;';
       document.getElementById("budgetContainer").innerHTML = '<canvas id="budgetChart" style="margin-top: 20px;"></canvas>';
 
+      $scope.month = false;
+
       if (Number(flag)) {
         $scope.Console = 0;
         $scope.consoles = false;
       }
 
-      if (Number(flag) === 2) {
+      if (Number(flag) === NO_ENTERPRISE_DATA) {
         $scope.enterpriseData = [];
         return false;
       }
@@ -334,7 +340,8 @@
     };
   
     $scope.pdf = function () {
-      html2canvas(document.getElementById('MarketPlaceBody'), {
+      const typeTable = $scope.azureActual === 'global' ? 'detailTable' : 'detailTablePlan';
+      html2canvas(document.getElementById(typeTable), {
           logging: true, letterRendering: 1, allowTaint: false, useCORS: false,
           onrendered: function (canvas) {
               var data = canvas.toDataURL();
@@ -349,7 +356,46 @@
       });
     };
 
+    $scope.reporte = function () {
+      var maxSize = 5000;
+      var d = new Date();
+      var sDate = ('0' + d.getDate()).slice(-2) + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + d.getFullYear() + ' ' + ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
+      var NombreReporte = 'Azure' + $scope.azureActual + '_' + sDate;
+      let clienteName = '';
+      let consoleName = '';
+      if (Number($scope.Cliente === 0)) {
+        clienteName = 'Todos los clientes';
+      } else {
+        $scope.selectClientes.map(cliente => {
+          if (cliente.IdEmpresa === $scope.Cliente) {
+            clienteName = cliente.NombreEmpresa;
+          }
+        });
+      }
+      if (Number($scope.Console === 0)) {
+        consoleName = 'Todas las consolas';
+      } else {
+        $scope.totalConsoles.map(console => {
+          if (console.IdSuscripcion === $scope.Console) {
+            consoleName = console.NombreConsola;
+          }
+        });
+      }
+      var repeat = Math.ceil($scope.UsageDetails.length / maxSize);
+      for (var j = 0; j < repeat; j++) {
+        var start = j * maxSize;
+        var end = start + maxSize;
+        var parte = $scope.UsageDetails.slice(start, end);
+        var number = j + 1;
+        const consoleN = $scope.consoles ? `\nConsola: ${consoleName}` : '';
+        NombreReporte = NombreReporte + '_' + number + ' \nCliente: ' + clienteName + consoleN;
+        angular.element(document.getElementById('divReportes')).scope().JSONToCSVConvertor(parte, NombreReporte, true);
+      }
+      return;
+    }
+
     $scope.getAzureDetails = function (month) {
+      $scope.month = true;
       const monthsName = {
         'Ene': 'Enero', 'Feb': 'Febrero', 'Mar': 'Marzo', 'Abr': 'Abril', 'May': 'Mayo', 'Jun': 'Junio',
         'Jul': 'Julio', 'Ago': 'Agosto', 'Sep': 'Septiembre', 'Oct': 'Octubre', 'Nov': 'Noviembre',
@@ -421,7 +467,7 @@
     $scope.init();
   };
 
-  UsoAzureController.$inject = ['$scope', '$sce', '$cookies', '$location', 'UsoAzureFactory', '$uibModal', '$filter', 'FabricantesFactory', 'PedidosFactory', 'EmpresasFactory', 'UsuariosFactory'];
+  UsoAzureController.$inject = ['$scope', '$routeParams', '$cookies', '$location', 'UsoAzureFactory', '$uibModal', '$filter', 'FabricantesFactory', 'PedidosFactory', 'EmpresasFactory', 'UsuariosFactory'];
 
   angular.module('marketplace').controller('UsoAzureController', UsoAzureController);
 }());

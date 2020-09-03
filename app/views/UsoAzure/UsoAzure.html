@@ -105,10 +105,19 @@
                 <div ng-show="!MostrarMensaje && UsageDetails.length > 0" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 details-table">
                     <b>Nota *</b> Esta información es solo un aproximado y puede no ser la mas actual.
                 </div>
-                <div ng-show="!MostrarMensaje && UsageDetails.length > 0" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 details-table">
+                <div ng-show="!MostrarMensaje && UsageDetails.length > 0 && month" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 details-table">
                     <p style="font-size: 15px;">Consumo del mes: {{mes}}</p>
                 </div>
-                <div ng-show="!MostrarMensaje && UsageDetails.length > 0 && azureActual === 'global'" class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                
+                <div ng-show="!MostrarMensaje && UsageDetails.length > 0" class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                  <ul class="nav nav-pills">
+                    <li class="active">
+                      <a data-toggle="tab" ng-click="reporte()">Descargar detalle</a>
+                    </li>
+                  </ul>
+                </div>
+
+                <div ng-show="!MostrarMensaje && UsageDetails.length > 0 && azureActual === 'global'" class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" id ="detailTable">
                     <table class="table table-hover table-responsive border-left-right-cero">
                         <th><b>Recurso</b></th>
                         <th><b>Utilizado </b></th>
@@ -138,7 +147,7 @@
                         </tr>
                       </table>
                 </div>
-                <div ng-show="!MostrarMensaje && UsageDetails.length > 0 && azureActual === 'plan'" class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div ng-show="!MostrarMensaje && UsageDetails.length > 0 && azureActual === 'plan'" class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" id ="detailTablePlan">
                     <table class="table table-hover table-responsive border-left-right-cero">
                         <th><b>Recurso</b></th>
                         <th><b>Entitlement </b></th>

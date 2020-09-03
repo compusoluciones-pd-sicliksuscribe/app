@@ -175,7 +175,7 @@
 									<br/> 
 									<div ng-if="pedido.MonedaPago === 'Dólares'">{{ (detalles.PrecioUnitario) | currency }} {{ pedido.MonedaPago }} </div>
 									<div ng-if="pedido.MonedaPago === 'Pesos'">{{pedido.TipoCambio *  detalles.PrecioUnitario | currency}} {{pedido.MonedaPago}} </div>
-									<br/> <a href="#/DetallesAzure/{{pedido.IdPedido}}">Ver detalles</a>
+									<br/> <a href="#/MonitorAzure/{{EmpresaSelect}}">Ver detalles {{EmpresaSelect}}</a>
 								</div>
 								<div ng-if="(SessionCookie.IdTipoAcceso == 4 || SessionCookie.IdTipoAcceso == 6 || SessionCookie.IdTipoAcceso == 7)"
 									class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
