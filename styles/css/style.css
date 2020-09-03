@@ -767,13 +767,13 @@ a, a:hover {
     background-color: #337ab7 !important;
   }
 
-  #collapseClientes>ul>li>a{
+  #collapseClientes>ul>li>a, #collapseMonitores>ul>li>a {
     list-style: none;
     color: #FFF;
     text-decoration: none;
   } 
   
-  #collapseClientes>ul>li{
+  #collapseClientes>ul>li, #collapseMonitores>ul>li{
     list-style: none;
     color: #FFF;
   } 
@@ -785,7 +785,7 @@ a, a:hover {
   z-index: 1000;
   display: none;
   float: left;
-  min-width: 160px;
+  min-width: 200px;
   padding: 5px 0;
   margin: 2px 0 0;
   font-size: 14px;

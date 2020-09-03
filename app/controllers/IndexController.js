@@ -461,11 +461,13 @@
   };
 
   $('body').click(function (evt) {    
-    if (evt.target.id !== 'collapseEmpresaId' && evt.target.id !== 'Clientes' ){
-      var botonOn = document.getElementById('collapseEmpresa');
-      var botonOn2 = document.getElementById('collapseClientes');
-      botonOn.classList.remove('in', 'show');
-      botonOn2.classList.remove('in', 'show');
+    if (evt.target.id !== 'collapseEmpresaId' && evt.target.id !== 'Clientes' && evt.target.id !== 'Monitores') {
+      var btnCollapseEmpresa = document.getElementById('collapseEmpresa');
+      var btnCollapseClientes = document.getElementById('collapseClientes');
+      var btnCollapseMonitores = document.getElementById('collapseMonitores');
+      btnCollapseEmpresa.classList.remove('in', 'show');
+      btnCollapseClientes.classList.remove('in', 'show');
+      btnCollapseMonitores.classList.remove('in', 'show');
     }
   });
 
