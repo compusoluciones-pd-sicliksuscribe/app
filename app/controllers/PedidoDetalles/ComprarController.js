@@ -559,31 +559,6 @@
         });
     };
 
-    const comprarEnTienda = async function() { // En tienda
-      keyAntifraude();
-      const siclikToken = await $scope.getSiclikToken();
-      const openpayCustomerId = await getOpenPayCustomer(siclikToken);
-      const body = {
-        openpayCustomerId,
-        deviceSessionId: $scope.deviceSessionId,
-      }
-      PedidosFactory.payInStore(body)
-        .then(function (speiResult) {
-          if (speiResult.data.success) {
-            $scope.ActualizarMenu();
-            speiResult.data.data.MetodoPago = 'Pago en tienda';
-            orderCookie(speiResult.data);
-          } else {
-            $scope.ShowToast('Ocurrio un error intente más tarde.', 'danger');
-            $location.path('/Carrito');
-          }
-        })
-        .catch(function (result) {
-          $scope.ShowToast('Ocurrio un error intente más tarde.', 'danger');
-          $location.path('/Carrito/e');
-        });
-    };
-
     $scope.Comprar = function () {
       angular.element(document.getElementById('auxScope')).scope().gaComprar($scope.PedidoDetalles, $scope.Distribuidor);
       if ($scope.Distribuidor.IdFormaPagoPredilecta === paymentMethods.CREDIT_CARD) $scope.PagarTarjeta();

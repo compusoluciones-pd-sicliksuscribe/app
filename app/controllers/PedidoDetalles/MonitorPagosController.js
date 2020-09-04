@@ -29,8 +29,6 @@
 
   
     $scope.session = $cookies.getObject('Session');
-    
-    const CLICKSUSCRIBE = 2;
   
     $scope.session = $cookies.getObject('Session');
     
