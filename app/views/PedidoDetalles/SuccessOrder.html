@@ -1,10 +1,15 @@
 <div class="container" ; style="padding-left: 75px">
     <div class="Title">
-        <h1 style="border-bottom: 1px solid black; padding-bottom: 17px">Compra Realizada Exitosamente </h1>
-        <h3>Tu compra generó los siguientes pedidos:</h3>
+        <h1 ng-hide = "spei" style="border-bottom: 1px solid black; padding-bottom: 17px">Compra Realizada Exitosamente </h1>
+        <h1 ng-show = "spei" style="border-bottom: 1px solid black; padding-bottom: 17px">Referencia SPEI realizada exitosamente </h1>
+        <h3 ng-hide = "spei">Tu compra generó los siguientes pedidos:</h3>
+        <h3 ng-show = "spei">Tu SPEI se generó para los siguientes pedidos:</h3>
+        <div ng-repeat="pedido in pedidos">
+            {{pedido.IdPedido || pedido}}
+        </div>
         <br>
     </div>
-    <div>
+    <div ng-hide = "spei">
         <div class="form-group row" ng-show="orderIdsCookie.length > 0">
             <ul ng-repeat="pedido in orderIdsCookie" class="repeat-animation" style="padding: 0; list-style-type: none; padding-left:17px">
                 <h4><b>Pedido:</b> {{pedido.IdPedido }}</h4>
@@ -16,19 +21,6 @@
             </ul>
         </div>
     </div>
-        <div class="form-group row" style="position: relative; margin-top: 25px; height: 120px;">
-            <div style="position: absolute; right: 0; ">
-                <p style="display: block"><b>Método de pago:</b> {{orderIdsCookie[0].MetodoPago}}</p>
-                <p ng-if="numeroConfirmacion(orderIdsCookie[0].NumeroConfirmacion)" style="display: block"><b>Número de confirmación:</b> {{orderIdsCookie[0].NumeroConfirmacion}}</p>
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
-                        <div class="form-group">
-                            <button id="mainButton" type="button" ng-click="AceptaPedido()" class="btn btn-primary btn-block">Aceptar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     <div id="isValidMPNIDModal" class="modal fade in" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -50,5 +42,34 @@
             </div>
         </div>
     </div>
+    <div ng-show = "spei"  class="row">
+        <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+            <ul ng-repeat="pedido in orderIdsCookie.data.order_ids" class="repeat-animation" style="padding: 0; list-style-type: none; padding-left:17px">
+                <h5><b>Pedido:</b> {{pedido }}</h5>
+            </ul>
+        </div>
+        <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+            <p>El archivo se encuentra disponible para su descarga, y se envió vía correo electrónico.</p>
+            <p ng-hide="monitor">Una vez detectado el pago, se enviará una notificación y se liberará su compra.</p>
+        </div>
+        <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+            <div class="embed-responsive embed-responsive-16by9">
+                <iframe class="embed-responsive-item" ng-src="{{url}}" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
 
+    <div class="form-group row" style="position: relative; margin-top: 25px; height: 120px;">
+        <div style="position: absolute; right: 0; ">
+            <p ng-hide = "spei" style="display: block"><b>Método de pago:</b> {{orderIdsCookie[0].MetodoPago}}</p>
+            <p ng-if="numeroConfirmacion(orderIdsCookie[0].NumeroConfirmacion)" style="display: block"><b>Número de confirmación:</b> {{orderIdsCookie[0].NumeroConfirmacion}}</p>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                    <div class="form-group">
+                        <button id="mainButton" type="button" ng-click="AceptaPedido()" class="btn btn-primary btn-block">Aceptar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

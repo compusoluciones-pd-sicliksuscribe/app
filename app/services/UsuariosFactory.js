@@ -123,7 +123,7 @@
       const data = Object.assign({}, { NvaContrasena }, { encryptedObject });
       return $http.post($rootScope.API + 'Usuarios/CambiarContrasena', data);
     };
-
+    
     factory.getUserDataSiclick = function ({ id }, tokenSiclick) {
       $http.defaults.headers.common['Authorization'] = 'Bearer ' + tokenSiclick;
       return $http.get($rootScope.SICLIK_API + 'users/' + id);
@@ -133,6 +133,22 @@
       factory.refreshToken();
       return $http.post($rootScope.API + 'Usuarios/create-user', Usuario);
     };
+        
+    factory.getTokenSiclik = function () {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'open-pay/token-siclik');
+    };
+
+    factory.createOpenPayUser = function (tokenSiclick, userData) {
+      $http.defaults.headers.common['Authorization'] = 'Bearer ' + tokenSiclick;
+      return $http.post($rootScope.PAGOS + 'customers', userData);
+    };
+
+    factory.getOpenPayUser = function (tokenSiclick, user) {
+      $http.defaults.headers.common['Authorization'] = 'Bearer ' + tokenSiclick;
+      return $http.get($rootScope.PAGOS + 'customers/' + user + '/details');
+    };
+
     return factory;
   };
 

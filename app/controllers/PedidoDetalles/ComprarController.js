@@ -492,10 +492,10 @@
 
     async function error_callbak (error) {
        const errorDescription = error.data.description;
-       var arr = await errorDescription.split(",").map(function(item) {
+       var errorName = await errorDescription.split(",").map(function(item) {
          return item.trim();
        });
-       return $scope.checkErrors(arr);  
+       return $scope.checkErrors(errorName);  
      
     }
 
@@ -531,6 +531,31 @@
         })
         .catch(function (response) {
           $scope.ShowToast('Ocurrió un error al procesar el pago. de tipo: ' + response.data.message, 'danger');
+        });
+    };
+
+    const comprarEnTienda = async function() { // En tienda
+      keyAntifraude();
+      const siclikToken = await $scope.getSiclikToken();
+      const openpayCustomerId = await getOpenPayCustomer(siclikToken);
+      const body = {
+        openpayCustomerId,
+        deviceSessionId: $scope.deviceSessionId,
+      }
+      PedidosFactory.payInStore(body)
+        .then(function (speiResult) {
+          if (speiResult.data.success) {
+            $scope.ActualizarMenu();
+            speiResult.data.data.MetodoPago = 'Pago en tienda';
+            orderCookie(speiResult.data);
+          } else {
+            $scope.ShowToast('Ocurrio un error intente más tarde.', 'danger');
+            $location.path('/Carrito');
+          }
+        })
+        .catch(function (result) {
+          $scope.ShowToast('Ocurrio un error intente más tarde.', 'danger');
+          $location.path('/Carrito/e');
         });
     };
 
@@ -626,6 +651,81 @@
         $location.path('/Carrito/e');
       }
     }; 
+
+    $.validator.addMethod("valueNotEquals", function(value, element, arg){
+      return arg !== value;
+     }, "Value must not equal arg.");
+
+
+     $.validator.addMethod("dateValidation", function(value, element, params) {
+       
+      let minMonth = new Date().getMonth() + 1;
+      let minYear = new Date().getFullYear();
+
+      let month = parseInt(params.formMonth[0].value, 10);
+      let year = parseInt(params.formYear[0].value, 10);
+      year = year + 2000;
+
+      if ((year > minYear) || ((year === minYear) && (month >= minMonth))) {
+          return true;
+      } else {
+          return false;
+      }
+}, "La fecha de expiración de tu tarjeta es incorrecta.");
+
+      $('#payment-form').validate({
+          rules: {
+            name: { 
+              required: true,
+            },
+            cardNumber: {
+                   required: true,
+                   number: true,
+                   maxlength: 19,
+                   minlength: 16
+               },
+               ccexpmonth: { valueNotEquals: "default" },
+            ccexpyear: { 
+              valueNotEquals: "default" ,
+              dateValidation: { 
+                formMonth: $('#ccexpmonth'),
+                formYear:  $('#ccexpyear'),
+              }
+          },
+            cvv: {
+              required: true,
+              number: true,
+              maxlength: 3,
+              minlength: 3
+            }
+          },
+          messages: {
+              name: {
+                  required: "Es requerido*",
+
+              },          
+              cardNumber: {
+                   required: "Es requerido*",
+                   number: "Solo se permiten números*",
+                   maxlength: "Máximo 19 digitos",
+                   minlength: "Mínimo 16 digitos"
+               },
+               ccexpmonth: { valueNotEquals: "Selecciona un mes" },
+               ccexpyear: { 
+                 valueNotEquals: "Selecciona un año",
+               },
+               cvv: {
+                required: "Es requerido*",
+                number: "Solo se permiten números*",
+                maxlength: "Máximo 3 digitos",
+                minlength: "Mínimo 3 digitos",
+              }
+           },
+           submitHandler: function (form) {
+              OpenPay.token.extractFormAndCreate('payment-form', success_callbak, error_callbak); 
+         }
+      });
+  
   
     var modal = document.getElementById('modalTipoMoneda');
 
