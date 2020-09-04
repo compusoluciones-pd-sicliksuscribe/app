@@ -272,7 +272,8 @@
         FechaFin: new Date(),
         IdProducto: Detalles.IdProducto,
         IdEsquemaRenovacion: Pedido.IdEsquemaRenovacion,
-        IdPedido: Pedido.IdPedido
+        IdPedido: Pedido.IdPedido,
+        IdFabricante: Pedido.IdFabricante,
       };
       if (Pedido.IdFabricante === 1) {
         PedidoDetallesFactory.putPedidoDetalleMicrosoft(order)
