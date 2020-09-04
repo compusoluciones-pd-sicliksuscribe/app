@@ -776,6 +776,11 @@ a, a:hover {
   #collapseClientes>ul>li, #collapseMonitores>ul>li{
     list-style: none;
     color: #FFF;
+
+  } 
+
+  #collapseClientes>ul>li:hover, #collapseMonitores>ul>li:hover{
+    text-decoration:underline !important;
   } 
 
   .collapseClass {
@@ -808,6 +813,9 @@ a, a:hover {
     line-height: 1.42857143;
     color: #FFF;
     white-space: nowrap;
+  }
+  .collapseClass>li>a:hover{
+    text-decoration:underline !important;
   }
 
   .navbar-nav>li>.collapseClass{
