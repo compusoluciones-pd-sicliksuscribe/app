@@ -283,7 +283,8 @@
         FechaFin: hoy.getFullYear() + '-' + (hoy.getUTCMonth() + 1).toString().padStart(2, 0) + '-' + hoy.getDate().toString().padStart(2, 0),
         IdProducto: Detalles.IdProducto,
         IdEsquemaRenovacion: Pedido.IdEsquemaRenovacion,
-        IdPedido: Pedido.IdPedido
+        IdPedido: Pedido.IdPedido,
+        IdFabricante: Pedido.IdFabricante,
       };
       if (Pedido.IdFabricante === 1) {
         PedidoDetallesFactory.putPedidoDetalleMicrosoft(order)

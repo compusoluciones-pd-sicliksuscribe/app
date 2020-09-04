@@ -217,6 +217,11 @@
         resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 7)) { $location.path('/404'); } } }
       })
 
+      .when('/ClientesAzureBudget', {
+        controller: 'EmpresasXEmpresasReadAzureBudgetController', templateUrl: 'app/views/EmpresasXEmpresasAzureBudget/EmpresasXEmpresasAzureBudgetRead.html',
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 7)) { $location.path('/404'); } } }
+      })
+
       .when('/Productos/:Busqueda', {
         controller: 'ProductosReadController', templateUrl: 'app/views/Productos/ProductosRead.html',
         resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 7)) { $location.path('/404'); } } }

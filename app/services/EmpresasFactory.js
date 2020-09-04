@@ -183,6 +183,21 @@
       return $http.put($rootScope.API + 'enterprises/level-descount-microsoft', parametros);
     };
 
+    factory.putBudgetAzure = function (Empresa) {
+      factory.refreshToken();
+      return $http.put($rootScope.API + 'enterprise/setAzureMovement', Empresa);
+    };
+
+    factory.getBudgetAzure = function () {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'enterprise/getAzureMovement');
+    };
+
+    factory.getBudgetAzureByEnterprise = function (IdEmpresaDistribuidor) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'enterprise/getAzureMovement/' + IdEmpresaDistribuidor);
+    };
+
     return factory;
   };
 

@@ -463,6 +463,65 @@
 
         </div>
     </div>
+    <div id="formModalAzurePlan" class="modal fade in" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" >
+                    <button type="button" ng-click="cerrarModal('formModalAzurePlan')" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Asiento AzurePlan</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Al presionar <strong>Aceptar</strong>, se mandará una notificación a nuestro equipo de soporte
+                        para agregar una suscripción adicional a su Azure Plan.
+                    </br>Nuestro equipo se pondrán en contacto lo antes posible.
+                    </br>Se puede consultar el consumo por consola del plan en el monitor de pedidos por cliente.
+                    </a>
+                    </br></br>
+                    </p>
+                    <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <img src="images/loading.gif" style="width:45px;height:45px" ng-show="loading-plan"/>
+                    </div>
+                    <div  class="modal-footer">
+                        <button type="button" class="btn btn-danger" ng-click="cerrarModal('formModalAzurePlan')" data-dismiss="modal">Cerrar </button>
+                        <button type="button" class="btn btn-success" ng-click="enviarNotificacionAzurePlanSeat();" data-dismiss="modal">Aceptar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="formModalTransicion" class="modal fade in" tabindex="-1" role="dialog" style="padding-top: 0px !important;">
+        <div class="modal-dialog" role="document" style="width: 100% !important;height: 100% !important;">
+            <div class="modal-content">
+                <div class="modal-header" >
+                    <button type="button" ng-click="cerrarModal('formModalTransicion')" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Transición a Azure Plan</h4>
+                </div>
+                <div class="modal-body">
+                    <iframe ng-src="Azure Plan.pdf" style="height: 500px; width: 100%;"></iframe>
+                    <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <img src="images/loading.gif" style="width:45px;height:45px" ng-show="loading_tran"/>
+                    </div>
+                </div>
+                <div  class="modal-footer">
+                    <div class="row">
+                        <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-show="mostrar">
+                            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" >
+                                <label>Se realizará la transición a AzurePlan, ¿Estás de acuerdo?</label>
+                                <button class="btn btn-warning" ng-click="aceptarTransicion() "> Sí </button>
+                                <button class="btn btn-primary" ng-click="cerrarModal('formModalTransicion')"> No </button>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-show="!mostrar">
+                            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <button type="button" class="btn btn-danger" ng-click="cerrarModal('formModalTransicion')" data-dismiss="modal">Cerrar </button>
+                                <button type="button" class="btn btn-success" ng-click="mostrarOpciones();" data-dismiss="modal">Aceptar Transición</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     </div>
 

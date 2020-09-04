@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  
 
   var IndexController = function ($scope, $log, $location, $cookies, $rootScope, PedidosFactory, PedidoDetallesFactory, ngToast, $uibModal, $window, UsuariosFactory, deviceDetector, ComprasUFFactory, EmpresasFactory) {
     $scope.indexBuscarProductos = {};
@@ -458,6 +459,18 @@
     if (icon) { link.href = icon; } else { link.href = 'images/icon.png'; }
     document.getElementsByTagName('head')[0].appendChild(link);
   };
+
+  $('body').click(function (evt) {    
+    if (evt.target.id !== 'collapseEmpresaId' && evt.target.id !== 'Clientes' && evt.target.id !== 'Monitores') {
+      var btnCollapseEmpresa = document.getElementById('collapseEmpresa');
+      var btnCollapseClientes = document.getElementById('collapseClientes');
+      var btnCollapseMonitores = document.getElementById('collapseMonitores');
+      btnCollapseEmpresa.classList.remove('in', 'show');
+      btnCollapseClientes.classList.remove('in', 'show');
+      btnCollapseMonitores.classList.remove('in', 'show');
+    }
+  });
+
   IndexController.$inject = ['$scope', '$log', '$location', '$cookies', '$rootScope', 'PedidosFactory', 'PedidoDetallesFactory', 'ngToast', '$uibModal', '$window', 'UsuariosFactory', 'deviceDetector', 'ComprasUFFactory', 'EmpresasFactory'];
 
   angular.module('marketplace').controller('IndexController', IndexController);

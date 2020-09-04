@@ -95,6 +95,21 @@
       return $http.post($rootScope.API + 'requestDataVwareProduct', body);
     };
 
+    factory.getValidateAzure = function (customerId, productIdERP) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'microsoft/get-azure-subs/' + customerId + '/' + productIdERP);
+    };
+
+    factory.postSeatAzurePlan = function (body) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'azure/add-seat', body);
+    };
+
+    factory.upgradeAzure = function (body) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'azure/upgrade-product', body);
+    };
+
     return factory;
   };
 

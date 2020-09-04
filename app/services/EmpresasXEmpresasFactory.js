@@ -61,6 +61,17 @@
       return $http.get($rootScope.API + 'agreements/get-customer-agreement');
     };
 
+    factory.updateDiscountAzure = function (empresa) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'enterprise/update-discount-azure', empresa);
+    };
+
+    factory.putEmpresasXEmpresaAzureBudget = function (EmpresasXEmpresa) {
+      factory.refreshToken();
+      console.log('AAPI  ', $rootScope.API);
+      return $http.put($rootScope.API + 'enterprise-by-enterprise/setAzureMovement', EmpresasXEmpresa);
+    };
+
     return factory;
   };
 

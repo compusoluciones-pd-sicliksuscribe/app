@@ -328,6 +328,20 @@ option {
   background: #3e5d1f;
 }
 
+  .btn-successSave {
+    min-width: 90px;
+    background: #68953B;
+    color:#ffffff;
+    border-color: transparent; }
+  
+  .btn-successSave:hover {
+    background: #3e5d1f;
+    color:#ffffff; }
+
+    .btn-successSave:focus {
+      background: #3e5d1f;
+      color:#ffffff; }
+  
 .btn-link {
   min-width: 150px;
   height: 45px;
@@ -847,3 +861,268 @@ option {
 }
 
 /* Media Queries*/
+.colMedio {
+  width: 30px; }
+
+.btnEnviar {
+  margin-top: 10px;
+  margin-right: 13px; }
+
+html {
+  position: relative;
+  overflow-x: hidden !important; }
+
+* {
+  box-sizing: border-box; }
+
+body {
+  color: #324e63; }
+
+a, a:hover {
+  text-decoration: none; }
+
+.carousel-control {
+  width: 8% !important; }
+
+.profile-card {
+  width: 100%;
+  min-height: 460px;
+  margin: auto;
+  box-shadow: -1px -1px 2px -1px rgba(13, 28, 39, 0.6);
+  background: rgba(255, 255, 255, 0.445);
+  border-radius: 12px;
+  position: relative;
+  margin-top: 70px; }
+  .profile-card.active .profile-card__cnt {
+    filter: blur(6px); }
+  .profile-card.active .profile-card-message,
+  .profile-card.active .profile-card__overlay {
+    opacity: 1;
+    pointer-events: auto;
+    transition-delay: .1s; }
+  .profile-card.active .profile-card-form {
+    transform: none;
+    transition-delay: .1s; }
+  .profile-card__img {
+    width: 25%;
+    height: 25%;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 50%;
+    position: relative;
+    z-index: 4;
+    padding-top: 20px;
+    padding-bottom: 30px; }
+    @media screen and (max-width: 576px) {
+      .profile-card__img {
+        width: 120px;
+        height: 120px; } }
+    .profile-card__img img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover; }
+  .profile-card__cnt {
+    margin-top: -35px;
+    padding: 0 100px;
+    padding-bottom: 40px;
+    transition: all .3s; }
+  .profile-card__name {
+    font-size: 32px;
+    color: #337ab7;
+    margin-bottom: 15px;
+    padding-top: 40px;
+    text-align: center; }
+  .profile-card__txt {
+    font-size: 16px;
+    font-family: 'newsgoth_lt_btlight';
+    font-weight: 500;
+    color: #324e63; }
+    .profile-card__txt strong {
+      font-weight: 700; }
+  .profile-card-loc {
+    display: flex;
+    font-size: 18px;
+    font-weight: 600; }
+    .profile-card-loc__icon {
+      display: inline-flex;
+      font-size: 27px;
+      margin-right: 10px; }
+  .profile-card-inf {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-items: flex-start; }
+    .profile-card-inf__item {
+      min-width: 150px; }
+      @media screen and (max-width: 768px) {
+        .profile-card-inf__item {
+          min-width: 120px; } }
+    .profile-card-inf__title {
+      font-weight: 700;
+      font-size: 27px;
+      color: #324e63; }
+    .profile-card-inf__txt {
+      font-weight: 500; }
+  .profile-card-form {
+    box-shadow: 0 4px 30px rgba(15, 22, 56, 0.35);
+    max-width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    height: 100%;
+    background: #fff;
+    border-radius: 10px;
+    padding: 35px;
+    transform: scale(0.8);
+    position: relative;
+    z-index: 3;
+    transition: all .3s; }
+    @media screen and (max-width: 768px) {
+      .profile-card-form {
+        max-width: 90%;
+        height: auto; } }
+    @media screen and (max-width: 576px) {
+      .profile-card-form {
+        padding: 20px; } }
+    .profile-card-form__bottom {
+      justify-content: space-between;
+      display: flex; }
+      @media screen and (max-width: 576px) {
+        .profile-card-form__bottom {
+          flex-wrap: wrap; } }
+          
+.percent {
+  position: absolute;
+      left: 50%;
+      transform: translate(-50%, 0);
+      font-size: 80px;
+      bottom: 0;
+      /* margin-bottom: 200px; */
+  }
+  .outer {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    transform: translate(8%, 0);
+  }
+  canvas {
+    position: absolute;
+  }
+
+  .background-yellow {
+    background-color: rgba(255, 164, 46, 1);
+    width: 15px;
+    height: 15px;
+    float:left;
+  }
+
+  .background-green {
+    background-color: rgba(46, 204, 113, 1);
+    width: 15px;
+    height: 15px;
+    float:left;
+
+  }
+
+  .label-budget { 
+    transform: translate(40%, 0);
+    font-size: 25px;
+    margin-top: 10px;
+  }
+
+  .details-table {
+    margin-top: 50px;
+  }
+ 
+  @media screen and (max-width: 768px) {
+    .percent {
+       margin-bottom: 20px;
+    }
+    .background-yellow {
+      margin-top: 0px;
+    }
+    .background-green {
+      margin-top: 0px;
+    }
+    .outer {
+    transform: translate(0%, 0);
+    }
+  }
+  div>#azureTabs .nav>li>a,  div>#azureTabs .nav>li>a{
+    background-color:#eee;
+  }
+
+  .nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover{
+    background-color: #337ab7 !important;
+  }
+
+  #collapseClientes>ul>li>a, #collapseMonitores>ul>li>a {
+    list-style: none;
+    color: #FFF;
+    text-decoration: none;
+  } 
+  
+  #collapseClientes>ul>li, #collapseMonitores>ul>li{
+    list-style: none;
+    color: #FFF;
+
+  } 
+
+  #collapseClientes>ul>li:hover, #collapseMonitores>ul>li:hover{
+    text-decoration:underline !important;
+  } 
+
+  .collapseClass {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  display: none;
+  float: left;
+  min-width: 200px;
+  padding: 5px 0;
+  margin: 2px 0 0;
+  font-size: 14px;
+  text-align: left;
+  list-style: none;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0,0,0,.15);
+  border-radius: 4px;
+  -webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);
+  box-shadow: 0 6px 12px rgba(0,0,0,.175);
+  }
+
+  .collapseClass>li>a{
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: 400;
+    line-height: 1.42857143;
+    color: #FFF;
+    white-space: nowrap;
+  }
+  .collapseClass>li>a:hover{
+    text-decoration:underline !important;
+  }
+
+  .navbar-nav>li>.collapseClass{
+    margin-top: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+
+  @media (max-width: 767px){
+.navbar-nav .collapseClass {
+  position: static;
+  float: none;
+  width: auto;
+  margin-top: 0;
+  background-color: transparent;
+  border: 0;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+}
+/*# sourceMappingURL=style.css.map */

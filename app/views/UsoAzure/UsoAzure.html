@@ -1,0 +1,191 @@
+<link href="../../../styles/css/sb-admin-2.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.22/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+<div id="content-wrapper" class="d-flex flex-column">
+  <!-- Main Content -->
+    <div id="content">
+        <div class="container">
+            <!-- Content Row -->
+            <div class="row">
+                <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        <div ng-show = "!esDist">
+                            <label for="Distribuidor">Distribuidor:</label><br>
+                            <select name="Distribuidor" class="form-control" ng-model="Distribuidor" ng-options="Distribuidor.IdEmpresa as Distribuidor.NombreEmpresa for Distribuidor in selectDistribuidor"
+                                ng-change="filterClients();">
+                                <option ng-selected="true" value="">Todos los distribuidores</option>
+                            </select>
+                        </div>
+                        <br>
+                        <div>
+                            <label for="uf">Cliente:</label><br>
+                            <select name="uf" class="form-control" ng-model="Cliente" ng-options="Clientes.IdEmpresa as Clientes.NombreEmpresa for Clientes in selectClientes"
+                                ng-change="clearTable(1);">
+                                <option ng-selected="true" value="">Todos los clientes</option>
+                            </select>
+                        </div>
+                        
+                        <div ng-show = "consoles">
+                            <label for="uf">Consolas:</label><br>
+                            <select name="uf" class="form-control" ng-model="Console" ng-options="Consoles.IdSuscripcion as Consoles.NombreConsola for Consoles in totalConsoles"
+                                ng-change="clearTable(0);">
+                                <option ng-selected="true" value="">Todas las consolas</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4" >
+                    </div>
+                    <!-- Se comenta para cuando se desarrolle ruta de años con uso, actualmente solo hay de 2020 -->
+                    <!-- <div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2" >
+                        <label for="uf">Año:</label>
+                        <select name="anio" class="form-control" ng-model="anios"
+                            ng-change="BuscarProducto(true);">
+                            <option ng-selected="true" value="2020">2020</option>
+                        </select>
+                    </div> -->
+                </div>
+                <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                </div>
+                <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" id="azureTabs">
+                  <ul class="nav nav-pills">
+                    <li class="active">
+                      <a data-toggle="tab" ng-click="changeAzure('global')">Azure Global</a>
+                    </li>
+                    <li>
+                      <a data-toggle="tab" ng-click="changeAzure('plan')">Azure Plan</a>
+                    </li>
+                </ul>
+                </div>
+                <!-- Area Chart -->
+                <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
+                    <div class="card shadow mb-4">
+                        <!-- Card Header - Dropdown -->
+                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h6 class="m-0 font-weight-bold text-primary">Consumo</h6>
+                        </div>
+                        <!-- Card Body -->
+                        <div class="card-body" ng-click="actualizeTable()">
+                            <div class="chart-area"  style="height: 320px !important;" id = "chartContainer">
+                                <canvas id="myAreaChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Pie Chart -->
+                <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+                    <!-- Project Card Example -->
+                    <div ng-show = "!Cliente"  class="card shadow mb-4" style="height: 395px;">
+                        <div class="card-header py-3">
+                            <h6 ng-if = "!Distribuidor" class="m-0 font-weight-bold text-primary">Consumo por distribuidor (Periodo: {{monthsToShow}})</h6>
+                            <h6 ng-if = "Distribuidor" class="m-0 font-weight-bold text-primary">Consumo por cliente (Periodo: {{monthsToShow}})</h6>
+                        </div>
+                        <div class="ex1" >
+                            <div id = "barras" class="card-body" ng-repeat="emp in enterpriseData">
+                                <h4 class="small font-weight-bold"> {{ emp.name }} <span class="float-right">{{ emp.percent }}%</span></h4>
+                                <div class="progress mb-4">
+                                    <div class="progress-bar {{emp.color}}" role="progressbar" style="width:{{emp.percent}}%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-show = "Cliente" class="outer" >
+                        <p class="label-budget">Budget</p>
+                        <div id = "budgetContainer">
+                            <canvas id="budgetChart" style="margin-top: 20px;"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="container details-table" ng-swipe-right="" ng-swipe-left="" ng-show="MostrarMensaje">
+                    <div class="form-group row">
+                      <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+                        <h2 style="float:left;">No se encontraron detalles.</h2>
+                      </div>
+                    </div>
+                  </div>
+                <div ng-show="!MostrarMensaje && UsageDetails.length > 0" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 details-table">
+                    <b>Nota *</b> Esta información es solo un aproximado y puede no ser la mas actual.
+                </div>
+                <div ng-show="!MostrarMensaje && UsageDetails.length > 0 && month" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 details-table">
+                    <p style="font-size: 15px;">Consumo del mes: {{mes}}</p>
+                </div>
+                
+                <div ng-show="!MostrarMensaje && UsageDetails.length > 0" class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                  <ul class="nav nav-pills">
+                    <li class="active">
+                      <a data-toggle="tab" ng-click="reporte()">Descargar detalle</a>
+                    </li>
+                  </ul>
+                </div>
+
+                <div ng-show="!MostrarMensaje && UsageDetails.length > 0 && azureActual === 'global'" class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" id ="detailTable">
+                    <table class="table table-hover table-responsive border-left-right-cero">
+                        <th><b>Recurso</b></th>
+                        <th><b>Utilizado </b></th>
+                        <th><b>Costo estimado </b></th>
+                        <tr ng-repeat="usage in UsageDetails" class="repeat-animation">
+                          <td class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+                    
+                            <div class="form-group">
+                              <b><h4>{{usage.Categoria}} {{usage.Subcategoria}} {{usage.Nombre}}</h4></b>
+                            </div>
+                    
+                          </td>
+                          <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                    
+                            <div class="form-group">
+                              <b><h5>{{usage.Utilizado}} {{usage.Unidad}}</h5></b>
+                            </div>
+                    
+                          </td>
+                          <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                    
+                            <div class="form-group">
+                              <b><h5>{{usage.Total | currency}} Dólares</h5></b>
+                            </div>
+                    
+                          </td>
+                        </tr>
+                      </table>
+                </div>
+                <div ng-show="!MostrarMensaje && UsageDetails.length > 0 && azureActual === 'plan'" class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" id ="detailTablePlan">
+                    <table class="table table-hover table-responsive border-left-right-cero">
+                        <th><b>Recurso</b></th>
+                        <th><b>Entitlement </b></th>
+                        <th><b>Grupo </b></th>
+                        <th><b>Costo estimado </b></th>
+                        <tr ng-repeat="usage in UsageDetails" class="repeat-animation">
+                          <td class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+                    
+                            <div class="form-group">
+                              <b><h4>{{usage.resourceName}} {{usage.resourceType}}</h4></b>
+                            </div>
+                    
+                          </td>
+                          <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                    
+                            <div class="form-group">
+                              <b><h5>{{usage.entitlementName}}</h5></b>
+                            </div>
+                    
+                          </td>
+                          <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                    
+                            <div class="form-group">
+                                <b><h4>{{usage.resourceGroupName}} {{usage.name}}</h4></b>
+                            </div>
+                    
+                          </td>
+                          <td class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                    
+                            <div class="form-group">
+                              <b><h5>{{usage.Total | currency}} Dólares</h5></b>
+                            </div>
+                    
+                          </td>
+                        </tr>
+                      </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

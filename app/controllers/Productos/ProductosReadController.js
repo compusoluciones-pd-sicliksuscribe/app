@@ -1,5 +1,5 @@
 (function () {
-  var ProductosReadController = function ($scope, $log, $location, $cookies, $routeParams, ProductosFactory, AmazonDataFactory, FabricantesFactory, TiposProductosFactory, PedidoDetallesFactory, TipoCambioFactory, ProductoGuardadosFactory, EmpresasXEmpresasFactory, UsuariosFactory, $anchorScroll) {
+  var ProductosReadController = function ($scope, $rootScope, $log, $location, $cookies, $routeParams, ProductosFactory, FabricantesFactory, TiposProductosFactory, PedidoDetallesFactory, TipoCambioFactory, ProductoGuardadosFactory, EmpresasXEmpresasFactory, UsuariosFactory, $anchorScroll) {
     var BusquedaURL = $routeParams.Busqueda;
     const HRWAWRE_EXTRA_EMPOLYEES_GROUPING = 1000;
     $scope.BuscarProductos = {};
@@ -20,6 +20,11 @@
     const NOT_FOUND = 404;
     $scope.datosCompletosCustomer = true;
     $scope.microsoftURI = false;
+    const azure = 75;
+    const azurePlan = 4105;
+    const MONTHLY = 01;
+    $scope.azureSeat = '';
+    $scope.mostrar = 0;
 
     $scope.esquemaRenovacionModelo={};
     $scope.EsquemaRenovacion=[
@@ -274,11 +279,23 @@
       }
     };
 
-    $scope.revisarProducto = function (Producto) {
-      $scope.DominioMicrosoft = $scope.selectEmpresas.filter(function (item) {
+    const getIdMicrosoft = Producto => {
+      return $scope.selectEmpresas.filter(function (item) {
         if (Producto.IdEmpresaUsuarioFinal === item.IdEmpresa) return item;
         return false;
       })[0].IdMicrosoftUF;
+    };
+
+    const getNameUFMicrosoft = Producto => {
+      return $scope.selectEmpresas.filter(function (item) {
+        if (Producto.IdEmpresaUsuarioFinal === item.IdEmpresa) return item;
+        return false;
+      })[0].NombreEmpresa;
+    };
+
+
+    $scope.revisarProducto = function (Producto) {
+      $scope.DominioMicrosoft = getIdMicrosoft(Producto);
       $scope.usuariosSinDominio[Producto.IdEmpresaUsuarioFinal] = $scope.DominioMicrosoft !== null;
       $scope.productoSeleccionado = Producto.IdProducto;
       if (Producto.IdFabricante === 2) validateAutodeskData(Producto);
@@ -351,6 +368,7 @@
 
     $scope.cerrarModal = function (modal) {
       document.getElementById(modal).style.display = 'none';
+      $scope.mostrar = 0;
     };
 
 
@@ -422,7 +440,15 @@
           $scope.IdEmpresaUsuarioFinalTerminos = producto.IdEmpresaUsuarioFinal;
           $scope.terminos = true;
         } else {
-          return $scope.AgregarCarrito(producto, producto.Cantidad, producto.IdPedidocontrato);
+          if (producto.IdProducto === azure || producto.IdProducto === azurePlan) {
+            if (Number(producto.IdEsquemaRenovacion) !== MONTHLY) {
+              $scope.ShowToast('Este producto no se puede comprar anual', 'danger');
+              return false;
+            }
+            return $scope.validateAzure(producto);
+          } else {
+            return $scope.AgregarCarrito(producto, producto.Cantidad, producto.IdPedidocontrato);
+          }
         }
       })
       .catch(function (error) {
@@ -433,6 +459,91 @@
         $scope.form.habilitar = false;
       });
     };
+    
+    $scope.enviarNotificacionAzurePlanSeat = function () {
+      return ProductosFactory.postSeatAzurePlan($scope.azureSeat)
+        .success(function (result) {
+        if (result.success) {
+          $scope.ShowToast('¡Petición realizada exitosamente, llegará la confirmación por correo electrónico!','success');
+          document.getElementById('formModalAzurePlan').style.display = 'none';
+          return true;
+        }
+        $scope.ShowToast(result.message, 'danger');
+        return false;
+      })
+      .catch(function (error) {
+        $scope.ShowToast(error.data.message, 'danger');
+        $log.log('data error: ' + error.data.message + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
+        $scope.form.habilitar = true;
+        $scope.ActualizarMonitor();
+        $scope.form.habilitar = false;
+      });
+    };
+
+    $scope.mostrarOpciones = function () {
+      $scope.mostrar = 1;
+    };
+
+    $scope.aceptarTransicion = function () {
+      const customerId =  getIdMicrosoft($scope.actualProduct);
+      const bodyRequest = {
+        "customerId": customerId,
+        "productFamily": "azure"
+      }
+      $scope.loading_tran = true;
+      return ProductosFactory.upgradeAzure(bodyRequest)
+        .success(function (result) {
+        $scope.loading_tran = false;
+        if (result.success) {
+          $scope.ShowToast('¡Petición realizada exitosamente!','success');
+          document.getElementById('formModalTransicion').style.display = 'none';
+          return true;
+        }
+        $scope.ShowToast(result.message.message, 'danger');
+        return false;
+      })
+      .catch(function (error) {
+        $scope.loading_tran = false;
+        $scope.ShowToast(error.data.message, 'danger');
+        $log.log('data error: ' + error.data.message + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
+        $scope.form.habilitar = true;
+        $scope.ActualizarMonitor();
+        $scope.form.habilitar = false;
+      });
+
+    };
+
+    $scope.validateAzure = function (producto) {
+      const azureIdERP = producto.IdERP === 'MS-AZ-R-0.' ? $rootScope.IdERPAzure : $rootScope.IdERPAzurePlan;
+      const customerId =  getIdMicrosoft(producto);
+      const nombreEmpresaUF = getNameUFMicrosoft(producto);
+      console.log($scope.selectEmpresas);
+      return ProductosFactory.getValidateAzure(customerId, azureIdERP)
+        .success(function (result) {
+        if (result.success) {
+          if (result.isAnAzurePlanSeat) {
+            $scope.azureSeat = Object.assign({}, producto, { IdSubs: result.data[0].id }, { NombreEmpresaUF: nombreEmpresaUF });
+            document.getElementById('formModalAzurePlan').style.display = 'block';
+            return false;
+          }
+          return $scope.AgregarCarrito(producto, producto.Cantidad, producto.IdPedidocontrato);
+        }
+        if (result.message === 'No puedes comprar Azure Plan, debes de transicionar tu suscripción actual de Azure') {
+          $scope.actualProduct = producto;
+          $scope.ShowToast(result.message, 'danger');
+          document.getElementById('formModalTransicion').style.display = 'block';
+          return false;
+        }
+        $scope.ShowToast(result.message, 'danger');
+      })
+      .catch(function (error) {
+        $scope.ShowToast(error.data.message, 'danger');
+        $log.log('data error: ' + error.data.message + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
+        $scope.form.habilitar = true;
+        $scope.ActualizarMonitor();
+        $scope.form.habilitar = false;
+      });
+    }
 
     $scope.previousISVValidate = function (producto) {
       if (producto.IdFabricante !== 6) {
@@ -761,7 +872,7 @@
     };
   };
 
-  ProductosReadController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'ProductosFactory','AmazonDataFactory', 'FabricantesFactory', 'TiposProductosFactory', 'PedidoDetallesFactory', 'TipoCambioFactory', 'ProductoGuardadosFactory', 'EmpresasXEmpresasFactory', 'UsuariosFactory', '$anchorScroll'];
+  ProductosReadController.$inject = ['$scope', '$rootScope', '$log', '$location', '$cookies', '$routeParams', 'ProductosFactory', 'FabricantesFactory', 'TiposProductosFactory', 'PedidoDetallesFactory', 'TipoCambioFactory', 'ProductoGuardadosFactory', 'EmpresasXEmpresasFactory', 'UsuariosFactory', '$anchorScroll'];
 
   angular.module('marketplace').controller('ProductosReadController', ProductosReadController);
 }());
