@@ -135,6 +135,7 @@
     };
         
     factory.getTokenSiclik = function () {
+      delete $http.defaults.headers.common['Authorization'];
       factory.refreshToken();
       return $http.get($rootScope.API + 'open-pay/token-siclik');
     };

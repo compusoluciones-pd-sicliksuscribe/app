@@ -1,11 +1,26 @@
 (function () {
-  var EmpresasXEmpresasReadAzureBudgetController = function ($scope, $log, $location, $cookies, EmpresasXEmpresasFactory, EmpresasFactory, PedidoDetallesFactory) {
+  var EmpresasXEmpresasReadAzureBudgetController = function ($scope, $log, $rootScope, $cookies, EmpresasXEmpresasFactory, EmpresasFactory, PedidoDetallesFactory) {
     $scope.sortBy = 'NombreEmpresa';
     $scope.reverse = false;
     $scope.CreditoDisponible = 0;
     $scope.PorcentajeAzureBudget = 100;
     $scope.CreditoRepartidoPorcentajeTotal = 0;
-
+    $scope.payment = 0;
+    $scope.paymentMethods = {
+      CREDIT_CARD: 1,
+      CS_CREDIT: 2,
+      PAYPAL: 3,
+      PREPAID: 4,
+      STORE: 5
+    };
+    $scope.name = '';
+    $scope.card = '';    
+    $scope.errorDate = '';
+    $scope.year = '';
+    $scope.month = '';
+    $scope.paymethod = 1;
+    $scope.CREDIT_CARD_COM = 0.02;
+    $scope.IVA = 1.16;
     String.prototype.splice = function (idx, rem, s) {
       return (this.slice(0, idx) + s + this.slice(idx + Math.abs(rem)));
     };
@@ -24,6 +39,14 @@
         }
       }
     };
+
+    $scope.showPaymentMethods = function (flag) {
+      if (Number(flag)) {
+        $scope.payment = 1;
+      } else {
+        $scope.payment = 0;
+      }
+    }
 
     $scope.init = function () {
       $scope.CheckCookie();
@@ -140,7 +163,196 @@
     $scope.CreditoPorRepartir = function () {
       $scope.CreditoPorRepartirTotal = (($scope.CreditoDisponible * $scope.PorcentajeAzureBudget) / 100).toFixed(4);
     };
+    
+    $scope.ActualizarFormaPago = function (metodoPago) {
+      $scope.paymethod = metodoPago;
+    };
 
+    $scope.anios = [{nombre:'Año',valor:'default'},{nombre:'2020',valor:20},{nombre:'2021',valor:21},{nombre:'2022',valor:22},{nombre:'2023',valor:23},{nombre:'2024',valor:24},{nombre:'2025',valor:25}];
+    $scope.meses = [{nombre:'Mes',valor:'default'},{nombre:'Enero',valor: '01'},{nombre:'Febrero',valor: '02'},{nombre:'Marzo',valor: '03'},{nombre:'Abril',valor: '04'},{nombre:'Mayo',valor: '05'},{nombre:'Junio',valor: '06'},{nombre:'Julio',valor: '07'},{nombre:'Agosto',valor: '08'},{nombre:'Septiembre',valor: '09'},{nombre:'Octubre',valor: '10'},{nombre:'Noviembre',valor: '11'},{nombre:'Diciembre',valor: '12'}]
+
+    const keyAntifraude = () => {
+      OpenPay.setId('mgp4crl0qu5nxy0ed2af');
+      OpenPay.setApiKey('pk_9f2f5b3c557045298d7df2c67fe378fe');
+      if ($rootScope.sandbox) OpenPay.setSandboxMode(true);
+      $scope.deviceSessionId = OpenPay.deviceData.setup("payment-form", "device_session_id");
+    };
+
+    const fullFilOpenpayData = async () => {
+      keyAntifraude();
+      const siclikToken = await angular.element(document.getElementById('divComprar')).scope().getSiclikToken();
+      const openpayCustomerId = await angular.element(document.getElementById('divComprar')).scope().getOpenPayCustomer(siclikToken);
+      return ({
+        openpayCustomerId,
+        deviceSessionId: $scope.deviceSessionId,
+        Moneda: 'Pesos',
+      });
+    };
+
+    async function success_callbak (response) {
+      const openpayData = await fullFilOpenpayData();
+      // Llamada a api
+    }
+
+    async function error_callbak (error) {
+      const test = error.data.description;
+      var arr = await test.split(",").map(function(item) {
+        return item.trim();
+      });
+      return angular.element(document.getElementById('divComprar')).scope().checkErrors(arr);
+    }
+
+    const calculateTotal = () => {
+      return (($scope.quantity * $scope.IVA) * $scope.CREDIT_CARD_COM) + $scope.quantity;
+    }
+    
+    $scope.pagar = function () {
+      if ($scope.quantity > 0) {
+        $scope.amount = calculateTotal();
+        $scope.currency = 'Pesos';
+      } else {
+        $scope.ShowToast('Selecciona cantidad a pagar.', 'danger');
+      }
+    };
+
+    $scope.checkPayment = function () {
+      if ($scope.paymethod === $scope.paymentMethods.CREDIT_CARD) {
+        $scope.pagar();
+      } else if ($scope.paymethod === $scope.paymentMethods.PREPAID) {
+        $scope.preparePrePaid();
+      } else if ($scope.paymethod === $scope.paymentMethods.STORE) {
+        $scope.payInStore();
+      }
+    };
+
+    $scope.payInStore = async function () {
+      if ($scope.quantity > 0) {
+        if ($scope.quantity < 29999) {
+          const openpayData = await fullFilOpenpayData();
+          // Llamada a api
+        } else {
+          $scope.ShowToast('La compra en tienda no debe ser mayor a 29,999.', 'danger');
+        }
+      } else {
+        $scope.ShowToast('Selecciona cantidad a pagar.', 'danger');
+      }
+    };
+
+    $scope.preparePrePaid = async function () {
+      if ($scope.quantity > 0) {
+        const openpayData = await fullFilOpenpayData();
+        // Llamada a api
+      } else {
+        $scope.ShowToast('Selecciona cantidad a pagar.', 'danger');
+      }
+    };
+      
+    $("#card").keyup(function(){              
+      var ta      =   $("#card");
+      letras      =   ta.val().replace(/ /g, "");
+      ta.val(letras)
+    }); 
+
+    $('#pay-button').on('click', function(event) {
+      $scope.errorName = 0;
+      $scope.errorCard = 0;
+      $scope.errorDate = 0;
+      $scope.dateError = '';
+      $scope.errorCardMessage = '';
+      if ($scope.name.length <= 0) {
+        $scope.errorName = 1;
+      }
+      if ($scope.card.length <= 0) {
+        $scope.errorCard = 1;
+        $scope.errorCardMessage = '*Requerido';
+      }
+      if ($scope.month.length <= 0) {
+        $scope.errorDate = 1;
+        $scope.dateError = '*Mes requerido';
+      }
+      if ($scope.year.length <= 0) {
+        $scope.errorDate = 1;
+        $scope.dateError = '*Año requerido';
+      }
+      event.preventDefault();
+      $("#pay-button").prop( "disabled", true);
+      OpenPay.token.extractFormAndCreate('payment-form', success_callbak, error_callbak);              
+    });
+
+    $.validator.addMethod("valueNotEquals", function(value, element, arg){
+      return arg !== value;
+     }, "Value must not equal arg.");
+
+
+     $.validator.addMethod("dateValidation", function(value, element, params) {
+       
+      let minMonth = new Date().getMonth() + 1;
+      let minYear = new Date().getFullYear();
+
+      let month = parseInt(params.formMonth[0].value, 10);
+      let year = parseInt(params.formYear[0].value, 10);
+      year = year + 2000;
+
+      if ((year > minYear) || ((year === minYear) && (month >= minMonth))) {
+          return true;
+      } else {
+          return false;
+      }
+}, "La fecha de expiración de tu tarjeta es incorrecta.");
+
+      $('#payment-form').validate({
+          rules: {
+            name: { 
+              required: true,
+            },
+            cardNumber: {
+                   required: true,
+                   number: true,
+                   maxlength: 19,
+                   minlength: 16
+               },
+               ccexpmonth: { valueNotEquals: "default" },
+            ccexpyear: { 
+              valueNotEquals: "default" ,
+              dateValidation: { 
+                formMonth: $('#ccexpmonth'),
+                formYear:  $('#ccexpyear'),
+              }
+          },
+            cvv: {
+              required: true,
+              number: true,
+              maxlength: 3,
+              minlength: 3
+            }
+          },
+          messages: {
+              name: {
+                  required: "Es requerido*",
+
+              },          
+              cardNumber: {
+                   required: "Es requerido*",
+                   number: "Solo se permiten números*",
+                   maxlength: "Máximo 19 digitos",
+                   minlength: "Mínimo 16 digitos"
+               },
+               ccexpmonth: { valueNotEquals: "Selecciona un mes" },
+               ccexpyear: { 
+                 valueNotEquals: "Selecciona un año",
+               },
+               cvv: {
+                required: "Es requerido*",
+                number: "Solo se permiten números*",
+                maxlength: "Máximo 3 digitos",
+                minlength: "Mínimo 3 digitos",
+              }
+           },
+           submitHandler: function (form) {
+              OpenPay.token.extractFormAndCreate('payment-form', success_callbak, error_callbak); 
+         }
+      });
+  
     $scope.IniciarTourClients = function () {
       $scope.Tour = new Tour({
         steps: [
@@ -190,7 +402,7 @@
     };
   };
 
-  EmpresasXEmpresasReadAzureBudgetController.$inject = ['$scope', '$log', '$location', '$cookies', 'EmpresasXEmpresasFactory', 'EmpresasFactory', 'PedidoDetallesFactory'];
+  EmpresasXEmpresasReadAzureBudgetController.$inject = ['$scope', '$log', '$rootScope', '$cookies', 'EmpresasXEmpresasFactory', 'EmpresasFactory', 'PedidoDetallesFactory'];
 
   angular.module('marketplace').controller('EmpresasXEmpresasReadAzureBudgetController', EmpresasXEmpresasReadAzureBudgetController);
 }());

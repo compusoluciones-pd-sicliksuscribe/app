@@ -154,7 +154,7 @@
         });
     };
 
-    const getOpenPayCustomer = async siclikToken => {
+    $scope.getOpenPayCustomer = async function (siclikToken) {
       return $scope.getOpenPayCustomerId(siclikToken)
         .catch(() => {
           const user = String($scope.session.IdUsuario);
@@ -171,7 +171,7 @@
     const comprarPrePago = async function () { // transferencia
       keyAntifraude();
       const siclikToken = await $scope.getSiclikToken();
-      const openpayCustomerId = await getOpenPayCustomer(siclikToken);
+      const openpayCustomerId = await $scope.getOpenPayCustomer(siclikToken);
       const body = {
         openpayCustomerId,
         deviceSessionId: $scope.deviceSessionId,
@@ -420,7 +420,7 @@
 
     async function success_callbak (response) {
       const siclikToken = await $scope.getSiclikToken();
-      const openpayCustomerId = await getOpenPayCustomer(siclikToken);
+      const openpayCustomerId = await $scope.getOpenPayCustomer(siclikToken);
         const bodyRequest = {
           deviceSessionId: $scope.deviceSessionId,
           sourceId: response.data.id,
@@ -537,7 +537,7 @@
     const comprarEnTienda = async function() { // En tienda
       keyAntifraude();
       const siclikToken = await $scope.getSiclikToken();
-      const openpayCustomerId = await getOpenPayCustomer(siclikToken);
+      const openpayCustomerId = await $scope.getOpenPayCustomer(siclikToken);
       const body = {
         openpayCustomerId,
         deviceSessionId: $scope.deviceSessionId,

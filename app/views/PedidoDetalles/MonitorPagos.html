@@ -128,12 +128,12 @@
         </div>
         <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
             <div class="">
-                <button ng-if = "paymethod !== CREDIT_CARD" id="btnSiguiente" type="button" ng-click="checkPayment()" class="btn btn-primary btn-block">
-            Realizar Pago
-          </button>
-            <button ng-if = "paymethod === CREDIT_CARD" type="button" ng-click="checkPayment();" class="btn btn-primary btn-block" ng-disabled="btnComprarBloqueado" data-toggle="modal" data-target="#modalPagoTC"  >
+              <button ng-if = "paymethod !== CREDIT_CARD" id="btnSiguiente" type="button" ng-click="checkPayment()" class="btn btn-primary btn-block">
                 Realizar Pago
-            </button>
+              </button>
+              <button ng-if = "paymethod === CREDIT_CARD" type="button" ng-click="checkPayment();" class="btn btn-primary btn-block" ng-disabled="btnComprarBloqueado" data-toggle="modal" data-target="#modalPagoTC"  >
+                  Realizar Pago
+              </button>
             </div>
         </div>
     </div>
