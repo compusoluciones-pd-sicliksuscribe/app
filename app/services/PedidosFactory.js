@@ -61,35 +61,41 @@
       factory.refreshToken();
       return $http.post($rootScope.API + 'open-pay/pay-with-card', bodyReq);
     };
-    
+
     factory.payWithSpeiOpenpay = function (bodyReq) {
       delete $http.defaults.headers.common['Authorization'];
       factory.refreshToken();
       return $http.post($rootScope.API + 'open-pay/pay-with-spei', bodyReq);
     };
-    
+
     factory.payInStore = function (bodyReq) {
       delete $http.defaults.headers.common['Authorization'];
       factory.refreshToken();
       return $http.post($rootScope.API + 'open-pay/pay-in-store', bodyReq);
     };
-    
+
     factory.payWithCardMonitorOpenpay = function (bodyReq) {
       delete $http.defaults.headers.common['Authorization'];
       factory.refreshToken();
       return $http.post($rootScope.API + 'open-pay/pay-with-card-monitor', bodyReq);
     };
-    
+
     factory.payWithSpeiOpenpayMonitor = function (bodyReq) {
       delete $http.defaults.headers.common['Authorization'];
       factory.refreshToken();
       return $http.post($rootScope.API + 'open-pay/pay-with-spei-monitor', bodyReq);
     };
-    
+
     factory.payInStoreOpenpayMonitor = function (bodyReq) {
       delete $http.defaults.headers.common['Authorization'];
       factory.refreshToken();
       return $http.post($rootScope.API + 'open-pay/pay-in-store-monitor', bodyReq);
+    };
+
+    factory.payWithCardBudget = function (bodyReq) {
+      delete $http.defaults.headers.common['Authorization'];
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'azure-usage/pay-with-card', bodyReq);
     };
 
     return factory;

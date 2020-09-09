@@ -338,6 +338,7 @@
     };
 
     $scope.getOpenPayCustomerId = siclikToken => {
+    $scope.session = $cookies.getObject('Session');
       const userData = {
         name: $scope.session.Nombre,
         lastName: $scope.session.ApellidoPaterno,
@@ -367,7 +368,7 @@
       }
     };
 
-    const getCardPaymentError = error => {
+    $scope.getCardPaymentError = function (error) {
       switch (error) {
         case 1612:
           return 'El monto transacción esta fuera de los limites permitidos.';
@@ -447,7 +448,7 @@
             });
           } else {
             if (resultPayment.data.statusCode) {
-              const cardError = getCardPaymentError(resultPayment.data.error.code);
+              const cardError = $scope.getCardPaymentError(resultPayment.data.error.code);
               $scope.ShowToast(cardError, 'danger');
             } else {
               $scope.ShowToast('Surgió un error, contactar a soporte o intentar más tarde.', 'danger');

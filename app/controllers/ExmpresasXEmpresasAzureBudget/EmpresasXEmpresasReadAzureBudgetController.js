@@ -1,5 +1,5 @@
 (function () {
-  var EmpresasXEmpresasReadAzureBudgetController = function ($scope, $log, $rootScope, $cookies, EmpresasXEmpresasFactory, EmpresasFactory, PedidoDetallesFactory) {
+  var EmpresasXEmpresasReadAzureBudgetController = function ($scope, $log, $rootScope, $cookies, EmpresasXEmpresasFactory, EmpresasFactory, PedidosFactory) {
     $scope.sortBy = 'NombreEmpresa';
     $scope.reverse = false;
     $scope.CreditoDisponible = 0;
@@ -185,13 +185,35 @@
       return ({
         openpayCustomerId,
         deviceSessionId: $scope.deviceSessionId,
-        Moneda: 'Pesos',
+        currency: 'MXN',
+        amount: $scope.amount,
       });
     };
 
     async function success_callbak (response) {
       const openpayData = await fullFilOpenpayData();
-      // Llamada a api
+      openpayData.sourceId = response.data.id;
+      console.log(response, openpayData);
+        PedidosFactory.payWithCardBudget(openpayData)
+        .then(function (resultPayment) {
+          if (resultPayment.data.success) {
+            $cookies.remove('pedidosAgrupados');
+            $scope.ShowToast(resultPayment.data.message, 'success');
+            $('#modalPagoTC').modal('hide');
+            angular.element(document.getElementById('divComprar')).scope().cerrarModal('modalPagoTC');
+            $scope.payment = 0;
+          } else {
+            if (resultPayment.data.statusCode) {
+              const cardError = angular.element(document.getElementById('divComprar')).scope().getCardPaymentError(resultPayment.data.error.code);
+              $scope.ShowToast(cardError, 'danger');
+            } else {
+              $scope.ShowToast('Surgió un error, contactar a soporte o intentar más tarde.', 'danger');
+            }
+          }
+        })
+        .catch(function (error) { 
+          $scope.ShowToast('Surgió un error, contactar a soporte o intentar más tarde.', 'danger');
+        });
     }
 
     async function error_callbak (error) {
@@ -208,7 +230,8 @@
     
     $scope.pagar = function () {
       if ($scope.quantity > 0) {
-        $scope.amount = calculateTotal();
+        keyAntifraude();
+        $scope.amount = $scope.quantity;
         $scope.currency = 'Pesos';
       } else {
         $scope.ShowToast('Selecciona cantidad a pagar.', 'danger');
@@ -252,32 +275,6 @@
       letras      =   ta.val().replace(/ /g, "");
       ta.val(letras)
     }); 
-
-    $('#pay-button').on('click', function(event) {
-      $scope.errorName = 0;
-      $scope.errorCard = 0;
-      $scope.errorDate = 0;
-      $scope.dateError = '';
-      $scope.errorCardMessage = '';
-      if ($scope.name.length <= 0) {
-        $scope.errorName = 1;
-      }
-      if ($scope.card.length <= 0) {
-        $scope.errorCard = 1;
-        $scope.errorCardMessage = '*Requerido';
-      }
-      if ($scope.month.length <= 0) {
-        $scope.errorDate = 1;
-        $scope.dateError = '*Mes requerido';
-      }
-      if ($scope.year.length <= 0) {
-        $scope.errorDate = 1;
-        $scope.dateError = '*Año requerido';
-      }
-      event.preventDefault();
-      $("#pay-button").prop( "disabled", true);
-      OpenPay.token.extractFormAndCreate('payment-form', success_callbak, error_callbak);              
-    });
 
     $.validator.addMethod("valueNotEquals", function(value, element, arg){
       return arg !== value;
@@ -402,7 +399,7 @@
     };
   };
 
-  EmpresasXEmpresasReadAzureBudgetController.$inject = ['$scope', '$log', '$rootScope', '$cookies', 'EmpresasXEmpresasFactory', 'EmpresasFactory', 'PedidoDetallesFactory'];
+  EmpresasXEmpresasReadAzureBudgetController.$inject = ['$scope', '$log', '$rootScope', '$cookies', 'EmpresasXEmpresasFactory', 'EmpresasFactory', 'PedidosFactory'];
 
   angular.module('marketplace').controller('EmpresasXEmpresasReadAzureBudgetController', EmpresasXEmpresasReadAzureBudgetController);
 }());
