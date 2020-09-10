@@ -1,9 +1,16 @@
 <div class="container" ; style="padding-left: 75px">
     <div class="Title">
-        <h1 ng-hide = "spei" style="border-bottom: 1px solid black; padding-bottom: 17px">Compra Realizada Exitosamente </h1>
-        <h1 ng-show = "spei" style="border-bottom: 1px solid black; padding-bottom: 17px">Referencia SPEI realizada exitosamente </h1>
-        <h3 ng-hide = "spei">Tu compra generó los siguientes pedidos:</h3>
-        <h3 ng-show = "spei">Tu SPEI se generó para los siguientes pedidos:</h3>
+        <div ng-hide = "spei">
+            <h1 ng-hide = "spei" style="border-bottom: 1px solid black; padding-bottom: 17px">Compra Realizada Exitosamente </h1>
+            <h3 ng-hide = "spei">Tu compra generó los siguientes pedidos:</h3>
+        </div>
+        <div ng-show = "spei && !budget">
+            <h1 ng-show = "spei" style="border-bottom: 1px solid black; padding-bottom: 17px">Referencia SPEI realizada exitosamente </h1>
+            <h3 ng-show = "spei">Tu SPEI se generó para los siguientes pedidos:</h3>
+        </div>
+        <div ng-show = "budget">
+            <h1 style="border-bottom: 1px solid black; padding-bottom: 17px">Referencia realizada exitosamente </h1>
+        </div>
         <div ng-repeat="pedido in pedidos">
             {{pedido.IdPedido || pedido}}
         </div>
@@ -50,7 +57,7 @@
         </div>
         <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
             <p>El archivo se encuentra disponible para su descarga, y se envió vía correo electrónico.</p>
-            <p ng-hide="monitor">Una vez detectado el pago, se enviará una notificación y se liberará su compra.</p>
+            <p ng-hide="monitor || budget">Una vez detectado el pago, se enviará una notificación y se liberará su compra.</p>
         </div>
         <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
             <div class="embed-responsive embed-responsive-16by9">

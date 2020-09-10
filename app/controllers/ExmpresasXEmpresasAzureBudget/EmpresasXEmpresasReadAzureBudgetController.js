@@ -1,5 +1,5 @@
 (function () {
-  var EmpresasXEmpresasReadAzureBudgetController = function ($scope, $log, $rootScope, $cookies, EmpresasXEmpresasFactory, EmpresasFactory, PedidosFactory) {
+  var EmpresasXEmpresasReadAzureBudgetController = function ($scope, $log, $rootScope, $cookies, $location, EmpresasXEmpresasFactory, EmpresasFactory, PedidosFactory) {
     $scope.sortBy = 'NombreEmpresa';
     $scope.reverse = false;
     $scope.CreditoDisponible = 0;
@@ -197,7 +197,6 @@
         PedidosFactory.payWithCardBudget(openpayData)
         .then(function (resultPayment) {
           if (resultPayment.data.success) {
-            $cookies.remove('pedidosAgrupados');
             $scope.ShowToast(resultPayment.data.message, 'success');
             $('#modalPagoTC').modal('hide');
             angular.element(document.getElementById('divComprar')).scope().cerrarModal('modalPagoTC');
@@ -248,11 +247,39 @@
       }
     };
 
+    const orderCookie = (orderIdsCookie) => {
+      const cookie = $cookies.putObject('orderIdsCookie', orderIdsCookie, { secure: $rootScope.secureCookie });
+      const location = $location.path('/SuccessOrder');
+      const resultOrderidCookie = [{cookie, location}];
+      return resultOrderidCookie;
+    };
+
+    const BUDGET = 2;
     $scope.payInStore = async function () {
       if ($scope.quantity > 0) {
         if ($scope.quantity < 29999) {
-          const openpayData = await fullFilOpenpayData();
-          // Llamada a api
+            $scope.amount = $scope.quantity;
+            const openpayData = await fullFilOpenpayData();
+            PedidosFactory.payInStoreBudget(openpayData)
+            .then(function (resultPayment) {
+              if (resultPayment.data.success) {
+                $scope.ShowToast(resultPayment.data.message, 'success');
+                $scope.payment = 0;
+                resultPayment.data.data.MetodoPago = 'Pago en tienda';
+                resultPayment.data.data.TipoPago = BUDGET;
+                orderCookie(resultPayment.data);
+              } else {
+                if (resultPayment.data.statusCode) {
+                  const cardError = angular.element(document.getElementById('divComprar')).scope().getCardPaymentError(resultPayment.data.error.code);
+                  $scope.ShowToast(cardError, 'danger');
+                } else {
+                  $scope.ShowToast('Surgió un error, contactar a soporte o intentar más tarde.', 'danger');
+                }
+              }
+            })
+            .catch(function (error) { 
+              $scope.ShowToast('Surgió un error, contactar a soporte o intentar más tarde.', 'danger');
+            });
         } else {
           $scope.ShowToast('La compra en tienda no debe ser mayor a 29,999.', 'danger');
         }
@@ -263,8 +290,28 @@
 
     $scope.preparePrePaid = async function () {
       if ($scope.quantity > 0) {
+        $scope.amount = $scope.quantity;
         const openpayData = await fullFilOpenpayData();
-        // Llamada a api
+          PedidosFactory.payWithSpeiBudget(openpayData)
+          .then(function (resultPayment) {
+            if (resultPayment.data.success) {
+              $scope.ShowToast(resultPayment.data.message, 'success');
+              $scope.payment = 0;
+              resultPayment.data.data.MetodoPago = 'Transferencia';
+              resultPayment.data.data.TipoPago = BUDGET;
+              orderCookie(resultPayment.data);
+            } else {
+              if (resultPayment.data.statusCode) {
+                const cardError = angular.element(document.getElementById('divComprar')).scope().getCardPaymentError(resultPayment.data.error.code);
+                $scope.ShowToast(cardError, 'danger');
+              } else {
+                $scope.ShowToast('Surgió un error, contactar a soporte o intentar más tarde.', 'danger');
+              }
+            }
+          })
+          .catch(function (error) { 
+            $scope.ShowToast('Surgió un error, contactar a soporte o intentar más tarde.', 'danger');
+          });
       } else {
         $scope.ShowToast('Selecciona cantidad a pagar.', 'danger');
       }
@@ -399,7 +446,7 @@
     };
   };
 
-  EmpresasXEmpresasReadAzureBudgetController.$inject = ['$scope', '$log', '$rootScope', '$cookies', 'EmpresasXEmpresasFactory', 'EmpresasFactory', 'PedidosFactory'];
+  EmpresasXEmpresasReadAzureBudgetController.$inject = ['$scope', '$log', '$rootScope', '$cookies', '$location', 'EmpresasXEmpresasFactory', 'EmpresasFactory', 'PedidosFactory'];
 
   angular.module('marketplace').controller('EmpresasXEmpresasReadAzureBudgetController', EmpresasXEmpresasReadAzureBudgetController);
 }());

@@ -98,6 +98,18 @@
       return $http.post($rootScope.API + 'azure-usage/pay-with-card', bodyReq);
     };
 
+    factory.payWithSpeiBudget = function (bodyReq) {
+      delete $http.defaults.headers.common['Authorization'];
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'azure-usage/pay-with-spei', bodyReq);
+    };
+
+    factory.payInStoreBudget = function (bodyReq) {
+      delete $http.defaults.headers.common['Authorization'];
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'azure-usage/pay-in-store', bodyReq);
+    };
+
     return factory;
   };
 

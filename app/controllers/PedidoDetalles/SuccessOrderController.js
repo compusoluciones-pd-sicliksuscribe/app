@@ -29,12 +29,14 @@
     };
 
     $scope.init = function () {
+      const BUDGET = 2;
       const MICROSOFT = 1;
       if ($scope.currentPath === '/SuccessOrder') {
         $scope.CheckCookie();
         if ($scope.orderIdsCookie.MetodoPago === 'Transferencia' || $scope.orderIdsCookie.MetodoPago === 'Pago en tienda') {
           $scope.pedidos = $scope.orderIdsCookie.order_ids;
           $scope.url = $sce.trustAsResourceUrl($scope.orderIdsCookie.urlFile);
+          $scope.budget = $scope.orderIdsCookie.TipoPago === BUDGET;
           $scope.spei = true;
           $scope.monitor = $scope.orderIdsCookie.path ? true : false;
         } else {
