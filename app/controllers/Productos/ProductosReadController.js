@@ -199,10 +199,10 @@
             if (Producto.contratos.length === 0) {
               Producto.TieneContrato = false;
             }
-            if ((Producto.IdAccionAutodesk === 2 || !Producto.IdAccionAutodesk) && Producto.contratos.length === 0) {
+            if (Producto.contratos.length === 0) {
               Producto.TieneContrato = false;
             }
-            if (Producto.IdAccionAutodesk === 1) Producto.contratos.unshift({ IdPedido: 0, NumeroContrato: 'Nuevo contrato...' });
+            Producto.contratos.unshift({ IdPedido: 0, NumeroContrato: 'Nuevo contrato...' });
             setProtectedRebatePrice(Producto.IdEmpresaUsuarioFinal);
           } else {
             $scope.ShowToast('No pudimos cargar la información de tus contratos, por favor intenta de nuevo más tarde.', 'danger');
@@ -488,7 +488,7 @@
         ResultadoFabricante2: Producto.IdProductoPadre,
         Especializacion: Producto.Especializacion,
         IdUsuarioContacto: Producto.IdUsuarioContacto,
-        IdAccionAutodesk: Producto.IdAccionAutodesk,
+        IdAccionAutodesk: 1,
         IdERP: Producto.IdERP,
         Plazo: Producto.Plazo
       };
@@ -512,6 +512,7 @@
           }
           if (Producto.IdPedidoContrato === 0) { // Cuando se elige la acción de nuevo contrato y existen contratos adicionales disponibles
             NuevoProducto.IdAccionAutodesk = 1;
+            delete NuevoProducto.ContratoBaseAutodesk;
           }
           return postPedidoAutodesk(NuevoProducto);
         });
