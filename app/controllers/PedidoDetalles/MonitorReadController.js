@@ -129,7 +129,7 @@
     $scope.ActualizarPedidosAlCambiarMonedaOFormaPago = function (pedidoRecienActualizado) {
       for (var i = 0; i < $scope.Pedidos.length; i++) {
         if ($scope.Pedidos[i].IdPedido === pedidoRecienActualizado.IdPedido) {
-          $scope.Pedidos[i].IdFormaPagoProxima = pedidoRecienActualizado.IdFormaPagoProxima;
+          $scope.Pedidos[i].IdFormaPagoProxima = parseInt(pedidoRecienActualizado.IdFormaPagoProxima);
           $scope.Pedidos[i].MonedaPagoProxima = pedidoRecienActualizado.MonedaPagoProxima;
         }
       }

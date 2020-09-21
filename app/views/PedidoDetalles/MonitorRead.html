@@ -201,15 +201,15 @@
                                 <label>{{ pedido.IdFabricante === 5 ? "Empleados" : pedido.IdFabricante === 11 ? "Créditos" :"Suscripciones" }}: </label>
                                 <br>
                                 <div style="margin:0; padding:0;" ng-show="pedido.IdFabricante === 11"> {{ detalles.Cantidad }} </div>
-                                <div style="margin:0; padding:0;" ng-show="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3) && !pedido.CargoRealizadoProximoPedido && !detalles.PedidoAFabricante"> {{ detalles.Cantidad }} </div>
-                                <a ng-click="ActualizarCantidad(detalles.IdPedidoDetalle)" style="text-decoration: none" ng-hide="pedido.CargoRealizadoProximoPedido || (!detalles.PedidoAFabricante || detalles.EstatusFabricante === 'FAILED') || pedido.IdFabricante === 11"> {{ detalles.IdProducto === 3616 ? 25 : detalles.Cantidad }} &nbsp;
+                                <div style="margin:0; padding:0;" ng-show="((SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3) && !pedido.CargoRealizadoProximoPedido && !detalles.PedidoAFabricante) || pedido.Renovado || !detalles.Activo"> {{ detalles.Cantidad }} </div>
+                                <a ng-click="ActualizarCantidad(detalles.IdPedidoDetalle)" style="text-decoration: none" ng-hide="pedido.CargoRealizadoProximoPedido || (!detalles.PedidoAFabricante || detalles.EstatusFabricante === 'FAILED') || pedido.IdFabricante === 11 || pedido.Renovado || !detalles.Activo"> {{ detalles.IdProducto === 3616 ? 25 : detalles.Cantidad }} &nbsp;
 										<span class="glyphicon glyphicon-triangle-bottom" ng-hide="detalles.MostrarCantidad || detalles.IdProducto === 3616 || pedido.IdFabricante === 11"></span>
 										<span class="glyphicon glyphicon-triangle-top" ng-show="detalles.MostrarCantidad"></span>
 									</a>
-                                <div style="margin:0; padding:0;" ng-show="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3) && pedido.IdFabricante !== 11">
+                                <div style="margin:0; padding:0;" ng-show="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3) && pedido.IdFabricante !== 11 && !pedido.Renovado" >
                                     <br> <label> Renovación: </label> <br>
-                                    <div ng-if="!detalles.PorCancelar || (detalles.Activo && pedido.IdFabricante === 1)"> {{ detalles.IdProducto === 3616 ? 25 : detalles.CantidadProxima }} </div>
-                                    <div ng-if="!detalles.Activo || detalles.PorCancelar"> No renovar </div>
+                                    <div ng-if="!detalles.PorCancelar"> {{ detalles.IdProducto === 3616 ? 25 : detalles.CantidadProxima }} </div>
+                                    <div ng-if="(!detalles.Activo || detalles.PorCancelar) && !pedido.Renovado" > No renovar </div>
                                 </div>
                                 <br/>
                                 <div class="row" ng-show="detalles.MostrarCantidad">
@@ -224,10 +224,17 @@
                                     <div class="form-group col-xs-6 col-sm-6 col-md-7 col-lg-7">
                                         <input type="number" class="form-control" ng-model="detalles.CantidadProxima" min="1" />
                                     </div>
-                                    <div class="form-group col-xs-6 col-sm-6 col-md-5 col-lg-5 ">
+                                    <div class="form-group col-xs-6 col-sm-6 col-md-2 col-lg-2 ">
                                         <h4>
                                             <a id="aActualizar" type="submit" title="Guardar" ng-click="ActualizarDetalle(pedido, detalles);" ng-disabled="!frmCantidad.$valid">
                                                 <span class="fa fa-floppy-o" style="cursor:pointer"></span>
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div class="form-group col-xs-6 col-sm-6 col-md-2 col-lg-2" ng-if="pedido.IdFormaPagoProxima === 2" >
+                                        <h4>
+                                            <a id="pCancelar" type="button" title="No renovar" ng-click="CancelarRenovacion(pedido, detalles);" ng-disabled="!frmCantidad.$valid">
+                                                <span class="glyphicon glyphicon-trash" style="cursor:pointer"></span>
                                             </a>
                                         </h4>
                                     </div>
@@ -241,11 +248,11 @@
                                     <label>Fecha inicio de suscripción: </label>
                                     <br/> {{ pedido.FechaInicio | date:'d/MM/yyyy' }} <br/> <br/>
                                 </li>
-                                <li ng-show = "pedido.IdFabricante === 1 && !detalles.Activo">
+                                <li ng-show = "pedido.IdFabricante === 1 && !detalles.Activo && !pedido.Renovado">
                                     <label>Fecha cancelación de suscripción: </label>
                                     <br/> {{ detalles.ResultadoFabricante2 | date:'d/MM/yyyy' }}
                                 </li>
-                                <li ng-show = "detalles.Activo">
+                                <li ng-show = "detalles.Activo || pedido.Renovado">
                                     <label>Fecha fin de suscripción: </label>
                                     <br/> {{ pedido.FechaFin | date:'d/MM/yyyy' }} <br/> <br/>
                                 </li>
@@ -258,7 +265,7 @@
 
                         <div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
                             <ul style="list-style-type:none; padding:0%">
-                                <li>
+                                <li ng-hide="pedido.Renovado">
                                     <label>Estatus de pedido: </label>
                                     <div ng-show="detalles.EstatusFabricante === 'accepted' && detalles.Activo">
                                         Aceptado <span class="glyphicon glyphicon-ok" title="{{ detalles.EstatusFabricante }}"> </span>
