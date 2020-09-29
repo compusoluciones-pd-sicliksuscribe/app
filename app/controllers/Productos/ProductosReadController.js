@@ -198,9 +198,7 @@
             }
             if (Producto.contratos.length === 0) {
               Producto.TieneContrato = false;
-            }
-            if (Producto.contratos.length === 0) {
-              Producto.TieneContrato = false;
+              Producto.IdAccionAutodesk = 1;
             }
             Producto.contratos.unshift({ IdPedido: 0, NumeroContrato: 'Nuevo contrato...' });
             setProtectedRebatePrice(Producto.IdEmpresaUsuarioFinal);

@@ -104,7 +104,7 @@
                         <label ng-show="pedido.IdFabricante !== 10 || pedido.IdProducto == 74" for="">Precio unitario:</label>
                         <label ng-show="pedido.IdFabricante === 10" for="">Precio de consumo:</label>{{ calculatePriceWithExchangeRate(pedido, producto, 'PrecioUnitario') | currency }} {{ pedido.MonedaPago }}
                         <br>
-                        <label ng-hide="pedido.IdFabricante === 10" for="">Precio renovación: {{ calculatePriceWithExchangeRate(pedido, producto, 'PrecioUnitario') | currency}} {{ pedido.MonedaPago }}</label>
+                        <label ng-hide="pedido.IdFabricante === 10 || pedido.IdFabricante === 2" for="">Precio renovación: {{ calculatePriceWithExchangeRate(pedido, producto, 'PrecioUnitario') | currency}} {{ pedido.MonedaPago }}</label>
                     </div>
                 </div>
                 <div class="form-group col-xs-12 col-sm-12 col-md-3 col-lg-3">
