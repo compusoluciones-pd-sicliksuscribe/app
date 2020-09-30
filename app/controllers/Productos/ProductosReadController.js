@@ -191,6 +191,7 @@
       ProductosFactory.getProductContracts(Producto.IdEmpresaUsuarioFinal, Producto.IdProducto)
         .success(function (respuesta) {
           if (respuesta.success === 1) {
+            Producto.IdAccionAutodesk = 1;
             Producto.contratos = respuesta.data;
             if (Producto.contratos.length >= 1) {
               Producto.TieneContrato = true;
@@ -198,7 +199,6 @@
             }
             if (Producto.contratos.length === 0) {
               Producto.TieneContrato = false;
-              Producto.IdAccionAutodesk = 1;
             }
             Producto.contratos.unshift({ IdPedido: 0, NumeroContrato: 'Nuevo contrato...' });
             setProtectedRebatePrice(Producto.IdEmpresaUsuarioFinal);
