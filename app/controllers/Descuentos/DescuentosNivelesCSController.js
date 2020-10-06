@@ -72,7 +72,7 @@
 
     $scope.getProducts = function () {
       $scope.porcentaje = '';
-      NivelesDistribuidorFactory.getProductosPorNivel(IdNivelCS)
+      NivelesDistribuidorFactory.getProductosPorNivel(IdNivelCS, $scope.fabricante)
         .then(function (result) {
           const response = result.data;
           if (!response.success) {

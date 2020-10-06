@@ -37,9 +37,9 @@
       return $http.get($rootScope.API + 'tuclick/get-levels/');
     };
 
-    factory.getProductosPorNivel = function (idNivelCS) {
+    factory.getProductosPorNivel = function (idNivelCS, Fabricante = 2) {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'levels/' + idNivelCS + '/products');
+      return $http.get($rootScope.API + 'levels/' + idNivelCS + '/products/' + Fabricante);
     };
 
     factory.asignarNivel = function (nivel) {
