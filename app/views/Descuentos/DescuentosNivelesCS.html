@@ -12,16 +12,16 @@
 
 		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
 
-		<div class="form-group col-xs-12 col-md-4">
-			<label for="Empresa">Mostrar productos de</label>
-			<select name="Empresa" ng-model="IdEmpresa" class="form-control" ng-change="refrescarMisProductos()">
-      	<option ng-selected="true" value="1">Microsoft</option>
-        <!-- <option value="2">Autodesk</option> -->
-      </select>
-		</div>
+		<div class="form-group col-xs-12 col-sm-12 col-md-3 col-lg-3">
+			<label for="IdFabricante">Mostrar productos de:</label>
+			<select name="IdFabricante" class="form-control filterOption" ng-model="fabricante" ng-options="Fabricante.IdFabricante as Fabricante.Nombre for Fabricante in selectFabricantes"
+			ng-change="refrescarMisProductos()">
+					<option ng-selected="true" value="">Selecciona un fabricante...</option>
+			</select>
+	</div>
 
 		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 searchOption">
-			<label for="Buscar">Busqueda</label>
+			<label for="Buscar">Búsqueda</label>
 			<div class="form-group has-feedback">
 				<input type="text" ng-model="filter" ng-change="search()" class="form-control" size="30" placeholder="Busca productos..." />
 				<i class="form-control-feedback glyphicon glyphicon-search"></i>
