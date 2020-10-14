@@ -50,16 +50,6 @@
       return $http.put($rootScope.API + 'ActualizarMisProductos', productos);
     };
 
-    factory.getBaseSubscription = function (IdProducto) {
-      factory.refreshToken();
-      return $http.get($rootScope.API + 'autodesk/subscription/base/' + IdProducto);
-    };
-
-    factory.putBaseSubscription = function (body) {
-      factory.refreshToken();
-      return $http.put($rootScope.API + 'autodesk/subscription/base', body);
-    };
-
     factory.getProductContracts = function (idEmpresaUsuarioFinal, idProducto) {
       factory.refreshToken();
       return $http.get($rootScope.API + 'autodesk/contacts/' + idEmpresaUsuarioFinal + '/contract/' + idProducto);
