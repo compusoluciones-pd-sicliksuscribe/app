@@ -1,5 +1,5 @@
 (function () {
-  var ProductosReadController = function ($scope, $log, $location, $cookies, $routeParams, ProductosFactory, AmazonDataFactory, FabricantesFactory, TiposProductosFactory, PedidoDetallesFactory, TipoCambioFactory, ProductoGuardadosFactory, EmpresasXEmpresasFactory, UsuariosFactory, $anchorScroll) {
+  var ProductosReadController = function ($scope, $log, $location, $cookies, $routeParams, ProductosFactory, AmazonDataFactory, FabricantesFactory, TiposProductosFactory, PedidoDetallesFactory, TipoCambioFactory, ProductoGuardadosFactory, EmpresasXEmpresasFactory, UsuariosFactory, $anchorScroll, EmpresasFactory) {
     var BusquedaURL = $routeParams.Busqueda;
     const HRWAWRE_EXTRA_EMPOLYEES_GROUPING = 1000;
     $scope.BuscarProductos = {};
@@ -126,6 +126,8 @@
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
 
+      $scope.validateMPA();
+
       TiposProductosFactory.getTiposProductos()
         .success(function (TiposProductos) {
           $scope.selectTiposProductos = TiposProductos;
@@ -160,6 +162,24 @@
         $scope.BuscarProducto(false);
       }
     };
+
+    $scope.validateMPA = function () {
+      $scope.IdEmpresa = $cookies.getObject('Session').IdEmpresa;
+      EmpresasFactory.verifySignedReseller($scope.IdEmpresa)
+        .then(status => {
+          if(!status.data.partnerAgreement){
+            $scope.abrirModal();
+          }
+        })
+
+    };
+
+    $scope.abrirModal = function () {
+      document.getElementById('avisoModal').style.display = 'block';
+      };
+      $scope.cerrarModal = function () {
+        document.getElementById('avisoModal').style.display = 'none';
+      };
 
     $scope.init();
 
@@ -346,11 +366,6 @@
           $scope.form.habilitar = false;
         });
     };
-
-    $scope.cerrarModal = function (modal) {
-      document.getElementById(modal).style.display = 'none';
-    };
-
 
     const validateCustomerData = ({ ApellidosContacto, CorreoContacto, NombreContacto, TelefonoContacto }) => {
       if (!ApellidosContacto || !CorreoContacto || !NombreContacto || !TelefonoContacto) {
@@ -751,7 +766,7 @@
     };
   };
 
-  ProductosReadController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'ProductosFactory','AmazonDataFactory', 'FabricantesFactory', 'TiposProductosFactory', 'PedidoDetallesFactory', 'TipoCambioFactory', 'ProductoGuardadosFactory', 'EmpresasXEmpresasFactory', 'UsuariosFactory', '$anchorScroll'];
+  ProductosReadController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'ProductosFactory','AmazonDataFactory', 'FabricantesFactory', 'TiposProductosFactory', 'PedidoDetallesFactory', 'TipoCambioFactory', 'ProductoGuardadosFactory', 'EmpresasXEmpresasFactory', 'UsuariosFactory', '$anchorScroll', 'EmpresasFactory'];
 
   angular.module('marketplace').controller('ProductosReadController', ProductosReadController);
 }());

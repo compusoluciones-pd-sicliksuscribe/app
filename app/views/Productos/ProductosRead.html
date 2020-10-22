@@ -2,6 +2,24 @@
 <div class="container" ng-swipe-right="" ng-swipe-left="">
     <div class="row">
 
+        <div id="avisoModal" class="modal fade in" tabindex="-1" role="dialog" style="padding-right: 17px;">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header red">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                        <h4 class="modal-title white">Aviso importate de Microsoft</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p style="text-align: center">Por disposición de Microsoft se debe firmar el Contrato de Partner de Microsoft para poder seguir consumiendo sus productos. La fecha límite para firmar es el 26 de Octubre del 2020.
+                            En caso de no firmar, no se podrá hacer ningún movimiento en las licencias actuales ni comprar nuevas.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" ng-click="cerrarModal()" data-dismiss="modal">Enterado</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
             <h2 style="float:left;">Suscripciones <i class="fa fa-question-circle tourButton" style="float:right; font-size:12px; margin-left:10px; margin-top:10px;"
                     ng-click="IniciarTourProducts();"></i></h2>
