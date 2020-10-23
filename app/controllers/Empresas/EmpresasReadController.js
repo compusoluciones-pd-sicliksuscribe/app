@@ -205,8 +205,8 @@
       };
 
     $scope.ActualizarAgentes = function (Empresa) {
-      var parametros = { IdEmpresa: Empresa.IdEmpresa, AgenteMicrosoft: Empresa.AgenteMicrosoft, AgenteAutodesk: Empresa.AgenteAutodesk, AgenteAutodeskRenovacion: Empresa.AgenteAutodeskRenovacion ,AgenteAmazon : Empresa.AgenteAmazon };
-      if (typeof Empresa.AgenteMicrosoft === 'undefined' || typeof Empresa.AgenteAutodesk === 'undefined' || typeof Empresa.AgenteAutodeskRenovacion === 'undefined'|| typeof Empresa.AgenteAmazon === 'undefined') {
+      var parametros = { IdEmpresa: Empresa.IdEmpresa, AgenteMicrosoft: Empresa.AgenteMicrosoft, AgenteAutodesk: Empresa.AgenteAutodesk, AgenteAutodeskRenovacion: Empresa.AgenteAutodeskRenovacion , AgenteAmazon : Empresa.AgenteAmazon , AgenteIBM : Empresa.AgenteIBM  };
+      if (typeof Empresa.AgenteMicrosoft === 'undefined' || typeof Empresa.AgenteAutodesk === 'undefined' || typeof Empresa.AgenteAutodeskRenovacion === 'undefined'|| typeof Empresa.AgenteAmazon === 'undefined' || typeof Empresa.AgenteIBM === 'undefined') {
         $scope.ShowToast('El nombre del agente solo debe contener letras y una longitud menor a 10 caracteres.', 'danger');
       } else {
         EmpresasFactory.putActualizarAgenteMarca(parametros)

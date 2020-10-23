@@ -53,7 +53,7 @@
                                                     <label><input id="CartaConfirmacion2" type="checkbox" ng-checked="Empresa.CartaConfirmacion2" ng-true-value="1" ng-false-value="0" ng-model="Empresa.CartaConfirmacion2" ng-click="ActualizarConfirmacionCarta(Empresa)" ng-disabled="SessionCookie.IdTipoAcceso !== 1"> Carta de tarjeta bancaria recibida físicamente</label>
                                                 </div>
                                             </div>
-                                            <!---Actulización de agente IBM-->
+           
                                             <div class="container">
 
                                                 <div ng-show="Empresas.length > 0">
@@ -89,22 +89,19 @@
                                                                     </td>
                                                                   
                                                                     <td  style="vertical-align: middle; border-right-style : none" >
+                                                                        
+                                                                        <div class="input-group">
+                                                                            <md-icon md-font-icon="account_box"></md-icon>
+                                                                            <span class="input-group-addon" style="border-radius: 0;"> <span class="fa fa-user" style="border-radius: 0;" ></span></span> 
+                                                                            <input id="agenteAutodesk" name="agenteAutodesk" type="text" ng-change="cambiarBoton(Empresa)" ng-model="Empresa.AgenteAutodesk" ng-pattern="/^[a-zA-ZñÑáéíóúü\s]{0,10}$/" class="form-control" value="0" step="1000"   placeholder="Agente Autodesk" maxlength="9" ng-disabled="SessionCookie.IdTipoAcceso !== 1" title="Agente Autodesk" />
+                                                                        </div>
+                                                                         <br>
                                                                         <div class="input-group">
                                                                             <span class="input-group-addon" style="border-radius: 0;"> <span class="fa fa-user" style="border-radius: 0;" ></span></span> 
-                                                                            <select name="IdAgenteAutodesk" class="form-control" ng-model="Empresa.IdAgenteAutodesk" 
-                                                                            ng-options="Agentes.IdAgente as (Agentes.Nombre + ' ' + Agentes.Apellido + ' - ' + Agentes.Agente) for Agentes in selectAgentesDistribuidor "
-                                                                            ng-change="ActualizarIdAgenteDistribuidorFabricantes(Empresa,2,1);"  title="Agente Autodesk" >
-                                                                            </select>
-                                                                        </div>
-                                                                        <br>
-                                                                        <div class="input-group">
-                                                                            <span class="input-group-addon" style="border-radius: 0;"> <span class="fa fa-user" style="border-radius: 0;" ></span></span> 
-                                                                            <select name="IdAgenteAutodeskRenovacion" class="form-control" ng-model="Empresa.IdAgenteAutodeskRenovacion" 
-                                                                            ng-options="Agentes.IdAgente as (Agentes.Nombre + ' ' + Agentes.Apellido + ' - ' + Agentes.Agente) for Agentes in selectAgentesDistribuidor "
-                                                                            ng-change="ActualizarIdAgenteDistribuidorFabricantes(Empresa,2,2);" title="Agente Autodesk Renovación" >
-                                                                        </select>
-                                                                        </div>
-                                                                    </td>
+                                                                            <input id="agenteAutodeskRenovacion" name="agenteAutodeskRenovacion" type="text"  ng-change="cambiarBoton(Empresa)" ng-model="Empresa.AgenteAutodeskRenovacion"  ng-pattern="/^[a-zA-ZñÑáéíóúü\s]{0,10}$/" class="form-control" value="0" step="1000" placeholder="Agente Autodesk Renovación" maxlength="9" ng-disabled="SessionCookie.IdTipoAcceso !== 1" title="Agente Autodesk Renovación"  />
+                                                                        </div>   
+
+                                                                     </td>
                                                                     
                                                                     <td  style="vertical-align: middle; border-left-style : none" >
                                                                     </td>
@@ -123,13 +120,12 @@
                                                                 </td>
                                                                
                                                                 <td style="vertical-align: middle ; border-right-style : none" >
+                                                                   
                                                                     <div class="input-group">
                                                                         <span class="input-group-addon" style="border-radius: 0;"> <span class="fa fa-user" style="border-radius: 0;" ></span></span> 
-                                                                        <select name="IdAgenteMicrosoft" class="form-control" ng-model="Empresa.IdAgenteMicrosoft" 
-                                                                        ng-options="Agentes.IdAgente as (Agentes.Nombre + ' ' + Agentes.Apellido + ' - ' + Agentes.Agente) for Agentes in selectAgentesDistribuidor "
-                                                                        ng-change="ActualizarIdAgenteDistribuidorFabricantes(Empresa,1,0);"  title="Agente Microsoft" >
-                                                                        </select>
+                                                                        <input id="agenteMicrosoft" name="agenteMicrosoft" type="text" ng-change="cambiarBoton(Empresa)" ng-model="Empresa.AgenteMicrosoft"  ng-pattern="/^[a-zA-ZñÑáéíóúü\s]{0,10}$/"  class="form-control"  placeholder="Agente Microsoft"   value="0" step="1000"  maxlength="9" ng-disabled="SessionCookie.IdTipoAcceso !== 1"   title="Agente Microsoft"  />
                                                                     </div>
+                         
                                                                 </td>
                                                                
                                                                 <td  style="vertical-align: middle; border-left-style : none" >
@@ -154,13 +150,12 @@
                                                                 </td>
                                                                
                                                                 <td style="vertical-align: middle ; border-right-style : none" >
+
                                                                     <div class="input-group">
                                                                         <span class="input-group-addon" style="border-radius: 0;"> <span class="fa fa-user" style="border-radius: 0;" ></span></span> 
-                                                                        <select name="IdAgenteAmazon" class="form-control" ng-model="Empresa.IdAgenteAmazon" 
-                                                                        ng-options="Agentes.IdAgente as (Agentes.Nombre + ' ' + Agentes.Apellido + ' - ' + Agentes.Agente) for Agentes in selectAgentesDistribuidor "
-                                                                        ng-change="ActualizarIdAgenteDistribuidorFabricantes(Empresa,10,0);"  title="Agente Amazon" > 
-                                                                        </select>
-                                                                    </div>
+                                                                        <input id="AgenteAmazon" name="AgenteAmazon" type="text" ng-change="cambiarBoton(Empresa)" ng-model="Empresa.AgenteAmazon" ng-pattern="/^[a-zA-ZñÑáéíóúü\s]{0,10}$/" class="form-control" value="0" step="1000" placeholder="Agente Amazon" maxlength="9" ng-disabled="SessionCookie.IdTipoAcceso !== 1" title="Agente Amazon"  />
+                                                                     </div>
+                                                       
                                                                 </td>
                                                               
                                                                 <td  style="vertical-align: middle; border-left-style : none" >
@@ -181,13 +176,12 @@
                                                                  </td>
                                                                                                 
                                                                 <td style="vertical-align: middle ; border-right-style : none" >
+                                                                    
                                                                     <div class="input-group">
                                                                         <span class="input-group-addon" style="border-radius: 0;"> <span class="fa fa-user" style="border-radius: 0;" ></span></span> 
-                                                                        <select name="IdAgenteIBM" class="form-control" ng-model="Empresa.IdAgenteIBM" 
-                                                                        ng-options="Agentes.IdAgente as (Agentes.Nombre + ' ' + Agentes.Apellido + ' - ' + Agentes.Agente) for Agentes in selectAgentesDistribuidor "
-                                                                        ng-change="ActualizarIdAgenteDistribuidorFabricantes(Empresa,11,0);" title="Agente IBM" >
-                                                                        </select>
-                                                                    </div>
+                                                                         <input id="AgenteIBM" name="AgenteIBM" type="text"    ng-change="cambiarBoton(Empresa)"   ng-model="Empresa.AgenteIBM"  ng-pattern="/^[a-zA-ZñÑáéíóúü\s]{0,10}$/" class="form-control" value="0" step="1000"  placeholder="Agente IBM" maxlength="9" ng-disabled="SessionCookie.IdTipoAcceso !== 1" title="Agente IBM" />
+                                                                     </div>     
+   
                                                                 </td>
       
                                                                 <td  style="vertical-align: middle; border-left-style : none" >
@@ -202,7 +196,7 @@
                                                     </div>
  
                                                   </div>
-                                            </div> <!---Fin Actulización de agente IBM-->                                        
+                                            </div>                                    
 
                                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-left: 0;">
                                                 <h5>Fecha de activación: {{Empresa.FechaActivo | date:'d/MM/yyyy' }}</h5>
