@@ -121,6 +121,16 @@
       return $http.put($rootScope.API + 'Empresas/NivelDistribuidor', Empresa);
     };
 
+    factory.putActualizarIdAgenteeDistribuidorFabricante = function (Empresa) {
+      factory.refreshToken();
+      return $http.put($rootScope.API + 'Empresas/AgenteDistribuidor', Empresa);
+    };
+    
+    factory.putActualizarNivelDistribuidorIBM = function (Empresa) {
+      factory.refreshToken();
+      return $http.put($rootScope.API + 'Empresas/NivelDistribuidorIBM', Empresa);
+    };
+
     factory.putActualizarAgenteMarca = function (Empresa) {
       factory.refreshToken();
       return $http.put($rootScope.API + 'Empresas/AgenteMarca', Empresa);
