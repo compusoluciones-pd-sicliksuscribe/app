@@ -1,5 +1,5 @@
 (function () {
-  var DescuentosNivelesCSController = function ($scope, $location, $cookies, $routeParams, NivelesDistribuidorFactory, DescuentosNivelesFactory) {
+  var DescuentosNivelesCSController = function ($scope, $location, $cookies, $routeParams, NivelesDistribuidorFactory, DescuentosNivelesFactory, FabricantesFactory) {
     var IdNivelCS = Number($routeParams.IdNivel);
     $scope.sortBy = 'Nombre';
     $scope.reverse = false;
@@ -72,7 +72,7 @@
 
     $scope.getProducts = function () {
       $scope.porcentaje = '';
-      NivelesDistribuidorFactory.getProductosPorNivel(IdNivelCS)
+      NivelesDistribuidorFactory.getProductosPorNivel(IdNivelCS, $scope.fabricante)
         .then(function (result) {
           const response = result.data;
           if (!response.success) {
@@ -98,12 +98,6 @@
 
     $scope.refrescarMisProductos = function () {
       $scope.filter = '';
-      if (productosEnCache[$scope.IdEmpresa]) {
-        filteredProducts = productosEnCache[$scope.IdEmpresa];
-        $scope.Productos = productosEnCache[$scope.IdEmpresa];
-        setPagination();
-        return;
-      }
       $scope.getProducts();
     };
 
@@ -192,13 +186,21 @@
     $scope.init = function () {
       $scope.CheckCookie();
       $scope.refrescarMisProductos();
+      FabricantesFactory.getFabricantes()
+      .success(function (Fabricantes) {
+        $scope.selectFabricantes = Fabricantes;
+      })
+      .error(function (data, status, headers, config) {
+        $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+        $scope.ShowToast('No pudimos cargar la lista de fabricantes, por favor intenta de nuevo más tarde.', 'danger');
+      });
       obtenerNivel();
     };
 
     $scope.init();
   };
 
-  DescuentosNivelesCSController.$inject = ['$scope', '$location', '$cookies', '$routeParams', 'NivelesDistribuidorFactory', 'DescuentosNivelesFactory'];
+  DescuentosNivelesCSController.$inject = ['$scope', '$location', '$cookies', '$routeParams', 'NivelesDistribuidorFactory', 'DescuentosNivelesFactory', 'FabricantesFactory'];
 
   angular.module('marketplace').controller('DescuentosNivelesCSController', DescuentosNivelesCSController);
 }());
