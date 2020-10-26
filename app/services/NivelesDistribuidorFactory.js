@@ -26,10 +26,14 @@
       return $http.delete($rootScope.API + 'NivelDistribuidor/' + IdNivelDistribuidor);
     };
 
-    //yorsh
     factory.getNivelesDistribuidor = function () {
       factory.refreshToken();
       return $http.get($rootScope.API + 'NivelDistribuidor');
+    };
+
+    factory.getAgentesDistribuidor = function () {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'AgentesDistribuidor');
     };
 
     factory.getNivelesDistribuidorFinalUser = function () {
