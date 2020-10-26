@@ -5,6 +5,12 @@
     $scope.TablaVisible = false;
     $scope.cambiaAgente = false;
     $scope.cambiaAgenteAutodesk = false;
+    const makers = {
+      MICROSOFT: 1,
+      AUTODESK: 2,
+      AMAZONWEBSERVICES:10,
+      IBM: 11
+    };
 
     $scope.init = function () {
       $scope.CheckCookie();
@@ -22,8 +28,19 @@
         .error(function (data, status, headers, config) {
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
-    };
 
+        NivelesDistribuidorFactory.getAgentesDistribuidor()
+        .success(function (AgentesDistribuidor) {
+          if (AgentesDistribuidor.success) {
+          $scope.selectAgentesDistribuidor = AgentesDistribuidor.data;
+          }
+        })
+        .error(function (data, status, headers, config) {
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        }); 
+
+      };
+  
     $scope.init();
 
     $scope.BajaEmpresa = function (index, IdEmpresa) {
@@ -125,6 +142,52 @@
         });
     };
 
+    $scope.ActualizarIdNivelDistribuidorIBM = function (Empresa) {
+      var parametros = { IdEmpresa: Empresa.IdEmpresa, IdNivelDistribuidor: Empresa.IdNivelDistribuidorIBM };
+      EmpresasFactory.putActualizarNivelDistribuidorIBM(parametros)
+        .success(function (result) {
+          if (result.success) {
+            $scope.ShowToast(result.message, 'success');
+          } else {
+            $scope.ShowToast(result.message, 'danger');
+          }
+        })
+        .error(function (data, status, headers, config) {
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+    };
+
+    $scope.ActualizarIdAgenteDistribuidorFabricantes = function (Empresa,IdFabricante,TypeAutodesk) {
+       var parametros = {};
+      // Asignación de paramteros dependiendo el fabricante.
+      switch(IdFabricante){
+        case makers.MICROSOFT: 
+          parametros = { IdEmpresa: Empresa.IdEmpresa, IdAgenteMicrosoft: Empresa.IdAgenteMicrosoft ,IdFabricante:1};
+        break;
+        case makers.AUTODESK: 
+          (TypeAutodesk == 1) ? parametros = { IdEmpresa: Empresa.IdEmpresa,  IdAgenteAutodesk: Empresa.IdAgenteAutodesk, IdFabricante:2,TypeAutodesk:1 } :    parametros = { IdEmpresa: Empresa.IdEmpresa , IdAgenteAutodeskRenovacion: Empresa.IdAgenteAutodeskRenovacion, IdFabricante:2,TypeAutodesk:2 };
+        break;
+        case makers.AMAZONWEBSERVICES:
+          parametros = { IdEmpresa: Empresa.IdEmpresa,  IdAgenteAmazon : Empresa.IdAgenteAmazon, IdFabricante:10   };
+        break;
+        case makers.IBM: 
+          parametros = { IdEmpresa: Empresa.IdEmpresa,  IdAgenteIBM : Empresa.IdAgenteIBM, IdFabricante:11  };
+        break;
+      } 
+      
+      EmpresasFactory.putActualizarIdAgenteeDistribuidorFabricante(parametros)
+        .success(function (result) {
+          if (result.success) {
+            $scope.ShowToast(result.message, 'success');
+          } else {
+            $scope.ShowToast(result.message, 'danger');
+          }
+        })
+        .error(function (data, status, headers, config) {
+            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+      };
+
     $scope.ActualizarIdNivelDistribuidorMicrosoft = function (Empresa) {
       var parametros = { IdEmpresa: Empresa.IdEmpresa, IdNivelDistribuidor: Empresa.IdNivelDistribuidorMicrosoft };
       EmpresasFactory.putActualizarNivelDistribuidorMicrosoft(parametros)
@@ -142,8 +205,8 @@
       };
 
     $scope.ActualizarAgentes = function (Empresa) {
-      var parametros = { IdEmpresa: Empresa.IdEmpresa, AgenteMicrosoft: Empresa.AgenteMicrosoft, AgenteAutodesk: Empresa.AgenteAutodesk, AgenteAutodeskRenovacion: Empresa.AgenteAutodeskRenovacion ,AgenteAmazon : Empresa.AgenteAmazon };
-      if (typeof Empresa.AgenteMicrosoft === 'undefined' || typeof Empresa.AgenteAutodesk === 'undefined' || typeof Empresa.AgenteAutodeskRenovacion === 'undefined'|| typeof Empresa.AgenteAmazon === 'undefined') {
+      var parametros = { IdEmpresa: Empresa.IdEmpresa, AgenteMicrosoft: Empresa.AgenteMicrosoft, AgenteAutodesk: Empresa.AgenteAutodesk, AgenteAutodeskRenovacion: Empresa.AgenteAutodeskRenovacion , AgenteAmazon : Empresa.AgenteAmazon , AgenteIBM : Empresa.AgenteIBM  };
+      if (typeof Empresa.AgenteMicrosoft === 'undefined' || typeof Empresa.AgenteAutodesk === 'undefined' || typeof Empresa.AgenteAutodeskRenovacion === 'undefined'|| typeof Empresa.AgenteAmazon === 'undefined' || typeof Empresa.AgenteIBM === 'undefined') {
         $scope.ShowToast('El nombre del agente solo debe contener letras y una longitud menor a 10 caracteres.', 'danger');
       } else {
         EmpresasFactory.putActualizarAgenteMarca(parametros)
