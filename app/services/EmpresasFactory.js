@@ -183,6 +183,11 @@
       return $http.put($rootScope.API + 'enterprises/level-descount-microsoft', parametros);
     };
 
+    factory.verifySignedReseller = function (IdEmpresa) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'enterprise/verifySignedReseller/' + IdEmpresa);
+    };
+
     return factory;
   };
 

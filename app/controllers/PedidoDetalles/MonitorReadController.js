@@ -180,7 +180,7 @@
         $scope.ShowToast('Cantidad no válida para el producto', 'danger');
         return false;
       }
-      if (pedido.IdFabricante !== 5 && (detalles.CantidadProxima > detalles.Cantidad) && pedido.IdFabricante !== 7) {
+      if (pedido.IdFabricante !== 5 && (detalles.CantidadProxima > detalles.Cantidad) && pedido.IdFabricante !== 7 && pedido.IdFabricante !== 1) {
         $scope.ShowToast('No se puede actualizar a un número mayor de suscripciones.', 'danger');
         return;
       }
