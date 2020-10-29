@@ -389,6 +389,9 @@
                     <li> <label for="FechaInicio">Duración del contrato: </label> {{ pedido.FechaInicio | date:'d/MM/yyyy' }} <label>-</label> {{ pedido.FechaFin | date:'d/MM/yyyy'}} </li>
                 </ul>
             </div>
+            <!-- <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+				
+			</div> -->
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="pedido.EstatusContrato === 'in-cart' || pedido.EstatusContrato === 'processing' || pedido.EstatusContrato === 'renewal'">
                 <div ng-if="pedido.EstatusContrato === 'in-cart'"><hr><h5 class="alert alert-warning text-warning" style="border-left: .6em solid; width: 100%;"><b>El pedido para la renovación se encuentra en el carrito. Realice el pago para continuar el proceso de renovación.</b></h5></div>
                 <div ng-if="pedido.EstatusContrato === 'processing'"><hr><h5 class="alert alert-info text-info" style="border-left: .6em solid;"><b>Este contrato será renovado. El siguiente periodo del contrato se habilitará al terminar el periodo actual.</b></h5></div>
@@ -396,13 +399,18 @@
             </div>
             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"></div>
 			<div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
-				<button id="Renovar" class="pull-right btn btn-block btn-primary" style="margin-top: 20px"
+				<button id="Renovar" class="pull-right btn btn-block btn-primary"
                 ng-hide="pedido.EstatusContrato !== 'ready' || !pedido.listoRenovar"
                 data-toggle="modal" data-target="#renovarModal"
 					ng-click="AgregarContrato(pedido);">
 					Renovar
+                </button>
+                <button id="Extender" class="pull-right btn btn-block btn-info" style="margin-top: 10px; padding: .8em 0px"
+                data-toggle="modal" data-target="#extenderModal"
+					ng-click="">
+					Extender
 				</button>
-			</div>
+            </div>
         </div>
 
         <table class="table table-hover table-responsive border-left-right-cero">
@@ -590,6 +598,35 @@
                 </div>
             </div>
         </div>
+
+        <div id="extenderModal" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title"><b>Solicitud de extensión de contrato (co-term)</b></h4>
+                    </div>
+                    <div class="modal-body">
+                        <h5><b>Selecciona la nueva fecha fin para el contrato:</b></h5>
+                        <div class="form-group has-feedback col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                            <input class="form-control ng-pristine ng-invalid ng-invalid-required ng-touched" type="date" ng-model="Extender.fechaFin" ng-change="">
+                        </div>
+                        <br><br><hr>
+                        <div class="form-group">
+                            <h5><b>Nota:</b></h5>
+                            <p>
+                              Al dar clic en <b>Extender contrato</b>, se agregarán al carrito de compras todos los productos que estén incluidos en el contrato con la cantidad actual de licencias activas</b>.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" style="padding: .8em 1.4em">Regresar</button>
+                        <button type="button" class="btn btn-info" data-dismiss="modal" ng-click="solicitarExtension(pedido.IdContrato)" style="padding: .8em 1.4em">Extender contrato</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div style="visibility: hidden">
             <div class="md-dialog-container" id="myStaticDialog">
                 <md-dialog>

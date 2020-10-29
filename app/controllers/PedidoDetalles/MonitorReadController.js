@@ -10,6 +10,7 @@
     $scope.Contrato = {};
     $scope.Contactos = [];
     $scope.Renovar = {};
+    $scope.Extender = {};
     $scope.terminos = false;
     $scope.SessionCookie = $cookies.getObject('Session');
 
@@ -71,6 +72,20 @@
 
     const renewContract = function (contractData) {
       PedidosFactory.renewContract(contractData)
+        .then(result => {
+          $scope.ShowToast(result.data.message, 'success');
+          $scope.ActualizarMenu();
+          $scope.addPulseCart();
+          setTimeout($scope.removePulseCart, 9000);
+          $location.path('/Carrito');
+        })
+        .catch(result => {
+          $scope.ShowToast(result.data.message, 'danger');
+        });
+    };
+
+    const extendContract = contractData => {
+      PedidosFactory.extendContract(contractData)
         .then(result => {
           $scope.ShowToast(result.data.message, 'success');
           $scope.ActualizarMenu();
@@ -535,6 +550,19 @@
       $scope.Tour.init();
       $scope.Tour.start();
     };
+
+    $scope.solicitarExtension = (IdContrato) => {
+      if ($scope.Extender.fechaFin) {
+        const payload = {
+          IdContrato: IdContrato,
+          FechaFin: $scope.Extender.fechaFin
+        };
+        extendContract(payload);
+      } else {
+        $scope.ShowToast('Especifica una fecha fin para la extensión del contrato', 'warning');
+      }
+    };
+
   };
 
   MonitorReadController.$inject = ['$scope', '$log', '$cookies', '$location', 'EmpresasXEmpresasFactory', 'PedidoDetallesFactory', '$uibModal', '$filter', 'FabricantesFactory', 'PedidosFactory', 'EmpresasFactory', 'UsuariosFactory','AmazonDataFactory'];

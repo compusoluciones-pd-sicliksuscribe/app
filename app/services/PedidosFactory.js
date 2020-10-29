@@ -56,6 +56,11 @@
       return $http.post($rootScope.API + 'autodesk/contracts/renew/tuclick/' + currentDistribuidor, contractData);
     };
 
+    factory.extendContract = function (contractData) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'autodesk/contracts/extend', contractData);
+    };
+
     return factory;
   };
 
