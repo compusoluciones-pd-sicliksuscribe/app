@@ -19,6 +19,30 @@
 
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <h4 style="float:left;">Datos de consulta para obtener información </h2>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+            <label>CSN</label>
+            <input type = "text" name = "CSNdist" placeholder="Escribe el CSN que deseas consultar" class="form-control" ng-model="CSNdist" required/>
+            <ul class="list-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-model = "ocultarOpcionesDist" ng-hide = "ocultarOpcionesDist" style="position:absolute; z-index: 1; padding-right:2em;">
+            <li style="background-color: white;" class="list-group-item" ng-repeat = "infoDist in filtroDistribuidor track by $index" ng-click = "llenarTextBoxDist(infoDist)">{{infoDist}}</li>
+            </ul>
+        </div>
+        <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
+            <label>Fecha fin del contrato</label>
+            <Input type="date" name="contractEndDate" class="form-control" ng-model="contractEndDate" required>
+        </div>
+        <button type="submit" style="float:right; margin: .5em;" ng-click="getSubscriptionData(CSNdist, contractEndDateFormat)" class="btn btn-success " style="background: !important">
+            <span class="glyphicon glyphicon-download-alt"></span>
+            &nbsp;Consultar información
+        </button>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <h4 style="float:left;">Datos del pedido </h2>
         </div>
     </div>
