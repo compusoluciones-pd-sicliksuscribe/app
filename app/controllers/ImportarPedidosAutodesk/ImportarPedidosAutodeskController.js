@@ -1,5 +1,16 @@
 (function () {
   var ImportarPedidosAutodeskController = function ($scope, $log, $location, $cookies, $routeParams, ImportarPedidosAutodeskFactory, UsuariosFactory, EstadosFactory, EmpresasFactory, $anchorScroll, lodash) {
+
+    $scope.getSubscriptionData = function (resellerCsn, contractEndDate) {
+      return ImportarPedidosAutodeskFactory.getSubscriptionData(resellerCsn, contractEndDate)
+        .then(result => {
+          $scope.subscriptionData = result.data.data;
+        })
+        .catch(function () {
+          $scope.ShowToast('No pudimos cargar la lista de suscripciones, por favor intenta de nuevo más tarde.', 'danger');
+        });
+    };
+
     const getSuppliers = function () {
       return ImportarPedidosAutodeskFactory.getAutodeskSuppliers()
         .then(result => {
