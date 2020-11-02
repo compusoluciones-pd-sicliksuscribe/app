@@ -555,6 +555,7 @@
       if ($scope.Extender.fechaFin) {
         const payload = {
           IdContrato: IdContrato,
+          IdEmpresaUsuarioFinal: $scope.EmpresaSelect,
           FechaFin: $scope.Extender.fechaFin
         };
         extendContract(payload);
