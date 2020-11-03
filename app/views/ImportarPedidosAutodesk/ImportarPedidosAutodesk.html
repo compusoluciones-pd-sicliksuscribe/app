@@ -34,6 +34,9 @@
         <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
             <label>Fecha fin del contrato</label>
             <Input type="date" name="contractEndDate" class="form-control" ng-model="contractEndDate" required>
+            <div ng-show="false">
+                {{contractEndDateFormat = (contractEndDate | date:'yyyy-MM-dd') }}
+            </div> 
         </div>
         <button type="submit" style="float:right; margin: .5em;" ng-click="getSubscriptionData(CSNdist, contractEndDateFormat)" class="btn btn-success " style="background: !important">
             <span class="glyphicon glyphicon-download-alt"></span>
