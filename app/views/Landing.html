@@ -13,11 +13,11 @@
 								<p class="textSlide">{{Promocion.Descripcion}}</p><br>
 
 								<button class="btn btn-success" ng-click="goToPage('Productos/{{Promocion.CodigoProducto}}', true);" style="{{secondaryColor}}"
-									ng-show="((SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3) && {{Promocion.EsUrl}}===0)">Comprar</button>
+									ng-show="((SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 10) && {{Promocion.EsUrl}}===0)">Comprar</button>
 									
 								<div>
 									<a target="_blank" href="//{{Promocion.CodigoProducto}}">
-										<button class="btn btn-success" ng-show="{{Promocion.EsUrl}}===1 && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)" style="{{secondaryColor}}">Aprovecha</button>				
+										<button class="btn btn-success" ng-show="{{Promocion.EsUrl}}===1 && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 10)" style="{{secondaryColor}}">Aprovecha</button>				
 									</a>
 								</div>
 								

@@ -1,0 +1,86 @@
+<style type="text/css">
+    .list-group-item:hover{
+      color: #337ab7;
+      cursor: pointer;
+    }
+  </style>
+  <div ng-app="myApp" ng-controller="CambiarDistribuidorController">
+    <form ng-submit="BuscarEmpresas();">
+      
+    <div class="container" ng-swipe-right="" ng-swipe-left="">
+  
+        <div class="form-group row">
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <h2 style="float:left;">Cambiar distribuidor </h2>
+            </div>
+            <h4>
+                Busca y selecciona el distribuidor para acceder a su espacio dentro de clicksuscribe.
+            </h4>
+
+            <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4 pull-right">
+                <div class="input-group"> 
+                    <div class="form-group has-feedback">
+                        <input type="text" class="form-control" placeholder="Busca un distribuidor..." ng-model="Empresa.Busqueda" size="255">
+                        <i class="form-control-feedback glyphicon glyphicon-search"></i>
+                    </div>
+                    <span class="input-group-btn">
+                        <button class="btn btn-default kingBlueColor white" type="submit"> Buscar </button>
+                    </span>
+                </div>
+            </div> 
+        </div>
+
+        <br>
+
+        <div ng-show="(Empresas == null)">
+            <div ng-show="!ordenes.length" style = "text-align:center"><h4>Sin resultados aún.</h4></div>   
+        </div>
+
+        <div ng-show="(Empresas.length > 0)">
+
+            <div class="form-group row" ng-show="TablaVisible">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="form-group row" ng-show="TablaVisible">
+                        <div class="pull-left">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                Número de resultados: {{ Empresas.length }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <table class="table table-hover table-responsive border-left-right-cero">
+
+                        <th style="cursor:pointer" ng-click="OrdenarPor('NombreEmpresa')"><b>&nbsp;Nombre <span class="fa fa-sort"></span></b></th>
+
+                        <tr ng-repeat="Empresa in Empresas | filter:EmpresasFilter | orderBy:sortBy:reverse" class="repeat-animation">
+                            <td>
+                                <div class="row">
+
+                                    <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+                                        <div class="form-group">
+                                            
+                                            <h4><b>{{Empresa.NombreEmpresa}}</b></h4>
+                                            <h4>ERP: {{Empresa.IdERP}} | RFC: {{Empresa.RFC}}</h4>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                                        <div class="form-group">
+                                            <div class="pull-right">
+                                                <button class="btn btn-success" ng-click="" type="button" style="margin-top: .8em"> Acceder </button>                                           
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+
+                    </table>
+
+                </div>
+            </div>
+
+        </div>     
+    </div>
+    </form>
+</div>
