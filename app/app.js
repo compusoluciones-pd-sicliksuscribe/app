@@ -590,7 +590,7 @@
       })
 
       .when('/CambiarDistribuidor', {
-        controller: 'CambiarDistribuidorController', templateUrl: 'app/views/Autodesk/CambiarDistribuidor.html',
+        controller: 'CambiarDistribuidorController', templateUrl: 'app/views/SuperUsuario/CambiarDistribuidor.html',
         resolve: { 'check': function ($location, $cookies) {
           var Session = $cookies.getObject('Session');
           if (!(Session.IdTipoAcceso === 10)) { $location.path('/404'); }

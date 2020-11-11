@@ -50,7 +50,10 @@
           });
     };
 
-    $scope.AccederADistribuidor = () => {
+    $scope.AccederADistribuidor = IdEmpresa => {
+      CambiarDistribuidorFactory.actualizarDistribuidor(IdEmpresa)
+        .success(result => {})
+        .catch(result => $scope.ShowToast(result.data.message, 'danger'));
     };
   };
 
