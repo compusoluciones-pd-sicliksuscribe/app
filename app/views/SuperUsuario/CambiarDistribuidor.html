@@ -10,13 +10,12 @@
     <div class="container" ng-swipe-right="" ng-swipe-left="">
   
         <div class="form-group row">
-            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <h2 style="float:left;">Cambiar distribuidor </h2>
+            <div style="float:left;" class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <h2>Cambiar distribuidor </h2>
+                <h4>
+                    Busca y selecciona el distribuidor para acceder a su espacio dentro de clicksuscribe.
+                </h4>
             </div>
-            <h4>
-                Busca y selecciona el distribuidor para acceder a su espacio dentro de clicksuscribe.
-            </h4>
-
             <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4 pull-right">
                 <div class="input-group"> 
                     <div class="form-group has-feedback">
@@ -60,14 +59,14 @@
                                         <div class="form-group">
                                             
                                             <h4><b>{{Empresa.NombreEmpresa}}</b></h4>
-                                            <h4>ERP: {{Empresa.IdERP}} | RFC: {{Empresa.RFC}}</h4>
+                                            <h5>ERP: {{Empresa.IdERP}} | RFC: {{Empresa.RFC}}</h5>
                                         </div>
                                     </div>
 
                                     <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
                                         <div class="form-group">
                                             <div class="pull-right">
-                                                <button class="btn btn-success" ng-click="AccederADistribuidor(Empresa.IdEmpresa);" type="button" style="margin-top: .8em"> Acceder </button>                                           
+                                                <button class="btn btn-success" data-toggle="modal" data-target="#contrasenaModal" ng-click="SeleccionarDistribuidor(Empresa.IdEmpresa, Empresa.NombreEmpresa)" type="button" style="margin-top: .8em; min-width: 3.8em;"><i class="glyphicon glyphicon glyphicon-log-in" style="margin-right: .5em;"></i> Acceder </button>                                           
                                             </div>
                                         </div>
                                     </div>
@@ -83,4 +82,29 @@
         </div>     
     </div>
     </form>
+
+
+    <div id="contrasenaModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"><b>Cambio de sesión</b></h4>
+                </div>
+                <div class="alert alert-info" style="margin: 1em .5em; padding: .5em;">
+                        Ingresa nuevamente tu contraseña para acceder a en nombre de <b>{{NombreEmpresaSeleccionada}}</b>.
+                </div>
+                <div class="modal-body">
+                    <div class="form-group has-feedback">
+                        <input id="Contrasena" name="Contrasena" type="password" ng-model="contrasena" class="form-control" placeholder="Contraseña" size="255" ng-maxlength="255" required="" />
+                        <i class="form-control-feedback glyphicon glyphicon-lock"></i>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Regresar</button>
+                    <button type="button" style="height: 2.4em; min-width: 3.6em;" class="btn btn-primary" data-dismiss="modal" ng-click="AccederADistribuidor(IdEmpresaSeleccionada, contrasena);">Continuar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

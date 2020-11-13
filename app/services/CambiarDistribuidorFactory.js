@@ -11,9 +11,9 @@
 
     factory.refreshToken();
 
-    factory.actualizarDistribuidor = IdEmpresaDistribuidor => {
+    factory.actualizarToken = (idEmpresaDistribuidor, contrasena) => {
       factory.refreshToken();
-      return $http.post($rootScope.API + 'super-user/update-supplier', { IdEmpresaDistribuidor: IdEmpresaDistribuidor });
+      return $http.post($rootScope.API + 'super-user/get-new-session', { Contrasena: contrasena, IdEmpresaDistribuidor: idEmpresaDistribuidor });
     };
 
     return factory;

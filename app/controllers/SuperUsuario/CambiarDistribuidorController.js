@@ -1,5 +1,5 @@
 (function () {
-  var CambiarDistribuidorController = ($scope, $log, $location, $cookies, $routeParams, CambiarDistribuidorFactory, EmpresasFactory, $anchorScroll, lodash) => {
+  var CambiarDistribuidorController = ($scope, $log, $rootScope, $cookies, jwtHelper, CambiarDistribuidorFactory, EmpresasFactory, $location) => {
     $scope.reverse = false;
     $scope.TablaVisible = false;
 
@@ -50,15 +50,65 @@
           });
     };
 
-    $scope.AccederADistribuidor = IdEmpresa => {
-      CambiarDistribuidorFactory.actualizarDistribuidor(IdEmpresa)
-        .success(result => {})
-        .catch(result => $scope.ShowToast(result.data.message, 'danger'));
+    $scope.SeleccionarDistribuidor = (idEmpresa, nombreEmpresa) => {
+      $scope.IdEmpresaSeleccionada = idEmpresa;
+      $scope.NombreEmpresaSeleccionada = nombreEmpresa;
+    };
+
+    const buildToken = result => {
+      if (result.success) {
+        var Session = {};
+        var tokenPayload = jwtHelper.decodeToken(result.data.Token);
+        var expireDate = new Date();
+
+        expireDate.setTime(expireDate.getTime() + 600 * 60000);
+
+        Session = {
+          Token: result.data.Token,
+          CorreoElectronico: tokenPayload.CorreoElectronico,
+          Nombre: tokenPayload.Nombre,
+          IdUsuario: tokenPayload.IdUsuario,
+          ApellidoPaterno: tokenPayload.ApellidoPaterno,
+          ApellidoMaterno: tokenPayload.ApellidoMaterno,
+          IdTipoAcceso: tokenPayload.IdTipoAcceso,
+          NombreTipoAcceso: tokenPayload.NombreTipoAcceso,
+          IdEmpresa: tokenPayload.IdEmpresa,
+          NombreEmpresa: tokenPayload.NombreEmpresa,
+          LeyoTerminos: tokenPayload.LeyoTerminos,
+          distribuidores: tokenPayload.distribuidores,
+          IdPlanTuClick: tokenPayload.IdPlanTuClick,
+          mFacturacion: tokenPayload.mFacturacion,
+          DominioMS: tokenPayload.DominioMS,
+          Expira: expireDate.getTime()
+        };
+        $cookies.putObject('Session', Session, { 'expires': expireDate, secure: $rootScope.secureCookie });
+
+        $scope.ActualizarMenu();
+        $location.path('/');
+      }
+    };
+
+    $scope.AccederADistribuidor = (idEmpresa, contrasena) => {
+      CambiarDistribuidorFactory.actualizarToken(idEmpresa, contrasena)
+        .success(result => {
+          if (result.success) {
+            $scope.ShowToast('Cambiando de sesión...', 'success');
+            $cookies.remove('Session');
+            $cookies.remove('Pedido');
+            $scope.SessionCookie = {};
+            return buildToken(result);
+          } else {
+            $scope.ShowToast(result.message, 'danger');
+          }
+        })
+        .error((data, status, headers, config) => {
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
     };
   };
 
   CambiarDistribuidorController.$inject =
-      ['$scope', '$log', '$location', '$cookies', '$routeParams', 'CambiarDistribuidorFactory', 'EmpresasFactory', '$anchorScroll'];
+      ['$scope', '$log', '$rootScope', '$cookies', 'jwtHelper', 'CambiarDistribuidorFactory', 'EmpresasFactory', '$location'];
 
   angular.module('marketplace').controller('CambiarDistribuidorController', CambiarDistribuidorController);
 }());
