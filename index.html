@@ -292,7 +292,7 @@
 						</div>
 					</div>
 
-					<div class="row" ng-show="((SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 7) && SessionCookie.Nombre !== undefined) && (SessionCookie.LeyoTerminos == 1)">
+					<div class="row" ng-show="((SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 7 || (SessionCookie.IdTipoAcceso == 10 && SessionCookie.IdEmpresa !== null)) && SessionCookie.Nombre !== undefined) && (SessionCookie.LeyoTerminos == 1)">
 
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 specialBlueColor search three">
 
