@@ -286,7 +286,7 @@
       })
       .when('/Empresa', {
         controller: 'EmpresasCreateController', templateUrl: 'app/views/Empresas/EmpresasCreate.html',
-        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 7 || Session.IdTipoAcceso === 3)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 7 || Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 10)) { $location.path('/404'); } } }
       })
 
       .when('/Registrarse', {
@@ -319,7 +319,7 @@
 
       .when('/Clientes', {
         controller: 'EmpresasXEmpresasReadController', templateUrl: 'app/views/EmpresasXEmpresas/EmpresasXEmpresasRead.html',
-        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 7)) { $location.path('/404'); } } }
+        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 7 || Session.IdTipoAcceso === 10)) { $location.path('/404'); } } }
       })
 
       .when('/Productos/:Busqueda', {
