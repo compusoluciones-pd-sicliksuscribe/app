@@ -94,7 +94,7 @@
             <div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div>
         </div>
         
-        <div class="form-group row" ng-if="(Usuario.IdTipoAcceso == 2 && Session.IdTipoAcceso == 1) || (Usuario.IdTipoAcceso == 4 && Session.IdTipoAcceso == 2)">
+        <div class="form-group row" ng-if="(Usuario.IdTipoAcceso == 2 && Session.IdTipoAcceso == 1) || (Usuario.IdTipoAcceso == 4 && Session.IdTipoAcceso == 2) || (Usuario.IdTipoAcceso == 4 && Session.IdTipoAcceso == 10)">
             <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
                 <div class="pull-rigth">
                     <label>Empresa* </label>
@@ -103,7 +103,7 @@
                         <option value="" ng-selected="true">Selecciona una empresa...</option>
                     </select>
                     <div ng-show="frm.$submitted || frm.IdEmpresa.$touched">
-                        <b style="color:red" ng-show="((Usuario.IdTipoAcceso == 2 && Session.IdTipoAcceso == 1) || (Usuario.IdTipoAcceso == 4 && Session.IdTipoAcceso == 2)) && frm.IdEmpresa.$error.required" class="help-block">La empresa es requerida.</b>
+                        <b style="color:red" ng-show="((Usuario.IdTipoAcceso == 2 && Session.IdTipoAcceso == 1) || (Usuario.IdTipoAcceso == 4 && Session.IdTipoAcceso == 2) || (Usuario.IdTipoAcceso == 4 && Session.IdTipoAcceso == 10)) && frm.IdEmpresa.$error.required" class="help-block">La empresa es requerida.</b>
                     </div>
                 </div>
                 

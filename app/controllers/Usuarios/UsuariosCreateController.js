@@ -9,7 +9,7 @@
 
     $scope.init = function () {
       $scope.CheckCookie();
-      if (Session.IdTipoAcceso !== 2) {
+      if (Session.IdTipoAcceso !== 2 || Session.IdTipoAcceso !== 10) {
         TiposAccesosFactory.getTiposAccesos()
           .success(function (TiposAccesos) {
             $scope.selectTiposAccesos = TiposAccesos;
@@ -19,7 +19,7 @@
           });
       };
 
-      if (Session.IdTipoAcceso === 2) {
+      if (Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 10) {
         UsuariosFactory.getAccessosParaDistribuidor()
           .success(function (TiposAccesos) {
             $scope.selectTiposAccesos = TiposAccesos.data;
@@ -54,12 +54,12 @@
     $scope.UsuarioCreate = function () {
       if ($scope.frm.$valid) {
         delete $scope.Usuario.Formulario;
-        if(Session.IdTipoAcceso === 4) {
+        if (Session.IdTipoAcceso === 4) {
           $scope.currentDistribuidor = $cookies.getObject('currentDistribuidor');
           $scope.Usuario.IdEmpresaDistribuidor = $scope.currentDistribuidor.IdEmpresa;
           UsuariosFactory.postUsuarioFinal($scope.Usuario)
             .success(function (result) {
-              if(!result.statusCode) {
+              if (!result.statusCode) {
                 if (result.data[0].success == true) {
                   $location.path("/Usuarios/uf");
                   $scope.ShowToast(result.data[0].message, 'success');
@@ -74,8 +74,7 @@
             .error(function (data, status, headers, config) {
               $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
             });
-        }
-        else if (Session.IdTipoAcceso !== 2) {
+        } else if (Session.IdTipoAcceso !== 2 && Session.IdTipoAcceso !== 10) {
           UsuariosFactory.postUsuario($scope.Usuario)
             .success(function (result) {
               if (result[0].Success == true) {
@@ -90,7 +89,7 @@
               $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
             });
         }
-        if (Session.IdTipoAcceso === 2) {
+        if (Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 10) {
           const user = Object.assign({}, $scope.Usuario);
           if ($scope.Usuario.IdTipoAcceso === 4 || $scope.Usuario.IdTipoAcceso === 6) {
             user.TipoUsuario = 'END_USER';
