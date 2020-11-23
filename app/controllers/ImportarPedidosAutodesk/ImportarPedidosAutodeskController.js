@@ -333,18 +333,12 @@
         IdEmpresaDistribuidor: $scope.distribuidorSeleccionado.IdEmpresa,
         IdEmpresaUsuarioFinal: $scope.ufSeleccionado.IdEmpresa,
         NumeroContrato: $scope.contrato,
-        IdUsuarioContacto: $scope.contacto.IdUsuario,
-        CorreoContacto: $scope.contacto.CorreoElectronico,
-        FechaInicio: $scope.fechaInicio,
-        FechaFin: $scope.fechaFin,
-        IdFormaPago: $scope.formaPago,
-        MonedaPago: $scope.monedaPago,
+        FechaInicio: $scope.FechaInicio,
+        FechaFin: $scope.FechaFin,
         IdEsquemaRenovacion: $scope.esquema.IdEsquemaRenovacion,
-        CSN: $scope.csnUF,
-        Detalles: conjuntarDetalles()
+        Detalles: $scope.SKUsDetails
       };
-      if ($scope.formularioCompleto) {
-        ImportarPedidosAutodeskFactory.importarPedido(infoPedido)
+      ImportarPedidosAutodeskFactory.importarPedido(infoPedido)
           .then(result => {
             if (result.data.data.error === 1) {
               $scope.ShowToast(result.data.data.message, 'danger');
@@ -356,10 +350,13 @@
           .catch(result => {
             $scope.ShowToast('Hubo un error durante la importación del pedido.', 'danger');
           });
-      }
     };
 
-    $scope.abrirModal = function (modal) {
+    $scope.abrirModal = function (modal, subs) {
+      $scope.contrato = subs.contractNumber;
+      $scope.FechaInicio = subs.startDate;
+      $scope.FechaFin = subs.endDate;
+      $scope.SKUsDetails = subs.details;
       document.getElementById(modal).style.display = 'block';
     };
 
