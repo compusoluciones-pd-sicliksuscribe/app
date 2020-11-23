@@ -68,11 +68,11 @@
                 <dd>Número de serie: {{subsdetails.serialNumber}}</dd>
                 <dd>Cantidad: {{subsdetails.seats}}</dd>
               </dl>
-            </div>
+             </div>
               </td>
               </div>
               <td>
-                <button type="submit" style="float:right; margin: .5em;" ng-click="abrirModal('importarContrato');" class="btn btn-success " style="background: !important">
+                <button type="submit" style="float:right; margin: .5em;" ng-click="abrirModal('importarContrato', subs);" class="btn btn-success " style="background: !important">
                     <span class="glyphicon glyphicon-download-alt"></span>
                     &nbsp;Importar
                 </button>
@@ -263,19 +263,19 @@
                 </div>
                 <div class="modal-body" style="margin-bottom: 15em;">
                     <p>Registre aquí la información solicitada para realizar la importación:</p> <hr>
-                        <div class="form-group col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                            <label>Distribuidor</label>r
-                            <input type = "text" name = "distribuidorModal" placeholder="Nombre del distribuidor" class="form-control" ng-model="Usuario.Distribuidor" ng-keyup="completarDistModal(Usuaio.Distribuidor)" required/>
-                            <ul class="list-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-model = "ocultarOpcionesDistModal" ng-hide = "ocultarOpcionesDistModal" style="position:absolute; z-index: 1; padding-right:2em;">
-                            <li style="background-color: white;" class="list-group-item" ng-repeat = "infoDistModal in filtroDistribuidorModal track by $index" ng-click = "llenarTextBoxDistModal(infoDistModal)">{{infoDistModal}}</li>
+                        <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                            <label>Distribuidor</label>
+                            <input type = "text" name = "distribuidor" placeholder="Escribe el nombre del distribuidor" class="form-control" ng-model="distribuidor" ng-keyup="completarDist(distribuidor)" required/>
+                            <ul class="list-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-model = "ocultarOpcionesDist" ng-hide = "ocultarOpcionesDist" style="position:absolute; z-index: 1; padding-right:2em;">
+                            <li style="background-color: white;" class="list-group-item" ng-repeat = "infoDist in filtroDistribuidor track by $index" ng-click = "llenarTextBoxDist(infoDist)">{{infoDist}}</li>
                             </ul>
                         </div>
-                        <div class="form-group col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                            <label>Empresa usuario final</label>
-                            <Input type="text" name="empresaufModal" placeholder="Nombre del usuario final" class="form-control" ng-model="Usuario.Empresauf" ng-keyup="completarUFModal(Usuario.Empresauf)" required>
-                                <ul class="list-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-model = "ocultarOpcionesUFModal" ng-hide = "ocultarOpcionesUFModal" style="position:absolute; z-index: 1;padding-right:2em;">
-                                    <li style="background-color: white;" class="list-group-item" ng-repeat = "infoUFModal in filtroUsuarioFinalModal track by $index" ng-click = "llenarTextBoxUFModal(infoUFModal)">{{infoUFModal}}</li>
-                                </ul>
+                        <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                            <label>Usuario final</label>
+                            <input type = "text" name = "usuarioF" placeholder="Escribe el nombre del usuario final" class="form-control" ng-model="usuarioF" ng-keyup="completarUF(usuarioF)" required/>
+                            <ul class="list-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-model = "ocultarOpcionesUF" ng-hide = "ocultarOpcionesUF" style="position:absolute; z-index: 1;padding-right:2em;">
+                            <li style="background-color: white;" class="list-group-item" ng-repeat = "infoUF in filtroUsuarioFinal track by $index" ng-click = "llenarTextBoxUF(infoUF)">{{infoUF}}</li>
+                            </ul>
                         </div>
                         <div class="form-group col-xs-4 col-sm-4 col-md-4 col-lg-4">
                             <label>Esquema renovación</label>
