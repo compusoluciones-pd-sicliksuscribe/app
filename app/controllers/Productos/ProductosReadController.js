@@ -501,7 +501,7 @@
         ResultadoFabricante2: Producto.IdProductoPadre,
         Especializacion: Producto.Especializacion,
         IdUsuarioContacto: Producto.IdUsuarioContacto,
-        IdAccionAutodesk: 1,
+        IdAccionAutodesk: Producto.IdFabricante === 2 ? 1 : null,
         IdERP: Producto.IdERP,
         Plazo: Producto.Plazo
       };

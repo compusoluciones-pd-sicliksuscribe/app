@@ -126,9 +126,10 @@
     };
 
     const validarCarrito = function () {
-      if ($scope.Distribuidor.IdFormaPagoPredilecta === 2) {
+      if (parseInt($scope.Distribuidor.IdFormaPagoPredilecta) === 2) {
         return PedidoDetallesFactory.getValidarCarrito()
         .then(function (result) {
+          $scope.datosValidarCarrito = result.data.data;
           $scope.PedidoDetalles.forEach(function (item) {
             result.data.data.forEach(function (user) {
               if (item.IdEmpresaUsuarioFinal === user.IdEmpresaUsuarioFinal && !user.hasCredit) {

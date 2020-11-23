@@ -41,12 +41,12 @@
                         MXN)
                     </div>
                     <div ng-show="!ValidarFormaPago()">
-                        <input type="radio" name="TipoPago" value="3" ng-disabled="ValidarFormaPago()" ng-model="Distribuidor.IdFormaPagoPredilecta" ng-change="ActualizarFormaPago(3);"> Pago Paypal (Solo Pesos MXN)
+                        <input type="radio" name="TipoPago" value="3" ng-checked="isPayingWithPaypal()" ng-disabled="ValidarFormaPago()" ng-model="Distribuidor.IdFormaPagoPredilecta" ng-click="ActualizarFormaPago(3);"> Pago Paypal (Solo Pesos MXN)
                     </div>
 
                     <!-- TRANSFERENCIA -->
                     <div>
-                        <input type="radio" name="TipoPago" value="4" ng-model="Distribuidor.IdFormaPagoPredilecta" ng-change="ActualizarFormaPago(4);"> Transferencia
+                        <input type="radio" name="TipoPago" value="4" ng-checked="isPayWithPrepaid()" ng-model="Distribuidor.IdFormaPagoPredilecta" ng-click="ActualizarFormaPago(4);"> Transferencia
                         <label for="" class="SaldoReal"> <b>Tu Saldo es: {{Distribuidor.MonedaPago === 'Pesos' ? Distribuidor.Transferencia : Distribuidor.TransferenciaDolares | currency}}</b> </label>
                     </div>
 
