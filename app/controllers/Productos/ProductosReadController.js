@@ -219,6 +219,7 @@
             }
             if (Producto.contratos.length === 0) {
               Producto.TieneContrato = false;
+              Producto.IdPedidoContrato = 0;
             }
             Producto.contratos.unshift({ IdPedido: 0, NumeroContrato: 'Nuevo contrato...' });
             setProtectedRebatePrice(Producto.IdEmpresaUsuarioFinal);

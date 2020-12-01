@@ -17,7 +17,7 @@
     };
 
     $scope.BuscarEmpresas = () => {
-      EmpresasFactory.getEmpresa($scope.Empresa.Busqueda)
+      EmpresasFactory.getEmpresaII($scope.Empresa.Busqueda)
         .success(Empresas => {
           if (Empresas) {
             try {

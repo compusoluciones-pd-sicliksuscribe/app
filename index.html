@@ -191,10 +191,10 @@
 												<li ng-show="SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 7 || SessionCookie.IdTipoAcceso == 10"><a ng-click="goToPage('Clientes');">Mis clientes</a></li>
 												<li><a ng-show="SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 4 || SessionCookie.IdTipoAcceso == 7 || SessionCookie.IdTipoAcceso === 10"
 													 ng-click="goToPage('Usuarios');">Mis colaboradores</a></li>
-												<li><a ng-click="goToPage('MonitorAws');">Monitor Amazon Web Services</a></li>
+												<li ng-show="SessionCookie.IdTipoAcceso !== 10"><a ng-click="goToPage('MonitorAws');">Monitor Amazon Web Services</a></li>
 												<li><a ng-click="goToPage('Monitor');">Monitor de pedidos por cliente</a></li>
 												<li id="monitorPagos" ng-show="SessionCookie.IdTipoAcceso == 2"><a ng-click="goToPage('MonitorPagos');">Monitor de pedidos por pagar</a></li>
-												<li><a ng-click="goToPage('MonitorVmware');">Monitor VMware</a></li>
+												<li ng-show="SessionCookie.IdTipoAcceso !== 10"><a ng-click="goToPage('MonitorVmware');">Monitor VMware</a></li>
 												<li id="monitorPagos" ng-show="SessionCookie.IdTipoAcceso == 2 && SessionCookie.IdEmpresa == 110"><a ng-click="goToPage('aplicaciones');">Aplicaciones</a></li>
 												<li id="activarMisProductos" ng-show="SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 7 || SessionCookie.IdTipoAcceso === 10"><a ng-click="goToPage('Reportes');">Reportes</a></li>
 											</ul>
