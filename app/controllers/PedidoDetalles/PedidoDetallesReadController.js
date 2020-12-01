@@ -193,7 +193,7 @@
         .catch(function (result) { error(result.data); });
       getEnterprises()
         .then(getOrderDetails)
-        .then(ActualizarFormaPago)
+        .then(params => $scope.SessionCookie.IdTipoAcceso === 10 ? ActualizarFormaPago(2) : ActualizarFormaPago(params))
         .catch(function (result) { error(result.data); });
     };
 

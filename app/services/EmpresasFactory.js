@@ -42,8 +42,9 @@
     };
 
     factory.getEmpresaII = IdEmpresa => {
+      const rs = /#+|\?+/;
       factory.refreshToken();
-      return $http.get($rootScope.API + 'Empresas/' + (!IdEmpresa ? '0' : IdEmpresa));
+      return $http.get($rootScope.API + 'Empresas/' + ((!IdEmpresa || rs.test(IdEmpresa)) ? '0' : IdEmpresa));
     };
 
     factory.postEmpresa = function (Empresa) {
