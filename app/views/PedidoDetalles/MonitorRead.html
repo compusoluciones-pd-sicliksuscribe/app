@@ -8,7 +8,7 @@
         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
             <br/>
             <label for="Cliente">Clientes:</label>
-            <select id="IdEmpresaUsuarioFinal" name="IdEmpresaUsuarioFinal" class="form-control selectOption" ng-model="EmpresaSelect" ng-options="Empresa.IdEmpresa as Empresa.NombreEmpresa for Empresa in selectEmpresas" ng-change="ActualizarMonitor();" ng-show="SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 7">
+            <select id="IdEmpresaUsuarioFinal" name="IdEmpresaUsuarioFinal" class="form-control selectOption" ng-model="EmpresaSelect" ng-options="Empresa.IdEmpresa as Empresa.NombreEmpresa for Empresa in selectEmpresas" ng-change="ActualizarMonitor();" ng-show="SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 7 || SessionCookie.IdTipoAcceso == 10">
                 <option ng-selected="true" value="">Selecciona un cliente</option>
 			</select>
         </div>
@@ -68,6 +68,12 @@
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <b>Nota importante *</b> <br> Para realizar la renovación de tus suscripciones de forma automática por medio de tu tarjeta bancaria es necesario descargar la siguiente carta, llenarla y enviarla a tu equipo de soporte CompuSoluciones. <br>            Descarga tu carta <a target="blank" href="https://s3.amazonaws.com/marketplace.compusoluciones.com/autorizacion_tarjeta.pdf">aquí</a>. (Este proceso solo se realiza una vez). <br> Si quieres realizar tu renovación automática con crédito CompuSoluciones,
             solo selecciona la opción y valida que tengas crédito disponible pagando las facturas pendientes o aumentando la cantidad de crédito del usuario final.
+        </div>
+    </div>
+
+    <div class="form-group row" ng-show="SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 7 || SessionCookie.IdTipoAcceso == 10">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <b>Nota importante *</b> <br> Si la forma de pago próxima es cambiada a tarjeta o transferencia el distribuidor tendrá que hacer el pago de la renovación desde el monitor de pedidos por pagar desde su cuenta administrador en clicksuscribe.
         </div>
     </div>
 
@@ -144,36 +150,33 @@
                             <br>
                             <label for="">Tipo de producto:</label> {{ detalles.Tipo }}
                             <br>
-                            <div ng-show="(detalles.Activo || pedido.CargoRealizadoProximoPedido === 1) && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 7)"><label for="">Estatus del pedido:</label> {{ pedido.Estatus }}</div>
-                            <div ng-show="(detalles.Activo) && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
+                            <div ng-show="(detalles.Activo || pedido.CargoRealizadoProximoPedido === 1) && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 7 || SessionCookie.IdTipoAcceso == 10)"><label for="">Estatus del pedido:</label> {{ pedido.Estatus }}</div>
+                            <div ng-show="(detalles.Activo) && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 10)">
                                 <label ng-hide="pedido.Bloquear || pedido.CargoRealizadoProximoPedido">Próxima forma de pago:</label>
                             </div>
 
                             <form ng-hide="pedido.Bloquear || pedido.CargoRealizadoProximoPedido">
-                                <div class="row" ng-show="detalles.Activo && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
+                                <div class="row" ng-show="detalles.Activo && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 10)">
                                     <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
                                         <div class="radio" style="margin-left:20px">
                                             <div>
-                                                <input type="radio" name="FormaPago" value="2" ng-model="pedido.IdFormaPagoProxima" ng-change="ActualizarPago(pedido)" ng-disabled="pedido.IdEstatusPedido !== 3"> Crédito
+                                                <input type="radio" name="FormaPago" value="2" ng-model="pedido.IdFormaPagoProxima" ng-change="ActualizarPago(pedido)" ng-disabled="pedido.IdEstatusPedido !== 3"> <div style="padding-top:.25em">Crédito</div>
                                             </div>
                                             <div ng-hide="detalles.IdTipoProducto === 3" ng-disabled="">
-                                                <input type="radio" name="FormaPago" value="1" ng-model="pedido.IdFormaPagoProxima" ng-change="ActualizarPago(pedido)" ng-disabled="pedido.MonedaPagoProxima === 'Dólares' || pedido.IdEstatusPedido !== 3">                                                Tarjeta
+                                                <input type="radio" name="FormaPago" value="1" ng-model="pedido.IdFormaPagoProxima" ng-change="ActualizarPago(pedido)" ng-disabled="pedido.MonedaPagoProxima === 'Dólares' || pedido.IdEstatusPedido !== 3"> <div style="padding-top:.25em">Tarjeta</div>
                                             </div>
                                             <div ng-hide="detalles.IdTipoProducto === 3">
-                                                <input type="radio" name="FormaPago" value="4" ng-model="pedido.IdFormaPagoProxima" ng-change="ActualizarPago(pedido)" ng-disabled="pedido.MonedaPagoProxima === 'Dólares' || pedido.IdEstatusPedido !== 3">                                                Transferencia
-                                            </div>
-                                            <div ng-hide="detalles.IdTipoProducto === 3">
-                                                <input type="radio" name="FormaPago" value="3" ng-model="pedido.IdFormaPagoProxima" ng-change="ActualizarPago(pedido)" ng-disabled="pedido.MonedaPagoProxima === 'Dólares' || pedido.IdEstatusPedido !== 3">                                                Paypal
+                                                <input type="radio" name="FormaPago" value="4" ng-model="pedido.IdFormaPagoProxima" ng-change="ActualizarPago(pedido)" ng-disabled="pedido.MonedaPagoProxima === 'Dólares' || pedido.IdEstatusPedido !== 3"> <div style="padding-top:.25em">Transferencia</div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
                                         <div class="radio" style="margin-left:20px">
                                             <div>
-                                                <input type="radio" name="MonedaPago" value="Dólares" ng-model="pedido.MonedaPagoProxima" ng-change="ActualizarMoneda(pedido) " ng-disabled="pedido.IdEstatusPedido !=3 || pedido.IdFormaPagoProxima != 2">                                                Dólares
+                                                <input type="radio" name="MonedaPago" value="Dólares" ng-model="pedido.MonedaPagoProxima" ng-change="ActualizarMoneda(pedido) " ng-disabled="pedido.IdEstatusPedido !=3 || pedido.IdFormaPagoProxima != 2"> <div style="padding-top:.25em">Dólares</div>
                                             </div>
                                             <div>
-                                                <input type="radio" name="MonedaPago" value="Pesos" ng-model="pedido.MonedaPagoProxima" ng-change="ActualizarMoneda(pedido)" ng-disabled="pedido.IdEstatusPedido != 3"> Pesos
+                                                <input type="radio" name="MonedaPago" value="Pesos" ng-model="pedido.MonedaPagoProxima" ng-change="ActualizarMoneda(pedido)" ng-disabled="pedido.IdEstatusPedido != 3"> <div style="padding-top:.25em">Pesos</div>
                                             </div>
                                         </div>
                                     </div>
@@ -183,7 +186,7 @@
                         </div>
 
                         <div class="BajoConsumo" ng-if="detalles.IdTipoProducto === 3">
-                            <div ng-if="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)" class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                            <div ng-if="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 10)" class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
                                 <label>Consumo: </label>
                                 <br/> 
                                 <div ng-if="pedido.MonedaPago === 'Dólares'">{{ (detalles.PrecioUnitario) | currency }} {{ pedido.MonedaPago }} </div>
@@ -201,12 +204,12 @@
                                 <label>{{ pedido.IdFabricante === 5 ? "Empleados" : pedido.IdFabricante === 11 ? "Créditos" :"Suscripciones" }}: </label>
                                 <br>
                                 <div style="margin:0; padding:0;" ng-show="pedido.IdFabricante === 11"> {{ detalles.Cantidad }} </div>
-                                <div style="margin:0; padding:0;" ng-show="((SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3) && !pedido.CargoRealizadoProximoPedido && !detalles.PedidoAFabricante) || pedido.Renovado || !detalles.Activo"> {{ detalles.Cantidad }} </div>
+                                <div style="margin:0; padding:0;" ng-show="((SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 10) && !pedido.CargoRealizadoProximoPedido && !detalles.PedidoAFabricante) || pedido.Renovado || !detalles.Activo"> {{ detalles.Cantidad }} </div>
                                 <a ng-click="ActualizarCantidad(detalles.IdPedidoDetalle)" style="text-decoration: none" ng-hide="pedido.CargoRealizadoProximoPedido || (!detalles.PedidoAFabricante || detalles.EstatusFabricante === 'FAILED') || pedido.IdFabricante === 11 || pedido.Renovado || !detalles.Activo"> {{ detalles.IdProducto === 3616 ? 25 : detalles.Cantidad }} &nbsp;
 										<span class="glyphicon glyphicon-triangle-bottom" ng-hide="detalles.MostrarCantidad || detalles.IdProducto === 3616 || pedido.IdFabricante === 11"></span>
 										<span class="glyphicon glyphicon-triangle-top" ng-show="detalles.MostrarCantidad"></span>
 									</a>
-                                <div style="margin:0; padding:0;" ng-show="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3) && pedido.IdFabricante !== 11 && !pedido.Renovado" >
+                                <div style="margin:0; padding:0;" ng-show="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 10) && pedido.IdFabricante !== 11 && !pedido.Renovado" >
                                     <br> <label> Renovación: </label> <br>
                                     <div ng-if="!detalles.PorCancelar"> {{ detalles.IdProducto === 3616 ? 25 : detalles.CantidadProxima }} </div>
                                     <div ng-if="(!detalles.Activo || detalles.PorCancelar) && !pedido.Renovado" > No renovar </div>
@@ -419,34 +422,34 @@
                             <li ng-if="detalles.PedidoImportado === 1"> <span style="font-size: 100%; padding-top: .3em;" class="label label-primary">Importado</span>
                             <li ng-hide="pedido.EstatusContrato === 'canceled'" ng-if="pedido.AutoRenovable && detalles.PagoRenovacion"> <label for="EstatusRenovacion">Estatus de renovación:</label> Pagado </li>
                             <li ng-hide="pedido.EstatusContrato === 'canceled'" ng-if="pedido.AutoRenovable && !detalles.PagoRenovacion"> <label for="EstatusRenovacion">Estatus de renovación:</label> Sin renovar </li>
-                            <li ng-if="pedido.AutoRenovable && (detalles.Activo) && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
+                            <li ng-if="pedido.AutoRenovable && (detalles.Activo) && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 10)">
 
                                 <form ng-hide="pedido.EstatusContrato === 'canceled'">
                                     <label>Próxima forma de pago:</label>
-                                    <div class="row" ng-show="detalles.Activo && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
+                                    <div class="row" ng-show="detalles.Activo && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 10)">
                                         <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
                                             <div class="radio" style="margin-left:20px">
                                                 <div>
-                                                    <input type="radio" name="FormaPago" value="2" ng-model="detalles.IdFormaPagoProxima" ng-change="ActualizarPago(detalles)" ng-disabled="detalles.PagoRenovacion || detalles.EstatusFabricante !== 'accepted'">                                                    Crédito
+                                                    <input type="radio" name="FormaPago" value="2" ng-model="detalles.IdFormaPagoProxima" ng-change="ActualizarPago(detalles)" ng-disabled="detalles.PagoRenovacion || detalles.EstatusFabricante !== 'accepted'"> <div style="padding-top:.25em">Crédito</div>
                                                 </div>
                                                 <div ng-hide="detalles.IdTipoProducto === 3" ng-disabled="">
-                                                    <input type="radio" name="FormaPago" value="1" ng-model="detalles.IdFormaPagoProxima" ng-change="ActualizarPago(detalles)" ng-disabled="detalles.MonedaPagoProxima === 'Dólares' || detalles.PagoRenovacion || detalles.EstatusFabricante !== 'accepted'">                                                    Tarjeta
+                                                    <input type="radio" name="FormaPago" value="1" ng-model="detalles.IdFormaPagoProxima" ng-change="ActualizarPago(detalles)" ng-disabled="detalles.MonedaPagoProxima === 'Dólares' || detalles.PagoRenovacion || detalles.EstatusFabricante !== 'accepted'"> <div style="padding-top:.25em">Tarjeta</div>
                                                 </div>
                                                 <div ng-hide="detalles.IdTipoProducto === 3">
-                                                    <input type="radio" name="FormaPago" value="4" ng-model="detalles.IdFormaPagoProxima" ng-change="ActualizarPago(detalles)" ng-disabled="detalles.MonedaPagoProxima === 'Dólares' || detalles.PagoRenovacion || detalles.EstatusFabricante !== 'accepted'">                                                    Transferencia
+                                                    <input type="radio" name="FormaPago" value="4" ng-model="detalles.IdFormaPagoProxima" ng-change="ActualizarPago(detalles)" ng-disabled="detalles.MonedaPagoProxima === 'Dólares' || detalles.PagoRenovacion || detalles.EstatusFabricante !== 'accepted'"> <div style="padding-top:.25em">Transferencia</div>
                                                 </div>
                                                 <div ng-hide="detalles.IdTipoProducto === 3">
-                                                    <input type="radio" name="FormaPago" value="3" ng-model="detalles.IdFormaPagoProxima" ng-change="ActualizarPago(detalles)" ng-disabled="detalles.MonedaPagoProxima === 'Dólares' || detalles.PagoRenovacion || detalles.EstatusFabricante !== 'accepted'">                                                    Paypal
+                                                    <input type="radio" name="FormaPago" value="3" ng-model="detalles.IdFormaPagoProxima" ng-change="ActualizarPago(detalles)" ng-disabled="detalles.MonedaPagoProxima === 'Dólares' || detalles.PagoRenovacion || detalles.EstatusFabricante !== 'accepted'"> <div style="padding-top:.25em">Paypal</div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
                                             <div class="radio" style="margin-left:20px">
                                                 <div>
-                                                    <input type="radio" name="MonedaPago" value="Dólares" ng-model="detalles.MonedaPagoProxima" ng-change="ActualizarMoneda(detalles)" ng-disabled="detalles.IdFormaPagoProxima != 2 || detalles.PagoRenovacion || detalles.EstatusFabricante !== 'accepted'">                                                    Dólares
+                                                    <input type="radio" name="MonedaPago" value="Dólares" ng-model="detalles.MonedaPagoProxima" ng-change="ActualizarMoneda(detalles)" ng-disabled="detalles.IdFormaPagoProxima != 2 || detalles.PagoRenovacion || detalles.EstatusFabricante !== 'accepted'"> <div style="padding-top:.25em">Dólares</div>
                                                 </div>
                                                 <div>
-                                                    <input type="radio" name="MonedaPago" value="Pesos" ng-model="detalles.MonedaPagoProxima " ng-change="ActualizarMoneda(detalles)" ng-disabled="detalles.PagoRenovacion || detalles.EstatusFabricante !== 'accepted'">                                                    Pesos
+                                                    <input type="radio" name="MonedaPago" value="Pesos" ng-model="detalles.MonedaPagoProxima " ng-change="ActualizarMoneda(detalles)" ng-disabled="detalles.PagoRenovacion || detalles.EstatusFabricante !== 'accepted'"> <div style="padding-top:.25em">Pesos</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -457,7 +460,7 @@
                         </ul>
                     </div>
 
-                    <div ng-if="detalles.IdTipoProducto !== 3 && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3) "
+                    <div ng-if="detalles.IdTipoProducto !== 3 && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 10) "
 				    	 ng-hide="pedido.EstatusContrato === 'canceled' || pedido.EstatusContrato === 'notRenewed'">
                         <div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
                             <label>Suscripciones: </label> <br>
