@@ -32,8 +32,6 @@
         <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
             <label>CSN</label>
             <input type = "text" name = "CSNdist" placeholder="Escribe el CSN que deseas consultar" class="form-control" ng-model="CSNdist" required/>
-            <ul class="list-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-model = "ocultarOpcionesDist" ng-hide = "ocultarOpcionesDist" style="position:absolute; z-index: 1; padding-right:2em;">
-            <li style="background-color: white;" class="list-group-item" ng-repeat = "infoDist in filtroDistribuidor track by $index" ng-click = "llenarTextBoxDist(infoDist)">{{infoDist}}</li>
             </ul>
         </div>
         <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
