@@ -570,7 +570,7 @@
       .when('/ImportacionesAutodesk', {
         controller: '', templateUrl: 'app/views/ImportarPedidosAutodesk/ImportarPedidosAutodesk.html',
         resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); 
-        if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 8)) { $location.path('/404'); } } }
+        if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 8 || Session.IdTipoAcceso === 10)) { $location.path('/404'); } } }
       })
 
       .when('/MonitorMPN', {
@@ -585,7 +585,7 @@
         controller: 'ParticionPedidosController', templateUrl: 'app/views/Autodesk/ParticionPedido.html',
         resolve: { 'check': function ($location, $cookies) {
           var Session = $cookies.getObject('Session');
-          if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 8)) { $location.path('/404'); }
+          if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 8 || Session.IdTipoAcceso === 10)) { $location.path('/404'); }
         }}
       })
 
