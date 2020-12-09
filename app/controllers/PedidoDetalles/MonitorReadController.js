@@ -87,11 +87,13 @@
     const extendContract = contractData => {
       PedidosFactory.extendContract(contractData)
         .then(result => {
-          $scope.ShowToast(result.data.message, 'success');
-          $scope.ActualizarMenu();
-          $scope.addPulseCart();
-          setTimeout($scope.removePulseCart, 9000);
-          $location.path('/Carrito');
+          if (result.data.success) {
+            $scope.ShowToast(result.data.message, 'success');
+            $scope.ActualizarMenu();
+            $scope.addPulseCart();
+          } else {
+            $scope.ShowToast(result.data.message, 'danger');
+          }
         })
         .catch(result => {
           $scope.ShowToast(result.data.message, 'danger');
