@@ -45,21 +45,28 @@
 			</div>
 		</div>
 	</div>
-	<div class="form-group row" ng-show="(!(EmpresaSelect === null) || (SessionCookie.IdTipoAcceso === 4 || SessionCookie.IdTipoAcceso === 6)) && !terminos">
+	<div class="form-group row" ng-show="(!(EmpresaSelect === null) || (SessionCookie.IdTipoAcceso === 4 || SessionCookie.IdTipoAcceso === 6)) && !terminos && SessionCookie.IdTipoAcceso !== 10">
 		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="(SessionCookie.IdTipoAcceso === 4 || SessionCookie.IdTipoAcceso === 6) || BuscarProductos.IdFabricante === 1">
 			<div class="alert alert-danger" role="alert">
 				<h4 class="alert-heading">Términos y condiciones</h4>
-				<p>Por disposición de Microsoft se debe de aceptar el Contrato del Cliente de Microsoft para poder seguir consumiendo sus productos. La fecha límite para aceptar los términos es el 01 de Febrero del 2020.
-					En caso de no aceptar los términos, no se podrá hacer ningún movimiento en las licencias actuales ni comprar nuevas.
+				<p>Por disposición de Microsoft se debe aceptar el <b>Microsoft Customer Agreement</b> para poder seguir consumiendo sus productos.
+					En caso de no aceptar los términos, no se podrá hacer ningún movimiento en las licencias actuales ni comprar nuevas. Puede aceptar los terminos desde el <b>catálogo de productos</b> al tratar de hacer una compra con Microsoft para este cliente.</p>
 				</br></br>
 				<a href="https://www.microsoft.com/licensing/docs/customeragreement" class="alert-link"  target="_blank">
 					*Consultar Contrato del Cliente de Microsoft
 				</a>
                 </p>
-                <hr>
-                <p class="mb-0">
-                    <button type="button" class="btn btn-success" ng-click="AceptarTerminos(EmpresaSelect)">Aceptar términos</button>
-                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group row" ng-show="(!(EmpresaSelect === null) && SessionCookie.IdTipoAcceso === 10)) && !terminos">
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="BuscarProductos.IdFabricante === 1 && SessionCookie.IdTipoAcceso === 10">
+			<div class="alert alert-danger" role="alert">
+				<h4 class="alert-heading">Términos y condiciones</h4>
+				<p>Por disposición de Microsoft se debe aceptar el <b>Microsoft Customer Agreement</b> para poder seguir consumiendo sus productos. Solicite al distribuidor acepte este contrato para continuar con el uso de la plataforma.
+                    El distribuidor puede aceptar el contrato desde el <b>catálogo de productos</b> al tratar de hacer una compra con Microsoft para este usuario final desde su sesión en clicksuscribe.
+				</br></br>
             </div>
         </div>
     </div>
@@ -71,9 +78,9 @@
         </div>
     </div>
 
-    <div class="form-group row" ng-show="SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 7 || SessionCookie.IdTipoAcceso == 10">
+    <div class="form-group row" ng-show="SessionCookie.IdTipoAcceso == 10">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <b>Nota importante *</b> <br> Si la forma de pago próxima es cambiada a tarjeta o transferencia el distribuidor tendrá que hacer el pago de la renovación desde el monitor de pedidos por pagar desde su cuenta administrador en clicksuscribe.
+            <b>Nota importante *</b> <br> Si la forma de pago próxima es cambiada a tarjeta o transferencia el distribuidor tendrá que hacer el pago de la renovación desde el monitor de pedidos por pagar desde su sesión en clicksuscribe.
         </div>
     </div>
 

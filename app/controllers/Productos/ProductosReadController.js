@@ -432,7 +432,7 @@
             document.getElementById('formModal').style.display = 'block';
             $scope.datosCompletosCustomer = false;
           }
-          $scope.ShowToast('No has aceptado los términos y condiciones que necesita microsoft.', 'danger');
+          $scope.ShowToast('No has aceptado los términos y condiciones que necesita Microsoft.', 'danger');
           $scope.IdEmpresaUsuarioFinalTerminos = producto.IdEmpresaUsuarioFinal;
           $scope.terminos = true;
         } else {
