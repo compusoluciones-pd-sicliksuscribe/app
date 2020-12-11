@@ -32,9 +32,6 @@
         <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
             <label>CSN</label>
             <input type = "text" name = "CSNdist" placeholder="Escribe el CSN que deseas consultar" class="form-control" ng-model="CSNdist" required/>
-            <ul class="list-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-model = "ocultarOpcionesDist" ng-hide = "ocultarOpcionesDist" style="position:absolute; z-index: 1; padding-right:2em;">
-            <li style="background-color: white;" class="list-group-item" ng-repeat = "infoDist in filtroDistribuidor track by $index" ng-click = "llenarTextBoxDist(infoDist)">{{infoDist}}</li>
-            </ul>
         </div>
         <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
             <label>Fecha fin del contrato</label>
@@ -50,7 +47,6 @@
     </div>
     <br>
     <br>
-
     <div class="container" ng-if="subscriptionData">
         <table class="table">
           <thead>
@@ -86,6 +82,9 @@
           </tbody>
         </table>
       </div>
+      <div class="container" ng-show="subscriptionData.length === 0">
+        <h4 style="text-align: center;">Sin resultados</h4>
+    </div>
     <hr>
 
     <div id="importarContrato" class="modal fade in" tabindex="-1" role="dialog" >
@@ -120,8 +119,8 @@
                 </div>
                 <br>
                 <div  class="modal-footer">
-                    <button type="submit" class="btn btn-success" ng-click="conjuntarInformacion()" data-dismiss="modal">Importar</button>
-                    <button type="button" class="btn btn-danger" ng-click="cerrarModal('importarContrato');" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success" ng-click="conjuntarInformacion();" ng-disabled = "procesandoImportacion" data-dismiss="modal">{{btnImportar}}</button>
+                    <button type="button" class="btn btn-danger" ng-click="cerrarModal('importarContrato');" ng-disabled = "procesandoImportacion" data-dismiss="modal">Cancelar</button>
                 </div>
             </div>
         </div>
@@ -198,9 +197,6 @@
             </div>
             <div class="modal-body" style="margin-bottom: 26em;">
                 <p>Registre aquí la información del usuario final (uf) y de contacto.</p> 
-                <div class="alert alert-warning" role="alert">
-                    *Si necesitas registrar más contactos para un uf, da click en el botón <b>Nuevo contacto</b> del formulario principal.
-                </div><hr>
                     <div class="form-group col-xs-4 col-sm-4 col-md-4 col-lg-4">
                         <label>Nombre de la empresa </label>
                         <input name="NombreEmpresa" type="text" placeholder="Nombre de la empresa" ng-model="Empresa.NombreEmpresa" class="form-control" />
@@ -281,8 +277,8 @@
             </div>
             <br>
             <div  class="modal-footer">
-                <button type="submit" class="btn btn-success" ng-click="conjuntarInformacionModalEmpresa()" data-dismiss="modal" ng-disabled="deshabilitado">Registrar</button>
-                <button type="button" class="btn btn-danger" ng-click="cerrarModal('nuevoUF');" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-success" ng-click="conjuntarInformacionModalEmpresa()" ng-disabled="deshabilitado" data-dismiss="modal">Registrar</button>
+                <button type="button" class="btn btn-danger" ng-click="cerrarModal('nuevoUF');" ng-disabled="deshabilitado" data-dismiss="modal">Cancelar</button>
             </div>
         </div>
     </div>

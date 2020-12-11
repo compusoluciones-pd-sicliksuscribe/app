@@ -2,13 +2,22 @@
   var ImportarPedidosAutodeskController = function ($scope, $log, $location, $cookies, $routeParams, ImportarPedidosAutodeskFactory, UsuariosFactory, EstadosFactory, EmpresasFactory, $anchorScroll, lodash) {
 
     $scope.getSubscriptionData = function (resellerCsn, contractEndDate) {
-      return ImportarPedidosAutodeskFactory.getSubscriptionData(resellerCsn, contractEndDate)
+      if (resellerCsn && contractEndDate) {
+        return ImportarPedidosAutodeskFactory.getSubscriptionData(resellerCsn, contractEndDate)
         .then(result => {
-          $scope.subscriptionData = result.data.data;
+          if (result.data.data.length > 0) {
+            $scope.subscriptionData = result.data.data;
+          } else {
+            $scope.subscriptionData = [];
+            $scope.ShowToast('No obtuvimos resultados para la fecha especificada.', 'warning');
+          }
         })
         .catch(function () {
           $scope.ShowToast('No pudimos cargar la lista de suscripciones, por favor intenta de nuevo más tarde.', 'danger');
         });
+      } else {
+        $scope.ShowToast('Completa los parametros de busqueda (CSN, fecha fin de contrato).', 'info');
+      }
     };
 
     const getSuppliers = function () {
@@ -71,55 +80,16 @@
       });
     };
 
-    const conjuntarDetalles = function () {
-      let detalles = [];
-      let camposCompletos = true;
-      $scope.visible.forEach(function (elemento, index) {
-        let detalle = {};
-        if (elemento) {
-          if ($scope.sku[index] !== '') detalle.SKU = $scope.sku[index];
-          else {
-            camposCompletos = false;
-            $scope.ShowToast('Campo SKU, vacío.', 'danger');
-          }
-          if ($scope.cantidad[index]) detalle.Cantidad = $scope.cantidad[index];
-          else {
-            camposCompletos = false;
-            $scope.ShowToast('Campo cantidad, vacío.', 'danger');
-          }
-          if ($scope.cantidadProx[index]) detalle.CantidadProx = $scope.cantidadProx[index];
-          else {
-            camposCompletos = false;
-            $scope.ShowToast('Campo cantidad próxima, vacío.', 'danger');
-          }
-          detalles.push(detalle);
-        }
-      });
-      if (camposCompletos) $scope.formularioCompleto = true;
-      else $scope.formularioCompleto = false;
-      return detalles;
-    };
-
-    const reiniciarCamposSKU = function () {
-      $scope.visible = [true, false, false, false, false];
-      $scope.sku = ['', '', '', '', ''];
-      $scope.cantidad = ['', '', '', '', ''];
-      $scope.cantidadProx = ['', '', '', '', ''];
-      $scope.estadoSKU = [{color: 'rgb(0, 0, 0)'}, {color: 'rgb(0, 0, 0)'}, {color: 'rgb(0, 0, 0)'}, {color: 'rgb(0, 0, 0)'}, {color: 'rgb(0, 0, 0)'}];
-    };
-
     const vaciarFormulario = function () {
-      reiniciarCamposSKU();
-      $scope.distribuidor = '';
-      $scope.usuarioF = '';
-      $scope.contrato = '';
-      $scope.contacto = '';
-      $scope.esquema = '';
-      $scope.fechaInicio = '';
-      $scope.fechaFin = '';
-      $scope.formaPago = '';
-      $scope.monedaPago = '';
-      $scope.csnUF = '';
+      $scope.distribuidorSeleccionado = undefined;
+      $scope.ufSeleccionado = undefined;
+      $scope.contrato = undefined;
+      $scope.FechaInicio = undefined;
+      $scope.FechaFin = undefined;
+      $scope.esquema = undefined;
+      $scope.SKUsDetails = undefined;
+      $scope.distribuidor = undefined;
+      $scope.usuarioF = undefined;
     };
 
     const esFechaInicioValida = function () {
@@ -157,13 +127,9 @@
 
     $scope.init = function () {
       $scope.formularioCompleto = false;
-      $scope.visible = [true, false, false, false, false];
-      $scope.sku = ['', '', '', '', ''];
-      $scope.cantidad = ['', '', '', '', ''];
-      $scope.cantidadProx = ['', '', '', '', ''];
-      $scope.estadoSKU = [{color: 'rgb(0, 0, 0)'}, {color: 'rgb(0, 0, 0)'}, {color: 'rgb(0, 0, 0)'}, {color: 'rgb(0, 0, 0)'}, {color: 'rgb(0, 0, 0)'}];
       $scope.contadorDetalles = 1;
       $scope.detalles = [];
+      $scope.btnImportar = 'Importar';
       getSuppliers();
       getFinalUsers();
       getEsquemas();
@@ -269,87 +235,41 @@
       }
     };
 
-    $scope.obtenerSKUs = function (NumeroContrato) {
-      ImportarPedidosAutodeskFactory.getSKUData(NumeroContrato)
-        .then(result => {
-          if (result.data.data) {
-            $scope.ShowToast(result.data.data.message, 'danger');
-            reiniciarCamposSKU();
-          } else {
-            reiniciarCamposSKU();
-            $scope.csnUF = result.data.CSNUF;
-            result.data.items.forEach((element, index) => {
-              $scope.visible[index] = true;
-              $scope.sku[index] = element.sku;
-              $scope.cantidad[index] = element.quantity;
-              $scope.validarSKU(element.sku, index);
-            });
-          }
-        });
-    };
-
-    $scope.editar = function (textbox) {
-      $scope.estadoSKU[textbox] = {color: 'rgb(0, 0, 0)'};
-    };
-
-    $scope.validarSKU = function (sku, textbox) {
-      let contador = 0;
-      let esUtilizado = false;
-      let skuValido = $scope.productosLista.find(function (elemento) {
-        return elemento.IdERP === sku;
-      });
-      $scope.sku.forEach(function (elemento) {
-        if (elemento === sku) contador++;
-      });
-      if (contador > 1) esUtilizado = true;
-      if (!skuValido) {
-        $scope.estadoSKU[textbox] = {color: 'rgb(230, 6, 6)'};
-        $scope.ShowToast('SKU no válido. Es posible que no esté registrado en ClickSuscribe.', 'danger');
-      } else if (esUtilizado) {
-        $scope.estadoSKU[textbox] = {color: 'rgb(230, 6, 6)'};
-        $scope.ShowToast('El SKU ya está siendo utilizado, no puede ser registrado más de una vez.', 'danger');
-      } else {
-        $scope.estadoSKU[textbox] = {color: 'rgb(5, 192, 86)'};
-      }
-    };
-
-    $scope.validarEntrada = function (campo, valor) {
-      const teclaPresionada = String.fromCharCode(event.keyCode);
-      const teclaPresionadaEsUnNumero = Number.isInteger(parseInt(teclaPresionada));
-      let cadena = '';
-      let esTeclaNoAdmitida;
-      if (campo === 'contrato') esTeclaNoAdmitida = !teclaPresionadaEsUnNumero;
-      else {
-        if (!valor) valor = '';
-        teclaPresionada !== '.' ? cadena = valor.concat(teclaPresionada) : cadena = valor;
-        esTeclaNoAdmitida = teclaPresionada !== '.' && !teclaPresionadaEsUnNumero;
-        if (cadena.indexOf('.') >= 0 && teclaPresionada === '.') esTeclaNoAdmitida = true;
-      }
-      if (esTeclaNoAdmitida) event.preventDefault();
-    };
-
     $scope.conjuntarInformacion = function () {
-      const infoPedido = {
-        IdEmpresaDistribuidor: $scope.distribuidorSeleccionado.IdEmpresa,
-        IdEmpresaUsuarioFinal: $scope.ufSeleccionado.IdEmpresa,
-        NumeroContrato: $scope.contrato,
-        FechaInicio: $scope.FechaInicio,
-        FechaFin: $scope.FechaFin,
-        IdEsquemaRenovacion: $scope.esquema.IdEsquemaRenovacion,
-        Detalles: $scope.SKUsDetails
-      };
-      ImportarPedidosAutodeskFactory.importarPedido(infoPedido)
-          .then(result => {
-            if (result.data.data.error === 1) {
-              $scope.ShowToast(result.data.data.message, 'danger');
-            } else {
-              $scope.ShowToast(`La información se ha importado en el pedido ${result.data.data.IdPedido}.`, 'success');
-              vaciarFormulario();
-            }
-          })
-          .catch(result => {
-            $scope.ShowToast('Hubo un error durante la importación del pedido.', 'danger');
-          });
+      $scope.procesandoImportacion = false;
+      if ($scope.distribuidorSeleccionado && $scope.ufSeleccionado && $scope.esquema) {
+        $scope.procesandoImportacion = true;
+        $scope.btnImportar = 'Procesando...';
+        const infoPedido = {
+          IdEmpresaDistribuidor: $scope.distribuidorSeleccionado.IdEmpresa,
+          IdEmpresaUsuarioFinal: $scope.ufSeleccionado.IdEmpresa,
+          NumeroContrato: $scope.contrato,
+          FechaInicio: $scope.FechaInicio,
+          FechaFin: $scope.FechaFin,
+          IdEsquemaRenovacion: $scope.esquema.IdEsquemaRenovacion,
+          Detalles: $scope.SKUsDetails
+        };
+        console.log(infoPedido);
+        ImportarPedidosAutodeskFactory.importarPedido(infoPedido)
+            .then(result => {
+              $scope.procesandoImportacion = false;
+              $scope.btnImportar = 'Importar';
+              if (result.data.data.error === 1) {
+                $scope.ShowToast(result.data.data.message, 'danger');
+              } else {
+                $scope.ShowToast(`La información se ha importado en el pedido ${result.data.data.IdPedido}.`, 'success');
+                vaciarFormulario();
+                $scope.cerrarModal('importarContrato');
+              }
+            })
+            .catch(result => {
+              $scope.procesandoImportacion = false;
+              $scope.btnImportar = 'Importar';
+              $scope.ShowToast('Hubo un error durante la importación del pedido.', 'danger');
+            });
+      } else {
+        $scope.ShowToast('Llena todos los campos del formulario para completar la importación.', 'info');
+      }
     };
 
     $scope.abrirModal = function (modal, subs) {
@@ -363,6 +283,7 @@
     $scope.cerrarModal = function (modal) {
       document.getElementById(modal).style.display = 'none';
       getFinalUsers();
+      vaciarFormulario();
     };
 
     $scope.completarDistModal = function (cadenaDist = '') {
