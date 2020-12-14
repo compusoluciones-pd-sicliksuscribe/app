@@ -219,6 +219,7 @@
             }
             if (Producto.contratos.length === 0) {
               Producto.TieneContrato = false;
+              Producto.IdPedidoContrato = 0;
             }
             Producto.contratos.unshift({ IdPedido: 0, NumeroContrato: 'Nuevo contrato...' });
             setProtectedRebatePrice(Producto.IdEmpresaUsuarioFinal);
@@ -431,7 +432,7 @@
             document.getElementById('formModal').style.display = 'block';
             $scope.datosCompletosCustomer = false;
           }
-          $scope.ShowToast('No has aceptado los términos y condiciones que necesita microsoft.', 'danger');
+          $scope.ShowToast('No has aceptado los términos y condiciones que necesita Microsoft.', 'danger');
           $scope.IdEmpresaUsuarioFinalTerminos = producto.IdEmpresaUsuarioFinal;
           $scope.terminos = true;
         } else {
@@ -501,7 +502,7 @@
         ResultadoFabricante2: Producto.IdProductoPadre,
         Especializacion: Producto.Especializacion,
         IdUsuarioContacto: Producto.IdUsuarioContacto,
-        IdAccionAutodesk: 1,
+        IdAccionAutodesk: Producto.IdFabricante === 2 ? 1 : null,
         IdERP: Producto.IdERP,
         Plazo: Producto.Plazo
       };

@@ -450,6 +450,14 @@
       $scope.Tour.init();
       $scope.Tour.start();
     };
+
+    $scope.CambiarDistribuidor = () => {
+      $scope.SessionCookie = $cookies.getObject('Session');
+      if ($scope.SessionCookie.IdTipoAcceso === 10) {
+        $location.path('/CambiarDistribuidor');
+      }
+    };
+
   };
   function selectNavicon (icon) {
     var link = document.createElement('link');

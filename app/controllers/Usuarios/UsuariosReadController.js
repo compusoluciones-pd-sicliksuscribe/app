@@ -10,7 +10,7 @@
     $scope.init = function () {
       let empresaActual = '';
       if (Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 8) empresaActual = { NombreEmpresa: 'CompuSoluciones', IdEmpresa: 1 };
-      if (Session.IdTipoAcceso === 2) empresaActual = { NombreEmpresa: Session.NombreEmpresa, IdEmpresa: Session.IdEmpresa };
+      if (Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 10) empresaActual = { NombreEmpresa: Session.NombreEmpresa, IdEmpresa: Session.IdEmpresa };
       $scope.CheckCookie();
       if (Session.IdTipoAcceso !== 2) {
         EmpresasFactory.getEmpresas()
@@ -26,7 +26,7 @@
             $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
           });
       }
-      if (Session.IdTipoAcceso === 2) {
+      if (Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 10) {
         EmpresasFactory.getClientes()
           .success(function (Empresas) {
             $scope.selectEmpresas = Empresas.data;

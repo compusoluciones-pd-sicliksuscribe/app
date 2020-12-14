@@ -10,7 +10,7 @@
 
   </div>
 
-  <div class="form-group row" ng-show="SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 8">
+  <div class="form-group row" ng-show="SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 8 || SessionCookie.IdTipoAcceso == 10">
     <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 searchOption">
         <label for="Busqueda">&nbsp;</label>
         <div class="form-group has-feedback">
@@ -33,7 +33,7 @@
         ng-options="Empresas.IdEmpresa as Empresas.NombreEmpresa for Empresas in selectEmpresas">
           <option selected value="" ng-disabled="true">Selecciona un cliente</option>
           <option selected value="Empresas.IdEmpresa" ng-show="SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 2
-          || SessionCookie.IdTipoAcceso == 8" ng-selected="true">{{Empresas.NombreEmpresa}}</option>      
+          || SessionCookie.IdTipoAcceso == 8 || SessionCookie.IdTipoAcceso == 10" ng-selected="true">{{Empresas.NombreEmpresa}}</option>      
         </select>
       </div>
 
@@ -60,7 +60,7 @@
             <br> {{Usuario.Tipo}}, desde el {{Usuario.FechaActivo}}
             
         
-            <div class="pull-right" ng-show="(!empresaSel == '') && (SessionCookie.IdTipoAcceso !== 1) && (SessionCookie.IdTipoAcceso !== 2) && (SessionCookie.IdTipoAcceso !== 8)">
+            <div ng-show="(!empresaSel == '') && (SessionCookie.IdTipoAcceso !== 1) && (SessionCookie.IdTipoAcceso !== 2) && (SessionCookie.IdTipoAcceso !== 8) && (SessionCookie.IdTipoAcceso !== 10)">
               <h4>
                 <a href="#/Usuario/{{Usuario.IdUsuario}}">
                   <span class="glyphicon glyphicon-edit edit"></span>
@@ -69,21 +69,22 @@
             </div>
           </td>
           <td>
+            <div style="margin-left:10em;margin-top:2em; text-align: center;">
               <div class="form-group" ng-hide="SessionCookie.Nombre===Usuario.Nombre &&SessionCookie.ApellidoPaterno===Usuario.ApellidoPaterno">
-                <button  class="btn btn-danger btn-sm" ng-click="Confirmar(Usuario.IdUsuario)" ng-show="SessionCookie.IdTipoAcceso === 1 || SessionCookie.IdTipoAcceso === 2 || SessionCookie.IdTipoAcceso === 3 || SessionCookie.IdTipoAcceso === 4">Eliminar  <span class="glyphicon glyphicon-trash"></span></button>
+                <button  class="btn btn-danger" ng-click="Confirmar(Usuario.IdUsuario)" 
+                ng-show="SessionCookie.IdTipoAcceso === 1 || SessionCookie.IdTipoAcceso === 2 || SessionCookie.IdTipoAcceso === 3 || SessionCookie.IdTipoAcceso === 4 || SessionCookie.IdTipoAcceso == 10" style="min-width:5em;">Eliminar  <span class="glyphicon glyphicon-trash"></span></button>
               </div>
               <div ng-show="Usuario.Mostrar"class="form-group" style=" margin-top:5px; ">
-
                 <div class="form-group">
-                    <button  class="btn btn-warning btn-sm   " style="min-width:0px;height:40px" ng-disabled="form.habilitar" ng-click="BajaUsuario(Usuario.IdUsuario)">Sí</button>
-                    <button class="btn btn-primary btn-sm"  style="min-width:0px;height:40px;" ng-disabled="form.habilitar" ng-click="Confirmar(Usuario.IdUsuario)">No</button>
+                  <div style="text-align: center;">
+                    <label>El usuario será dado de baja, ¿deseas continuar?</label>
+                    <button  class="btn btn-warning btn-sm" style="min-width:1.6em;height:2.6em;" ng-disabled="form.habilitar" ng-click="BajaUsuario(Usuario.IdUsuario)">Sí</button>
+                    <button class="btn btn-primary btn-sm"  style="min-width:1.6em;height:2.6em;" ng-disabled="form.habilitar" ng-click="Confirmar(Usuario.IdUsuario)">No</button>
+                  </div>
                 </div>
-                
               </div>
+            </div>
           </td>
-        </div>
-        <div  ng-show="Usuario.Mostrar">
-            <label>El Usuario será dado de baja, ¿Deseas continuar?</label>
         </div>
       </div>
     </td>
@@ -108,18 +109,3 @@
 
 
 </div>
-
-
-  <!--<div class="form-group row" >
-            <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                <div class="pull-rigth">
-                    <label>Empresa* </label>
-                    <select name="IdEmpresa" class="form-control" ng-model="Usuario.IdEmpresa" 
-                    ng-options="Empresas.IdEmpresa as Empresas.NombreEmpresa for Empresas in selectEmpresas">
-                        <option value="" ng-selected="true">CompuSoluciones</option>
-                    </select>
-                </div>
-                
-            </div>
-            <div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div>
-        </div>-->
