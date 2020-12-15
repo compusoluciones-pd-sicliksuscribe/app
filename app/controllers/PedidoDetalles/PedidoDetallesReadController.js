@@ -126,9 +126,10 @@
     };
 
     const validarCarrito = function () {
-      if ($scope.Distribuidor.IdFormaPagoPredilecta === 2) {
+      if (parseInt($scope.Distribuidor.IdFormaPagoPredilecta) === 2) {
         return PedidoDetallesFactory.getValidarCarrito()
         .then(function (result) {
+          $scope.datosValidarCarrito = result.data.data;
           $scope.PedidoDetalles.forEach(function (item) {
             result.data.data.forEach(function (user) {
               if (item.IdEmpresaUsuarioFinal === user.IdEmpresaUsuarioFinal && !user.hasCredit) {
@@ -192,7 +193,7 @@
         .catch(function (result) { error(result.data); });
       getEnterprises()
         .then(getOrderDetails)
-        .then(ActualizarFormaPago)
+        .then(params => $scope.SessionCookie.IdTipoAcceso === 10 ? ActualizarFormaPago(2) : ActualizarFormaPago(params))
         .catch(function (result) { error(result.data); });
     };
 
