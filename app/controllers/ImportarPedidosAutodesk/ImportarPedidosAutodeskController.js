@@ -249,7 +249,6 @@
           IdEsquemaRenovacion: $scope.esquema.IdEsquemaRenovacion,
           Detalles: $scope.SKUsDetails
         };
-        console.log(infoPedido);
         ImportarPedidosAutodeskFactory.importarPedido(infoPedido)
             .then(result => {
               $scope.procesandoImportacion = false;
