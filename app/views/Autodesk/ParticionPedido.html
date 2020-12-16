@@ -37,20 +37,18 @@
           </div>
           <div style="margin-top: 2em; text-align: center;">
             <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"><label>Pedido anterior:</label></div>
-            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"><label>SKU Actual:</label></div>
-            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"><label>SKU Renovación:</label></div>
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3"><label>SKU Renovación:</label></div>
             <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><label>Cantidad:</label></div>
             <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"><label>Cantidad próxima:</label></div>
-            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" ><label>Número de serie:</label></div>
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" ><label>Número de serie:</label></div>
           </div>
           <hr class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
           <div ng-repeat="detalle in item.Detalles" style=" text-align: center;">
               <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="margin-bottom: .8em;">{{ detalle.IdPedidoPadre }} </div>
-              <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="margin-bottom: .8em;">{{ detalle.SKU_Actual }} </div>
-              <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="margin-bottom: .8em;"> {{ detalle.SKU_Renovacion }} </div>
+              <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="margin-bottom: .8em;"> {{ detalle.SKU_Renovacion }} </div>
               <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1" style="margin-bottom: .8em;"> {{ detalle.Cantidad }} </div>
               <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="margin-bottom: .8em;"> {{ detalle.CantidadProxima }} </div>
-              <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="margin-bottom: .8em;"> {{ detalle.NumeroSerie ? detalle.NumeroSerie : "-" }} </div>
+              <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="margin-bottom: .8em;"> {{ detalle.NumeroSerie ? detalle.NumeroSerie : "-" }} </div>
           </div>
           <br><hr class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         </div>
