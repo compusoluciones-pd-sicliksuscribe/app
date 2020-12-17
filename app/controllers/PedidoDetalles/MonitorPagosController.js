@@ -522,6 +522,7 @@
               $scope.amount = Datos.data[0].amount;
               $scope.currency = Datos.data[0].currency;
             }
+            $('#modalPagoTC').modal('show');
           })
           .error(function (data, status, headers, config) {
             $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';

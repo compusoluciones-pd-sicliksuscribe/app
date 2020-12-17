@@ -131,7 +131,7 @@
               <button ng-if = "paymethod !== CREDIT_CARD" id="btnSiguiente" type="button" ng-click="checkPayment()" class="btn btn-primary btn-block">
                 Realizar Pago
               </button>
-              <button ng-if = "paymethod === CREDIT_CARD" type="button" ng-click="checkPayment();" class="btn btn-primary btn-block" ng-disabled="btnComprarBloqueado" data-toggle="modal" data-target="#modalPagoTC"  >
+              <button ng-if = "paymethod === CREDIT_CARD" type="button" ng-click="checkPayment();" class="btn btn-primary btn-block" ng-disabled="btnComprarBloqueado" data-toggle="modal">
                   Realizar Pago
               </button>
             </div>
