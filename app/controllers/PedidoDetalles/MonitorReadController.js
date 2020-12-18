@@ -70,6 +70,16 @@
         });
     };
 
+    const getEndDateContract = function () {
+      PedidosFactory.getEndDateContract($cookies.getObject('Session').IdEmpresa, $scope.EmpresaSelect)
+        .then(result => {
+          $scope.OpcionesExtencion = result.data.data.contractDates;
+        })
+        .catch(result => {
+          $scope.ShowToast(result.data.message, 'danger');
+        });
+    };
+
     const renewContract = function (contractData) {
       PedidosFactory.renewContract(contractData)
         .then(result => {
@@ -114,8 +124,10 @@
       Params.EstatusContrato = $scope.Contrato.tipo || 'all';
       if (Params.IdFabricante && $scope.EmpresaSelect) {
         getOrderPerCustomer(Params);
-        if (Params.IdFabricante === 2) getContactUsers();
-
+        if (Params.IdFabricante === 2) {
+          getContactUsers();
+          getEndDateContract();
+        }
       }
       getTerminos($scope.EmpresaSelect);
     };
@@ -554,11 +566,12 @@
     };
 
     $scope.solicitarExtension = (IdContrato) => {
-      if ($scope.Extender.fechaFin) {
+      console.log($scope.Extender.NvaFechaFinContrato);
+      if ($scope.Extender.NvaFechaFinContrato) {
         const payload = {
           IdContrato: IdContrato,
           IdEmpresaUsuarioFinal: $scope.EmpresaSelect,
-          FechaFin: $scope.Extender.fechaFin
+          FechaFin: $scope.Extender.NvaFechaFinContrato
         };
         extendContract(payload);
       } else {

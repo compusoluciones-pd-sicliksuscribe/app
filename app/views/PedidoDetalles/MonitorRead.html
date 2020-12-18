@@ -607,11 +607,17 @@
                         <h4 class="modal-title"><b>Solicitud de extensión de contrato (co-term)</b></h4>
                     </div>
                     <div class="modal-body">
+                        <p class="alert alert-info">
+                            Las extenciones de contrato están destinadas a emparejar la fecha de término entre contratos de un usuario final. 
+                            Podrá seleccionar entre las fechas fin de contratos que terminen en el futuro y estén registrados en clicksuscribe.
+                          </p>
+                        <div class="form-group has-feedback col-xs-7 col-sm-7 col-md-7 col-lg-7">
                         <h5><b>Selecciona la nueva fecha fin para el contrato:</b></h5>
-                        <div class="form-group has-feedback col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                            <input class="form-control ng-pristine ng-invalid ng-invalid-required ng-touched" type="date" ng-model="Extender.fechaFin" ng-change="">
+                            <select id="NvaFechaFin" name="NvaFechaFin" class="form-control selectOption" ng-model="Extender.NvaFechaFinContrato" ng-options="OpcionExtencion.FechaFin as (OpcionExtencion.NumeroContrato + ' - ' + OpcionExtencion.FechaFin) for OpcionExtencion in OpcionesExtencion">
+                                <option ng-selected="true" value="">Selecciona una nueva fecha fin</option>
+                            </select>
                         </div>
-                        <br><br><hr>
+                        <br><br><br><br><hr>
                         <div class="form-group">
                             <h5><b>Nota:</b></h5>
                             <p>
@@ -620,7 +626,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal" style="padding: .8em 1.4em">Regresar</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal" style="padding: .8em 1.4em">Regresar</button> 
                         <button type="button" class="btn btn-info" data-dismiss="modal" ng-click="solicitarExtension(pedido.IdContrato)" style="padding: .8em 1.4em">Extender contrato</button>
                     </div>
                 </div>
