@@ -70,16 +70,6 @@
         });
     };
 
-    const getEndDateContract = function () {
-      PedidosFactory.getEndDateContract($cookies.getObject('Session').IdEmpresa, $scope.EmpresaSelect)
-        .then(result => {
-          $scope.OpcionesExtencion = result.data.data.contractDates;
-        })
-        .catch(result => {
-          $scope.ShowToast(result.data.message, 'danger');
-        });
-    };
-
     const renewContract = function (contractData) {
       PedidosFactory.renewContract(contractData)
         .then(result => {
@@ -124,10 +114,7 @@
       Params.EstatusContrato = $scope.Contrato.tipo || 'all';
       if (Params.IdFabricante && $scope.EmpresaSelect) {
         getOrderPerCustomer(Params);
-        if (Params.IdFabricante === 2) {
-          getContactUsers();
-          getEndDateContract();
-        }
+        if (Params.IdFabricante === 2) getContactUsers();
       }
       getTerminos($scope.EmpresaSelect);
     };
@@ -565,8 +552,27 @@
       $scope.Tour.start();
     };
 
-    $scope.solicitarExtension = (IdContrato) => {
-      console.log($scope.Extender.NvaFechaFinContrato);
+    $scope.getEndDateContract = contratoActual => {
+      PedidosFactory.getEndDateContract(contratoActual, $cookies.getObject('Session').IdEmpresa, $scope.EmpresaSelect)
+        .then(result => {
+          $scope.OpcionesExtencion = result.data.data.contractDates;
+          $scope.validarModal();
+        })
+        .catch(result => {
+          $scope.ShowToast(result.data.message, 'danger');
+        });
+    };
+
+    $scope.validarModal = () => {
+      $scope.OpcionesExtencion.length > 0 ? document.getElementById('extenderModal').style.display = 'block'
+      : document.getElementById('noExtender').style.display = 'block';
+    };
+
+    $scope.cerrarModal = modal => {
+      document.getElementById(modal).style.display = 'none';
+    };
+
+    $scope.solicitarExtension = IdContrato => {
       if ($scope.Extender.NvaFechaFinContrato) {
         const payload = {
           IdContrato: IdContrato,
@@ -575,7 +581,7 @@
         };
         extendContract(payload);
       } else {
-        $scope.ShowToast('Especifica una fecha fin para la extensión del contrato', 'warning');
+        $scope.ShowToast('Especifica una fecha fin para la extensión del contrato.', 'warning');
       }
     };
 
