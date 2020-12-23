@@ -765,6 +765,8 @@
         }
       })
     };
+    
+    $scope.actualizarConsulta = () => $scope.terminos = false;
   };
 
   ProductosReadController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'ProductosFactory','AmazonDataFactory', 'FabricantesFactory', 'TiposProductosFactory', 'PedidoDetallesFactory', 'TipoCambioFactory', 'ProductoGuardadosFactory', 'EmpresasXEmpresasFactory', 'UsuariosFactory', '$anchorScroll', 'EmpresasFactory'];
