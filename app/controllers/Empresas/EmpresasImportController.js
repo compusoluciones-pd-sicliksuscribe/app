@@ -22,10 +22,31 @@
         .success(function (Empresas) {
           $scope.EmpresasM = Empresas.items;
           $scope.Combo.TipoRFC = [{ Nombre: 'Persona Física' }, { Nombre: 'Persona Moral' }];
+          $scope.listaAux = $scope.EmpresasM;
+          pagination();
+
         })
         .error(function (data, status, headers, config) {
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
+    };
+
+    $scope.filter = () => {
+      $scope.listaAux = $scope.EmpresasM.filter(function (str) { return str.companyProfile.companyName.indexOf($scope.EmpresaFilter) !== -1; })
+      pagination();
+    }
+
+    const pagination = () => {
+      $scope.filtered = [];
+      $scope.currentPage = 1;
+      $scope.numPerPage = 10;
+      $scope.maxSize = 5;
+
+      $scope.$watch('currentPage + numPerPage', function () {
+        let begin = (($scope.currentPage - 1) * $scope.numPerPage),
+          end = begin + $scope.numPerPage;
+        $scope.filtered = $scope.listaAux.slice(begin, end);
+      });
     };
 
     $scope.init();
