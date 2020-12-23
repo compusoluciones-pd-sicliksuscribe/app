@@ -154,6 +154,12 @@
                             </a>
                         </div>
 
+                        <div ng-show="pedido.IdFabricante === 2 && pedido.IdAccionAutodesk === 5">
+                            <a title="Elimina del carrito el pedido de renovación." ng-click="removeExt(pedido);">
+                                <span class="glyphicon glyphicon-trash"> </span> Quitar extensión
+                            </a>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -211,7 +217,7 @@
 
                         </div>
                     </div>
-                    <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1" ng-hide="pedido.IdFabricante === 2 && pedido.IdAccionAutodesk === 4">
+                    <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1" ng-hide="pedido.IdFabricante === 2 && (pedido.IdAccionAutodesk === 4 || pedido.IdAccionAutodesk === 5)">
                         <div class="form-group">
                             <label labelfor="aQuitarProducto"></label>
                             <h4>

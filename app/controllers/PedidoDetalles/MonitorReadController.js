@@ -15,6 +15,8 @@
     $scope.SessionCookie = $cookies.getObject('Session');
 
     $scope.init = function () {
+      $scope.procesandoExtension = false;
+      $scope.procesandoExtensionLbl = 'Extender contrato';
       $scope.CheckCookie();
       FabricantesFactory.getFabricantes()
         .success(function (Fabricantes) {
@@ -85,8 +87,13 @@
     };
 
     const extendContract = contractData => {
+      $scope.procesandoExtension = true;
+      $scope.procesandoExtensionLbl = 'Procesando...';
       PedidosFactory.extendContract(contractData)
         .then(result => {
+          $scope.procesandoExtension = false;
+          $scope.procesandoExtensionLbl = 'Extender contrato';
+          $scope.cerrarModal('extenderModal');
           if (result.data.success) {
             $scope.ShowToast(result.data.message, 'success');
             $scope.ActualizarMenu();
@@ -96,6 +103,9 @@
           }
         })
         .catch(result => {
+          $scope.procesandoExtension = false;
+          $scope.procesandoExtensionLbl = 'Extender contrato';
+          $scope.cerrarModal('extenderModal');
           $scope.ShowToast(result.data.message, 'danger');
         });
     };
@@ -584,7 +594,6 @@
         $scope.ShowToast('Especifica una fecha fin para la extensión del contrato.', 'warning');
       }
     };
-
   };
 
   MonitorReadController.$inject = ['$scope', '$log', '$cookies', '$location', 'EmpresasXEmpresasFactory', 'PedidoDetallesFactory', '$uibModal', '$filter', 'FabricantesFactory', 'PedidosFactory', 'EmpresasFactory', 'UsuariosFactory','AmazonDataFactory'];

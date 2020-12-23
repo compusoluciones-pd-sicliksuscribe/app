@@ -626,8 +626,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal" style="padding: .8em 1.4em" ng-click="cerrarModal('extenderModal')">Regresar</button> 
-                        <button type="button" class="btn btn-info" data-dismiss="modal" ng-click="solicitarExtension(pedido.IdContrato)" style="padding: .8em 1.4em">Extender contrato</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal" style="padding: .8em 1.4em" ng-click="cerrarModal('extenderModal')" ng-disabled="procesandoExtension">Regresar</button> 
+                        <button type="button" class="btn btn-info" data-dismiss="modal" ng-click="solicitarExtension(pedido.IdContrato)" ng-disabled="procesandoExtension" style="padding: .8em 1.4em">{{procesandoExtensionLbl}}</button>
                     </div>
                 </div>
             </div>
