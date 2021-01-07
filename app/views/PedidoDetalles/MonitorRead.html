@@ -400,13 +400,13 @@
             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"></div>
 			<div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
 				<button id="Renovar" class="pull-right btn btn-block btn-primary"
-                ng-hide="pedido.EstatusContrato !== 'ready' || !pedido.listoRenovar"
+                ng-hide="pedido.EstatusContrato !== 'ready' || !pedido.listoRenovar || pedido.PorExtender || pedido.Extendido"
                 data-toggle="modal" data-target="#renovarModal"
 					ng-click="AgregarContrato(pedido);">
 					Renovar
                 </button>
                 <button id="Extender" class="pull-right btn btn-block btn-info" style="margin-top: 10px; padding: .8em 0px"
-                ng-hide="pedido.EstatusContrato === 'canceled' || pedido.EstatusContrato === 'notRenewed' || pedido.EstatusContrato === 'in-cart' || pedido.EstatusContrato === 'processing' || pedido.EstatusContrato === 'renewal'"
+                ng-hide="pedido.EstatusContrato === 'canceled' || pedido.EstatusContrato === 'notRenewed' || pedido.EstatusContrato === 'in-cart' || pedido.EstatusContrato === 'processing' || pedido.EstatusContrato === 'renewal' || pedido.PorExtender || pedido.Extendido"
 					ng-click="getEndDateContract(pedido.IdContrato);">
 					Extender 
 				</button>
@@ -571,6 +571,9 @@
 
         <div id="renovarModal" class="modal fade" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
+                <div class="divLoading" data-cargando>
+                    <div class=""><img src="images/ripple.svg" /></div>
+                </div>  
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -601,6 +604,9 @@
 
         <div id="extenderModal" class="modal fade in" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
+                <div class="divLoading" data-cargando>
+                    <div class=""><img src="images/ripple.svg" /></div>
+                </div>                
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cerrarModal('extenderModal')"><span aria-hidden="true">&times;</span></button>
@@ -613,7 +619,7 @@
                           </p>
                         <div class="form-group has-feedback col-xs-7 col-sm-7 col-md-7 col-lg-7">
                         <h5><b>Selecciona la nueva fecha fin para el contrato:</b></h5>
-                            <select id="NvaFechaFin" name="NvaFechaFin" class="form-control selectOption" ng-model="Extender.NvaFechaFinContrato" ng-options="OpcionExtencion.FechaFin as (OpcionExtencion.NumeroContrato + ' - ' + OpcionExtencion.FechaFin) for OpcionExtencion in OpcionesExtencion">
+                            <select id="NvaFechaFin" name="NvaFechaFin" class="form-control selectOption" ng-model="Extender.IdContrato" ng-options="OpcionExtencion.IdContrato as (OpcionExtencion.NumeroContrato + ' - ' + OpcionExtencion.FechaFin) for OpcionExtencion in OpcionesExtencion">
                                 <option ng-selected="true" value="">Selecciona una nueva fecha fin</option>
                             </select>
                         </div>

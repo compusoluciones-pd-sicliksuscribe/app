@@ -98,6 +98,7 @@
             $scope.ShowToast(result.data.message, 'success');
             $scope.ActualizarMenu();
             $scope.addPulseCart();
+            $scope.Pedidos.filter(pedido => { if (pedido.IdContrato === contractData.IdContrato) pedido.PorExtender = 1; });
           } else {
             $scope.ShowToast(result.data.message, 'danger');
           }
@@ -583,11 +584,11 @@
     };
 
     $scope.solicitarExtension = IdContrato => {
-      if ($scope.Extender.NvaFechaFinContrato) {
+      if ($scope.Extender.IdContrato) {
         const payload = {
           IdContrato: IdContrato,
           IdEmpresaUsuarioFinal: $scope.EmpresaSelect,
-          FechaFin: $scope.Extender.NvaFechaFinContrato
+          IdContratoRelacionado: $scope.Extender.IdContrato
         };
         extendContract(payload);
       } else {
