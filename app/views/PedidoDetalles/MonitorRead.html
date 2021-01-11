@@ -380,22 +380,24 @@
                     <li ng-if="pedido.NumeroContrato"> <label for="Contrato">Número de contrato: </label> {{ pedido.NumeroContrato }} </li>
                     <li ng-if="!pedido.NumeroContrato"> <label for="Contrato">Número de contrato: </label> Solicitando contrato... </li>
                     <li ng-hide="pedido.EstatusContrato === 'canceled'"> <label for="Esquema">Esquema de renovación: </label> {{ pedido.NombreEsquema }} </li>
-                    <li ng-if="pedido.EstatusContrato === 'ready' && pedido.listoRenovar"> <label for="Renovado">Estatus renovación: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-success">Listo para renovar</span></li>
-                    <li ng-if="pedido.EstatusContrato === 'renewal'"> <label for="Renovado">Estatus renovación: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-primary">Renovado</span></li>
-                    <li ng-if="pedido.EstatusContrato === 'processing'"><label for="Renovado">Estatus renovación: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-info">Pendiente</span></li>
-                    <li ng-if="(pedido.EstatusContrato === 'unready' || !pedido.listoRenovar) && pedido.EstatusContrato !== 'notRenewed'"><label for="Renovado">Estatus renovación: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-default" data-toggle="tooltip" data-placement="top" title="Periodo de renovación: 90 días previo a su fecha de termino.">Aún no puede ser renovado</span></li>
-                    <li ng-if="pedido.EstatusContrato === 'in-cart'"><label for="Renovado">Estatus renovación: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-warning">En carrito</span></li>
+                    <li ng-if="pedido.EstatusContrato === 'ready' && pedido.listoRenovar && !pedido.PorExtender"> <label for="Renovado">Estatus renovación: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-success">Listo para renovar</span></li>
+                    <li ng-if="pedido.EstatusContrato === 'renewal' && !pedido.PorExtender"> <label for="Renovado">Estatus renovación: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-primary">Renovado</span></li>
+                    <li ng-if="pedido.EstatusContrato === 'processing' && !pedido.PorExtender"><label for="Renovado">Estatus renovación: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-info">Pendiente</span></li>
+                    <li ng-if="(pedido.EstatusContrato === 'unready' || !pedido.listoRenovar) && pedido.EstatusContrato !== 'notRenewed' && !pedido.PorExtender"><label for="Renovado">Estatus renovación: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-default" data-toggle="tooltip" data-placement="top" title="Periodo de renovación: 90 días previo a su fecha de termino.">Aún no puede ser renovado</span></li>
+                    <li ng-if="pedido.EstatusContrato === 'in-cart' && !pedido.PorExtender"><label for="Renovado">Estatus renovación: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-warning">En carrito</span></li>
                     <li ng-if="pedido.EstatusContrato === 'notRenewed'"><label for="Renovado">Estatus renovación: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-default">No Renovado</span></li>
+                    <li ng-if="pedido.PorExtender"><label for="Renovado">Estatus del contrato: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-info">Por extender</span></li>
                     <li> <label for="FechaInicio">Duración del contrato: </label> {{ pedido.FechaInicio | date:'d/MM/yyyy' }} <label>-</label> {{ pedido.FechaFin | date:'d/MM/yyyy'}} </li>
                 </ul>
             </div>
             <!-- <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
 				
 			</div> -->
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="pedido.EstatusContrato === 'in-cart' || pedido.EstatusContrato === 'processing' || pedido.EstatusContrato === 'renewal'">
-                <div ng-if="pedido.EstatusContrato === 'in-cart'"><hr><h5 class="alert alert-warning text-warning" style="border-left: .6em solid; width: 100%;"><b>El pedido para la renovación se encuentra en el carrito. Realice el pago para continuar el proceso de renovación.</b></h5></div>
-                <div ng-if="pedido.EstatusContrato === 'processing'"><hr><h5 class="alert alert-info text-info" style="border-left: .6em solid;"><b>Este contrato será renovado. El siguiente periodo del contrato se habilitará al terminar el periodo actual.</b></h5></div>
-                <div ng-if="pedido.EstatusContrato === 'renewal'"><hr><h5 class="alert alert-info text-info" style="border-left: .6em solid;"><b>El siguiente periodo del contrato se habilitará al terminar el periodo actual.</b></h5></div>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="pedido.EstatusContrato === 'in-cart' || pedido.EstatusContrato === 'processing' || pedido.EstatusContrato === 'renewal' || pedido.PorExtender">
+                <div ng-if="pedido.EstatusContrato === 'in-cart' && !pedido.PorExtender"><hr><h5 class="alert alert-warning text-warning" style="border-left: .6em solid; width: 100%;"><b>El pedido para la renovación se encuentra en el carrito. Realice el pago para continuar el proceso de renovación.</b></h5></div>
+                <div ng-if="pedido.EstatusContrato === 'processing' && !pedido.PorExtender"><hr><h5 class="alert alert-info text-info" style="border-left: .6em solid;"><b>Este contrato será renovado. El siguiente periodo del contrato se habilitará al terminar el periodo actual.</b></h5></div>
+                <div ng-if="pedido.EstatusContrato === 'renewal' && !pedido.PorExtender"><hr><h5 class="alert alert-info text-info" style="border-left: .6em solid;"><b>El siguiente periodo del contrato se habilitará al terminar el periodo actual.</b></h5></div>
+                <div ng-if="pedido.PorExtender"><hr><h5 class="alert alert-info text-info" style="border-left: .6em solid;"><b>El periodo de vigencia del contrato será extendido.</b></h5></div>
             </div>
             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"></div>
 			<div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
