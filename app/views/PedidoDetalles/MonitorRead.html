@@ -410,7 +410,7 @@
                 <button id="Extender" class="pull-right btn btn-block btn-info" style="margin-top: 10px; padding: .8em 0px"
                 ng-hide="pedido.EstatusContrato === 'canceled' || pedido.EstatusContrato === 'notRenewed' || pedido.EstatusContrato === 'in-cart' || pedido.EstatusContrato === 'processing' || pedido.EstatusContrato === 'renewal' || pedido.PorExtender || pedido.Extendido"
 					ng-click="getEndDateContract(pedido.IdContrato);">
-					Extender 
+					Extender
 				</button>
             </div> 
         </div>
@@ -604,14 +604,14 @@
             </div>
         </div>
 
-        <div id="extenderModal" class="modal fade in" tabindex="-1" role="dialog">
+        <div id="extenderModal{{pedido.IdContrato}}" class="modal fade in" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="divLoading" data-cargando>
                     <div class=""><img src="images/ripple.svg" /></div>
                 </div>                
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cerrarModal('extenderModal')"><span aria-hidden="true">&times;</span></button>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cerrarModal('extenderModal{{pedido.IdContrato}}')"><span aria-hidden="true">&times;</span></button>
                         <h4 class="modal-title"><b>Solicitud de extensión de contrato (co-term)</b></h4>
                     </div>
                     <div class="modal-body">
@@ -634,7 +634,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal" style="padding: .8em 1.4em" ng-click="cerrarModal('extenderModal')" ng-disabled="procesandoExtension">Regresar</button> 
+                        <button type="button" class="btn btn-default" data-dismiss="modal" style="padding: .8em 1.4em" ng-click="cerrarModal('extenderModal{{pedido.IdContrato}}')" ng-disabled="procesandoExtension">Regresar</button> 
                         <button type="button" class="btn btn-info" data-dismiss="modal" ng-click="solicitarExtension(pedido.IdContrato)" ng-disabled="procesandoExtension" style="padding: .8em 1.4em">{{procesandoExtensionLbl}}</button>
                     </div>
                 </div>

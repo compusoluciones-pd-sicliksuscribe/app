@@ -93,7 +93,7 @@
         .then(result => {
           $scope.procesandoExtension = false;
           $scope.procesandoExtensionLbl = 'Extender contrato';
-          $scope.cerrarModal('extenderModal');
+          $scope.cerrarModal(`extenderModal${contractData.IdContrato}`);
           if (result.data.success) {
             $scope.ShowToast(result.data.message, 'success');
             $scope.ActualizarMenu();
@@ -106,7 +106,7 @@
         .catch(result => {
           $scope.procesandoExtension = false;
           $scope.procesandoExtensionLbl = 'Extender contrato';
-          $scope.cerrarModal('extenderModal');
+          $scope.cerrarModal(`extenderModal${contractData.IdContrato}`);
           $scope.ShowToast(result.data.message, 'danger');
         });
     };
@@ -567,15 +567,15 @@
       PedidosFactory.getEndDateContract(contratoActual, $cookies.getObject('Session').IdEmpresa, $scope.EmpresaSelect)
         .then(result => {
           $scope.OpcionesExtencion = result.data.data.contractDates;
-          $scope.validarModal();
+          $scope.validarModal(contratoActual);
         })
         .catch(result => {
           $scope.ShowToast(result.data.message, 'danger');
         });
     };
 
-    $scope.validarModal = () => {
-      $scope.OpcionesExtencion.length > 0 ? document.getElementById('extenderModal').style.display = 'block'
+    $scope.validarModal = contratoActual => {
+      $scope.OpcionesExtencion.length > 0 ? document.getElementById(`extenderModal${contratoActual}`).style.display = 'block'
       : document.getElementById('noExtender').style.display = 'block';
     };
 
@@ -585,12 +585,13 @@
 
     $scope.solicitarExtension = IdContrato => {
       if ($scope.Extender.IdContrato) {
-        const payload = {
+        let payload = {
           IdContrato: IdContrato,
           IdEmpresaUsuarioFinal: $scope.EmpresaSelect,
           IdContratoRelacionado: $scope.Extender.IdContrato
         };
         extendContract(payload);
+        payload = {};
       } else {
         $scope.ShowToast('Especifica una fecha fin para la extensión del contrato.', 'warning');
       }
