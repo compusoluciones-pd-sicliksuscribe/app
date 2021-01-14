@@ -94,6 +94,7 @@
           $scope.procesandoExtension = false;
           $scope.procesandoExtensionLbl = 'Extender contrato';
           $scope.cerrarModal(`extenderModal${contractData.IdContrato}`);
+          $scope.Extender.IdContrato = null;
           if (result.data.success) {
             $scope.ShowToast(result.data.message, 'success');
             $scope.ActualizarMenu();
@@ -107,6 +108,7 @@
           $scope.procesandoExtension = false;
           $scope.procesandoExtensionLbl = 'Extender contrato';
           $scope.cerrarModal(`extenderModal${contractData.IdContrato}`);
+          $scope.Extender.IdContrato = null;
           $scope.ShowToast(result.data.message, 'danger');
         });
     };
