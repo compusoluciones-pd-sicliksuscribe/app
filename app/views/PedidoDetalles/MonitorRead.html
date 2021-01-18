@@ -408,7 +408,8 @@
 					Renovar
                 </button>
                 <button id="Extender" class="pull-right btn btn-block btn-info" style="margin-top: 10px; padding: .8em 0px"
-                ng-hide="pedido.EstatusContrato === 'canceled' || pedido.EstatusContrato === 'notRenewed' || pedido.EstatusContrato === 'in-cart' || pedido.EstatusContrato === 'processing' || pedido.EstatusContrato === 'renewal' || pedido.PorExtender"
+                ng-hide="pedido.EstatusContrato === 'canceled' || pedido.EstatusContrato === 'notRenewed' || pedido.EstatusContrato === 'in-cart' || pedido.EstatusContrato === 'processing' || pedido.EstatusContrato === 'renewal' ||  pedido.EstatusContrato === 'processing' || pedido.PorExtender"
+                ng-disabled="pedido.EstatusPedido !== 3"
 					ng-click="getEndDateContract(pedido.IdContrato);">
 					Extender
 				</button>
