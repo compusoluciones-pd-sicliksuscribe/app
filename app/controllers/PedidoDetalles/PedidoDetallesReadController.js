@@ -333,6 +333,27 @@
         });
     };
 
+    $scope.removeExt = function (pedido) {
+      const params = {
+        IdPedido: pedido.IdPedido,
+        IdEmpresaUsuarioFinal: pedido.IdEmpresaUsuarioFinal
+      };
+      PedidoDetallesFactory.removeExt(params)
+        .then(function (result) {
+          $scope.PedidoDetalles.forEach(function (order, indexOrder) {
+            if (pedido.IdPedido === order.IdPedido) {
+              $scope.PedidoDetalles.splice(indexOrder, 1);
+              if ($scope.isPayingWithCSCredit()) validarCarrito();
+            }
+          });
+          $scope.ActualizarMenu();
+          $scope.ShowToast(result.data.message, 'success');
+        })
+        .catch(function (result) {
+          $scope.ShowToast(result.data.message, 'danger');
+        });
+    };
+
     const isTiredProduct = function (product) {
       return product.tieredPrice > 0;
     };

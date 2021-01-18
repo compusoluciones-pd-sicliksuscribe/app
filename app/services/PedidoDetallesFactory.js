@@ -282,6 +282,11 @@
       return $http.post($rootScope.API + 'autodesk/update-quantity', pedido);
     };
 
+    factory.removeExt = function (pedido) {
+      factory.refreshToken();
+      return $http.delete($rootScope.API + 'shopping-cart/remove-contract-extension/order/' + pedido.IdPedido + '/end-user/' + pedido.IdEmpresaUsuarioFinal);
+    };
+
     return factory;
   };
 

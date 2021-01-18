@@ -390,29 +390,40 @@
                     <li ng-if="pedido.NumeroContrato"> <label for="Contrato">Número de contrato: </label> {{ pedido.NumeroContrato }} </li>
                     <li ng-if="!pedido.NumeroContrato"> <label for="Contrato">Número de contrato: </label> Solicitando contrato... </li>
                     <li ng-hide="pedido.EstatusContrato === 'canceled'"> <label for="Esquema">Esquema de renovación: </label> {{ pedido.NombreEsquema }} </li>
-                    <li ng-if="pedido.EstatusContrato === 'ready' && pedido.listoRenovar"> <label for="Renovado">Estatus renovación: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-success">Listo para renovar</span></li>
-                    <li ng-if="pedido.EstatusContrato === 'renewal'"> <label for="Renovado">Estatus renovación: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-primary">Renovado</span></li>
-                    <li ng-if="pedido.EstatusContrato === 'processing'"><label for="Renovado">Estatus renovación: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-info">Pendiente</span></li>
-                    <li ng-if="(pedido.EstatusContrato === 'unready' || !pedido.listoRenovar) && pedido.EstatusContrato !== 'notRenewed'"><label for="Renovado">Estatus renovación: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-default" data-toggle="tooltip" data-placement="top" title="Periodo de renovación: 90 días previo a su fecha de termino.">Aún no puede ser renovado</span></li>
-                    <li ng-if="pedido.EstatusContrato === 'in-cart'"><label for="Renovado">Estatus renovación: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-warning">En carrito</span></li>
+                    <li ng-if="pedido.EstatusContrato === 'ready' && pedido.listoRenovar && !pedido.PorExtender"> <label for="Renovado">Estatus renovación: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-success">Listo para renovar</span></li>
+                    <li ng-if="pedido.EstatusContrato === 'renewal' && !pedido.PorExtender"> <label for="Renovado">Estatus renovación: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-primary">Renovado</span></li>
+                    <li ng-if="pedido.EstatusContrato === 'processing' && !pedido.PorExtender"><label for="Renovado">Estatus renovación: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-info">Pendiente</span></li>
+                    <li ng-if="(pedido.EstatusContrato === 'unready' || !pedido.listoRenovar) && pedido.EstatusContrato !== 'notRenewed' && !pedido.PorExtender"><label for="Renovado">Estatus renovación: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-default" data-toggle="tooltip" data-placement="top" title="Periodo de renovación: 90 días previo a su fecha de termino.">Aún no puede ser renovado</span></li>
+                    <li ng-if="pedido.EstatusContrato === 'in-cart' && !pedido.PorExtender"><label for="Renovado">Estatus renovación: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-warning">En carrito</span></li>
                     <li ng-if="pedido.EstatusContrato === 'notRenewed'"><label for="Renovado">Estatus renovación: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-default">No Renovado</span></li>
+                    <li ng-if="pedido.PorExtender"><label for="Renovado">Estatus del contrato: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-info">Por extender</span></li>
                     <li> <label for="FechaInicio">Duración del contrato: </label> {{ pedido.FechaInicio | date:'d/MM/yyyy' }} <label>-</label> {{ pedido.FechaFin | date:'d/MM/yyyy'}} </li>
                 </ul>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="pedido.EstatusContrato === 'in-cart' || pedido.EstatusContrato === 'processing' || pedido.EstatusContrato === 'renewal'">
-                <div ng-if="pedido.EstatusContrato === 'in-cart'"><hr><h5 class="alert alert-warning text-warning" style="border-left: .6em solid; width: 100%;"><b>El pedido para la renovación se encuentra en el carrito. Realice el pago para continuar el proceso de renovación.</b></h5></div>
-                <div ng-if="pedido.EstatusContrato === 'processing'"><hr><h5 class="alert alert-info text-info" style="border-left: .6em solid;"><b>Este contrato será renovado. El siguiente periodo del contrato se habilitará al terminar el periodo actual.</b></h5></div>
-                <div ng-if="pedido.EstatusContrato === 'renewal'"><hr><h5 class="alert alert-info text-info" style="border-left: .6em solid;"><b>El siguiente periodo del contrato se habilitará al terminar el periodo actual.</b></h5></div>
+            <!-- <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+				
+			</div> -->
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="pedido.EstatusContrato === 'in-cart' || pedido.EstatusContrato === 'processing' || pedido.EstatusContrato === 'renewal' || pedido.PorExtender">
+                <div ng-if="pedido.EstatusContrato === 'in-cart' && !pedido.PorExtender"><hr><h5 class="alert alert-warning text-warning" style="border-left: .6em solid; width: 100%;"><b>El pedido para la renovación se encuentra en el carrito. Realice el pago para continuar el proceso de renovación.</b></h5></div>
+                <div ng-if="pedido.EstatusContrato === 'processing' && !pedido.PorExtender"><hr><h5 class="alert alert-info text-info" style="border-left: .6em solid;"><b>Este contrato será renovado. El siguiente periodo del contrato se habilitará al terminar el periodo actual.</b></h5></div>
+                <div ng-if="pedido.EstatusContrato === 'renewal' && !pedido.PorExtender"><hr><h5 class="alert alert-info text-info" style="border-left: .6em solid;"><b>El siguiente periodo del contrato se habilitará al terminar el periodo actual.</b></h5></div>
+                <div ng-if="pedido.PorExtender"><hr><h5 class="alert alert-info text-info" style="border-left: .6em solid;"><b>El periodo de vigencia del contrato será extendido.</b></h5></div>
             </div>
             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"></div>
 			<div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
-				<button id="Renovar" class="pull-right btn btn-block btn-primary" style="margin-top: 20px"
-                ng-hide="pedido.EstatusContrato !== 'ready' || !pedido.listoRenovar"
+				<button id="Renovar" class="pull-right btn btn-block btn-primary"
+                ng-hide="pedido.EstatusContrato !== 'ready' || !pedido.listoRenovar || pedido.PorExtender"
                 data-toggle="modal" data-target="#renovarModal"
 					ng-click="AgregarContrato(pedido);">
 					Renovar
+                </button>
+                <button id="Extender" class="pull-right btn btn-block btn-info" style="margin-top: 10px; padding: .8em 0px"
+                ng-hide="pedido.EstatusContrato === 'canceled' || pedido.EstatusContrato === 'notRenewed' || pedido.EstatusContrato === 'in-cart' || pedido.EstatusContrato === 'processing' || pedido.EstatusContrato === 'renewal' ||  pedido.EstatusContrato === 'processing' || pedido.PorExtender"
+                ng-disabled="pedido.EstatusPedido !== 3"
+					ng-click="getEndDateContract(pedido.IdContrato);">
+					Extender
 				</button>
-			</div>
+            </div> 
         </div>
 
         <table class="table table-hover table-responsive border-left-right-cero">
@@ -514,7 +525,8 @@
 
                     <div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
                         <div>
-                            <label>Fecha Solicitud: </label>
+                            <label ng-show="detalles.IdAccionAutodesk !== 5">Fecha solicitud: </label>
+                            <label ng-show="detalles.IdAccionAutodesk === 5">Fecha extensión: </label>
                             <br/> {{ detalles.FechaActivo | date:'d/MM/yyyy' }}
                         </div>
                         <br>
@@ -573,6 +585,9 @@
 
         <div id="renovarModal" class="modal fade" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
+                <div class="divLoading" data-cargando>
+                    <div class=""><img src="images/ripple.svg" /></div>
+                </div>  
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -600,6 +615,63 @@
                 </div>
             </div>
         </div>
+
+        <div id="extenderModal{{pedido.IdContrato}}" class="modal fade in" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="divLoading" data-cargando>
+                    <div class=""><img src="images/ripple.svg" /></div>
+                </div>                
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cerrarModal('extenderModal{{pedido.IdContrato}}')"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title"><b>Solicitud de extensión de contrato (co-term)</b></h4>
+                    </div>
+                    <div class="modal-body">
+                        <p class="alert alert-info">
+                            Las extenciones de contrato están destinadas a emparejar la fecha de término entre contratos de un usuario final. 
+                            Podrá seleccionar entre las fechas fin de contratos que terminen en el futuro y estén registrados en clicksuscribe.
+                          </p>
+                        <div class="form-group has-feedback col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                        <h5><b>Selecciona la nueva fecha fin para el contrato:</b></h5>
+                            <select id="NvaFechaFin" name="NvaFechaFin" class="form-control selectOption" ng-model="Extender.IdContrato" ng-options="OpcionExtencion.IdContrato as (OpcionExtencion.NumeroContrato + ' - ' + OpcionExtencion.FechaFin) for OpcionExtencion in OpcionesExtencion">
+                                <option ng-selected="true" value="">Selecciona una nueva fecha fin</option>
+                            </select>
+                        </div>
+                        <br><br><br><br><hr>
+                        <div class="form-group">
+                            <h5><b>Nota:</b></h5>
+                            <p>
+                              Al dar clic en <b>Extender contrato</b>, se agregarán al carrito de compras todos los productos que estén incluidos en el contrato con la cantidad actual de licencias activas</b>.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" style="padding: .8em 1.4em" ng-click="cerrarModal('extenderModal{{pedido.IdContrato}}')" ng-disabled="procesandoExtension">Regresar</button> 
+                        <button type="button" class="btn btn-info" data-dismiss="modal" ng-click="solicitarExtension(pedido.IdContrato)" ng-disabled="procesandoExtension" style="padding: .8em 1.4em">{{procesandoExtensionLbl}}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="noExtender" class="modal fade in" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cerrarModal('noExtender')"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title"><b>Solicitud de extensión de contrato (co-term)</b></h4>
+                    </div>
+                    <div class="modal-body">
+                        <p class="alert alert-info">
+                            No es posible extender este contrato. No se encontraron contratos dentro de clicksuscribe que terminen en el futuro para el cliente seleccionado.
+                          </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" style="padding: .8em 1.4em" ng-click="cerrarModal('noExtender')">Aceptar</button> 
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div style="visibility: hidden">
             <div class="md-dialog-container" id="myStaticDialog">
                 <md-dialog>

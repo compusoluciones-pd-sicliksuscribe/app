@@ -10,10 +10,13 @@
     $scope.Contrato = {};
     $scope.Contactos = [];
     $scope.Renovar = {};
+    $scope.Extender = {};
     $scope.terminos = false;
     $scope.SessionCookie = $cookies.getObject('Session');
 
     $scope.init = function () {
+      $scope.procesandoExtension = false;
+      $scope.procesandoExtensionLbl = 'Extender contrato';
       $scope.CheckCookie();
       FabricantesFactory.getFabricantes()
         .success(function (Fabricantes) {
@@ -83,6 +86,33 @@
         });
     };
 
+    const extendContract = contractData => {
+      $scope.procesandoExtension = true;
+      $scope.procesandoExtensionLbl = 'Procesando...';
+      PedidosFactory.extendContract(contractData)
+        .then(result => {
+          $scope.procesandoExtension = false;
+          $scope.procesandoExtensionLbl = 'Extender contrato';
+          $scope.cerrarModal(`extenderModal${contractData.IdContrato}`);
+          $scope.Extender.IdContrato = null;
+          if (result.data.success) {
+            $scope.ShowToast(result.data.message, 'success');
+            $scope.ActualizarMenu();
+            $scope.addPulseCart();
+            $scope.Pedidos.filter(pedido => { if (pedido.IdContrato === contractData.IdContrato) pedido.PorExtender = 1; });
+          } else {
+            $scope.ShowToast(result.data.message, 'danger');
+          }
+        })
+        .catch(result => {
+          $scope.procesandoExtension = false;
+          $scope.procesandoExtensionLbl = 'Extender contrato';
+          $scope.cerrarModal(`extenderModal${contractData.IdContrato}`);
+          $scope.Extender.IdContrato = null;
+          $scope.ShowToast(result.data.message, 'danger');
+        });
+    };
+
     $scope.init();
 
     $scope.ActualizarMonitor = function () {
@@ -98,7 +128,6 @@
       if (Params.IdFabricante && $scope.EmpresaSelect) {
         getOrderPerCustomer(Params);
         if (Params.IdFabricante === 2) getContactUsers();
-
       }
       getTerminos($scope.EmpresaSelect);
     };
@@ -534,6 +563,40 @@
 
       $scope.Tour.init();
       $scope.Tour.start();
+    };
+
+    $scope.getEndDateContract = contratoActual => {
+      PedidosFactory.getEndDateContract(contratoActual, $cookies.getObject('Session').IdEmpresa, $scope.EmpresaSelect)
+        .then(result => {
+          $scope.OpcionesExtencion = result.data.data.contractDates;
+          $scope.validarModal(contratoActual);
+        })
+        .catch(result => {
+          $scope.ShowToast(result.data.message, 'danger');
+        });
+    };
+
+    $scope.validarModal = contratoActual => {
+      $scope.OpcionesExtencion.length > 0 ? document.getElementById(`extenderModal${contratoActual}`).style.display = 'block'
+      : document.getElementById('noExtender').style.display = 'block';
+    };
+
+    $scope.cerrarModal = modal => {
+      document.getElementById(modal).style.display = 'none';
+    };
+
+    $scope.solicitarExtension = IdContrato => {
+      if ($scope.Extender.IdContrato) {
+        let payload = {
+          IdContrato: IdContrato,
+          IdEmpresaUsuarioFinal: $scope.EmpresaSelect,
+          IdContratoRelacionado: $scope.Extender.IdContrato
+        };
+        extendContract(payload);
+        payload = {};
+      } else {
+        $scope.ShowToast('Especifica una fecha fin para la extensión del contrato.', 'warning');
+      }
     };
   };
 
