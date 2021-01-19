@@ -148,8 +148,6 @@
                             <div ng-show="(detalles.Activo) && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)">
                                 <label ng-hide="pedido.Bloquear || pedido.CargoRealizadoProximoPedido">Próxima forma de pago:</label>
                             </div>
-						</div>
-							
 							<div class="BajoConsumo" ng-if="detalles.IdTipoProducto === 3">
 								<div ng-if="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3)" class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
 									<label>Consumo: </label>
@@ -194,9 +192,7 @@
                                     </div>
                                 </div>
                             </form>
-
-                        </div>
-
+						</div>
                         <div ng-if="detalles.IdTipoProducto !== 3">
                             <div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
                                 <label>{{ pedido.IdFabricante === 5 ? "Empleados" : pedido.IdFabricante === 11 ? "Créditos" :"Suscripciones" }}: </label>
@@ -322,11 +318,11 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
-                </td>
-            </tr>
-        </table>
+                </div>
+             </td>
+        </tr>
+    </table>
 
         <div id="cancelationAlert" class="modal fade in" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
