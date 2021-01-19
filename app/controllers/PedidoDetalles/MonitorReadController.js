@@ -565,8 +565,8 @@
       $scope.Tour.start();
     };
 
-    $scope.getEndDateContract = (contratoActual, estatusPedidos) => {​​
-     $scope.estatusPedidos = estatusPedidos;
+    $scope.getEndDateContract = (contratoActual, estatusPedidos) => {
+      $scope.estatusPedidos = estatusPedidos;
       PedidosFactory.getEndDateContract(contratoActual, $cookies.getObject('Session').IdEmpresa, $scope.EmpresaSelect)
         .then(result => {
           $scope.OpcionesExtencion = result.data.data.contractDates;
@@ -590,6 +590,7 @@
       if ($scope.Extender.IdContrato) {
         let payload = {
           IdContrato: IdContrato,
+          IdEmpresaUsuarioFinal: $scope.EmpresaSelect,
           IdContratoRelacionado: $scope.Extender.IdContrato,
           EstatusPedidos: $scope.estatusPedidos
         };
