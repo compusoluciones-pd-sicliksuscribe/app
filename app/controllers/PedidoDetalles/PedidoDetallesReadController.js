@@ -1,5 +1,5 @@
 (function () {
-  var PedidoDetallesReadController = function ($scope, $log, $location, $cookies, PedidoDetallesFactory, TipoCambioFactory, EmpresasXEmpresasFactory, EmpresasFactory, PedidosFactory, $routeParams) {
+  var PedidoDetallesReadController = function ($scope, $log, $location, $cookies, PedidoDetallesFactory, TipoCambioFactory, EmpresasXEmpresasFactory, EmpresasFactory, PedidosFactory, UsuariosFactory, $routeParams) {
     $scope.CreditoValido = 1;
     $scope.error = false;
     $scope.Distribuidor = {};
@@ -186,11 +186,20 @@
       .catch(function (result) { error(result.data); });
     };
 
+    const getUsuarioCompra = () => {
+      UsuariosFactory.getUsuariosAdministradores()
+        .then(result => {
+          console.log(result.data);
+          $scope.usuariosCompra = result.data;
+        });
+    };
+
 
     $scope.init = function () {
       $scope.CheckCookie();
       PedidoDetallesFactory.getPrepararCompra(0)
         .catch(function (result) { error(result.data); });
+      if ($scope.SessionCookie.IdTipoAcceso === 10) getUsuarioCompra();
       getEnterprises()
         .then(getOrderDetails)
         .then(params => $scope.SessionCookie.IdTipoAcceso === 10 ? ActualizarFormaPago(2) : ActualizarFormaPago(params))
@@ -476,7 +485,7 @@
     };
   };
 
-  PedidoDetallesReadController.$inject = ['$scope', '$log', '$location', '$cookies', 'PedidoDetallesFactory', 'TipoCambioFactory', 'EmpresasXEmpresasFactory', 'EmpresasFactory', 'PedidosFactory', '$routeParams'];
+  PedidoDetallesReadController.$inject = ['$scope', '$log', '$location', '$cookies', 'PedidoDetallesFactory', 'TipoCambioFactory', 'EmpresasXEmpresasFactory', 'EmpresasFactory', 'PedidosFactory', 'UsuariosFactory', '$routeParams'];
 
   angular.module('marketplace').controller('PedidoDetallesReadController', PedidoDetallesReadController);
 }());
