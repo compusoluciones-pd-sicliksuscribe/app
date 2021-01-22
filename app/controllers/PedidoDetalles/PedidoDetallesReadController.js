@@ -188,12 +188,8 @@
 
     const getUsuarioCompra = () => {
       UsuariosFactory.getUsuariosAdministradores()
-        .then(result => {
-          console.log(result.data);
-          $scope.usuariosCompra = result.data;
-        });
+        .then(result => ($scope.usuariosCompra = result.data));
     };
-
 
     $scope.init = function () {
       $scope.CheckCookie();
@@ -434,6 +430,10 @@
     };
 
     $scope.next = function () {
+      if ($scope.SessionCookie.IdTipoAcceso === 10 && !$scope.usuarioCompraSelect) {
+        $scope.ShowToast('selecciona el usuario al que se le notificará de la compra.', 'warning');
+        return null;
+      }
       if ($scope.isPayingWithCSCredit()) validarCarrito();
       let next = true;
       if (!$scope.PedidoDetalles || $scope.PedidoDetalles.length === 0) next = false;
@@ -482,6 +482,14 @@
 
       $scope.Tour.init();
       $scope.Tour.start();
+    };
+
+    $scope.actualizarUsuarioCompra = () => {
+      const idPedidos = $scope.PedidoDetalles.map(pedido => pedido.IdPedido);
+      const idUsuarioCompra = $scope.usuarioCompraSelect;
+      PedidoDetallesFactory.actualizarUsuarioCompra(idPedidos, idUsuarioCompra)
+        .then(() => $scope.ShowToast('Usuario de compra actualizado.', 'success'))
+        .catch(() => $scope.ShowToast('No fue posible actualizar el usuario de compra.', 'danger'));
     };
   };
 

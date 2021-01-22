@@ -55,8 +55,9 @@
                 <label for="" class="">* ¿Quién deber ser notificado por la compra?</label>
                 <select name="usuarioCompra" class="form-control" ng-model="usuarioCompraSelect" 
                         ng-options="Usuario.IdUsuario as Usuario.Nombre + ' ' + Usuario.ApellidoPaterno + ' - ' + Usuario.CorreoElectronico for Usuario in usuariosCompra"
-                        ng-change="">    
-                        <option value="" ng-selected="true">Selecciona un usuario</option>
+                        ng-change="actualizarUsuarioCompra()"
+                        style="margin-top: 1em;">    
+                        <option value="" ng-selected="true" disabled>Selecciona un usuario</option>
                 </select>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">

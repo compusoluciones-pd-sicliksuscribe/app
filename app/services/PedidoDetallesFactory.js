@@ -287,6 +287,11 @@
       return $http.delete($rootScope.API + 'shopping-cart/remove-contract-extension/order/' + pedido.IdPedido + '/end-user/' + pedido.IdEmpresaUsuarioFinal);
     };
 
+    factory.actualizarUsuarioCompra = (idPedidos, IdUsuarioCompra) => {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'super-user/update-purchase-user', {IdPedidos: idPedidos, IdUsuarioCompra});
+    };
+
     return factory;
   };
 
