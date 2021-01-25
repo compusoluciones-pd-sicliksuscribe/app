@@ -97,6 +97,7 @@
       return PedidoDetallesFactory.getPedidoDetalles()
         .then(function (result) {
           $scope.PedidoDetalles = result.data.data;
+          if ($scope.SessionCookie.IdTipoAcceso === 10) $scope.usuarioCompraSelect = $scope.PedidoDetalles[0].IdUsuarioCompra;
           $scope.PedidoDetalles.forEach(function (elem) {
             $scope.CreditoValido = 1;
             elem.hasCredit = 1;
