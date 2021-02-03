@@ -97,7 +97,13 @@
       return PedidoDetallesFactory.getPedidoDetalles()
         .then(function (result) {
           $scope.PedidoDetalles = result.data.data;
-          if ($scope.SessionCookie.IdTipoAcceso === 10) $scope.usuarioCompraSelect = $scope.PedidoDetalles[0].IdUsuarioCompra;
+          if ($scope.SessionCookie.IdTipoAcceso === 10) {
+            const estaEnLista = $scope.usuariosCompra.filter(usuario => usuario.IdUsuario === $scope.PedidoDetalles[0].IdUsuarioCompra);
+            if (estaEnLista.length > 0) {
+              $scope.usuarioCompraSelect = $scope.PedidoDetalles[0].IdUsuarioCompra;
+              $scope.actualizarUsuarioCompra();
+            }
+          }
           $scope.PedidoDetalles.forEach(function (elem) {
             $scope.CreditoValido = 1;
             elem.hasCredit = 1;
