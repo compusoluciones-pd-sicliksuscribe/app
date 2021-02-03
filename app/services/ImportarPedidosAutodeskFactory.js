@@ -51,6 +51,11 @@
       return $http.get($rootScope.API + 'autodesk/getSubscriptionData/groupContracts/' + resellerCsn + '/' + endDate);
     };
 
+    factory.getCSN = IdEmpresa => {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'autodesk/get-dist-csn/dist/' + IdEmpresa);
+    };
+
     return factory;
   };
   ImportarPedidosAutodeskFactory.$inject = ['$http', '$cookies', '$rootScope'];

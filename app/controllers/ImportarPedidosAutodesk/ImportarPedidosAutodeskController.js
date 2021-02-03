@@ -16,8 +16,22 @@
           $scope.ShowToast('No pudimos cargar la lista de suscripciones, por favor intenta de nuevo más tarde.', 'danger');
         });
       } else {
-        $scope.ShowToast('Completa los parametros de busqueda (CSN, fecha fin de contrato).', 'info');
+        $scope.ShowToast('Completa los parametros de busqueda.', 'info');
       }
+    };
+
+    const getCSN = () => {
+      return ImportarPedidosAutodeskFactory.getCSN($scope.SessionCookie.IdEmpresa)
+        .then(result => {
+          if (result.data.success) {
+            $scope.CSNdist = result.data.data.CSN;
+          } else {
+            $scope.ShowToast('No pudimos cargar el CSN de distribuidor.', 'danger');
+          }
+        })
+        .catch(function () {
+          $scope.ShowToast('No pudimos cargar el CSN de distribuidor, por favor intenta de nuevo más tarde.', 'danger');
+        });
     };
 
     const getSuppliers = function () {
@@ -126,10 +140,13 @@
     };
 
     $scope.init = function () {
+      $scope.esDistribuidor = false;
+      if ($scope.SessionCookie.IdTipoAcceso === 2) $scope.esDistribuidor = true;
       $scope.formularioCompleto = false;
       $scope.contadorDetalles = 1;
       $scope.detalles = [];
       $scope.btnImportar = 'Importar';
+      getCSN();
       getSuppliers();
       getFinalUsers();
       getEsquemas();
