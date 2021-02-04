@@ -148,7 +148,7 @@
 										<li class="grayColor" ng-show="(SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 8 || SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 10) && (SessionCookie.LeyoTerminos == 1)" dropdown>
 											<a dropdown-toggle><span class="fa fa-list-alt"></span><div class="text">Autodesk</div> <b class="caret"></b></a>
 											<ul class="dropdown-menu grayColor">
-												<li ng-show="SessionCookie.IdTipoAcceso === 2"><a ng-click="goToPage('ImportacionesAutodesk');">Importar pedidos Autodesk</a></li>
+												<li ng-show="SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 8 || SessionCookie.IdTipoAcceso == 10 || SessionCookie.IdTipoAcceso === 2"><a ng-click="goToPage('ImportacionesAutodesk');">Importar contratos Autodesk</a></li>
 												<li ng-show="SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 8 || SessionCookie.IdTipoAcceso == 10"><a ng-click="goToPage('ParticionPedidos');">Particionar renovable Autodesk</a></li>
 											</ul>
 										</li>

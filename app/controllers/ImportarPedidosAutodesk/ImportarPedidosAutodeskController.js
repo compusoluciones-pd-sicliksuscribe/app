@@ -64,16 +64,6 @@
         });
     };
 
-    const getProducts = function () {
-      return ImportarPedidosAutodeskFactory.getProducts()
-        .then(result => {
-          $scope.productosLista = result.data;
-        })
-        .catch(function () {
-          $scope.ShowToast('No pudimos cargar la lista de productos, por favor intenta de nuevo más tarde.', 'danger');
-        });
-    };
-
     const getEstados = function () {
       EstadosFactory.getEstados()
       .success(function (result) {
@@ -140,17 +130,19 @@
     };
 
     $scope.init = function () {
-      $scope.esDistribuidor = false;
-      if ($scope.SessionCookie.IdTipoAcceso === 2) $scope.esDistribuidor = true;
       $scope.formularioCompleto = false;
       $scope.contadorDetalles = 1;
       $scope.detalles = [];
       $scope.btnImportar = 'Importar';
-      getCSN();
-      getSuppliers();
+      $scope.esDistribuidor = false;
+      if ($scope.SessionCookie.IdTipoAcceso === 2) {
+        getCSN();
+        $scope.esDistribuidor = true;
+      } else {
+        getSuppliers();
+      }
       getFinalUsers();
       getEsquemas();
-      getProducts();
       getIndustrias();
       getEstados();
     };
@@ -160,7 +152,6 @@
     $scope.completarDist = function (cadenaDist = '') {
       let resultado = [];
       $scope.resultadoDistribuidor = [];
-
       $scope.ocultarOpcionesDist = false;
       $scope.distribuidoresLista.forEach(distribuidor => {
         if (distribuidor.NombreEmpresa.toLowerCase().indexOf(cadenaDist.toLowerCase()) >= 0) {
@@ -175,8 +166,17 @@
     };
 
     $scope.llenarTextBoxDist = function (infoDist) {
-      $scope.distribuidor = infoDist;
-      $scope.distribuidorSeleccionado = $scope.resultadoDistribuidor.find(elemento => elemento.NombreEmpresa === infoDist);
+      let auxDistribuidor = {};
+      if ($scope.SessionCookie.IdTipoAcceso === 2) {
+        auxDistribuidor = {
+          IdAutodeskDist: $scope.CSNdist,
+          IdEmpresa: $scope.SessionCookie.IdEmpresa,
+          NombreEmpresa: $scope.SessionCookie.NombreEmpresa
+        };
+      } else {
+        $scope.distribuidor = infoDist;
+      }
+      $scope.distribuidorSeleccionado = $scope.SessionCookie.IdTipoAcceso === 2 ? auxDistribuidor : $scope.resultadoDistribuidor.find(elemento => elemento.NombreEmpresa === infoDist);
       $scope.ocultarOpcionesDist = true;
       $scope.ufsListaAux = $scope.ufsLista.filter(uf => uf.IdEmpresaDistribuidor === $scope.distribuidorSeleccionado.IdEmpresa);
       $scope.usuarioF = '';
@@ -289,6 +289,7 @@
     };
 
     $scope.abrirModal = function (modal, subs) {
+      if ($scope.SessionCookie.IdTipoAcceso === 2) $scope.llenarTextBoxDist($scope.SessionCookie.NombreEmpresa);
       $scope.contrato = subs.contractNumber;
       $scope.FechaInicio = subs.startDate;
       $scope.FechaFin = subs.endDate;
