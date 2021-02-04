@@ -438,7 +438,7 @@
 
     $scope.next = function () {
       if ($scope.SessionCookie.IdTipoAcceso === 10 && !$scope.usuarioCompraSelect) {
-        $scope.ShowToast('selecciona el usuario al que se le notificará de la compra.', 'warning');
+        $scope.ShowToast('Selecciona el usuario al que se le notificará de la compra.', 'warning');
         return null;
       }
       if ($scope.isPayingWithCSCredit()) validarCarrito();
