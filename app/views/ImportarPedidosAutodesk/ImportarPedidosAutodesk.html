@@ -19,7 +19,7 @@
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 alert alert-info" ng-show = "esDistribuidor">
             <li type="disc">Aquí puedes consultar la información de tus contratos e importarlos a click suscribe para su procesamiento. La consulta se hace por medio de la fecha fin del contrato que deseas importar.</li>
-            <li type="disc">Si el usuario final relacionado a determinado contrato no está registrado en click aún, puedes registrarlo haciendo clic en el botón <b>Nuevo uf</b>.</li>
+            <li type="disc">Si el usuario final relacionado a determinado contrato no está registrado en click aún, puedes registrarlo haciendo clic en el botón <b>Nuevo cliente</b>.</li>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <h4 style="float:left;">Datos de consulta para obtener información </h4><br>
@@ -47,7 +47,7 @@
         <div style="float: right; margin-right: 0; margin-top: .8em;">
             <button type="button" style="padding: .8em;" data-toggle="modal" data-target="#nuevoUF" class="btn btn-primary " style="background: !important">
                 <span class="glyphicon glyphicon glyphicon glyphicon-briefcase"></span>
-                &nbsp;Nuevo uf
+                &nbsp;Nuevo cliente
             </button>
         </div>
     </div>
@@ -280,7 +280,7 @@
 
                     <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
                         <label>CSN </label>
-                        <input name="IdAutodeskUF" type="Number" ng-model="Empresa.IdAutodeskUF" class="form-control" placeholder="Customer Specific Numbers" ng-pattern="/^\d+$/"/>
+                        <input name="IdAutodeskUF" type="Number" ng-model="Empresa.IdAutodeskUF" class="form-control" placeholder="CSN" ng-pattern="/^\d+$/"/>
                     </div>
                 
             </div>
