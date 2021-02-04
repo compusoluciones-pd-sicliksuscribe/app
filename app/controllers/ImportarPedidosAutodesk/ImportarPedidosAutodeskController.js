@@ -401,9 +401,9 @@
 
     $scope.conjuntarInformacionModalEmpresa = function () {
       $scope.deshabilitado = true;
-      if ($scope.distribuidorSeleccionadoModalEmpresa) {
+      if ($scope.distribuidorSeleccionadoModalEmpresa || $scope.esDistribuidor) {
         const infoEmpresa = {
-          IdEmpresaDistribuidor: $scope.distribuidorSeleccionadoModalEmpresa.IdEmpresa,
+          IdEmpresaDistribuidor: $scope.esDistribuidor ? $scope.SessionCookie.IdEmpresa : $scope.distribuidorSeleccionadoModalEmpresa.IdEmpresa,
           NombreEmpresa: $scope.Empresa.NombreEmpresa,
           Direccion: $scope.Empresa.Direccion,
           Ciudad: $scope.Empresa.Ciudad,
@@ -430,6 +430,7 @@
               $scope.deshabilitado = false;
             } else {
               $scope.ShowToast(`Hubo un error al tratar de registrar la empresa: ${result.data.message}.`, 'danger');
+              $scope.deshabilitado = false;
             }
           })
           .catch(result => {

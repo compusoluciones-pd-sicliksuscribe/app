@@ -261,7 +261,7 @@
                         <input class="form-control col-xs-3 col-sm-3 col-md-3 col-lg-3" name="Telefono" type="text" ng-model="Empresa.Telefono" ui-mask="(999) 999-9999" ui-mask-placeholder ui-mask-placeholder-char="_" placeholder="" size="255" ng-maxlength="255" required="">
                     </div>
 
-                    <div class="form-group col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                    <div class="form-group col-xs-6 col-sm-6 col-md-6 col-lg-6" ng-hide = "esDistribuidor">
                         <label>Distribuidor relacionado</label>
                         <input type = "text" name = "distribuidorModalEmpresa" placeholder="Escribe el nombre del distribuidor" class="form-control" ng-model="Empresa.Distribuidor" ng-keyup="completarDistModalEmpresa(Empresa.Distribuidor)" required/>
                         <ul class="list-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-model = "ocultarOpcionesDistModalEmpresa" ng-hide = "ocultarOpcionesDistModalEmpresa" style="position:absolute; z-index: 1; padding-right:2em;">
