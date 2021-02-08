@@ -199,6 +199,9 @@
 
 <div id="nuevoUF" class="modal fade in" tabindex="-1" role="dialog" >
     <div class="modal-dialog" role="document">
+        <div class="divLoading" data-cargando>
+            <div class=""><img src="images/ripple.svg" /></div>
+        </div> 
         <div class="modal-content" style="margin: auto; top: -15em;">
             <div class="modal-header" >
                 <button type="button" class="close" ng-click="cerrarModal('nuevoUF');" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -286,7 +289,7 @@
             </div>
             <br>
             <div  class="modal-footer">
-                <button type="submit" class="btn btn-success" ng-click="conjuntarInformacionModalEmpresa()" ng-disabled="deshabilitado" data-dismiss="modal">Registrar</button>
+                <button type="submit" class="btn btn-success" ng-click="conjuntarInformacionModalEmpresa()" ng-disabled="deshabilitado">Registrar</button>
                 <button type="button" class="btn btn-danger" ng-click="cerrarModal('nuevoUF');" ng-disabled="deshabilitado" data-dismiss="modal">Cancelar</button>
             </div>
         </div>
