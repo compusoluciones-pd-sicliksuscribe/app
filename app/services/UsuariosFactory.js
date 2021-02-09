@@ -133,6 +133,11 @@
       factory.refreshToken();
       return $http.post($rootScope.API + 'Usuarios/create-user', Usuario);
     };
+
+    factory.getUsuariosAdministradores = function () {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'super-user/get-administrator-users');
+    };
     return factory;
   };
 

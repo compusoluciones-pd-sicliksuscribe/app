@@ -1,5 +1,5 @@
 (function () {
-  var PedidoDetallesReadController = function ($scope, $log, $location, $cookies, PedidoDetallesFactory, TipoCambioFactory, EmpresasXEmpresasFactory, EmpresasFactory, PedidosFactory, $routeParams) {
+  var PedidoDetallesReadController = function ($scope, $log, $location, $cookies, PedidoDetallesFactory, TipoCambioFactory, EmpresasXEmpresasFactory, EmpresasFactory, PedidosFactory, UsuariosFactory, $routeParams) {
     $scope.CreditoValido = 1;
     $scope.error = false;
     $scope.Distribuidor = {};
@@ -97,6 +97,13 @@
       return PedidoDetallesFactory.getPedidoDetalles()
         .then(function (result) {
           $scope.PedidoDetalles = result.data.data;
+          if ($scope.SessionCookie.IdTipoAcceso === 10) {
+            const estaEnLista = $scope.usuariosCompra.filter(usuario => usuario.IdUsuario === $scope.PedidoDetalles[0].IdUsuarioCompra);
+            if (estaEnLista.length > 0) {
+              $scope.usuarioCompraSelect = $scope.PedidoDetalles[0].IdUsuarioCompra;
+              $scope.actualizarUsuarioCompra();
+            }
+          }
           $scope.PedidoDetalles.forEach(function (elem) {
             $scope.CreditoValido = 1;
             elem.hasCredit = 1;
@@ -186,11 +193,16 @@
       .catch(function (result) { error(result.data); });
     };
 
+    const getUsuarioCompra = () => {
+      UsuariosFactory.getUsuariosAdministradores()
+        .then(result => ($scope.usuariosCompra = result.data));
+    };
 
     $scope.init = function () {
       $scope.CheckCookie();
       PedidoDetallesFactory.getPrepararCompra(0)
         .catch(function (result) { error(result.data); });
+      if ($scope.SessionCookie.IdTipoAcceso === 10) getUsuarioCompra();
       getEnterprises()
         .then(getOrderDetails)
         .then(params => $scope.SessionCookie.IdTipoAcceso === 10 ? ActualizarFormaPago(2) : ActualizarFormaPago(params))
@@ -425,6 +437,10 @@
     };
 
     $scope.next = function () {
+      if ($scope.SessionCookie.IdTipoAcceso === 10 && !$scope.usuarioCompraSelect) {
+        $scope.ShowToast('Selecciona el usuario al que se le notificará de la compra.', 'warning');
+        return null;
+      }
       if ($scope.isPayingWithCSCredit()) validarCarrito();
       let next = true;
       if (!$scope.PedidoDetalles || $scope.PedidoDetalles.length === 0) next = false;
@@ -474,9 +490,17 @@
       $scope.Tour.init();
       $scope.Tour.start();
     };
+
+    $scope.actualizarUsuarioCompra = () => {
+      const idPedidos = $scope.PedidoDetalles.map(pedido => pedido.IdPedido);
+      const idUsuarioCompra = $scope.usuarioCompraSelect;
+      PedidoDetallesFactory.actualizarUsuarioCompra(idPedidos, idUsuarioCompra)
+        .then(() => $scope.ShowToast('Usuario de compra actualizado.', 'success'))
+        .catch(() => $scope.ShowToast('No fue posible actualizar el usuario de compra.', 'danger'));
+    };
   };
 
-  PedidoDetallesReadController.$inject = ['$scope', '$log', '$location', '$cookies', 'PedidoDetallesFactory', 'TipoCambioFactory', 'EmpresasXEmpresasFactory', 'EmpresasFactory', 'PedidosFactory', '$routeParams'];
+  PedidoDetallesReadController.$inject = ['$scope', '$log', '$location', '$cookies', 'PedidoDetallesFactory', 'TipoCambioFactory', 'EmpresasXEmpresasFactory', 'EmpresasFactory', 'PedidosFactory', 'UsuariosFactory', '$routeParams'];
 
   angular.module('marketplace').controller('PedidoDetallesReadController', PedidoDetallesReadController);
 }());
