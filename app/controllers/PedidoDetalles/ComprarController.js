@@ -55,6 +55,9 @@
         case paymentMethods.CASH:
           paymentMethod = 'Transferencia';
           break;
+        case paymentMethods.STORE:
+          paymentMethod = 'Pago en tienda';
+          break;
         default:
           paymentMethod = 'Metodo de pago incorrecto.';
       }
