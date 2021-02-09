@@ -434,6 +434,7 @@
                         <h4><b>{{ detalles.Nombre }}</b></h4><span ng-if="detalles.IdCompraUF" class="badge badge-secondary">TuClick</span></h4>
                         <ul style="list-style-type:none; padding:0%">
                             <li> <label for="Order">Número de pedido:</label> {{ detalles.IdPedido }} </li>
+                            <li> <label for="Serie">Número de serie:</label> {{ detalles.NumeroSerie }} </li>
                             <li> <label for="TipoProducto">Tipo de producto:</label> {{ detalles.Tipo }} </li>
                             <li ng-if="detalles.IdEstatusPedido === 2"> <label for="Estatus">Estatus pedido: </label> Pago pendiente </li>
                             <li ng-if="detalles.IdEstatusPedido === 3"> <label for="Estatus">Estatus pedido: </label> Pagado </li>
