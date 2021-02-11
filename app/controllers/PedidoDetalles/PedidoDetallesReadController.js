@@ -437,10 +437,6 @@
     };
 
     $scope.next = function () {
-      if ($scope.SessionCookie.IdTipoAcceso === 10 && !$scope.usuarioCompraSelect) {
-        $scope.ShowToast('Selecciona el usuario al que se le notificará de la compra.', 'warning');
-        return null;
-      }
       if ($scope.isPayingWithCSCredit()) validarCarrito();
       let next = true;
       if (!$scope.PedidoDetalles || $scope.PedidoDetalles.length === 0) next = false;
