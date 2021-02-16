@@ -297,7 +297,19 @@
                                                     <input id="Activo" type="checkbox" ng-checked="Producto.PorcentajeDescuento" ng-true-value="1" ng-false-value="0" ng-model="Producto.SP">
                                                     Spetial Petition
                                                 </label>
-                                            </div>                            
+                                            </div>
+                                            <div ng-hide="Producto.IdFabricante !== 2 || Producto.IdTipoProducto === 6" >
+                                                <label for="IdDescuento">* ID Descuento</label>
+                                                <div class="input-group" style="width:100%;" >
+                                                        <span class="input-group-addon green white">
+                                                            <span class="glyphicon glyphicon-hourglass"></span>
+                                                        </span>
+                                                        <input id="IdDescuento" name="IdDescuento" type="string" ng-model="Producto.IdDescuento" class="form-control" placeholder="Ingresa el ID de descuento especial..."
+                                                        maxlength="15" title="ID Descuento"
+                                                        required/>
+                                                </div>
+                                            </div>   
+                            
                                             <div ng-show="Producto.MostrarMensajeP" style="color:red;">
 
                                                 <label>* No cuentas con suscripciones para este producto.</label>&nbsp;
