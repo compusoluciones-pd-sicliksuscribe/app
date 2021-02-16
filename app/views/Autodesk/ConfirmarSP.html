@@ -1,0 +1,57 @@
+<div ng-app="myApp" ng-controller="ParticionPedidosController">
+    <div class="container" ng-swipe-right="" ng-swipe-left="">
+  
+        <div class="row">
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <h2 style="float:left;">Confirmación de peticiones especiales (SP)</h2>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <h4 style="float:left;">Valida y confirma la información de las peticiones especiales. </h4><br>
+            </div>
+        </div>
+        <hr>
+    
+        <div class="row">
+            <!-- <div class="row cotainer" ng-repeat="orden in ordenes"> -->
+                <div style="background-color: rgba(220, 220, 220, 0.4); padding: 2em">
+                    <ul style="list-style-type:none; padding:0%">
+                        <li> <label>Número de pedido:</label> {{ orden.IdPedido }} </li>
+                        <li> <label>Distribuidor:</label> {{ orden.Distribuidor }} </li>
+                        <li> <label>Usuario final:</label> {{ orden.UsuarioFinal }} </li>
+                        <li> <label>Número de contrato:</label> {{ orden.NumeroContrato }} </li>
+                    </ul>
+                    <div style="position: relative; bottom: 7.8em; left: 25em; width: 10em">
+                        <label>Código descuento:</label>
+                        <input class="form-control" type="text" ng-model="CodigoDescuento" ng-keyup = "">
+                    </div>
+                    <button style="position: relative; float: right; bottom: 3.2em;" class="btn btn-success" ng-click="">
+                    Confirmar
+                    </button>
+                </div>
+                <div style="margin-top: 2em; text-align: center;">
+                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3"><label>Proucto</label></div>
+                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3"><label>SKU</label></div>
+                    <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><label>Cantidad</label></div>
+                    <div class="col-xs-2 col-sm-1 col-md-1 col-lg-1"><label>Descuento</label></div>
+                    <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"><label>Precio unitario</label></div>
+                    <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"><label>Subtotal</label></div>
+                </div>
+                <hr class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div ng-repeat="detalle in item.Detalles" style=" text-align: center;">
+                    <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="margin-bottom: .8em;">{{ detalle.IdPedidoPadre }} </div>
+                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="margin-bottom: .8em;"> {{ detalle.SKU_Renovacion }} </div>
+                    <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1" style="margin-bottom: .8em;"> {{ detalle.Cantidad }} </div>
+                    <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="margin-bottom: .8em;"> {{ detalle.CantidadProxima }} </div>
+                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="margin-bottom: .8em;"> {{ detalle.NumeroSerie ? detalle.NumeroSerie : "-" }} </div>
+                </div>
+                <br><hr class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <!-- </div> -->
+    
+            <div ng-show="!ordenes.length" style = "text-align:center"><h4>No hay SPs por confirmar.</h4></div>        
+            
+        </div>
+    </div>
+</div>
