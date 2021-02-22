@@ -21,6 +21,19 @@
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
 
+      DescuentosFactory.getFamilias()
+        .success(function (Familias) {
+          if (Familias.success) {
+            $scope.selectFamilias = Familias.data;
+          } else {
+            $scope.ShowToast(Familias.message, 'danger');
+            $location.path('/Descuentos');
+          }
+        })
+        .error(function (data, status, headers, config) {
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+
       NivelesDistribuidorFactory.getNivelesDistribuidor()
         .success(function (NivelesDistribuidor) {
           if (NivelesDistribuidor.success) {
