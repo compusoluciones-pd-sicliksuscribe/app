@@ -34,6 +34,20 @@
 		<div class="form-group row">
 			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 				<div class="pull-rigth">
+					<label>Familia  </label>
+            <select name="Familia" class="form-control" ng-model="Descuento.Familia"
+            ng-options="Familias.Familia as Familias.Familia for Familias in selectFamilias" required="">
+              <option value="" ng-selected="true">Selecciona un tipo de familia...</option>
+            </select>
+					<b style="color:red" ng-show="frm.Familia.$invalid && !frm.Familia.$pristine" class="help-block">Selecciona una familia.</b>
+				</div>
+			</div>
+			<div class="col-xs-0 col-sm-0 col-md-8 col-lg-8"></div>
+		</div>
+
+		<div class="form-group row">
+			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+				<div class="pull-rigth">
 					<label>Porcentaje de descuento * </label>
 					<input name="Porcentaje" type="number" ng-model="Descuento.PorcentajeDescuento" class="form-control" ng-pattern="/[0-9]$/" placeholder="Porcentaje"
 						size="3" required="" min="1" max="100" />
