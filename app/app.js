@@ -597,6 +597,14 @@
         }}
       })
 
+      .when('/ActualizarCSN', {
+        controller: 'ActualizarCSNController', templateUrl: 'app/views/Autodesk/ActualizarCSN.html',
+        resolve: { 'check': function ($location, $cookies) {
+          var Session = $cookies.getObject('Session');
+          if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 8 || Session.IdTipoAcceso === 10 || Session.IdTipoAcceso === 2)) { $location.path('/404'); }
+        }}
+      })
+
       .otherwise({ redirectTo: '/404' });
   });
 }());

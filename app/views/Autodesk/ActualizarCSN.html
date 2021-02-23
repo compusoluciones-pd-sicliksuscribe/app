@@ -1,0 +1,49 @@
+<div ng-app="myApp" ng-controller="ActualizarCSNController">
+    <div class="container" ng-swipe-right="" ng-swipe-left="">
+        <div class="row">
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <h2 style="float:left;"> Actualizar CSN </h2>
+            </div>
+        </div>
+  
+        <div class="row">
+            <div class="form-group col-xs-11 col-sm-11 col-md-6 col-lg-4" style="float:left;" ng-hide="SessionCookie.IdTipoAcceso === 2">
+                <select class="form-control" ng-model="IdEmpresa" ng-options="distribuidor.IdEmpresa as distribuidor.NombreEmpresa for distribuidor in distribuidores"
+                    ng-change="getUfsCSN()">    
+                    <option value="" ng-selected="true">Selecciona un distribuidor</option>
+                </select>
+            </div>
+            <div style="float:right;">
+                <span class="glyphicon glyphicon-search fa-2x"  style="float:right;"></span>
+            </div>
+            <div class="form-group col-xs-11 col-sm-11 col-md-6 col-lg-4" style="float:right;">
+                <input class="form-control fa-lg" type="text" placeholder="Buscar por nombre de la empresa"aria-label="Buscar" ng-model="busqueda" ng-keyup = "buscar(busqueda)">
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div style="margin-top: 2em; text-align: center;">
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" style="text-align: left;"><label>Nombre de la empresa</label></div>
+                <div class="col-xs-3 col-sm-2 col-md-2 col-lg-2"><label>CSN</label></div>
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"><label>Acciones</label></div>
+            </div>
+            <hr class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div ng-repeat="item in filtered" style=" text-align: center;">
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" style="margin-bottom: .8em; text-align: left;">{{ item.NombreEmpresa }} </div>
+                <div class="col-xs-3 col-sm-2 col-md-2 col-lg-2" style="margin-bottom: .8em;"> <input class="form-control fa-lg" type="text" ng-value="item.IdAutodeskUF" ng-model="csn" > </div>
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="margin-bottom: .8em;"> 
+                    <a class="" ng-click="actializarCSN({{item.IdEmpresa}}, csn)"><span class="glyphicon glyphicon-floppy-disk" style="font-size: 1.6em"></span></a> 
+                    
+                </div>
+                <hr style="margin: 0 0 1em 0;" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            </div>
+            <br>
+
+            <div ng-show="!filtered.length" style = "text-align:center"><h4>No se encontraron resultados.</h4></div>           
+        </div>
+
+        <div ng-show="filtered.length > 0" style="margin: auto; text-align: center;" >
+            <pagination class="pager" ng-model="currentPage" total-items="UFs.length" max-size="maxSize" boundary-links="true"></pagination>
+        </div>
+    </div> 
+</div>
