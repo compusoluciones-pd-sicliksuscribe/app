@@ -52,6 +52,16 @@
       pagination();
     };
 
+    $scope.updateUfCSN = (IdEmpresaUf, csn) => {
+      ActualizarCSNFactory.updateUfCSN(IdEmpresaUf, csn)
+          .then(result => {
+            result.data.success ? $scope.ShowToast('Información actuaizada.', 'success') : $scope.ShowToast('No fue posible actualizar la información', 'danger');
+          })
+          .catch(() => {
+            $scope.ShowToast('No fue posible actualizar la información, por favor intenta más tarde.', 'danger');
+          });
+    };
+
     $scope.init();
   };
 

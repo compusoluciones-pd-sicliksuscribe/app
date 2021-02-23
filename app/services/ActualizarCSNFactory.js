@@ -16,6 +16,11 @@
       return $http.get($rootScope.API + 'autodesk/get-ufs-csn/' + idEmpresaDistribuidor);
     };
 
+    factory.updateUfCSN = (IdEmpresa, csn) => {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'autodesk/update-uf-csn', { IdEmpresa, csn });
+    };
+
     return factory;
   };
   ActualizarCSNFactory.$inject = ['$http', '$cookies', '$rootScope'];
