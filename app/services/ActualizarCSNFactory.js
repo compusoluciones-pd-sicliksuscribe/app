@@ -1,0 +1,24 @@
+(function () {
+  var ActualizarCSNFactory = function ($http, $cookies, $rootScope) {
+    var factory = {};
+    var Session = {};
+
+    factory.refreshToken = () => {
+      Session = $cookies.getObject('Session');
+      if (!Session) { Session = { Token: 'no' }; }
+      $http.defaults.headers.common['token'] = Session.Token;
+    };
+
+    factory.refreshToken();
+
+    factory.getUfsCSN = idEmpresaDistribuidor => {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'autodesk/get-ufs-csn/' + idEmpresaDistribuidor);
+    };
+
+    return factory;
+  };
+  ActualizarCSNFactory.$inject = ['$http', '$cookies', '$rootScope'];
+
+  angular.module('marketplace').factory('ActualizarCSNFactory', ActualizarCSNFactory);
+}());
