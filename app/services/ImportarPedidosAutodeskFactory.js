@@ -53,7 +53,7 @@
 
     factory.getCSN = IdEmpresa => {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'autodesk/get-dist-csn/dist/' + IdEmpresa);
+      return $http.get($rootScope.API + 'autodesk/get-csn/dist/' + IdEmpresa);
     };
 
     return factory;

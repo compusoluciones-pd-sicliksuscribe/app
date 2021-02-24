@@ -25,7 +25,8 @@
 
     $scope.init = () => {
       if ($scope.SessionCookie.IdTipoAcceso !== 2) getSuppliers();
-      if ($scope.SessionCookie.IdTipoAcceso === 2) $scope.getUfsCSN();
+      if ($scope.SessionCookie.IdTipoAcceso === 10) $scope.IdEmpresa = $scope.SessionCookie.IdEmpresa;
+      if ($scope.SessionCookie.IdTipoAcceso === 2 || $scope.SessionCookie.IdTipoAcceso === 10) $scope.getUfsCSN();
       pagination();
     };
 
@@ -35,7 +36,7 @@
       ActualizarCSNFactory.getUfsCSN(idDist)
           .then(result => {
             result.data.success ? $scope.UFs = $scope.ufsCSN = result.data.data
-              : $scope.ShowToast('No fue posible obtener los csn del los clientes, por favor intenta más tarde.', 'danger');
+              : $scope.ShowToast('No fue posible obtener los csn del los clientes', 'danger');
             pagination();
           })
           .catch(() => {
@@ -55,7 +56,7 @@
     $scope.updateUfCSN = (IdEmpresaUf, csn) => {
       ActualizarCSNFactory.updateUfCSN(IdEmpresaUf, csn)
           .then(result => {
-            result.data.success ? $scope.ShowToast('Información actuaizada.', 'success') : $scope.ShowToast('No fue posible actualizar la información', 'danger');
+            result.data.success ? $scope.ShowToast('Información actualizada.', 'success') : $scope.ShowToast('No fue posible actualizar la información', 'danger');
           })
           .catch(() => {
             $scope.ShowToast('No fue posible actualizar la información, por favor intenta más tarde.', 'danger');
