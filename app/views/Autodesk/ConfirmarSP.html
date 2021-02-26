@@ -15,7 +15,6 @@
         <hr>
     
         <div class="row">
-            <!-- <div class="row cotainer" ng-repeat="orden in ordenes"> -->
                 <div style="background-color: rgba(220, 220, 220, 0.4); padding: 2em">
                     <ul style="list-style-type:none; padding:0%">
                         <li> <label>Número de pedido:</label> {{ orden.IdPedido }} </li>
@@ -48,7 +47,6 @@
                     <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="margin-bottom: .8em;"> {{ detalle.NumeroSerie ? detalle.NumeroSerie : "-" }} </div>
                 </div>
                 <br><hr class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <!-- </div> -->
     
             <div ng-show="!ordenes.length" style = "text-align:center"><h4>No hay SPs por confirmar.</h4></div>        
             
