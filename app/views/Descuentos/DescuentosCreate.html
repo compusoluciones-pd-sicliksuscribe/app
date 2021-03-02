@@ -22,7 +22,8 @@
 				<div class="pull-rigth">
 					<label>Especialización *</label>
             <select name="Especializacion" class="form-control" ng-model="Descuento.Especializacion"
-            ng-options="Especializaciones.Especializacion as Especializaciones.Especializacion for Especializaciones in selectEspecializaciones" required="">
+            ng-options="Especializaciones.Especializacion as Especializaciones.Especializacion for Especializaciones in selectEspecializaciones" 
+						ng-change = "filtrarFamilia()" required="">
               <option value="" ng-selected="true">Selecciona un tipo de especialización...</option>
             </select>
 					<b style="color:red" ng-show="frm.Especializacion.$invalid && !frm.Especializacion.$pristine" class="help-block">Selecciona un especialización.</b>
@@ -36,7 +37,7 @@
 				<div class="pull-rigth">
 					<label>Familia * </label>
             <select name="Familia" class="form-control" ng-model="Descuento.Familia"
-            ng-options="Familias.Familia as Familias.Familia for Familias in selectFamilias" required="">
+            ng-options="Familias.Familia as Familias.Familia for Familias in selectFamiliasFiltered" required="">
               <option value="" ng-selected="true">Selecciona un tipo de familia...</option>
             </select>
 					<b style="color:red" ng-show="frm.Familia.$invalid && !frm.Familia.$pristine" class="help-block">Selecciona una familia.</b>

@@ -50,6 +50,10 @@
 
     $scope.init();
 
+    $scope.filtrarFamilia = function () {
+      $scope.selectFamiliasFiltered = $scope.selectFamilias.filter(tipo => tipo['Especializacion'] === $scope.Descuento.Especializacion);
+    };
+
     $scope.descuentoCancelar = function () {
       $location.path('/Descuentos');
     };
