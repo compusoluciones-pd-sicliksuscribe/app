@@ -292,6 +292,11 @@
       return $http.post($rootScope.API + 'super-user/update-purchase-user', {IdPedidos: idPedidos, IdUsuarioCompra});
     };
 
+    factory.actualizarOrdenesCompra = ordenes => {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'orders/update-purchase-order', ordenes);
+    };
+
     return factory;
   };
 
