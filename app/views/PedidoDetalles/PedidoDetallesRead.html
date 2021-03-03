@@ -15,6 +15,9 @@
             <p>Se agruparán y facturarán los productos según el usuario final, marca del producto, esquema de renovación y moneda de pago seleccionada. Una vez realizada la compra, el sistema te enviará la factura del próximo periodo aumáticamente cuando
                 llegue la fecha.</p>
             <p>Si deseas cancelar tus suscripciones o disminuir cantidades, tienes hasta 4 días antes de la finalización del periodo y lo puedes hacer ingresando al <a href="#/Monitor">monitor de pedidos por cliente</a>.</p>
+            <div class="alert alert-info">
+                <p>Ahora puedes incluir un número de orden de compra en tu pedido. El numero aparecera en el formato pdf de la factura.</p>
+            </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
     </div>
@@ -129,6 +132,8 @@
                             <span ng-if="pedido.IdAccionAutodesk === 5">Extensión</span>
                         </div>
                     </div>
+                    <label>Orden de compra</label>
+                    <input type="number" ng-model="orden[$index]" value="{{pedido.OrdenCompra}}" style="width: 40%; height: 1.9em; margin-bottom: 1em;" class="form-control" size="30" />
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3" class="form-group">
                     <div class="form-group">
