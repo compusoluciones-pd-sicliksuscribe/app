@@ -1,5 +1,5 @@
 (function () {
-  var ProductosReadController = function ($scope, $log, $location, $cookies, $routeParams, ProductosFactory, AmazonDataFactory, FabricantesFactory, TiposProductosFactory, PedidoDetallesFactory, TipoCambioFactory, ProductoGuardadosFactory, EmpresasXEmpresasFactory, UsuariosFactory, $anchorScroll, EmpresasFactory) {
+  var ProductosReadController = function ($scope, $log, $location, $cookies, $routeParams, ProductosFactory, AmazonDataFactory, FabricantesFactory, TiposProductosFactory, PedidoDetallesFactory, TipoCambioFactory, ProductoGuardadosFactory, EmpresasXEmpresasFactory, UsuariosFactory, ActualizarCSNFactory, $anchorScroll, EmpresasFactory) {
     var BusquedaURL = $routeParams.Busqueda;
     const HRWAWRE_EXTRA_EMPOLYEES_GROUPING = 1000;
     $scope.BuscarProductos = {};
@@ -113,6 +113,7 @@
     };
 
     $scope.init = function () {
+      $scope.hayCSNUF = false;
       $scope.CheckCookie();
       FabricantesFactory.getFabricantes()
         .success(function (Fabricantes) {
@@ -241,6 +242,14 @@
         .error(function () {
           $scope.ShowToast('No pudimos cargar la información de tus contactos, por favor intenta de nuevo más tarde.', 'danger');
         });
+      ActualizarCSNFactory.getUfCSN(Producto.IdEmpresaUsuarioFinal)
+        .then(result => {
+          if (result.data.success) {
+            $scope.csnUf = result.data.data.CSN ? result.data.data.CSN : 'El cliente no tiene un CSN registrado en click.';
+            $scope.hayCSNUF = true;
+          } else $scope.ShowToast('No pudimos cargar el csn de este cliente.', 'danger')
+        })
+        .catch(() => $scope.ShowToast('No pudimos cargar el csn de este cliente, por favor intenta de nuevo más tarde.', 'danger'));
     };
 
     const validateISVsData = function (Producto) {
@@ -767,7 +776,7 @@
     };
   };
 
-  ProductosReadController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'ProductosFactory','AmazonDataFactory', 'FabricantesFactory', 'TiposProductosFactory', 'PedidoDetallesFactory', 'TipoCambioFactory', 'ProductoGuardadosFactory', 'EmpresasXEmpresasFactory', 'UsuariosFactory', '$anchorScroll', 'EmpresasFactory'];
+  ProductosReadController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'ProductosFactory','AmazonDataFactory', 'FabricantesFactory', 'TiposProductosFactory', 'PedidoDetallesFactory', 'TipoCambioFactory', 'ProductoGuardadosFactory', 'EmpresasXEmpresasFactory', 'UsuariosFactory', 'ActualizarCSNFactory', '$anchorScroll', 'EmpresasFactory'];
 
   angular.module('marketplace').controller('ProductosReadController', ProductosReadController);
 }());

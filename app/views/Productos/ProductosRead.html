@@ -222,6 +222,14 @@
                                                     <option ng-selected="true" value="">Selecciona un cliente...</option>
                                                 </select>
                                             </div>
+
+                                            <div style="margin-top: .5em; margin-left: .2em;" ng-if="Producto.IdEmpresaUsuarioFinal && hayCSNUF && Producto.IdFabricante === 2" > 
+                                                <label > CSN del cliente: </label> {{csnUf}}
+                                                <a href="#/ActualizarCSN" class="form-group" title="Actualiza el CSN del cliente" ng-show="SessionCookie.IdTipoAcceso === 10 || SessionCookie.IdTipoAcceso === 2 " style="background-blend-mode: initial">
+                                                    <br><strong>¿No es el correcto? Actualízalo &nbsp;</strong>
+                                                </a>
+                                            </div>
+
                                             <label style="color:red" for="DominioMicrosoft" ng-show="Producto.IdFabricante === 1 && usuariosSinDominio[Producto.IdEmpresaUsuarioFinal] === false">*No cuentas con un Dominio de Microsoft para este producto.</label>&nbsp;                                            
                                             <div ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2">
                                                 <label for="contrato" >* Contrato</label>
