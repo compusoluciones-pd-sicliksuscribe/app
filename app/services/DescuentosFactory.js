@@ -47,6 +47,11 @@
       return $http.get($rootScope.API + 'Especializaciones');
     };
 
+    factory.getFamilias = function () {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'Familias');
+    };
+
     return factory;
   };
 
