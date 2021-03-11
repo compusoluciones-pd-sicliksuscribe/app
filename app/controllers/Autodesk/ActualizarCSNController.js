@@ -32,6 +32,7 @@
 
     $scope.getUfsCSN = () => {
       let idDist;
+      $scope.busqueda = "";
       $scope.SessionCookie.IdTipoAcceso === 2 ? idDist = $scope.SessionCookie.IdEmpresa : idDist = $scope.IdEmpresa;
       ActualizarCSNFactory.getUfsCSN(idDist)
           .then(result => {
