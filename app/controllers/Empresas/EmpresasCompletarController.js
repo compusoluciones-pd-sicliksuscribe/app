@@ -159,10 +159,7 @@
             IdFormaPagoPredilecta: $scope.Empresa.IdFormaPagoPredilecta
           };
           EmpresasFactory.postEmpresaMicrosoft(ObjMicrosoft)
-            .success(function (result) {
-              if (!result.success) {
-                $scope.ShowToast(result.message, 'danger');
-              }
+            .success(function () {
               $location.path('/Empresas');
               $scope.ShowToast('Se está importando la empresa, por favor espere ', 'success');
             })
