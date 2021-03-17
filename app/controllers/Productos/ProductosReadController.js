@@ -245,7 +245,17 @@
       ActualizarCSNFactory.getUfCSN(Producto.IdEmpresaUsuarioFinal)
         .then(result => {
           if (result.data.success) {
-            $scope.csnUf = result.data.data.CSN ? result.data.data.CSN : 'El cliente no tiene un CSN registrado en click.';
+            if (result.data.data.CSN) {
+              ActualizarCSNFactory.validateCSN(result.data.data.CSN)
+                .then(r => {
+                  if (!r.data.data.victimCsn) $scope.csnUf = r.data.data.csn;
+                  else {
+                    $scope.csnUf = r.data.data.csn;
+                    ActualizarCSNFactory.updateUfCSN(Producto.IdEmpresaUsuarioFinal, r.data.data.csn);
+                  }
+                  return null;
+                });
+            } else $scope.csnUf = 'El cliente no tiene un CSN registrado en click.';
             $scope.hayCSNUF = true;
           } else $scope.ShowToast('No pudimos cargar el csn de este cliente.', 'danger')
         })
