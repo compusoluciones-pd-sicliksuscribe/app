@@ -26,6 +26,11 @@
       return $http.get($rootScope.API + 'autodesk/get-csn/uf/' + idEmpresaUsuarioFinal);
     };
 
+    factory.validateCSN = csn => {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'autodesk/get-account/' + csn);
+    };
+
     return factory;
   };
   ActualizarCSNFactory.$inject = ['$http', '$cookies', '$rootScope'];

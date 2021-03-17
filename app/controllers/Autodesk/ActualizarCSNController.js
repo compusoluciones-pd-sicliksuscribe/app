@@ -32,12 +32,14 @@
 
     $scope.getUfsCSN = () => {
       let idDist;
-      $scope.busqueda = "";
+      $scope.busqueda = '';
       $scope.SessionCookie.IdTipoAcceso === 2 ? idDist = $scope.SessionCookie.IdEmpresa : idDist = $scope.IdEmpresa;
       ActualizarCSNFactory.getUfsCSN(idDist)
           .then(result => {
-            result.data.success ? $scope.UFs = $scope.ufsCSN = result.data.data
-              : $scope.ShowToast('No fue posible obtener los csn del los clientes', 'danger');
+            if (result.data.success) {
+              $scope.UFs = $scope.ufsCSN = result.data.data;
+              $scope.mensajeCSN = new Array($scope.UFs.length);
+            } else $scope.ShowToast('No fue posible obtener los csn del los clientes', 'danger');
             pagination();
           })
           .catch(() => {
@@ -62,6 +64,20 @@
           .catch(() => {
             $scope.ShowToast('No fue posible actualizar la información, por favor intenta más tarde.', 'danger');
           });
+    };
+
+    $scope.validateCSN = (csn, index) => {
+      ActualizarCSNFactory.validateCSN(csn)
+      .then(result => {
+        if (result.data.success) {
+          const data = result.data.data;
+          !data.victimCsn ? $scope.mensajeCSN[index] = `CSN valido. Pertenece a ${data.name}`
+          : $scope.mensajeCSN[index] = `CSN victima. El CSN correcto es ${data.csn}. Pertenece a ${data.name}`;
+        } else $scope.ShowToast('No fue posible actualizar la información', 'danger');
+      })
+      .catch(() => {
+        $scope.ShowToast('No fue posible validar el CSN del cliente, por favor intenta más tarde.', 'danger');
+      });
     };
 
     $scope.init();

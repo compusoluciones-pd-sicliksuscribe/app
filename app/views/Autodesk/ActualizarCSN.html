@@ -29,11 +29,15 @@
             </div>
             <hr class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <div ng-repeat="item in filtered" style=" text-align: center;">
-                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" style="margin-bottom: .8em; text-align: left;">{{ item.NombreEmpresa }} </div>
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" style="margin-bottom: .8em; text-align: left;">
+                    {{ item.NombreEmpresa }} 
+                    <div class="text-info"><b>{{mensajeCSN[$index]}}</b></div>
+                </div>
                 <div class="col-xs-3 col-sm-2 col-md-2 col-lg-2" style="margin-bottom: .8em;"> <input class="form-control fa-lg" type="text" ng-value="item.IdAutodeskUF" ng-model="csn" > </div>
                 <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="margin-bottom: .8em;"> 
-                    <a class="" ng-click="updateUfCSN({{item.IdEmpresa}}, csn = csn || {{item.IdAutodeskUF}})"><span class="glyphicon glyphicon-floppy-disk" style="font-size: 1.6em"></span></a> 
                     
+                    <a class="" ng-click="validateCSN(csn = csn || {{item.IdAutodeskUF}}, $index)"><span class="glyphicon glyphicon glyphicon-search" tooltip="Comprobar csn" style="font-size: 1.6em; margin-right: 1em;"></span></a> 
+                    <a class="" ng-click="updateUfCSN({{item.IdEmpresa}}, csn = csn || {{item.IdAutodeskUF}})"><span class="glyphicon glyphicon-floppy-disk"  tooltip="Guardar cambio"  style="font-size: 1.6em"></span></a> 
                 </div>
                 <hr style="margin: 0 0 1em 0;" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             </div>
