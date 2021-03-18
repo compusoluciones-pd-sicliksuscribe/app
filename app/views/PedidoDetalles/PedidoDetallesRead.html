@@ -129,6 +129,8 @@
                             <span ng-if="pedido.IdAccionAutodesk === 5">Extensión</span>
                         </div>
                     </div>
+                    <label tooltip="Ahora puedes incluir un número de orden de compra en tu pedido. El numero aparecera en el formato pdf de la factura.">Orden de compra</label>
+                    <input type="text" ng-model="orden[$index]" ng-value="pedido.OrdenCompra" style="width: 40%; height: 1.9em; margin-bottom: 1em;" class="form-control" size="30" />
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3" class="form-group">
                     <div class="form-group">

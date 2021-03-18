@@ -96,6 +96,7 @@
     const getOrderDetails = function (validate) {
       return PedidoDetallesFactory.getPedidoDetalles()
         .then(function (result) {
+          $scope.orden = new Array(result.data.data.length);
           $scope.PedidoDetalles = result.data.data;
           if ($scope.SessionCookie.IdTipoAcceso === 10) {
             const estaEnLista = $scope.usuariosCompra.filter(usuario => usuario.IdUsuario === $scope.PedidoDetalles[0].IdUsuarioCompra);
@@ -125,7 +126,7 @@
         })
         .then(function () {
           if ($scope.isPayWithPrepaid()) CambiarMonedaPrepaid();
-        }) 
+        })
         .catch(function (result) {
           error(result.data);
           $location.path('/Productos');
@@ -188,7 +189,7 @@
       .then(function (result) {
         if (!result.data.success) {
           $scope.ShowToast(result.data.message, 'danger');
-        } 
+        }
       })
       .catch(function (result) { error(result.data); });
     };
@@ -196,6 +197,17 @@
     const getUsuarioCompra = () => {
       UsuariosFactory.getUsuariosAdministradores()
         .then(result => ($scope.usuariosCompra = result.data));
+    };
+
+    const actualizarOrdenesCompra = () => {
+      const pedidos = $scope.PedidoDetalles.map((pedido, index) => ({
+        IdPedido: pedido.IdPedido,
+        IdOrdenCompra: pedido.IdOrdenCompra,
+        OrdenCompra: pedido.OrdenCompra
+        ? ($scope.orden[index] ? $scope.orden[index] : ($scope.orden[index] === null ? null : pedido.OrdenCompra))
+        : $scope.orden[index]}));
+      PedidoDetallesFactory.actualizarOrdenesCompra(pedidos)
+        .catch(result => { error(result.data); });
     };
 
     $scope.init = function () {
@@ -381,9 +393,7 @@
             } else {
               total = total + (productPrice * product.Cantidad);
             }
-
           }
-
         });
       });
       return total;
@@ -406,7 +416,7 @@
       total = total + iva;
       return total;
     };
-    $scope.calcularTotalconDescuentoAWS = function (total,descuento) {
+    $scope.calcularTotalconDescuentoAWS = function (total, descuento) {
       return total - total * descuento / 100;
     };
     $scope.calculatePriceWithExchangeRate = function (order, details, value) {
@@ -437,6 +447,7 @@
     };
 
     $scope.next = function () {
+      actualizarOrdenesCompra();
       if ($scope.isPayingWithCSCredit()) validarCarrito();
       let next = true;
       if (!$scope.PedidoDetalles || $scope.PedidoDetalles.length === 0) next = false;
