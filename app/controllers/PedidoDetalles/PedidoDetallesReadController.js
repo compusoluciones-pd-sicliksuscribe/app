@@ -204,7 +204,7 @@
         IdPedido: pedido.IdPedido,
         IdOrdenCompra: pedido.IdOrdenCompra,
         OrdenCompra: pedido.OrdenCompra
-        ? ($scope.orden[index] ? $scope.orden[index] : ($scope.orden[index] === null ? null : pedido.OrdenCompra))
+        ? ($scope.orden[index] ? $scope.orden[index] : (!$scope.orden[index] ? null : pedido.OrdenCompra))
         : $scope.orden[index]}));
       PedidoDetallesFactory.actualizarOrdenesCompra(pedidos)
         .catch(result => { error(result.data); });

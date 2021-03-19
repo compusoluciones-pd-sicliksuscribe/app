@@ -50,7 +50,7 @@
                         <div ng-if="pedido.IdFabricante === 10"><label for="IdEmpresaUsuarioFinal">Consola:&nbsp;</label>{{ pedido.NombreConsola }}<br></div>
                     <label>Marca de los productos:</label> {{ pedido.NombreFabricante }} <br>
                     <label>Duración del periodo: del {{ pedido.FechaInicio }} al {{ pedido.FechaFin  }}</label> <br>
-
+                    <label>Orden de compra:</label> {{ pedido.OrdenCompra ? pedido.OrdenCompra : 'No registrada' }} <br>
                     <label>Renovación del periodo:</label> {{ pedido.NombreEsquemaRenovacion }}
                     <div ng-if="pedido.IdFabricante === 2">
                         <label>Contrato: </label> {{ pedido.ContratoBaseAutodesk || 'Nuevo' }} <br>
@@ -60,8 +60,6 @@
                         <span ng-if="(pedido.IdAccionAutodesk === 2 || pedido.IdAccionAutodesk === 3) && pedido.Renovado">Add-On (Renovación)</span>
                         <span ng-if="pedido.IdAccionAutodesk === 4">Renovación</span>
                         <span ng-if="pedido.IdAccionAutodesk === 5">Extensión</span>
-                        <br>
-                        <label>Orden de compra:</label> {{ pedido.OrdenCompra }}
                     </div>
                 </div>
             </div>
