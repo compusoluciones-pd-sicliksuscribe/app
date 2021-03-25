@@ -203,9 +203,8 @@
       const pedidos = $scope.PedidoDetalles.map((pedido, index) => ({
         IdPedido: pedido.IdPedido,
         IdOrdenCompra: pedido.IdOrdenCompra,
-        OrdenCompra: pedido.OrdenCompra
-        ? ($scope.orden[index] ? $scope.orden[index] : (!$scope.orden[index] ? null : pedido.OrdenCompra))
-        : $scope.orden[index]}));
+        OrdenCompra: $scope.orden[index] ? $scope.orden[index] : ($scope.orden[index] === '' ? null : pedido.OrdenCompra)
+      }));
       PedidoDetallesFactory.actualizarOrdenesCompra(pedidos)
         .catch(result => { error(result.data); });
     };
