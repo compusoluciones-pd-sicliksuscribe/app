@@ -133,7 +133,7 @@
       if ($scope.Empresa.DominioMicrosoft) {
         EmpresasFactory.revisarDominio($scope.Empresa.DominioMicrosoft)
           .success(function (result) {
-            if (result === 'false') {
+            if (result === false) {
               $scope.frm.DominioMicrosoft.$pristine = false;
               $scope.frm.DominioMicrosoft.$invalid = true;
               $scope.Empresa.MensajeDominio = 'Ya existe el dominio, Intenta con uno diferente.';
