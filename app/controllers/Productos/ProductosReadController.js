@@ -213,7 +213,7 @@
       .then(result => {
         if (result.data.success) {
           Producto.mensajeCSN = undefined;
-          Producto.csnUF = result.data.data.CSN ? result.data.data.CSN : '';
+          Producto.csnUF = Producto.IdAutodeskUF = result.data.data.CSN ? result.data.data.CSN : '';
         } else $scope.ShowToast('No pudimos cargar el csn de este cliente.', 'danger')
       })
       .catch(() => $scope.ShowToast('No pudimos cargar el csn de este cliente, por favor intenta de nuevo más tarde.', 'danger'))
@@ -273,6 +273,7 @@
         } else {
           console.log(Producto)
           Producto.mensajeCSN = r.mensaje;
+          Producto.csnUF = Producto.IdAutodeskUF;
           Producto.color = 'rgb(230,8,8)';
           $scope.$apply();
         }
