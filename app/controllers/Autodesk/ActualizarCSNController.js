@@ -10,9 +10,9 @@
         });
     };
 
-    const pagination = () => {
+    const pagination = (currentPage = 1) => {
       $scope.filtered = [];
-      $scope.currentPage = 1;
+      $scope.currentPage = currentPage;
       $scope.numPerPage = 8;
       $scope.maxSize = 5;
 
@@ -20,6 +20,8 @@
         let begin = (($scope.currentPage - 1) * $scope.numPerPage),
           end = begin + $scope.numPerPage;
         $scope.filtered = $scope.UFs.slice(begin, end);
+        $scope.csnValue = $scope.filtered.map(uf => uf.IdAutodeskUF);
+        $scope.mensajeCSN = new Array($scope.filtered.length);
       });
     };
 
@@ -27,20 +29,18 @@
       if ($scope.SessionCookie.IdTipoAcceso !== 2) getSuppliers();
       if ($scope.SessionCookie.IdTipoAcceso === 10) $scope.IdEmpresa = $scope.SessionCookie.IdEmpresa;
       if ($scope.SessionCookie.IdTipoAcceso === 2 || $scope.SessionCookie.IdTipoAcceso === 10) $scope.getUfsCSN();
-      pagination();
     };
 
-    $scope.getUfsCSN = () => {
+    $scope.getUfsCSN = async () => {
       let idDist;
       $scope.busqueda = '';
       $scope.SessionCookie.IdTipoAcceso === 2 ? idDist = $scope.SessionCookie.IdEmpresa : idDist = $scope.IdEmpresa;
-      ActualizarCSNFactory.getUfsCSN(idDist)
+      return ActualizarCSNFactory.getUfsCSN(idDist)
           .then(result => {
             if (result.data.success) {
               $scope.UFs = $scope.ufsCSN = result.data.data;
-              $scope.mensajeCSN = new Array($scope.UFs.length);
             } else $scope.ShowToast('No fue posible obtener los csn del los clientes', 'danger');
-            pagination();
+            pagination($scope.currentPage);
           })
           .catch(() => {
             $scope.ShowToast('No fue posible obtener los csn del los clientes, por favor intenta más tarde.', 'danger');
@@ -56,29 +56,43 @@
       pagination();
     };
 
-    $scope.updateUfCSN = (IdEmpresaUf, csn) => {
-      ActualizarCSNFactory.updateUfCSN(IdEmpresaUf, csn)
-          .then(result => {
+    $scope.updateUfCSN = async (IdEmpresaUf, csn, index) => {
+      csn = !csn ? null : csn;
+      await validateCSN(csn)
+      .then (async (r) => { 
+      if (r.estatus) {
+        ActualizarCSNFactory.updateUfCSN(IdEmpresaUf, csn)
+          .then(async result => {
             result.data.success ? $scope.ShowToast('Información actualizada.', 'success') : $scope.ShowToast('No fue posible actualizar la información', 'danger');
+            await $scope.getUfsCSN();
+            $scope.mensajeCSN[index] = r.mensaje;
+            $scope.color = 'rgb(25,185,50)';
           })
           .catch(() => {
             $scope.ShowToast('No fue posible actualizar la información, por favor intenta más tarde.', 'danger');
           });
+        } else {
+            await $scope.getUfsCSN();
+            $scope.mensajeCSN[index] =  r.mensaje;
+            $scope.color = 'rgb(230,8,8)';
+            $scope.$apply();
+        }
+      })
     };
 
-    $scope.validateCSN = (csn, index) => {
-      ActualizarCSNFactory.validateCSN(csn)
+    const validateCSN = async (csn) => {
+    if (!csn) return { mensaje: `CSN vacío.`, estatus: false}
+    return ActualizarCSNFactory.validateCSN(csn)
       .then(result => {
         if (result.data.success) {
-          const data = result.data.data;
-          !data.victimCsn ? $scope.mensajeCSN[index] = `CSN valido. Pertenece a ${data.name}`
-          : $scope.mensajeCSN[index] = `CSN victima. El CSN correcto es ${data.csn}. Pertenece a ${data.name}`;
-        } else $scope.ShowToast('No fue posible actualizar la información', 'danger');
-      })
-      .catch(() => {
-        $scope.ShowToast('No fue posible validar el CSN del cliente, por favor intenta más tarde.', 'danger');
-      });
-    };
+          if (result.data.data.error) return { mensaje: `CSN: ${csn} no válido.`, estatus: false};
+          else if (result.data.data.csn) {
+            const data = result.data.data;
+            return !data.victimCsn ? { mensaje: `CSN: ${csn} válido. Pertenece a ${data.name}`, estatus: true}
+            : { mensaje: `CSN: ${csn} víctima. El CSN correcto es ${data.csn}. Pertenece a ${data.name}`, estatus: false};
+          } else return { mensaje: `CSN ${csn} no válido.`, estatus: false};
+        }
+      })};
 
     $scope.init();
   };
