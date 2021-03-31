@@ -132,7 +132,7 @@
         .then(result => {
           if (result.data.success) {
             $scope.mensajeCSN = undefined;
-            $scope.csnUf = result.data.data.CSN ? result.data.data.CSN : '';
+            $scope.BuscarProductos.csnUf = $scope.BuscarProductos.IdAutodeskUF = result.data.data.CSN ? result.data.data.CSN : '';
           } else $scope.ShowToast('No pudimos cargar el csn de este cliente.', 'danger');
         })
         .catch(() => $scope.ShowToast('No pudimos cargar el csn de este cliente, por favor intenta de nuevo más tarde.', 'danger'));
@@ -140,7 +140,7 @@
       getTerminos($scope.EmpresaSelect);
     };
 
-    $scope.updateUfCSN = (IdEmpresaUf, csn) => {
+    $scope.updateUfCSN = (IdEmpresaUf, csn, BuscarProductos) => {
       csn = !csn ? null : csn;
       validateCSN(csn)
       .then((r) => {
@@ -156,6 +156,7 @@
           });
         } else {
           $scope.mensajeCSN = r.mensaje;
+          BuscarProductos.csnUf = BuscarProductos.IdAutodeskUF;
           $scope.color = 'rgb(230,8,8)';
           $scope.$apply();
         }
@@ -168,11 +169,9 @@
         .then(result => {
           if (result.data.success) {
             if (result.data.data.error) return { mensaje: `CSN: ${csn} no válido.`, estatus: false};
-            else if (result.data.data.csn) {
               const data = result.data.data;
               return !data.victimCsn ? { mensaje: `CSN: ${csn} válido. Pertenece a ${data.name}`, estatus: true}
-              : { mensaje: `CSN: ${csn} víctima. El CSN correcto es ${data.csn}. Pertenece a ${data.name}`, estatus: false};
-            } else return { mensaje: `CSN ${csn} no válido.`, estatus: false};
+              : { mensaje: `CSN: ${csn} inactivo. El CSN correcto es ${data.csn}. Pertenece a ${data.name}`, estatus: false};
           } else {
             return { mensaje: `CSN ${csn} no válido.`, estatus: false};
           }

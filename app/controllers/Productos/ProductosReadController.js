@@ -271,7 +271,6 @@
             $scope.ShowToast('No fue posible actualizar la información, por favor intenta más tarde.', 'danger');
           });
         } else {
-          console.log(Producto)
           Producto.mensajeCSN = r.mensaje;
           Producto.csnUF = Producto.IdAutodeskUF;
           Producto.color = 'rgb(230,8,8)';
@@ -286,11 +285,9 @@
         .then(result => {
           if (result.data.success) {
             if (result.data.data.error) return { mensaje: `CSN: ${csn} no válido.`, estatus: false};
-            else if (result.data.data.csn) {
               const data = result.data.data;
               return !data.victimCsn ? { mensaje: `CSN: ${csn} válido. Pertenece a ${data.name}`, estatus: true}
-              : { mensaje: `CSN: ${csn} víctima. El CSN correcto es ${data.csn}. Pertenece a ${data.name}`, estatus: false};
-            } else return { mensaje: `CSN ${csn} no válido.`, estatus: false};
+              : { mensaje: `CSN: ${csn} inactivo. El CSN correcto es ${data.csn}. Pertenece a ${data.name}`, estatus: false};
           } else {
             return { mensaje: `CSN ${csn} no válido.`, estatus: false};
           }

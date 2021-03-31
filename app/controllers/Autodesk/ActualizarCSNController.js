@@ -69,7 +69,6 @@
             if (!$scope.busqueda) await $scope.getUfsCSN();
             $scope.mensajeCSN[index] = r.mensaje;
             $scope.color[index] = 'rgb(25,185,50)';
-            $scope.$apply();
           })
           .catch(() => {  
             $scope.ShowToast('No fue posible actualizar la información, por favor intenta más tarde.', 'danger');
@@ -85,20 +84,18 @@
     };
 
     const validateCSN = async (csn) => {
-    if (!csn) return { mensaje: `CSN vacío.`, estatus: false}
-    return ActualizarCSNFactory.validateCSN(csn)
-      .then(result => {
-        if (result.data.success) {
-          if (result.data.data.error) return { mensaje: `CSN: ${csn} no válido.`, estatus: false};
-          else if (result.data.data.csn) {
-            const data = result.data.data;
-            return !data.victimCsn ? { mensaje: `CSN: ${csn} válido. Pertenece a ${data.name}`, estatus: true}
-            : { mensaje: `CSN: ${csn} víctima. El CSN correcto es ${data.csn}. Pertenece a ${data.name}`, estatus: false};
-          } else return { mensaje: `CSN ${csn} no válido.`, estatus: false};
-        } else {
-          return { mensaje: `CSN ${csn} no válido.`, estatus: false};
-        }
-      })};
+      if (!csn) return { mensaje: `CSN vacío.`, estatus: false}
+      return ActualizarCSNFactory.validateCSN(csn)
+        .then(result => {
+          if (result.data.success) {
+            if (result.data.data.error) return { mensaje: `CSN: ${csn} no válido.`, estatus: false};
+              const data = result.data.data;
+              return !data.victimCsn ? { mensaje: `CSN: ${csn} válido. Pertenece a ${data.name}`, estatus: true}
+              : { mensaje: `CSN: ${csn} inactivo. El CSN correcto es ${data.csn}. Pertenece a ${data.name}`, estatus: false};
+          } else {
+            return { mensaje: `CSN ${csn} no válido.`, estatus: false};
+          }
+        })};
 
     $scope.init();
   };
