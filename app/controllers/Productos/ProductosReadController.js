@@ -209,6 +209,15 @@
     }
 
     const validateAutodeskData = function (Producto) {
+      ActualizarCSNFactory.getUfCSN(Producto.IdEmpresaUsuarioFinal)
+      .then(result => {
+        if (result.data.success) {
+          Producto.mensajeCSN = undefined;
+          Producto.csnUF = Producto.IdAutodeskUF = result.data.data.CSN ? result.data.data.CSN : '';
+        } else $scope.ShowToast('No pudimos cargar el csn de este cliente.', 'danger')
+      })
+      .catch(() => $scope.ShowToast('No pudimos cargar el csn de este cliente, por favor intenta de nuevo más tarde.', 'danger'))
+      .then(() => {
       ProductosFactory.getProductContracts(Producto.IdEmpresaUsuarioFinal, Producto.IdProducto)
         .success(function (respuesta) {
           if (respuesta.success === 1) {
@@ -230,7 +239,9 @@
         })
         .error(function () {
           $scope.ShowToast('No pudimos cargar la información de tus contratos, por favor intenta de nuevo más tarde.', 'danger');
-        });
+        })
+      })
+      .then(() => {
       UsuariosFactory.getUsuariosContacto(Producto.IdEmpresaUsuarioFinal)
         .success(function (respuesta) {
           if (respuesta.success === 1) {
@@ -242,15 +253,45 @@
         .error(function () {
           $scope.ShowToast('No pudimos cargar la información de tus contactos, por favor intenta de nuevo más tarde.', 'danger');
         });
-      ActualizarCSNFactory.getUfCSN(Producto.IdEmpresaUsuarioFinal)
+      })
+    };
+
+    $scope.updateUfCSN = (IdEmpresaUf, csn, Producto) => {
+      csn = !csn ? null : csn;
+      validateCSN(csn, Producto)
+      .then((r) => {
+        if (r.estatus) {
+        ActualizarCSNFactory.updateUfCSN(IdEmpresaUf, csn)
+          .then(result => {
+            result.data.success ? $scope.ShowToast('Información actualizada.', 'success') : $scope.ShowToast('No fue posible actualizar la información', 'danger');
+            Producto.mensajeCSN = r.mensaje;
+            Producto.color = 'rgb(25,185,50)';
+          })
+          .catch(() => {
+            $scope.ShowToast('No fue posible actualizar la información, por favor intenta más tarde.', 'danger');
+          });
+        } else {
+          Producto.mensajeCSN = r.mensaje;
+          Producto.csnUF = Producto.IdAutodeskUF;
+          Producto.color = 'rgb(230,8,8)';
+          $scope.$apply();
+        }
+      })
+    };
+
+    const validateCSN = async (csn) => {
+      if (!csn) return { mensaje: `CSN vacío.`, estatus: false}
+      return ActualizarCSNFactory.validateCSN(csn)
         .then(result => {
           if (result.data.success) {
-            $scope.csnUf = result.data.data.CSN ? result.data.data.CSN : 'El cliente no tiene un CSN registrado en click.';
-            $scope.hayCSNUF = true;
-          } else $scope.ShowToast('No pudimos cargar el csn de este cliente.', 'danger')
-        })
-        .catch(() => $scope.ShowToast('No pudimos cargar el csn de este cliente, por favor intenta de nuevo más tarde.', 'danger'));
-    };
+            if (result.data.data.error) return { mensaje: `CSN: ${csn} no válido.`, estatus: false};
+              const data = result.data.data;
+              return !data.victimCsn ? { mensaje: `CSN: ${csn} válido. Pertenece a ${data.name}`, estatus: true}
+              : { mensaje: `CSN: ${csn} inactivo. El CSN correcto es ${data.csn}. Pertenece a ${data.name}`, estatus: false};
+          } else {
+            return { mensaje: `CSN ${csn} no válido.`, estatus: false};
+          }
+        })};
 
     const validateISVsData = function (Producto) {
       UsuariosFactory.getUsuariosContacto(Producto.IdEmpresaUsuarioFinal)

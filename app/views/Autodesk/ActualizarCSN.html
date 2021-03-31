@@ -17,7 +17,7 @@
                 <span class="glyphicon glyphicon-search fa-2x"  style="float:right;"></span>
             </div>
             <div class="form-group col-xs-11 col-sm-11 col-md-6 col-lg-4" style="float:right;">
-                <input class="form-control fa-lg" type="text" placeholder="Buscar por nombre de la empresa"aria-label="Buscar" ng-model="busqueda" ng-keyup = "buscar(busqueda)">
+                <input class="form-control fa-lg" type="text" placeholder="Buscar por nombre de la empresa"aria-label="Buscar" ng-model="busqueda" ng-keyup = "buscar()">
             </div>
         </div>
         <hr>
@@ -25,15 +25,18 @@
             <div style="margin-top: 2em; text-align: center;">
                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" style="text-align: left;"><label>Nombre de la empresa</label></div>
                 <div class="col-xs-3 col-sm-2 col-md-2 col-lg-2"><label>CSN</label></div>
-                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"><label>Acciones</label></div>
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"><label></label></div>
             </div>
             <hr class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <div ng-repeat="item in filtered" style=" text-align: center;">
-                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" style="margin-bottom: .8em; text-align: left;">{{ item.NombreEmpresa }} </div>
-                <div class="col-xs-3 col-sm-2 col-md-2 col-lg-2" style="margin-bottom: .8em;"> <input class="form-control fa-lg" type="text" ng-value="item.IdAutodeskUF" ng-model="csn" > </div>
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" style="margin-bottom: .8em; text-align: left;">
+                    {{ item.NombreEmpresa }}
+                    <div class="text-info" style="color: {{color[$index]}};"><b>{{mensajeCSN[$index]}}</b></div>
+                </div>
+                <div class="col-xs-3 col-sm-2 col-md-2 col-lg-2" style="margin-bottom: .8em;"> <input class="form-control fa-lg" type="text" pattern="[A-Za-z0-9]*" ng-model="csnValue[$index]" > </div>
                 <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="margin-bottom: .8em;"> 
-                    <a class="" ng-click="updateUfCSN({{item.IdEmpresa}}, csn = csn || {{item.IdAutodeskUF}})"><span class="glyphicon glyphicon-floppy-disk" style="font-size: 1.6em"></span></a> 
                     
+                    <button class="btn btn-primary" style="min-width: 6em;" ng-click="updateUfCSN({{item.IdEmpresa}}, csnValue[$index], $index)">Guardar</a> 
                 </div>
                 <hr style="margin: 0 0 1em 0;" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             </div>

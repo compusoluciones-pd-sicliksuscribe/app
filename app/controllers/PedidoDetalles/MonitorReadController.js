@@ -131,14 +131,51 @@
         ActualizarCSNFactory.getUfCSN(Params.IdEmpresaUsuarioFinal)
         .then(result => {
           if (result.data.success) {
-            $scope.csnUf = result.data.data.CSN ? result.data.data.CSN : 'El cliente no tiene un CSN registrado en click.';
-            $scope.hayCSNUF = true;
-          } else $scope.ShowToast('No pudimos cargar el csn de este cliente.', 'danger')  
+            $scope.mensajeCSN = undefined;
+            $scope.BuscarProductos.csnUf = $scope.BuscarProductos.IdAutodeskUF = result.data.data.CSN ? result.data.data.CSN : '';
+          } else $scope.ShowToast('No pudimos cargar el csn de este cliente.', 'danger');
         })
         .catch(() => $scope.ShowToast('No pudimos cargar el csn de este cliente, por favor intenta de nuevo más tarde.', 'danger'));
       }
       getTerminos($scope.EmpresaSelect);
     };
+
+    $scope.updateUfCSN = (IdEmpresaUf, csn, BuscarProductos) => {
+      csn = !csn ? null : csn;
+      validateCSN(csn)
+      .then((r) => {
+        if (r.estatus) {
+        ActualizarCSNFactory.updateUfCSN(IdEmpresaUf, csn)
+          .then(result => {
+            result.data.success ? $scope.ShowToast('Información actualizada.', 'success') : $scope.ShowToast('No fue posible actualizar la información', 'danger');
+            $scope.mensajeCSN = r.mensaje;
+            $scope.color = 'rgb(25,185,50)';
+          })
+          .catch(() => {
+            $scope.ShowToast('No fue posible actualizar la información, por favor intenta más tarde.', 'danger');
+          });
+        } else {
+          $scope.mensajeCSN = r.mensaje;
+          BuscarProductos.csnUf = BuscarProductos.IdAutodeskUF;
+          $scope.color = 'rgb(230,8,8)';
+          $scope.$apply();
+        }
+      })
+    };
+
+    const validateCSN = async (csn) => {
+      if (!csn) return { mensaje: `CSN vacío.`, estatus: false}
+      return ActualizarCSNFactory.validateCSN(csn)
+        .then(result => {
+          if (result.data.success) {
+            if (result.data.data.error) return { mensaje: `CSN: ${csn} no válido.`, estatus: false};
+              const data = result.data.data;
+              return !data.victimCsn ? { mensaje: `CSN: ${csn} válido. Pertenece a ${data.name}`, estatus: true}
+              : { mensaje: `CSN: ${csn} inactivo. El CSN correcto es ${data.csn}. Pertenece a ${data.name}`, estatus: false};
+          } else {
+            return { mensaje: `CSN ${csn} no válido.`, estatus: false};
+          }
+        })};
 
     $scope.ActualizarCantidad = function (IdPedidoDetalle) {
       $scope.Pedidos.forEach(function (Pedido) {
