@@ -288,9 +288,11 @@
             if (result.data.data.error) return { mensaje: `CSN: ${csn} no válido.`, estatus: false};
             else if (result.data.data.csn) {
               const data = result.data.data;
-              return !data.victimCsn ? { mensaje: `CSN: ${csn} valido. Pertenece a ${data.name}`, estatus: true}
-              : { mensaje: `CSN: ${csn} victima. El CSN correcto es ${data.csn}. Pertenece a ${data.name}`, estatus: false};
+              return !data.victimCsn ? { mensaje: `CSN: ${csn} válido. Pertenece a ${data.name}`, estatus: true}
+              : { mensaje: `CSN: ${csn} víctima. El CSN correcto es ${data.csn}. Pertenece a ${data.name}`, estatus: false};
             } else return { mensaje: `CSN ${csn} no válido.`, estatus: false};
+          } else {
+            return { mensaje: `CSN ${csn} no válido.`, estatus: false};
           }
         })};
 

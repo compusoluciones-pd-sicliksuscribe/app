@@ -47,10 +47,11 @@
           });
     };
 
-    $scope.buscar = function (valor) {
+    $scope.buscar = function () {
+      $scope.buscado = $scope.busqueda;
       let resultados = [];
       $scope.ufsCSN.forEach(uf => {
-        if (uf.NombreEmpresa.toString().toUpperCase().indexOf(valor.toUpperCase()) >= 0) resultados.push(uf);
+        if (uf.NombreEmpresa.toString().toUpperCase().indexOf($scope.busqueda.toUpperCase()) >= 0) resultados.push(uf);
       });
       $scope.UFs = resultados;
       pagination();
@@ -64,7 +65,7 @@
         ActualizarCSNFactory.updateUfCSN(IdEmpresaUf, csn)
           .then(async result => {
             result.data.success ? $scope.ShowToast('Información actualizada.', 'success') : $scope.ShowToast('No fue posible actualizar la información', 'danger');
-            await $scope.getUfsCSN();
+            if (!$scope.busqueda) await $scope.getUfsCSN();
             $scope.mensajeCSN[index] = r.mensaje;
             $scope.color = 'rgb(25,185,50)';
           })
@@ -72,7 +73,8 @@
             $scope.ShowToast('No fue posible actualizar la información, por favor intenta más tarde.', 'danger');
           });
         } else {
-            await $scope.getUfsCSN();
+          if (!$scope.busqueda) await $scope.getUfsCSN();
+             $scope.busqueda =  $scope.buscado;
             $scope.mensajeCSN[index] =  r.mensaje;
             $scope.color = 'rgb(230,8,8)';
             $scope.$apply();
@@ -91,6 +93,8 @@
             return !data.victimCsn ? { mensaje: `CSN: ${csn} válido. Pertenece a ${data.name}`, estatus: true}
             : { mensaje: `CSN: ${csn} víctima. El CSN correcto es ${data.csn}. Pertenece a ${data.name}`, estatus: false};
           } else return { mensaje: `CSN ${csn} no válido.`, estatus: false};
+        } else {
+          return { mensaje: `CSN ${csn} no válido.`, estatus: false};
         }
       })};
 
