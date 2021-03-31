@@ -33,7 +33,7 @@
                     {{ item.NombreEmpresa }}
                     <div class="text-info" style="color: {{color}};"><b>{{mensajeCSN[$index]}}</b></div>
                 </div>
-                <div class="col-xs-3 col-sm-2 col-md-2 col-lg-2" style="margin-bottom: .8em;"> <input class="form-control fa-lg" type="text" ng-model="csnValue[$index]" > </div>
+                <div class="col-xs-3 col-sm-2 col-md-2 col-lg-2" style="margin-bottom: .8em;"> <input class="form-control fa-lg" type="text" pattern="[A-Za-z0-9]*" ng-model="csnValue[$index]" > </div>
                 <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="margin-bottom: .8em;"> 
                     
                     <button class="btn btn-primary" style="min-width: 6em;" ng-click="updateUfCSN({{item.IdEmpresa}}, csnValue[$index], $index)">Guardar</a> 

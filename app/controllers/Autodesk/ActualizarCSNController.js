@@ -22,6 +22,7 @@
         $scope.filtered = $scope.UFs.slice(begin, end);
         $scope.csnValue = $scope.filtered.map(uf => uf.IdAutodeskUF);
         $scope.mensajeCSN = new Array($scope.filtered.length);
+        $scope.color = new Array($scope.filtered.length);
       });
     };
 
@@ -67,16 +68,16 @@
             result.data.success ? $scope.ShowToast('Información actualizada.', 'success') : $scope.ShowToast('No fue posible actualizar la información', 'danger');
             if (!$scope.busqueda) await $scope.getUfsCSN();
             $scope.mensajeCSN[index] = r.mensaje;
-            $scope.color = 'rgb(25,185,50)';
+            $scope.color[index] = 'rgb(25,185,50)';
           })
-          .catch(() => {
+          .catch(() => {  
             $scope.ShowToast('No fue posible actualizar la información, por favor intenta más tarde.', 'danger');
           });
         } else {
           if (!$scope.busqueda) await $scope.getUfsCSN();
              $scope.busqueda =  $scope.buscado;
             $scope.mensajeCSN[index] =  r.mensaje;
-            $scope.color = 'rgb(230,8,8)';
+            $scope.color[index] = 'rgb(230,8,8)';
             $scope.$apply();
         }
       })
