@@ -69,6 +69,7 @@
             if (!$scope.busqueda) await $scope.getUfsCSN();
             $scope.mensajeCSN[index] = r.mensaje;
             $scope.color[index] = 'rgb(25,185,50)';
+            $scope.$apply();
           })
           .catch(() => {  
             $scope.ShowToast('No fue posible actualizar la información, por favor intenta más tarde.', 'danger');
