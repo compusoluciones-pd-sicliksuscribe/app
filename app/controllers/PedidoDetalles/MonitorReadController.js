@@ -148,6 +148,7 @@
         ActualizarCSNFactory.updateUfCSN(IdEmpresaUf, csn)
           .then(result => {
             result.data.success ? $scope.ShowToast('Información actualizada.', 'success') : $scope.ShowToast('No fue posible actualizar la información', 'danger');
+            BuscarProductos.csnUf = BuscarProductos.IdAutodeskUF = csn
             $scope.mensajeCSN = r.mensaje;
             $scope.color = 'rgb(25,185,50)';
           })
