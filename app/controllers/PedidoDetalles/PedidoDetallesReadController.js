@@ -22,6 +22,10 @@
       IBM: 11
     };
 
+    const tipoAcceso = {
+      SUPER_USUARIO: 10,
+    };
+
     const error = function (error) {
       $scope.ShowToast(!error ? 'Ha ocurrido un error, inténtelo más tarde.' : error.message, 'danger');
       $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
@@ -159,7 +163,7 @@
 
     const ActualizarFormaPago = function (IdFormaPago) {
       let empresa;
-      if ($scope.SessionCookie.IdTipoAcceso === 10) {
+      if ($scope.SessionCookie.IdTipoAcceso === tipoAcceso.SUPER_USUARIO) {
         $scope.Distribuidor.IdFormaPagoPredilecta === paymentMethods.PAYPAL || $scope.Distribuidor.IdFormaPagoPredilecta === paymentMethods.CREDIT_CARD ?
         empresa = { IdFormaPagoPredilecta: paymentMethods.CS_CREDIT } : empresa = { IdFormaPagoPredilecta: IdFormaPago || $scope.Distribuidor.IdFormaPagoPredilecta };
       } else empresa = { IdFormaPagoPredilecta: IdFormaPago || $scope.Distribuidor.IdFormaPagoPredilecta };
