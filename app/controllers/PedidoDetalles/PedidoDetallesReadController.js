@@ -22,6 +22,10 @@
       IBM: 11
     };
 
+    const tipoAcceso = {
+      SUPER_USUARIO: 10,
+    };
+
     const error = function (error) {
       $scope.ShowToast(!error ? 'Ha ocurrido un error, inténtelo más tarde.' : error.message, 'danger');
       $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
@@ -157,8 +161,12 @@
       }
     };
 
-    var ActualizarFormaPago = function (IdFormaPago) {
-      var empresa = { IdFormaPagoPredilecta: IdFormaPago || $scope.Distribuidor.IdFormaPagoPredilecta };
+    const ActualizarFormaPago = function (IdFormaPago) {
+      let empresa;
+      if ($scope.SessionCookie.IdTipoAcceso === tipoAcceso.SUPER_USUARIO) {
+        $scope.Distribuidor.IdFormaPagoPredilecta === paymentMethods.PAYPAL || $scope.Distribuidor.IdFormaPagoPredilecta === paymentMethods.CREDIT_CARD ?
+        empresa = { IdFormaPagoPredilecta: paymentMethods.CS_CREDIT } : empresa = { IdFormaPagoPredilecta: IdFormaPago || $scope.Distribuidor.IdFormaPagoPredilecta };
+      } else empresa = { IdFormaPagoPredilecta: IdFormaPago || $scope.Distribuidor.IdFormaPagoPredilecta };
       EmpresasFactory.putEmpresaFormaPago(empresa)
         .then(function (result) {
           if (result.data.success) {
@@ -209,14 +217,14 @@
         .catch(result => { error(result.data); });
     };
 
-    $scope.init = function () {
+    $scope.init = async () => {
       $scope.CheckCookie();
-      PedidoDetallesFactory.getPrepararCompra(0)
+      await PedidoDetallesFactory.getPrepararCompra(0)
         .catch(function (result) { error(result.data); });
       if ($scope.SessionCookie.IdTipoAcceso === 10) getUsuarioCompra();
       getEnterprises()
         .then(getOrderDetails)
-        .then(params => $scope.SessionCookie.IdTipoAcceso === 10 ? ActualizarFormaPago(2) : ActualizarFormaPago(params))
+        .then(ActualizarFormaPago)
         .catch(function (result) { error(result.data); });
     };
 
