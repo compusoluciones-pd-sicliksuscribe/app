@@ -134,11 +134,6 @@
                                 <b style="color:#68953B;">{{Producto.PorcentajeDescuento}}% Desc.</b>
                             </span>
 
-                            <div ng-show="Producto.IdTipoProducto == 2 && Producto.IdFabricante == 1 && Producto.IdEsquemaRenovacion == MENSUAL">
-                                <label for="" title="Precio prorrateado">Precio prorrateado del primer periodo:</label> {{Producto.PrecioProrrateo
-                                | currency}} {{Producto.MonedaPrecio}}
-                            </div>
-
                             <div ng-show="Producto.tiers">
                                 <label for="" title="nivel">Precios por nivel:</label>
                                 <ul>
