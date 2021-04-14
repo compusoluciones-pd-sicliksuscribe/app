@@ -1,0 +1,57 @@
+#chart {
+    max-width: 650px;
+    margin: 35px auto;
+}
+.card {
+    color: #ffffff;
+    box-shadow: 1px 1px 5px gray;
+    padding: 10px;
+    margin: 30px;
+}
+.card1 {
+    background: #4a7bab;
+}
+.card2 {
+    background: #db9635;
+}
+.card3 {
+    background: #68953b;
+}
+.box-shadow {
+    box-shadow: 1px 1px 5px grey;
+}
+table.tb1 tr:hover td {
+    background-color: #bfceff;
+    cursor: pointer;
+}
+.p-0 {
+    padding: 0 !important;
+}
+.mt-0 {
+    margin-top: 0;
+}
+.pt-5 {
+    padding-top: 30px !important;
+}
+.mt {
+    margin-top: 20px;
+}
+.mtb {
+    margin-bottom: 30px;
+    margin-top: 100px;
+}
+table.tb1 thead {
+    background: #68953b;
+    color: white;
+}
+table.tb2 thead {
+    background: #4a7bab;
+    color: white;
+}
+.nav-tabs > li.active > a {
+    color: #fff;
+    background-color: #4c4c4c;
+}
+.nav > li > a {
+    color: rgb(105, 105, 105);
+}
