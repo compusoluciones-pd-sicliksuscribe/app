@@ -1,193 +1,176 @@
 <link rel="stylesheet" href="styles/css/tableReconciliation.css">
-    <div class="container" ng-controller="ReconciliacionController">
+<div class="container" ng-controller="ReconciliacionController">
+    <div class="row">
+        <h2 style="padding-top: 20px; padding-bottom: 20px;">Reconciliación
+        </h2>
+
         <div class="row">
-            <h2 style="padding-top: 20px; padding-bottom: 20px;">Reconciliación
-            </h2>
-            <div class="box-shadow | col-xs-12 col-md-7 | mt">
-                <div id="chart"></div>
-            </div>
-            <div class="col-xs-10 col-md-5 | col-xs-offset-1 col-md-offset-0 | mt">
-                <div class="card card2 mt-0">
-                    <h4>Ventas CSP</h4>
-                    <h3>$123,476.00</h3>
-                </div>
-                <div class="card card3">
-                    <h4>Ventas Click Suscribe</h4>
-                    <h3>$239,430.00</h3>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-12 col-md-4 mtb">
+            <div class="col-xs-12 col-md-4">
                 <div class="input-group">
                     <div class="form-group">
                         <label>Filtrar por mes</label>
-                        <input
-                            class="form-control"
-                            type="month"
-                            name="mes"
-                            step="1"
-                            min="2020-01"
-                            value="2021-03"></div>
-                        <span class="input-group-btn" style="padding-top: 22px !important;">
-                            <button
-                                class="btn btn-default white"
-                                style="background-color: #4a7bab;"
-                                type="submit">
-                                Buscar
-                            </button>
-                        </span>
+                        <input id="dateFilter" class="form-control" type="month" name="mes" step="1" min="2020-01"
+                            value="2021-03">
                     </div>
+                    <span class="input-group-btn" style="padding-top: 22px !important;">
+                        <button class="btn btn-default white" style="background-color: #4a7bab;" 
+                            ng-click="getReconciliationData()">
+                            Buscar
+                        </button>
+                    </span>
                 </div>
-                <div class="col-xs-12">
-                    <ul class="nav nav-tabs" style="padding-left: 40% !important;" role="tablist">
-                        <li role="presentation" class="active">
-                            <a data-target="#todos" aria-controls="todos" role="tab" data-toggle="tab">Todos los registros</a>
-                        </li>
-                        <li role="presentation">
-                            <a
-                                data-target="#diferencias"
-                                aria-controls="diferencias"
-                                role="tab"
-                                data-toggle="tab">Registros con diferencias</a>
-                        </li>
-                    </ul>
-                    <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane active" id="todos">
-                            <h4 class="pt-5">Todos los Registros</h4>
-                            <div class="col-xs-12 col-md-4">
-                                <div class="form-group ">
-                                    <label for="Busqueda">&nbsp;</label>
-                                    <div class="form-group row">
-                                        <div class="form-group has-feedback">
-                                            <input
-                                                type="text"
-                                                ng-model="PromocionFilter"
-                                                class="form-control ng-valid ng-dirty ng-valid-parse ng-touched"
-                                                size="30"
-                                                placeholder="Busca por pedido, suscripción, usuario..."
-                                                style="">
-                                                <i class="form-control-feedback glyphicon glyphicon-search"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="bs-example" data-example-id="striped-table">
-                                    <table class="table table-striped tb1" style="color: rgb(97, 97, 97);">
-                                        <thead>
-                                            <tr>
-                                                <th>Id pedido</th>
-                                                <th>Id suscripción</th>
-                                                <th>Usuario final</th>
-                                                <th>Producto</th>
-                                                <th>Cantidad</th>
-                                                <th>Esquema renovación</th>
-                                                <th>Periodo</th>
-                                                <th>Estatus</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody ng-repeat="item in filtered">
-                                            <tr
-                                                data-toggle="collapse"
-                                                data-target="#collapseExample_{{item.IdReconciliacion}}"
-                                                aria-expanded="false"
-                                                aria-controls="collapseExample_{{item.IdReconciliacion}}"
-                                                ng-click="timeChart({{item.IdReconciliacion}})">
-                                                <td scope="row">{{item.IdReconciliacion}}</td>
-                                                <td>{{item.IdLicencia}}</td>
-                                                <td>{{item.NombreEmpresa}}</td>
-                                                <td>{{item.NombreProducto}}</td>
-                                                <td>{{item.Cantidad}}</td>
-                                                <td>{{item.IdEsquemaRenovacion}}</td>
-                                                <td>{{item.FechaFactura}}</td>
-                                                <td>
-                                                    <span class="label label-danger">Dif. cantidades</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="9" class="p-0">
-                                                    <div class="collapse" id="collapseExample_{{item.IdReconciliacion}}">
-                                                        <div id="chart_{{item.IdReconciliacion}}"></div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div ng-show="lista.length === 0" style="text-align:center">
-                                    <h4>No se encontraron resultados.</h4>
-                                </div>
-                                <div style="margin: auto; text-align: center;">
-                                    <pagination
-                                        class="pager"
-                                        ng-model="currentPage"
-                                        total-items="lista.length"
-                                        max-size="maxSize"
-                                        boundary-links="true"></pagination>
-                                </div>
-                            </div>
-                            <div role="tabpanel" class="tab-pane" id="diferencias">
-                                <h3>Registros con diferencias</h3>
-                                <div class="bs-example" data-example-id="striped-table">
-                                    <table class="table table-striped tb2" style="color: rgb(97, 97, 97);">
-                                        <thead>
-                                            <tr>
-                                                <th>Id pedido</th>
-                                                <th>Id suscripción</th>
-                                                <th>Usuario final</th>
-                                                <th>Distribuidor</th>
-                                                <th>Producto</th>
-                                                <th>Cantidad</th>
-                                                <th>Esquema renovación</th>
-                                                <th>Periodo</th>
-                                                <th>Estatus</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <th scope="row">48092</th>
-                                                <td>48092-48092-48092-48092-48092</td>
-                                                <td>ZIHONI CONSULTORS</td>
-                                                <td>Trade Chemicals and Products SA de CV</td>
-                                                <td>Office 365 Enterprise E3 Trial</td>
-                                                <td>25</td>
-                                                <td>Mensual</td>
-                                                <td>03/2021</td>
-                                                <td>
-                                                    <span class="label label-danger">Dif. cantidades</span>
-                                                </td>
-                                            </tr>
-                                            <tr
-                                                data-toggle="collapse"
-                                                data-target="#collapseExample"
-                                                aria-expanded="false"
-                                                aria-controls="collapseExample">
-                                                <td scope="row">48092</td>
-                                                <td>48092-48092-48092-48092-48092</td>
-                                                <td>ZIHONI CONSULTORS</td>
-                                                <td>Trade Chemicals and Products SA de CV</td>
-                                                <td>Office 365 Enterprise E3 Trial</td>
-                                                <td>25</td>
-                                                <td>Mensual</td>
-                                                <td>03/2021</td>
-                                                <td>
-                                                    <span class="label label-danger">Dif. cantidades</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="9">
-                                                    <div class="collapse" id="collapseExample">
-                                                        <p>
-                                                            Time Line #2
-                                                        </p>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+            </div>
+        </div>
+
+
+        <div class="box-shadow | col-xs-12 col-md-7 | mt">
+            <div id="chart"></div>
+        </div>
+        <div class="col-xs-10 col-md-5 | col-xs-offset-1 col-md-offset-0 | mt">
+            <div class="card card2 mt-0">
+                <h4>Ventas CSP <i>(dólares)</i> </h4>
+                <h5 id='ventasCspDate'></h5>
+                <h3 id='ventasCspTotal'></h3>
+            </div>
+            <div class="card card3">
+                <h4>Ventas clicksuscribe <i>(dólares)</i></h4>
+                <h3>$239,430.00</h3>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="col-xs-12 pt-5">
+        <ul class="nav nav-tabs" style="padding-left: 40% !important;" role="tablist">
+            <li role="presentation" class="active">
+                <a data-target="#todos" aria-controls="todos" role="tab" data-toggle="tab">Todos los registros</a>
+            </li>
+            <li role="presentation">
+                <a data-target="#diferencias" aria-controls="diferencias" role="tab" data-toggle="tab">Registros con
+                    diferencias</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="todos">
+                <h4 class="pt-3">Todos los registros</h4>
+                <div class="col-xs-12 col-md-4">
+                    <div class="form-group ">
+                        <label for="Busqueda">&nbsp;</label>
+                        <div class="form-group row">
+                            <div class="form-group has-feedback">
+                                <input type="text" ng-model="PromocionFilter"
+                                    class="form-control ng-valid ng-dirty ng-valid-parse ng-touched" size="30"
+                                    placeholder="Busca por pedido, suscripción, usuario...">
+                                <i class="form-control-feedback glyphicon glyphicon-search"></i>
                             </div>
                         </div>
                     </div>
                 </div>
+                <div class="bs-example" data-example-id="striped-table">
+                    <table class="table table-striped tb1" style="color: rgb(97, 97, 97);">
+                        <thead>
+                            <tr>
+                                <th>Id pedido</th>
+                                <th>Id suscripción</th>
+                                <th>Usuario final</th>
+                                <th>Producto</th>
+                                <th>Cantidad</th>
+                                <th>Esquema renovación</th>
+                                <th>Estatus</th>
+                            </tr>
+                        </thead>
+                        <tbody ng-repeat="item in filtered">
+                            <tr data-toggle="collapse" data-target="#collapseExample_{{item.IdReconciliacion}}"
+                                aria-expanded="false" aria-controls="collapseExample_{{item.IdReconciliacion}}"
+                                ng-click="timeChart({{item.IdReconciliacion}}, '{{item.IdLicencia}}')">
+                                <td scope="row">{{item.IdReconciliacion}}</td>
+                                <td>{{item.IdLicencia}}</td>
+                                <td>{{item.NombreEmpresa}}</td>
+                                <td>{{item.NombreProducto}}</td>
+                                <td>{{item.Cantidad}}</td>
+                                <td>{{item.Nombre}}</td>
+                                <td>
+                                    <span class="label label-danger">Dif. cantidades</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="9" class="p-0">
+                                    <div class="collapse" id="collapseExample_{{item.IdReconciliacion}}">
+                                        <div id="chart_{{item.IdReconciliacion}}"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div ng-show="lista.length === 0" style="text-align:center">
+                    <h4>No se encontraron resultados.</h4>
+                </div>
+                <div style="margin: auto; text-align: center;">
+                    <pagination class="pager" ng-model="currentPage" total-items="lista.length" max-size="maxSize"
+                        boundary-links="true"></pagination>
+                </div>
             </div>
+            <div role="tabpanel" class="tab-pane" id="diferencias">
+                <h3>Registros con diferencias</h3>
+                <div class="bs-example" data-example-id="striped-table">
+                    <table class="table table-striped tb2" style="color: rgb(97, 97, 97);">
+                        <thead>
+                            <tr>
+                                <th>Id pedido</th>
+                                <th>Id suscripción</th>
+                                <th>Usuario final</th>
+                                <th>Distribuidor</th>
+                                <th>Producto</th>
+                                <th>Cantidad</th>
+                                <th>Esquema renovación</th>
+                                <th>Periodo</th>
+                                <th>Estatus</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">48092</th>
+                                <td>48092-48092-48092-48092-48092</td>
+                                <td>ZIHONI CONSULTORS</td>
+                                <td>Trade Chemicals and Products SA de CV</td>
+                                <td>Office 365 Enterprise E3 Trial</td>
+                                <td>25</td>
+                                <td>Mensual</td>
+                                <td>03/2021</td>
+                                <td>
+                                    <span class="label label-danger">Dif. cantidades</span>
+                                </td>
+                            </tr>
+                            <tr data-toggle="collapse" data-target="#collapseExample" aria-expanded="false"
+                                aria-controls="collapseExample">
+                                <td scope="row">48092</td>
+                                <td>48092-48092-48092-48092-48092</td>
+                                <td>ZIHONI CONSULTORS</td>
+                                <td>Trade Chemicals and Products SA de CV</td>
+                                <td>Office 365 Enterprise E3 Trial</td>
+                                <td>25</td>
+                                <td>Mensual</td>
+                                <td>03/2021</td>
+                                <td>
+                                    <span class="label label-danger">Dif. cantidades</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="9">
+                                    <div class="collapse" id="collapseExample">
+                                        <p>
+                                            Time Line #2
+                                        </p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

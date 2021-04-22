@@ -31,6 +31,9 @@ table.tb1 tr:hover td {
     margin-top: 0;
 }
 .pt-5 {
+    padding-top: 50px !important;
+}
+.pt-3 {
     padding-top: 30px !important;
 }
 .mt {

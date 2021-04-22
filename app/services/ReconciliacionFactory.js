@@ -11,9 +11,19 @@
 
     factory.refreshToken();
 
-    factory.getReconciliacion = function () {
+    factory.getReconciliacion = function (dateFilter) {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'reconciliacion');
+      return $http.get($rootScope.API + 'reconciliacion/' + dateFilter);
+    };
+
+    factory.getHistogramInfo = function () {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'histograma/');
+    };
+
+    factory.getTimeLine = function (idLicencia) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'timeline/' + idLicencia);
     };
 
     return factory;
