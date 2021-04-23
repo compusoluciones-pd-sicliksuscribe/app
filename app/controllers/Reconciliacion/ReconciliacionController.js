@@ -249,6 +249,11 @@
                 });
     };
 
+    $scope.filter = () => {
+      $scope.listaAux = $scope.lista.filter(function (str) { return str.NombreEmpresa.indexOf($scope.subFilter) !== -1; })
+      pagination();
+    }
+
     const pagination = () => {
       $scope.filtered = [];
       $scope.currentPage = 1;
@@ -257,7 +262,7 @@
 
       $scope.$watch('currentPage + numPerPage', function () {
         let begin = (($scope.currentPage - 1) * $scope.numPerPage), end = begin + $scope.numPerPage;
-        $scope.filtered = $scope.lista.slice(begin, end);
+        $scope.filtered = $scope.listaAux.slice(begin, end);
         let monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
         let filterDate = document.getElementById('dateFilter').value;
         const dateArray = filterDate.split('-');

@@ -60,7 +60,7 @@
                         <label for="Busqueda">&nbsp;</label>
                         <div class="form-group row">
                             <div class="form-group has-feedback">
-                                <input type="text"
+                                <input name="Busqueda" type="text" ng-model="subFilter" class="form-control" ng-change="filter()"
                                     class="form-control " size="30"
                                     placeholder="Busca por pedido, suscripción, usuario...">
                                 <i class="form-control-feedback glyphicon glyphicon-search"></i>
@@ -81,7 +81,7 @@
                                 <th>Estatus</th>
                             </tr>
                         </thead>
-                        <tbody ng-repeat="item in filtered">
+                        <tbody ng-repeat="item in filtered | filter:subFilter">
                             <tr data-toggle="collapse" data-target="#collapseExample_{{item.IdReconciliacion}}"
                                 aria-expanded="false" aria-controls="collapseExample_{{item.IdReconciliacion}}"
                                 ng-click="timeChart({{item.IdReconciliacion}}, '{{item.IdLicencia}}', '{{item.IdFactura}}')">
@@ -109,7 +109,7 @@
                     <h4>No se encontraron resultados.</h4>
                 </div>
                 <div style="margin: auto; text-align: center;">
-                    <pagination class="pager" ng-model="currentPage" total-items="lista.length" max-size="maxSize"
+                    <pagination class="pager" ng-model="currentPage" total-items="listaAux.length" max-size="maxSize"
                         boundary-links="true"></pagination>
                 </div>
             </div>
