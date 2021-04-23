@@ -60,8 +60,8 @@
                         <label for="Busqueda">&nbsp;</label>
                         <div class="form-group row">
                             <div class="form-group has-feedback">
-                                <input type="text" ng-model="PromocionFilter"
-                                    class="form-control ng-valid ng-dirty ng-valid-parse ng-touched" size="30"
+                                <input type="text"
+                                    class="form-control " size="30"
                                     placeholder="Busca por pedido, suscripción, usuario...">
                                 <i class="form-control-feedback glyphicon glyphicon-search"></i>
                             </div>
@@ -84,7 +84,7 @@
                         <tbody ng-repeat="item in filtered">
                             <tr data-toggle="collapse" data-target="#collapseExample_{{item.IdReconciliacion}}"
                                 aria-expanded="false" aria-controls="collapseExample_{{item.IdReconciliacion}}"
-                                ng-click="timeChart({{item.IdReconciliacion}}, '{{item.IdLicencia}}')">
+                                ng-click="timeChart({{item.IdReconciliacion}}, '{{item.IdLicencia}}', '{{item.IdFactura}}')">
                                 <td scope="row">{{item.IdReconciliacion}}</td>
                                 <td>{{item.IdLicencia}}</td>
                                 <td>{{item.NombreEmpresa}}</td>

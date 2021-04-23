@@ -21,9 +21,9 @@
       return $http.get($rootScope.API + 'histograma/');
     };
 
-    factory.getTimeLine = function (idLicencia) {
+    factory.getTimeLine = function (body) {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'timeline/' + idLicencia);
+      return $http.get($rootScope.API + 'timeline/' + body.IdFactura + '/' + body.IdLicencia);
     };
 
     return factory;

@@ -144,17 +144,21 @@
       });
     };
 
-    $scope.timeChart = (IdReconciliacion, idLicencia) => {
-      document.getElementById('chart_' + IdReconciliacion).value = '';
+    $scope.timeChart = (IdReconciliacion, IdLicencia, IdFactura) => {
+      const body = {
+        IdFactura: IdFactura,
+        IdLicencia: IdLicencia
+      };
+      document.getElementById('chart_' + IdReconciliacion).innerHTML = '';
       return ReconciliacionFactory
-                .getTimeLine(idLicencia)
+                .getTimeLine(body)
                 .then(res => {
                   $scope.timeLine = res.data.data;
                   let arrayTimeLine = [];
                   let actual = '';
                   for (const item in $scope.timeLine) {
                     actual = {
-                      x: $scope.timeLine[item].descripcion,
+                      x: $scope.timeLine[item].Descripcion,
                       y: [new Date($scope.timeLine[item].FechaInicioCargo).getTime(), new Date($scope.timeLine[item].FechaFinCargo).getTime()],
                       fillColor: '#db9635'
                     };
@@ -220,7 +224,6 @@
                       horizontalAlign: 'left'
                     }
                   };
-
                   const chart = new ApexCharts(document.querySelector('#chart_' + IdReconciliacion), options);
                   chart.render();
                 })
