@@ -98,7 +98,7 @@
       fecha.setMonth(fecha.getMonth() + 1);
       fecha.setDate(fecha.getDate() - 1);
       Producto.FechaFinSuscripcion = fecha.getDate() + "/" + (fecha.getMonth() +1)+ "/" + (fecha.getFullYear());
-      Producto.EsquemaRenovacion = "Mensual";
+      Producto.EsquemaRenovacion = 'Mensual';
       Producto.IdEsquemaRenovacion= $scope.MENSUAL;
      } 
     
