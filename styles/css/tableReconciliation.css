@@ -36,6 +36,9 @@ table.tb1 tr:hover td {
 .pt-3 {
     padding-top: 30px !important;
 }
+.btnDate {
+    padding-top: 22px !important;
+}
 .mt {
     margin-top: 20px;
 }
@@ -47,8 +50,11 @@ table.tb1 thead {
     background: #68953b;
     color: white;
 }
+table.tb1 {
+    color: rgb(97, 97, 97) ;
+}
 table.tb2 thead {
-    background: #4a7bab;
+    background: #00549f;
     color: white;
 }
 .nav-tabs > li.active > a {
@@ -57,4 +63,31 @@ table.tb2 thead {
 }
 .nav > li > a {
     color: rgb(105, 105, 105);
+}
+
+.tabsPadding {
+    padding-left: 40% !important;
+}
+.h2Title{
+    padding-top: 20px; padding-bottom: 20px;
+}
+
+.bgBlue{
+    background: #00549f;
+}
+.bgGreen{
+    background: #68953b;
+}
+.bgRed{
+    background: #bc112e;
+}
+.bgYellow{
+    background: #db9635;
+}
+
+.center-align {
+    text-align:center !important;
+}
+.margin-auto{
+    margin: auto;
 }
