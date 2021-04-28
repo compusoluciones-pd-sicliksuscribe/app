@@ -131,12 +131,11 @@
         });
     };
 
-    $scope.getTotalClick = () => {
+    $scope.getTotalClick = (date) => {
       return ReconciliacionFactory
-        .getTotalCS()
+        .getTotalCS(date)
         .then(res => {
-          $scope.timeLine = res.data.data;
-
+           $scope.ventaClick = res.data.totalClick;
         })
         .catch(function () {
           $scope.ShowToast('No pudimos cargar la lista de reconciliación, por favor intenta de nuevo más tarde.', 'danger');
@@ -247,6 +246,7 @@
           $scope.lista = res.data.data;
           $scope.listaAux = $scope.lista;
           pagination();
+          $scope.getTotalClick(dateFilter);
         })
         .catch(function () {
           $scope.ShowToast('No pudimos cargar la lista de reconciliación, por favor intenta de nuevo más tarde.', 'danger');

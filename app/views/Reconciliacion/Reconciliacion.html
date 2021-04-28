@@ -28,7 +28,7 @@
             </div>
             <div class="card card3">
                 <h4>Ventas Click Suscribe <i>(dólares)</i></h4>
-                <h3>$239,430.00</h3>
+                <h3>{{ventaClick}}</h3>
             </div>
         </div>
     </div>
@@ -50,7 +50,7 @@
                         <div class="form-group row pt-3">
                             <div class="form-group has-feedback">
                                 <input type="text" ng-model="subFilter" class="form-control" ng-change="filter()"
-                                    class="form-control " size="30" placeholder="Buscar por usuario">
+                                    class="form-control " size="30" placeholder="Buscar por cliente">
                                 <i class="form-control-feedback glyphicon glyphicon-search"></i>
                             </div>
                         </div>
@@ -60,9 +60,9 @@
                     <table class="table table-striped tb1">
                         <thead>
                             <tr>
-                                <th>Id pedido</th>
-                                <th>Id suscripción</th>
-                                <th>Usuario final</th>
+                                <th>Pedido</th>
+                                <th>Suscripción</th>
+                                <th>Ciente</th>
                                 <th>Producto</th>
                                 <th>Esquema renovación</th>
                                 <th>Estatus</th>
