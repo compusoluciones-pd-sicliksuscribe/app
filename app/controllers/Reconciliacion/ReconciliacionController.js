@@ -135,7 +135,7 @@
       return ReconciliacionFactory
         .getTotalCS(date)
         .then(res => {
-           $scope.ventaClick = res.data.totalClick;
+           $scope.ventaClick = res.data.totalClick.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         })
         .catch(function () {
           $scope.ShowToast('No pudimos cargar la lista de reconciliación, por favor intenta de nuevo más tarde.', 'danger');
