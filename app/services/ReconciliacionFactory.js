@@ -25,6 +25,11 @@
       factory.refreshToken();
       return $http.get($rootScope.API + 'timeline/' + body.IdFactura + '/' + body.IdLicencia);
     };
+    
+    factory.getTotalCS = function (date) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'ventasClick/' + date);
+    };
 
     return factory;
   };

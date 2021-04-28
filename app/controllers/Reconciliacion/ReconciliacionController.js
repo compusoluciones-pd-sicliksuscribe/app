@@ -131,6 +131,19 @@
         });
     };
 
+    $scope.getTotalClick = () => {
+      return ReconciliacionFactory
+        .getTotalCS()
+        .then(res => {
+          $scope.timeLine = res.data.data;
+
+        })
+        .catch(function () {
+          $scope.ShowToast('No pudimos cargar la lista de reconciliación, por favor intenta de nuevo más tarde.', 'danger');
+        });
+    };
+
+
     $scope.timeChart = (IdReconciliacion, IdLicencia, IdFactura) => {
       const body = {
         IdFactura: IdFactura,
@@ -181,6 +194,10 @@
               }],
               height: 450,
               type: 'rangeBar'
+            },
+            title: {
+              text: 'Linea del tiempo de cargos aplicados',
+              align: 'left'
             },
             grid: {
               borderColor: '#cecece',
