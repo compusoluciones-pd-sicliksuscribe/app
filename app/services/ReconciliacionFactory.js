@@ -16,7 +16,12 @@
       return $http.get($rootScope.API + 'reconciliacion/' + dateFilter);
     };
 
-    factory.getHistogramInfo = function () {
+    factory.getHistogramCsp = function () {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'histograma/');
+    };
+
+    factory.getHistogramClick = function () {
       factory.refreshToken();
       return $http.get($rootScope.API + 'histograma/');
     };
