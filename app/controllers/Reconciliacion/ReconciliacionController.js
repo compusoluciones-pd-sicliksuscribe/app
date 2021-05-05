@@ -9,7 +9,7 @@
     let lastMonth = '';
     const ShortmonthNames = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
     const LargemonthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-
+    const colors = ['#bc112e', '#db9635', '#68953b', '#00549f'];
 
     getCspHistogram = () => {
       return ReconciliacionFactory
@@ -78,7 +78,6 @@
             data: totalCSP.reverse()
           }, {
             name: 'Click Suscribe',
-            // data: $scope.histogramaClick.reverse()
             data: totalClick.reverse()
           }
         ],
@@ -163,7 +162,12 @@
 
     $scope.getReconciliationData = (lastDate) => {
       let dateFilter = '';
-      (lastDate) ? dateFilter = lastDate : dateFilter = document.getElementById('dateFilter').value;
+      if (lastDate) {
+        dateFilter = lastDate;
+      } else {
+        dateFilter = document.getElementById('dateFilter').value;
+        getTotalClick(dateFilter);
+      }
       return ReconciliacionFactory
         .getReconciliacion(dateFilter)
         .then(res => {
@@ -179,64 +183,30 @@
             $scope.ventaCsp = '$0.00';
           }
           pagination();
-          getTotalClick(dateFilter);
+          getReconciliationDif(dateFilter);
         })
         .catch(function () {
           $scope.ShowToast('No pudimos cargar la lista de reconciliación, por favor intenta de nuevo más tarde.', 'danger');
         });
     };
 
-    $scope.filter = () => {
-      $scope.listaAux = $scope.lista.filter(function (str) {
-        return str.NombreEmpresa.toLowerCase().indexOf($scope.subFilter.toLowerCase()) !== -1;
-      })
-      pagination();
-    }
-
-    const pagination = () => {
-      $scope.filtered = [];
-      $scope.currentPage = 1;
-      $scope.numPerPage = 10;
-      $scope.maxSize = 5;
-
-      $scope.$watch('currentPage + numPerPage', function () {
-        let begin = (($scope.currentPage - 1) * $scope.numPerPage), end = begin + $scope.numPerPage;
-        $scope.filtered = $scope.listaAux.slice(begin, end);
-      });
-    };
-
-    getTotalClick = (date) => {
-      return ReconciliacionFactory
-        .getTotalCS(date)
-        .then(res => {
-          histogramaClick = res.data.data;
-          $scope.ventaClick = '$' + histogramaClick[0].total.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-          const dateArray = date.split('-');
-          let monthArray = dateArray[1];
-          monthArray = +monthArray - 1;
-          $scope.ventasClickDate = LargemonthNames[monthArray] + ' del ' + dateArray[0];
-        })
-        .catch(function () {
-          $scope.ShowToast('No pudimos cargar la lista de reconciliación, por favor intenta de nuevo más tarde.', 'danger');
-        });
-    };
-
-    $scope.timeChart = (IdReconciliacion, IdLicencia, IdFactura) => {
+    $scope.timeChart = (IdLicencia, IdFactura) => {
+      $('.collapse').collapse('hide');
+      $('#collapse1_'+IdLicencia).collapse('show');
       const body = {
         IdFactura: IdFactura,
         IdLicencia: IdLicencia
       };
-      document.getElementById('time1_' + IdReconciliacion).innerHTML = '';
+      document.getElementById('time_' + IdLicencia).innerHTML = '';
       return ReconciliacionFactory
         .getTimeLine(body)
         .then(res => {
           $scope.timeLine = res.data.data;
           let arrayTimeLine = [];
           let actual = '';
-          const colors = ['#bc112e', '#db9635', '#68953b', '#00549f'];
           for (const item in $scope.timeLine) {
             actual = {
-              x: $scope.timeLine[item].Descripcion + ' - Cantidad: ' + $scope.timeLine[item].Cantidad,
+              x: $scope.timeLine[item].Descripcion + '<br> -Cantidad: ' + $scope.timeLine[item].Cantidad,
               y: [new Date($scope.timeLine[item].FechaInicioCargo).getTime(), new Date($scope.timeLine[item].FechaFinCargo).getTime()],
               fillColor: colors[Math.floor(Math.random() * colors.length)]
             };
@@ -254,8 +224,8 @@
               locales: [{
                 name: 'es',
                 options: {
-                  months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-                  shortMonths: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                  months: LargemonthNames,
+                  shortMonths: ShortmonthNames,
                   days: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
                   shortDays: ['Dom', 'Lun', 'Mar', 'Mier', 'Jue', 'Vie', 'Sab'],
                   toolbar: {
@@ -306,12 +276,217 @@
               horizontalAlign: 'left'
             }
           };
-          const chart = new ApexCharts(document.querySelector('#time1_' + IdReconciliacion), options);
+          const chart = new ApexCharts(document.querySelector('#time_' + IdLicencia), options);
           chart.render();
         })
         .catch(function () {
           $scope.ShowToast('No pudimos cargar la lista de reconciliación, por favor intenta de nuevo más tarde.', 'danger');
         });
+    };
+
+    getReconciliationDif = (dateFilter) => {
+      return ReconciliacionFactory
+        .getReconciliacionDif(dateFilter)
+        .then(res => {
+          $scope.listaDif = res.data.data;
+          $scope.arrayDif = [];
+          let BodyTimeLine = [];
+          let BodyClick = [];
+          
+          for (const item in $scope.listaDif) {
+            if ($scope.listaDif[item].existClick === 1 && $scope.listaDif[item].totalCSP > $scope.listaDif[item].totalClick) {
+                BodyTimeLine = [];
+                BodyClick = [];
+                for (const charge in $scope.listaDif[item].detailsCSP) {
+                  BodyTimeLine.push({
+                    x: $scope.listaDif[item].detailsCSP[charge].Descripcion + '<br>Cantidad: ' + $scope.listaDif[item].detailsCSP[charge].Cantidad,
+                    y: [new Date($scope.listaDif[item].detailsCSP[charge].FechaInicioCargo).getTime(), new Date($scope.listaDif[item].detailsCSP[charge].FechaFinCargo).getTime()],
+                    fillColor: colors[Math.floor(Math.random() * colors.length)]
+                  });
+                }
+                for (const itemClick in $scope.listaDif[item].detailsClick) {
+                  BodyClick.push({
+                    IdPedido: $scope.listaDif[item].detailsClick[itemClick].IdPedido,
+                    Cantidad: $scope.listaDif[item].detailsClick[itemClick].Cantidad,
+                    PrecioUnitario: $scope.listaDif[item].detailsClick[itemClick].PrecioUnitario,
+                    Total: $scope.listaDif[item].detailsClick[itemClick].Total,
+                  });
+                }
+                $scope.arrayDif.push({
+                  'IdLicencia': $scope.listaDif[item].idSubscription,
+                  'Distribuidor': $scope.listaDif[item].detailsCSP[0].Distribuidor,
+                  'NombreEmpresa': $scope.listaDif[item].detailsCSP[0].NombreEmpresa,
+                  'NombreProducto': $scope.listaDif[item].detailsCSP[0].NombreProducto,
+                  'Renovacion': $scope.listaDif[item].detailsCSP[0].Nombre,
+                  'IdFactura': $scope.listaDif[item].detailsCSP[0].IdFactura,
+                  'totalCSP': $scope.listaDif[item].totalCSP,
+                  'totalClick': $scope.listaDif[item].totalClick,
+                  'Estatus': 'Diferencia de Precios',
+                  'TimeLine': BodyTimeLine,
+                  'detailsClick': BodyClick
+                });
+            } else if ($scope.listaDif[item].existClick === 0) {
+              BodyTimeLine = [];
+              for (const itemCsp in $scope.listaDif[item].detailsCSP) {
+                BodyTimeLine.push({
+                    x: $scope.listaDif[item].detailsCSP[itemCsp].Descripcion + ' <br>Cantidad: ' + $scope.listaDif[item].detailsCSP[itemCsp].Cantidad,
+                    y: [new Date($scope.listaDif[item].detailsCSP[itemCsp].FechaInicioCargo).getTime(), new Date($scope.listaDif[item].detailsCSP[itemCsp].FechaFinCargo).getTime()],
+                    fillColor: colors[Math.floor(Math.random() * colors.length)]
+                });
+              }
+              $scope.arrayDif.push({
+                'IdLicencia': $scope.listaDif[item].idSubscription,
+                'Distribuidor': $scope.listaDif[item].detailsCSP[0].Distribuidor,
+                'NombreEmpresa': $scope.listaDif[item].detailsCSP[0].NombreEmpresa,
+                'NombreProducto': $scope.listaDif[item].detailsCSP[0].NombreProducto,
+                'Renovacion': $scope.listaDif[item].detailsCSP[0].Nombre,
+                'totalCSP': $scope.listaDif[item].totalCSP,
+                'Estatus': 'No existe en Clicksuscribe',
+                'detailsClick': false,
+                'TimeLine': BodyTimeLine
+              });
+            }
+          }
+          $scope.listaDifAux = $scope.arrayDif;
+          paginationDif();
+        })
+        .catch(function () {
+          $scope.ShowToast('No pudimos cargar la lista de reconciliación, por favor intenta de nuevo más tarde.', 'danger');
+        });
+    };
+
+
+
+    pagination = () => {
+      $scope.filtered = [];
+      $scope.currentPage = 1;
+      $scope.numPerPage = 10;
+      $scope.maxSize = 5;
+      $scope.$watch('currentPage + numPerPage', function () {
+        let begin = (($scope.currentPage - 1) * $scope.numPerPage), end = begin + $scope.numPerPage;
+        $scope.filtered = $scope.listaAux.slice(begin, end);
+      });
+    };
+
+    $scope.filter = () => {
+      $scope.listaAux = $scope.lista.filter(function (str) {
+        return str.NombreEmpresa.toLowerCase().indexOf($scope.subFilter.toLowerCase()) !== -1;
+      })
+      pagination();
+    }
+
+    paginationDif = () => {
+      $scope.filteredDif = [];
+      $scope.currentPageDif = 1;
+      $scope.numPerPageDif = 10;
+      $scope.maxSizeDif = 5;
+      $scope.$watch('currentPageDif + numPerPageDif', function () {
+        let beginDif = (($scope.currentPageDif - 1) * $scope.numPerPageDif), endDif = beginDif + $scope.numPerPageDif;
+        $scope.filteredDif = $scope.listaDifAux.slice(beginDif, endDif);
+      });
+    };
+
+    $scope.filterDif = () => {
+      $scope.listaDifAux = $scope.arrayDif.filterDif(function (str) {
+        return str.NombreEmpresa.toLowerCase().indexOf($scope.subFilterDif.toLowerCase()) !== -1;
+      })
+      paginationDif();
+    }
+
+    getTotalClick = (date) => {
+      return ReconciliacionFactory
+        .getTotalCS(date)
+        .then(res => {
+          histogramaClick = res.data.data;
+          $scope.ventaClick = '$' + histogramaClick[0].total.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+          const dateArray = date.split('-');
+          let monthArray = dateArray[1];
+          monthArray = +monthArray - 1;
+          $scope.ventasClickDate = LargemonthNames[monthArray] + ' del ' + dateArray[0];
+        })
+        .catch(function () {
+          $scope.ShowToast('No pudimos cargar la lista de reconciliación, por favor intenta de nuevo más tarde.', 'danger');
+        });
+    };
+
+    $scope.timeChartDif = (IdLicencia) => {
+      $('.collapse').collapse('hide');
+      $('#collapseDif_' + IdLicencia).collapse('show');
+      document.getElementById('timeDif_' + IdLicencia).innerHTML = '';
+      let TimeFilter = $scope.arrayDif.filter(function (val) {
+        return val.IdLicencia === IdLicencia;
+      });
+
+      if (TimeFilter[0].detailsClick) {
+        $scope.arrayDetailsClick = TimeFilter[0].detailsClick;
+      } else {
+        $scope.arrayDetailsClick = false;
+      }
+      var options = {
+        series: [
+          {
+            data: TimeFilter[0].TimeLine
+          }
+        ],
+        chart: {
+          defaultLocale: 'es',
+          locales: [{
+            name: 'es',
+            options: {
+              months: LargemonthNames,
+              shortMonths: ShortmonthNames,
+              days: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+              shortDays: ['Dom', 'Lun', 'Mar', 'Mier', 'Jue', 'Vie', 'Sab'],
+              toolbar: {
+                download: 'Descargar SVG',
+                selection: 'Selección',
+                selectionZoom: 'Seleccionar zoom',
+                zoomIn: 'Acercar',
+                zoomOut: 'Alejar',
+                pan: 'Panorámica',
+                reset: 'Restablecer zoom'
+              }
+            }
+          }],
+          height: 450,
+          type: 'rangeBar'
+        },
+        title: {
+          text: 'Linea del tiempo de cargos aplicados',
+          align: 'left'
+        },
+        grid: {
+          borderColor: '#cecece',
+          row: {
+            colors: [
+              'transparent'
+            ],
+            opacity: 0.1
+          }
+        },
+        plotOptions: {
+          bar: {
+            horizontal: true,
+            barHeight: '80%'
+          }
+        },
+        xaxis: {
+          type: 'datetime'
+        },
+        stroke: {
+          width: 1,
+          colors: '#F44336'
+        },
+        fill: {
+          colors: ['#F44336', '#E91E63', '#9C27B0', '#db9635']
+        },
+        legend: {
+          position: 'top',
+          horizontalAlign: 'left'
+        }
+      };
+      const chart = new ApexCharts(document.querySelector('#timeDif_' + IdLicencia), options);
+      chart.render();
     };
 
     $scope.init = function () {

@@ -7,7 +7,8 @@
                 <div class="input-group">
                     <div class="form-group">
                         <label>Filtrar por mes</label>
-                        <input id="dateFilter" name="dateFilter" class="form-control" type="month" name="mes" step="1" min="2020-01">
+                        <input id="dateFilter" name="dateFilter" class="form-control" type="month" name="mes" step="1"
+                            min="2020-01">
                     </div>
                     <span class="input-group-btn btnDate">
                         <button class="btn btn-default white bgBlue" ng-click="getReconciliationData()">
@@ -61,31 +62,27 @@
                     <table class="table table-striped tb1">
                         <thead>
                             <tr>
-                                <th>Pedido</th>
                                 <th>Suscripción</th>
+                                <th>Distribuidor</th>
                                 <th>Ciente</th>
                                 <th>Producto</th>
                                 <th>Esquema renovación</th>
-                                <th>Estatus</th>
                             </tr>
                         </thead>
                         <tbody ng-repeat="item in filtered | filter:subFilter">
-                            <tr data-toggle="collapse" data-target="#collapse2_{{item.IdReconciliacion}}"
-                                aria-expanded="false" aria-controls="collapse2_{{item.IdReconciliacion}}"
-                                ng-click="timeChart({{item.IdReconciliacion}}, '{{item.IdLicencia}}', '{{item.IdFactura}}')">
-                                <td scope="row">{{item.IdReconciliacion}}</td>
+                            <tr data-toggle="collapse" data-target="#collapse1_{{item.IdLicencia}}"
+                                aria-expanded="false" aria-controls="collapse1_{{item.IdLicencia}}"
+                                ng-click="timeChart('{{item.IdLicencia}}', '{{item.IdFactura}}')">
                                 <td>{{item.IdLicencia}}</td>
+                                <td>{{item.Distribuidor}}</td>
                                 <td>{{item.NombreEmpresa}}</td>
                                 <td>{{item.NombreProducto}}</td>
                                 <td>{{item.Nombre}}</td>
-                                <td>
-                                    <span class="label label-danger">Dif. cantidades</span>
-                                </td>
                             </tr>
                             <tr>
                                 <td colspan="9" class="p-0">
-                                    <div class="collapse" id="collapse2_{{item.IdReconciliacion}}">
-                                        <div id="time1_{{item.IdReconciliacion}}"></div>
+                                    <div class="collapse" id="collapse1_{{item.IdLicencia}}">
+                                        <div id="time_{{item.IdLicencia}}"></div>
                                     </div>
                                 </td>
                             </tr>
@@ -101,48 +98,82 @@
                 </div>
             </div>
             <div role="tabpanel" class="tab-pane" id="diferencias">
-                <h3>Registros con diferencias</h3>
-                <div class="form-group col-xs-12 col-md-4">
-                    <label>Filtrar por diferencias</label>
-                    <select" class="form-control" 
-                         required>
-                        <option value="" disabled>Selecciona una opción</option>
-                    </select>
+                <h4 class="pt-3">Registros con diferencias</h4>
+                <div class="col-xs-12 col-md-4">
+                    <div class="form-group ">
+                        <div class="form-group row pt-3">
+                            <div class="form-group has-feedback">
+                                <input type="text" ng-model="subFilterDif" class="form-control" ng-change="filterDif()"
+                                    class="form-control " size="30" placeholder="Buscar diferencias por cliente">
+                                <i class="form-control-feedback glyphicon glyphicon-search"></i>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
                 <div>
                     <table class="table table-striped tb2">
                         <thead>
                             <tr>
-                                <th>Pedido</th>
                                 <th>Suscripción</th>
+                                <th>Distribuidor</th>
                                 <th>Ciente</th>
                                 <th>Producto</th>
                                 <th>Esquema renovación</th>
                                 <th>Estatus</th>
                             </tr>
                         </thead>
-                        <tbody >
-                            <tr data-toggle="collapse" data-target="#collapse2_3"
-                                aria-expanded="false" aria-controls="collapse2_3">
-                                <td scope="row">{item.IdReconciliacion}</td>
-                                <td>{item.IdLicencia}</td>
-                                <td>{item.NombreEmpresa}</td>
-                                <td>{item.NombreProducto}</td>
-                                <td>{item.Nombre}</td>
+                        <tbody ng-repeat="dif in filteredDif | filter:subFilterDif">
+                            <tr data-toggle="collapse" data-target="#collapseDif_{{dif.IdLicencia}}"
+                                aria-expanded="false" aria-controls="collapseDif_{{dif.IdLicencia}}"
+                                ng-click="timeChartDif('{{dif.IdLicencia}}')">
+                                <td scope="row">{{dif.IdLicencia}}</td>
+                                <td>{{dif.Distribuidor}}</td>
+                                <td>{{dif.NombreEmpresa}}</td>
+                                <td>{{dif.NombreProducto}}</td>
+                                <td>{{dif.Renovacion}}</td>
                                 <td>
-                                    <span class="label label-danger">Dif. cantidades</span>
+                                    <span class="label label-danger">{{dif.Estatus}}</span>
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="9" class="p-0">
-                                    <div class="collapse" id="collapse2_3">
-                                        <div id="time2_3"></div>
+                                <td colspan="5" class="p-0" >
+                                    <div class="collapse" id="collapseDif_{{dif.IdLicencia}}">
+                                        <div class="row">
+                                            <div class="col-sm-12 col-md-6 offset-md-2 p-4 justify-content-md-center" ng-if="arrayDetailsClick">
+                                                <h5>Pedidos en ClickSuscribe</h5>
+                                                <table class="table table-striped" >
+                                                    <thead>
+                                                        <tr class="bgYellow">
+                                                            <th class="p-1">IdPedido</th>
+                                                            <th class="p-1">PrecioUnitario</th>
+                                                            <th class="p-1">Cantidad</th>
+                                                            <th class="p-1">Total</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody ng-repeat="detail in arrayDetailsClick">
+                                                        <tr>
+                                                            <td class="p-1" scope="row">{{detail.IdPedido}}</td>
+                                                            <td class="p-1">{{detail.PrecioUnitario}}</td>
+                                                            <td class="p-1">{{detail.Cantidad}}</td>
+                                                            <td class="p-1">{{detail.Total}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div id="timeDif_{{dif.IdLicencia}}"></div>
                                     </div>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
+                </div>
+                <div ng-show="arrayDif.length === 0" class="center-align">
+                    <h4>No se encontraron resultados.</h4>
+                </div>
+                <div class="margin-auto center-align">
+                    <pagination class="pager" ng-model="currentPageDif" total-items="listaDifAux.length" max-size="maxSizeDif"
+                        boundary-links="true"></pagination>
                 </div>
             </div>
         </div>

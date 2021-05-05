@@ -15,6 +15,16 @@
       factory.refreshToken();
       return $http.get($rootScope.API + 'reconciliacion/' + dateFilter);
     };
+    
+    factory.getReconciliacion = function (dateFilter) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'getReconciliacionTable/' + dateFilter);
+    };
+
+    factory.getReconciliacionDif = function (dateFilter) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'diferenciaMicrosoft/' + dateFilter);
+    };
 
     factory.getHistogramCsp = function () {
       factory.refreshToken();

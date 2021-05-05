@@ -20,12 +20,21 @@
 .box-shadow {
     box-shadow: 1px 1px 5px grey;
 }
-table.tb1 tr:hover td {
+table tr:hover td {
     background-color: #bfceff;
     cursor: pointer;
 }
 .p-0 {
     padding: 0 !important;
+}
+.p-4 {
+    padding: 40px;
+}
+.p-2 {
+    padding: 20px;
+}
+.p-1 {
+    padding: 10px;
 }
 .mt-0 {
     margin-top: 0;
