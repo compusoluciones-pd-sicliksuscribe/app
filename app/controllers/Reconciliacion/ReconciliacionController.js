@@ -192,7 +192,7 @@
 
     $scope.timeChart = (IdLicencia, IdFactura) => {
       $('.collapse').collapse('hide');
-      $('#collapse1_'+IdLicencia).collapse('show');
+      $('#collapse1_' + IdLicencia).collapse('show');
       const body = {
         IdFactura: IdFactura,
         IdLicencia: IdLicencia
@@ -292,46 +292,48 @@
           $scope.arrayDif = [];
           let BodyTimeLine = [];
           let BodyClick = [];
-          
+
           for (const item in $scope.listaDif) {
             if ($scope.listaDif[item].existClick === 1 && $scope.listaDif[item].totalCSP > $scope.listaDif[item].totalClick) {
-                BodyTimeLine = [];
-                BodyClick = [];
-                for (const charge in $scope.listaDif[item].detailsCSP) {
-                  BodyTimeLine.push({
-                    x: $scope.listaDif[item].detailsCSP[charge].Descripcion + '<br>Cantidad: ' + $scope.listaDif[item].detailsCSP[charge].Cantidad,
-                    y: [new Date($scope.listaDif[item].detailsCSP[charge].FechaInicioCargo).getTime(), new Date($scope.listaDif[item].detailsCSP[charge].FechaFinCargo).getTime()],
-                    fillColor: colors[Math.floor(Math.random() * colors.length)]
-                  });
-                }
-                for (const itemClick in $scope.listaDif[item].detailsClick) {
-                  BodyClick.push({
-                    IdPedido: $scope.listaDif[item].detailsClick[itemClick].IdPedido,
-                    Cantidad: $scope.listaDif[item].detailsClick[itemClick].Cantidad,
-                    PrecioUnitario: `$${$scope.listaDif[item].detailsClick[itemClick].PrecioUnitario.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`,
-                    Total: `$${$scope.listaDif[item].detailsClick[itemClick].Total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`,
-                  });
-                }
-                $scope.arrayDif.push({
-                  'IdLicencia': $scope.listaDif[item].idSubscription,
-                  'Distribuidor': $scope.listaDif[item].detailsCSP[0].Distribuidor,
-                  'NombreEmpresa': $scope.listaDif[item].detailsCSP[0].NombreEmpresa,
-                  'NombreProducto': $scope.listaDif[item].detailsCSP[0].NombreProducto,
-                  'Renovacion': $scope.listaDif[item].detailsCSP[0].Nombre,
-                  'IdFactura': $scope.listaDif[item].detailsCSP[0].IdFactura,
-                  'totalCSP': $scope.listaDif[item].totalCSP,
-                  'totalClick': $scope.listaDif[item].totalClick,
-                  'Estatus': 'Diferencia de precios',
-                  'TimeLine': BodyTimeLine,
-                  'detailsClick': BodyClick
+              BodyTimeLine = [];
+              BodyClick = [];
+              for (const charge in $scope.listaDif[item].detailsCSP) {
+                BodyTimeLine.push({
+                  x: $scope.listaDif[item].detailsCSP[charge].Descripcion + '<br>Cantidad: ' + $scope.listaDif[item].detailsCSP[charge].Cantidad,
+                  y: [new Date($scope.listaDif[item].detailsCSP[charge].FechaInicioCargo).getTime(), new Date($scope.listaDif[item].detailsCSP[charge].FechaFinCargo).getTime()],
+                  fillColor: colors[Math.floor(Math.random() * colors.length)]
                 });
+              }
+              for (const itemClick in $scope.listaDif[item].detailsClick) {
+                BodyClick.push({
+                  IdPedido: $scope.listaDif[item].detailsClick[itemClick].IdPedido,
+                  FechaInicio: $scope.listaDif[item].detailsClick[itemClick].FechaInicio,
+                  FechaFin: $scope.listaDif[item].detailsClick[itemClick].FechaFin,
+                  Cantidad: $scope.listaDif[item].detailsClick[itemClick].Cantidad,
+                  PrecioUnitario: `$${$scope.listaDif[item].detailsClick[itemClick].PrecioUnitario.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`,
+                  Total: `$${$scope.listaDif[item].detailsClick[itemClick].Total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`,
+                });
+              }
+              $scope.arrayDif.push({
+                'IdLicencia': $scope.listaDif[item].idSubscription,
+                'Distribuidor': $scope.listaDif[item].detailsCSP[0].Distribuidor,
+                'NombreEmpresa': $scope.listaDif[item].detailsCSP[0].NombreEmpresa,
+                'NombreProducto': $scope.listaDif[item].detailsCSP[0].NombreProducto,
+                'Renovacion': $scope.listaDif[item].detailsCSP[0].Nombre,
+                'IdFactura': $scope.listaDif[item].detailsCSP[0].IdFactura,
+                'totalCSP': $scope.listaDif[item].totalCSP,
+                'totalClick': $scope.listaDif[item].totalClick,
+                'Estatus': 'Diferencia de precios',
+                'TimeLine': BodyTimeLine,
+                'detailsClick': BodyClick
+              });
             } else if ($scope.listaDif[item].existClick === 0) {
               BodyTimeLine = [];
               for (const itemCsp in $scope.listaDif[item].detailsCSP) {
                 BodyTimeLine.push({
-                    x: $scope.listaDif[item].detailsCSP[itemCsp].Descripcion + ' <br>Cantidad: ' + $scope.listaDif[item].detailsCSP[itemCsp].Cantidad,
-                    y: [new Date($scope.listaDif[item].detailsCSP[itemCsp].FechaInicioCargo).getTime(), new Date($scope.listaDif[item].detailsCSP[itemCsp].FechaFinCargo).getTime()],
-                    fillColor: colors[Math.floor(Math.random() * colors.length)]
+                  x: $scope.listaDif[item].detailsCSP[itemCsp].Descripcion + ' <br>Cantidad: ' + $scope.listaDif[item].detailsCSP[itemCsp].Cantidad,
+                  y: [new Date($scope.listaDif[item].detailsCSP[itemCsp].FechaInicioCargo).getTime(), new Date($scope.listaDif[item].detailsCSP[itemCsp].FechaFinCargo).getTime()],
+                  fillColor: colors[Math.floor(Math.random() * colors.length)]
                 });
               }
               $scope.arrayDif.push({
@@ -354,8 +356,6 @@
           $scope.ShowToast('No pudimos cargar la lista de reconciliación, por favor intenta de nuevo más tarde.', 'danger');
         });
     };
-
-
 
     pagination = () => {
       $scope.filtered = [];
@@ -416,7 +416,7 @@
       let TimeFilter = $scope.arrayDif.filter(function (val) {
         return val.IdLicencia === IdLicencia;
       });
-      
+
       if (TimeFilter[0].detailsClick) {
         $scope.arrayDetailsClick = TimeFilter[0].detailsClick;
         $scope.totalCSP = `$${TimeFilter[0].totalCSP.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;

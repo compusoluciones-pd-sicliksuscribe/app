@@ -46,7 +46,6 @@
         </ul>
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="todos">
-                <h4 class="pt-3">Todos los registros</h4>
                 <div class="col-xs-12 col-md-4">
                     <div class="form-group ">
                         <div class="form-group row pt-3">
@@ -98,7 +97,6 @@
                 </div>
             </div>
             <div role="tabpanel" class="tab-pane" id="diferencias">
-                <h4 class="pt-3">Registros con diferencias</h4>
                 <div class="col-xs-12 col-md-4">
                     <div class="form-group ">
                         <div class="form-group row pt-3">
@@ -145,8 +143,10 @@
                                                         <table class="table table-striped" >
                                                             <thead>
                                                                 <tr class="bgYellow">
-                                                                    <th class="p-1">IdPedido</th>
-                                                                    <th class="p-1">PrecioUnitario</th>
+                                                                    <th class="p-1">ID pedido</th>
+                                                                    <th class="p-1">Fecha inicio</th>
+                                                                    <th class="p-1">Fecha fin</th>
+                                                                    <th class="p-1">Precio unitario</th>
                                                                     <th class="p-1">Cantidad</th>
                                                                     <th class="p-1">Total</th>
                                                                 </tr>
@@ -154,6 +154,8 @@
                                                             <tbody ng-repeat="detail in arrayDetailsClick">
                                                                 <tr>
                                                                     <td class="p-1" scope="row">{{detail.IdPedido}}</td>
+                                                                    <td class="p-1" scope="row">{{detail.FechaInicio | date:'dd/MM/yyyy'}}</td>
+                                                                    <td class="p-1" scope="row">{{detail.FechaFin | date:'dd/MM/yyyy'}}</td>
                                                                     <td class="p-1">{{detail.PrecioUnitario}}</td>
                                                                     <td class="p-1">{{detail.Cantidad}}</td>
                                                                     <td class="p-1">{{detail.Total}}</td>
@@ -165,8 +167,8 @@
                                                         <table class="table table-striped">
                                                             <thead>
                                                                 <tr class="bgGreen">
-                                                                    <td>Total CSP</td>
-                                                                    <td>Total Click Suscribe</td>
+                                                                    <th>Total CSP</th>
+                                                                    <th>Total Click Suscribe</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
