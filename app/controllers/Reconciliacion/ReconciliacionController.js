@@ -321,7 +321,7 @@
                   'IdFactura': $scope.listaDif[item].detailsCSP[0].IdFactura,
                   'totalCSP': $scope.listaDif[item].totalCSP,
                   'totalClick': $scope.listaDif[item].totalClick,
-                  'Estatus': 'Diferencia de Precios',
+                  'Estatus': 'Diferencia de precios',
                   'TimeLine': BodyTimeLine,
                   'detailsClick': BodyClick
                 });
@@ -341,7 +341,7 @@
                 'NombreProducto': $scope.listaDif[item].detailsCSP[0].NombreProducto,
                 'Renovacion': $scope.listaDif[item].detailsCSP[0].Nombre,
                 'totalCSP': $scope.listaDif[item].totalCSP,
-                'Estatus': 'No existe en Clicksuscribe',
+                'Estatus': 'ID no encontrado en el periodo',
                 'detailsClick': false,
                 'TimeLine': BodyTimeLine
               });
