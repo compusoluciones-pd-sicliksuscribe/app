@@ -136,29 +136,48 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="5" class="p-0" >
+                                <td colspan="6" class="p-0" >
                                     <div class="collapse" id="collapseDif_{{dif.IdLicencia}}">
                                         <div class="row">
-                                            <div class="col-sm-12 col-md-6 offset-md-2 p-4 justify-content-md-center" ng-if="arrayDetailsClick">
-                                                <h5>Pedidos en ClickSuscribe</h5>
-                                                <table class="table table-striped" >
-                                                    <thead>
-                                                        <tr class="bgYellow">
-                                                            <th class="p-1">IdPedido</th>
-                                                            <th class="p-1">PrecioUnitario</th>
-                                                            <th class="p-1">Cantidad</th>
-                                                            <th class="p-1">Total</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody ng-repeat="detail in arrayDetailsClick">
-                                                        <tr>
-                                                            <td class="p-1" scope="row">{{detail.IdPedido}}</td>
-                                                            <td class="p-1">{{detail.PrecioUnitario}}</td>
-                                                            <td class="p-1">{{detail.Cantidad}}</td>
-                                                            <td class="p-1">{{detail.Total}}</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
+                                            <div class="col-sm-12 col-md-12 offset-md-2 p-4 justify-content-md-center" ng-if="arrayDetailsClick">
+                                                <div class="row">
+                                                    <div class="col-sm-6 col-md-6">
+                                                        <table class="table table-striped" >
+                                                            <thead>
+                                                                <tr class="bgYellow">
+                                                                    <th class="p-1">IdPedido</th>
+                                                                    <th class="p-1">PrecioUnitario</th>
+                                                                    <th class="p-1">Cantidad</th>
+                                                                    <th class="p-1">Total</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody ng-repeat="detail in arrayDetailsClick">
+                                                                <tr>
+                                                                    <td class="p-1" scope="row">{{detail.IdPedido}}</td>
+                                                                    <td class="p-1">{{detail.PrecioUnitario}}</td>
+                                                                    <td class="p-1">{{detail.Cantidad}}</td>
+                                                                    <td class="p-1">{{detail.Total}}</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <div class="col-sm-6 col-md-3">
+                                                        <table class="table table-striped">
+                                                            <thead>
+                                                                <tr class="bgGreen">
+                                                                    <td>Total CSP</td>
+                                                                    <td>Total ClickSuscribe</td>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>{{totalCSP}}</td>
+                                                                    <td>{{totalClick}}</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <div id="timeDif_{{dif.IdLicencia}}"></div>

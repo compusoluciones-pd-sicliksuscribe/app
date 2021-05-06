@@ -308,8 +308,8 @@
                   BodyClick.push({
                     IdPedido: $scope.listaDif[item].detailsClick[itemClick].IdPedido,
                     Cantidad: $scope.listaDif[item].detailsClick[itemClick].Cantidad,
-                    PrecioUnitario: $scope.listaDif[item].detailsClick[itemClick].PrecioUnitario,
-                    Total: $scope.listaDif[item].detailsClick[itemClick].Total,
+                    PrecioUnitario: `$${$scope.listaDif[item].detailsClick[itemClick].PrecioUnitario.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`,
+                    Total: `$${$scope.listaDif[item].detailsClick[itemClick].Total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`,
                   });
                 }
                 $scope.arrayDif.push({
@@ -416,9 +416,11 @@
       let TimeFilter = $scope.arrayDif.filter(function (val) {
         return val.IdLicencia === IdLicencia;
       });
-
+      
       if (TimeFilter[0].detailsClick) {
         $scope.arrayDetailsClick = TimeFilter[0].detailsClick;
+        $scope.totalCSP = `$${TimeFilter[0].totalCSP.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+        $scope.totalClick = `$${TimeFilter[0].totalClick.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
       } else {
         $scope.arrayDetailsClick = false;
       }
