@@ -570,19 +570,12 @@
         NuevoProducto.ContratoBaseAutodesk = contrato.trim();
       }
       if (NuevoProducto.IdAccionAutodesk === 1 && Producto.TieneContrato) {
-        ProductosFactory.getProductExists(Producto.IdEmpresaUsuarioFinal, Producto.IdProducto, NuevoProducto.ContratoBaseAutodesk)
-        .then(function (result) {
-          if (result.data.data.length >= 1) {
-            NuevoProducto.IdAccionAutodesk = 2;
-          } else {
-            NuevoProducto.IdAccionAutodesk = 3;
-          }
-          if (Producto.IdPedidoContrato === 0) { // Cuando se elige la acción de nuevo contrato y existen contratos adicionales disponibles
-            NuevoProducto.IdAccionAutodesk = 1;
-            delete NuevoProducto.ContratoBaseAutodesk;
-          }
-          return postPedidoAutodesk(NuevoProducto);
-        });
+        NuevoProducto.IdAccionAutodesk = 2;
+        if (Producto.IdPedidoContrato === 0) { // Cuando se elige la acción de nuevo contrato y existen contratos adicionales disponibles
+          NuevoProducto.IdAccionAutodesk = 1;
+          delete NuevoProducto.ContratoBaseAutodesk;
+        }
+        return postPedidoAutodesk(NuevoProducto);
       }
       if (Producto.IdFabricante !== 2) {
         if (!NuevoProducto.IdAccionAutodesk) delete NuevoProducto.IdAccionAutodesk;
