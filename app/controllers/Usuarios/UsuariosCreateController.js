@@ -92,13 +92,12 @@
         if (Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 10) {
           const user = Object.assign({}, $scope.Usuario);
           if ($scope.Usuario.IdTipoAcceso === 4 || $scope.Usuario.IdTipoAcceso === 6) {
-            user.TipoUsuario = 'END_USER';
             user.IdTipoAcceso = $scope.Usuario.IdTipoAcceso.toString();
             user.Lada = $scope.Usuario.Lada.toString();
             UsuariosFactory.postUsuarioCliente(user)
               .success(function (result) {
                 if (result.success === 1) {
-                  $location.path("/Usuarios");
+                  $location.path('/Usuarios');
                   $scope.ShowToast(result.message, 'success');
                 } else {
                   $scope.ShowToast(result.message, 'danger');

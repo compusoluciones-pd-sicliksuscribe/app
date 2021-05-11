@@ -23,9 +23,11 @@
 
     $scope.esquemaRenovacionModelo={};
     $scope.EsquemaRenovacion=[
-      {id: '01', esquema: 'Mensual' },
-      {id: '02', esquema: 'Anual' }
+      {id: 1, esquema: 'Mensual' },
+      {id: 2, esquema: 'Anual' }
     ];
+    $scope.MENSUAL = 1;
+    $scope.ANUAL = 2;
     $scope.esquemaRenovacionModel = {};
     
     
@@ -91,21 +93,21 @@
 
 
    $scope.CambiarFechaRenovacion = function (Producto) {
-    if (Producto.Esquema === 01 || Producto.Esquema === '01'){
+    if (Producto.Esquema === $scope.MENSUAL){
       var fecha = new Date();
       fecha.setMonth(fecha.getMonth() + 1);
       fecha.setDate(fecha.getDate() - 1);
       Producto.FechaFinSuscripcion = fecha.getDate() + "/" + (fecha.getMonth() +1)+ "/" + (fecha.getFullYear());
-      Producto.EsquemaRenovacion ="Mensual";
-      Producto.IdEsquemaRenovacion='01';
+      Producto.EsquemaRenovacion = 'Mensual';
+      Producto.IdEsquemaRenovacion= $scope.MENSUAL;
      } 
     
-    if (Producto.Esquema === 02 ||Producto.Esquema === '02'){
+    if (Producto.Esquema === $scope.ANUAL){
       var fecha = new Date();
       fecha.setDate(fecha.getDate() - 1);
       Producto.FechaFinSuscripcion = fecha.getDate() + "/" + (fecha.getMonth() +1) + "/" + (fecha.getFullYear()+1);
-      Producto.EsquemaRenovacion ='Anual';
-      Producto.IdEsquemaRenovacion='02';
+      Producto.EsquemaRenovacion = 'Anual';
+      Producto.IdEsquemaRenovacion= $scope.ANUAL;
       Producto.PrecioNormalAnual = Producto.PrecioNormal * 12;
     }
      
@@ -392,7 +394,7 @@
         return estimateTieredTotal(product.tiers, quantity);
       }
 
-      if (product.IdEsquemaRenovacion === '02') {
+      if (product.IdEsquemaRenovacion === $scope.ANUAL) {
         return $scope.estimateTotalAnnual(product,quantity);
       }
       const price = product.PorcentajeDescuento > 0 ? product.PrecioDescuento : product.PrecioProrrateo;
@@ -568,19 +570,12 @@
         NuevoProducto.ContratoBaseAutodesk = contrato.trim();
       }
       if (NuevoProducto.IdAccionAutodesk === 1 && Producto.TieneContrato) {
-        ProductosFactory.getProductExists(Producto.IdEmpresaUsuarioFinal, Producto.IdProducto, NuevoProducto.ContratoBaseAutodesk)
-        .then(function (result) {
-          if (result.data.data.length >= 1) {
-            NuevoProducto.IdAccionAutodesk = 2;
-          } else {
-            NuevoProducto.IdAccionAutodesk = 3;
-          }
-          if (Producto.IdPedidoContrato === 0) { // Cuando se elige la acción de nuevo contrato y existen contratos adicionales disponibles
-            NuevoProducto.IdAccionAutodesk = 1;
-            delete NuevoProducto.ContratoBaseAutodesk;
-          }
-          return postPedidoAutodesk(NuevoProducto);
-        });
+        NuevoProducto.IdAccionAutodesk = 2;
+        if (Producto.IdPedidoContrato === 0) { // Cuando se elige la acción de nuevo contrato y existen contratos adicionales disponibles
+          NuevoProducto.IdAccionAutodesk = 1;
+          delete NuevoProducto.ContratoBaseAutodesk;
+        }
+        return postPedidoAutodesk(NuevoProducto);
       }
       if (Producto.IdFabricante !== 2) {
         if (!NuevoProducto.IdAccionAutodesk) delete NuevoProducto.IdAccionAutodesk;
