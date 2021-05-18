@@ -156,7 +156,8 @@
             IdEmpresaDistribuidor: IdEmpresaDistribuidor,
             IdUsuario: UsuariosXEmpresas[0].IdUsuario,
             MonedaPago: $scope.Empresa.MonedaPago,
-            IdFormaPagoPredilecta: $scope.Empresa.IdFormaPagoPredilecta
+            IdFormaPagoPredilecta: $scope.Empresa.IdFormaPagoPredilecta,
+            ImportarOrdenes: $scope.Empresa.importarOrdenes
           };
           EmpresasFactory.postEmpresaMicrosoft(ObjMicrosoft)
             .success(function () {
