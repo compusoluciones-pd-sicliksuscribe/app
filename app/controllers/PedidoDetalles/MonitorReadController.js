@@ -127,15 +127,17 @@
       Params.EstatusContrato = $scope.Contrato.tipo || 'all';
       if (Params.IdFabricante && $scope.EmpresaSelect) {
         getOrderPerCustomer(Params);
-        if (Params.IdFabricante === 2) getContactUsers();
-        ActualizarCSNFactory.getUfCSN(Params.IdEmpresaUsuarioFinal)
-        .then(result => {
-          if (result.data.success) {
-            $scope.mensajeCSN = undefined;
-            $scope.BuscarProductos.csnUf = $scope.BuscarProductos.IdAutodeskUF = result.data.data.CSN ? result.data.data.CSN : '';
-          } else $scope.ShowToast('No pudimos cargar el csn de este cliente.', 'danger');
-        })
-        .catch(() => $scope.ShowToast('No pudimos cargar el csn de este cliente, por favor intenta de nuevo más tarde.', 'danger'));
+        if (Params.IdFabricante === 2) { 
+          getContactUsers();
+          ActualizarCSNFactory.getUfCSN(Params.IdEmpresaUsuarioFinal)
+          .then(result => {
+            if (result.data.success) {
+              $scope.mensajeCSN = undefined;
+              $scope.BuscarProductos.csnUf = $scope.BuscarProductos.IdAutodeskUF = result.data.data.CSN ? result.data.data.CSN : '';
+            } else $scope.ShowToast('No pudimos cargar el csn de este cliente.', 'danger');
+          })
+          .catch(() => $scope.ShowToast('No pudimos cargar el csn de este cliente, por favor intenta de nuevo más tarde.', 'danger'));
+        }
       }
       getTerminos($scope.EmpresaSelect);
     };
