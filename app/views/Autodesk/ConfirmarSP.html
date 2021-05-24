@@ -13,7 +13,7 @@
             </div>
         </div>
         <hr>
-    
+        
         <div class="row">
             <div class="row cotainer" ng-repeat="orden in ordenes">
                 <div style="background-color: rgba(220, 220, 220, 0.4); padding: 2em; margin-bottom: 1.4em;" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -39,8 +39,8 @@
                         <label>Código descuento:</label>
                         <input class="form-control" type="text" ng-model="CodigoDescuento" ng-keyup = "">
                     </div>
-                    <div  class="col-xs-12 col-sm-12 col-md-offset-2  col-lg-offset-2 col-md-2 col-lg-2" style="padding-top: 6em;">
-                        <button  class="btn btn-success" ng-click="">
+                    <div  class="col-xs-12 col-sm-12 col-md-offset-2 col-lg-offset-2 col-md-2 col-lg-2" style="padding-top: 6em;">
+                        <button  class="btn btn-success" ng-click="confirmarSP(orden.IdPedido, CodigoDescuento)">
                             Confirmar
                         </button>
                     </div>

@@ -3,12 +3,14 @@
     const getSPs = () => {
       SpecialPetitionFactory.getOrders()
         .then(result => {
-          $scope.ordenes = result.data.data;
-          $scope.ordenes.forEach(orden => {
-            orden.Detalles.forEach(detalle => {
-              detalle.subtotal = calcularSubtotal(orden.Moneda, orden.TipoCambio, detalle.Precio, detalle.Descuento, detalle.DescuentoSP);
+          if (result) {
+            $scope.ordenes = result.data.data;
+            $scope.ordenes.forEach(orden => {
+              orden.Detalles.forEach(detalle => {
+                detalle.subtotal = calcularSubtotal(orden.Moneda, orden.TipoCambio, detalle.Precio, detalle.Descuento, detalle.DescuentoSP);
+              });
             });
-          });
+          }
         });
     };
 
@@ -29,6 +31,13 @@
       }
       detalle.subtotal = calcularSubtotal(moneda, tipoCambio, precio, descuento, descuentoSp);
       SpecialPetitionFactory.updateSubtotal(detalle.IdPedidoDetalle, detalle.Descuento, detalle.DescuentoSP, (moneda === 'Pesos' ? detalle.subtotal / tipoCambio : detalle.subtotal));
+    };
+
+    $scope.confirmarSP = (idPedido, codigo) => {
+      if (codigo && codigo !== '') {
+        SpecialPetitionFactory.confirmarSP(idPedido, codigo)
+          .then(getSPs);
+      } else $scope.ShowToast('Coloca un código de descuento.', 'warning');
     };
 
     $scope.init();
