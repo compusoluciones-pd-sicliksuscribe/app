@@ -16,7 +16,7 @@
       return $http.get($rootScope.API + 'autodesk/get-SPs');
     };
 
-    factory.updateSubtotal = (idDetalle, descuento, descuentoSp, subtotal) => {
+    factory.updateSubtotal = (idDetalle, descuento, descuentoSp = 0, subtotal) => {
       factory.refreshToken();
       return $http.post($rootScope.API + 'autodesk/update-subtotal', {IdPedidoDetalle: idDetalle, PorcentajeDescuento: descuento, PorcentajeDescuentoProxima: descuentoSp, PrecioUnitario: subtotal});
     };
