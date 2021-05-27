@@ -25,9 +25,9 @@
     };
 
     $scope.porcentajeDetalle = (moneda, tipoCambio, precio, descuento, descuentoSp, detalle) => {
-      if (!descuentoSp) {
-        descuentoSp = 0;
-        detalle.DescuentoSP = undefined;
+      if (descuentoSp > 100) {
+        descuentoSp = 100;
+        detalle.DescuentoSP = 100;
       }
       detalle.subtotal = calcularSubtotal(moneda, tipoCambio, precio, descuento, descuentoSp);
       SpecialPetitionFactory.updateSubtotal(detalle.IdPedidoDetalle, detalle.Descuento, detalle.DescuentoSP, (moneda === 'Pesos' ? detalle.subtotal / tipoCambio : detalle.subtotal));
