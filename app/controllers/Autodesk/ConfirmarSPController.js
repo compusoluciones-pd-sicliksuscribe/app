@@ -7,29 +7,37 @@
             $scope.ordenes = result.data.data;
             $scope.ordenes.forEach(orden => {
               orden.Detalles.forEach(detalle => {
-                detalle.subtotal = calcularSubtotal(orden.Moneda, orden.TipoCambio, detalle.Precio, detalle.Descuento, detalle.DescuentoSP);
+                detalle.precioDescuento = calcularPrecioDescuento(orden.Moneda, orden.TipoCambio, detalle.Precio, detalle.Descuento, detalle.DescuentoSP);
+                detalle.subtotal = calcularSubtotal(orden.Moneda, orden.TipoCambio, detalle.Precio, detalle.Descuento, detalle.DescuentoSP, detalle.Cantidad);
               });
             });
           }
         });
     };
 
-    const calcularSubtotal = (moneda, tipoCambio, precio, descuento, descuentoSp) => {
+    const calcularPrecioDescuento = (moneda, tipoCambio, precio, descuento, descuentoSp) => {
       const precioAux = (moneda = 'Pesos' ? (precio * tipoCambio) : precio);
       const resultado = precioAux * ((100 - descuento) / 100) * ((100 - descuentoSp) / 100);
       return resultado;
+    };
+
+    const calcularSubtotal = (moneda, tipoCambio, precio, descuento, descuentoSp, cantidad) => {
+      const precioAux = (moneda = 'Pesos' ? (precio * tipoCambio) : precio);
+      const resultado = precioAux * ((100 - descuento) / 100) * ((100 - descuentoSp) / 100);
+      return resultado * cantidad;
     };
 
     $scope.init = () => {
       getSPs();
     };
 
-    $scope.porcentajeDetalle = (moneda, tipoCambio, precio, descuento, descuentoSp, detalle) => {
+    $scope.porcentajeDetalle = (moneda, tipoCambio, precio, descuento, descuentoSp, detalle, cantidad) => {
       if (descuentoSp > 100) {
         descuentoSp = 100;
         detalle.DescuentoSP = 100;
       }
-      detalle.subtotal = calcularSubtotal(moneda, tipoCambio, precio, descuento, descuentoSp);
+      detalle.precioDescuento = calcularPrecioDescuento(moneda, tipoCambio, precio, descuento, descuentoSp);
+      detalle.subtotal = calcularSubtotal(moneda, tipoCambio, precio, descuento, descuentoSp, cantidad);
       SpecialPetitionFactory.updateSubtotal(detalle.IdPedidoDetalle, detalle.Descuento, detalle.DescuentoSP, (moneda === 'Pesos' ? detalle.subtotal / tipoCambio : detalle.subtotal));
     };
 
