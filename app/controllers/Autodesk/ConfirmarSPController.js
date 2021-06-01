@@ -41,9 +41,12 @@
       SpecialPetitionFactory.updateSubtotal(detalle.IdPedidoDetalle, detalle.Descuento, detalle.DescuentoSP, (moneda === 'Pesos' ? detalle.subtotal / tipoCambio : detalle.subtotal));
     };
 
-    $scope.confirmarSP = (idPedido, codigo) => {
+    $scope.confirmarSP = (idPedido, codigo, csn) => {
       if (codigo && codigo !== '') {
-        SpecialPetitionFactory.confirmarSP(idPedido, codigo)
+        SpecialPetitionFactory.confirmarSP(idPedido, codigo, csn)
+          .then(result => {
+            result.data.success ? $scope.ShowToast(result.data.message, 'success') : $scope.ShowToast(result.data.message, 'warning');
+          })
           .then(getSPs);
       } else $scope.ShowToast('Coloca un código de descuento.', 'warning');
     };

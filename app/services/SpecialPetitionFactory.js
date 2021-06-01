@@ -21,9 +21,9 @@
       return $http.post($rootScope.API + 'autodesk/update-subtotal', {IdPedidoDetalle: idDetalle, PorcentajeDescuento: descuento, PorcentajeDescuentoProxima: descuentoSp, PrecioUnitario: subtotal});
     };
 
-    factory.confirmarSP = (idPedido, codigo) => {
+    factory.confirmarSP = (idPedido, codigo, csn) => {
       factory.refreshToken();
-      return $http.post($rootScope.API + 'autodesk/confirm-sp', {IdPedido: idPedido, CodigoDescuento: codigo});
+      return $http.post($rootScope.API + 'autodesk/confirm-sp', {IdPedido: idPedido, CodigoDescuento: codigo, CSNUF: csn});
     };
 
     return factory;
