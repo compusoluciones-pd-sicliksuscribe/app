@@ -19,8 +19,8 @@
           lastDate = new Date(histogramaCsp[0].FechaFactura);
           lastYear = lastDate.getFullYear();
           lastMonth = lastDate.getMonth() + 1;
-          (lastMonth < 10) ? lastMonth = "0" + lastMonth : '';
-          getHistogramClick(lastYear + '-' + lastMonth);
+          (lastMonth < 10) ? lastMonth = `0${lastMonth}` : '';
+          getHistogramClick(`${lastYear}-${lastMonth}`);
         })
         .catch(function () {
           $scope.ShowToast('No pudimos cargar la lista de reconciliación, por favor intenta de nuevo más tarde.', 'danger');
@@ -32,11 +32,11 @@
         .getTotalCS(date)
         .then(res => {
           histogramaClick = res.data.data;
-          $scope.ventaClick = '$' + histogramaClick[0].total.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+          $scope.ventaClick = `$${histogramaClick[0].total.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
           const dateArray = date.split('-');
           let monthArray = dateArray[1];
           monthArray = +monthArray - 1;
-          $scope.ventasClickDate = LargemonthNames[monthArray] + ' del ' + dateArray[0];
+          $scope.ventasClickDate = `${LargemonthNames[monthArray]} del ${dateArray[0]}`;
           loadHistogram();
         })
         .catch(function () {
@@ -67,9 +67,9 @@
       lastDate = new Date(histogramaCsp[0].FechaFactura);
       lastYear = lastDate.getFullYear();
       lastMonth = lastDate.getMonth() + 1;
-      (lastMonth < 10) ? lastMonth = "0" + lastMonth : '';
-      $scope.getReconciliationData(lastYear + '-' + lastMonth);
-      document.getElementById('dateFilter').value = lastYear + '-' + lastMonth;
+      (lastMonth < 10) ? lastMonth = `0${lastMonth}` : '';
+      $scope.getReconciliationData(`${lastYear}-${lastMonth}`);
+      document.getElementById('dateFilter').value = `${lastYear}-${lastMonth}`;
 
       const options = {
         series: [
@@ -136,11 +136,11 @@
           labels: {
             formatter: function (value) {
               if (value <= 999) {
-                return '$' + value + ' K';
+                return `$${value} K`;
               } else {
                 value = value / 1000;
                 value = value.toFixed(2);
-                return '$' + value + ' M';
+                return `$${value} M`;
               }
             }
           },
@@ -176,9 +176,9 @@
           const dateArray = dateFilter.split('-');
           let monthArray = dateArray[1];
           monthArray = +monthArray - 1;
-          $scope.ventasCspDate = LargemonthNames[monthArray] + ' del ' + dateArray[0];
+          $scope.ventasCspDate = `${LargemonthNames[monthArray]} del ${dateArray[0]}`;
           if ($scope.lista[0] !== undefined) {
-            $scope.ventaCsp = '$' + $scope.lista[0].Total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            $scope.ventaCsp = `$${$scope.lista[0].Total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
           } else {
             $scope.ventaCsp = '$0.00';
           }
@@ -192,12 +192,12 @@
 
     $scope.timeChart = (IdLicencia, IdFactura) => {
       $('.collapse').collapse('hide');
-      $('#collapse1_' + IdLicencia).collapse('show');
+      $(`#collapse1_${IdLicencia}`).collapse('show');
       const body = {
         IdFactura: IdFactura,
         IdLicencia: IdLicencia
       };
-      document.getElementById('time_' + IdLicencia).innerHTML = '';
+      document.getElementById(`time_${IdLicencia}`).innerHTML = '';
       return ReconciliacionFactory
         .getTimeLine(body)
         .then(res => {
@@ -206,7 +206,7 @@
           let actual = '';
           for (const item in $scope.timeLine) {
             actual = {
-              x: $scope.timeLine[item].Descripcion + '<br> -Cantidad: ' + $scope.timeLine[item].Cantidad,
+              x: `${$scope.timeLine[item].Descripcion} <br> -Cantidad: ${$scope.timeLine[item].Cantidad}`,
               y: [new Date($scope.timeLine[item].FechaInicioCargo).getTime(), new Date($scope.timeLine[item].FechaFinCargo).getTime()],
               fillColor: colors[Math.floor(Math.random() * colors.length)]
             };
@@ -276,7 +276,7 @@
               horizontalAlign: 'left'
             }
           };
-          const chart = new ApexCharts(document.querySelector('#time_' + IdLicencia), options);
+          const chart = new ApexCharts(document.querySelector(`#time_${IdLicencia}`), options);
           chart.render();
         })
         .catch(function () {
@@ -299,7 +299,7 @@
               BodyClick = [];
               for (const charge in $scope.listaDif[item].detailsCSP) {
                 BodyTimeLine.push({
-                  x: $scope.listaDif[item].detailsCSP[charge].Descripcion + '<br>Cantidad: ' + $scope.listaDif[item].detailsCSP[charge].Cantidad,
+                  x: `${$scope.listaDif[item].detailsCSP[charge].Descripcion}<br>Cantidad: ${$scope.listaDif[item].detailsCSP[charge].Cantidad}`,
                   y: [new Date($scope.listaDif[item].detailsCSP[charge].FechaInicioCargo).getTime(), new Date($scope.listaDif[item].detailsCSP[charge].FechaFinCargo).getTime()],
                   fillColor: colors[Math.floor(Math.random() * colors.length)]
                 });
@@ -331,7 +331,7 @@
               BodyTimeLine = [];
               for (const itemCsp in $scope.listaDif[item].detailsCSP) {
                 BodyTimeLine.push({
-                  x: $scope.listaDif[item].detailsCSP[itemCsp].Descripcion + ' <br>Cantidad: ' + $scope.listaDif[item].detailsCSP[itemCsp].Cantidad,
+                  x: `${$scope.listaDif[item].detailsCSP[itemCsp].Descripcion} <br>Cantidad: ${$scope.listaDif[item].detailsCSP[itemCsp].Cantidad}` ,
                   y: [new Date($scope.listaDif[item].detailsCSP[itemCsp].FechaInicioCargo).getTime(), new Date($scope.listaDif[item].detailsCSP[itemCsp].FechaFinCargo).getTime()],
                   fillColor: colors[Math.floor(Math.random() * colors.length)]
                 });
@@ -398,11 +398,11 @@
         .getTotalCS(date)
         .then(res => {
           histogramaClick = res.data.data;
-          $scope.ventaClick = '$' + histogramaClick[0].total.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+          $scope.ventaClick = `$${histogramaClick[0].total.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
           const dateArray = date.split('-');
           let monthArray = dateArray[1];
           monthArray = +monthArray - 1;
-          $scope.ventasClickDate = LargemonthNames[monthArray] + ' del ' + dateArray[0];
+          $scope.ventasClickDate = `${LargemonthNames[monthArray]} del ${dateArray[0]}`;
         })
         .catch(function () {
           $scope.ShowToast('No pudimos cargar la lista de reconciliación, por favor intenta de nuevo más tarde.', 'danger');
@@ -411,8 +411,8 @@
 
     $scope.timeChartDif = (IdLicencia) => {
       $('.collapse').collapse('hide');
-      $('#collapseDif_' + IdLicencia).collapse('show');
-      document.getElementById('timeDif_' + IdLicencia).innerHTML = '';
+      $(`#collapseDif_${IdLicencia}`).collapse('show');
+      document.getElementById(`timeDif_${IdLicencia}`).innerHTML = '';
       let TimeFilter = $scope.arrayDif.filter(function (val) {
         return val.IdLicencia === IdLicencia;
       });
@@ -487,7 +487,7 @@
           horizontalAlign: 'left'
         }
       };
-      const chart = new ApexCharts(document.querySelector('#timeDif_' + IdLicencia), options);
+      const chart = new ApexCharts(document.querySelector(`#timeDif_${IdLicencia}`), options);
       chart.render();
     };
 
