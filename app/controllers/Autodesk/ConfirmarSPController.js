@@ -16,13 +16,13 @@
     };
 
     const calcularPrecioDescuento = (moneda, tipoCambio, precio, descuento, descuentoSp) => {
-      const precioAux = (moneda = 'Pesos' ? (precio * tipoCambio) : precio);
+      const precioAux = (moneda === 'Pesos' ? (precio * tipoCambio) : precio);
       const resultado = precioAux * ((100 - descuento) / 100) * ((100 - descuentoSp) / 100);
       return resultado;
     };
 
     const calcularSubtotal = (moneda, tipoCambio, precio, descuento, descuentoSp, cantidad) => {
-      const precioAux = (moneda = 'Pesos' ? (precio * tipoCambio) : precio);
+      const precioAux = (moneda === 'Pesos' ? (precio * tipoCambio) : precio);
       const resultado = precioAux * ((100 - descuento) / 100) * ((100 - descuentoSp) / 100);
       return resultado * cantidad;
     };
@@ -36,6 +36,10 @@
         descuentoSp = 100;
         detalle.DescuentoSP = 100;
       }
+      if (descuento > 100) {
+        descuento = 100;
+        detalle.Descuento = 100;
+      }
       detalle.precioDescuento = calcularPrecioDescuento(moneda, tipoCambio, precio, descuento, descuentoSp);
       detalle.subtotal = calcularSubtotal(moneda, tipoCambio, precio, descuento, descuentoSp, cantidad);
       SpecialPetitionFactory.updateSubtotal(detalle.IdPedidoDetalle, detalle.Descuento, detalle.DescuentoSP, (moneda === 'Pesos' ? detalle.subtotal / tipoCambio : detalle.subtotal));
@@ -46,8 +50,9 @@
         SpecialPetitionFactory.confirmarSP(idPedido, codigo, csn)
           .then(result => {
             result.data.success ? $scope.ShowToast(result.data.message, 'success') : $scope.ShowToast(result.data.message, 'warning');
+            return result.data.success;
           })
-          .then(getSPs);
+          .then(success => { if (success) getSPs(); });
       } else $scope.ShowToast('Coloca un código de descuento.', 'warning');
     };
 
