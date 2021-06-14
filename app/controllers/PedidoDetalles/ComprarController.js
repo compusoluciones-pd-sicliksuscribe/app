@@ -17,9 +17,17 @@
       COMPUSOLUCIONES: 3,
       HP: 4,
       APERIO: 5,
-      AMAZONWEBSERVICES:10,
+      AMAZONWEBSERVICES: 10,
       IBM: 11
     };
+
+    const llavesOpenPay = {
+      id: 'mzdblulczshumdvqbvdl',
+      llavePublica: 'pk_fa2f48e0e6f0485c8273c4c0418de7b8',
+      llavePrivada: 'sk_8660f55539684dcea40d3b4b44543e06'
+    }
+
+
     $scope.tipoMonedaCambio = $cookies.getObject('compararPedidosAnteriores');
 
     const error = function (message) {
@@ -118,7 +126,7 @@
     const orderCookie = orderIdsCookie => {
       const cookie = $cookies.putObject('orderIdsCookie', orderIdsCookie, { secure: $rootScope.secureCookie });
       const location = $location.path('/SuccessOrder');
-      const resultOrderidCookie = [{cookie, location}];
+      const resultOrderidCookie = [{ cookie, location }];
       return resultOrderidCookie;
     };
 
@@ -230,7 +238,7 @@
       return total;
     };
 
-    $scope.calcularTotal = function (IdPedido) {
+    $scope.calcularTotal = function (IdPedido) {  // calcula el total de cada pedido
       let total = $scope.calcularSubTotal(IdPedido);
       let iva = 0;
       if ($scope.Distribuidor.ZonaImpuesto === 'Normal') iva = 0.16 * total;
@@ -270,64 +278,98 @@
     };
 
     $scope.PagarTarjeta = function () { // tarjeta de credito
-      if ($scope.Distribuidor.IdFormaPagoPredilecta === 1) {
-        PedidoDetallesFactory.getPrepararTarjetaCredito()
-          .success(function (Datos) {
-            var expireDate = new Date();
-            expireDate.setTime(expireDate.getTime() + 600 * 2000); /* 20 minutos */
-            $cookies.putObject('pedidosAgrupados', Datos.data['0'].pedidosAgrupados, { 'expires': expireDate, secure: $rootScope.secureCookie });
-            if (Datos.data['0'].total > 0) {
 
-              if (Datos.success) {
-                if ($cookies.getObject('pedidosAgrupados')) {
-                  Checkout.configure({
-                    merchant: Datos.data['0'].merchant,
-                    session: { id: Datos.data['0'].session_id },
-                    order:
-                    {
-                      amount: Datos.data['0'].total,
-                      currency: Datos.data['0'].moneda,
-                      description: 'Pago tarjeta bancaria',
-                      id: Datos.data['0'].pedidos
-                    },
-                    interaction:
-                    {
-                      merchant:
-                      {
-                        name: 'CompuSoluciones',
-                        address:
-                        {
-                          line1: 'CompuSoluciones y Asociados, S.A. de C.V.',
-                          line2: 'Av. Mariano Oterno No. 1105',
-                          line3: 'Col. Rinconada del Bosque C.P. 44530',
-                          line4: 'Guadalajara, Jalisco. México'
-                        },
+      validarOpenPay();
+      modalTC.style.display = 'block';
 
-                        email: 'order@yourMerchantEmailAddress.com',
-                        phone: '+1 123 456 789 012'
-                      },
-                      displayControl: { billingAddress: 'HIDE', orderSummary: 'SHOW' },
-                      locale: 'es_MX',
-                      theme: 'default'
-                    }
-                  });
-                  Checkout.showLightbox();
-                } else {
-                  $scope.ShowToast('No pudimos comenzar con tu proceso de pago, favor de intentarlo una vez más.', 'danger');
-                }
-              } else {
-                $scope.ShowToast('No pudimos comenzar con tu proceso de pago, favor de intentarlo una vez más.', 'danger');
-              }
-            } else {
-              $scope.ShowToast('Algo salió mal con el pago con tarjeta bancaria, favor de intentarlo una vez más.', 'danger');
-            }
-          })
-          .error(function (data, status, headers, config) {
-            const error = !data.message ? 'Ocurrió un error al procesar la solicitud. Intentalo de nuevo.' : data.message;
-            $scope.ShowToast(error, 'danger');
-          });
-      }
     };
+
+    //validar llaves para openpay
+    const validarOpenPay = () => {
+      OpenPay.setId('mzdblulczshumdvqbvdl');
+      OpenPay.setApiKey('pk_fa2f48e0e6f0485c8273c4c0418de7b8');
+      var deviceSessionId = OpenPay.deviceData.setup("payment-form", "deviceIdHiddenFieldName");
+    }
+
+
+    $('#pay-button').on('click', function (event) {
+
+      event.preventDefault();
+      $("#pay-button").prop("disabled", true);
+      OpenPay.token.extractFormAndCreate('payment-form', success_callbak, error_callbak);
+
+    });
+
+
+
+    $('#payment-form').validate({
+      rules: {
+        name: {
+          required: true,
+        },
+        cardNumber: {
+          required: true,
+          number: true,
+          maxlength: 19,
+          minlength: 16
+        },
+        ccexpmonth: { valueNotEquals: "default" },
+        ccexpyear: {
+          valueNotEquals: "default",
+          dateValidation: {
+            formMonth: $('#ccexpmonth'),
+            formYear: $('#ccexpyear'),
+          }
+        },
+        cvv: {
+          required: true,
+          number: true,
+          maxlength: 3,
+          minlength: 3
+        }
+      },
+      messages: {
+        name: {
+          required: "Es requerido*",
+
+        },
+        cardNumber: {
+          required: "Es requerido*",
+          number: "Solo se permiten números*",
+          maxlength: "Máximo 19 digitos",
+          minlength: "Mínimo 16 digitos"
+        },
+        ccexpmonth: { valueNotEquals: "Selecciona un mes" },
+        ccexpyear: {
+          valueNotEquals: "Selecciona un año",
+        },
+        cvv: {
+          required: "Es requerido*",
+          number: "Solo se permiten números*",
+          maxlength: "Máximo 3 digitos",
+          minlength: "Mínimo 3 digitos",
+        }
+      },
+      submitHandler: function (form) {
+        OpenPay.token.extractFormAndCreate('payment-form', success_callbak, error_callbak);
+      }
+    });
+
+
+    var success_callbak = function (response) {
+      var token_id = response.data.id;
+      $('#token_id').val(token_id);
+      $('#payment-form').submit();
+    };
+
+    var error_callbak = function (response) {
+      var desc = response.data.description != undefined ?
+        response.data.description : response.message;
+      $("#pay-button").prop("disabled", false);
+    };
+
+
+
 
     const getActualSubdomain = function () {
       let subdomain = window.location.href;
@@ -428,6 +470,7 @@
     };
 
     var modal = document.getElementById('modalTipoMoneda');
+    var modalTC = document.getElementById('modalPagoTC');
 
     $scope.modalNotificacionComprar = function () {
       modal.style.display = 'none';
@@ -436,6 +479,10 @@
     $scope.modalNotificacionCarrito = function () {
       modal.style.display = 'none';
     };
+
+    $scope.cerrarModal = modal => {
+      document.getElementById(modal).style.display = 'none';
+    }
 
     window.onclick = function (event) { // When the user clicks anywhere outside of the modal, close it
       if (event.target === modal) {
