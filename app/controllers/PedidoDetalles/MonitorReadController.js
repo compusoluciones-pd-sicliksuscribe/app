@@ -292,19 +292,22 @@
             $scope.ShowToast(error.data.message, 'danger');
           });
       }
+      pedido.Detalles[0].PorCancelar = 0;
       PedidoDetallesFactory.putPedidoDetalle(PedidoActualizado)
-        .success(function (PedidoDetalleSuccess) {
-          PedidoDetallesFactory.postPartitionFlag(pedido)
-          .catch(function (result) {
+        .success(async PedidoDetalleSuccess => {
+          await PedidoDetallesFactory.postPartitionFlag(pedido)
+          .then(() => {
+            if (PedidoDetalleSuccess.success) {
+              detalles.MostrarCantidad = 0;
+              detalles.PorCancelar = 0;
+              $scope.ShowToast(PedidoDetalleSuccess.message, 'success');
+            } else {
+              $scope.ShowToast(PedidoDetalleSuccess.message, 'danger');
+            }
+          })
+          .catch(result => {
             $scope.ShowToast(result.data.message, 'danger');
           });
-          if (PedidoDetalleSuccess.success) {
-            detalles.MostrarCantidad = 0;
-            detalles.PorCancelar = 0;
-            $scope.ShowToast(PedidoDetalleSuccess.message, 'success');
-          } else {
-            $scope.ShowToast(PedidoDetalleSuccess.message, 'danger');
-          }
         })
         .error(function (data, status, headers, config) {
           $scope.ShowToast('No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde', 'danger');
@@ -326,9 +329,10 @@
         IdTipoProducto: detalles.IdTipoProducto,
         IdPedidoDetalle: detalles.IdPedidoDetalle
       };
+      pedido.Detalles[0].PorCancelar = 1;
       PedidoDetallesFactory.putPedidoDetalle(params)
-        .then(function (result) {
-          PedidoDetallesFactory.postPartitionFlag(pedido)
+        .then(async result => {
+          await PedidoDetallesFactory.postPartitionFlag(pedido)
           .catch(function (result) {
             $scope.ShowToast(result.data.message, 'danger');
           });
