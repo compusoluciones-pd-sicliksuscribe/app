@@ -84,6 +84,16 @@
       });
     };
 
+    const getContactos = IdEmpresaUsuarioFinal => {
+      ImportarPedidosAutodeskFactory.getContactos(IdEmpresaUsuarioFinal)
+        .success(result => {
+          $scope.Contactos = result.data;
+        })
+        .error(function (data, status, headers, config) {
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
+    };
+
     const vaciarFormulario = function () {
       $scope.distribuidorSeleccionado = undefined;
       $scope.ufSeleccionado = undefined;
@@ -127,6 +137,14 @@
       $scope.Empresa.Lada = undefined;
       $scope.Empresa.Telefono = undefined;
       $scope.Empresa.IdAutodeskUF = undefined;
+    };
+
+    const limipiarModalImportacion = function () {
+      $scope.Contrato.Distribuidor = undefined;
+      $scope.Contrato.Empresauf = undefined;
+      $scope.Contrato.NumeroContrato = undefined;
+      $scope.Contrato.IdUsuarioContacto = undefined;
+      $scope.numerosSerie = [];
     };
 
     $scope.init = function () {
@@ -424,7 +442,6 @@
         };
         ImportarPedidosAutodeskFactory.postEmpresa(infoEmpresa)
           .success(function (result) {
-            console.log(result);
             if (result.data.error === 0) {
               $scope.ShowToast(` ${result.message}.`, 'success');
               limipiarModalEmpresa();
@@ -438,6 +455,105 @@
             $scope.ShowToast(`Hubo un error al tratar de registrar la empresa: ${result.data.message}.`, 'danger');
             $scope.deshabilitado = false;
           });
+      } else {
+        $scope.ShowToast('Asegurese de registrar un distribuidor', 'warning');
+        $scope.deshabilitado = false;
+      }
+    };
+
+    $scope.completarDistModalImportacion = (cadenaDist = '') => {
+      let resultado = [];
+      $scope.resultadoDistribuidorModalImportacion = [];
+      $scope.ocultarOpcionesDistModalImportacion = false;
+      $scope.distribuidoresLista.forEach(distribuidor => {
+        if (distribuidor.NombreEmpresa.toLowerCase().indexOf(cadenaDist.toLowerCase()) >= 0) {
+          resultado.push(distribuidor.NombreEmpresa);
+          $scope.resultadoDistribuidorModalImportacion.push(distribuidor);
+        }
+        if (cadenaDist === '') $scope.ocultarOpcionesDistModalImportacion = true;
+      });
+      $scope.filtroDistribuidorModalImportacion = resultado;
+    };
+
+    $scope.llenarTextBoxDistModalImportacion = infoDist => {
+      $scope.Contrato.Distribuidor = infoDist;
+      $scope.distribuidorSeleccionadoModalImportacion = $scope.resultadoDistribuidorModalImportacion.find(elemento => elemento.NombreEmpresa === infoDist);
+      $scope.ufsListaAuxModalImportacion = $scope.ufsLista.filter(uf => uf.IdEmpresaDistribuidor === $scope.distribuidorSeleccionadoModalImportacion.IdEmpresa);
+      $scope.Contrato.Empresauf = '';
+      $scope.Contrato.IdUsuarioContacto = '';
+      $scope.Contactos = {};
+      $scope.ocultarOpcionesDistModalImportacion = true;
+    };
+
+    $scope.completarUFModalImportacion = (cadenaUF = '') => {
+      let resultado = [];
+      $scope.resultadoUFModalImportacion = [];
+      if ($scope.ufsListaAuxModalImportacion) {
+        $scope.ocultarOpcionesUFModalImportacion = false;
+        $scope.ufsListaAuxModalImportacion.forEach(uf => {
+          if (uf.NombreEmpresa.toLowerCase().indexOf(cadenaUF.toLowerCase()) >= 0) {
+            resultado.push(uf.NombreEmpresa);
+            $scope.resultadoUFModalImportacion.push(uf);
+          }
+          if (cadenaUF === '') $scope.ocultarOpcionesUFModalImportacion = true;
+        });
+        $scope.filtroUsuarioFinalModalImportacion = resultado;
+      };
+    };
+
+    $scope.llenarTextBoxUFModalImportacion = infoUF => {
+      $scope.Contrato.Empresauf = infoUF;
+      $scope.ufSeleccionadoModalImportacion = $scope.resultadoUFModalImportacion.find(elemento => elemento.NombreEmpresa === infoUF);
+      $scope.ocultarOpcionesUFModalImportacion = true;
+      $scope.Contrato.IdUsuarioContacto = '';
+      getContactos($scope.ufSeleccionadoModalImportacion.IdEmpresa);
+    };
+
+    $scope.numerosSerie = [];
+
+    $scope.agregarSerie = (numeroSerie, cantidad) => {
+      if (numeroSerie && cantidad) {
+        $scope.numerosSerie.push({NumeroSerie: numeroSerie, Cantidad: cantidad});
+        $scope.numeroSerie = '';
+        $scope.cantidad = '';
+      }
+    };
+
+    $scope.quitarSerie = index => {
+      $scope.numerosSerie.splice(index, 1);
+    };
+
+    $scope.conjuntarInformacionModalImportacion = () => {
+      $scope.deshabilitado = true;
+      if ($scope.distribuidorSeleccionadoModalImportacion || $scope.esDistribuidor) {
+        const infoContrato = {
+          IdEmpresaDistribuidor: $scope.esDistribuidor ? $scope.SessionCookie.IdEmpresa : $scope.distribuidorSeleccionadoModalImportacion.IdEmpresa,
+          IdEmpresaUsuarioFinal: $scope.ufSeleccionadoModalImportacion.IdEmpresa,
+          IdUsuarioContacto: $scope.Contrato.IdUsuarioContacto,
+          NumeroContrato: $scope.Contrato.NumeroContrato,
+          Series: $scope.numerosSerie
+        };
+        if (!infoContrato.IdEmpresaDistribuidor || !infoContrato.IdEmpresaUsuarioFinal || !infoContrato.IdUsuarioContacto ||
+          !infoContrato.NumeroContrato || infoContrato.Series.length === 0) {
+          $scope.ShowToast('Llena todos los campos del formulario', 'info');
+          $scope.deshabilitado = false;
+        } else {
+          ImportarPedidosAutodeskFactory.postContratoOtroMayorista(infoContrato)
+          .success(result => {
+            if (result.data.error === 0) {
+              $scope.ShowToast(` ${result.message}.`, 'success');
+              limipiarModalImportacion();
+              $scope.deshabilitado = false;
+            } else {
+              $scope.ShowToast(`Hubo un error al tratar de importar el contrato: ${result.data.message}.`, 'danger');
+              $scope.deshabilitado = false;
+            }
+          })
+          .catch(result => {
+            $scope.ShowToast(`Hubo un error al tratar de importar el contrato: ${result.data.message}.`, 'danger');
+            $scope.deshabilitado = false;
+          });
+        }
       } else {
         $scope.ShowToast('Asegurese de registrar un distribuidor', 'warning');
         $scope.deshabilitado = false;

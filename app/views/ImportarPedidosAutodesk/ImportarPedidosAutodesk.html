@@ -45,7 +45,12 @@
             </button>
         </div>
         <div style="float: right; margin-right: 0; margin-top: .8em;">
-            <button type="button" style="padding: .8em;" data-toggle="modal" data-target="#nuevoUF" class="btn btn-primary " style="background: !important">
+            <button type="submit" style="margin-bottom: .8em;"  data-toggle="modal" data-target="#desdeOtroMayorista" class="btn btn-success " style="background: !important">
+                <span class="glyphicon glyphicon glyphicon-import"></span>
+                &nbsp;Desde otro mayorista
+            </button>
+            <br>
+            <button type="button" style="padding: .8em 2.4em;" data-toggle="modal" data-target="#nuevoUF" class="btn btn-primary " style="background: !important">
                 <span class="glyphicon glyphicon glyphicon glyphicon-briefcase"></span>
                 &nbsp;Nuevo cliente
             </button>
@@ -295,5 +300,75 @@
         </div>
     </div>
 </div>
+
+
+<div id="desdeOtroMayorista" class="modal fade in" tabindex="-1" role="dialog" >
+    <div class="modal-dialog" role="document">
+        <div class="divLoading" data-cargando>
+            <div class=""><img src="images/ripple.svg" /></div>
+        </div> 
+        <div class="modal-content" style="margin: auto; top: -15em;">
+            <div class="modal-header" >
+                <button type="button" class="close" ng-click="cerrarModal('desdeOtroMayorista');" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Importar contrato desde otro mayorista</h4>
+            </div>
+            <div class="modal-body" style="margin-bottom: 26em;">
+                <p>Registre a continuación la información del contrato.</p>
+                <hr class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12"> 
+                <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6" ng-hide = "esDistribuidor">
+                    <label>Distribuidor</label>
+                    <input type = "text" placeholder="Escribe el nombre del distribuidor" class="form-control" ng-model="Contrato.Distribuidor" ng-keyup="completarDistModalImportacion(Contrato.Distribuidor)" required/>
+                    <ul class="list-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-model = "ocultarOpcionesDistModalImportacion" ng-hide = "ocultarOpcionesDistModalImportacion" style="position:absolute; z-index: 1; padding-right:2em;">
+                    <li style="background-color: white;" class="list-group-item" ng-repeat = "infoDistModalImportacion in filtroDistribuidorModalImportacion track by $index" ng-click = "llenarTextBoxDistModalImportacion(infoDistModalImportacion)">{{infoDistModalImportacion}}</li>
+                    </ul>
+                </div>
+                <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <label>Usuario final</label>
+                    <Input type="text" placeholder="Escribe el nombre del usuario final" class="form-control" ng-model="Contrato.Empresauf" ng-keyup="completarUFModalImportacion(Contrato.Empresauf)" required>
+                        <ul class="list-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-model = "ocultarOpcionesUFModalImportacion" ng-hide = "ocultarOpcionesUFModalImportacion" style="position:absolute; z-index: 1;padding-right:2em;">
+                            <li style="background-color: white;" class="list-group-item" ng-repeat = "infoUFModalImportacion in filtroUsuarioFinalModalImportacion track by $index" ng-click = "llenarTextBoxUFModalImportacion(infoUFModalImportacion)">{{infoUFModalImportacion}}</li>
+                        </ul>
+                </div>
+                <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <label>Número de contrato</label>
+                    <input type="text" placeholder="Escribe el número de contrato" ng-model="Contrato.NumeroContrato"  onKeypress="if (event.keyCode < 48 || event.keyCode > 57) event.returnValue = false;" class="form-control" />
+                </div>
+                <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <label>Contacto</label>
+                    <select class="form-control selectOption" ng-model="Contrato.IdUsuarioContacto" ng-options="Contacto.IdUsuario as Contacto.Nombre + ' ('+ Contacto.CorreoElectronico +')' for Contacto in Contactos">
+                        <option ng-selected="true" value="">Selecciona un contacto...</option>
+                    </select>
+                </div>
+                <hr class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <div style="padding-left: 0%;" class="form-group col-xs-12 col-sm-12 col-md-8 col-lg-8">
+                        <label>Número de serie</label>
+                        <input type="text" onKeypress="if ((event.keyCode < 48 && event.keyCode != 45) || event.keyCode > 57) event.returnValue = false;" ng-model="numeroSerie" class="form-control" />
+                    </div>
+                    <div style="padding-left: 0%; padding-right: 0%;" class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                        <label>Cantidad</label>
+                        <input type="text" onKeypress="if (event.keyCode < 48 || event.keyCode > 57) event.returnValue = false;" ng-model="cantidad" class="form-control" />
+                    </div>
+                    <button class="btn btn-success pull-right" style="min-width: 0em; padding:.6em ;" ng-click="agregarSerie(numeroSerie, cantidad)"><span class="glyphicon glyphicon-plus-sign"></span>&nbsp;Agregar</button>
+                </div>
+                <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                <div style="text-align: center;"><label>Listado de series del contrato y su cantidad</label></div>
+                <div class="" style="margin-top: 0%;" ng-repeat="serie in numerosSerie track by $index">
+                    <button style="float: right;" type="button" class="close" ng-click="quitarSerie($index);" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <p><span class="badge badge-info" style="margin-right: 1em;">{{serie.Cantidad}}</span>
+                      {{serie.NumeroSerie}}</p>
+                </div>
+                </div>    
+            </div>
+            <div style="border-top: 0;" class="modal-footer">
+                <button type="submit" style="min-width: 0em" class="btn btn-success" ng-click="conjuntarInformacionModalImportacion()" ng-disabled="deshabilitado">Registrar</button>
+                <button type="button" style="min-width: 0em" class="btn btn-danger" ng-click="cerrarModal('desdeOtroMayorista');" ng-disabled="deshabilitado" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 </div>
 </div>
