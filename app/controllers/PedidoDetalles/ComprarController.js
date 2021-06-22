@@ -238,7 +238,7 @@
       return total;
     };
 
-    $scope.calcularTotal = function (IdPedido) {  // calcula el total de cada pedido
+    $scope.calcularTotal = function (IdPedido) {
       let total = $scope.calcularSubTotal(IdPedido);
       let iva = 0;
       if ($scope.Distribuidor.ZonaImpuesto === 'Normal') iva = 0.16 * total;

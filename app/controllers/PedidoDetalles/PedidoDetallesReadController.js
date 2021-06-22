@@ -453,6 +453,16 @@
       return priceWithExchangeRate * product.Cantidad;
     };
 
+    $scope.tipoTarjeta = (tipo) => {
+      PedidoDetallesFactory.setCreditCardType(tipo)
+          .then(function (result) {
+            console.log(result);
+          })
+          .catch(function (result) {
+            $scope.ShowToast(result.data.message, 'danger');
+          });
+    }
+
     $scope.next = function () {
       actualizarOrdenesCompra();
       if ($scope.isPayingWithCSCredit()) validarCarrito();

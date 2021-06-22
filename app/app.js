@@ -343,7 +343,7 @@
       })
 
       .when('/Comprar', {
-        controller: 'ComprarController', templateUrl: 'app/views/PedidoDetalles/Comprar.html',
+        templateUrl: 'app/views/PedidoDetalles/Comprar.html',
         resolve: {
           'check': function ($location, $cookies) {
             var Session = $cookies.getObject('Session');
