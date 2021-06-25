@@ -297,9 +297,9 @@
       return $http.post($rootScope.API + 'orders/update-purchase-order', ordenes);
     };
 
-    factory.setCreditCardType = cardType => {
+    factory.setCreditCardType = (IdEmpresa, cardType) => {
       factory.refreshToken();
-      return $http.post($rootScope.API + 'shopping-cart/set-card-type', cardType);
+      return $http.post($rootScope.API + 'cardType/'+ IdEmpresa + '/' + cardType);
     };
 
     return factory;

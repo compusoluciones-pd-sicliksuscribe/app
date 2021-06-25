@@ -453,8 +453,8 @@
       return priceWithExchangeRate * product.Cantidad;
     };
 
-    $scope.tipoTarjeta = (tipo) => {
-      PedidoDetallesFactory.setCreditCardType(tipo)
+    $scope.tipoTarjeta = (tipoTarjeta) => {
+      PedidoDetallesFactory.setCreditCardType($scope.Distribuidor.IdEmpresa, tipoTarjeta)
           .then(function (result) {
             console.log(result);
           })
