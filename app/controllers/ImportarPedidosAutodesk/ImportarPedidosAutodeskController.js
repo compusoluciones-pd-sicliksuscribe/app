@@ -84,16 +84,6 @@
       });
     };
 
-    const getContactos = IdEmpresaUsuarioFinal => {
-      ImportarPedidosAutodeskFactory.getContactos(IdEmpresaUsuarioFinal)
-        .success(result => {
-          $scope.Contactos = result.data;
-        })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
-    };
-
     const vaciarFormulario = function () {
       $scope.distribuidorSeleccionado = undefined;
       $scope.ufSeleccionado = undefined;
@@ -143,7 +133,8 @@
       $scope.Contrato.Distribuidor = undefined;
       $scope.Contrato.Empresauf = undefined;
       $scope.Contrato.NumeroContrato = undefined;
-      $scope.Contrato.IdUsuarioContacto = undefined;
+      $scope.Contrato.IdEsquemaRenovacion = '';
+      $scope.Contrato.FechaFin = undefined;
       $scope.numerosSerie = [];
     };
 
@@ -480,8 +471,8 @@
       $scope.distribuidorSeleccionadoModalImportacion = $scope.resultadoDistribuidorModalImportacion.find(elemento => elemento.NombreEmpresa === infoDist);
       $scope.ufsListaAuxModalImportacion = $scope.ufsLista.filter(uf => uf.IdEmpresaDistribuidor === $scope.distribuidorSeleccionadoModalImportacion.IdEmpresa);
       $scope.Contrato.Empresauf = '';
-      $scope.Contrato.IdUsuarioContacto = '';
-      $scope.Contactos = {};
+      $scope.Contrato.IdEsquemaRenovacion = '';
+      $scope.Contrato.FechaFin = undefined;
       $scope.ocultarOpcionesDistModalImportacion = true;
     };
 
@@ -505,8 +496,8 @@
       $scope.Contrato.Empresauf = infoUF;
       $scope.ufSeleccionadoModalImportacion = $scope.resultadoUFModalImportacion.find(elemento => elemento.NombreEmpresa === infoUF);
       $scope.ocultarOpcionesUFModalImportacion = true;
-      $scope.Contrato.IdUsuarioContacto = '';
-      getContactos($scope.ufSeleccionadoModalImportacion.IdEmpresa);
+      $scope.Contrato.IdEsquemaRenovacion = '';
+      $scope.Contrato.FechaFin = undefined;
     };
 
     $scope.numerosSerie = [];
@@ -529,23 +520,24 @@
         const infoContrato = {
           IdEmpresaDistribuidor: $scope.esDistribuidor ? $scope.SessionCookie.IdEmpresa : $scope.distribuidorSeleccionadoModalImportacion.IdEmpresa,
           IdEmpresaUsuarioFinal: $scope.ufSeleccionadoModalImportacion.IdEmpresa,
-          IdUsuarioContacto: $scope.Contrato.IdUsuarioContacto,
+          IdEsquemaRenovacion: $scope.Contrato.IdEsquemaRenovacion,
+          FechaFin: $scope.Contrato.FechaFin,
           NumeroContrato: $scope.Contrato.NumeroContrato,
           Series: $scope.numerosSerie
         };
-        if (!infoContrato.IdEmpresaDistribuidor || !infoContrato.IdEmpresaUsuarioFinal || !infoContrato.IdUsuarioContacto ||
-          !infoContrato.NumeroContrato || infoContrato.Series.length === 0) {
+        if (!infoContrato.IdEmpresaDistribuidor || !infoContrato.IdEmpresaUsuarioFinal || !infoContrato.IdEsquemaRenovacion ||
+          !infoContrato.NumeroContrato || !infoContrato.FechaFin || infoContrato.Series.length === 0) {
           $scope.ShowToast('Llena todos los campos del formulario', 'info');
           $scope.deshabilitado = false;
         } else {
           ImportarPedidosAutodeskFactory.postContratoOtroMayorista(infoContrato)
           .success(result => {
-            if (result.data.error === 0) {
-              $scope.ShowToast(` ${result.message}.`, 'success');
+            if (result.success === 1) {
+              $scope.ShowToast(`Contrato importado con exito. Pedido insertado:  ${result.data.IdPedido}.`, 'success');
               limipiarModalImportacion();
               $scope.deshabilitado = false;
             } else {
-              $scope.ShowToast(`Hubo un error al tratar de importar el contrato: ${result.data.message}.`, 'danger');
+              $scope.ShowToast(`${result.data.message}`, 'danger');
               $scope.deshabilitado = false;
             }
           })

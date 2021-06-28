@@ -334,10 +334,17 @@
                     <input type="text" placeholder="Escribe el número de contrato" ng-model="Contrato.NumeroContrato"  onKeypress="if (event.keyCode < 48 || event.keyCode > 57) event.returnValue = false;" class="form-control" />
                 </div>
                 <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                    <label>Contacto</label>
-                    <select class="form-control selectOption" ng-model="Contrato.IdUsuarioContacto" ng-options="Contacto.IdUsuario as Contacto.Nombre + ' ('+ Contacto.CorreoElectronico +')' for Contacto in Contactos">
-                        <option ng-selected="true" value="">Selecciona un contacto...</option>
+                    <label>Esquema de renovación</label>
+                    <select class="form-control selectOption" ng-model="Contrato.IdEsquemaRenovacion">
+                        <option ng-selected="true" value="" >Selecciona un esquema...</option>
+                        <option value="2">Anual</option>
+                        <option value="4">2 años</option>
+                        <option value="5">3 años</option>
                     </select>
+                </div>
+                <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <label>Fecha fin del contrato</label>
+                    <input type="date" ng-model="Contrato.FechaFin" class="form-control" />
                 </div>
                 <hr class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
