@@ -512,6 +512,11 @@
         .then(() => $scope.ShowToast('Usuario de compra actualizado.', 'success'))
         .catch(() => $scope.ShowToast('No fue posible actualizar el usuario de compra.', 'danger'));
     };
+
+    $scope.marcarSP = async (idPedido, marcado) => {
+      const { IdPedido } = $scope.PedidoDetalles.find(pedido => pedido.IdPedido === idPedido)
+      await PedidoDetallesFactory.marcarSP(IdPedido, marcado)
+    };
   };
 
   PedidoDetallesReadController.$inject = ['$scope', '$log', '$location', '$cookies', 'PedidoDetallesFactory', 'TipoCambioFactory', 'EmpresasXEmpresasFactory', 'EmpresasFactory', 'PedidosFactory', 'UsuariosFactory', '$routeParams'];
