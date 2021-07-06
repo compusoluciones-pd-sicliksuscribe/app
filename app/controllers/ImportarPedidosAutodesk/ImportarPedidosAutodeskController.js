@@ -471,8 +471,6 @@
       $scope.distribuidorSeleccionadoModalImportacion = $scope.resultadoDistribuidorModalImportacion.find(elemento => elemento.NombreEmpresa === infoDist);
       $scope.ufsListaAuxModalImportacion = $scope.ufsLista.filter(uf => uf.IdEmpresaDistribuidor === $scope.distribuidorSeleccionadoModalImportacion.IdEmpresa);
       $scope.Contrato.Empresauf = '';
-      $scope.Contrato.IdEsquemaRenovacion = '';
-      $scope.Contrato.FechaFin = undefined;
       $scope.ocultarOpcionesDistModalImportacion = true;
     };
 
@@ -496,8 +494,6 @@
       $scope.Contrato.Empresauf = infoUF;
       $scope.ufSeleccionadoModalImportacion = $scope.resultadoUFModalImportacion.find(elemento => elemento.NombreEmpresa === infoUF);
       $scope.ocultarOpcionesUFModalImportacion = true;
-      $scope.Contrato.IdEsquemaRenovacion = '';
-      $scope.Contrato.FechaFin = undefined;
     };
 
     $scope.numerosSerie = [];
@@ -519,7 +515,7 @@
       if ($scope.distribuidorSeleccionadoModalImportacion || $scope.esDistribuidor) {
         const infoContrato = {
           IdEmpresaDistribuidor: $scope.esDistribuidor ? $scope.SessionCookie.IdEmpresa : $scope.distribuidorSeleccionadoModalImportacion.IdEmpresa,
-          IdEmpresaUsuarioFinal: $scope.ufSeleccionadoModalImportacion.IdEmpresa,
+          IdEmpresaUsuarioFinal: $scope.ufSeleccionadoModalImportacion ? $scope.ufSeleccionadoModalImportacion.IdEmpresa : null,
           IdEsquemaRenovacion: $scope.Contrato.IdEsquemaRenovacion,
           FechaFin: $scope.Contrato.FechaFin,
           NumeroContrato: $scope.Contrato.NumeroContrato,
@@ -533,7 +529,7 @@
           ImportarPedidosAutodeskFactory.postContratoOtroMayorista(infoContrato)
           .success(result => {
             if (result.success === 1) {
-              $scope.ShowToast(`Contrato importado con exito. Pedido insertado:  ${result.data.IdPedido}.`, 'success');
+              $scope.ShowToast('Contrato importado con éxito.', 'success');
               limipiarModalImportacion();
               $scope.deshabilitado = false;
             } else {
@@ -549,6 +545,20 @@
       } else {
         $scope.ShowToast('Asegurese de registrar un distribuidor', 'warning');
         $scope.deshabilitado = false;
+      }
+    };
+
+    $scope.estaSeleccionadoDist = () => {
+      if ($scope.distribuidorSeleccionadoModalImportacion) {
+        $scope.distribuidorSeleccionadoModalImportacion = null;
+        $scope.Contrato.Distribuidor = '';
+      }
+    };
+
+    $scope.estaSeleccionadoUF = () => {
+      if ($scope.ufSeleccionadoModalImportacion) {
+        $scope.ufSeleccionadoModalImportacion = null;
+        $scope.Contrato.Empresauf = '';
       }
     };
   };
