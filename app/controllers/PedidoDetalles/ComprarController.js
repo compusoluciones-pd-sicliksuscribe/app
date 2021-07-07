@@ -21,13 +21,20 @@
       IBM: 11
     };
 
-    const llavesOpenPay = {
+    const openpayKeys = {
       id: 'mzdblulczshumdvqbvdl',
       llavePublica: 'pk_fa2f48e0e6f0485c8273c4c0418de7b8',
       llavePrivada: 'sk_8660f55539684dcea40d3b4b44543e06'
-    }
+    };
 
+    const creditCardType = {
+      VisaMc: 1,
+      Amex: 2
+    };
 
+    let selectedCreditCard = 0;
+
+    $scope.meses = [{ nombre: 'Mes', valor: 'default' }, { nombre: 'Enero', valor: '01' }, { nombre: 'Febrero', valor: '02' }, { nombre: 'Marzo', valor: '03' }, { nombre: 'Abril', valor: '04' }, { nombre: 'Mayo', valor: '05' }, { nombre: 'Junio', valor: '06' }, { nombre: 'Julio', valor: '07' }, { nombre: 'Agosto', valor: '08' }, { nombre: 'Septiembre', valor: '09' }, { nombre: 'Octubre', valor: '10' }, { nombre: 'Noviembre', valor: '11' }, { nombre: 'Diciembre', valor: '12' }]
     $scope.tipoMonedaCambio = $cookies.getObject('compararPedidosAnteriores');
 
     const error = function (message) {
@@ -191,16 +198,6 @@
       }
     };
 
-    $scope.init = function () {
-      if ($scope.currentPath === '/Comprar') {
-        $scope.CheckCookie();
-        confirmarPaypal();
-        $scope.prepararPedidos();
-      }
-    };
-
-    $scope.init();
-
     $scope.ActualizarFormaPago = function (IdFormaPago) {
       var empresa = { IdFormaPagoPredilecta: IdFormaPago };
       EmpresasFactory.putEmpresaFormaPago(empresa)
@@ -278,34 +275,51 @@
     };
 
     $scope.PagarTarjeta = function () { // tarjeta de credito
-
       validarOpenPay();
+      setCCDates();
+      getCreditCardType();
       modalTC.style.display = 'block';
-
     };
 
-    //validar llaves para openpay
+    // validar llaves para openpay
     const validarOpenPay = () => {
-      OpenPay.setId('mzdblulczshumdvqbvdl');
-      OpenPay.setApiKey('pk_fa2f48e0e6f0485c8273c4c0418de7b8');
-      var deviceSessionId = OpenPay.deviceData.setup("payment-form", "deviceIdHiddenFieldName");
-    }
-
+      OpenPay.setId(openpayKeys.id);
+      OpenPay.setApiKey(openpayKeys.llavePublica);
+      OpenPay.setSandboxMode(true);
+      var deviceSessionId = OpenPay.deviceData.setup('payment-form', 'deviceIdHiddenFieldName');
+    };
 
     $('#pay-button').on('click', function (event) {
-
       event.preventDefault();
-      $("#pay-button").prop("disabled", true);
+      $('#pay-button').prop('disabled', true);
       OpenPay.token.extractFormAndCreate('payment-form', success_callbak, error_callbak);
-
     });
 
+    const setCCDates = () => {
+      const dateCC = new Date();
+      let yearNow = parseInt(dateCC.getFullYear().toString().substr(-2));
+      let yearMax = yearNow + 6;
+      $scope.anios = [];
+      for (yearNow; yearNow <= yearMax; yearNow++) {
+        $scope.anios.push(yearNow);
+      }
+    };
 
+    const getCreditCardType = () => {
+      PedidoDetallesFactory.getCreditCardType($scope.Distribuidor.IdEmpresa)
+        .then(function (result) {
+          selectedCreditCard = result.data.data[0].TarjetaCredito;
+        })
+        .catch(
+          function (result) {
+            error(result.data);
+          });
+    };
 
     $('#payment-form').validate({
       rules: {
         name: {
-          required: true,
+          required: true
         },
         cardNumber: {
           required: true,
@@ -313,12 +327,12 @@
           maxlength: 19,
           minlength: 16
         },
-        ccexpmonth: { valueNotEquals: "default" },
+        ccexpmonth: { valueNotEquals: 'default' },
         ccexpyear: {
-          valueNotEquals: "default",
+          valueNotEquals: 'default',
           dateValidation: {
             formMonth: $('#ccexpmonth'),
-            formYear: $('#ccexpyear'),
+            formYear: $('#ccexpyear')
           }
         },
         cvv: {
@@ -330,31 +344,30 @@
       },
       messages: {
         name: {
-          required: "Es requerido*",
+          required: 'Es requerido*'
 
         },
         cardNumber: {
-          required: "Es requerido*",
-          number: "Solo se permiten números*",
-          maxlength: "Máximo 19 digitos",
-          minlength: "Mínimo 16 digitos"
+          required: 'Es requerido*',
+          number: 'Solo se permiten números*',
+          maxlength: 'Máximo 19 digitos',
+          minlength: 'Mínimo 16 digitos'
         },
-        ccexpmonth: { valueNotEquals: "Selecciona un mes" },
+        ccexpmonth: { valueNotEquals: 'Selecciona un mes' },
         ccexpyear: {
-          valueNotEquals: "Selecciona un año",
+          valueNotEquals: 'Selecciona un año'
         },
         cvv: {
-          required: "Es requerido*",
-          number: "Solo se permiten números*",
-          maxlength: "Máximo 3 digitos",
-          minlength: "Mínimo 3 digitos",
+          required: 'Es requerido*',
+          number: 'Solo se permiten números*',
+          maxlength: 'Máximo 3 digitos',
+          minlength: 'Mínimo 3 digitos'
         }
       },
       submitHandler: function (form) {
         OpenPay.token.extractFormAndCreate('payment-form', success_callbak, error_callbak);
       }
     });
-
 
     var success_callbak = function (response) {
       var token_id = response.data.id;
@@ -363,13 +376,11 @@
     };
 
     var error_callbak = function (response) {
-      var desc = response.data.description != undefined ?
-        response.data.description : response.message;
-      $("#pay-button").prop("disabled", false);
+      var desc = response.data.description != undefined
+        ? response.data.description : response.message;
+      alert('ERROR [' + response.status + '] ' + desc);
+      $('#pay-button').prop('disabled', false);
     };
-
-
-
 
     const getActualSubdomain = function () {
       let subdomain = window.location.href;
@@ -482,13 +493,23 @@
 
     $scope.cerrarModal = modal => {
       document.getElementById(modal).style.display = 'none';
-    }
+    };
 
     window.onclick = function (event) { // When the user clicks anywhere outside of the modal, close it
       if (event.target === modal) {
         modal.style.display = 'none';
       }
     };
+
+    $scope.init = function () {
+      if ($scope.currentPath === '/Comprar') {
+        $scope.CheckCookie();
+        confirmarPaypal();
+        $scope.prepararPedidos();
+      }
+    };
+
+    $scope.init();
   };
 
   ComprarController.$inject = ['$scope', '$log', '$rootScope', '$location', '$cookies', 'PedidoDetallesFactory', 'TipoCambioFactory', 'PedidosFactory', 'EmpresasFactory', '$route'];

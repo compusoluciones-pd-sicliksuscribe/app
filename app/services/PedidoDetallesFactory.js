@@ -299,8 +299,13 @@
 
     factory.setCreditCardType = (IdEmpresa, cardType) => {
       factory.refreshToken();
-      return $http.post($rootScope.API + 'cardType/'+ IdEmpresa + '/' + cardType);
+      return $http.post($rootScope.API + 'cardType/' + IdEmpresa + '/' + cardType);
     };
+
+    factory.getCreditCardType = IdEmpresa => {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'getCardType/' + IdEmpresa);
+    }
 
     return factory;
   };

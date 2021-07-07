@@ -279,9 +279,9 @@
                                 <div class="nameAndNumber half l">
                                   <select                                   
                                     data-openpay-card="expiration_year"
-                                    id="ccexpyear" name="ccexpyear"
+                                    id="ccexpyear" 
                                  >
-                                  <option ng-repeat="anio in anios" value="{{anio.valor}}">{{anio.nombre}}</option>                                       
+                                  <option ng-repeat="anio in anios" value="{{anio}}">{{anio}}</option>                                       
                                   </select>
                                 </div>
                               </div>
@@ -296,7 +296,7 @@
                               <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
                                 <input
                                   type="text"                                 
-                                  placeholder="3 dígitos"                                  
+                                  placeholder="3 dígitos" autocomplete="off"                                 
                                   data-openpay-card="cvv2"
                                   id="cvv" name="cvv"
                                 />
