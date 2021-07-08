@@ -34,7 +34,7 @@
 
     let selectedCreditCard = 0;
 
-    $scope.meses = [{ nombre: 'Mes', valor: 'default' }, { nombre: 'Enero', valor: '01' }, { nombre: 'Febrero', valor: '02' }, { nombre: 'Marzo', valor: '03' }, { nombre: 'Abril', valor: '04' }, { nombre: 'Mayo', valor: '05' }, { nombre: 'Junio', valor: '06' }, { nombre: 'Julio', valor: '07' }, { nombre: 'Agosto', valor: '08' }, { nombre: 'Septiembre', valor: '09' }, { nombre: 'Octubre', valor: '10' }, { nombre: 'Noviembre', valor: '11' }, { nombre: 'Diciembre', valor: '12' }]
+    $scope.meses = [{ nombre: 'Mes', valor: 'default' }, { nombre: 'Enero', valor: '01' }, { nombre: 'Febrero', valor: '02' }, { nombre: 'Marzo', valor: '03' }, { nombre: 'Abril', valor: '04' }, { nombre: 'Mayo', valor: '05' }, { nombre: 'Junio', valor: '06' }, { nombre: 'Julio', valor: '07' }, { nombre: 'Agosto', valor: '08' }, { nombre: 'Septiembre', valor: '09' }, { nombre: 'Octubre', valor: '10' }, { nombre: 'Noviembre', valor: '11' }, { nombre: 'Diciembre', valor: '12' }];
     $scope.tipoMonedaCambio = $cookies.getObject('compararPedidosAnteriores');
 
     const error = function (message) {
@@ -286,7 +286,7 @@
       OpenPay.setId(openpayKeys.id);
       OpenPay.setApiKey(openpayKeys.llavePublica);
       OpenPay.setSandboxMode(true);
-      var deviceSessionId = OpenPay.deviceData.setup('payment-form', 'deviceIdHiddenFieldName');
+      const deviceSessionId = OpenPay.deviceData.setup('payment-form', 'deviceIdHiddenFieldName');
     };
 
     $('#pay-button').on('click', function (event) {
@@ -369,16 +369,16 @@
       }
     });
 
-    var success_callbak = function (response) {
-      var token_id = response.data.id;
+    const success_callbak = function (response) {
+      const token_id = response.data.id;
       $('#token_id').val(token_id);
       $('#payment-form').submit();
     };
 
-    var error_callbak = function (response) {
-      var desc = response.data.description != undefined
+    const error_callbak = function (response) {
+      const desc = response.data.description != undefined
         ? response.data.description : response.message;
-      alert('ERROR [' + response.status + '] ' + desc);
+      $scope.ShowToast('ERROR [' + response.status + '] ' + desc);
       $('#pay-button').prop('disabled', false);
     };
 
