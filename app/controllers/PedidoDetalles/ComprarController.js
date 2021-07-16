@@ -275,6 +275,15 @@
     };
 
     $scope.PagarTarjeta = function () { // tarjeta de credito
+      PedidoDetallesFactory.getPrepararTarjetaCredito()
+        .success(function (resultTC) {
+          $scope.amount = resultTC.data[0].total;
+          $scope.currency = resultTC.data[0].moneda;
+        })
+        .error(function (data, status, headers, config) {
+          const error = !data.message ? 'Ocurrió un error al procesar la solicitud. Intentalo de nuevo.' : data.message;
+          $scope.ShowToast(error, 'danger');
+        });
       validarOpenPay();
       setCCDates();
       getCreditCardType();
@@ -371,15 +380,27 @@
 
     const success_callbak = function (response) {
       const token_id = response.data.id;
+      console.log(response.data.id);
       $('#token_id').val(token_id);
-      $('#payment-form').submit();
+      // $('#payment-form').submit();
+      createCustomer()
+      .then(res => generarPago(res));
     };
 
     const error_callbak = function (response) {
+      console.log(response.data.description);
       const desc = response.data.description != undefined
         ? response.data.description : response.message;
       $scope.ShowToast('ERROR [' + response.status + '] ' + desc);
       $('#pay-button').prop('disabled', false);
+    };
+
+    const createCustomer = () => {
+      return console.log('customer creado!');
+    };
+
+    const generarPago = () => {
+      return console.log('pago generado!')
     };
 
     const getActualSubdomain = function () {
