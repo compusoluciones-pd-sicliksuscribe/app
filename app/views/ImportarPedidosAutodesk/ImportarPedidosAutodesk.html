@@ -20,6 +20,8 @@
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 alert alert-info" ng-show = "esDistribuidor">
             <li type="disc">Aquí puedes consultar la información de tus contratos e importarlos a click suscribe para su procesamiento. La consulta se hace por medio de la fecha fin del contrato que deseas importar.</li>
             <li type="disc">Si el usuario final relacionado a determinado contrato no está registrado en click aún, puedes registrarlo haciendo clic en el botón <b>Nuevo cliente</b>.</li>
+            <hr style="margin: 0.7em;">
+            <li type="disc">Puedes importar contratos de otros mayoristas. Presiona el botón <b>Desde otro mayorista</b> y llena el formulario.</li>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <h4 style="float:left;">Datos de consulta para obtener información </h4><br>
@@ -45,7 +47,7 @@
             </button>
         </div>
         <div style="float: right; margin-right: 0; margin-top: .8em;">
-            <button type="submit" style="margin-bottom: .8em;"  data-toggle="modal" data-target="#desdeOtroMayorista" class="btn btn-success " style="background: !important">
+            <button type="submit" style="margin-bottom: .8em;"  data-toggle="modal" data-target="#desdeOtroMayorista" ng-click="importacionDistribuidor()" class="btn btn-success " style="background: !important">
                 <span class="glyphicon glyphicon glyphicon-import"></span>
                 &nbsp;Desde otro mayorista
             </button>
@@ -316,14 +318,14 @@
                     <label>Distribuidor</label>
                     <input type = "text" placeholder="Escribe el nombre del distribuidor" class="form-control" ng-model="Contrato.Distribuidor" ng-keydown=" estaSeleccionadoDist();" ng-keyup="completarDistModalImportacion(Contrato.Distribuidor);" required/>
                     <ul class="list-group col-xs-12 col-sm-12 col-md-12 col-lg-12 options-autocomplete" ng-model = "ocultarOpcionesDistModalImportacion" ng-hide = "ocultarOpcionesDistModalImportacion">
-                    <li class="list-group-item item-autocomplete" ng-repeat = "infoDistModalImportacion in filtroDistribuidorModalImportacion track by $index" ng-if="$index < 12" ng-click = "llenarTextBoxDistModalImportacion(infoDistModalImportacion)">{{infoDistModalImportacion}}</li>
+                    <li class="list-group-item item-autocomplete" ng-repeat = "infoDistModalImportacion in filtroDistribuidorModalImportacion track by $index" ng-if="$index < 8" ng-click = "llenarTextBoxDistModalImportacion(infoDistModalImportacion)">{{infoDistModalImportacion}}</li>
                     </ul>
                 </div>
                 <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
                     <label>Usuario final</label>
                     <Input type="text" placeholder="Escribe el nombre del usuario final" class="form-control" ng-model="Contrato.Empresauf" ng-keydown=" estaSeleccionadoUF();" ng-keyup="completarUFModalImportacion(Contrato.Empresauf)" required>
                         <ul class="list-group col-xs-12 col-sm-12 col-md-12 col-lg-12  options-autocomplete" ng-model = "ocultarOpcionesUFModalImportacion" ng-hide = "ocultarOpcionesUFModalImportacion">
-                            <li class="list-group-item item-autocomplete" ng-repeat = "infoUFModalImportacion in filtroUsuarioFinalModalImportacion track by $index" ng-if="$index < 12" ng-click = "llenarTextBoxUFModalImportacion(infoUFModalImportacion)">{{infoUFModalImportacion}}</li>
+                            <li class="list-group-item item-autocomplete" ng-repeat = "infoUFModalImportacion in filtroUsuarioFinalModalImportacion track by $index" ng-if="$index < 8" ng-click = "llenarTextBoxUFModalImportacion(infoUFModalImportacion)">{{infoUFModalImportacion}}</li>
                         </ul>
                 </div>
                 <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
@@ -359,8 +361,9 @@
                 <div style="text-align: center;"><label>Listado de series del contrato y su cantidad</label></div>
                 <div class="" style="margin-top: 0%;" ng-repeat="serie in numerosSerie track by $index">
                     <button style="float: right;" type="button" class="close" ng-click="quitarSerie($index);" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <p><span class="badge badge-info" style="margin-right: 1em;">{{serie.Cantidad}}</span>
-                      {{serie.NumeroSerie}}</p>
+                    <p><span class="badge badge-info" style="margin-right: 1em; padding-top: .4em;">{{serie.Cantidad}}</span>
+                    <b>{{serie.NumeroSerie}}</b></p>
+                    <hr style="margin-bottom: 1em; margin-top: .4em;">
                 </div>
                 </div>    
             </div>

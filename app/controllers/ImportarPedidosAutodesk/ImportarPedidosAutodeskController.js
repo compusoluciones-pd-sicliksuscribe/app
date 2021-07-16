@@ -451,7 +451,6 @@
         $scope.deshabilitado = false;
       }
     };
-
     $scope.completarDistModalImportacion = (cadenaDist = '') => {
       let resultado = [];
       $scope.resultadoDistribuidorModalImportacion = [];
@@ -464,6 +463,10 @@
         if (cadenaDist === '') $scope.ocultarOpcionesDistModalImportacion = true;
       });
       $scope.filtroDistribuidorModalImportacion = resultado;
+    };
+
+    $scope.importacionDistribuidor = () => {
+      if ($scope.SessionCookie.IdTipoAcceso === 2) $scope.ufsListaAuxModalImportacion = $scope.ufsLista.filter(uf => uf.IdEmpresaDistribuidor === $scope.SessionCookie.IdEmpresa);
     };
 
     $scope.llenarTextBoxDistModalImportacion = infoDist => {
@@ -500,10 +503,12 @@
 
     $scope.agregarSerie = (numeroSerie, cantidad) => {
       if (numeroSerie && cantidad) {
-        $scope.numerosSerie.push({NumeroSerie: numeroSerie, Cantidad: cantidad});
-        $scope.numeroSerie = '';
-        $scope.cantidad = '';
-      }
+        if (/[0-9]{3}-[0-9]{8}/g.test(numeroSerie)) {
+          $scope.numerosSerie.push({NumeroSerie: numeroSerie, Cantidad: cantidad});
+          $scope.numeroSerie = '';
+          $scope.cantidad = '';
+        } else $scope.ShowToast('El formato del número del serie es incorrecto. Ejemplo correcto: 721-24135768', 'info');
+      } else $scope.ShowToast('Ingresa número de serie y cantidad', 'info');
     };
 
     $scope.quitarSerie = index => {
