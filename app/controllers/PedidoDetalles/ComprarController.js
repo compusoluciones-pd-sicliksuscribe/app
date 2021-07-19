@@ -383,8 +383,8 @@
       console.log(response.data.id);
       $('#token_id').val(token_id);
       // $('#payment-form').submit();
-      createCustomer()
-      .then(res => generarPago(res));
+      createCustomer();
+      generarPago();
     };
 
     const error_callbak = function (response) {
@@ -396,11 +396,20 @@
     };
 
     const createCustomer = () => {
+      PedidoDetallesFactory.getOpenpayClient('Params')
+        .then(function (result) {
+          console.log(result.data);
+        })
+        .catch(
+          function (result) {
+            error(result.data);
+          });
       return console.log('customer creado!');
     };
 
     const generarPago = () => {
-      return console.log('pago generado!')
+      // factory.getOpenpayClient
+      return console.log('pago generado!');
     };
 
     const getActualSubdomain = function () {

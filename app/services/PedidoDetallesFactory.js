@@ -305,7 +305,19 @@
     factory.getCreditCardType = IdEmpresa => {
       factory.refreshToken();
       return $http.post($rootScope.API + 'getCardType/' + IdEmpresa);
-    }
+    };
+
+    factory.getOpenpayClient = Params => {
+      factory.refreshToken();
+      // lambda micro servicio
+      return $http.post($rootScope.API + 'openpayLambda/' + Params);
+    };
+
+    // factory.getOpenpayClient = Params => {
+    //   factory.refreshToken();
+    //   // lambda micro servicio
+    //   return $http.post($rootScope.API + 'getOpenpayClient/' + Params);
+    // };
 
     return factory;
   };
