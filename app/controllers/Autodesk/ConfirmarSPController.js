@@ -42,7 +42,7 @@
       }
       detalle.precioDescuento = calcularPrecioDescuento(moneda, tipoCambio, precio, descuento, descuentoSp);
       detalle.subtotal = calcularSubtotal(moneda, tipoCambio, precio, descuento, descuentoSp, cantidad);
-      SpecialPetitionFactory.updateSubtotal(detalle.IdPedidoDetalle, detalle.Descuento, detalle.DescuentoSP, (moneda === 'Pesos' ? detalle.subtotal / tipoCambio : detalle.subtotal));
+      SpecialPetitionFactory.updateSubtotal(detalle.IdPedidoDetalle, detalle.Descuento, detalle.DescuentoSP, ((moneda === 'Pesos' ? detalle.subtotal / tipoCambio : detalle.subtotal) / cantidad));
     };
 
     $scope.confirmarSP = (idPedido, codigo, csn) => {
