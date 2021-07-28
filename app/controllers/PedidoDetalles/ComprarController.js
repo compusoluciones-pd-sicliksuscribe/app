@@ -33,7 +33,8 @@
     };
 
     let selectedCreditCard = 0;
-
+    let deviceSessionId = '';
+    let token_id = '';
     $scope.meses = [{ nombre: 'Mes', valor: 'default' }, { nombre: 'Enero', valor: '01' }, { nombre: 'Febrero', valor: '02' }, { nombre: 'Marzo', valor: '03' }, { nombre: 'Abril', valor: '04' }, { nombre: 'Mayo', valor: '05' }, { nombre: 'Junio', valor: '06' }, { nombre: 'Julio', valor: '07' }, { nombre: 'Agosto', valor: '08' }, { nombre: 'Septiembre', valor: '09' }, { nombre: 'Octubre', valor: '10' }, { nombre: 'Noviembre', valor: '11' }, { nombre: 'Diciembre', valor: '12' }];
     $scope.tipoMonedaCambio = $cookies.getObject('compararPedidosAnteriores');
 
@@ -295,12 +296,14 @@
       OpenPay.setId(openpayKeys.id);
       OpenPay.setApiKey(openpayKeys.llavePublica);
       OpenPay.setSandboxMode(true);
-      const deviceSessionId = OpenPay.deviceData.setup('payment-form', 'deviceIdHiddenFieldName');
+      deviceSessionId = OpenPay.deviceData.setup('payment-form', 'deviceIdHiddenFieldName');
+      $('#device_session_id').val(deviceSessionId);
     };
 
     $('#pay-button').on('click', function (event) {
       event.preventDefault();
-      $('#pay-button').prop('disabled', true);
+      // $('#pay-button').prop('disabled', true);
+
       OpenPay.token.extractFormAndCreate('payment-form', success_callbak, error_callbak);
     });
 
@@ -379,12 +382,36 @@
     });
 
     const success_callbak = function (response) {
-      const token_id = response.data.id;
-      console.log(response.data.id);
+      token_id = response.data.id;
+      console.log('token id: ', response.data.id);
       $('#token_id').val(token_id);
+      testPayment(token_id);
       // $('#payment-form').submit();
-      createCustomer();
+      // createCustomer();
       generarPago();
+    };
+
+    // Test payment .testPurchase
+    const testPayment = (tokenCard) => {
+
+      const charges = {
+        token_id: token_id,
+        device_session_id: deviceSessionId,
+        name: $scope.name,
+        cardNumber: $scope.cardNumber,
+        amount: $scope.amount
+      };
+      console.log(charges);
+
+      PedidoDetallesFactory.testPurchase(charges)
+        .then(function (result) {
+          console.log(result.data);
+        })
+        .catch(
+          function (result) {
+            error(result.data);
+          });
+      return console.log('customer creado!');
     };
 
     const error_callbak = function (response) {
@@ -392,11 +419,11 @@
       const desc = response.data.description != undefined
         ? response.data.description : response.message;
       $scope.ShowToast('ERROR [' + response.status + '] ' + desc);
-      $('#pay-button').prop('disabled', false);
+      // $('#pay-button').prop('disabled', false);
     };
 
     const createCustomer = () => {
-      PedidoDetallesFactory.getOpenpayClient('Params')
+      PedidoDetallesFactory.getOpenpayCustomer($scope.Distribuidor.IdEmpresa)
         .then(function (result) {
           console.log(result.data);
         })

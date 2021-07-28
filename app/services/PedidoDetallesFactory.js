@@ -307,17 +307,16 @@
       return $http.post($rootScope.API + 'getCardType/' + IdEmpresa);
     };
 
-    factory.getOpenpayClient = Params => {
+    factory.getOpenpayCustomer = IdEmpresa => {
       factory.refreshToken();
-      // lambda micro servicio
-      return $http.post($rootScope.API + 'openpayLambda/' + Params);
+      return $http.post($rootScope.API + 'openpayCustomer/' + IdEmpresa);
     };
 
-    // factory.getOpenpayClient = Params => {
-    //   factory.refreshToken();
-    //   // lambda micro servicio
-    //   return $http.post($rootScope.API + 'getOpenpayClient/' + Params);
-    // };
+    // Prueba de pago con openpay
+    factory.testPurchase = charges => {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'openpayCustomer/testPayment', { charges });
+    };
 
     return factory;
   };

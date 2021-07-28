@@ -241,10 +241,9 @@
                             <label class="paddingTop">Nombre del titular</label>
                             <input
                               type="text"
-                            
                               placeholder="Como aparece en la tarjeta"
                               data-openpay-card="holder_name"
-                              id="name" name="name"
+                              id="name" name="name" ng-model="name"
                             />
                           </div>
   
@@ -252,8 +251,8 @@
                             <label class="paddingTop">Número de tarjeta</label>
                             <input
                               type="text"
-                              id="cardNumber" name="cardNumber"                              
-                              data-openpay-card="card_number"
+                              id="cardNumber" name="cardNumber" value="4242424242424242"                             
+                              data-openpay-card="card_number" ng-model="cardNumber"
                             /><a ng-show="errorCard">{{errorCardMessage}}</a>
                           </div>
                         </div>
