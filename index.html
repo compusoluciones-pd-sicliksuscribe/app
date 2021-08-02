@@ -470,7 +470,7 @@
 				<div class=""><img src="images/ripple.svg" /></div>
 			</div>
 
-			<div data-ng-view autoscroll="true" class="slide-animation" style="margin-top:180px;"></div>
+			<div data-ng-view autoscroll="true" class="slide-animation" style="margin-top:180px; margin-bottom: 200px;"></div>
 
 		</div>
 		<br><br><br><br><br>
@@ -503,33 +503,60 @@
 				</div>
 			</div>
 		</div>
-		
-		<div class="mycolumn" ng-hide="selectMenu()">
-			<div style="background:{{currentDistribuidor.PrimaryColor}}" class="footer navbar-static-bottom">
-				<div class="container-fluid">
-					<div class="form-group row">
-						<div class="form-group col-xs-12 col-sm-12 col-md-8 col-lg-8">
-							<div style="width:100%; color:#fff; font-size:12px; text-align:left!important; cursor:default;" class="pull-left">
-								<label></label>
-								<img class="logoFooter" src="images/logoFooter.svg" width="150px;" style="display:inline-block; vertical-align:bottom;">
-								<p class="textFooter" style="display:inline-block; margin:0; vertical-align:bottom; margin-left:35px;">&nbsp; Todos los derechos reservados CompuSoluciones 2020.</p>
-							</div>
-						</div>
 
-						<div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4  hidden-xs hidden-sm pull-right" style="color:#fff;">
-							<div class="pull-right">
-								<label></label>
-								<p>
-									<a style="color:#fff" href="#/Version">Versiones</a>
-									&nbsp; / &nbsp;
-									<a style="color:#fff;" href="http://www.compusoluciones.com/aviso-de-privacidad/">Aviso de privacidad</a>
-									&nbsp; /&nbsp;
-									<a style="color:#fff;" href="https://www.compusoluciones.com/contacto/">Queremos Escucharte</a>
-									&nbsp; /&nbsp;
-									<a style="color:#fff;" href="https://www.siclik.mx/">siclik CompuSoluciones </a>
-								</p>
+		<div class="mycolumn" ng-hide="selectMenu()">
+			<div style="background:{{currentDistribuidor.PrimaryColor}}" class="footer ">
+				<div class="container-fluid">
+					<div class="form-group row" style="color:#fff; text-align: justify; margin-bottom: -20px;">
+						<div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3" style="text-align: right;">
+							<a style="color:#fff;" href="https://www.siclik.mx/">SICLIK COMPUSOLUCIONES</a><br><br>
+							<a style="color:#fff;" href="https://www.compusoluciones.com/contacto/">QUEREMOS ESCUCHARTE</a><br><br>
+							<a style="color:#fff" href="#/Version">VERSIONES</a>
+						</div>
+						<div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+							<a style="color:#fff;" href="http://www.compusoluciones.com/aviso-de-privacidad/">AVISO DE PRIVACIDAD</a><br><br>
+							<a style="color: #fff;" href="https://s3.amazonaws.com/marketplace.compusoluciones.com/TerminosCondiciones.pdf">TÉRMINOS Y CONDICIONES</a><br><br>
+							<a style="color: #fff;" href="">POLITICA DE CANCELACIONES</a><br><br>
+							<a style="color:#fff;" href="https://www.gob.mx/profeco/">PROFECO</a><br><br>
+							<a style="color:#fff;" href="https://www.condusef.gob.mx/">CONDUSEF</a><br><br>
+
+
+						</div>
+						<div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3" style="align-content: center;">									
+							<div class="form-group row">
+								GUADALAJARA 
+								<br>Av. Mariano Otero 1105, Rinconada del Bosque, 44530
+								<br>Tel. +52 33-5000-7777
+							</div>
+							<div class="form-group row">
+								CDMX 
+								<br>Pennsylvania 4, Nápoles, 03810
+								<br>Tel. +52 55-5000-7777
+							</div>
+							<div class="form-group row">
+								MONTERREY 
+								<br>Miguel Hidalgo 2404, Col. Centro Monterrey, 64000 
+								<br>We Work Av. Constitución 2050 - Piso 38
 							</div>
 						</div>
+						<div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3" style="align-content: center;">									
+							<div class="form-group row" style="align-content: center;">									
+								<a class="fa fa-facebook-square fa-3x" style="color: #fff; margin: 3px;" href="https://www.facebook.com/CompuSolucionesyAsociados/"></a>
+								<a class="iconsFooter fa fa-twitter-square fa-3x" style="color: #fff; margin: 4px;" href="https://www.twitter.com/CompuSoluciones/"></a>
+								<a class="iconsFooter fa fa-linkedin-square fa-3x" style="color: #fff; margin: 4px;" href="https://www.linkedin.com/company/compusoluciones/"></a>
+								<a class="iconsFooter fa fa-youtube-play fa-3x" style="color: #fff; margin: 4px;" href="https://www.youtube.com/user/CanalCompuSoluciones/"></a>
+							</div>
+							<div class="form-group row">
+								Horario de atención<br>
+								L-V 8:30-14:00 y 15:00-18:00 hrs.
+							</div>
+						</div>
+					</div>
+					<div class="form-group row" style="color:#fff; text-align: center; ">
+							<img class="logoFooter" src="images/payments.png" style="display: inline-block; height: 60px; margin-top: -20px;">
+					</div>
+					<div class="form-group row" style=" text-align: center;">
+									<a style="color:#fff; text-align: center;">Todos los derechos reservados CompuSoluciones 2021</a>
 					</div>
 				</div>
 			</div>	
@@ -695,6 +722,10 @@
 	<script src="scripts/tinycolor2-min.js"></script>
 	<script src="scripts/angularjs-color-picker.min.js"></script>
 	<script src="scripts/apexjs.js"></script>
+
+	<script src="node_modules/pdfjs-dist/build/pdf.js"></script>
+	<script src="node_modules/angular/angular.js"></script>
+	<script src="node_modules/angularjs-pdf-viewer/dist/angular-pdf-viewer.min.js"></script>
 
 	<!-- Tarjeta Credito -->
 	<script src="https://secure.na.tnspayments.com/checkout/version/44/checkout.js" data-error="errorCallback" data-complete="completeCallback"

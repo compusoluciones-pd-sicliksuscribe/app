@@ -1,5 +1,5 @@
 (function () {
-  var app = angular.module('marketplace', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngTouch', 'angular-jwt', 'angular-parallax', 'ui.bootstrap', 'angular.filter', 'angularFileUpload', 'ngToast', 'ui.mask', 'directives.loading', 'bcherny/formatAsCurrency', 'ng.deviceDetector', 'color.picker', 'ngTextTruncate']);
+  var app = angular.module('marketplace', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngTouch', 'angular-jwt', 'angular-parallax', 'ui.bootstrap', 'angular.filter', 'angularFileUpload', 'ngToast', 'ui.mask', 'directives.loading', 'bcherny/formatAsCurrency', 'ng.deviceDetector', 'color.picker', 'ngTextTruncate', 'pdf']);
   app.config(function ($routeProvider) {
     $routeProvider
 
