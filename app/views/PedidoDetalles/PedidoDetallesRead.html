@@ -279,10 +279,10 @@
                 <br><br><br><br><br>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal" style="padding: .8em 1.4em" ng-click="cerrarModal('inicioFuturoModal')" ng-disabled="procesandoExtension">Cancelar</button> 
-                    <button type="button" class="btn btn-info" data-dismiss="modal" ng-click="inicioFuturo(Contrato.FechaInicio)" ng-disabled="procesandoExtension" style="padding: .8em 1.4em">Aceptar</button>
+                    <button type="button" class="btn btn-info" data-dismiss="modal" ng-click="inicioFuturo(Contrato.FechaInicio); cerrarModal('inicioFuturoModal')" ng-disabled="procesandoExtension" style="padding: .8em 1.4em">Aceptar</button>
                 </div>
             </div>
         </div>
     </div>
-    
+
 </div>

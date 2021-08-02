@@ -530,9 +530,14 @@
 
     $scope.inicioFuturo = async fechaInicio => {
       PedidoDetallesFactory.actualizarFechaInicio($scope.idContratoInicioFuturo, fechaInicio, $scope.idEsquemaRenovacion)
-        .then(result => {
-          result.data.success ? $scope.ShowToast( result.data.message, 'success')
-          : $scope.ShowToast(result.data.message, 'danger');
+        .then(async result => {
+          if (result.data.success) {
+            $scope.ShowToast( result.data.message, 'success');
+            $scope.Contrato.FechaInicio = undefined;
+            await getOrderDetails();
+          } else {
+            $scope.ShowToast(result.data.message, 'danger');
+          }
         })
         .catch(() => $scope.ShowToast(result.data.message, 'danger'));
     };
