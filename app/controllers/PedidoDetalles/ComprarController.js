@@ -401,11 +401,11 @@
         cardNumber: $scope.cardNumber,
         amount: $scope.amount
       };
-      console.log(charges);
 
       PedidoDetallesFactory.testPurchase(charges)
         .then(function (result) {
           console.log(result.data);
+          window.location.href = result.data.payment_method.url;
         })
         .catch(
           function (result) {
