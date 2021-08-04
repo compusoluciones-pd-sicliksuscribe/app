@@ -118,7 +118,7 @@
                         <label>Marca de los productos:</label> {{ pedido.NombreFabricante }} <br>
                         <label ng-if="pedido.IdFabricante === 10">Fecha inicio : {{ pedido.FechaInicio }} </label>
                         <label ng-if="pedido.IdFabricante !== 10">Duración del periodo: del {{ pedido.FechaInicio }} al {{ pedido.FechaFin | date:'yyyy-MM-dd'}}</label>
-                        <br><div ng-if="pedido.IdAccionAutodesk === 1" style="padding-bottom: .4em;"><a tooltip="Se puede definir una fecha de inicio del periodo de hasta un mes en el futuro." ng-click="abrirModal('inicioFuturoModal', pedido.IdContrato, pedido.IdEsquemaRenovacion)"><span class="glyphicon glyphicon-calendar"> </span> Definir fecha de inicio futuro</a></div>
+                        <br><div ng-if="pedido.IdAccionAutodesk === 1" style="padding-bottom: .4em;"><a tooltip="Se puede definir una fecha de inicio del contrato de hasta un mes en el futuro." ng-click="abrirModal('inicioFuturoModal', pedido.IdContrato, pedido.IdEsquemaRenovacion)"><span class="glyphicon glyphicon-calendar"> </span> Fecha de inicio futuro</a></div>
                         <label>Renovación del periodo:</label> {{ pedido.NombreEsquemaRenovacion }}
                         <div ng-if="pedido.IdFabricante === 2">
                             <label>Contrato: </label> {{ pedido.ContratoBaseAutodesk || 'Nuevo' }} <br>
@@ -269,7 +269,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cerrarModal('inicioFuturoModal')"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title"><b>Fecha de inicio en el futuro</b></h4>
+                    <h4 class="modal-title"><b>Fecha de inicio futuro</b></h4>
                 </div>
                 <div class="modal-body">
                     <div class="form-group has-feedback col-xs-12 col-sm-12 col-md-12 col-lg-12">
