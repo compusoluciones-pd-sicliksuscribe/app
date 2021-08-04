@@ -1,0 +1,17 @@
+.options-autocomplete
+{
+    position:absolute; 
+    z-index: 1; 
+    padding-right:2em; 
+    cursor: default
+}
+
+.item-autocomplete
+{
+    background-color:white;
+}
+.item-autocomplete:hover
+{
+    background-color:rgb(30, 144, 255);
+    color: white;
+}

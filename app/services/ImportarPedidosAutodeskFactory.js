@@ -56,6 +56,11 @@
       return $http.get($rootScope.API + 'autodesk/get-csn/dist/' + IdEmpresa);
     };
 
+    factory.postContratoOtroMayorista = infoContrato => {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'autodesk/otherWholesaler', infoContrato);
+    };
+
     return factory;
   };
   ImportarPedidosAutodeskFactory.$inject = ['$http', '$cookies', '$rootScope'];

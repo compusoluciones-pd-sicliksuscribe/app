@@ -75,11 +75,13 @@
     const renewContract = function (contractData) {
       PedidosFactory.renewContract(contractData)
         .then(result => {
-          $scope.ShowToast(result.data.message, 'success');
-          $scope.ActualizarMenu();
-          $scope.addPulseCart();
-          setTimeout($scope.removePulseCart, 9000);
-          $location.path('/Carrito');
+          if(result.data.success) {
+            $scope.ShowToast(result.data.message, 'success');
+            $scope.ActualizarMenu();
+            $scope.addPulseCart();
+            setTimeout($scope.removePulseCart, 9000);
+            $location.path('/Carrito');
+          } else  $scope.ShowToast(result.data.message, 'danger');
         })
         .catch(result => {
           $scope.ShowToast(result.data.message, 'danger');
@@ -334,10 +336,6 @@
       pedido.Detalles[0].PorCancelar = 1;
       PedidoDetallesFactory.putPedidoDetalle(params)
         .then(async result => {
-          await PedidoDetallesFactory.postPartitionFlag(pedido)
-          .catch(function (result) {
-            $scope.ShowToast(result.data.message, 'danger');
-          });
           detalles.PorCancelar = 1;
           detalles.MostrarCantidad = 0;
           $scope.ShowToast(result.data.message, 'success');
