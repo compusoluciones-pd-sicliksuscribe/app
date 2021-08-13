@@ -35,7 +35,7 @@
     let selectedCreditCard = 0;
     let deviceSessionId = '';
     let token_id = '';
-    $scope.meses = [{ nombre: 'Mes', valor: 'default' }, { nombre: 'Enero', valor: '01' }, { nombre: 'Febrero', valor: '02' }, { nombre: 'Marzo', valor: '03' }, { nombre: 'Abril', valor: '04' }, { nombre: 'Mayo', valor: '05' }, { nombre: 'Junio', valor: '06' }, { nombre: 'Julio', valor: '07' }, { nombre: 'Agosto', valor: '08' }, { nombre: 'Septiembre', valor: '09' }, { nombre: 'Octubre', valor: '10' }, { nombre: 'Noviembre', valor: '11' }, { nombre: 'Diciembre', valor: '12' }];
+    $scope.meses = [{ nombre: 'Enero', valor: '01' }, { nombre: 'Febrero', valor: '02' }, { nombre: 'Marzo', valor: '03' }, { nombre: 'Abril', valor: '04' }, { nombre: 'Mayo', valor: '05' }, { nombre: 'Junio', valor: '06' }, { nombre: 'Julio', valor: '07' }, { nombre: 'Agosto', valor: '08' }, { nombre: 'Septiembre', valor: '09' }, { nombre: 'Octubre', valor: '10' }, { nombre: 'Noviembre', valor: '11' }, { nombre: 'Diciembre', valor: '12' }];
     $scope.tipoMonedaCambio = $cookies.getObject('compararPedidosAnteriores');
 
     const error = function (message) {
@@ -339,7 +339,6 @@
           maxlength: 19,
           minlength: 16
         },
-        ccexpmonth: { valueNotEquals: 'default' },
         ccexpyear: {
           valueNotEquals: 'default',
           dateValidation: {
@@ -365,7 +364,7 @@
           maxlength: 'Máximo 19 digitos',
           minlength: 'Mínimo 16 digitos'
         },
-        ccexpmonth: { valueNotEquals: 'Selecciona un mes' },
+        ccexpmonth: { valueNotEquals: 'Mes' },
         ccexpyear: {
           valueNotEquals: 'Selecciona un año'
         },
@@ -393,19 +392,32 @@
 
     // Test payment .testPurchase
     const testPayment = (tokenCard) => {
-
       const charges = {
-        token_id: token_id,
-        device_session_id: deviceSessionId,
-        name: $scope.name,
-        cardNumber: $scope.cardNumber,
-        amount: $scope.amount
+        source_id: token_id, // Token de la tarjeta
+        method: 'card',
+        amount: 2,
+        currency: $scope.currency, // MXN o USD
+        description: 'Desc',
+        order_id: Math.floor(Math.random() * 1000) + 1,
+        device_session_id: deviceSessionId, // Llave antifraude
+        customer: {
+          external_id: $scope.Distribuidor.IdEmpresa + Math.floor(Math.random() * 1000) + 1,
+          name: $scope.Distribuidor.NombreEmpresa, // *Requerido
+          last_name: '', // -Opcional
+          email: 'jesus.emmanuel9306@gmail.com', // *Requerido
+          phone_number: $scope.Distribuidor.TelefonoContacto
+          // address: $scope.Distribuidor.Direccion
+        },
+        use_3d_secure: 'true',
+        redirect_url: 'http://localhost:5000/#/',
+        send_email: true,
+        confirm: true
       };
 
       PedidoDetallesFactory.testPurchase(charges)
         .then(function (result) {
           console.log(result.data);
-          window.location.href = result.data.payment_method.url;
+          // window.location.href = result.data.payment_method.url;
         })
         .catch(
           function (result) {
@@ -415,7 +427,7 @@
     };
 
     const error_callbak = function (response) {
-      console.log(response.data.description);
+      $scope.ShowToastg(response.data.description);
       const desc = response.data.description != undefined
         ? response.data.description : response.message;
       $scope.ShowToast('ERROR [' + response.status + '] ' + desc);
