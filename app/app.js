@@ -631,6 +631,11 @@
         }}
       })
 
+      .when('/Politicas/:politic', {
+        controller: 'PoliticasReadController',
+        templateUrl: 'app/views/Usuarios/PoliticasRead.html'
+      })
+
       .otherwise({ redirectTo: '/404' });
   });
 }());

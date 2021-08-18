@@ -515,8 +515,8 @@
 						</div>
 						<div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
 							<a style="color:#fff;" href="http://www.compusoluciones.com/aviso-de-privacidad/">AVISO DE PRIVACIDAD</a><br><br>
-							<a style="color: #fff;" href="https://s3.amazonaws.com/marketplace.compusoluciones.com/TerminosCondiciones.pdf">TÉRMINOS Y CONDICIONES</a><br><br>
-							<a style="color: #fff;" href="">POLITICA DE CANCELACIONES</a><br><br>
+							<a style="color: #fff;" ng-click="goToPage('Politicas/TyC')">TÉRMINOS Y CONDICIONES</a><br><br>
+							<a style="color: #fff;" ng-click="goToPage('Politicas/Cancelaciones')" >POLITICA DE CANCELACIONES</a><br><br>
 							<a style="color:#fff;" href="https://www.gob.mx/profeco/">PROFECO</a><br><br>
 							<a style="color:#fff;" href="https://www.condusef.gob.mx/">CONDUSEF</a><br><br>
 
@@ -717,6 +717,7 @@
 	<script type="text/javascript" src="app/services/ReconciliacionFactory.js"></script>
 	<script type="text/javascript" src="app/controllers/Autodesk/ConfirmarSPController.js"></script>
 	<script type="text/javascript" src="app/services/SpecialPetitionFactory.js"></script>
+	<script type="text/javascript" src="app/controllers/Usuarios/PoliticasReadController.js"></script>
 
 
 	<script src="scripts/tinycolor2-min.js"></script>
@@ -724,7 +725,6 @@
 	<script src="scripts/apexjs.js"></script>
 
 	<script src="node_modules/pdfjs-dist/build/pdf.js"></script>
-	<script src="node_modules/angular/angular.js"></script>
 	<script src="node_modules/angularjs-pdf-viewer/dist/angular-pdf-viewer.min.js"></script>
 
 	<!-- Tarjeta Credito -->
