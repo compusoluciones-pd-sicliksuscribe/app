@@ -153,6 +153,7 @@
 												<li ng-show="SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 8 || SessionCookie.IdTipoAcceso == 10"><a ng-click="goToPage('ParticionPedidos');">Particionar renovable</a></li>
 												<li ng-show="SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 8 || SessionCookie.IdTipoAcceso == 10 || SessionCookie.IdTipoAcceso === 2"><a ng-click="goToPage('ActualizarCSN');">Actualizar CSN cliente</a></li>
 												<li ng-show="SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 8 || SessionCookie.IdTipoAcceso == 10"><a ng-click="goToPage('ConfirmarSP');">Peticiones especiales (SP)</a></li>
+												<li ng-show="SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 8 || SessionCookie.IdTipoAcceso == 10"><a ng-click="goToPage('MonitorPremium');">Monitor planes premium</a></li>
 											</ul>
 										</li>
 
@@ -691,6 +692,8 @@
 	<script type="text/javascript" src="app/services/ReconciliacionFactory.js"></script>
 	<script type="text/javascript" src="app/controllers/Autodesk/ConfirmarSPController.js"></script>
 	<script type="text/javascript" src="app/services/SpecialPetitionFactory.js"></script>
+	<script type="text/javascript" src="app/controllers/Autodesk/MonitorPremiumController.js"></script>
+	<script type="text/javascript" src="app/services/PlanPremiumFactory.js"></script>
 
 
 	<script src="scripts/tinycolor2-min.js"></script>
