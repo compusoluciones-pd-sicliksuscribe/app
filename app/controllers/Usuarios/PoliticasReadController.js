@@ -5,6 +5,7 @@
     let terminosMS = 'https://politicas-clicksuscribe.s3.amazonaws.com/PoliticasMS.pdf';
     let terminosAD = 'https://politicas-clicksuscribe.s3.amazonaws.com/PoliticasAD.pdf';
     let cancelaciones = 'https://politicas-clicksuscribe.s3.amazonaws.com/Cancelaciones.pdf';
+    let entrega = 'https://politicas-clicksuscribe.s3.amazonaws.com/Entregas.pdf';
 
     $scope.init = function () {
       $scope.title = true;
@@ -22,6 +23,9 @@
           break;
         case 'cancel':
           rutaPDF = cancelaciones;
+          break;
+        case 'entrega':
+          rutaPDF = entrega;
           break;
         default:
           rutaPDF = terminosMS;
