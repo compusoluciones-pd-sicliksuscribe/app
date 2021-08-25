@@ -302,6 +302,11 @@
       return $http.post($rootScope.API + 'orders/mark-sp', { IdPedido: idPedido, Marcado: marcado });
     };
 
+    factory.actualizarFechaInicio = (idContrato, fechaInicio, idEsquemaRenovacion) => {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'orders/update-start-date', { IdContrato: idContrato, FechaInicio: fechaInicio, IdEsquemaRenovacion: idEsquemaRenovacion });
+    };
+
     return factory;
   };
 

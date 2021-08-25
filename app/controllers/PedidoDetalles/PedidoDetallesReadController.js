@@ -517,6 +517,30 @@
       const { IdPedido } = $scope.PedidoDetalles.find(pedido => pedido.IdPedido === idPedido)
       await PedidoDetallesFactory.marcarSP(IdPedido, marcado)
     };
+
+    $scope.abrirModal = (modal, idContrato, idEsquemaRenovacion) => {
+      document.getElementById(modal).style.display = 'block';
+      $scope.idContratoInicioFuturo = idContrato;
+      $scope.idEsquemaRenovacion = idEsquemaRenovacion;
+    };
+
+    $scope.cerrarModal = (modal) => {
+      document.getElementById(modal).style.display = 'none';
+    };
+
+    $scope.inicioFuturo = async fechaInicio => {
+      PedidoDetallesFactory.actualizarFechaInicio($scope.idContratoInicioFuturo, fechaInicio, $scope.idEsquemaRenovacion)
+        .then(async result => {
+          if (result.data.success) {
+            $scope.ShowToast( result.data.message, 'success');
+            $scope.Contrato.FechaInicio = undefined;
+            await getOrderDetails();
+          } else {
+            $scope.ShowToast(result.data.message, 'danger');
+          }
+        })
+        .catch(() => $scope.ShowToast(result.data.message, 'danger'));
+    };
   };
 
   PedidoDetallesReadController.$inject = ['$scope', '$log', '$location', '$cookies', 'PedidoDetallesFactory', 'TipoCambioFactory', 'EmpresasXEmpresasFactory', 'EmpresasFactory', 'PedidosFactory', 'UsuariosFactory', '$routeParams'];

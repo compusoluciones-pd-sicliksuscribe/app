@@ -423,7 +423,7 @@
 			<div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
 				<button id="Renovar" class="pull-right btn btn-block btn-primary"
                 ng-hide="pedido.EstatusContrato !== 'ready' || !pedido.listoRenovar || pedido.PorExtender"
-                data-toggle="modal" data-target="#renovarModal"
+                data-toggle="modal" data-target="#renovacionMultiUser"
 					ng-click="AgregarContrato(pedido);">
 					Renovar
                 </button>
@@ -678,6 +678,27 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal" style="padding: .8em 1.4em" ng-click="cerrarModal('noExtender')">Aceptar</button> 
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="renovacionMultiUser" class="modal fade in" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cerrarModal('renovacionMultiUser')"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title"><b>Renovación de contrato</b></h4>
+                    </div>
+                    <div class="modal-body">
+                        <h5>
+                            Si alguno de estos productos corresponde a una renovación en RED, debes tomar en cuenta que se conservará el tipo de acceso. Si deseas realizar un <b>TRADE IN 2:1</b>, por favor envía tu OC de manera tradicional o contacta a tu agente de venta.
+                            <br><br><b style="color: #b93228;">Una vez que se finalice la compra, la renovación no podrá ser cancelada.</b>
+                        </h5>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" style="min-width: 7em;" ng-click="cerrarModal('renovacionMultiUser')">Cancelar</button> 
+                        <button type="button" class="btn btn-default" data-dismiss="modal" style="padding: .8em 1.4em" data-toggle="modal" data-target="#renovarModal" ng-click="cerrarModal('renovacionMultiUser')">Continuar</button> 
                     </div>
                 </div>
             </div>
