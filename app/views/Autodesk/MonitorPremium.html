@@ -9,7 +9,7 @@
 
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <h4 style="float:left;">Consulta la información por medio del correo del administrador primario. </h4><br>
+                <h4 style="float:left;">Consulta la información por medio del correo del <b style="color:rgb(188,17,46);" tooltip="Mensaje de ayuda">administrador primario</b>. </h4><br>
             </div>
         </div>
         <hr>
@@ -35,7 +35,7 @@
                 <table class="table" style="text-align: center;">
                     <h4>Detalle de equipos de trabajo</h4>
                     <tr>
-                      <th style="text-align: center;">ID</th>
+                      <th style="text-align: center;">ID del equipo</th>
                       <th style="text-align: center;">Nombre del equipo</th>
                       <th style="text-align: center;">Asientos totales</th>
                       <th style="text-align: center;">Asientos elegibles para premium</th>
@@ -66,7 +66,7 @@
                       <td>Asientos elegibles totales</td>
                       <td>{{asientosElegibles}}</td>
                     </tr>
-                    <tr>
+                    <tr ng-if="asientosComprados">
                       <td>Asientos restantes (True-up)</td>
                       <td>{{asientosElegibles - asientosComprados}}</td>
                     </tr>
