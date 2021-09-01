@@ -7,7 +7,6 @@
     $scope.getTeams = () => {
       PlanPremiumFactory.getTeams($scope.email)
       .then(result => {
-        console.log(result);
         $scope.asientosElegibles = 0;
         $scope.asientosComprados = 0;
         $scope.equipos = [];

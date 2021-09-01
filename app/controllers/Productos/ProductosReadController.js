@@ -1,5 +1,5 @@
 (function () {
-  var ProductosReadController = function ($scope, $log, $location, $cookies, $routeParams, ProductosFactory, AmazonDataFactory, FabricantesFactory, TiposProductosFactory, PedidoDetallesFactory, TipoCambioFactory, ProductoGuardadosFactory, EmpresasXEmpresasFactory, UsuariosFactory, ActualizarCSNFactory, $anchorScroll, EmpresasFactory) {
+  var ProductosReadController = function ($scope, $log, $location, $cookies, $routeParams, PlanPremiumFactory, ProductosFactory, AmazonDataFactory, FabricantesFactory, TiposProductosFactory, PedidoDetallesFactory, TipoCambioFactory, ProductoGuardadosFactory, EmpresasXEmpresasFactory, UsuariosFactory, ActualizarCSNFactory, $anchorScroll, EmpresasFactory) {
     var BusquedaURL = $routeParams.Busqueda;
     const HRWAWRE_EXTRA_EMPOLYEES_GROUPING = 1000;
     $scope.BuscarProductos = {};
@@ -29,6 +29,8 @@
     $scope.MENSUAL = 1;
     $scope.ANUAL = 2;
     $scope.esquemaRenovacionModel = {};
+
+    const PREMIUM = "Planes Premium";
     
     
     const formatTiers = function (tiers) {
@@ -211,6 +213,7 @@
     }
 
     const validateAutodeskData = function (Producto) {
+      Producto.mensajePlanPremium = '';
       ActualizarCSNFactory.getUfCSN(Producto.IdEmpresaUsuarioFinal)
       .then(result => {
         if (result.data.success) {
@@ -225,11 +228,11 @@
           if (respuesta.success === 1) {
             Producto.IdAccionAutodesk = 1;
             Producto.contratos = respuesta.data;
-            if (Producto.contratos.length >= 1) {
+            if (Producto.contratos.length >= 1 && Producto.Especializacion !== PREMIUM) {
               Producto.TieneContrato = true;
               Producto.IdPedidoContrato = respuesta.data[0].IdPedido;
             }
-            if (Producto.contratos.length === 0) {
+            else if (Producto.contratos.length === 0 || Producto.Especializacion === PREMIUM) {
               Producto.TieneContrato = false;
               Producto.IdPedidoContrato = 0;
             }
@@ -237,7 +240,7 @@
             setProtectedRebatePrice(Producto.IdEmpresaUsuarioFinal);
           } else {
             $scope.ShowToast('No pudimos cargar la información de tus contratos, por favor intenta de nuevo más tarde.', 'danger');
-          }
+          }   
         })
         .error(function () {
           $scope.ShowToast('No pudimos cargar la información de tus contratos, por favor intenta de nuevo más tarde.', 'danger');
@@ -811,9 +814,33 @@
         }
       })
     };
+
+    $scope.asientosPremium = Producto => {
+      const usuario = Producto.usuariosContacto.filter(usuario => usuario.IdUsuario === Producto.IdUsuarioContacto)
+      if (Producto.Especializacion === PREMIUM) {
+        Producto.planPremiumNo = false;
+        PlanPremiumFactory.getTeams(usuario[0].CorreoElectronico)
+        .then(result => {
+          console.log(result);
+          Producto.mensajePlanPremium = '';
+          if (result.data.success) {
+            if (!result.data.data.totalPurchasedPremiumSeats) {
+              Producto.mensajePlanPremium = `Asientos elegibles para planes premium: ${result.data.data.totalPremiumElegibleSeats}`;
+              Producto.planPremiumNo = false;
+            } else {
+              Producto.mensajePlanPremium = 'Ya dispones de los servicios de planes premium';
+              Producto.planPremiumNo = true;
+            }
+          } else {
+            Producto.mensajePlanPremium = 'No se encontró información de planes premium para este correo electrónico';
+            Producto.planPremiumNo = true;
+          }
+        });
+      }
+    }
   };
 
-  ProductosReadController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'ProductosFactory','AmazonDataFactory', 'FabricantesFactory', 'TiposProductosFactory', 'PedidoDetallesFactory', 'TipoCambioFactory', 'ProductoGuardadosFactory', 'EmpresasXEmpresasFactory', 'UsuariosFactory', 'ActualizarCSNFactory', '$anchorScroll', 'EmpresasFactory'];
+  ProductosReadController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'PlanPremiumFactory', 'ProductosFactory','AmazonDataFactory', 'FabricantesFactory', 'TiposProductosFactory', 'PedidoDetallesFactory', 'TipoCambioFactory', 'ProductoGuardadosFactory', 'EmpresasXEmpresasFactory', 'UsuariosFactory', 'ActualizarCSNFactory', '$anchorScroll', 'EmpresasFactory'];
 
   angular.module('marketplace').controller('ProductosReadController', ProductosReadController);
 }());
