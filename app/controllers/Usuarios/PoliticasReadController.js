@@ -8,8 +8,15 @@
     let entrega = 'https://politicas-clicksuscribe.s3.amazonaws.com/Entregas.pdf';
 
     $scope.init = function () {
-      $scope.title = true;
-      $scope.container = false;
+      let route = $routeParams.politic;
+      if (route === 'TyC') {
+        $scope.politics('tycMS');
+      } 
+      else if (route === 'Cancelaciones') {
+        $scope.politics('cancel');
+      } else {
+        $scope.politics('entrega');
+      }
     };
     $scope.politics = function (maker) {
       $scope.title = false;
