@@ -8,7 +8,6 @@
     "angular-colorpicker-directive": "^2.0.0",
     "angular-sanitize": "^1.7.9",
     "angularjs-color-picker": "^3.4.8",
-    "angularjs-pdf-viewer": "^1.0.4",
     "autotrack": "^2.4.1",
     "tinycolor2": "^1.4.1"
   },
