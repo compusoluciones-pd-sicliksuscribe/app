@@ -651,9 +651,22 @@
         $scope.ShowToast('Especifica una fecha fin para la extensión del contrato.', 'warning');
       }
     };
+
+    $scope.actualizarEsquema = (numeroSerie, idEsquemaRenovacion) =>{
+
+
+      PedidoDetallesFactory.actualizarEsquemaRenovacion(numeroSerie, idEsquemaRenovacion)
+        .then(result => {
+          $scope.ShowToast(result.data.message, 'success');
+        })
+        .catch(result => {
+          $scope.ShowToast(result.data.message, 'danger');
+        });
+    }
   };
 
   MonitorReadController.$inject = ['$scope', '$log', '$cookies', '$location', 'EmpresasXEmpresasFactory', 'PedidoDetallesFactory', '$uibModal', '$filter', 'FabricantesFactory', 'PedidosFactory', 'EmpresasFactory', 'UsuariosFactory','AmazonDataFactory', 'ActualizarCSNFactory'];
 
   angular.module('marketplace').controller('MonitorReadController', MonitorReadController);
+
 }());
