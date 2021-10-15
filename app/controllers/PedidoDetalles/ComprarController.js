@@ -383,8 +383,9 @@
     const success_callbak = function (response) {
       token_id = response.data.id;
       console.log('token id: ', response.data.id);
+      console.log('deviceSessionId: ', deviceSessionId);
       $('#token_id').val(token_id);
-      testPayment(token_id);
+      // testPayment(token_id);
       // $('#payment-form').submit();
       // createCustomer();
       generarPago();
