@@ -1,0 +1,18 @@
+.btn-monitor-pedidos-x-cliente {
+    margin-right: .5em; 
+    margin-top: .5em;
+    min-width: 11em; 
+    height: 2.6em;
+    color: white;
+}
+
+.btn-monitor-pedidos-x-cliente:hover {
+    color: white;
+}
+
+.btn-modal {
+    margin-right: .5em; 
+    margin-top: .5em;
+    min-width: 7em; 
+    height: 2.6em;
+}
