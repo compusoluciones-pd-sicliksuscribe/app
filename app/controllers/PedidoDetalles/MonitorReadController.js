@@ -651,6 +651,30 @@
         $scope.ShowToast('Especifica una fecha fin para la extensión del contrato.', 'warning');
       }
     };
+
+    $scope.SolicitarRenovacionTradein = () => {
+      if ($scope.Renovar.IdUsuarioContacto) {
+        const contractData = {
+          IdContrato: $scope.Renovar.IdContrato,
+          IdEmpresaUsuarioFinal: $scope.EmpresaSelect,
+          IdUsuarioContacto: $scope.Renovar.IdUsuarioContacto
+        };
+        PedidoDetallesFactory.renovacionTradein(contractData)
+          .then(result => {
+            $scope.ShowToast(result.data.message, 'success');
+            $scope.ActualizarMenu();
+            $scope.addPulseCart();
+            setTimeout($scope.removePulseCart, 9000);
+            $location.path('/Carrito');
+          })
+          .catch(result => {
+            $scope.ShowToast(result.data.message, 'danger');
+          });
+      } else {
+        $scope.ShowToast('Selecciona un usuario de contacto', 'warning');
+      }
+    }
+  
   };
 
   MonitorReadController.$inject = ['$scope', '$log', '$cookies', '$location', 'EmpresasXEmpresasFactory', 'PedidoDetallesFactory', '$uibModal', '$filter', 'FabricantesFactory', 'PedidosFactory', 'EmpresasFactory', 'UsuariosFactory','AmazonDataFactory', 'ActualizarCSNFactory'];
