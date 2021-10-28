@@ -652,10 +652,9 @@
       }
     };
 
-    $scope.actualizarEsquema = (numeroSerie, idEsquemaRenovacion) =>{
-
-
-      PedidoDetallesFactory.actualizarEsquemaRenovacion(numeroSerie, idEsquemaRenovacion)
+    $scope.actualizarEsquema = (numeroSeries, idEsquemaRenovacion) =>{
+      
+      PedidoDetallesFactory.actualizarEsquemaRenovacion(numeroSeries, idEsquemaRenovacion)
         .then(result => {
           $scope.ShowToast(result.data.message, 'success');
         })

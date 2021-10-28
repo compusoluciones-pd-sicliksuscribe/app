@@ -435,7 +435,7 @@
 				</button>
                 <button id="ActualizarEsquema" class="pull-right btn  btn-warning" style="margin-right: .5em; padding: .8em ; min-width: 150px;"
                 ng-hide="pedido.EstatusContrato !== 'ready' || !pedido.listoRenovar || pedido.PorExtender"
-                ng-click="actualizarEsquema(pedido.Detalles[0].NumeroSerie, pedido.IdEsquemaRenovacion)">
+                ng-click="actualizarEsquema(pedido.Detalles, pedido.IdEsquemaRenovacion)">
 					Actualizar esquema
 				</button>
             </div> 

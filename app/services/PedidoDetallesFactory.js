@@ -307,9 +307,9 @@
       return $http.post($rootScope.API + 'orders/update-start-date', { IdContrato: idContrato, FechaInicio: fechaInicio, IdEsquemaRenovacion: idEsquemaRenovacion });
     };
     
-    factory.actualizarEsquemaRenovacion = (numeroSerie, idEsquemaRenovacion) => {
+    factory.actualizarEsquemaRenovacion = (numeroSeries, idEsquemaRenovacion) => {
       factory.refreshToken();
-      return $http.post($rootScope.API + 'autodesk/update-subscriptions', { NumeroSerie: numeroSerie, IdEsquemaRenovacion: idEsquemaRenovacion });
+      return $http.post($rootScope.API + 'autodesk/update-subscriptions', {numeroSeries, idEsquemaRenovacion});
     };
     return factory;
   };
