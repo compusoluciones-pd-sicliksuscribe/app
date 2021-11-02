@@ -652,7 +652,7 @@
       }
     };
 
-    $scope.SolicitarRenovacionTradein = () => {
+    $scope.solicitarRenovacionTradein = () => {
       if ($scope.Renovar.IdUsuarioContacto) {
         const contractData = {
           IdContrato: $scope.Renovar.IdContrato,
