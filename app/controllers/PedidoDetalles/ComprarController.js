@@ -388,7 +388,7 @@
       // testPayment(token_id);
       // $('#payment-form').submit();
       // createCustomer();
-      generarPago();
+      // generarPago();
     };
 
     // Test payment .testPurchase
