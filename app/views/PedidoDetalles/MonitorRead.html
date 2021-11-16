@@ -407,6 +407,7 @@
                     <li ng-if="pedido.EstatusContrato === 'in-cart' && !pedido.PorExtender"><label for="Renovado">Estatus renovación: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-warning">En carrito</span></li>
                     <li ng-if="pedido.EstatusContrato === 'notRenewed'"><label for="Renovado">Estatus renovación: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-default">No Renovado</span></li>
                     <li ng-if="pedido.PorExtender"><label for="Renovado">Estatus del contrato: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-warning">Por extender</span></li>
+                    <li ng-if="pedido.TermSwitch"><label for="Renovado">Estatus del contrato: </label><span style="font-size: 100%; margin-left: 0.5em; padding-top: .3em;" class="label label-warning">Actualizando esquema de renovación</span></li>
                     <li> <label for="FechaInicio">Duración del contrato: </label> {{ pedido.FechaInicio | date:'d/MM/yyyy' }} <label>-</label> {{ pedido.FechaFin | date:'d/MM/yyyy'}} </li>
                 </ul>
             </div>
@@ -435,7 +436,7 @@
 				</button>
                 <button id="ActualizarEsquema" class="pull-right btn  btn-warning" style="margin-right: .5em; padding: .8em ; min-width: 150px;"
                 ng-hide="pedido.EstatusContrato !== 'ready' || !pedido.listoRenovar || pedido.PorExtender"
-                ng-click="actualizarEsquema(pedido.Detalles, pedido.IdEsquemaRenovacion)">
+                ng-click="actualizarEsquema(pedido.NumeroContrato, pedido.Detalles, pedido.IdEsquemaRenovacion)">
 					Actualizar esquema
 				</button>
             </div> 

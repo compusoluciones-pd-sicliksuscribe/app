@@ -55,6 +55,7 @@
                 detalle.NumeroSerie && detalle.EstatusFabricante === 'accepted' && detalle.PedidoAFabricante
                 ? pedido.listoRenovar = 1 : pedido.listoRenovar = 0;
               });
+              pedido.TermSwitch = pedido.EstatusContrato === 'term-switch';
             });
             $scope.Vacio = 1;
           }
@@ -652,10 +653,16 @@
       }
     };
 
-    $scope.actualizarEsquema = (numeroSeries, idEsquemaRenovacion) =>{
+    $scope.actualizarEsquema = (NumeroContrato, numeroSeries, idEsquemaRenovacion) =>{
       
       PedidoDetallesFactory.actualizarEsquemaRenovacion(numeroSeries, idEsquemaRenovacion)
         .then(result => {
+          $scope.Pedidos.forEach(pedido =>{
+             if (pedido.NumeroContrato === NumeroContrato){
+              pedido.TermSwitch = true;
+              pedido.EstatusContrato = 'term-switch';
+             }
+          });
           $scope.ShowToast(result.data.message, 'success');
         })
         .catch(result => {
