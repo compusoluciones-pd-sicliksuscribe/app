@@ -653,12 +653,12 @@
       }
     };
 
-    $scope.actualizarEsquema = (NumeroContrato, numeroSeries, idEsquemaRenovacion) =>{
+    $scope.actualizarEsquema = (numeroContrato, numeroSeries, idEsquemaRenovacion) =>{
       
       PedidoDetallesFactory.actualizarEsquemaRenovacion(numeroSeries, idEsquemaRenovacion)
         .then(result => {
           $scope.Pedidos.forEach(pedido =>{
-             if (pedido.NumeroContrato === NumeroContrato){
+             if (pedido.NumeroContrato === numeroContrato){
               pedido.TermSwitch = true;
               pedido.EstatusContrato = 'term-switch';
              }
