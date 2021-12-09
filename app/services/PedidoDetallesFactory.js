@@ -307,6 +307,11 @@
       return $http.post($rootScope.API + 'orders/update-start-date', { IdContrato: idContrato, FechaInicio: fechaInicio, IdEsquemaRenovacion: idEsquemaRenovacion });
     };
 
+    factory.renovacionTradein = contractData => {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'autodesk/renew-trade-in', contractData);
+    };
+
     return factory;
   };
 
