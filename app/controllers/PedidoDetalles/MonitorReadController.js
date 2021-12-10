@@ -56,6 +56,7 @@
                 ? pedido.listoRenovar = 1 : pedido.listoRenovar = 0;
               });
               pedido.TermSwitch = pedido.EstatusContrato === 'term-switch';
+              pedido.etiquetaTermSwitch = (pedido.IdEsquemaRenovacion == 5) ? 'Actualizar periodo a un año' : 'Actualizar periodo a tres años';
             });
             $scope.Vacio = 1;
           }
@@ -657,8 +658,8 @@
       
       PedidoDetallesFactory.actualizarEsquemaRenovacion(numeroSeries, idEsquemaRenovacion)
         .then(result => {
-          $scope.Pedidos.forEach(pedido =>{
-             if (pedido.NumeroContrato === numeroContrato){
+          $scope.Pedidos.forEach(pedido => {
+             if (pedido.NumeroContrato === numeroContrato) {
               pedido.TermSwitch = true;
               pedido.EstatusContrato = 'term-switch';
              }
