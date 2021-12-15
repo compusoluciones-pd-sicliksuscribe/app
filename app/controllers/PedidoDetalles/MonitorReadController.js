@@ -55,6 +55,8 @@
                 detalle.NumeroSerie && detalle.EstatusFabricante === 'accepted' && detalle.PedidoAFabricante
                 ? pedido.listoRenovar = 1 : pedido.listoRenovar = 0;
               });
+              pedido.TermSwitch = pedido.EstatusContrato === 'term-switch';
+              pedido.etiquetaTermSwitch = (pedido.IdEsquemaRenovacion == 5) ? 'Actualizar periodo a un año' : 'Actualizar periodo a tres años';
             });
             $scope.Vacio = 1;
           }
@@ -651,9 +653,27 @@
         $scope.ShowToast('Especifica una fecha fin para la extensión del contrato.', 'warning');
       }
     };
+
+    $scope.actualizarEsquema = (numeroContrato, numeroSeries, idEsquemaRenovacion) =>{
+      
+      PedidoDetallesFactory.actualizarEsquemaRenovacion(numeroSeries, idEsquemaRenovacion)
+        .then(result => {
+          $scope.Pedidos.forEach(pedido => {
+             if (pedido.NumeroContrato === numeroContrato) {
+              pedido.TermSwitch = true;
+              pedido.EstatusContrato = 'term-switch';
+             }
+          });
+          $scope.ShowToast(result.data.message, 'success');
+        })
+        .catch(result => {
+          $scope.ShowToast(result.data.message, 'danger');
+        });
+    }
   };
 
   MonitorReadController.$inject = ['$scope', '$log', '$cookies', '$location', 'EmpresasXEmpresasFactory', 'PedidoDetallesFactory', '$uibModal', '$filter', 'FabricantesFactory', 'PedidosFactory', 'EmpresasFactory', 'UsuariosFactory','AmazonDataFactory', 'ActualizarCSNFactory'];
 
   angular.module('marketplace').controller('MonitorReadController', MonitorReadController);
+
 }());
