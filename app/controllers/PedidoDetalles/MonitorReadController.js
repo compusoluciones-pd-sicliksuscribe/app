@@ -677,7 +677,7 @@
               IdEsquemaRenovacion: $scope.tradeIn.IdEsquemaRenovacion,
               Detalles: $scope.tradeIn.detalles
             };
-            PedidoDetallesFactory.renovacionTradein(contractData)
+            PedidosFactory.renovacionTradein(contractData)
               .then(result => {
                 $scope.ShowToast(result.data.message, 'success');
                 $scope.ActualizarMenu();
