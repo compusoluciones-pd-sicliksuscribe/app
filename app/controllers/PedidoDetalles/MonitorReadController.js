@@ -655,6 +655,7 @@
 
     $scope.agregarInfoTradein = pedido => {
       $scope.tradeIn.idContrato = pedido.IdContrato;
+      $scope.tradeIn.IdEsquemaRenovacion = pedido.IdEsquemaRenovacion;
       $scope.tradeIn.detalles = pedido.Detalles;
     };
 
