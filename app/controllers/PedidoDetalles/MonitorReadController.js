@@ -369,7 +369,7 @@
       if (Pedido.IdFabricante === 1) {
         PedidoDetallesFactory.putPedidoDetalleMicrosoft(order)
         .success(function (result) {
-          if (result.success === 0) {
+          if (result.success === 0 || result.name === 'Error') {
             $scope.ShowToast(result.message, 'danger');
           } else {
             $scope.ShowToast('Suscripción cancelada.', 'success');
