@@ -29,11 +29,10 @@
         <table class="table table-hover border-left-right-cero">
           <thead>
             <tr style="font-size:14px">
-              <th class="col-sm-5 col-md-5 col-lg-5">Nombre</th>
+              <th class="col-sm-5 col-md-5 col-lg-6">Nombre</th>
               <th class="col-sm-2 col-md-2 col-lg-2">Sub total</th>
-              <th class="col-sm-2 col-md-2 col-lg-2">Porcentaje de descuento</th>
               <th class="col-sm-2 col-md-2 col-lg-2">Total</th>
-              <th class="col-sm-1 col-md-1 col-lg-1">Acción</th>
+              <th class="col-sm-1 col-md-1 col-lg-2">Acción</th>
             </tr>
           </thead>
           <tbody>
@@ -51,16 +50,6 @@
                       <input id="subTotal" name="subTotal" type="number" class="form-control" value="0" step="1000"
                         maxlength="1" ng-model="subscripcion.PrecioLista" disabled />
                     </div>
-                  </div>
-                </div>
-              </td>
-              <td style="vertical-align:middle">
-                <div class="form-group">
-                  <div class="input-group">
-                    <span class="input-group-addon">%</span>
-                    <input id="porcentajeDescuento" name="porcentajeDescuento" type="number" class="form-control"
-                      value="0" step="1" placeholder="Descuento" maxlength="2"
-                      ng-disabled="SessionCookie.IdTipoAcceso !== 1" />
                   </div>
                 </div>
               </td>
