@@ -21,7 +21,7 @@
       IBM: 11
     };
     $scope.tipoMonedaCambio = $cookies.getObject('compararPedidosAnteriores');
-
+    let modalTC = document.getElementById('modalPagoTC');
     const error = function (message) {
       $scope.ShowToast(!message ? 'Ha ocurrido un error, inténtelo más tarde.' : message, 'danger');
       $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
@@ -46,6 +46,12 @@
           paymentMethod = 'Metodo de pago incorrecto.';
       }
       return paymentMethod;
+    };
+
+    const openpayKeys = {
+      id: 'mzdblulczshumdvqbvdl',
+      llavePublica: 'pk_fa2f48e0e6f0485c8273c4c0418de7b8',
+      llavePrivada: 'sk_8660f55539684dcea40d3b4b44543e06'
     };
 
     const getMakers = function (id) {
@@ -271,63 +277,23 @@
 
     $scope.PagarTarjeta = function () { // tarjeta de credito
       if ($scope.Distribuidor.IdFormaPagoPredilecta === 1) {
-        PedidoDetallesFactory.getPrepararTarjetaCredito()
-          .success(function (Datos) {
-            var expireDate = new Date();
-            expireDate.setTime(expireDate.getTime() + 600 * 2000); /* 20 minutos */
-            $cookies.putObject('pedidosAgrupados', Datos.data['0'].pedidosAgrupados, { 'expires': expireDate, secure: $rootScope.secureCookie });
-            if (Datos.data['0'].total > 0) {
+        modalTC.style.display = 'block';
+        validarOpenPay();
 
-              if (Datos.success) {
-                if ($cookies.getObject('pedidosAgrupados')) {
-                  Checkout.configure({
-                    merchant: Datos.data['0'].merchant,
-                    session: { id: Datos.data['0'].session_id },
-                    order:
-                    {
-                      amount: Datos.data['0'].total,
-                      currency: Datos.data['0'].moneda,
-                      description: 'Pago tarjeta bancaria',
-                      id: Datos.data['0'].pedidos
-                    },
-                    interaction:
-                    {
-                      merchant:
-                      {
-                        name: 'CompuSoluciones',
-                        address:
-                        {
-                          line1: 'CompuSoluciones y Asociados, S.A. de C.V.',
-                          line2: 'Av. Mariano Oterno No. 1105',
-                          line3: 'Col. Rinconada del Bosque C.P. 44530',
-                          line4: 'Guadalajara, Jalisco. México'
-                        },
 
-                        email: 'order@yourMerchantEmailAddress.com',
-                        phone: '+1 123 456 789 012'
-                      },
-                      displayControl: { billingAddress: 'HIDE', orderSummary: 'SHOW' },
-                      locale: 'es_MX',
-                      theme: 'default'
-                    }
-                  });
-                  Checkout.showLightbox();
-                } else {
-                  $scope.ShowToast('No pudimos comenzar con tu proceso de pago, favor de intentarlo una vez más.', 'danger');
-                }
-              } else {
-                $scope.ShowToast('No pudimos comenzar con tu proceso de pago, favor de intentarlo una vez más.', 'danger');
-              }
-            } else {
-              $scope.ShowToast('Algo salió mal con el pago con tarjeta bancaria, favor de intentarlo una vez más.', 'danger');
-            }
-          })
-          .error(function (data, status, headers, config) {
-            const error = !data.message ? 'Ocurrió un error al procesar la solicitud. Intentalo de nuevo.' : data.message;
-            $scope.ShowToast(error, 'danger');
-          });
+        
       }
     };
+
+    // validar llaves para openpay
+    const validarOpenPay = () => {
+      OpenPay.setId(openpayKeys.id);
+      OpenPay.setApiKey(openpayKeys.llavePublica);
+      OpenPay.setSandboxMode(true);
+      deviceSessionId = OpenPay.deviceData.setup('payment-form', 'deviceIdHiddenFieldName');
+      $('#device_session_id').val(deviceSessionId);
+    };
+
 
     const getActualSubdomain = function () {
       let subdomain = window.location.href;
@@ -371,8 +337,10 @@
     $scope.CreditCardPayment = function (resultIndicator, sessionVersion) {
       $scope.currentDistribuidor = $cookies.getObject('currentDistribuidor');
       if ($scope.currentDistribuidor) {
+        console.log('11  $scope.CreditCardPayment   IF', $scope.currentDistribuidor);
         angular.element(document.getElementById('divComprarTuClick')).scope().ComprarConTarjetaTuClick(resultIndicator, sessionVersion);
       } else {
+        console.log('22  $scope.CreditCardPayment   ELSE', resultIndicator, sessionVersion);
         $scope.ComprarConTarjeta(resultIndicator, sessionVersion);
       };
     };
@@ -381,7 +349,9 @@
       var datosTarjeta = { 'TarjetaResultIndicator': resultIndicator, 'TarjetaSessionVersion': sessionVersion, 'PedidosAgrupados': $cookies.getObject('pedidosAgrupados') };
       if (datosTarjeta.PedidosAgrupados) {
         if (datosTarjeta.PedidosAgrupados[0].Renovacion) {
-          PedidosFactory.patchPaymentInformation(datosTarjeta)
+          console.log('333 $scope.ComprarConTarjeta', datosTarjeta.PedidosAgrupados, datosTarjeta.PedidosAgrupados[0].Renovacion);
+          console.log('333 datosTarjeta ', datosTarjeta);
+          PedidosFactory.patchPaymentInformation(datosTarjeta) // en éste factory va a estar la informacion de la actualizacion de compra
             .success(function (compra) {
               $cookies.remove('pedidosAgrupados'); // revisar
               if (compra.success === 1) {
@@ -393,12 +363,17 @@
               $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
             });
         } else {
+          console.log('444 datosTarjeta', datosTarjeta);
+          // 5424180279791732
           PedidosFactory.putPedido(datosTarjeta)
             .success(function (putPedidoResult) {
+              console.log('5555 PedidosFactory.putPedido   , result= ', putPedidoResult);
               $cookies.remove('pedidosAgrupados');
               if (putPedidoResult.success) {
                 PedidoDetallesFactory.getComprar()
                   .success(function (compra) {
+                    console.log('6666 PedidosFactory.putPedido   , result= ', compra);
+
                     if (compra) {
                       $scope.ActualizarMenu();
                       orderCookie(compra);

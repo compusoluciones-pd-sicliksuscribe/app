@@ -1,0 +1,21 @@
+.modal-op {
+    border-radius: 30px;
+    
+}
+
+.bg-op {
+    background: #4488dd;
+}
+
+.btn-pay {
+    background: #22b877;
+    line-height: 2em;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    color: #fff;
+    cursor: pointer;
+}
+
+.btn-pay:hover {
+    background: #22a877;
+}
