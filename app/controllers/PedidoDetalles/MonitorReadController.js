@@ -682,9 +682,8 @@
               .then(result => {
                 $scope.ShowToast(result.data.message, 'success');
                 $scope.ActualizarMenu();
+                $scope.ActualizarMonitor();
                 $scope.addPulseCart();
-                setTimeout($scope.removePulseCart, 9000);
-                $location.path('/Carrito');
               })
               .catch(result => {
                 $scope.ShowToast(result.data.message, 'danger');
