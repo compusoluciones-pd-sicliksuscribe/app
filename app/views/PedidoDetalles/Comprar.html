@@ -198,27 +198,23 @@
         <div class="modal-dialog modal-lg">
             <!-- Modal content-->
             <div class="modal-content modal-op">
-                    <!-- <button type="button" ng-click="cerrarModal('modalPagoTC')" class="close" data-dismiss="modal">
-                        &times;
-                    </button> -->
+
                 <div class="modal-body">
+
                     <div class="row">
-                        
-                        <div class="col-sm-6 ">
-                            <h4 class="bg-success">VISA</h4>
-                            <h4 class="bg-success">VISA</h4>
-                            <h4 class="bg-success">VISA</h4>
-                            <h4 class="bg-success">VISA</h4>
-
-                        </div>
-
-                        <div class="col-sm-6 bg-op">
+                        <div class="col-sm-12">
+                            <button type="button" ng-click="cerrarModal('modalPagoTC')" class="close" data-dismiss="modal">
+                                &times;
+                            </button>
+                            <h2 class="modal-title text-center"><b>pago con tarjeta de crédito</b></h2>
                             <div class="w100">
                                 <form id="payment-form">
                                     <input type="hidden" name="token_id" id="token_id" />
                                     <input type="hidden" name="device_session_id" id="device_session_id" />
-                                    <div class="grayBackground pymnt-itm card active">
-                                        <h2>Tarjeta de crédito o débito</h2>
+
+
+
+                                    <div class=" pymnt-itm card active">
                                         <div class="row">
                                             <div class="col-md-12 col-lg-12">
                                                 <div class="alert ocultar" role="alert" id="responseDiv"></div>
@@ -228,6 +224,7 @@
                                         <div class="row" style="margin-top: 15px;">
                                             <div class="grayBorder col-md-4 col-lg-4 col-sm-12 col-xs-12 hidden-sm hidden-xs"
                                                 style="padding-left: 40px;">
+
                                                 <h4>Tarjetas de crédito</h4>
                                                 <img src="../../../images/open-pay/cards1.png" alt="" />
                                             </div>
@@ -237,11 +234,13 @@
                                                 <h4>Tarjetas de crédito</h4>
                                                 <img src="../../../images/open-pay/cards1.png" alt="" />
                                             </div>
+
                                             <div class="col-md-8 col-lg-8 col-sm-12 col-xs-12 hidden-sm hidden-xs"
                                                 style="padding-left: 40px;">
                                                 <h4>Tarjetas de débito</h4>
                                                 <img src="../../../images/open-pay/cards2.png" alt="" />
                                             </div>
+                                            
                                             <div class="col-md-8 col-lg-8 col-sm-12 col-xs-12 hidden-md hidden-lg hidden-xl"
                                                 style="padding-left: 24px;">
                                                 <h4>Tarjetas de débito</h4>
@@ -359,8 +358,9 @@
                                     </div>
                                 </form>
                             </div>
+
+
                         </div>
-                        
                     </div>
                 </div>
             </div>
