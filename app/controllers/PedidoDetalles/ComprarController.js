@@ -53,6 +53,57 @@
     let tokenId = '';
     $scope.meses = [{ nombre: 'Enero', valor: '01' }, { nombre: 'Febrero', valor: '02' }, { nombre: 'Marzo', valor: '03' }, { nombre: 'Abril', valor: '04' }, { nombre: 'Mayo', valor: '05' }, { nombre: 'Junio', valor: '06' }, { nombre: 'Julio', valor: '07' }, { nombre: 'Agosto', valor: '08' }, { nombre: 'Septiembre', valor: '09' }, { nombre: 'Octubre', valor: '10' }, { nombre: 'Noviembre', valor: '11' }, { nombre: 'Diciembre', valor: '12' }];
 
+    const getCardError = (errorCode) => {
+      switch (errorCode) {
+        case 2004:
+          return 'El número de tarjeta es invalido.';
+        case 2005:
+          return 'La fecha de expiración de la tarjeta es anterior a la fecha actual.';
+        case 2006:
+          return 'El código de seguridad de la tarjeta (CVV2) no fue proporcionado.';
+        case 2007:
+          return 'El número de tarjeta es de prueba, solamente puede usarse en Sandbox.';
+        case 2008:
+          return 'La tarjeta no es valida para pago con puntos.';
+        case 2009:
+          return 'El código de seguridad de la tarjeta (CVV2) es inválido.';
+        case 2010:
+          return 'Autenticación 3D Secure fallida.';
+        case 2011:
+          return 'Tipo de tarjeta no soportada.';
+        case 3001:
+          return 'La tarjeta fue declinada por el banco.';
+        case 3002:
+          return 'La tarjeta ha expirado.';
+        case 3003:
+          return 'La tarjeta no tiene fondos suficientes.';
+        case 3004:
+          return 'La tarjeta ha sido identificada como una tarjeta robada.';
+        case 3005:
+          return 'La tarjeta ha sido rechazada por el sistema antifraude.';
+        case 3006:
+          return 'La operación no esta permitida para este cliente o esta transacción.';
+        case 3009:
+          return 'La tarjeta fue reportada como perdida.';
+        case 3010:
+          return 'El banco ha restringido la tarjeta.';
+        case 3011:
+          return 'El banco ha solicitado que la tarjeta sea retenida. Contacte al banco.';
+        case 3012:
+          return 'Se requiere solicitar al banco autorización para realizar este pago.';
+        case 3201:
+          return 'Comercio no autorizado para procesar pago a meses sin intereses.';
+        case 3203:
+          return 'Promoción no valida para este tipo de tarjetas.';
+        case 3204:
+          return 'El monto de la transacción es menor al mínimo permitido para la promoción.';
+        case 3205:
+          return 'Promoción no permitida.';
+        default:
+          return 'Ocurrió un error, contactar a soporte.';
+      }
+    };
+
     const setCCDates = () => {
       const dateCC = new Date();
       let yearNow = parseInt(dateCC.getFullYear().toString().substr(-2));
@@ -299,11 +350,12 @@
               if ($cookies.getObject('pedidosAgrupados')) {
                 console.log(Datos);
                 setCCDates();
+                $scope.pedidos = Datos.data[0].pedidos;
                 $scope.amount = Datos.data[0].total;
                 $scope.currency = Datos.data[0].moneda;
                 OpenPay.setId(Datos.data['0'].opId);
                 OpenPay.setApiKey(Datos.data['0'].opPublic);
-                OpenPay.setSandboxMode(true);
+                OpenPay.setSandboxMode(true); //  descomentar esta linea cuando haya pruebas
                 deviceSessionId = OpenPay.deviceData.setup('payment-form', 'deviceIdHiddenFieldName');
                 $('#device_session_id').val(deviceSessionId);
                 modalTC.style.display = 'block';
@@ -326,41 +378,51 @@
 
     $('#pay-button').on('click', function (event) {
       event.preventDefault();
-      // $('#pay-button').prop('disabled', true);
-
-      OpenPay.token.extractFormAndCreate('payment-form', success_callbak, error_callbak);
+      $('#pay-button').prop('disabled', true);
+      OpenPay.token.extractFormAndCreate('payment-form', successCallbak, errorCallbak);
     });
 
-    const success_callbak = function (response) {
+    const successCallbak = function (response) {
+      $('#responseDiv').html('').addClass('ocultar').removeClass('alert alert-danger');
       tokenId = response.data.id;
       console.log('token id: ', response.data.id);
       console.log('deviceSessionId: ', deviceSessionId);
       $('#token_id').val(tokenId);
 
-      const charges = {
-        source_id: tokenId, // Token de la tarjeta
-        method: 'card',
-        amount: 2,
-        currency: $scope.currency, // MXN o USD
-        description: '12',
-        device_session_id: deviceSessionId // Llave antifraude
-      };
+      const verifyCreditCard = document.getElementById('txtCardNumber').value;
+      console.log(verifyCreditCard);
+      const cardType = OpenPay.card.cardType(verifyCreditCard); // check if cc is correct
+      console.log(cardType);
 
+      const charges = {
+        source_id: tokenId,
+        method: 'card',
+        amount: $scope.amount,
+        currency: $scope.currency,
+        description: $scope.pedidos,
+        device_session_id: deviceSessionId
+      };
       PedidoDetallesFactory.pagarTarjetaOpenpay(charges)
       .then(function (response) {
-        console.log('*************', response.data);
-        angular.element(document.getElementById('divComprar')).scope().CreditCardPayment(response.data.content.statusCharge, response.data.content.paymentId);
+        if (response.data.statusCode === 200) {
+          angular.element(document.getElementById('divComprar')).scope().CreditCardPayment(response.data.content.statusCharge, response.data.content.paymentId);
+        } else {
+          printError(getCardError(response.data.content));
+        }
       })
         .catch(function (response) {
           $scope.ShowToast('Ocurrió un error al procesar el pago. de tipo: ' + response.data.message, 'danger');
         });
     };
 
-    const error_callbak = function (response) {
-      $scope.ShowToast(response.data.description);
-      const desc = response.data.description != undefined
-        ? response.data.description : response.message;
-      $scope.ShowToast('ERROR [' + response.status + '] ' + desc);
+    const printError = (messageError) => {
+      $('#responseDiv').html(messageError).removeClass('ocultar').removeClass().addClass('alert alert-danger');
+    };
+
+    const errorCallbak = function (response) {
+      let desc = response.data.description != undefined ? response.data.description : response.message;
+      console.log(desc);
+      printError(getCardError(response.data.error_code));
       $('#pay-button').prop('disabled', false);
     };
 

@@ -253,16 +253,16 @@
                                             <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12 nameAndNumber">
                                                 <label class="paddingTop">Nombre del titular</label>
                                                 <input type="text" placeholder="Como aparece en la tarjeta"
-                                                    data-openpay-card="holder_name" id="name" name="name"
+                                                    data-openpay-card="holder_name"
                                                     ng-model="name" />
                                             </div>
 
                                             <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12 nameAndNumber">
                                                 <label class="paddingTop">Número de tarjeta</label>
-                                                <input type="text" id="cardNumber" name="cardNumber"
-                                                    value="4242424242424242" data-openpay-card="card_number"
-                                                    ng-model="cardNumber" /><a
-                                                    ng-show="errorCard">{{errorCardMessage}}</a>
+                                                <input type="text" id="cardNumber" 
+                                                    onkeypress="if ( isNaN( String.fromCharCode(event.keyCode) ))return false;"
+                                                    autocomplete="off" data-openpay-card="card_number" ng-model="cardNumber" />
+                                                <a ng-show="errorCard">{{errorCardMessage}}</a>
                                             </div>
                                         </div>
 
@@ -272,8 +272,7 @@
                                                 <div class="row">
                                                     <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
                                                         <div class="nameAndNumber half l">
-                                                            <select data-openpay-card="expiration_month" id="ccexpmonth"
-                                                                name="ccexpmonth">
+                                                            <select data-openpay-card="expiration_month" id="ccexpmonth">
                                                                 <option ng-repeat="mes in meses" value="{{mes.valor}}">
                                                                     {{mes.nombre}}</option>
                                                             </select>
@@ -294,7 +293,8 @@
                                                 <label class="paddingTop">Código de seguridad</label>
                                                 <div class="row">
                                                     <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
-                                                        <input type="text" placeholder="3 dígitos" autocomplete="off"
+                                                        <input type="password" placeholder="3 dígitos" autocomplete="off"
+                                                        onkeypress="if ( isNaN( String.fromCharCode(event.keyCode) )) return false;"
                                                             data-openpay-card="cvv2" id="cvv" name="cvv" />
                                                     </div>
                                                     <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
