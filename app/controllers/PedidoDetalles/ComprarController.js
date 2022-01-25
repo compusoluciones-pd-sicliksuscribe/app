@@ -383,34 +383,12 @@
     const successCallbak = function (response) {
       $('#responseDiv').html('').addClass('ocultar').removeClass('alert alert-danger');
       tokenId = response.data.id;
-      console.log('token id: ', response.data.id);
-      console.log('deviceSessionId: ', deviceSessionId);
       $('#token_id').val(tokenId);
 
       const verifyCreditCard = document.getElementById('cc-number-input').value;
-      verifyCreditCard.replace(' ', '');
       console.log('Credit card: ', verifyCreditCard);
       const cardType = OpenPay.card.cardType(verifyCreditCard); // check if cc is correct
       console.log(cardType);
-
-
-  //     OpenPay.token.create({
-  //       "card_number":"4111111111111111",
-  //       "holder_name":"Juan Perez Ramirez",
-  //       "expiration_year":"20",
-  //       "expiration_month":"12",
-  //       "cvv2":"110",
-  //       "address":{
-  //          "city":"Querétaro",
-  //          "line3":"Queretaro",
-  //          "postal_code":"76900",
-  //          "line1":"Av 5 de Febrero",
-  //          "line2":"Roble 207",
-  //          "state":"Queretaro",
-  //          "country_code":"MX"
-  //       }
-  // }, onSuccess, onError);
-
 
       const charges = {
         source_id: tokenId,
@@ -441,7 +419,6 @@
 
     const errorCallbak = function (response) {
       let desc = response.data.description != undefined ? response.data.description : response.message;
-      console.log(desc);
       printError(getCardError(response.data.error_code));
       $('#pay-button').prop('disabled', false);
     };
@@ -489,24 +466,19 @@
       if ($scope.Distribuidor.IdFormaPagoPredilecta === paymentMethods.PAYPAL) $scope.prepararPaypal();
     };
 
-    // $scope.CreditCardPayment = function (resultIndicator, sessionVersion) {
     $scope.CreditCardPayment = function (status, paymentId) {
       $scope.currentDistribuidor = $cookies.getObject('currentDistribuidor');
       if ($scope.currentDistribuidor) {
-        console.log('11  $scope.CreditCardPayment   IF', $scope.currentDistribuidor);
         angular.element(document.getElementById('divComprarTuClick')).scope().ComprarConTarjetaTuClick(status, paymentId);
       } else {
-        console.log('22  $scope.CreditCardPayment   ELSE', status, paymentId);
         $scope.ComprarConTarjeta(status, paymentId);
       };
     };
 
     $scope.ComprarConTarjeta = function (status, paymentId) {
-      var datosTarjeta = { 'TarjetaResultIndicator': status, 'TarjetaSessionVersion': paymentId, 'PedidosAgrupados': $cookies.getObject('pedidosAgrupados') };
+      var datosTarjeta = { 'TarjetaResultIndicator': paymentId, 'TarjetaSessionVersion': status, 'PedidosAgrupados': $cookies.getObject('pedidosAgrupados') };
       if (datosTarjeta.PedidosAgrupados) {
         if (datosTarjeta.PedidosAgrupados[0].Renovacion) {
-          console.log('333 $scope.ComprarConTarjeta', datosTarjeta.PedidosAgrupados, datosTarjeta.PedidosAgrupados[0].Renovacion);
-          console.log('333 datosTarjeta ', datosTarjeta);
           PedidosFactory.patchPaymentInformation(datosTarjeta)
             .success(function (compra) {
               $cookies.remove('pedidosAgrupados');
@@ -519,17 +491,12 @@
               $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
             });
         } else {
-          console.log('444 datosTarjeta', datosTarjeta);
-          // 5424180279791732
           PedidosFactory.putPedido(datosTarjeta)
             .success(function (putPedidoResult) {
-              console.log('5555 PedidosFactory.putPedido   , result= ', putPedidoResult);
               $cookies.remove('pedidosAgrupados');
               if (putPedidoResult.success) {
                 PedidoDetallesFactory.getComprar()
                   .success(function (compra) {
-                    console.log('6666 PedidosFactory.putPedido   , result= ', compra);
-
                     if (compra) {
                       $scope.ActualizarMenu();
                       orderCookie(compra);

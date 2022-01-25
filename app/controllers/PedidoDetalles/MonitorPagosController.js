@@ -129,7 +129,6 @@
       $location.path('/MonitorPagos');
       PedidoDetallesFactory.getPendingOrdersToPay()
         .success(function (ordersToPay) {
-          console.log("orders to pay ",ordersToPay);
           $scope.Pedidos = ordersToPay.data;
           if (!ordersToPay.data || ordersToPay.data.length === 0) {
             return $scope.DeshabilitarPagar = true;
@@ -290,26 +289,6 @@
             $scope.ShowToast('No pudimos realizar los cálculos, por favor intenta de nuevo más tarde.', 'danger');
           });
       }
-      // if ($scope.PedidosSeleccionadosParaPagar.length !== 0 && document.getElementById('PayPal').checked) {
-      //   PedidoDetallesFactory.monitorCalculationsPayPal({ Pedidos: $scope.PedidosSeleccionadosParaPagar })
-      //     .success(function (calculations) {
-      //       if (calculations.total) {
-      //         $scope.ServicioElectronico = calculations.electronicService;
-      //         $scope.Subtotal = calculations.subtotal;
-      //         $scope.Iva = calculations.iva;
-      //         $scope.Total = calculations.total;
-      //       } else {
-      //         $scope.ServicioElectronico = 0;
-      //         $scope.Subtotal = 0;
-      //         $scope.Iva = 0;
-      //         $scope.Total = 0;
-      //       }
-      //     })
-      //     .error(function (data, status, headers, config) {
-      //       $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
-      //       $scope.ShowToast('No pudimos realizar los cálculos, por favor intenta de nuevo más tarde.', 'danger');
-      //     });
-      // }
       if ($scope.PedidosSeleccionadosParaPagar.length !== 0 && document.getElementById('Tarjeta').checked) {
         PedidoDetallesFactory.monitorCalculations({ Pedidos: $scope.PedidosSeleccionadosParaPagar })
           .success(function (calculations) {
@@ -346,8 +325,6 @@
     $scope.checkPayment = function () {
       if (document.getElementById('Tarjeta').checked) {
         $scope.pagar();
-      // } else if (document.getElementById('PayPal').checked) {
-      //   $scope.preparePayPal();
       } else if (document.getElementById('Prepago').checked) {
         $scope.preparePrePaid();
       }
@@ -368,7 +345,6 @@
             if (Datos.success) {
               if ($cookies.getObject('pedidosAgrupados')) {
                 setCCDates();
-                console.log(Datos);
                 $scope.pedidos = Datos.data.pedidos;
                 $scope.amount = Datos.data.total;
                 $scope.currency = Datos.data.moneda;
@@ -402,8 +378,6 @@
     const successCallbak = function (response) {
       $('#responseDivMonitor').html('').addClass('ocultar').removeClass('alert alert-danger');
       tokenId = response.data.id;
-      console.log('token id: ', response.data.id);
-      console.log('deviceSessionId: ', deviceSessionId);
       $('#tokenId').val(tokenId);
 
       const verifyCreditCard = document.getElementById('cardNumber').value;
@@ -441,7 +415,6 @@
 
     const errorCallbak = function (response) {
       let desc = response.data.description != undefined ? response.data.description : response.message;
-      console.log(desc);
       printError(getCardError(response.data.error_code));
       $('#payButton').prop('disabled', false);
     };
@@ -455,39 +428,6 @@
       subdomain = subdomain.replace('/#/MonitorPagos', '');
       return subdomain;
     };
-
-    // $scope.preparePayPal = function () {
-    //   if ($scope.PedidosSeleccionadosParaPagar.length > 0) {
-    //     const actualSubdomain = getActualSubdomain();
-    //     PedidoDetallesFactory.payWithPaypal({ Pedidos: $scope.PedidosSeleccionadosParaPagar })
-    //     .success(function (response) {
-    //       var expireDate = new Date();
-    //       expireDate.setTime(expireDate.getTime() + 600 * 2000);
-    //       const paypalNextPayment = {
-    //         electronicServiceByOrder: response.data.electronicServiceByOrder,
-    //         TipoCambio: $scope.TipoCambio
-    //       };
-    //       $cookies.putObject('paypalNextPayment', paypalNextPayment, { expires: expireDate, secure: $rootScope.secureCookie });
-    //       $cookies.putObject('orderIds', $scope.PedidosSeleccionadosParaPagar, { expires: expireDate, secure: $rootScope.secureCookie });
-    //       PedidoDetallesFactory.preparePayPal({ orderIds: $scope.PedidosSeleccionadosParaPagar, url: 'MonitorPagos', actualSubdomain })
-    //         .then(function (response) {
-    //           if (response.data.state === 'created') {
-    //             const paypal = response.data.links.filter(function (item) {
-    //               if (item.method === 'REDIRECT') return item.href;
-    //             })[0];
-    //             location.href = paypal.href;
-    //           } else {
-    //             $scope.ShowToast('Ocurrió un error al procesar el pago.', 'danger');
-    //           }
-    //         });
-    //     })
-    //     .catch(function (response) {
-    //       $scope.ShowToast('Ocurrió un error al procesar el pago. de tipo: ' + response.data.message, 'danger');
-    //     });
-    //   } else {
-    //     $scope.ShowToast('Selecciona al menos un pedido para pagar.', 'danger');
-    //   }
-    // };
 
     $scope.ComprarConPayPal = function (resultPaypal) {
       const paypalNextPayment = $cookies.getObject('paypalNextPayment');
