@@ -345,10 +345,8 @@
           expireDate.setTime(expireDate.getTime() + 600 * 2000); /* 20 minutos */
           $cookies.putObject('pedidosAgrupados', Datos.data['0'].pedidosAgrupados, { 'expires': expireDate, secure: $rootScope.secureCookie });
           if (Datos.data['0'].total > 0) {
-
             if (Datos.success) {
               if ($cookies.getObject('pedidosAgrupados')) {
-                console.log(Datos);
                 setCCDates();
                 $scope.pedidos = Datos.data[0].pedidos;
                 $scope.amount = Datos.data[0].total;
@@ -389,10 +387,30 @@
       console.log('deviceSessionId: ', deviceSessionId);
       $('#token_id').val(tokenId);
 
-      const verifyCreditCard = document.getElementById('txtCardNumber').value;
-      console.log(verifyCreditCard);
+      const verifyCreditCard = document.getElementById('cc-number-input').value;
+      verifyCreditCard.replace(' ', '');
+      console.log('Credit card: ', verifyCreditCard);
       const cardType = OpenPay.card.cardType(verifyCreditCard); // check if cc is correct
       console.log(cardType);
+
+
+  //     OpenPay.token.create({
+  //       "card_number":"4111111111111111",
+  //       "holder_name":"Juan Perez Ramirez",
+  //       "expiration_year":"20",
+  //       "expiration_month":"12",
+  //       "cvv2":"110",
+  //       "address":{
+  //          "city":"Querétaro",
+  //          "line3":"Queretaro",
+  //          "postal_code":"76900",
+  //          "line1":"Av 5 de Febrero",
+  //          "line2":"Roble 207",
+  //          "state":"Queretaro",
+  //          "country_code":"MX"
+  //       }
+  // }, onSuccess, onError);
+
 
       const charges = {
         source_id: tokenId,
@@ -402,6 +420,7 @@
         description: $scope.pedidos,
         device_session_id: deviceSessionId
       };
+
       PedidoDetallesFactory.pagarTarjetaOpenpay(charges)
       .then(function (response) {
         if (response.data.statusCode === 200) {
@@ -413,6 +432,7 @@
         .catch(function (response) {
           $scope.ShowToast('Ocurrió un error al procesar el pago. de tipo: ' + response.data.message, 'danger');
         });
+
     };
 
     const printError = (messageError) => {
@@ -487,9 +507,9 @@
         if (datosTarjeta.PedidosAgrupados[0].Renovacion) {
           console.log('333 $scope.ComprarConTarjeta', datosTarjeta.PedidosAgrupados, datosTarjeta.PedidosAgrupados[0].Renovacion);
           console.log('333 datosTarjeta ', datosTarjeta);
-          PedidosFactory.patchPaymentInformation(datosTarjeta) // en éste factory va a estar la informacion de la actualizacion de compra
+          PedidosFactory.patchPaymentInformation(datosTarjeta)
             .success(function (compra) {
-              $cookies.remove('pedidosAgrupados'); // revisar
+              $cookies.remove('pedidosAgrupados');
               if (compra.success === 1) {
                 $scope.ShowToast(compra.message, 'success');
                 $location.path('/MonitorPagos/refrescar');

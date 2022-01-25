@@ -18,6 +18,71 @@
       PAYPAL: 3,
       PREPAY: 4
     };
+
+    let modalPagoMonitor = document.getElementById('modalPagoMonitor');
+    let deviceSessionId = '';
+    let tokenId = '';
+    $scope.meses = [{ nombre: 'Enero', valor: '01' }, { nombre: 'Febrero', valor: '02' }, { nombre: 'Marzo', valor: '03' }, { nombre: 'Abril', valor: '04' }, { nombre: 'Mayo', valor: '05' }, { nombre: 'Junio', valor: '06' }, { nombre: 'Julio', valor: '07' }, { nombre: 'Agosto', valor: '08' }, { nombre: 'Septiembre', valor: '09' }, { nombre: 'Octubre', valor: '10' }, { nombre: 'Noviembre', valor: '11' }, { nombre: 'Diciembre', valor: '12' }];
+    const getCardError = (errorCode) => {
+      switch (errorCode) {
+        case 2004:
+          return 'El número de tarjeta es invalido.';
+        case 2005:
+          return 'La fecha de expiración de la tarjeta es anterior a la fecha actual.';
+        case 2006:
+          return 'El código de seguridad de la tarjeta (CVV2) no fue proporcionado.';
+        case 2007:
+          return 'El número de tarjeta es de prueba, solamente puede usarse en Sandbox.';
+        case 2008:
+          return 'La tarjeta no es valida para pago con puntos.';
+        case 2009:
+          return 'El código de seguridad de la tarjeta (CVV2) es inválido.';
+        case 2010:
+          return 'Autenticación 3D Secure fallida.';
+        case 2011:
+          return 'Tipo de tarjeta no soportada.';
+        case 3001:
+          return 'La tarjeta fue declinada por el banco.';
+        case 3002:
+          return 'La tarjeta ha expirado.';
+        case 3003:
+          return 'La tarjeta no tiene fondos suficientes.';
+        case 3004:
+          return 'La tarjeta ha sido identificada como una tarjeta robada.';
+        case 3005:
+          return 'La tarjeta ha sido rechazada por el sistema antifraude.';
+        case 3006:
+          return 'La operación no esta permitida para este cliente o esta transacción.';
+        case 3009:
+          return 'La tarjeta fue reportada como perdida.';
+        case 3010:
+          return 'El banco ha restringido la tarjeta.';
+        case 3011:
+          return 'El banco ha solicitado que la tarjeta sea retenida. Contacte al banco.';
+        case 3012:
+          return 'Se requiere solicitar al banco autorización para realizar este pago.';
+        case 3201:
+          return 'Comercio no autorizado para procesar pago a meses sin intereses.';
+        case 3203:
+          return 'Promoción no valida para este tipo de tarjetas.';
+        case 3204:
+          return 'El monto de la transacción es menor al mínimo permitido para la promoción.';
+        case 3205:
+          return 'Promoción no permitida.';
+        default:
+          return 'Ocurrió un error, contactar a soporte.';
+      }
+    };
+
+    const setCCDates = () => {
+      const dateCC = new Date();
+      let yearNow = parseInt(dateCC.getFullYear().toString().substr(-2));
+      let yearMax = yearNow + 6;
+      $scope.anios = [];
+      for (yearNow; yearNow <= yearMax; yearNow++) {
+        $scope.anios.push(yearNow);
+      }
+    };
   
     function groupBy (array, f) {
       var groups = {};
@@ -288,48 +353,31 @@
       }
     };
 
+    $scope.abreModal = function () {
+      modalPagoMonitor.style.display = 'block';
+    };
+
     $scope.pagar = function () {
       if ($scope.PedidosSeleccionadosParaPagar.length > 0) {
         PedidoDetallesFactory.payWidthCard({ Pedidos: $scope.PedidosSeleccionadosParaPagar })
           .success(function (Datos) {
             var expireDate = new Date();
             expireDate.setTime(expireDate.getTime() + 600 * 2000);
-            Datos.data["0"].pedidosAgrupados[0].TipoCambio = $scope.TipoCambio;
-            $cookies.putObject('pedidosAgrupados', Datos.data["0"].pedidosAgrupados, { 'expires': expireDate, secure: $rootScope.secureCookie });
+            Datos.data.pedidosAgrupados[0].TipoCambio = $scope.TipoCambio;
+            $cookies.putObject('pedidosAgrupados', Datos.data.pedidosAgrupados, { 'expires': expireDate, secure: $rootScope.secureCookie });
             if (Datos.success) {
               if ($cookies.getObject('pedidosAgrupados')) {
-
-                Checkout.configure({
-                  merchant: Datos.data["0"].merchant,
-                  session: { id: Datos.data["0"].session_id },
-                  order:
-                  {
-                    amount: Datos.data['0'].total,
-                    currency: Datos.data["0"].moneda,
-                    description: 'Pago tarjeta bancaria',
-                    id: Datos.data["0"].pedidos,
-                  },
-                  interaction:
-                  {
-                    merchant:
-                    {
-                      name: 'CompuSoluciones',
-                      address:
-                      {
-                        line1: 'CompuSoluciones y Asociados, S.A. de C.V.',
-                        line2: 'Av. Mariano Oterno No. 1105',
-                        line3: 'Col. Rinconada del Bosque C.P. 44530',
-                        line4: 'Guadalajara, Jalisco. México'
-                      },
-                      email: 'order@yourMerchantEmailAddress.com',
-                      phone: '+1 123 456 789 012',
-                    },
-                    displayControl: { billingAddress: 'HIDE', orderSummary: 'SHOW' },
-                    locale: 'es_MX',
-                    theme: 'default'
-                  }
-                });
-                Checkout.showLightbox();
+                setCCDates();
+                console.log(Datos);
+                $scope.pedidos = Datos.data.pedidos;
+                $scope.amount = Datos.data.total;
+                $scope.currency = Datos.data.moneda;
+                OpenPay.setId(Datos.data.opId);
+                OpenPay.setApiKey(Datos.data.opPublic);
+                OpenPay.setSandboxMode(true); //  descomentar esta linea cuando haya pruebas
+                deviceSessionId = OpenPay.deviceData.setup('payment-form', 'deviceIdHiddenFieldName');
+                $('#deviceSessionId').val(deviceSessionId); // tokenId deviceSessionId
+                modalPagoMonitor.style.display = 'block';
               }
             }
           })
@@ -343,6 +391,63 @@
       } else {
         $scope.ShowToast('Selecciona al menos un pedido para pagar.', 'danger');
       }
+    };
+
+    $('#payButton').on('click', function (event) {
+      event.preventDefault();
+      $('#payButton').prop('disabled', true);
+      OpenPay.token.extractFormAndCreate('payment-form', successCallbak, errorCallbak);
+    });
+
+    const successCallbak = function (response) {
+      $('#responseDivMonitor').html('').addClass('ocultar').removeClass('alert alert-danger');
+      tokenId = response.data.id;
+      console.log('token id: ', response.data.id);
+      console.log('deviceSessionId: ', deviceSessionId);
+      $('#tokenId').val(tokenId);
+
+      const verifyCreditCard = document.getElementById('cardNumber').value;
+      verifyCreditCard.replace(' ', '');
+      console.log('Credit card: ', verifyCreditCard);
+      const cardType = OpenPay.card.cardType(verifyCreditCard); // check if cc is correct
+      console.log(cardType);
+
+      const charges = {
+        source_id: tokenId,
+        method: 'card',
+        amount: $scope.amount,
+        currency: $scope.currency,
+        description: $scope.pedidos,
+        device_session_id: deviceSessionId
+      };
+
+      PedidoDetallesFactory.pagarTarjetaOpenpay(charges)
+      .then(function (response) {
+        if (response.data.statusCode === 200) {
+          angular.element(document.getElementById('divComprar')).scope().CreditCardPayment(response.data.content.statusCharge, response.data.content.paymentId);
+        } else {
+          printError(getCardError(response.data.content));
+        }
+      })
+        .catch(function (response) {
+          $scope.ShowToast('Ocurrió un error al procesar el pago. de tipo: ' + response.data.message, 'danger');
+        });
+
+    };
+
+    const printError = (messageError) => {
+      $('#responseDiv').html(messageError).removeClass('ocultar').removeClass().addClass('alert alert-danger');
+    };
+
+    const errorCallbak = function (response) {
+      let desc = response.data.description != undefined ? response.data.description : response.message;
+      console.log(desc);
+      printError(getCardError(response.data.error_code));
+      $('#payButton').prop('disabled', false);
+    };
+
+    $scope.cerrarModal = modal => {
+      document.getElementById(modal).style.display = 'none';
     };
 
     const getActualSubdomain = function () {

@@ -186,11 +186,6 @@
     </div>
 
 
-
-
-    <!-- modal openpay -->
-
-    <!-- Modal -->
     <div id="modalPagoTC" class="modal fade in" role="dialog">
         <div class="divLoading" data-cargando>
             <div class=""><img src="images/ripple.svg" /></div>
@@ -203,7 +198,8 @@
 
                     <div class="row">
                         <div class="col-sm-12">
-                            <button type="button" ng-click="cerrarModal('modalPagoTC')" class="close" data-dismiss="modal">
+                            <button type="button" ng-click="cerrarModal('modalPagoTC')" class="close"
+                                data-dismiss="modal">
                                 &times;
                             </button>
                             <h2 class="modal-title text-center"><b>pago con tarjeta de crédito</b></h2>
@@ -240,7 +236,7 @@
                                                 <h4>Tarjetas de débito</h4>
                                                 <img src="../../../images/open-pay/cards2.png" alt="" />
                                             </div>
-                                            
+
                                             <div class="col-md-8 col-lg-8 col-sm-12 col-xs-12 hidden-md hidden-lg hidden-xl"
                                                 style="padding-left: 24px;">
                                                 <h4>Tarjetas de débito</h4>
@@ -253,15 +249,14 @@
                                             <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12 nameAndNumber">
                                                 <label class="paddingTop">Nombre del titular</label>
                                                 <input type="text" placeholder="Como aparece en la tarjeta"
-                                                    data-openpay-card="holder_name"
-                                                    ng-model="name" />
+                                                    data-openpay-card="holder_name" ng-model="name" />
                                             </div>
 
                                             <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12 nameAndNumber">
                                                 <label class="paddingTop">Número de tarjeta</label>
-                                                <input type="text" id="cardNumber" 
-                                                    onkeypress="if ( isNaN( String.fromCharCode(event.keyCode) ))return false;"
-                                                    autocomplete="off" data-openpay-card="card_number" ng-model="cardNumber" />
+                                                <input type="text" id="cc-number-input" class="cc-number-input"
+                                                    data-openpay-card="card_number"
+                                                    ng-model="cardNumber" maxlength="20" spellcheck="false" />
                                                 <a ng-show="errorCard">{{errorCardMessage}}</a>
                                             </div>
                                         </div>
@@ -272,7 +267,8 @@
                                                 <div class="row">
                                                     <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
                                                         <div class="nameAndNumber half l">
-                                                            <select data-openpay-card="expiration_month" id="ccexpmonth">
+                                                            <select data-openpay-card="expiration_month"
+                                                                id="ccexpmonth">
                                                                 <option ng-repeat="mes in meses" value="{{mes.valor}}">
                                                                     {{mes.nombre}}</option>
                                                             </select>
@@ -293,9 +289,11 @@
                                                 <label class="paddingTop">Código de seguridad</label>
                                                 <div class="row">
                                                     <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
-                                                        <input type="password" placeholder="3 dígitos" autocomplete="off"
-                                                        onkeypress="if ( isNaN( String.fromCharCode(event.keyCode) )) return false;"
-                                                            data-openpay-card="cvv2" id="cvv" name="cvv" />
+                                                        <input type="password" placeholder="3 dígitos"
+                                                            autocomplete="off"
+                                                            onkeypress="if ( isNaN( String.fromCharCode(event.keyCode) )) return false;"
+                                                            maxlength="4" data-openpay-card="cvv2" id="cvv"
+                                                            spellcheck="false" />
                                                     </div>
                                                     <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
                                                         <center>
@@ -367,8 +365,83 @@
         </div>
     </div>
 
-
-
-
-
 </div>
+<script>
+/*
+    let ccNumberInput = document.querySelector('.cc-number-input'),
+        ccNumberPattern = /^\d{0,16}$/g,
+        ccNumberSeparator = " ",
+        ccNumberInputOldValue,
+        ccNumberInputOldCursor,
+
+        mask = (value, limit, separator) => {
+            var output = [];
+            for (let i = 0; i < value.length; i++) {
+                if (i !== 0 && i % limit === 0) {
+                    output.push(separator);
+                }
+
+                output.push(value[i]);
+            }
+
+            return output.join("");
+        },
+        unmask = (value) => value.replace(/[^\d]/g, ''),
+        checkSeparator = (position, interval) => Math.floor(position / (interval + 1)),
+        ccNumberInputKeyDownHandler = (e) => {
+            let el = e.target;
+            ccNumberInputOldValue = el.value;
+            ccNumberInputOldCursor = el.selectionEnd;
+        },
+        ccNumberInputInputHandler = (e) => {
+            let el = e.target,
+                newValue = unmask(el.value),
+                newCursorPosition;
+
+            if (newValue.match(ccNumberPattern)) {
+                newValue = mask(newValue, 4, ccNumberSeparator);
+
+                newCursorPosition =
+                    ccNumberInputOldCursor - checkSeparator(ccNumberInputOldCursor, 4) +
+                    checkSeparator(ccNumberInputOldCursor + (newValue.length - ccNumberInputOldValue.length), 4) +
+                    (unmask(newValue).length - unmask(ccNumberInputOldValue).length);
+
+                el.value = (newValue !== "") ? newValue : "";
+            } else {
+                el.value = ccNumberInputOldValue;
+                newCursorPosition = ccNumberInputOldCursor;
+            }
+
+            el.setSelectionRange(newCursorPosition, newCursorPosition);
+
+            highlightCC(el.value);
+        },
+        highlightCC = (ccValue) => {
+            let ccCardType = '',
+                ccCardTypePatterns = {
+                    amex: /^3/,
+                    visa: /^4/,
+                    mastercard: /^5/,
+                    disc: /^6/,
+
+                    genric: /(^1|^2|^7|^8|^9|^0)/,
+                };
+
+            for (const cardType in ccCardTypePatterns) {
+                if (ccCardTypePatterns[cardType].test(ccValue)) {
+                    ccCardType = cardType;
+                    break;
+                }
+            }
+
+            let activeCC = document.querySelector('.cc-types__img--active'),
+                newActiveCC = document.querySelector(`.cc-types__img--${ccCardType}`);
+
+            if (activeCC) activeCC.classList.remove('cc-types__img--active');
+            if (newActiveCC) newActiveCC.classList.add('cc-types__img--active');
+        };
+
+    ccNumberInput.addEventListener('keydown', ccNumberInputKeyDownHandler);
+    ccNumberInput.addEventListener('input', ccNumberInputInputHandler);
+*/
+</script>
