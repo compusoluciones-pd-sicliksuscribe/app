@@ -654,22 +654,28 @@
       }
     };
 
-    $scope.actualizarEsquema = (numeroContrato, numeroSeries, idEsquemaRenovacion) =>{
+    $scope.actualizarEsquema = (numeroContrato, numeroSeries, idEsquemaRenovacion) => {
       
       PedidoDetallesFactory.actualizarEsquemaRenovacion(numeroSeries, idEsquemaRenovacion)
         .then(result => {
-          $scope.Pedidos.forEach(pedido => {
-             if (pedido.NumeroContrato === numeroContrato) {
-              pedido.TermSwitch = true;
-              pedido.EstatusContrato = 'term-switch';
-             }
-          });
-          $scope.ShowToast(result.data.message, 'success');
+          if (result.data.statusCode === 400) {
+            $scope.ShowToast(result.data.message, 'danger');
+          } 
+          else {
+            $scope.Pedidos.forEach(pedido => {
+              if (pedido.NumeroContrato === numeroContrato) {
+                pedido.TermSwitch = true;
+                pedido.EstatusContrato = 'term-switch';
+              }
+            });
+            $scope.ShowToast(result.data.message, 'success');
+          }
         })
         .catch(result => {
           $scope.ShowToast(result.data.message, 'danger');
         });
-    }
+    };
+    
   };
 
   MonitorReadController.$inject = ['$scope', '$log', '$cookies', '$location', 'EmpresasXEmpresasFactory', 'PedidoDetallesFactory', '$uibModal', '$filter', 'FabricantesFactory', 'PedidosFactory', 'EmpresasFactory', 'UsuariosFactory','AmazonDataFactory', 'ActualizarCSNFactory'];
