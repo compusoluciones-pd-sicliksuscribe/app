@@ -72,6 +72,17 @@
                         </div>
                     </div>
                 </div>
+                <div class="form-group" ng-hide="isPayingWithCSCredit() || hasProtectedExchangeRate() || isPayingWithPaypal() || isPayingInStore()  || isPayWithPrepaid() ">
+                    <label for="" class="">* ¿Con qué tipo de tarjeta quieres pagar?</label>
+                    <div class="radio" style="margin-left:30px">
+                        <div>
+                            <input type="radio" ng-model="Distribuidor.TipoTarjeta" ng-value="1" ng-change="tipoTarjeta(1)" id="TC_1" name="TipoTarjeta">Visa/Mastercard
+                        </div>
+                        <div>
+                            <input type="radio" ng-model="Distribuidor.TipoTarjeta" ng-value="2" ng-change="tipoTarjeta(2)" id="TC_2" name="TipoTarjeta" >American Express
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 

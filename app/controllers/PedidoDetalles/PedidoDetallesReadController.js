@@ -102,6 +102,7 @@
         .then(function (result) {
           $scope.orden = new Array(result.data.data.length);
           $scope.PedidoDetalles = result.data.data;
+          validarTC();
           if ($scope.SessionCookie.IdTipoAcceso === 10) {
             const estaEnLista = $scope.usuariosCompra.filter(usuario => usuario.IdUsuario === $scope.PedidoDetalles[0].IdUsuarioCompra);
             if (estaEnLista.length > 0) {
@@ -452,6 +453,24 @@
       if (isTiredProduct(product)) return priceWithExchangeRate;
       return priceWithExchangeRate * product.Cantidad;
     };
+
+    const validarTC = () => {
+      let tipoTarjetaCredito = $cookies.getObject('tipoTarjetaCredito');
+      if ($scope.PedidoDetalles[0].IdFormaPago === 1) {
+        if (!tipoTarjetaCredito)
+          $('#btnSiguiente').prop('disabled', true);
+        else 
+          $('#TC_'+tipoTarjetaCredito).prop('checked', true);
+          $('#btnSiguiente').prop('disabled', false);
+      }else{
+        $('#btnSiguiente').prop('disabled', false);
+      }
+    };
+
+    $scope.tipoTarjeta = (tipo) => {
+      $cookies.putObject('tipoTarjetaCredito', tipo);
+      validarTC();
+    }
 
     $scope.next = function () {
       actualizarOrdenesCompra();
