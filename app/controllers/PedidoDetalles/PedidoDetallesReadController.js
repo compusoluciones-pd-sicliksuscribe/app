@@ -102,7 +102,7 @@
         .then(function (result) {
           $scope.orden = new Array(result.data.data.length);
           $scope.PedidoDetalles = result.data.data;
-          validarTC();
+          if ($scope.PedidoDetalles[0].IdFormaPago === 1) validarTC();
           if ($scope.SessionCookie.IdTipoAcceso === 10) {
             const estaEnLista = $scope.usuariosCompra.filter(usuario => usuario.IdUsuario === $scope.PedidoDetalles[0].IdUsuarioCompra);
             if (estaEnLista.length > 0) {
@@ -357,7 +357,6 @@
             }
           });
           $scope.ActualizarMenu();
-          // validarCarrito();
           $scope.ShowToast(result.data.message, 'success');
         })
         .catch(function (result) {
@@ -454,23 +453,25 @@
       return priceWithExchangeRate * product.Cantidad;
     };
 
-    const validarTC = () => {
-      let tipoTarjetaCredito = $cookies.getObject('tipoTarjetaCredito');
-      if ($scope.PedidoDetalles[0].IdFormaPago === 1) {
-        if (!tipoTarjetaCredito)
-          $('#btnSiguiente').prop('disabled', true);
-        else 
-          $('#TC_'+tipoTarjetaCredito).prop('checked', true);
-          $('#btnSiguiente').prop('disabled', false);
-      }else{
-        $('#btnSiguiente').prop('disabled', false);
-      }
+    $scope.tipoTarjeta = (tipo, cookie) => {
+      
+      if (cookie) $cookies.putObject('tipoTarjetaCredito', tipo);
+      PedidoDetallesFactory.setCreditCardType($scope.PedidoDetalles, tipo)
+        .then(() => $scope.ShowToast('Tipo de tarjeta actualizada.', 'success'))
+        .catch(() => $scope.ShowToast('No fue posible actualizar el usuario de compra.', 'danger'));
     };
 
-    $scope.tipoTarjeta = (tipo) => {
-      $cookies.putObject('tipoTarjetaCredito', tipo);
-      validarTC();
-    }
+    const validarTC = () => {
+      let tipoTarjetaCredito = $cookies.getObject('tipoTarjetaCredito');
+      if (!tipoTarjetaCredito){
+        $('#btnSiguiente').prop('disabled', true);
+      }else {
+        $scope.tipoTarjeta(tipoTarjetaCredito, false);
+        $('#TC_'+tipoTarjetaCredito).prop('checked', true);
+        $('#btnSiguiente').prop('disabled', false);
+      }
+
+    };
 
     $scope.next = function () {
       actualizarOrdenesCompra();

@@ -335,10 +335,8 @@
       $location.path('/Carrito');
     };
 
-    $scope.PagarTarjeta = function () { // tarjeta de credito
+    $scope.PagarTarjeta = function () {
       if ($scope.Distribuidor.IdFormaPagoPredilecta === 1) {
-
-
         PedidoDetallesFactory.getPrepararTarjetaCredito()
         .success(function (Datos) {
           var expireDate = new Date();
@@ -385,11 +383,6 @@
       tokenId = response.data.id;
       $('#token_id').val(tokenId);
 
-      const verifyCreditCard = document.getElementById('cc-number-input').value;
-      console.log('Credit card: ', verifyCreditCard);
-      const cardType = OpenPay.card.cardType(verifyCreditCard); // check if cc is correct
-      console.log(cardType);
-
       const charges = {
         source_id: tokenId,
         method: 'card',
@@ -410,7 +403,6 @@
         .catch(function (response) {
           $scope.ShowToast('Ocurrió un error al procesar el pago. de tipo: ' + response.data.message, 'danger');
         });
-
     };
 
     const printError = (messageError) => {

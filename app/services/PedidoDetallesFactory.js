@@ -316,6 +316,11 @@
       factory.refreshToken();
       return $http.post($rootScope.API + 'autodesk/update-subscriptions', { numeroSeries, idEsquemaRenovacion });
     };
+
+    factory.setCreditCardType = (PedidoDetalles, tipoTarjeta) => {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'shopping-cart/set-creditCardType', { PedidoDetalles, tipoTarjeta });
+    };
     return factory;
   };
 
