@@ -459,6 +459,7 @@
       PedidoDetallesFactory.setCreditCardType($scope.PedidoDetalles, tipo)
         .then(() => $scope.ShowToast('Tipo de tarjeta actualizada.', 'success'))
         .catch(() => $scope.ShowToast('No fue posible actualizar el usuario de compra.', 'danger'));
+      $('#btnSiguiente').prop('disabled', false);
     };
 
     const validarTC = () => {
