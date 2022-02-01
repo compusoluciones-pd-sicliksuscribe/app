@@ -19,12 +19,13 @@
       PREPAY: 4
     };
 
-    let modalPagoMonitor = document.getElementById('modalPagoMonitor');
     let deviceSessionId = '';
     let tokenId = '';
     $scope.meses = [{ nombre: 'Enero', valor: '01' }, { nombre: 'Febrero', valor: '02' }, { nombre: 'Marzo', valor: '03' }, { nombre: 'Abril', valor: '04' }, { nombre: 'Mayo', valor: '05' }, { nombre: 'Junio', valor: '06' }, { nombre: 'Julio', valor: '07' }, { nombre: 'Agosto', valor: '08' }, { nombre: 'Septiembre', valor: '09' }, { nombre: 'Octubre', valor: '10' }, { nombre: 'Noviembre', valor: '11' }, { nombre: 'Diciembre', valor: '12' }];
     const getCardError = (errorCode) => {
       switch (errorCode) {
+        case 1001:
+          return 'El número de tarjeta debería de tener 3 dígitos (4 si es American Express).';
         case 2004:
           return 'El número de tarjeta es invalido.';
         case 2005:
@@ -83,8 +84,8 @@
         $scope.anios.push(yearNow);
       }
     };
-  
-    function groupBy (array, f) {
+
+    function groupBy(array, f) {
       var groups = {};
       array.forEach(function (o) {
         var group = JSON.stringify(f(o));
@@ -198,9 +199,9 @@
       const MonedaPago = $scope.Distribuidor.MonedaPago;
       $scope.pedidosPorPagar(key);
       EmpresasFactory.putCambiaMonedaMonitorPXP($scope.PedidosSeleccionadosParaPagar, MonedaPago)
-      .then(function (result) {
-      })
-      .catch(function (result) { error(result.data); });
+        .then(function (result) {
+        })
+        .catch(function (result) { error(result.data); });
     };
 
     $scope.ActualizarPagoAutomatico = function () {
@@ -223,7 +224,7 @@
       var subtotal = 0;
       for (var x = 0; x < $scope.Pedidos.length; x++) {
         if ($scope.Pedidos[x].IdPedido == key) {
-          subtotal += $scope.Pedidos[x].PrecioRenovacion * $scope.Pedidos[x].CantidadProxima  * $scope.Pedidos[x].TipoCambio;
+          subtotal += $scope.Pedidos[x].PrecioRenovacion * $scope.Pedidos[x].CantidadProxima * $scope.Pedidos[x].TipoCambio;
         }
       }
       return subtotal;
@@ -331,6 +332,7 @@
     };
 
     $scope.abreModal = function () {
+      let modalPagoMonitor = document.getElementById('modalPagoMonitor');
       modalPagoMonitor.style.display = 'block';
     };
 
@@ -353,7 +355,7 @@
                 OpenPay.setSandboxMode(true); //  descomentar esta linea cuando haya pruebas
                 deviceSessionId = OpenPay.deviceData.setup('payment-form', 'deviceIdHiddenFieldName');
                 $('#deviceSessionId').val(deviceSessionId); // tokenId deviceSessionId
-                modalPagoMonitor.style.display = 'block';
+                $scope.abreModal();
               }
             }
           })
@@ -380,12 +382,6 @@
       tokenId = response.data.id;
       $('#tokenId').val(tokenId);
 
-      const verifyCreditCard = document.getElementById('cardNumber').value;
-      verifyCreditCard.replace(' ', '');
-      console.log('Credit card: ', verifyCreditCard);
-      const cardType = OpenPay.card.cardType(verifyCreditCard); // check if cc is correct
-      console.log(cardType);
-
       const charges = {
         source_id: tokenId,
         method: 'card',
@@ -396,13 +392,13 @@
       };
 
       PedidoDetallesFactory.pagarTarjetaOpenpay(charges)
-      .then(function (response) {
-        if (response.data.statusCode === 200) {
-          angular.element(document.getElementById('divComprar')).scope().CreditCardPayment(response.data.content.statusCharge, response.data.content.paymentId);
-        } else {
-          printError(getCardError(response.data.content));
-        }
-      })
+        .then(function (response) {
+          if (response.data.statusCode === 200) {
+            angular.element(document.getElementById('divComprar')).scope().CreditCardPayment(response.data.content.statusCharge, response.data.content.paymentId);
+          } else {
+            printError(getCardError(response.data.content));
+          }
+        })
         .catch(function (response) {
           $scope.ShowToast('Ocurrió un error al procesar el pago. de tipo: ' + response.data.message, 'danger');
         });
@@ -410,11 +406,12 @@
     };
 
     const printError = (messageError) => {
-      $('#responseDiv').html(messageError).removeClass('ocultar').removeClass().addClass('alert alert-danger');
+      $('#responseDivMonitor').html(messageError).removeClass('ocultar').removeClass().addClass('alert alert-danger');
     };
 
     const errorCallbak = function (response) {
-      let desc = response.data.description != undefined ? response.data.description : response.message;
+      let desc = response.data.error_code != undefined ?
+        response.data.error_code : response.message;
       printError(getCardError(response.data.error_code));
       $('#payButton').prop('disabled', false);
     };
@@ -464,17 +461,17 @@
     $scope.preparePrePaid = function () {
       if ($scope.PedidosSeleccionadosParaPagar.length > 0) {
         PedidoDetallesFactory.payWithPrePaid({ Pedidos: $scope.PedidosSeleccionadosParaPagarPrepaid }, $scope.Distribuidor.MonedaPago)
-        .success(function (response) {
-          if (response.statusCode === 400) {
-            $scope.ShowToast(response.message, 'danger');
-          } else {
-            $scope.ShowToast('Pago realizado correctamente.', 'success');
-            $location.path('/MonitorPagos/refrescar');
-          }
-        })
-        .catch(function (response) {
-          $scope.ShowToast('Algo salió mal con tu pedido, por favor ponte en contacto con tu equipo de soporte CompuSoluciones para más información.', 'danger');
-        });
+          .success(function (response) {
+            if (response.statusCode === 400) {
+              $scope.ShowToast(response.message, 'danger');
+            } else {
+              $scope.ShowToast('Pago realizado correctamente.', 'success');
+              $location.path('/MonitorPagos/refrescar');
+            }
+          })
+          .catch(function (response) {
+            $scope.ShowToast('Algo salió mal con tu pedido, por favor ponte en contacto con tu equipo de soporte CompuSoluciones para más información.', 'danger');
+          });
       } else {
         $scope.ShowToast('Selecciona al menos un pedido para pagar.', 'danger');
       }
