@@ -137,7 +137,7 @@ option {
   /* Hidden by default */
   position: fixed;
   /* Sit on top */
-  padding-top: 200px;
+  padding-top: 0px;
   /* Location of the box */
   left: 0;
   top: 0;
