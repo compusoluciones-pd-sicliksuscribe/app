@@ -21,7 +21,8 @@
     const creditCardTypes = {
       VISA: 1,
       MASTERCARD: 1,
-      AMEX: 2
+      AMEX: 2,
+      OTRO: 3
     };
     const makers = {
       MICROSOFT: 1,
@@ -403,7 +404,7 @@
       $('#token_id').val(tokenId);
 
       const verifyCreditCard = document.getElementById('cc-number-input').value;
-      const cardType = OpenPay.card.cardType(verifyCreditCard); // check if cc is correct
+      let cardType = OpenPay.card.cardType(verifyCreditCard); // check if cc is correct
       switch (cardType) {
         case creditCardNames.VISA:
           $scope.creditCardType = creditCardTypes.VISA;
@@ -415,11 +416,12 @@
           $scope.creditCardType = creditCardTypes.AMEX;
           break;
         default:
-          $scope.creditCardType = cardType;
+          $scope.creditCardType = creditCardTypes.OTRO;
+          cardType = 'Desconocido';
       }
 
       if ($scope.creditCardType !== $cookies.getObject('tipoTarjetaCredito')) {
-        printError(`El numero de tu tarjeta es <b>${cardType}</b> y no concuerda con el tipo seleccionado anteriormente (<b>${creditCardName}</b>), favor de actualizar tu información.`);
+        printError(`El tipo de tarjeta ingresado es <b>${cardType}</b> y no concuerda con el tipo seleccionado anteriormente (<b>${creditCardName}</b>), favor de actualizar tu información.`);
       } else {
         const charges = {
           source_id: tokenId,
