@@ -33,6 +33,9 @@
       AMAZONWEBSERVICES: 10,
       IBM: 11
     };
+    const creditCardDigits = 16;
+    const ccLengthNameMin = 5;
+    const ccLengthNameMax = 80;
     $scope.tipoMonedaCambio = $cookies.getObject('compararPedidosAnteriores');
     let modalTC = document.getElementById('modalPagoTC');
     const error = function (message) {
@@ -199,7 +202,7 @@
     const orderCookie = orderIdsCookie => {
       const cookie = $cookies.putObject('orderIdsCookie', orderIdsCookie, { secure: $rootScope.secureCookie });
       const location = $location.path('/SuccessOrder');
-      const resultOrderidCookie = [{cookie, location}];
+      const resultOrderidCookie = [{ cookie, location }];
       return resultOrderidCookie;
     };
 
@@ -358,37 +361,37 @@
         }
         $cookies.getObject('tipoTarjetaCredito') === 1 ? creditCardName = 'Visa/Mastercard' : creditCardName = 'American Express';
         PedidoDetallesFactory.getPrepararTarjetaCredito()
-        .success(function (Datos) {
-          var expireDate = new Date();
-          expireDate.setTime(expireDate.getTime() + 600 * 2000); /* 20 minutos */
-          $cookies.putObject('pedidosAgrupados', Datos.data['0'].pedidosAgrupados, { 'expires': expireDate, secure: $rootScope.secureCookie });
-          if (Datos.data['0'].total > 0) {
-            if (Datos.success) {
-              if ($cookies.getObject('pedidosAgrupados')) {
-                setCCDates();
-                $scope.pedidos = Datos.data[0].pedidos;
-                $scope.amount = Datos.data[0].total;
-                $scope.currency = Datos.data[0].moneda;
-                OpenPay.setId(Datos.data['0'].opId);
-                OpenPay.setApiKey(Datos.data['0'].opPublic);
-                OpenPay.setSandboxMode(true); //  descomentar esta linea cuando haya pruebas
-                deviceSessionId = OpenPay.deviceData.setup('payment-form', 'deviceIdHiddenFieldName');
-                $('#device_session_id').val(deviceSessionId);
-                modalTC.style.display = 'block';
+          .success(function (Datos) {
+            var expireDate = new Date();
+            expireDate.setTime(expireDate.getTime() + 600 * 2000); /* 20 minutos */
+            $cookies.putObject('pedidosAgrupados', Datos.data['0'].pedidosAgrupados, { 'expires': expireDate, secure: $rootScope.secureCookie });
+            if (Datos.data['0'].total > 0) {
+              if (Datos.success) {
+                if ($cookies.getObject('pedidosAgrupados')) {
+                  setCCDates();
+                  $scope.pedidos = Datos.data[0].pedidos;
+                  $scope.amount = Datos.data[0].total;
+                  $scope.currency = Datos.data[0].moneda;
+                  OpenPay.setId(Datos.data['0'].opId);
+                  OpenPay.setApiKey(Datos.data['0'].opPublic);
+                  OpenPay.setSandboxMode(true); //  descomentar esta linea cuando haya pruebas
+                  deviceSessionId = OpenPay.deviceData.setup('payment-form', 'deviceIdHiddenFieldName');
+                  $('#device_session_id').val(deviceSessionId);
+                  modalTC.style.display = 'block';
+                } else {
+                  $scope.ShowToast('No pudimos comenzar con tu proceso de pago, favor de intentarlo una vez más.', 'danger');
+                }
               } else {
                 $scope.ShowToast('No pudimos comenzar con tu proceso de pago, favor de intentarlo una vez más.', 'danger');
               }
             } else {
-              $scope.ShowToast('No pudimos comenzar con tu proceso de pago, favor de intentarlo una vez más.', 'danger');
+              $scope.ShowToast('Algo salió mal con el pago con tarjeta bancaria, favor de intentarlo una vez más.', 'danger');
             }
-          } else {
-            $scope.ShowToast('Algo salió mal con el pago con tarjeta bancaria, favor de intentarlo una vez más.', 'danger');
-          }
-        })
-        .error(function (data, status, headers, config) {
-          const error = !data.message ? 'Ocurrió un error al procesar la solicitud. Intentalo de nuevo.' : data.message;
-          $scope.ShowToast(error, 'danger');
-        });
+          })
+          .error(function (data, status, headers, config) {
+            const error = !data.message ? 'Ocurrió un error al procesar la solicitud. Intentalo de nuevo.' : data.message;
+            $scope.ShowToast(error, 'danger');
+          });
       }
     };
 
@@ -419,29 +422,37 @@
           $scope.creditCardType = creditCardTypes.OTRO;
           cardType = 'Desconocido';
       }
-
       if ($scope.creditCardType !== $cookies.getObject('tipoTarjetaCredito')) {
         printError(`El tipo de tarjeta ingresado es <b>${cardType}</b> y no concuerda con el tipo seleccionado anteriormente (<b>${creditCardName}</b>), favor de actualizar tu información.`);
       } else {
-        const charges = {
-          source_id: tokenId,
-          method: 'card',
-          amount: $scope.amount,
-          currency: $scope.currency,
-          description: $scope.pedidos,
-          device_session_id: deviceSessionId
-        };
-        PedidoDetallesFactory.pagarTarjetaOpenpay(charges)
-        .then(function (response) {
-          if (response.data.statusCode === 200) {
-            angular.element(document.getElementById('divComprar')).scope().CreditCardPayment(response.data.content.statusCharge, response.data.content.paymentId);
+        const ccName = document.getElementById('cc-name-input').value;
+        if (ccName.length < ccLengthNameMin && ccName.length > ccLengthNameMax) {
+          printError('Verifica que el nombre del titular esté escrito de manera correcta.');
+        } else {
+          if (verifyCreditCard.length !== creditCardDigits) {
+            printError('Verifica que el número de tarjeta esté escrito de manera correcta.');
           } else {
-            printError(getCardError(response.data.content));
+            const charges = {
+              source_id: tokenId,
+              method: 'card',
+              amount: $scope.amount,
+              currency: $scope.currency,
+              description: $scope.pedidos,
+              device_session_id: deviceSessionId
+            };
+            PedidoDetallesFactory.pagarTarjetaOpenpay(charges)
+              .then(function (response) {
+                if (response.data.statusCode === 200) {
+                  angular.element(document.getElementById('divComprar')).scope().CreditCardPayment(response.data.content.statusCharge, response.data.content.paymentId);
+                } else {
+                  printError(getCardError(response.data.content));
+                }
+              })
+              .catch(function (response) {
+                $scope.ShowToast('Ocurrió un error al procesar el pago. de tipo: ' + response.data.message, 'danger');
+              });
           }
-        })
-          .catch(function (response) {
-            $scope.ShowToast('Ocurrió un error al procesar el pago. de tipo: ' + response.data.message, 'danger');
-          });
+        }
       };
     };
 

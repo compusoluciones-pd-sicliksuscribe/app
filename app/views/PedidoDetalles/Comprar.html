@@ -249,7 +249,8 @@
                                             <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12 nameAndNumber">
                                                 <label class="paddingTop">Nombre del titular</label>
                                                 <input type="text" placeholder="Como aparece en la tarjeta"
-                                                    data-openpay-card="holder_name" ng-model="name" />
+                                                    data-openpay-card="holder_name"  onkeydown="return /[a-z]/i.test(event.key) || event.keyCode == 32"
+                                                    id="cc-name-input" ng-model="name" />
                                             </div>
 
                                             <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12 nameAndNumber">
