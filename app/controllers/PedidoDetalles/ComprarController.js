@@ -117,6 +117,8 @@
           return 'El monto de la transacción es menor al mínimo permitido para la promoción.';
         case 3205:
           return 'Promoción no permitida.';
+        case 4013:
+          return 'El monto transacción esta fuera de los limites permitidos.';
         default:
           return 'Ocurrió un error, contactar a soporte.';
       }
@@ -371,6 +373,7 @@
                   setCCDates();
                   $scope.pedidos = Datos.data[0].pedidos;
                   $scope.amount = Datos.data[0].total;
+                  $scope.FormatedAmount = String(Datos.data[0].total).replace(/(?<!\..*)(\d)(?=(?:\d{3})+(?:\.|$))/g, '$1,');
                   $scope.currency = Datos.data[0].moneda;
                   OpenPay.setId(Datos.data['0'].opId);
                   OpenPay.setApiKey(Datos.data['0'].opPublic);
@@ -426,7 +429,7 @@
         printError(`El tipo de tarjeta ingresado es <b>${cardType}</b> y no concuerda con el tipo seleccionado anteriormente (<b>${creditCardName}</b>), favor de actualizar tu información.`);
       } else {
         const ccName = document.getElementById('cc-name-input').value;
-        if (ccName.length < ccLengthNameMin && ccName.length > ccLengthNameMax) {
+        if (ccName.length < ccLengthNameMin || ccName.length > ccLengthNameMax) {
           printError('Verifica que el nombre del titular esté escrito de manera correcta.');
         } else {
           if (verifyCreditCard.length !== creditCardDigits) {
@@ -445,7 +448,7 @@
                 if (response.data.statusCode === 200) {
                   angular.element(document.getElementById('divComprar')).scope().CreditCardPayment(response.data.content.statusCharge, response.data.content.paymentId);
                 } else {
-                  printError(getCardError(response.data.content));
+                  printError(response.data.message);
                 }
               })
               .catch(function (response) {

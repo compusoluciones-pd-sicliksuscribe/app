@@ -1,4 +1,4 @@
-<div class="container" ng-swipe-right="" ng-swipe-left="" >
+<div class="container" ng-swipe-right="" ng-swipe-left="" oncopy="return false" onpaste="return false">
     <!-- The Modal -->
     <div class="modal" id="modalTipoMoneda" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -249,14 +249,14 @@
                                             <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12 nameAndNumber">
                                                 <label class="paddingTop">Nombre del titular</label>
                                                 <input type="text" placeholder="Como aparece en la tarjeta"
-                                                    data-openpay-card="holder_name"  onkeydown="return /[a-z]/i.test(event.key) || event.keyCode == 32"
+                                                    data-openpay-card="holder_name" maxlength="80" onkeydown="return /[a-z]/i.test(event.key) || event.keyCode == 32"
                                                     id="cc-name-input" ng-model="name" />
                                             </div>
 
                                             <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12 nameAndNumber">
                                                 <label class="paddingTop">Número de tarjeta</label>
                                                 <input type="text" id="cc-number-input" class="cc-number-input" autocomplete="off"
-                                                    data-openpay-card="card_number" onkeypress="if ( isNaN( String.fromCharCode(event.keyCode) ))return false;"
+                                                    data-openpay-card="card_number" onkeypress="if ( isNaN( String.fromCharCode(event.keyCode) ) || event.keyCode == 32 )return false;"
                                                     ng-model="cardNumber" maxlength="16" spellcheck="false" />
                                                 <a ng-show="errorCard">{{errorCardMessage}}</a>
                                             </div>
@@ -341,7 +341,7 @@
                                         <div class="row">
                                             <div class="col-md-8 col-lg-8 col-sm-4 col-xs-4"></div>
                                             <div class="col-md-4 col-lg-4 col-sm-8 col-xs-8 nameAndNumber">
-                                                <label class="totalLabel" ng-if="amount"> Total: {{amount}}
+                                                <label class="totalLabel" ng-if="amount"> Total: {{FormatedAmount}}
                                                     {{currency}}</label>
                                             </div>
                                         </div>
