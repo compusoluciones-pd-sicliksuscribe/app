@@ -1,13 +1,16 @@
 .btn-monitor-pedidos-x-cliente {
     margin-right: .5em; 
     margin-top: .5em;
-    min-width: 14em; 
+    min-width: 7em; 
     height: 2.8em;
     color: white;
+    font-weight: bold;
+    background-color: #4A7BAB;
 }
 
 .btn-monitor-pedidos-x-cliente:hover {
     color: white;
+    background-color: #4a7bab94;
 }
 
 .btn-modal {

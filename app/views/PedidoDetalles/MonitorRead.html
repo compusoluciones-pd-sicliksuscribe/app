@@ -421,28 +421,28 @@
                 <div ng-if="pedido.PorExtender"><hr><h5 class="alert alert-warning text-warning" style="border-left: .6em solid;"><b>El periodo de vigencia del contrato será extendido.</b></h5></div>
             </div>
 			<div class="col-xs-12 col-sm-2 col-md-6 col-lg-6">
-                <button id="Extender" class="pull-right btn btn-info btn-monitor-pedidos-x-cliente"
+                <button id="ActualizarEsquema" class="pull-right btn btn-monitor-pedidos-x-cliente" style="margin-right: .5em; padding: .8em ; min-width: 150px;"
+                ng-hide="pedido.EstatusContrato !== 'ready' || !pedido.listoRenovar || pedido.PorExtender"
+                ng-click="actualizarEsquema(pedido.NumeroContrato, pedido.Detalles, pedido.IdEsquemaRenovacion)">
+					{{pedido.etiquetaTermSwitch}}
+				</button>
+                <button id="TradeIn" class="pull-right btn btn-monitor-pedidos-x-cliente"
+                ng-hide="pedido.EstatusContrato !== 'ready' || !pedido.listoRenovar || pedido.PorExtender"
+                data-toggle="modal" data-target="#renovacionTradeIn"
+				ng-click="agregarInfoTradein(pedido);">
+                    Trade in
+                </button>
+                <button id="Extender" class="pull-right btn btn-monitor-pedidos-x-cliente"
                 ng-hide="pedido.EstatusContrato === 'canceled' || pedido.EstatusContrato === 'notRenewed' || pedido.EstatusContrato === 'in-cart' || pedido.EstatusContrato === 'processing' || pedido.EstatusContrato === 'renewal' ||  pedido.EstatusContrato === 'processing' || pedido.PorExtender"
                 ng-disabled="pedido.EstatusPedido !== 3"
                 ng-click="getEndDateContract(pedido.IdContrato, pedido.EstatusPedido);">
 					Extender
 				</button>
-                <button id="Renovar" class="pull-right btn btn-primary btn-monitor-pedidos-x-cliente"
+                <button id="Renovar" class="pull-right btn btn-monitor-pedidos-x-cliente"
                 ng-hide="pedido.EstatusContrato !== 'ready' || !pedido.listoRenovar || pedido.PorExtender"
                 data-toggle="modal" data-target="#renovarModal"
 				ng-click="AgregarContrato(pedido);">
 					Renovar
-                </button>
-                <button id="ActualizarEsquema" class="pull-right btn  btn-warning btn-monitor-pedidos-x-cliente" style="margin-right: .5em; padding: .8em ; min-width: 150px;"
-                ng-hide="pedido.EstatusContrato !== 'ready' || !pedido.listoRenovar || pedido.PorExtender"
-                ng-click="actualizarEsquema(pedido.NumeroContrato, pedido.Detalles, pedido.IdEsquemaRenovacion)">
-					{{pedido.etiquetaTermSwitch}}
-				</button>
-                <button id="TradeIn" class="pull-right btn grayColor btn-monitor-pedidos-x-cliente"
-                ng-hide="pedido.EstatusContrato !== 'ready' || !pedido.listoRenovar || pedido.PorExtender"
-                data-toggle="modal" data-target="#renovacionTradeIn"
-				ng-click="agregarInfoTradein(pedido);">
-                    Trade in
                 </button>
             </div> 
         </div>
