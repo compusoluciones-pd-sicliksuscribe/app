@@ -708,9 +708,11 @@
                 $scope.ActualizarMenu();
                 $scope.ActualizarMonitor();
                 $scope.addPulseCart();
+                $('#renovacionTradeIn').modal('hide');
               })
               .catch(result => {
                 $scope.ShowToast(result.data.message, 'danger');
+                $('#renovacionTradeIn').modal('hide');
               });
           } else $scope.ShowToast('Especifique una cantidad para hacer tarde in en al menos una de las series.', 'warning');
         } else $scope.ShowToast('La cantidad no debe ser mayor a la disponible.', 'warning');
