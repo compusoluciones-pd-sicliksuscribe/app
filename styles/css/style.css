@@ -712,6 +712,14 @@ option {
   display: none;
 }
 
+.blueText {
+  color: #00549f !important;
+}
+
+.pb-3 {
+  padding-bottom: 30px;
+}
+
 /*General Classes*/
 
 /* Media Queries*/
