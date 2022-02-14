@@ -12,11 +12,27 @@
     $scope.DeshabilitarPagar = false;
     $scope.todos = 0;
     $scope.paymethod = 1;
+    $scope.creditCardType = 0;
+    let creditCardName = '';
+    const creditCardDigits = 16;
+    const ccLengthNameMin = 5;
+    const ccLengthNameMax = 80;
     const paymentMethods = {
       CREDIT_CARD: 1,
       CS_CREDIT: 2,
       PAYPAL: 3,
       PREPAY: 4
+    };
+    const creditCardNames = {
+      VISA: 'Visa',
+      MASTERCARD: 'Mastercard',
+      AMEX: 'American Express'
+    };
+    const creditCardTypes = {
+      VISA: 1,
+      MASTERCARD: 1,
+      AMEX: 2,
+      OTRO: 3
     };
     let deviceSessionId = '';
     let tokenId = '';
@@ -69,6 +85,8 @@
           return 'El monto de la transacción es menor al mínimo permitido para la promoción.';
         case 3205:
           return 'Promoción no permitida.';
+        case 4013:
+          return 'El monto de la transacción está fuera de los limites permitidos.';
         default:
           return 'Ocurrió un error, contactar a soporte.';
       }
@@ -225,7 +243,6 @@
     $scope.tipoTarjetaMonitor = (tipo) => {
       let deshabilitarTc = document.getElementById('deshabilitarTc');
       $cookies.putObject('tipoTarjetaCreditoMonitor', tipo);
-      $scope.ShowToast('Tipo de tarjeta actualizada.', 'success');
       $('#btnSiguiente').prop('disabled', false);
       deshabilitarTc.style.display = 'block';
       limpiarPedido();
@@ -398,11 +415,12 @@
                 setCCDates();
                 $scope.pedidos = Datos.data.pedidos;
                 $scope.amount = Datos.data.total;
+                $scope.FormatedAmountMonitor = String(Datos.data.total).replace(/(?<!\..*)(\d)(?=(?:\d{3})+(?:\.|$))/g, '$1,');
                 $scope.currency = Datos.data.moneda;
                 OpenPay.setId(Datos.data.opId);
                 OpenPay.setApiKey(Datos.data.opPublic);
                 OpenPay.setSandboxMode(true); //  descomentar esta linea cuando haya pruebas
-                deviceSessionId = OpenPay.deviceData.setup('payment-form', 'deviceIdHiddenFieldName');
+                deviceSessionId = OpenPay.deviceData.setup('payment-form-monitor', 'deviceIdHiddenFieldName');
                 $('#deviceSessionId').val(deviceSessionId);
                 $scope.abreModal();
               }
@@ -423,7 +441,7 @@
     $('#payButton').on('click', function (event) {
       event.preventDefault();
       $('#payButton').prop('disabled', true);
-      OpenPay.token.extractFormAndCreate('payment-form', successCallbak, errorCallbak);
+      OpenPay.token.extractFormAndCreate('payment-form-monitor', successCallbak, errorCallbak);
     });
 
     const successCallbak = function (response) {
@@ -431,37 +449,66 @@
       tokenId = response.data.id;
       $('#tokenId').val(tokenId);
 
-      const charges = {
-        source_id: tokenId,
-        method: 'card',
-        amount: $scope.amount,
-        currency: $scope.currency,
-        description: $scope.pedidos,
-        device_session_id: deviceSessionId
-      };
+      const verifyCreditCard = document.getElementById('cardNumber').value;
+      let cardType = OpenPay.card.cardType(verifyCreditCard);
+      switch (cardType) {
+        case creditCardNames.VISA:
+          $scope.creditCardType = creditCardTypes.VISA;
+          break;
+        case creditCardNames.MASTERCARD:
+          $scope.creditCardType = creditCardTypes.MASTERCARD;
+          break;
+        case creditCardNames.AMEX:
+          $scope.creditCardType = creditCardTypes.AMEX;
+          break;
+        default:
+          $scope.creditCardType = creditCardTypes.OTRO;
+          cardType = 'Desconocido';
+      }
 
-      PedidoDetallesFactory.pagarTarjetaOpenpay(charges)
-        .then(function (response) {
-          if (response.data.statusCode === 200) {
-            angular.element(document.getElementById('divComprar')).scope().CreditCardPayment(response.data.content.statusCharge, response.data.content.paymentId);
+      if ($scope.creditCardType !== $cookies.getObject('tipoTarjetaCreditoMonitor')) {
+        printError(`El tipo de tarjeta ingresado es <b>${cardType}</b> y no concuerda con el tipo seleccionado anteriormente (<b>${creditCardName}</b>), favor de actualizar tu información.`);
+      } else {
+        const ccName = document.getElementById('cardName').value;
+        if (ccName.length < ccLengthNameMin || ccName.length > ccLengthNameMax) {
+          printError('Verifica que el nombre del titular esté escrito de manera correcta.');
+        } else {
+          if (verifyCreditCard.length !== creditCardDigits) {
+            printError('Verifica que el número de tarjeta esté escrito de manera correcta.');
           } else {
-            printError(getCardError(response.data.content));
+            const charges = {
+              source_id: tokenId,
+              method: 'card',
+              amount: $scope.amount,
+              currency: $scope.currency,
+              description: $scope.pedidos,
+              device_session_id: deviceSessionId
+            };
+            PedidoDetallesFactory.pagarTarjetaOpenpay(charges)
+              .then(function (response) {
+                if (response.data.statusCode === 200) {
+                  angular.element(document.getElementById('divComprar')).scope().CreditCardPayment(response.data.content.statusCharge, response.data.content.paymentId);
+                } else {
+                  printError(response.data.message);
+                }
+              })
+              .catch(function (response) {
+                $scope.ShowToast('Ocurrió un error al procesar el pago, de tipo: ' + response.data.message, 'danger');
+              });
           }
-        })
-        .catch(function (response) {
-          $scope.ShowToast('Ocurrió un error al procesar el pago. de tipo: ' + response.data.message, 'danger');
-        });
+        }
+      }
     };
 
     const printError = (messageError) => {
       $('#responseDivMonitor').html(messageError).removeClass('ocultar').removeClass().addClass('alert alert-danger');
+      $('#payButton').prop('disabled', false);
     };
 
     const errorCallbak = function (response) {
       let desc = response.data.error_code != undefined ?
         response.data.error_code : response.message;
       printError(getCardError(response.data.error_code));
-      $('#payButton').prop('disabled', false);
     };
 
     $scope.cerrarModal = modal => {

@@ -118,7 +118,7 @@
         case 3205:
           return 'Promoción no permitida.';
         case 4013:
-          return 'El monto transacción esta fuera de los limites permitidos.';
+          return 'El monto de la transacción está fuera de los limites permitidos.';
         default:
           return 'Ocurrió un error, contactar a soporte.';
       }
@@ -501,7 +501,7 @@
           }
         })
         .catch(function (response) {
-          $scope.ShowToast('Ocurrió un error al procesar el pago. de tipo: ' + response.data.message, 'danger');
+          $scope.ShowToast('Ocurrió un error al procesar el pago, de tipo: ' + response.data.message, 'danger');
         });
     };
 
