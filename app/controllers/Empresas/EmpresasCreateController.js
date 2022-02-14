@@ -12,6 +12,7 @@
     $scope.mensajerfc = '';
     $scope.aceptarButton = true;
     $scope.selectIndustrias = {};
+    $scope.Elegido = [];
 
     $scope.init = function () {
       $scope.CheckCookie();
@@ -269,9 +270,9 @@
             if (!$scope.Empresa.DominioMicrosoft || $scope.Empresa.DominioMicrosoft === ''){
               delete $scope.Empresa.DominioMicrosoft;
             }
-            console.log($scope.Empresa)
             $scope.loading = true;
             $scope.Empresa.Formulario = true;
+            console.log($scope.Empresa);
             EmpresasFactory.postEmpresa($scope.Empresa)
                 .success(function (result) {
                   var re, me, dat;
