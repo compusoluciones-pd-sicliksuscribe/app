@@ -437,11 +437,11 @@
           } else {
             const charges = {
               source_id: tokenId,
-              method: 'card',
               amount: $scope.amount,
               currency: $scope.currency,
               description: $scope.pedidos,
-              device_session_id: deviceSessionId
+              device_session_id: deviceSessionId,
+              pedidosAgrupados: $cookies.getObject('pedidosAgrupados')
             };
             PedidoDetallesFactory.pagarTarjetaOpenpay(charges)
               .then(function (response) {
