@@ -4,9 +4,13 @@
     $scope.PedidoDetalles = {};
     $scope.Distribuidor = {};
     $scope.creditCardType = 0;
-    let creditCardName = '';
-    const ELECTRONIC_SERVICE = 74;
     $scope.error = false;
+    let creditCardName = '';
+    const ccVisaMcLength = 16;
+    const ccAmexLength = 15;
+    const ELECTRONIC_SERVICE = 74;
+    const ccLengthNameMin = 5;
+    const ccLengthNameMax = 80;
     const paymentMethods = {
       CREDIT_CARD: 1,
       CS_CREDIT: 2,
@@ -33,9 +37,6 @@
       AMAZONWEBSERVICES: 10,
       IBM: 11
     };
-    const creditCardDigits = 16;
-    const ccLengthNameMin = 5;
-    const ccLengthNameMax = 80;
     $scope.tipoMonedaCambio = $cookies.getObject('compararPedidosAnteriores');
     let modalTC = document.getElementById('modalPagoTC');
     const error = function (message) {
@@ -399,18 +400,13 @@
     };
 
     $('#pay-button').on('click', function (event) {
-      event.preventDefault();
-      $('#pay-button').prop('disabled', true);
-      OpenPay.token.extractFormAndCreate('payment-form', successCallbak, errorCallbak);
-    });
-
-    const successCallbak = function (response) {
-      $('#responseDiv').html('').addClass('ocultar').removeClass('alert alert-danger');
-      tokenId = response.data.id;
-      $('#token_id').val(tokenId);
-
-      const verifyCreditCard = document.getElementById('cc-number-input').value;
-      let cardType = OpenPay.card.cardType(verifyCreditCard); // check if cc is correct
+      const creditCardNumber = document.getElementById('cc-number-input').value;
+      const creditCardFormated = creditCardNumber.split(' ').join('');
+      const holderName = document.getElementById('cc-name-input').value;
+      const ccexpmonth = document.getElementById('ccexpmonth').value;
+      const ccexpyear = document.getElementById('ccexpyear').value;
+      const cvv = document.getElementById('cvv').value;
+      let cardType = OpenPay.card.cardType(creditCardFormated);
       switch (cardType) {
         case creditCardNames.VISA:
           $scope.creditCardType = creditCardTypes.VISA;
@@ -425,38 +421,68 @@
           $scope.creditCardType = creditCardTypes.OTRO;
           cardType = 'Desconocido';
       }
+
+      const validateCreditCard = () => {
+        event.preventDefault();
+        $('#pay-button').prop('disabled', true);
+        OpenPay.token.create({
+          'card_number': creditCardFormated,
+          'holder_name': holderName,
+          'expiration_year': ccexpyear,
+          'expiration_month': ccexpmonth,
+          'cvv2': cvv
+        }, successCallbak, errorCallbak);
+      };
       if ($scope.creditCardType !== $cookies.getObject('tipoTarjetaCredito')) {
         printError(`El tipo de tarjeta ingresado es <b>${cardType}</b> y no concuerda con el tipo seleccionado anteriormente (<b>${creditCardName}</b>), favor de actualizar tu información.`);
       } else {
-        const ccName = document.getElementById('cc-name-input').value;
-        if (ccName.length < ccLengthNameMin || ccName.length > ccLengthNameMax) {
-          printError('Verifica que el nombre del titular esté escrito de manera correcta.');
+        if (holderName.length < ccLengthNameMin) {
+          printError('El nombre del titular debe contar con 5 o más caracteres.');
         } else {
-          if (verifyCreditCard.length !== creditCardDigits) {
-            printError('Verifica que el número de tarjeta esté escrito de manera correcta.');
+          if (holderName.length > ccLengthNameMax) {
+            printError('El nombre del titular es demasiado largo (máximo 80 caracteres).');
           } else {
-            const charges = {
-              source_id: tokenId,
-              amount: $scope.amount,
-              currency: $scope.currency,
-              description: $scope.pedidos,
-              device_session_id: deviceSessionId,
-              pedidosAgrupados: $cookies.getObject('pedidosAgrupados')
-            };
-            PedidoDetallesFactory.pagarTarjetaOpenpay(charges)
-              .then(function (response) {
-                if (response.data.statusCode === 200) {
-                  angular.element(document.getElementById('divComprar')).scope().CreditCardPayment(response.data.content.statusCharge, response.data.content.paymentId);
-                } else {
-                  printError(response.data.message);
-                }
-              })
-              .catch(function (response) {
-                $scope.ShowToast('Ocurrió un error al procesar el pago. de tipo: ' + response.data.message, 'danger');
-              });
+            if ($scope.creditCardType === creditCardTypes.VISA || $scope.creditCardType === creditCardTypes.MASTERCARD) {
+              if (creditCardFormated.length !== ccVisaMcLength) {
+                printError(`El tipo de tarjetas <b>${cardType}</b> debería contar con 16 dígitos.`);
+              } else {
+                validateCreditCard();
+              }
+            } else if ($scope.creditCardType === creditCardTypes.AMEX) {
+              if (creditCardFormated.length !== ccAmexLength) {
+                printError(`El tipo de tarjetas <b>${cardType}</b> debería contar con 15 dígitos.`);
+              } else {
+                validateCreditCard();
+              }
+            }
           }
         }
+      }
+    });
+
+    const successCallbak = function (response) {
+      $('#responseDiv').html('').addClass('ocultar').removeClass('alert alert-danger');
+      tokenId = response.data.id;
+      $('#token_id').val(tokenId);
+      const charges = {
+        source_id: tokenId,
+        amount: $scope.amount,
+        currency: $scope.currency,
+        description: $scope.pedidos,
+        device_session_id: deviceSessionId,
+        pedidosAgrupados: $cookies.getObject('pedidosAgrupados')
       };
+      PedidoDetallesFactory.pagarTarjetaOpenpay(charges)
+        .then(function (response) {
+          if (response.data.statusCode === 200) {
+            angular.element(document.getElementById('divComprar')).scope().CreditCardPayment(response.data.content.statusCharge, response.data.content.paymentId);
+          } else {
+            printError(response.data.message);
+          }
+        })
+        .catch(function (response) {
+          $scope.ShowToast('Ocurrió un error al procesar el pago. de tipo: ' + response.data.message, 'danger');
+        });
     };
 
     const printError = (messageError) => {

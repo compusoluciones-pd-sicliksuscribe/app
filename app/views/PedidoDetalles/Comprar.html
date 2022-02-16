@@ -1,4 +1,4 @@
-<div class="container" ng-swipe-right="" ng-swipe-left="" oncopy="return false" onpaste="return false">
+<div class="container" ng-swipe-right="" ng-swipe-left="" >
     <!-- The Modal -->
     <div class="modal" id="modalTipoMoneda" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -248,16 +248,16 @@
                                         <div class="row" style="margin-top: 25px; padding-left: 20px;">
                                             <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12 nameAndNumber">
                                                 <label class="paddingTop">Nombre del titular</label>
-                                                <input type="text" placeholder="Como aparece en la tarjeta"
+                                                <input type="text" placeholder="Como aparece en la tarjeta" required
                                                     data-openpay-card="holder_name" maxlength="80" onkeydown="return /[a-z]/i.test(event.key) || event.keyCode == 32"
                                                     id="cc-name-input" ng-model="name" />
                                             </div>
 
                                             <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12 nameAndNumber">
                                                 <label class="paddingTop">Número de tarjeta</label>
-                                                <input type="text" id="cc-number-input" class="cc-number-input" autocomplete="off"
-                                                    data-openpay-card="card_number" onkeypress="if ( isNaN( String.fromCharCode(event.keyCode) ) || event.keyCode == 32 )return false;"
-                                                    ng-model="cardNumber" maxlength="16" spellcheck="false" />
+                                                <input type="text" id="cc-number-input" class="cc-number-input" autocomplete="off" required
+                                                    data-openpay-card="card_number" 
+                                                    ng-model="cardNumber"  spellcheck="false" />
                                                 <a ng-show="errorCard">{{errorCardMessage}}</a>
                                             </div>
                                         </div>
@@ -367,3 +367,79 @@
     </div>
 
 </div>
+<script>
+    function _getcaret(input) {
+  if ('selectionStart' in input) {
+    return input.selectionStart;
+  } else if(document.selection) {
+    input.focus();
+    var sel = document.selection.createRange();
+    var selLen = document.selection.createRange().text.length;
+    sel.moveStart('character', -input.value.length);
+    return sel.text.length - selLen;
+  }
+}
+function _setcaret(input, pos) {
+  if (input.setSelectionRange) {
+    input.focus()
+    input.setSelectionRange(pos,pos)
+  } else if(input.createTextRange) {
+    var range = input.createTextRange();
+    range.move('character', pos);
+    range.select();
+  }
+}
+
+function _format_465 (cc) {
+  return [cc.substring(0,4),cc.substring(4,10),cc.substring(10,15)].join(' ').trim()
+}
+function _format_4444 (cc) {
+  return cc?cc.match(/[0-9]{1,4}/g).join(' '):''
+}
+_CARD_TYPES = [
+  {'type':'visa','pattern':/^4/, 'format': _format_4444, 'maxlength': 16},
+  {'type':'master','pattern':/^(5[12345])|(2[2-7])/, 'format': _format_4444, 'maxlength': 16},
+  {'type':'amex','pattern':/^3[47]/, 'format': _format_465, 'maxlength':15},
+]
+function _format_cardnumber(cc, maxlength) {
+  cc = cc.replace(/[^0-9]+/g,'')
+
+  for(var i in _CARD_TYPES) {
+    const ct = _CARD_TYPES[i]
+    if(cc.match(ct.pattern)) {
+      cc = cc.substring(0,ct.maxlength)
+      return ct.format(cc)
+    }
+  }
+
+  return _format_4444(cc)
+}
+
+function _set_creditcard_number(event) {
+  const input = event.target
+  const maxlength = input.getAttribute('maxlength')
+
+  var oldval = input.value
+  var caret_position = _getcaret(input)
+  var before_caret = oldval.substring(0,caret_position)
+  before_caret = _format_cardnumber(before_caret)
+  caret_position = before_caret.length
+
+  var newvalue = _format_cardnumber(oldval, maxlength)
+
+  if(oldval==newvalue) return
+
+  input.value = newvalue
+  _setcaret(input, caret_position)
+}
+
+function make_credit_card_input(input) {
+  input.addEventListener('input',_set_creditcard_number)
+  input.addEventListener('keyup',_set_creditcard_number)
+  input.addEventListener('keydown',_set_creditcard_number)
+  input.addEventListener('keypress',_set_creditcard_number)
+  input.addEventListener('change',_set_creditcard_number)
+}
+
+make_credit_card_input(document.getElementById("cc-number-input"));
+</script>
