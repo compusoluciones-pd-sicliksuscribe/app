@@ -75,7 +75,7 @@
         case 1001:
           return 'El número de tarjeta debería de tener 3 dígitos (4 si es American Express).';
         case 2004:
-          return 'El número de tarjeta es invalido.';
+          return 'El número de tarjeta es inválido.';
         case 2005:
           return 'La fecha de expiración de la tarjeta es anterior a la fecha actual.';
         case 2006:
@@ -119,7 +119,7 @@
         case 3205:
           return 'Promoción no permitida.';
         case 4013:
-          return 'El monto de la transacción está fuera de los limites permitidos.';
+          return 'El monto de transacción está fuera de los límites permitidos.';
         default:
           return 'Ocurrió un error, contactar a soporte.';
       }
@@ -406,7 +406,7 @@
       const ccexpmonth = document.getElementById('ccexpmonth').value;
       const ccexpyear = document.getElementById('ccexpyear').value;
       const cvv = document.getElementById('cvv').value;
-      let cardType = OpenPay.card.cardType(creditCardFormated);
+      const cardType = OpenPay.card.cardType(creditCardFormated);
       switch (cardType) {
         case creditCardNames.VISA:
           $scope.creditCardType = creditCardTypes.VISA;
@@ -419,7 +419,6 @@
           break;
         default:
           $scope.creditCardType = creditCardTypes.OTRO;
-          cardType = 'Desconocido';
       }
 
       const validateCreditCard = () => {
@@ -433,26 +432,31 @@
           'cvv2': cvv
         }, successCallbak, errorCallbak);
       };
-      if ($scope.creditCardType !== $cookies.getObject('tipoTarjetaCredito')) {
-        printError(`El tipo de tarjeta ingresado es <b>${cardType}</b> y no concuerda con el tipo seleccionado anteriormente (<b>${creditCardName}</b>), favor de actualizar tu información.`);
+
+      if (holderName.replace(/ /g, '').length < ccLengthNameMin) {
+        printError('El nombre del titular debe contar con 5 o más caracteres.');
       } else {
-        if (holderName.length < ccLengthNameMin) {
-          printError('El nombre del titular debe contar con 5 o más caracteres.');
+        if (holderName.replace(/ /g, '').length > ccLengthNameMax) {
+          printError('El nombre del titular es demasiado largo (máximo 80 caracteres).');
         } else {
-          if (holderName.length > ccLengthNameMax) {
-            printError('El nombre del titular es demasiado largo (máximo 80 caracteres).');
+          if (creditCardFormated.replace(/ /g, '').length !== ccVisaMcLength && creditCardFormated.trim().length !== ccAmexLength) {
+            printError(`Los dígitos de tu tarjeta <b>${creditCardName}</b> están incompletos, verificalos.`);
           } else {
-            if ($scope.creditCardType === creditCardTypes.VISA || $scope.creditCardType === creditCardTypes.MASTERCARD) {
-              if (creditCardFormated.length !== ccVisaMcLength) {
-                printError(`El tipo de tarjetas <b>${cardType}</b> debería contar con 16 dígitos.`);
-              } else {
-                validateCreditCard();
-              }
-            } else if ($scope.creditCardType === creditCardTypes.AMEX) {
-              if (creditCardFormated.length !== ccAmexLength) {
-                printError(`El tipo de tarjetas <b>${cardType}</b> debería contar con 15 dígitos.`);
-              } else {
-                validateCreditCard();
+            if ($scope.creditCardType !== $cookies.getObject('tipoTarjetaCredito')) {
+              printError(`El tipo de tarjeta no es válido y no concuerda con el tipo seleccionado anteriormente (<b>${creditCardName}</b>), favor de actualizar tu información.`);
+            } else {
+              if ($scope.creditCardType === creditCardTypes.VISA || $scope.creditCardType === creditCardTypes.MASTERCARD) {
+                if (creditCardFormated.length !== ccVisaMcLength) {
+                  printError(`El tipo de tarjetas <b>${cardType}</b> debería contar con 16 dígitos.`);
+                } else {
+                  validateCreditCard();
+                }
+              } else if ($scope.creditCardType === creditCardTypes.AMEX) {
+                if (creditCardFormated.length !== ccAmexLength) {
+                  printError(`El tipo de tarjetas <b>${cardType}</b> debería contar con 15 dígitos.`);
+                } else {
+                  validateCreditCard();
+                }
               }
             }
           }
