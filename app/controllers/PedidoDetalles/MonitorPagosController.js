@@ -416,8 +416,8 @@
               if ($cookies.getObject('pedidosAgrupados')) {
                 setCCDates();
                 $scope.pedidos = Datos.data.pedidos;
-                $scope.amount = Datos.data.total;
-                $scope.FormatedAmountMonitor = String(Datos.data.total).replace(/(?<!\..*)(\d)(?=(?:\d{3})+(?:\.|$))/g, '$1,');
+                $scope.amount = $scope.Total.toFixed(2);
+                $scope.FormatedAmountMonitor = String($scope.amount).replace(/(?<!\..*)(\d)(?=(?:\d{3})+(?:\.|$))/g, '$1,');
                 $scope.currency = Datos.data.moneda;
                 OpenPay.setId(Datos.data.opId);
                 OpenPay.setApiKey(Datos.data.opPublic);
