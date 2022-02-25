@@ -329,6 +329,7 @@
         }
       }
       if ($scope.PedidosSeleccionadosParaPagar.length === 0) {
+        $scope.PedidosSeleccionadosParaPagar = [];
         $scope.ServicioElectronico = 0;
         $scope.Subtotal = 0;
         $scope.Iva = 0;
@@ -354,7 +355,7 @@
           });
       }
       if ($scope.PedidosSeleccionadosParaPagar.length !== 0 && document.getElementById('Tarjeta').checked) {
-        if ($cookies.getObject('tipoTarjetaCreditoMonitor')) {
+        if ($cookies.getObject('tipoTarjetaCreditoMonitor') && $scope.PedidosSeleccionadosParaPagar.length !== 0) {
           let tipoTarjeta = $cookies.getObject('tipoTarjetaCreditoMonitor');
           PedidoDetallesFactory.monitorCalculations({Pedidos: $scope.PedidosSeleccionadosParaPagar, tipoTarjeta})
           .success(function (calculations) {
