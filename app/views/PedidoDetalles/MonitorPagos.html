@@ -251,8 +251,8 @@
                                         <div class="row" style="margin-top: 25px; padding-left: 20px;">
                                             <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12 nameAndNumber">
                                                 <label class="paddingTop">Nombre del titular</label>
-                                                <input type="text" placeholder="Como aparece en la tarjeta" required
-                                                    data-openpay-card="holder_name" maxlength="80" onkeydown="return /[a-z]/i.test(event.key) || event.keyCode == 32"
+                                                <input type="text" placeholder="Como aparece en la tarjeta" required onpaste="return false;"
+                                                    data-openpay-card="holder_name" maxlength="80" onkeydown="if (event.keyCode == 186 || event.keyCode == 18) {return false; } return /[a-z]/i.test(event.key) || event.keyCode == 32;"
                                                     id="cardName" ng-model="name" />
                                             </div>
 
