@@ -292,7 +292,7 @@
                                                     <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
                                                         <input type="password" placeholder="3 dígitos"
                                                             autocomplete="off"
-                                                            onkeypress="if ( isNaN( String.fromCharCode(event.keyCode) )) return false;"
+                                                            onkeypress="if ( isNaN( String.fromCharCode(event.keyCode)) || event.keyCode == 32) return false;"
                                                             maxlength="4" data-openpay-card="cvv2" id="cvv"
                                                             spellcheck="false" />
                                                     </div>
@@ -368,6 +368,7 @@
 
 </div>
 <script>
+    let globalNumber = 0;
     function _getcaret(input) {
         if ('selectionStart' in input) {
             return input.selectionStart;
@@ -418,27 +419,26 @@
     function _set_creditcard_number(event) {
         const input = event.target
         const maxlength = input.getAttribute('maxlength')
-
         var oldval = input.value
         var caret_position = _getcaret(input)
-        var before_caret = oldval.substring(0, caret_position)
+        var before_caret = oldval.substring(0,caret_position)
         before_caret = _format_cardnumber(before_caret)
-        caret_position = before_caret.length
-
-        var newvalue = _format_cardnumber(oldval, maxlength)
-
-        if (oldval == newvalue) return
-
-        input.value = newvalue
-        _setcaret(input, caret_position)
+        caret_position = before_caret.length;
+        let newNumber = oldval.replace(/ /g,'');
+        if(newNumber.length >= 17) {
+            return input.value = globalNumber;
+        }else {
+            var newvalue = _format_cardnumber(oldval, maxlength);
+            globalNumber = newvalue;
+            if(oldval==newvalue) return
+            input.value = newvalue
+            _setcaret(input, caret_position)
+        }
     }
 
     function make_credit_card_input(input) {
-        input.addEventListener('input', _set_creditcard_number)
-        input.addEventListener('keyup', _set_creditcard_number)
-        input.addEventListener('keydown', _set_creditcard_number)
-        input.addEventListener('keypress', _set_creditcard_number)
-        input.addEventListener('change', _set_creditcard_number)
+        input.addEventListener('keyup',_set_creditcard_number)
+        input.addEventListener('change',_set_creditcard_number)
     }
 
     make_credit_card_input(document.getElementById("cc-number-input"));
