@@ -561,7 +561,7 @@
               $cookies.remove('pedidosAgrupados');
               if (compra.success === 1) {
                 $scope.ShowToast(compra.message, 'success');
-                $location.path('/MonitorPagos/refrescar');
+                location.reload();
               }
             })
             .error(function (data, status, headers, config) {
