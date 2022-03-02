@@ -256,7 +256,7 @@
                                             <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12 nameAndNumber">
                                                 <label class="paddingTop">Número de tarjeta</label>
                                                 <input type="text" id="cc-number-input" class="cc-number-input" autocomplete="off" required
-                                                    data-openpay-card="card_number" 
+                                                    data-openpay-card="card_number" maxlength="19"
                                                     ng-model="cardNumber"  spellcheck="false" />
                                                 <a ng-show="errorCard">{{errorCardMessage}}</a>
                                             </div>
