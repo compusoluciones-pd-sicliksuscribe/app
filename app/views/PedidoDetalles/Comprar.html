@@ -369,6 +369,7 @@
 </div>
 <script>
     let globalNumber = 0;
+    let maxlengthNumber = 17;
     function _getcaret(input) {
         if ('selectionStart' in input) {
             return input.selectionStart;
@@ -425,7 +426,7 @@
         before_caret = _format_cardnumber(before_caret)
         caret_position = before_caret.length;
         let newNumber = oldval.replace(/ /g,'');
-        if(newNumber.length >= 17) {
+        if(newNumber.length >= maxlengthNumber) {
             return input.value = globalNumber;
         }else {
             var newvalue = _format_cardnumber(oldval, maxlength);
