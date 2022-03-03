@@ -35,6 +35,8 @@
       AMEX: 2,
       OTRO: 3
     };
+    $scope.statusCharge2 = '';
+    $scope.paymentId2 = '';
     let deviceSessionId = '';
     let tokenId = '';
     $scope.meses = [{ nombre: 'Enero', valor: '01' }, { nombre: 'Febrero', valor: '02' }, { nombre: 'Marzo', valor: '03' }, { nombre: 'Abril', valor: '04' }, { nombre: 'Mayo', valor: '05' }, { nombre: 'Junio', valor: '06' }, { nombre: 'Julio', valor: '07' }, { nombre: 'Agosto', valor: '08' }, { nombre: 'Septiembre', valor: '09' }, { nombre: 'Octubre', valor: '10' }, { nombre: 'Noviembre', valor: '11' }, { nombre: 'Diciembre', valor: '12' }];
@@ -138,6 +140,12 @@
           });
       }
     };
+
+    $scope.modalTdcPagado = function () {
+      let modalPagoMonitor = document.getElementById('modalTdcpagado');
+      modalPagoMonitor.style.display = 'block';
+    };
+
 
     $scope.init = function () {
       if ($scope.currentPath === '/MonitorPagos') {
@@ -405,6 +413,7 @@
       modalPagoMonitor.style.display = 'block';
     };
 
+
     $scope.pagar = function () {
       if ($scope.PedidosSeleccionadosParaPagar.length > 0) {
         PedidoDetallesFactory.payWidthCard({ Pedidos: $scope.PedidosSeleccionadosParaPagar })
@@ -522,14 +531,21 @@
       PedidoDetallesFactory.pagarTarjetaOpenpay(charges)
         .then(function (response) {
           if (response.data.statusCode === 200) {
-            angular.element(document.getElementById('divComprar')).scope().CreditCardPayment(response.data.content.statusCharge, response.data.content.paymentId);
-          } else {
+            $scope.cerrarModal('modalPagoMonitor');
+            $scope.modalTdcPagado();
+            $scope.statusCharge2 = response.data.content.statusCharge;
+            $scope.paymentId2 = response.data.content.paymentId;
+            } else {
             printError(response.data.message);
           }
         })
         .catch(function (response) {
           $scope.ShowToast('Ocurrió un error al procesar el pago. de tipo: ' + response.data.message, 'danger');
         });
+    };
+
+    $scope.btnTdc = (statusCharge, paymentId) => {
+      angular.element(document.getElementById('divComprar')).scope().CreditCardPayment(statusCharge, paymentId);
     };
 
     const printError = (messageError) => {

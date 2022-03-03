@@ -560,7 +560,6 @@
             .success(function (compra) {
               $cookies.remove('pedidosAgrupados');
               if (compra.success === 1) {
-                $scope.ShowToast(compra.message, 'success');
                 location.reload();
               }
             })

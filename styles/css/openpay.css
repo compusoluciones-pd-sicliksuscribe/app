@@ -255,3 +255,11 @@ div.credit {
 .responseDiv, .responseDivMonitor {
   margin-bottom: 0px !important;
 }
+
+.p-5 {
+  padding: 15px;
+}
+
+.m-5 {
+  margin: 20px;
+}
