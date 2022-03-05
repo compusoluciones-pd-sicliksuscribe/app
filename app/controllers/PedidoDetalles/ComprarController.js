@@ -403,10 +403,13 @@
       const creditCardNumber = document.getElementById('cc-number-input').value;
       const creditCardFormated = creditCardNumber.split(' ').join('');
       const holderName = document.getElementById('cc-name-input').value;
+      let holderNameFormated = holderName.replace(/  +/g, ' ');
+      if (holderNameFormated[0] == ' ') holderNameFormated = holderNameFormated.substring(1);
       const ccexpmonth = document.getElementById('ccexpmonth').value;
       const ccexpyear = document.getElementById('ccexpyear').value;
       const cvv = document.getElementById('cvv').value;
       const cardType = OpenPay.card.cardType(creditCardFormated);
+      document.getElementById('cc-name-input').value = holderNameFormated;
       switch (cardType) {
         case creditCardNames.VISA:
           $scope.creditCardType = creditCardTypes.VISA;

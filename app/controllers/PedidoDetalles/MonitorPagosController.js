@@ -454,10 +454,13 @@
       const creditCardNumber = document.getElementById('cardNumber').value;
       const creditCardFormated = creditCardNumber.split(' ').join('');
       const holderName = document.getElementById('cardName').value;
+      let holderNameFormated = holderName.replace(/  +/g, ' ');
+      if (holderNameFormated[0] == ' ') holderNameFormated = holderNameFormated.substring(1);
       const ccexpmonth = document.getElementById('ccexpmonthMonitor').value;
       const ccexpyear = document.getElementById('ccexpyearMonitor').value;
       const cvv = document.getElementById('cvvMonitor').value;
       const cardType = OpenPay.card.cardType(creditCardFormated);
+      document.getElementById('cardName').value = holderNameFormated;
       switch (cardType) {
         case creditCardNames.VISA:
           $scope.creditCardType = creditCardTypes.VISA;
@@ -477,7 +480,7 @@
         $('#payButton').prop('disabled', true);
         OpenPay.token.create({
           'card_number': creditCardFormated,
-          'holder_name': holderName,
+          'holder_name': holderNameFormated,
           'expiration_year': ccexpyear,
           'expiration_month': ccexpmonth,
           'cvv2': cvv

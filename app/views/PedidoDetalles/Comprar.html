@@ -249,7 +249,9 @@
                                             <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12 nameAndNumber">
                                                 <label class="paddingTop">Nombre del titular</label>
                                                 <input type="text" placeholder="Como aparece en la tarjeta" required onpaste="return false;"
-                                                    data-openpay-card="holder_name" maxlength="80" onkeydown="if (event.keyCode == 186 || event.keyCode == 18) {return false; } return /[a-z]/i.test(event.key) || event.keyCode == 32;"
+                                                    onchange="this.value = this.value.replace(/  +/g, ' ').toUpperCase();" onpaste="return false;"
+                                                    data-openpay-card="holder_name" maxlength="80"
+                                                    onkeydown="if (event.keyCode == 186 || event.keyCode == 18) {return false; } return /[a-z]/i.test(event.key) || event.keyCode == 32;"
                                                     id="cc-name-input" ng-model="name" />
                                             </div>
 
@@ -438,7 +440,10 @@
     }
 
     function make_credit_card_input(input) {
+        input.addEventListener('input',_set_creditcard_number)
         input.addEventListener('keyup',_set_creditcard_number)
+        input.addEventListener('keydown',_set_creditcard_number)
+        input.addEventListener('keypress',_set_creditcard_number)
         input.addEventListener('change',_set_creditcard_number)
     }
 
