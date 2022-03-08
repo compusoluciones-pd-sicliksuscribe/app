@@ -98,7 +98,7 @@
     const setCCDates = () => {
       const dateCC = new Date();
       let yearNow = parseInt(dateCC.getFullYear().toString().substr(-2));
-      let yearMax = yearNow + 6;
+      let yearMax = yearNow + 10;
       $scope.anios = [];
       for (yearNow; yearNow <= yearMax; yearNow++) {
         $scope.anios.push(yearNow);
