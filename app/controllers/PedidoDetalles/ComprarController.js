@@ -97,7 +97,7 @@
         case 3003:
           return 'La tarjeta no tiene fondos suficientes.';
         case 3004:
-          return 'La tarjeta ha sido identificada como una tarjeta robada.';
+          return 'La tarjeta ha sido rechazada.';
         case 3005:
           return 'La tarjeta ha sido rechazada por el sistema antifraude.';
         case 3006:
