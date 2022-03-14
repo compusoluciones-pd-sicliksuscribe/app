@@ -622,6 +622,87 @@
         $scope.ShowToast('Selecciona al menos un pedido para pagar.', 'danger');
       }
     };
+
+
+    let globalNumber = 0;
+    let maxlengthNumber = 17;
+    function _getcaret(input) {
+        if ('selectionStart' in input) {
+            return input.selectionStart;
+        } else if (document.selection) {
+            input.focus();
+            let sel = document.selection.createRange();
+            let selLen = document.selection.createRange().text.length;
+            sel.moveStart('character', -input.value.length);
+            return sel.text.length - selLen;
+        }
+    }
+    function _setcaret(input, pos) {
+        if (input.setSelectionRange) {
+            input.focus()
+            input.setSelectionRange(pos, pos)
+        } else if (input.createTextRange) {
+            let range = input.createTextRange();
+            range.move('character', pos);
+            range.select();
+        }
+    }
+
+    function _format_465(cc) {
+        return [cc.substring(0, 4), cc.substring(4, 10), cc.substring(10, 15)].join(' ').trim()
+    }
+    function _format_4444(cc) {
+        return cc ? cc.match(/[0-9]{1,4}/g).join(' ') : ''
+    }
+    _CARD_TYPES = [
+        { 'type': 'visa', 'pattern': /^4/, 'format': _format_4444, 'maxlength': 16 },
+        { 'type': 'master', 'pattern': /^(5[12345])|(2[2-7])/, 'format': _format_4444, 'maxlength': 16 },
+        { 'type': 'amex', 'pattern': /^3[47]/, 'format': _format_465, 'maxlength': 15 },
+    ]
+    function _format_cardnumber(cc, maxlength) {
+        cc = cc.replace(/[^0-9]+/g, '')
+
+        for (let i in _CARD_TYPES) {
+            const ct = _CARD_TYPES[i]
+            if (cc.match(ct.pattern)) {
+                cc = cc.substring(0, ct.maxlength)
+                return ct.format(cc)
+            }
+        }
+
+        return _format_4444(cc)
+    }
+
+    function _set_creditcard_number(event) {
+        const input = event.target
+        const maxlength = input.getAttribute('maxlength')
+        let oldval = input.value
+        let caret_position = _getcaret(input)
+        let before_caret = oldval.substring(0,caret_position)
+        before_caret = _format_cardnumber(before_caret)
+        caret_position = before_caret.length;
+        let newNumber = oldval.replace(/ /g,'');
+        if(newNumber.length >= maxlengthNumber) {
+            return input.value = globalNumber;
+        }else {
+            let newvalue = _format_cardnumber(oldval, maxlength);
+            globalNumber = newvalue;
+            if(oldval==newvalue) return
+            input.value = newvalue
+            _setcaret(input, caret_position)
+        }
+    }
+
+    function make_credit_card_input(input) {
+        input.addEventListener('input',_set_creditcard_number)
+        input.addEventListener('keyup',_set_creditcard_number)
+        input.addEventListener('keydown',_set_creditcard_number)
+        input.addEventListener('keypress',_set_creditcard_number)
+        input.addEventListener('change',_set_creditcard_number)
+    }
+
+    make_credit_card_input(document.getElementById("cardNumber"));
+
   };
   MonitorPagos.$inject = ['$scope', '$log', '$rootScope', '$cookies', '$location', '$uibModal', '$filter', 'PedidoDetallesFactory', 'EmpresasFactory', 'PedidosFactory'];
 
