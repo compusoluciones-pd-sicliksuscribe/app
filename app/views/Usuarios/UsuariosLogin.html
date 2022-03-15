@@ -21,7 +21,7 @@
                     <p ng-show="frm.Correo.$error.required">Escribe un correo</p>-->
     
                     <div class="form-group has-feedback">
-                        <input id="Correo" name="Correo" type="email" ng-model="Usuario.CorreoElectronico" class="form-control" placeholder="Correo electrónico" size="255" ng-maxlength="255" required="" />
+                        <input autocomplete="off" id="Correo" name="Correo" type="email" ng-model="Usuario.CorreoElectronico" class="form-control" placeholder="Correo electrónico" size="255" ng-maxlength="255" required="" autofocus="true" />
                         <i class="form-control-feedback glyphicon glyphicon-user"></i>
                     </div>
     
@@ -39,7 +39,7 @@
                     <p ng-show="frm.Contrasena.$error.required">Escribe una contraseña</p>-->
     
                     <div class="form-group has-feedback">
-                        <input id="Contrasena" name="Contrasena" type="password" ng-model="Usuario.Contrasena" class="form-control" placeholder="Contraseña" size="255" ng-maxlength="255" required="" />
+                        <input autocomplete="off" id="Contrasena" name="Contrasena" type="password" ng-model="Usuario.Contrasena" class="form-control" placeholder="Contraseña" size="255" ng-maxlength="255" required="" />
                         <i class="form-control-feedback glyphicon glyphicon-lock"></i>
                     </div>
     
