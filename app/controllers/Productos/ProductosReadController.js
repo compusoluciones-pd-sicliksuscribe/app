@@ -24,10 +24,14 @@
     $scope.esquemaRenovacionModelo={};
     $scope.EsquemaRenovacion=[
       {id: 1, esquema: 'Mensual' },
-      {id: 2, esquema: 'Anual' }
+      {id: 2, esquema: 'Anual' },
+      {id: 9, esquema: 'Anual con facturación mensual' }
+
     ];
     $scope.MENSUAL = 1;
     $scope.ANUAL = 2;
+    $scope.ANUAL_MENSUAL = 9;
+
     $scope.esquemaRenovacionModel = {};
 
     const PREMIUM = "Planes Premium";
