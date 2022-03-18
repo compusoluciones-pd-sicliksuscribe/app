@@ -118,7 +118,6 @@
             elem.NombreFabricante = getMakers(elem.IdFabricante);
             elem.Productos.forEach(function (item) {
               if (item.IdFabricante === 1 && item.NumeroSerie === "CREATEORDER") {$scope.legacyCSP ++;}
-              console.log("🚀 ~ file: $scope.legacyCSP", $scope.legacyCSP)
               if (item.PrecioUnitario == null) $scope.error = true;
             });
           });
@@ -131,10 +130,8 @@
           if ($scope.legacyCSP >= 1) {
             $('#btnSiguiente').prop('disabled', true);
             $scope.ShowToast('Las compras nuevas de productos Microsoft no se pueden procesar por CSP Legacy.', 'danger');
-            console.log("11111 AQUI: ", $scope.legacyCSP);
           } else {
             $('#btnSiguiente').prop('disabled', false);
-            console.log("222222 AQUI: ", $scope.legacyCSP);
           }
         })
         .then(function () {
