@@ -113,11 +113,12 @@
           }
           $scope.PedidoDetalles.forEach(function (elem) {
             $scope.CreditoValido = 1;
+            let IdEsquemaRenovacion = elem.IdEsquemaRenovacion;
             elem.hasCredit = 1;
             elem.Forma = getPaymentMethods(elem.IdFormaPago);
             elem.NombreFabricante = getMakers(elem.IdFabricante);
             elem.Productos.forEach(function (item) {
-              if (item.IdFabricante === 1 && item.NumeroSerie === "CREATEORDER") {$scope.legacyCSP ++;}
+              if (item.IdFabricante === 1 && item.NumeroSerie === "CREATEORDER" && IdEsquemaRenovacion !== 3) $scope.legacyCSP ++;
               if (item.PrecioUnitario == null) $scope.error = true;
             });
           });
