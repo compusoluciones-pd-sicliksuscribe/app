@@ -44,6 +44,7 @@
         });
     };
 
+    const esquemaAzurePlan = 8;
     const getPaymentMethods = function (id) {
       let paymentMethod = '';
       switch (id) {
@@ -118,7 +119,7 @@
             elem.Forma = getPaymentMethods(elem.IdFormaPago);
             elem.NombreFabricante = getMakers(elem.IdFabricante);
             elem.Productos.forEach(function (item) {
-              if (item.IdFabricante === 1 && item.NumeroSerie === "CREATEORDER" && IdEsquemaRenovacion !== 3) $scope.legacyCSP ++;
+              if (item.IdFabricante === makers.MICROSOFT && item.NumeroSerie === "CREATEORDER" && IdEsquemaRenovacion !== esquemaAzurePlan) $scope.legacyCSP ++;
               if (item.PrecioUnitario == null) $scope.error = true;
             });
           });
