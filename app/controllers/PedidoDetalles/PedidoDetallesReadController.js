@@ -130,7 +130,7 @@
           }
           if ($scope.legacyCSP >= 1) {
             $('#btnSiguiente').prop('disabled', true);
-            $scope.ShowToast('Las compras nuevas de productos Microsoft no se pueden procesar por CSP Legacy.', 'danger');
+            $scope.ShowToast('Las compras nuevas de productos Microsoft no se pueden procesar por CSP Legacy. Contacta a tu agente de ventas.', 'danger');
           } else {
             $('#btnSiguiente').prop('disabled', false);
           }
