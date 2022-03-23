@@ -116,6 +116,16 @@
       Producto.IdEsquemaRenovacion= $scope.ANUAL;
       Producto.PrecioNormalAnual = Producto.PrecioNormal * 12;
     }
+
+    if (Producto.Esquema === $scope.ANUAL_MENSUAL){
+      console.log('ANUAL_MENSUAL');
+      var fecha = new Date();
+      fecha.setDate(fecha.getDate() - 1);
+      Producto.FechaFinSuscripcion = fecha.getDate() + "/" + (fecha.getMonth() +1) + "/" + (fecha.getFullYear()+1);
+      Producto.EsquemaRenovacion = 'Anual con facturación mensual';
+      Producto.IdEsquemaRenovacion= $scope.ANUAL_MENSUAL;
+      Producto.PrecioNormalAnual = Producto.PrecioNormal * 12;
+    }
      
      return Producto.EsquemaRenovacion; 
     };
