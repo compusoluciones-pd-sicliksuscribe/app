@@ -133,11 +133,11 @@
 
     const getMSCoterm = function (Producto) {
       ManejoLicencias.cotermByUF(Producto.IdEmpresaUsuarioFinal)
-        .then(result => result.data ? $scope.cotermMSByUF = result.data : $scope.cotermMSByUF = null );
+        .then(result => result.data ? ($scope.cotermMSByUF = result.data, $scope.generateCotermMSViability(Producto)) : $scope.cotermMSByUF = null, $scope.cotermMSByEschema = null);
     }
 
     $scope.generateCotermMSViability = function (Producto) {
-      if($scope.cotermMSByUF) { 
+      if($scope.cotermMSByUF.length) { 
         if (Producto.Esquema === $scope.MENSUAL){
           $scope.cotermMSByEschema = formatDateCoterm($scope.MENSUAL, $scope.cotermMSByUF);
         }
