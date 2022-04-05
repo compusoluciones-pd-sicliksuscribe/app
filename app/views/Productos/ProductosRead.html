@@ -274,8 +274,23 @@
                                                         </span>
                                                     <select id="esquemaModelo" name="esquemaModelo" class="form-control selectOption ufs" ng-model="Producto.Esquema"
                                                         ng-options="esquema.id as esquema.esquema for esquema in EsquemaRenovacion"
-                                                        ng-change="CambiarFechaRenovacion(Producto);" title="Selecciona un tipo de renovación para tu producto" ng-required="Producto.IdFabricante === 1 && Producto.IdTipoProducto !== 6 && Producto.IdTipoProducto !== 3">
+                                                        ng-change="CambiarFechaRenovacion(Producto); generateCotermMSViability(Producto);" title="Selecciona un tipo de renovación para tu producto" ng-required="Producto.IdFabricante === 1 && Producto.IdTipoProducto !== 6 && Producto.IdTipoProducto !== 3">
                                                         <option ng-selected="true" value="" disabled>Selecciona un tipo de renovación...</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <br>
+                                            <div ng-hide="Producto.IdFabricante !== 1 || Producto.IdTipoProducto !== 2 || !cotermMSByEschema" >
+                                                <label>* Selecciona una fecha de co-termino disponible</label>
+                                                <div class="input-group" style="width:100%;" >
+                                                        <span class="input-group-addon green white">
+                                                            <span class="glyphicon glyphicon-hourglass"></span>
+                                                        </span>
+                                                    <select id="coterm" name="coterm" class="form-control selectOption ufs" ng-model="cotermMS"
+                                                        ng-options="cotermMS.FechaFin for cotermMS in cotermMSByEschema"
+                                                        ng-change="CambiarFechaRenovacion(Producto);" title="Selecciona una fecha de co-termino disponible" ng-required="Producto.IdFabricante === 1 && Producto.IdTipoProducto !== 6 && Producto.IdTipoProducto !== 3">
+                                                        <option ng-selected="true" value="">Periodo completo</option>
                                                     </select>
                                                 </div>
                                             </div>

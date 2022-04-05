@@ -1,5 +1,5 @@
 (function () {
-  var ProductosReadController = function ($scope, $log, $location, $cookies, $routeParams, PlanPremiumFactory, ProductosFactory, AmazonDataFactory, FabricantesFactory, TiposProductosFactory, PedidoDetallesFactory, TipoCambioFactory, ProductoGuardadosFactory, EmpresasXEmpresasFactory, UsuariosFactory, ActualizarCSNFactory, $anchorScroll, EmpresasFactory) {
+  var ProductosReadController = function ($scope, $log, $location, $cookies, $routeParams, PlanPremiumFactory, ProductosFactory, AmazonDataFactory, FabricantesFactory, TiposProductosFactory, PedidoDetallesFactory, TipoCambioFactory, ProductoGuardadosFactory, EmpresasXEmpresasFactory, UsuariosFactory, ActualizarCSNFactory, $anchorScroll, EmpresasFactory, ManejoLicencias) {
     var BusquedaURL = $routeParams.Busqueda;
     const HRWAWRE_EXTRA_EMPOLYEES_GROUPING = 1000;
     $scope.BuscarProductos = {};
@@ -20,6 +20,8 @@
     const NOT_FOUND = 404;
     $scope.datosCompletosCustomer = true;
     $scope.microsoftURI = false;
+    $scope.cotermMSByUF = null;
+    $scope.cotermMSByEschema = null;
 
     $scope.esquemaRenovacionModelo={};
     $scope.EsquemaRenovacion=[
@@ -118,7 +120,6 @@
     }
 
     if (Producto.Esquema === $scope.ANUAL_MENSUAL){
-      console.log('ANUAL_MENSUAL');
       var fecha = new Date();
       fecha.setDate(fecha.getDate() - 1);
       Producto.FechaFinSuscripcion = fecha.getDate() + "/" + (fecha.getMonth() +1) + "/" + (fecha.getFullYear()+1);
@@ -129,6 +130,41 @@
      
      return Producto.EsquemaRenovacion; 
     };
+
+    const getMSCoterm = function (Producto) {
+      ManejoLicencias.cotermByUF(Producto.IdEmpresaUsuarioFinal)
+        .then(result => result.data ? $scope.cotermMSByUF = result.data : $scope.cotermMSByUF = null );
+    }
+
+    $scope.generateCotermMSViability = function (Producto) {
+      if($scope.cotermMSByUF) { 
+        if (Producto.Esquema === $scope.MENSUAL){
+          $scope.cotermMSByEschema = formatDateCoterm($scope.MENSUAL, $scope.cotermMSByUF);
+        }
+        if (Producto.Esquema === $scope.ANUAL || Producto.Esquema === $scope.ANUAL_MENSUAL){
+          const annualCoterm = $scope.cotermMSByUF.filter(element => element.IdEsquemaRenovacion === $scope.ANUAL || element.IdEsquemaRenovacion === $scope.ANUAL_MENSUAL);
+          annualCoterm ? $scope.cotermMSByEschema = formatDateCoterm($scope.ANUAL, annualCoterm) : $scope.cotermMSByEschema = null;
+      }
+    }
+  }
+
+  const formatDateCoterm = function (eschemaType, dateByEschema) {
+    if (eschemaType === $scope.MENSUAL) {
+      return dateByEschema.map(function (item)  {
+        const endDate = new Date(item.FechaFin);
+        const nowDate = new Date();
+
+        if (endDate.getDate() >= nowDate.getDate() ) {
+          return { FechaFin: ('0' + endDate.getDate()).slice(-2) + '/' + ('0' + (nowDate.getMonth() + 1)).slice(-2) + "/" + (nowDate.getFullYear())};
+        } else return { FechaFin: ('0' + endDate.getDate()).slice(-2) + '/' + ('0' + (nowDate.getMonth() + 2)).slice(-2) + "/" + (nowDate.getFullYear())};
+      });
+    } else {
+     return dateByEschema.map(function (item)  {
+       const endDate = new Date(item.FechaFin);
+       return { FechaFin: ('0' + endDate.getDate()).slice(-2) + '/' + ('0' + (endDate.getMonth() + 1)).slice(-2) + "/" + (endDate.getFullYear())};
+     });
+    }
+  }
 
     $scope.init = function () {
       $scope.hayCSNUF = false;
@@ -372,6 +408,7 @@
       $scope.productoSeleccionado = Producto.IdProducto;
       if (Producto.IdFabricante === 2) validateAutodeskData(Producto);
       if (Producto.IdFabricante === 1 && $scope.DominioMicrosoft) validateMicrosoftData(Producto);
+      if (Producto.IdFabricante === 1 && Producto.IdTipoProducto === 2) getMSCoterm(Producto);
       if (Producto.IdFabricante === 6 || Producto.IdFabricante === 11 || (Producto.IdFabricante === 5  && Producto.IdProductoFabricanteExtra !== 'Aperio')) validateISVsData(Producto);
     };
 
@@ -835,7 +872,6 @@
         Producto.planPremiumNo = false;
         PlanPremiumFactory.getTeams(usuario[0].CorreoElectronico)
         .then(result => {
-          console.log(result);
           Producto.mensajePlanPremium = '';
           if (result.data.success) {
             if (!result.data.data.totalPurchasedPremiumSeats) {
@@ -854,7 +890,7 @@
     }
   };
 
-  ProductosReadController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'PlanPremiumFactory', 'ProductosFactory','AmazonDataFactory', 'FabricantesFactory', 'TiposProductosFactory', 'PedidoDetallesFactory', 'TipoCambioFactory', 'ProductoGuardadosFactory', 'EmpresasXEmpresasFactory', 'UsuariosFactory', 'ActualizarCSNFactory', '$anchorScroll', 'EmpresasFactory'];
+  ProductosReadController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'PlanPremiumFactory', 'ProductosFactory','AmazonDataFactory', 'FabricantesFactory', 'TiposProductosFactory', 'PedidoDetallesFactory', 'TipoCambioFactory', 'ProductoGuardadosFactory', 'EmpresasXEmpresasFactory', 'UsuariosFactory', 'ActualizarCSNFactory', '$anchorScroll', 'EmpresasFactory', 'ManejoLicencias'];
 
   angular.module('marketplace').controller('ProductosReadController', ProductosReadController);
 }());
