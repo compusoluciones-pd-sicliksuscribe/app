@@ -543,7 +543,17 @@
           $scope.IdEmpresaUsuarioFinalTerminos = producto.IdEmpresaUsuarioFinal;
           $scope.terminos = true;
         } else {
-          return $scope.AgregarCarrito(producto, producto.Cantidad, producto.IdPedidocontrato);
+
+          EmpresasFactory.getTerminosNuevoComercio($scope.IdEmpresa)
+          .success(result => {
+            if (result.Firma === 1) {
+              $scope.AgregarCarrito(producto, producto.Cantidad, producto.IdPedidocontrato);
+            } else {
+              $scope.ShowToast('No has aceptado los términos y condiciones de nuevo comercio', 'danger');
+            }
+          });
+
+           
         }
       })
       .catch(function (error) {
@@ -579,6 +589,13 @@
       });
     };
 
+    const validateTerminosNuevoComercio = function (IdEmpresa){
+      $scope.terminosMicrosoftNC = 0;
+
+      console.log($scope.terminosMicrosoftNC, '$scope.terminosMicrosoftNC');
+      return $scope.terminosMicrosoftNC;
+    };
+    
     const validateQuantity = function (producto) {
       ProductosFactory.getQuantity(producto.IdEmpresaUsuarioFinal, producto.IdProducto)
       .then(function (result) {
