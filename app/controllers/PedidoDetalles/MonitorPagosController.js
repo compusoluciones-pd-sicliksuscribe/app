@@ -144,6 +144,9 @@
       modalPagoMonitor.style.display = 'block';
     };
 
+    $scope.recargarMonitor = () => {
+      location.reload();
+    };
 
     $scope.init = function () {
       if ($scope.currentPath === '/MonitorPagos') {
