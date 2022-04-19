@@ -102,27 +102,39 @@
 
    $scope.CambiarFechaRenovacion = function (Producto) {
     if (Producto.Esquema === $scope.MENSUAL){
-      var fecha = new Date();
-      fecha.setMonth(fecha.getMonth() + 1);
-      fecha.setDate(fecha.getDate() - 1);
-      Producto.FechaFinSuscripcion = fecha.getDate() + "/" + (fecha.getMonth() +1)+ "/" + (fecha.getFullYear());
+      if (Producto.cotermMS) {
+        Producto.FechaFinSuscripcion = Producto.cotermMS.FechaFin;
+      } else {
+        var fecha = new Date();
+        fecha.setMonth(fecha.getMonth() + 1);
+        fecha.setDate(fecha.getDate() - 1);
+        Producto.FechaFinSuscripcion = fecha.getDate() + "/" + (fecha.getMonth() +1)+ "/" + (fecha.getFullYear());
+      }
       Producto.EsquemaRenovacion = 'Mensual';
-      Producto.IdEsquemaRenovacion= $scope.MENSUAL;
-     } 
-    
+      Producto.IdEsquemaRenovacion= $scope.MENSUAL; 
+    } 
+
     if (Producto.Esquema === $scope.ANUAL){
-      var fecha = new Date();
-      fecha.setDate(fecha.getDate() - 1);
-      Producto.FechaFinSuscripcion = fecha.getDate() + "/" + (fecha.getMonth() +1) + "/" + (fecha.getFullYear()+1);
+      if (Producto.cotermMS) {
+        Producto.FechaFinSuscripcion = Producto.cotermMS.FechaFin;
+      } else {
+        var fecha = new Date();
+        fecha.setDate(fecha.getDate() - 1);
+        Producto.FechaFinSuscripcion = fecha.getDate() + "/" + (fecha.getMonth() +1) + "/" + (fecha.getFullYear()+1);
+      }
       Producto.EsquemaRenovacion = 'Anual';
       Producto.IdEsquemaRenovacion= $scope.ANUAL;
       Producto.PrecioNormalAnual = Producto.PrecioNormal * 12;
     }
 
     if (Producto.Esquema === $scope.ANUAL_MENSUAL){
-      var fecha = new Date();
-      fecha.setDate(fecha.getDate() - 1);
-      Producto.FechaFinSuscripcion = fecha.getDate() + "/" + (fecha.getMonth() +1) + "/" + (fecha.getFullYear()+1);
+      if (Producto.cotermMS) {
+        Producto.FechaFinSuscripcion = Producto.cotermMS.FechaFin;
+      } else {
+        var fecha = new Date();
+        fecha.setDate(fecha.getDate() - 1);
+        Producto.FechaFinSuscripcion = fecha.getDate() + "/" + (fecha.getMonth() +1) + "/" + (fecha.getFullYear()+1);
+      }
       Producto.EsquemaRenovacion = 'Anual con facturación mensual';
       Producto.IdEsquemaRenovacion= $scope.ANUAL_MENSUAL;
       Producto.PrecioNormalAnual = Producto.PrecioNormal * 12;
