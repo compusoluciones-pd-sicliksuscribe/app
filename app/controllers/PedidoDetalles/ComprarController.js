@@ -567,6 +567,8 @@
             .success(function (compra) {
               $cookies.remove('pedidosAgrupados');
               if (compra.success === 1) {
+                let modalPagado = document.getElementById('modalTdcpagado');
+                modalPagado.style.display = 'block';
                 location.reload();
               }
             })

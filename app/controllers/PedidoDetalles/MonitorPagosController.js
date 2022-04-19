@@ -35,8 +35,6 @@
       AMEX: 2,
       OTRO: 3
     };
-    $scope.statusCharge2 = '';
-    $scope.paymentId2 = '';
     let deviceSessionId = '';
     let tokenId = '';
     $scope.meses = [{ nombre: 'Enero', valor: '01' }, { nombre: 'Febrero', valor: '02' }, { nombre: 'Marzo', valor: '03' }, { nombre: 'Abril', valor: '04' }, { nombre: 'Mayo', valor: '05' }, { nombre: 'Junio', valor: '06' }, { nombre: 'Julio', valor: '07' }, { nombre: 'Agosto', valor: '08' }, { nombre: 'Septiembre', valor: '09' }, { nombre: 'Octubre', valor: '10' }, { nombre: 'Noviembre', valor: '11' }, { nombre: 'Diciembre', valor: '12' }];
@@ -535,9 +533,7 @@
         .then(function (response) {
           if (response.data.statusCode === 200) {
             $scope.cerrarModal('modalPagoMonitor');
-            $scope.modalTdcPagado();
-            $scope.statusCharge2 = response.data.content.statusCharge;
-            $scope.paymentId2 = response.data.content.paymentId;
+            angular.element(document.getElementById('divComprar')).scope().CreditCardPayment(response.data.content.statusCharge, response.data.content.paymentId);
             } else {
             printError(response.data.message);
           }
