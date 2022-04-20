@@ -290,7 +290,7 @@
                                                     <select id="coterm" name="coterm" class="form-control selectOption ufs" ng-model="Producto.cotermMS"
                                                         ng-options="cotermMS.FechaFin for cotermMS in cotermMSByEschema"
                                                         ng-change="CambiarFechaRenovacion(Producto);" title="Selecciona una fecha de co-termino disponible" ng-required="Producto.IdFabricante === 1 && Producto.IdTipoProducto !== 6 && Producto.IdTipoProducto !== 3">
-                                                        <option ng-selected="true" value="">Periodo completo</option>
+                                                        <option ng-selected="true" value="" disabled>Selecciona una fecha disponible...</option>
                                                     </select>
                                                 </div>
                                             </div>

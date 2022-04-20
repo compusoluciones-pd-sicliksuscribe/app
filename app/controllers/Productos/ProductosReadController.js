@@ -161,21 +161,25 @@
   }
 
   const formatDateCoterm = function (eschemaType, dateByEschema) {
+    const fechaCoterm = [];
     if (eschemaType === $scope.MENSUAL) {
-      return dateByEschema.map(function (item)  {
+      dateByEschema.map(function (item) {
         const endDate = new Date(item.FechaFin);
         const nowDate = new Date();
 
         if (endDate.getDate() >= nowDate.getDate() ) {
-          return { FechaFin: ('0' + endDate.getDate()).slice(-2) + '/' + ('0' + (nowDate.getMonth() + 1)).slice(-2) + "/" + (nowDate.getFullYear())};
-        } else return { FechaFin: ('0' + endDate.getDate()).slice(-2) + '/' + ('0' + (nowDate.getMonth() + 2)).slice(-2) + "/" + (nowDate.getFullYear())};
+          fechaCoterm.push({ FechaFin: ('0' + endDate.getDate()).slice(-2) + '/' + ('0' + (nowDate.getMonth() + 1)).slice(-2) + "/" + (nowDate.getFullYear())});
+        } else fechaCoterm.push({ FechaFin: ('0' + endDate.getDate()).slice(-2) + '/' + ('0' + (nowDate.getMonth() + 2)).slice(-2) + "/" + (nowDate.getFullYear())});
       });
     } else {
-     return dateByEschema.map(function (item)  {
+      dateByEschema.map(function (item)  {
        const endDate = new Date(item.FechaFin);
-       return { FechaFin: ('0' + endDate.getDate()).slice(-2) + '/' + ('0' + (endDate.getMonth() + 1)).slice(-2) + "/" + (endDate.getFullYear())};
+       fechaCoterm.push({FechaFin: ('0' + endDate.getDate()).slice(-2) + '/' + ('0' + (endDate.getMonth() + 1)).slice(-2) + "/" + (endDate.getFullYear())});
      });
     }
+    return fechaCoterm.filter((valorActual, indiceActual, arreglo) => {
+      return arreglo.findIndex(valorDelArreglo => JSON.stringify(valorDelArreglo) === JSON.stringify(valorActual)) === indiceActual
+  });
   }
 
     $scope.init = function () {
@@ -640,7 +644,8 @@
         IdUsuarioContacto: Producto.IdUsuarioContacto,
         IdAccionAutodesk: Producto.IdFabricante === 2 ? 1 : null,
         IdERP: Producto.IdERP,
-        Plazo: Producto.Plazo
+        Plazo: Producto.Plazo,
+        CotermMS: Producto.cotermMS ? Producto.cotermMS.FechaFin : null
       };
       if (NuevoProducto.IdAccionAutodesk === 1 && !Producto.TieneContrato) {
         return postPedidoAutodesk(NuevoProducto, Producto);
