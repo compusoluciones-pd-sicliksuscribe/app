@@ -66,6 +66,11 @@
       return $http.get($rootScope.API + 'autodesk/contracts/get-end-date-contract/dist/' + distribuidor + '/uf/' + usuarioFinal + '/contrato/' + contratoActual);
     };
 
+    factory.renovacionTradein = contractData => {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'autodesk/trade-in', contractData);
+    };
+
     return factory;
   };
 

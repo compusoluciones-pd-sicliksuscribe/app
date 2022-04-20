@@ -11,6 +11,7 @@
     $scope.Contactos = [];
     $scope.Renovar = {};
     $scope.Extender = {};
+    $scope.tradeIn = {};
     $scope.terminos = false;
     $scope.SessionCookie = $cookies.getObject('Session');
 
@@ -369,7 +370,7 @@
       if (Pedido.IdFabricante === 1) {
         PedidoDetallesFactory.putPedidoDetalleMicrosoft(order)
         .success(function (result) {
-          if (result.success === 0) {
+          if (result.success === 0 || result.name === 'Error') {
             $scope.ShowToast(result.message, 'danger');
           } else {
             $scope.ShowToast('Suscripción cancelada.', 'success');
@@ -654,22 +655,70 @@
       }
     };
 
-    $scope.actualizarEsquema = (numeroContrato, numeroSeries, idEsquemaRenovacion) =>{
+    $scope.actualizarEsquema = (numeroContrato, numeroSeries, idEsquemaRenovacion) => {
       
       PedidoDetallesFactory.actualizarEsquemaRenovacion(numeroSeries, idEsquemaRenovacion)
         .then(result => {
-          $scope.Pedidos.forEach(pedido => {
-             if (pedido.NumeroContrato === numeroContrato) {
-              pedido.TermSwitch = true;
-              pedido.EstatusContrato = 'term-switch';
-             }
-          });
-          $scope.ShowToast(result.data.message, 'success');
+          if (result.data.statusCode === 400) {
+            $scope.ShowToast(result.data.message, 'danger');
+          } 
+          else {
+            $scope.Pedidos.forEach(pedido => {
+              if (pedido.NumeroContrato === numeroContrato) {
+                pedido.TermSwitch = true;
+                pedido.EstatusContrato = 'term-switch';
+              }
+            });
+            $scope.ShowToast(result.data.message, 'success');
+          }
         })
         .catch(result => {
           $scope.ShowToast(result.data.message, 'danger');
         });
-    }
+    };
+    
+    $scope.agregarInfoTradein = pedido => {
+      $scope.tradeIn.idContrato = pedido.IdContrato;
+      $scope.tradeIn.IdEsquemaRenovacion = pedido.IdEsquemaRenovacion;
+      $scope.tradeIn.detalles = pedido.Detalles;
+    };
+
+    $scope.solicitarRenovacionTradein = () => {
+      let cantidadTradeInRevasada = false;
+      let contadorDetallesEnCero = 0;
+      if ($scope.tradeIn.IdUsuarioContacto && $scope.tradeIn.IdEsquemaRenovacion) {
+        $scope.tradeIn.detalles.forEach(detalle => {
+          if (detalle.cantidadProxTradeIn > detalle.Cantidad) cantidadTradeInRevasada = true;
+          if (detalle.cantidadProxTradeIn == 0 || !detalle.cantidadProxTradeIn) {
+            contadorDetallesEnCero++;
+          }
+        });
+        if (!cantidadTradeInRevasada) {
+          if (contadorDetallesEnCero != $scope.tradeIn.detalles.length) {
+            const contractData = {
+              IdContrato: $scope.tradeIn.idContrato,
+              IdEmpresaUsuarioFinal: $scope.EmpresaSelect,
+              IdUsuarioContacto: $scope.tradeIn.IdUsuarioContacto,
+              IdEsquemaRenovacion: $scope.tradeIn.IdEsquemaRenovacion,
+              Detalles: $scope.tradeIn.detalles
+            };
+            PedidosFactory.renovacionTradein(contractData)
+              .then(result => {
+                $scope.ShowToast(result.data.message, 'success');
+                $scope.ActualizarMenu();
+                $scope.ActualizarMonitor();
+                $scope.addPulseCart();
+                $('#renovacionTradeIn').modal('hide');
+              })
+              .catch(result => {
+                $scope.ShowToast(result.data.message, 'danger');
+                $('#renovacionTradeIn').modal('hide');
+              });
+          } else $scope.ShowToast('Especifique una cantidad para hacer tarde in en al menos una de las series.', 'warning');
+        } else $scope.ShowToast('La cantidad no debe ser mayor a la disponible.', 'warning');
+      } else $scope.ShowToast('Llena todos los campos del formulario.', 'warning');
+    };
+  
   };
 
   MonitorReadController.$inject = ['$scope', '$log', '$cookies', '$location', 'EmpresasXEmpresasFactory', 'PedidoDetallesFactory', '$uibModal', '$filter', 'FabricantesFactory', 'PedidosFactory', 'EmpresasFactory', 'UsuariosFactory','AmazonDataFactory', 'ActualizarCSNFactory'];

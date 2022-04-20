@@ -372,7 +372,7 @@
       })
 
       .when('/Carrito', {
-        controller: 'PedidoDetallesReadController', templateUrl: 'app/views/PedidoDetalles/PedidoDetallesRead.html',
+        templateUrl: 'app/views/PedidoDetalles/PedidoDetallesRead.html',
         resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 10)) { $location.path('/404'); } } }
       })
 
@@ -644,6 +644,13 @@
         }}
       })
 
+      .when('/FacturacionAzure', {
+        controller: 'FacturacionController', templateUrl: 'app/views/Facturacion/FacturacionAzure.html',
+        resolve: { 'check': function ($location, $cookies) {
+          var Session = $cookies.getObject('Session');
+          if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 8)) { $location.path('/404'); }
+        }}
+      })
       .otherwise({ redirectTo: '/404' });
   });
 }());

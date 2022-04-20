@@ -21,10 +21,6 @@
 									</a>
 								</div>
 								
-								<div class="sliderMessage" ng-show="!(currentDistribuidor.IdEmpresa)">
-									Para comprar este producto, ponte en contacto con tu distribuidor {{currentDistribuidor.IdEmpresa}}
-								</div>
-								
 								<!-- Para tuclick -->
 								<button class="btn btn-success" ng-click="goToPage('uf/Productos/{{Promocion.CodigoProducto}}');" style="{{secondaryColor}}"
 								ng-show="((SessionCookie.IdTipoAcceso == 4) && {{Promocion.EsUrl}}===0 && SessionCookie.distribuidores)">Comprar</button>
