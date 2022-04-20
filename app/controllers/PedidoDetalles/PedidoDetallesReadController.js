@@ -105,6 +105,7 @@
           $scope.legacyCSP = 0;
           $scope.orden = new Array(result.data.data.length);
           $scope.PedidoDetalles = result.data.data;
+          if ($scope.PedidoDetalles[0].IdFormaPago === 1) validarTC();
           if ($scope.SessionCookie.IdTipoAcceso === 10) {
             const estaEnLista = $scope.usuariosCompra.filter(usuario => usuario.IdUsuario === $scope.PedidoDetalles[0].IdUsuarioCompra);
             if (estaEnLista.length > 0) {
@@ -367,7 +368,6 @@
             }
           });
           $scope.ActualizarMenu();
-          // validarCarrito();
           $scope.ShowToast(result.data.message, 'success');
         })
         .catch(function (result) {
@@ -462,6 +462,27 @@
       const priceWithExchangeRate = $scope.calculatePriceWithExchangeRate(order, product, value);
       if (isTiredProduct(product)) return priceWithExchangeRate;
       return priceWithExchangeRate * product.Cantidad;
+    };
+
+    $scope.tipoTarjeta = (tipo, cookie) => {
+      
+      if (cookie) $cookies.putObject('tipoTarjetaCredito', tipo);
+      PedidoDetallesFactory.setCreditCardType($scope.PedidoDetalles, tipo)
+        .then(() => $scope.ShowToast('Tipo de tarjeta actualizada.', 'success'))
+        .catch(() => $scope.ShowToast('No fue posible actualizar el usuario de compra.', 'danger'));
+      $('#btnSiguiente').prop('disabled', false);
+    };
+
+    const validarTC = () => {
+      let tipoTarjetaCredito = $cookies.getObject('tipoTarjetaCredito');
+      if (!tipoTarjetaCredito){
+        $('#btnSiguiente').prop('disabled', true);
+      }else {
+        $scope.tipoTarjeta(tipoTarjetaCredito, false);
+        $('#TC_'+tipoTarjetaCredito).prop('checked', true);
+        $('#btnSiguiente').prop('disabled', false);
+      }
+
     };
 
     $scope.next = function () {

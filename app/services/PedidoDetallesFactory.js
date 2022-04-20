@@ -127,6 +127,11 @@
       return $http.post($rootScope.API + 'shopping-cart/credit-card-payments');
     };
 
+    factory.pagarTarjetaOpenpay = function (charges) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'shopping-cart/credit-card-payments/openpay', charges);
+    };
+
     factory.getPrepararTarjetaCreditoFinalUser = function (currentDistribuidor) {
       factory.refreshToken();
       return $http.post($rootScope.API + 'shopping-cart/credit-card-payments/final-user/' + currentDistribuidor);
@@ -262,12 +267,12 @@
       return $http.put($rootScope.API + 'shopping-cart/update-use-CFDI/' + UsoCFDI + '/id-pedido/' + IdPedido);
     };
 
-    factory.getProratePriceMonth = function ({FechaInicio}, {PrecioNormal}) {
+    factory.getProratePriceMonth = function ({ FechaInicio }, { PrecioNormal }) {
       factory.refreshToken();
       return $http.get($rootScope.API + 'orders/prorateMonth/fechaInicio/' + FechaInicio + '/precio/' + PrecioNormal);
     };
 
-    factory.getProratePriceAnnual = function ({FechaInicio}, {PrecioNormal}) {
+    factory.getProratePriceAnnual = function ({ FechaInicio }, { PrecioNormal }) {
       factory.refreshToken();
       return $http.get($rootScope.API + 'orders/prorateAnnual/fechaInicio/' + FechaInicio + '/precio/' + PrecioNormal);
     };
@@ -289,7 +294,7 @@
 
     factory.actualizarUsuarioCompra = (idPedidos, IdUsuarioCompra) => {
       factory.refreshToken();
-      return $http.post($rootScope.API + 'super-user/update-purchase-user', {IdPedidos: idPedidos, IdUsuarioCompra});
+      return $http.post($rootScope.API + 'super-user/update-purchase-user', { IdPedidos: idPedidos, IdUsuarioCompra });
     };
 
     factory.actualizarOrdenesCompra = ordenes => {
@@ -306,10 +311,15 @@
       factory.refreshToken();
       return $http.post($rootScope.API + 'orders/update-start-date', { IdContrato: idContrato, FechaInicio: fechaInicio, IdEsquemaRenovacion: idEsquemaRenovacion });
     };
-    
+
     factory.actualizarEsquemaRenovacion = (numeroSeries, idEsquemaRenovacion) => {
       factory.refreshToken();
-      return $http.post($rootScope.API + 'autodesk/update-subscriptions', {numeroSeries, idEsquemaRenovacion});
+      return $http.post($rootScope.API + 'autodesk/update-subscriptions', { numeroSeries, idEsquemaRenovacion });
+    };
+
+    factory.setCreditCardType = (PedidoDetalles, tipoTarjeta) => {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'shopping-cart/set-creditCardType', { PedidoDetalles, tipoTarjeta });
     };
     return factory;
   };

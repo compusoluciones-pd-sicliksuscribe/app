@@ -24,8 +24,14 @@
       document.getElementById(modal).style.display = 'none';
     };
 
+    $scope.modalOpenpayConfirma = function () {
+      let modalPagoMonitor = document.getElementById('modalOpenpayConfirma');
+      modalPagoMonitor.style.display = 'block';
+    };
+
     $scope.init = function () {
       const MICROSOFT = 1;
+      $scope.modalOpenpayConfirma();
       if ($scope.currentPath === '/SuccessOrder') {
         $scope.CheckCookie();
         $scope.orderIdsCookie.forEach(elemento => {
