@@ -280,8 +280,12 @@
                                                 </div>
                                             </div>
                                             <br>
-                                            <br>
-                                            <div ng-hide="Producto.IdFabricante !== 1 || Producto.IdTipoProducto !== 2 || !cotermMSByEschema" >
+                                            <div>
+                                                <div class="checkbox"  ng-hide="Producto.IdFabricante !== 1 || Producto.IdTipoProducto !== 2 || !Producto.Esquema || !cotermMSByEschema">
+                                                    <label><input id="periodoCompleto" type="checkbox" ng-checked="Producto.periodoCompleto" ng-true-value="1" ng-false-value="0" ng-model="Producto.periodoCompleto" ng-click="" ng-disabled="!cotermMSByEschema"> Periodo completo</label>
+                                                </div>
+                                            </div>
+                                            <div ng-hide="Producto.IdFabricante !== 1 || Producto.IdTipoProducto !== 2 || !cotermMSByEschema || Producto.periodoCompleto" >
                                                 <label>* Selecciona una fecha de co-termino disponible</label>
                                                 <div class="input-group" style="width:100%;" >
                                                         <span class="input-group-addon green white">
@@ -289,7 +293,7 @@
                                                         </span>
                                                     <select id="coterm" name="coterm" class="form-control selectOption ufs" ng-model="Producto.cotermMS"
                                                         ng-options="cotermMS.FechaFin for cotermMS in cotermMSByEschema"
-                                                        ng-change="CambiarFechaRenovacion(Producto);" title="Selecciona una fecha de co-termino disponible" ng-required="Producto.IdFabricante === 1 && Producto.IdTipoProducto !== 6 && Producto.IdTipoProducto !== 3">
+                                                        ng-change="CambiarFechaRenovacion(Producto);" title="Selecciona una fecha de co-termino disponible" ng-required="Producto.IdFabricante === 1 && Producto.IdTipoProducto !== 6 && Producto.IdTipoProducto !== 3 && !Producto.periodoCompleto">
                                                         <option ng-selected="true" value="" disabled>Selecciona una fecha disponible...</option>
                                                     </select>
                                                 </div>

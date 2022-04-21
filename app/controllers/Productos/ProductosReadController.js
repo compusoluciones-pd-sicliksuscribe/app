@@ -645,7 +645,7 @@
         IdAccionAutodesk: Producto.IdFabricante === 2 ? 1 : null,
         IdERP: Producto.IdERP,
         Plazo: Producto.Plazo,
-        CotermMS: Producto.cotermMS ? Producto.cotermMS.FechaFin : null
+        CotermMS: Producto.cotermMS && !Producto.periodoCompleto ? Producto.cotermMS.FechaFin : null
       };
       if (NuevoProducto.IdAccionAutodesk === 1 && !Producto.TieneContrato) {
         return postPedidoAutodesk(NuevoProducto, Producto);
