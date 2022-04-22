@@ -645,7 +645,7 @@
         IdAccionAutodesk: Producto.IdFabricante === 2 ? 1 : null,
         IdERP: Producto.IdERP,
         Plazo: Producto.Plazo,
-        CotermMS: Producto.cotermMS && !Producto.periodoCompleto ? Producto.cotermMS.FechaFin : null
+        CotermMS: Producto.cotermMS && !Producto.periodoCompleto ? fortmatDate(Producto.cotermMS.FechaFin) : null
       };
       if (NuevoProducto.IdAccionAutodesk === 1 && !Producto.TieneContrato) {
         return postPedidoAutodesk(NuevoProducto, Producto);
@@ -688,6 +688,11 @@
         });
       }
     };
+
+    const fortmatDate = function (date) {
+      const visualDate = date.split('/');
+      return visualDate[2] + '-' + visualDate[1] + '-' + visualDate[0];
+    }
 
     const postPedidoAutodesk = function (NuevoProducto) {
       PedidoDetallesFactory.postPedidoDetalle(NuevoProducto)
