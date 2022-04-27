@@ -55,6 +55,7 @@
                 detalle.NumeroSerie && detalle.EstatusFabricante === 'accepted' && detalle.PedidoAFabricante
                 ? pedido.listoRenovar = 1 : pedido.listoRenovar = 0;
               });
+              pedido.optionDeleteMS = pedido.EsOrdenInicial === 0 ? false : evaluationDeleteMS(pedido.FechaInicio);
               pedido.TermSwitch = pedido.EstatusContrato === 'term-switch';
               pedido.etiquetaTermSwitch = (pedido.IdEsquemaRenovacion == 5) ? 'Actualizar periodo a un año' : 'Actualizar periodo a tres años';
             });
@@ -65,6 +66,13 @@
           $scope.ShowToast(result.data.message, 'danger');
         });
     };
+
+    const evaluationDeleteMS = function (FechaInicio) {
+      const now = new Date();
+      const limitDate = new Date(FechaInicio);
+      limitDate.setDate(limitDate.getDate() + 5);
+      return now > limitDate ? false : true;
+    }
 
     const getContactUsers = function () {
       UsuariosFactory.getUsuariosContacto($scope.EmpresaSelect)
