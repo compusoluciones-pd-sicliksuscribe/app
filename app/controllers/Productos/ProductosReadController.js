@@ -101,6 +101,14 @@
 
 
    $scope.CambiarFechaRenovacion = function (Producto) {
+    ProductosFactory.getNCProduct(Producto.IdERP)
+    .success(function (result) {
+      console.log(result, 'NC')
+    })
+    .error(function (data, status, headers, config) {
+     console.log(data);
+    });
+
     if (Producto.Esquema === $scope.MENSUAL){
       if (Producto.cotermMS) {
         Producto.FechaFinSuscripcion = Producto.cotermMS.FechaFin;
