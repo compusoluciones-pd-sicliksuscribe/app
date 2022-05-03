@@ -126,7 +126,7 @@
                                 {{Producto.PrecioNormalAnual | currency: "$" : 2}} {{Producto.MonedaPrecio}}
                             </span>
                             <span ng-show="Producto.PorcentajeDescuento == 0 && Producto.IdFabricante !== 5 && Producto.Esquema != MENSUAL && Producto.Esquema != ANUAL && Producto.PrecioNormalAnual">
-                                {{Producto.PrecioNormal | currency: "$" : 2}} {{Producto.MonedaPrecio}} al mes por 12 meses
+                                {{Producto.PrecioNormalAnual | currency: "$" : 2}} {{Producto.MonedaPrecio}} al mes por 12 meses
                             </span>
                             <span ng-show="Producto.IdFabricante === 5 && Producto.IdTipoProducto === 4">
                                 {{Producto.PrecioNormal | currency: "$" : 2}} {{Producto.MonedaPrecio}}

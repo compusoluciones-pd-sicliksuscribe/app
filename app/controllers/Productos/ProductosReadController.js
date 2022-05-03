@@ -22,7 +22,6 @@
     $scope.microsoftURI = false;
     $scope.cotermMSByUF = null;
     $scope.cotermMSByEschema = null;
-
     $scope.esquemaRenovacionModelo={};
     $scope.EsquemaRenovacion=[
       {id: 1, esquema: 'Mensual' },
@@ -66,13 +65,20 @@
         IdTipoProducto = undefined;
       }
       $scope.BuscarProductos.IdTipoProducto = IdTipoProducto;
-      ProductosFactory.getBuscarProductos($scope.BuscarProductos)
+     ProductosFactory.getBuscarProductos($scope.BuscarProductos)
         .success(function (Productos) {
           if (Productos.success === 1) {
             $scope.Productos = Productos.data.map(function (item) {
               item.IdPedidoContrato = 0;
               item.TieneContrato = true;
               item.tiers = formatTiers(item.tiers);
+                ProductosFactory.getNCProduct(item.IdERP)
+                .success(function (result) {
+                item.FlagNC = result ? true : false;
+                })
+                .error(function (data, status, headers, config) {
+                 console.log('error', error);
+                });
               return item;
             });
           }
@@ -100,7 +106,7 @@
     };
 
 
-   $scope.CambiarFechaRenovacion = function (Producto) {
+    $scope.CambiarFechaRenovacion = function (Producto) {
     if (Producto.Esquema === $scope.MENSUAL){
       if (Producto.cotermMS) {
         Producto.FechaFinSuscripcion = Producto.cotermMS.FechaFin;
@@ -124,7 +130,7 @@
       }
       Producto.EsquemaRenovacion = 'Anual';
       Producto.IdEsquemaRenovacion= $scope.ANUAL;
-      Producto.PrecioNormalAnual = Producto.PrecioNormal * 12;
+      Producto.PrecioNormalAnual = Producto.FlagNC ? (Producto.PrecioNormal * 10) : Producto.PrecioNormal * 12 ;
     }
 
     if (Producto.Esquema === $scope.ANUAL_MENSUAL){
@@ -137,7 +143,7 @@
       }
       Producto.EsquemaRenovacion = 'Anual con facturación mensual';
       Producto.IdEsquemaRenovacion= $scope.ANUAL_MENSUAL;
-      Producto.PrecioNormalAnual = Producto.PrecioNormal * 12;
+      Producto.PrecioNormalAnual = Producto.FlagNC ? ((Producto.PrecioNormal * 10)/12) : Producto.PrecioNormal  ;
     }
      
      return Producto.EsquemaRenovacion; 
@@ -454,8 +460,7 @@
     $scope.estimateTotalAnnual = function (product, quantity) {
 
       const price = product.PorcentajeDescuento > 0 ? product.PrecioDescuento : product.PrecioNormal;
-      const estimatedTotal = ((price * quantity)*12) || 0.00;
-
+      const estimatedTotal = product.FlagNC ? ((price * quantity)*10) : ((price * quantity)*12)|| 0.00;
       return estimatedTotal;
     };
 
@@ -468,7 +473,9 @@
         return $scope.estimateTotalAnnual(product,quantity);
       }
       const price = product.PorcentajeDescuento > 0 ? product.PrecioDescuento : product.PrecioProrrateo;
-      const estimatedTotal = price * quantity || 0.00;
+      //const estimatedTotal = price * quantity || 0.00;
+      const estimatedTotal = product.FlagNC ? ((product.PrecioNormal * 10)/12) : (price * quantity)|| 0.00;
+      console.log('estimatedTotal', estimatedTotal);
       return estimatedTotal;
     };
 
