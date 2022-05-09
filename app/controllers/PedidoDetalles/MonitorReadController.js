@@ -1,5 +1,5 @@
 (function () {
-  var MonitorReadController = function ($scope, $log, $cookies, $location, EmpresasXEmpresasFactory, PedidoDetallesFactory, $uibModal, $filter, FabricantesFactory, PedidosFactory, EmpresasFactory, UsuariosFactory, AmazonDataFactory, ActualizarCSNFactory) {
+  var MonitorReadController = function ($scope, $log, $cookies, $location, EmpresasXEmpresasFactory, PedidoDetallesFactory, $uibModal, $filter, FabricantesFactory, PedidosFactory, EmpresasFactory, UsuariosFactory, AmazonDataFactory, ActualizarCSNFactory, ProductosFactory) {
     $scope.EmpresaSelect = 0;
     var Params = {};
     $scope.form = {};
@@ -54,6 +54,10 @@
               pedido.Detalles.forEach(detalle => {
                 detalle.NumeroSerie && detalle.EstatusFabricante === 'accepted' && detalle.PedidoAFabricante
                 ? pedido.listoRenovar = 1 : pedido.listoRenovar = 0;
+              });
+              ProductosFactory.getNCProduct(pedido.Detalles[0].IdErp)
+              .success(function (result) {
+              pedido.productoNC = result ? true : false;
               });
               pedido.optionDeleteMS = pedido.EsOrdenInicial === 0 ? false : evaluationDeleteMS(pedido.FechaInicio);
               pedido.TermSwitch = pedido.EstatusContrato === 'term-switch';
@@ -372,7 +376,8 @@
         FechaFin: hoy.getFullYear() + '-' + (hoy.getUTCMonth() + 1).toString().padStart(2, 0) + '-' + hoy.getDate().toString().padStart(2, 0),
         IdProducto: Detalles.IdProducto,
         IdEsquemaRenovacion: Pedido.IdEsquemaRenovacion,
-        IdPedido: Pedido.IdPedido
+        IdPedido: Pedido.IdPedido,
+        ProductoNC: Pedido.productoNC,
       };
       if (Pedido.IdFabricante === 1) {
         PedidoDetallesFactory.putPedidoDetalleMicrosoft(order)
@@ -686,7 +691,7 @@
     
   };
 
-  MonitorReadController.$inject = ['$scope', '$log', '$cookies', '$location', 'EmpresasXEmpresasFactory', 'PedidoDetallesFactory', '$uibModal', '$filter', 'FabricantesFactory', 'PedidosFactory', 'EmpresasFactory', 'UsuariosFactory','AmazonDataFactory', 'ActualizarCSNFactory'];
+  MonitorReadController.$inject = ['$scope', '$log', '$cookies', '$location', 'EmpresasXEmpresasFactory', 'PedidoDetallesFactory', '$uibModal', '$filter', 'FabricantesFactory', 'PedidosFactory', 'EmpresasFactory', 'UsuariosFactory','AmazonDataFactory', 'ActualizarCSNFactory', 'ProductosFactory'];
 
   angular.module('marketplace').controller('MonitorReadController', MonitorReadController);
 
