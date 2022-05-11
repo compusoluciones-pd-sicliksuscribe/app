@@ -1,5 +1,5 @@
 (function () {
-  var MonitorReadController = function ($scope, $log, $cookies, $location, EmpresasXEmpresasFactory, PedidoDetallesFactory, $uibModal, $filter, FabricantesFactory, PedidosFactory, EmpresasFactory, UsuariosFactory, AmazonDataFactory, ActualizarCSNFactory, ProductosFactory) {
+  var MonitorReadController = function ($scope, $log, $cookies, $location, EmpresasXEmpresasFactory, PedidoDetallesFactory, $uibModal, $filter, FabricantesFactory, PedidosFactory, EmpresasFactory, UsuariosFactory, AmazonDataFactory, ActualizarCSNFactory, ProductosFactory, ManejoLicencias) {
     $scope.EmpresaSelect = 0;
     var Params = {};
     $scope.form = {};
@@ -337,6 +337,18 @@
       FechaFin.setDate(22);
       FechaFin.setMonth(FechaFin.getMonth() + 2);
       return FechaFin;
+    };
+
+    $scope.actualizarEstatusRenovacion = function(status, pedido){
+      ManejoLicencias.updateStatusAutoRenew(pedido.IdMicrosoftUF, pedido.IdSuscripcion, status, pedido.Detalles[0].IdPedidoDetalle)
+      .then(function () {
+        if (!status) { 
+          $scope.ShowToast('Se desactivo la renovación automática', 'success');
+        } else $scope.ShowToast('Se activo la renovación automática', 'success');
+      })
+      .catch(function () {
+        $scope.ShowToast('No es posible actualizar el estatus de renovación automática', 'danger');
+      })
     };
 
     $scope.CancelarRenovacion = function (pedido, detalles) {
@@ -691,7 +703,7 @@
     
   };
 
-  MonitorReadController.$inject = ['$scope', '$log', '$cookies', '$location', 'EmpresasXEmpresasFactory', 'PedidoDetallesFactory', '$uibModal', '$filter', 'FabricantesFactory', 'PedidosFactory', 'EmpresasFactory', 'UsuariosFactory','AmazonDataFactory', 'ActualizarCSNFactory', 'ProductosFactory'];
+  MonitorReadController.$inject = ['$scope', '$log', '$cookies', '$location', 'EmpresasXEmpresasFactory', 'PedidoDetallesFactory', '$uibModal', '$filter', 'FabricantesFactory', 'PedidosFactory', 'EmpresasFactory', 'UsuariosFactory','AmazonDataFactory', 'ActualizarCSNFactory', 'ProductosFactory', 'ManejoLicencias'];
 
   angular.module('marketplace').controller('MonitorReadController', MonitorReadController);
 
