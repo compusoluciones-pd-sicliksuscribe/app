@@ -14,6 +14,11 @@
         return $http.get(`${$rootScope.MAPI}subscriptions/coterm/by/${IdEmpresaUsuarioFinal}`);
       };
 
+      factory.updateStatusAutoRenew = function ( IdCustomer, IdSubscription, Status, IdPedidoDetalle ) {
+        factory.refreshToken();
+        return $http.post(`${$rootScope.MAPI}subscriptions/updateAutoRenewById`, { IdCustomer, IdSubscription, Status, IdPedidoDetalle });
+      };
+      
       return factory;
     };
   
