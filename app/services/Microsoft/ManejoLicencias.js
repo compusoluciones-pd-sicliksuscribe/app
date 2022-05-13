@@ -18,7 +18,12 @@
         factory.refreshToken();
         return $http.post(`${$rootScope.MAPI}subscriptions/updateAutoRenewById`, { IdCustomer, IdSubscription, Status, IdPedidoDetalle });
       };
-      
+
+      factory.updateQuantityRenew = function ( IdCustomer, IdSubscription, CantidadProxima ) {
+        factory.refreshToken();
+        return $http.post(`${$rootScope.MAPI}subscriptions/updateQuantityRenewById`, { IdCustomer, IdSubscription, CantidadProxima });
+      };
+        
       return factory;
     };
   
