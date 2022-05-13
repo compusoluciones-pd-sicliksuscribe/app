@@ -473,9 +473,12 @@
         return $scope.estimateTotalAnnual(product,quantity);
       }
       const price = product.PorcentajeDescuento > 0 ? product.PrecioDescuento : product.PrecioProrrateo;
-      //const estimatedTotal = price * quantity || 0.00;
-      const estimatedTotal = product.FlagNC ? ((product.PrecioNormal * 10)/12) : (price * quantity)|| 0.00;
-      console.log('estimatedTotal', estimatedTotal);
+      let estimatedTotal
+      if(product.IdEsquemaRenovacion === $scope.ANUAL_MENSUAL){
+      estimatedTotal = product.FlagNC ? ((product.PrecioNormal * 10)/12) : (price * quantity)|| 0.00;
+      }else{
+        estimatedTotal = price * quantity || 0.00;
+      }
       return estimatedTotal;
     };
 
