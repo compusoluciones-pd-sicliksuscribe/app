@@ -3,6 +3,7 @@
     $scope.CreditoValido = 1;
     $scope.error = false;
     $scope.Distribuidor = {};
+    $scope.flagAnnualMensual = 0;
     const ON_DEMAND = 3;
     const ELECTRONIC_SERVICE = 74;
     const paymentMethods = {
@@ -100,6 +101,7 @@
     const getOrderDetails = function (validate) {
       return PedidoDetallesFactory.getPedidoDetalles()
         .then(function (result) {
+          $scope.flagAnnualMensual = 0;
           $scope.orden = new Array(result.data.data.length);
           $scope.PedidoDetalles = result.data.data;
           if ($scope.SessionCookie.IdTipoAcceso === 10) {
@@ -115,6 +117,7 @@
             elem.Forma = getPaymentMethods(elem.IdFormaPago);
             elem.NombreFabricante = getMakers(elem.IdFabricante);
             elem.Productos.forEach(function (item) {
+              if (item.IdFabricante === 1 && elem.IdEsquemaRenovacion === 9 && elem.IdFormaPago!==2) {$scope.flagAnnualMensual ++;}
               if (item.PrecioUnitario == null) $scope.error = true;
             });
           });
@@ -124,6 +127,12 @@
           if (!validate) {
             $scope.ValidarFormaPago();
           }
+          if ($scope.flagAnnualMensual >= 1) {
+            $('#btnSiguiente').prop('disabled', true);
+            $scope.ShowToast('Las compras de esquema anual con facturación mensual se deben finalizar con la forma de pago de crédito.', 'danger');
+           } else {
+             $('#btnSiguiente').prop('disabled', false);
+           }
         })
         .then(function () {
           if ($scope.isPayingWithCSCredit()) validarCarrito();
