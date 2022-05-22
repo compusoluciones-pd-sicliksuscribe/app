@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="styles/css/toggleButton.css">
+
 <div class="container" ng-swipe-right="" ng-swipe-left="">
 
 
@@ -251,7 +253,7 @@
                                             </a>
                                         </h4>
                                     </div>
-                                    <div class="form-group col-xs-6 col-sm-6 col-md-2 col-lg-2" ng-if="pedido.IdFormaPagoProxima === 2" >
+                                    <div class="form-group col-xs-6 col-sm-6 col-md-2 col-lg-2" ng-if="pedido.IdFormaPagoProxima === 2 && !pedido.productoNC">
                                         <h4>
                                             <a id="pCancelar" type="button" title="No renovar" ng-click="CancelarRenovacion(pedido, detalles);" ng-disabled="!frmCantidad.$valid">
                                                 <span class="glyphicon glyphicon-trash" style="cursor:pointer"></span>
@@ -313,9 +315,15 @@
                                     </div>
                                 </li>
                         </div>
+                        <div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2" ng-hide="!detalles.Activo || pedido.IdFabricante !== 1 || pedido.IdFormaPagoProxima !== 2 || detalles.IdTipoProducto !== 2 || !detalles.PedidoAFabricante ">
+                            <label class="switchBtn">
+                                <input type="checkbox" ng-checked="pedido.RenovacionNC" ng-model="RenovacionNC" ng-click="actualizarEstatusRenovacion(RenovacionNC, pedido)" >
+                                <div class="slide round">Renovación</div>
+                            </label>
+                        </div>
 
                         <div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
-                            <button class="btn btn-danger" ng-show="detalles.Activo  && pedido.IdFabricante !== 11" ng-click="Confirmar(detalles.IdPedidoDetalle)" ng-disabled="pedido.CargoRealizadoProximoPedido || (!detalles.PedidoAFabricante || detalles.EstatusFabricante === 'FAILED')">
+                            <button class="btn btn-danger" ng-show="detalles.Activo  && pedido.IdFabricante !== 11" ng-click="Confirmar(detalles.IdPedidoDetalle)" ng-disabled="pedido.CargoRealizadoProximoPedido || (!detalles.PedidoAFabricante || detalles.EstatusFabricante === 'FAILED') || (pedido.IdFabricante === 1 && !pedido.optionDeleteMS && pedido.productoNC)">
 									CANCELAR
 								</button>
                             <button class="btn btn-success" ng-show="!detalles.Activo && pedido.IdFabricante !== 1" ng-click="Reanudar(pedido, detalles)" ng-disabled="pedido.CargoRealizadoProximoPedido || (!detalles.PedidoAFabricante || detalles.EstatusFabricante === 'FAILED')">
@@ -325,7 +333,7 @@
                             <div ng-show="detalles.Mostrar">
                                 <div class="row">
                                     <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                        <label>Se cancelará la suscripción automática, ¿Estás de acuerdo?</label>
+                                        <label>Se cancelará la suscripción de forma inmediata, ¿Estás de acuerdo?</label>
                                     </div>
                                 </div>
                                 <div class="row" ng-show="pedido.IdFabricante === 5">

@@ -119,11 +119,14 @@
                             <div ng-show="Producto.IdTipoProducto == 2">Precio unitario:</div>
                             <div ng-show="Producto.IdTipoProducto == 3">Precio de contratación:</div>
                             </label>
-                            <span ng-show="Producto.PorcentajeDescuento == 0 && Producto.IdFabricante !== 5 && Producto.Esquema != ANUAL">
+                            <span ng-show="Producto.PorcentajeDescuento == 0 && Producto.IdFabricante !== 5 && Producto.Esquema != ANUAL && Producto.Esquema != ANUAL_MENSUAL">
                                 {{Producto.PrecioNormal | currency: "$" : 2}} {{Producto.MonedaPrecio}}
                             </span>
-                            <span ng-show="Producto.PorcentajeDescuento == 0 && Producto.IdFabricante !== 5 && Producto.Esquema != MENSUAL && Producto.PrecioNormalAnual">
+                            <span ng-show="Producto.PorcentajeDescuento == 0 && Producto.IdFabricante !== 5 && Producto.Esquema != MENSUAL && Producto.PrecioNormalAnual && Producto.Esquema != ANUAL_MENSUAL">
                                 {{Producto.PrecioNormalAnual | currency: "$" : 2}} {{Producto.MonedaPrecio}}
+                            </span>
+                            <span ng-show="Producto.PorcentajeDescuento == 0 && Producto.IdFabricante !== 5 && Producto.Esquema != MENSUAL && Producto.Esquema != ANUAL && Producto.PrecioNormalAnual">
+                                {{Producto.PrecioNormalAnual | currency: "$" : 2}} {{Producto.MonedaPrecio}} al mes por 12 meses
                             </span>
                             <span ng-show="Producto.IdFabricante === 5 && Producto.IdTipoProducto === 4">
                                 {{Producto.PrecioNormal | currency: "$" : 2}} {{Producto.MonedaPrecio}}
@@ -271,8 +274,27 @@
                                                         </span>
                                                     <select id="esquemaModelo" name="esquemaModelo" class="form-control selectOption ufs" ng-model="Producto.Esquema"
                                                         ng-options="esquema.id as esquema.esquema for esquema in EsquemaRenovacion"
-                                                        ng-change="CambiarFechaRenovacion(Producto);" title="Selecciona un tipo de renovación para tu producto" ng-required="Producto.IdFabricante === 1 && Producto.IdTipoProducto !== 6 && Producto.IdTipoProducto !== 3">
+                                                        ng-change="CambiarFechaRenovacion(Producto); generateCotermMSViability(Producto);" title="Selecciona un tipo de renovación para tu producto" ng-required="Producto.IdFabricante === 1 && Producto.IdTipoProducto !== 6 && Producto.IdTipoProducto !== 3">
                                                         <option ng-selected="true" value="" disabled>Selecciona un tipo de renovación...</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <div>
+                                                <div class="checkbox"  ng-hide="Producto.IdFabricante !== 1 || Producto.IdTipoProducto !== 2 || !Producto.Esquema || !cotermMSByEschema">
+                                                    <label><input id="periodoCompleto" type="checkbox" ng-checked="Producto.periodoCompleto" ng-true-value="1" ng-false-value="0" ng-model="Producto.periodoCompleto" ng-click="" ng-disabled="!cotermMSByEschema"> Periodo completo</label>
+                                                </div>
+                                            </div>
+                                            <div ng-hide="Producto.IdFabricante !== 1 || Producto.IdTipoProducto !== 2 || !cotermMSByEschema || Producto.periodoCompleto" >
+                                                <label>* Selecciona una fecha de co-termino disponible</label>
+                                                <div class="input-group" style="width:100%;" >
+                                                        <span class="input-group-addon green white">
+                                                            <span class="glyphicon glyphicon-hourglass"></span>
+                                                        </span>
+                                                    <select id="coterm" name="coterm" class="form-control selectOption ufs" ng-model="Producto.cotermMS"
+                                                        ng-options="cotermMS.FechaFin for cotermMS in cotermMSByEschema"
+                                                        ng-change="CambiarFechaRenovacion(Producto);" title="Selecciona una fecha de co-termino disponible" ng-required="Producto.IdFabricante === 1 && Producto.IdTipoProducto !== 6 && Producto.IdTipoProducto !== 3 && !Producto.periodoCompleto">
+                                                        <option ng-selected="true" value="" disabled>Selecciona una fecha disponible...</option>
                                                     </select>
                                                 </div>
                                             </div>
