@@ -428,25 +428,30 @@
                 <div ng-if="pedido.EstatusContrato === 'renewal' && !pedido.PorExtender"><hr><h5 class="alert alert-info text-info" style="border-left: .6em solid;"><b>El siguiente periodo del contrato se habilitará al terminar el periodo actual.</b></h5></div>
                 <div ng-if="pedido.PorExtender"><hr><h5 class="alert alert-warning text-warning" style="border-left: .6em solid;"><b>El periodo de vigencia del contrato será extendido.</b></h5></div>
             </div>
-            
 			<div class="col-xs-12 col-sm-2 col-md-6 col-lg-6">
-				<button id="Renovar" class="pull-right btn  btn-primary" style="margin-right: .5em; padding: .8em;"
+                <button id="ActualizarEsquema" class="pull-right btn btn-monitor-pedidos-x-cliente" style="margin-right: .5em; padding: .8em ; min-width: 150px;"
                 ng-hide="pedido.EstatusContrato !== 'ready' || !pedido.listoRenovar || pedido.PorExtender"
-                data-toggle="modal" data-target="#renovacionMultiUser"
-				ng-click="AgregarContrato(pedido);">
-					Renovar
+                ng-click="actualizarEsquema(pedido.NumeroContrato, pedido.Detalles, pedido.IdEsquemaRenovacion)">
+					{{pedido.etiquetaTermSwitch}}
+				</button>
+                <button id="TradeIn" class="pull-right btn btn-monitor-pedidos-x-cliente"
+                ng-hide="pedido.EstatusContrato !== 'ready' || !pedido.listoRenovar || pedido.PorExtender"
+                data-toggle="modal" data-target="#renovacionTradeIn"
+				ng-click="agregarInfoTradein(pedido);">
+                    Trade in
                 </button>
-                <button id="Extender" class="pull-right btn  btn-info" style="margin-right: .5em; padding: .8em ; min-width: 150px;"
+                <button id="Extender" class="pull-right btn btn-monitor-pedidos-x-cliente"
                 ng-hide="pedido.EstatusContrato === 'canceled' || pedido.EstatusContrato === 'notRenewed' || pedido.EstatusContrato === 'in-cart' || pedido.EstatusContrato === 'processing' || pedido.EstatusContrato === 'renewal' ||  pedido.EstatusContrato === 'processing' || pedido.PorExtender"
                 ng-disabled="pedido.EstatusPedido !== 3"
                 ng-click="getEndDateContract(pedido.IdContrato, pedido.EstatusPedido);">
 					Extender
 				</button>
-                <button id="ActualizarEsquema" class="pull-right btn  btn-warning" style="margin-right: .5em; padding: .8em ; min-width: 150px;"
+                <button id="Renovar" class="pull-right btn btn-monitor-pedidos-x-cliente"
                 ng-hide="pedido.EstatusContrato !== 'ready' || !pedido.listoRenovar || pedido.PorExtender"
-                ng-click="actualizarEsquema(pedido.NumeroContrato, pedido.Detalles, pedido.IdEsquemaRenovacion)">
-					{{pedido.etiquetaTermSwitch}}
-				</button>
+                data-toggle="modal" data-target="#renovarModal"
+				ng-click="AgregarContrato(pedido);">
+					Renovar
+                </button>
             </div> 
         </div>
 
@@ -625,17 +630,64 @@
 									<option ng-selected="true" value="">Selecciona un contacto...</option>
 								</select>
                         </div>
-                        <br/> <br/>
-                        <div class="form-group">
+                        <br/>
+                        <div class="form-group alert alert-info">
                             <p>
-                                <b>Nota**</b> <br/> <br/> Al dar click en <b>Renovar Contrato</b>, se agregarán al carrito de compras todos los productos que estén incluidos en el contrato con el estatus de <b>Aceptado</b> y con la cantidad de renovaciones
+                                Al dar click en <b>Renovar Contrato</b>, se agregarán al carrito de compras todos los productos que estén incluidos en el contrato con el estatus de <b>Aceptado</b> y con la cantidad de renovaciones
                                 en el campo de <b>Renovación</b>.
                             </p>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Regresar</button>
-                        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="SolicitarRenovacion(pedido.IdContrato);">Renovar contrato</button>
+                        <button type="button" class="btn btn-default btn-modal" data-dismiss="modal">Regresar</button>
+                        <button type="button" class="btn btn-primary btn-modal" data-dismiss="modal" ng-click="SolicitarRenovacion();">Renovar contrato</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="renovacionTradeIn" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="divLoading" data-cargando>
+                    <div class=""><img src="images/ripple.svg" /></div>
+                </div>  
+                <div class="row modal-content">
+                    <div class="col-sm-12 col-md-12 col-lg-12 modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Solicitud de renovación trade in</h4>
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-lg-12 modal-body">
+                        <div class="col-sm-6 col-md-6 col-lg-6 form-group has-feedback">
+                            <label >Contacto </label>
+                            <select class="form-control selectOption" ng-model="tradeIn.IdUsuarioContacto" ng-options="Contacto.IdUsuario as Contacto.Nombre + ' ('+ Contacto.CorreoElectronico +')' for Contacto in Contactos">
+									<option ng-selected="true" value="">Selecciona un contacto...</option>
+								</select>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+                            <div style="text-align: center;">
+                                <label class="col-lg-4 col-md-4 col-sm-4">Numero de serie</label>
+                                <label class="col-lg-3 col-md-3 col-sm-3">Cantidad</label>
+                                <label class="col-lg-3 col-md-3 col-sm-3">Cantidad trade in</label>
+                            </div>
+                            <div class="row" ng-repeat="detalle in tradeIn.detalles"  style="text-align: center;">
+                                <div class="col-lg-4 col-md-4 col-sm-4" style="margin-top:.6em"> {{detalle.NumeroSerie}}</div>
+                                <div class="col-lg-3 col-md-3 col-sm-3" style="margin-top:.6em">{{detalle.Cantidad}}</div>
+                                <input type="text" maxlength="3" onKeypress="if (event.keyCode < 48 || event.keyCode > 57) event.returnValue = false;" ng-model="detalle.cantidadProxTradeIn" class="form-control col-lg-3 col-md-3 col-sm-3" style="width: 3.5em; margin-left: 3em; margin-bottom: .5em" />
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="col-sm-12 col-md-12 col-lg-12 form-group alert alert-info" style="margin-top: 2em;">
+                            <p>
+                               Al dar click en <b>Continuar</b>, se agregarán al carrito de compras todos los productos que estén incluidos en el contrato con el estatus de <b>Aceptado</b>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-lg-12 modal-footer">
+                        <button type="button" class="btn btn-default btn-modal" data-dismiss="modal">Regresar</button>
+                        <button type="button" class="btn btn-primary btn-modal" ng-click="solicitarRenovacionTradein();">Continuar</button>
                     </div>
                 </div>
             </div>
@@ -692,27 +744,6 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal" style="padding: .8em 1.4em" ng-click="cerrarModal('noExtender')">Aceptar</button> 
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="renovacionMultiUser" class="modal fade in" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cerrarModal('renovacionMultiUser')"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title"><b>Renovación de contrato</b></h4>
-                    </div>
-                    <div class="modal-body">
-                        <h5>
-                            Si alguno de estos productos corresponde a una renovación en RED, debes tomar en cuenta que se conservará el tipo de acceso. Si deseas realizar un <b>TRADE IN 2:1</b>, por favor envía tu OC de manera tradicional o contacta a tu agente de venta.
-                            <br><br><b style="color: #b93228;">Una vez que se finalice la compra, la renovación no podrá ser cancelada.</b>
-                        </h5>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal" style="min-width: 7em;" ng-click="cerrarModal('renovacionMultiUser')">Cancelar</button> 
-                        <button type="button" class="btn btn-default" data-dismiss="modal" style="padding: .8em 1.4em" data-toggle="modal" data-target="#renovarModal" ng-click="cerrarModal('renovacionMultiUser')">Continuar</button> 
                     </div>
                 </div>
             </div>

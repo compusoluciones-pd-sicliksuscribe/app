@@ -1,4 +1,4 @@
-<div class="container" ng-swipe-right="" ng-swipe-left="">
+<div class="container"  ng-controller="PedidoDetallesReadController" ng-swipe-right="" ng-swipe-left="">
 
     <div class="form-group row">
         <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
@@ -128,6 +128,7 @@
                             <span ng-if="(pedido.IdAccionAutodesk === 2 || pedido.IdAccionAutodesk === 3) && pedido.Renovado">Add-On (Renovación)</span>
                             <span ng-if="pedido.IdAccionAutodesk === 4">Renovación</span>
                             <span ng-if="pedido.IdAccionAutodesk === 5">Extensión</span>
+                            <span ng-if="pedido.IdAccionAutodesk === 6">Trade in</span>
                         </div>
                     </div>
                     <label tooltip="Ahora puedes incluir un número de orden de compra en tu pedido. El número aparecera en el formato pdf de la factura.">Orden de compra</label>
@@ -262,27 +263,31 @@
     </div>
 
     <div id="inicioFuturoModal" class="modal fade in" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-sm" role="document">     
+        <div class="modal-dialog modal-sm" role="document">
             <div class="divLoading" data-cargando>
                 <div class=""><img src="images/ripple.svg" /></div>
-            </div>         
+            </div>
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cerrarModal('inicioFuturoModal')"><span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                        ng-click="cerrarModal('inicioFuturoModal')"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title"><b>Fecha de inicio futuro</b></h4>
                 </div>
                 <div class="modal-body">
                     <div class="form-group has-feedback col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <label>Fecha inicio del contrato</label>
-                    <input type="date" ng-model="Contrato.FechaInicio" class="form-control" />
-                </div>
-                <br><br><br><br><br>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal" style="padding: .8em 1.4em" ng-click="cerrarModal('inicioFuturoModal')" ng-disabled="procesandoExtension">Cancelar</button> 
-                    <button type="button" class="btn btn-info" data-dismiss="modal" ng-click="inicioFuturo(Contrato.FechaInicio); cerrarModal('inicioFuturoModal')" ng-disabled="procesandoExtension" style="padding: .8em 1.4em">Aceptar</button>
+                        <label>Fecha inicio del contrato</label>
+                        <input type="date" ng-model="Contrato.FechaInicio" class="form-control" />
+                    </div>
+                    <br><br><br><br><br>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" style="padding: .8em 1.4em"
+                            ng-click="cerrarModal('inicioFuturoModal')" ng-disabled="procesandoExtension">Cancelar</button>
+                        <button type="button" class="btn btn-info" data-dismiss="modal"
+                            ng-click="inicioFuturo(Contrato.FechaInicio); cerrarModal('inicioFuturoModal')"
+                            ng-disabled="procesandoExtension" style="padding: .8em 1.4em">Aceptar</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
 </div>

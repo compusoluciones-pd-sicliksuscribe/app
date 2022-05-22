@@ -1,6 +1,7 @@
 (function () {
   var PedidoDetallesReadController = function ($scope, $log, $location, $cookies, PedidoDetallesFactory, TipoCambioFactory, EmpresasXEmpresasFactory, EmpresasFactory, PedidosFactory, UsuariosFactory, $routeParams) {
     $scope.CreditoValido = 1;
+    $scope.legacyCSP = 0;
     $scope.error = false;
     $scope.Distribuidor = {};
     $scope.flagAnnualMensual = 0;
@@ -44,6 +45,7 @@
         });
     };
 
+    const esquemaAzurePlan = 8;
     const getPaymentMethods = function (id) {
       let paymentMethod = '';
       switch (id) {
@@ -113,6 +115,7 @@
           }
           $scope.PedidoDetalles.forEach(function (elem) {
             $scope.CreditoValido = 1;
+            let IdEsquemaRenovacion = elem.IdEsquemaRenovacion;
             elem.hasCredit = 1;
             elem.Forma = getPaymentMethods(elem.IdFormaPago);
             elem.NombreFabricante = getMakers(elem.IdFabricante);
