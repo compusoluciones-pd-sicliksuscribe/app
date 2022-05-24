@@ -77,7 +77,7 @@
                 item.FlagNC = result ? true : false;
                 })
                 .error(function (data, status, headers, config) {
-                 console.log('error', error);
+                 return status;
                 });
               return item;
             });
@@ -594,7 +594,13 @@
     $scope.previousISVValidate = function (producto) {
       if (producto.IdFabricante !== 6) {
         if (producto.IdFabricante === 1) {
-          return $scope.validateAgreementCSP(producto);
+          if (producto.Cantidad && producto.IdEmpresaUsuarioFinal && producto.Esquema ) {
+            return $scope.validateAgreementCSP(producto);
+          }
+          else {
+            $scope.ShowToast('Complete los datos necesario para continuar.', 'danger');
+            return false;
+          }
         } 
         else if (producto.IdFabricante === 7) {
           return validateQuantity(producto);
@@ -615,13 +621,6 @@
       });
     };
 
-    const validateTerminosNuevoComercio = function (IdEmpresa){
-      $scope.terminosMicrosoftNC = 0;
-
-      console.log($scope.terminosMicrosoftNC, '$scope.terminosMicrosoftNC');
-      return $scope.terminosMicrosoftNC;
-    };
-    
     const validateQuantity = function (producto) {
       ProductosFactory.getQuantity(producto.IdEmpresaUsuarioFinal, producto.IdProducto)
       .then(function (result) {
