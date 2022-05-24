@@ -85,9 +85,9 @@
       return $http.post($rootScope.API + 'requestDataVwareProduct', body);
     };
 
-    factory.getNCProduct = function (IdProducto) {
+    factory.getNCProduct = function (producto) {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'products/validateNC/' + IdProducto);
+      return $http.post($rootScope.API + 'products/validateNC', { IdProducto: producto });
     };
 
     return factory;
