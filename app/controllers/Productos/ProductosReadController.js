@@ -1,5 +1,5 @@
 (function () {
-  var ProductosReadController = function ($scope, $log, $location, $cookies, $routeParams, PlanPremiumFactory, ProductosFactory, AmazonDataFactory, FabricantesFactory, TiposProductosFactory, PedidoDetallesFactory, TipoCambioFactory, ProductoGuardadosFactory, EmpresasXEmpresasFactory, UsuariosFactory, ActualizarCSNFactory, $anchorScroll, EmpresasFactory, ManejoLicencias) {
+  var ProductosReadController = function ($scope, $log, $location, $cookies, $routeParams, PlanPremiumFactory, ProductosFactory, AmazonDataFactory, FabricantesFactory, TiposProductosFactory, PedidoDetallesFactory, TipoCambioFactory, ProductoGuardadosFactory, EmpresasXEmpresasFactory, UsuariosFactory, ActualizarCSNFactory, $anchorScroll, EmpresasFactory, ManejoLicencias, PedidosFactory) {
     var BusquedaURL = $routeParams.Busqueda;
     const HRWAWRE_EXTRA_EMPOLYEES_GROUPING = 1000;
     $scope.BuscarProductos = {};
@@ -71,14 +71,16 @@
             $scope.Productos = Productos.data.map(function (item) {
               item.IdPedidoContrato = 0;
               item.TieneContrato = true;
+              item.AddSeatMS = false;
               item.tiers = formatTiers(item.tiers);
                 ProductosFactory.getNCProduct(item.IdERP)
                 .success(function (result) {
-                item.FlagNC = result ? true : false;
+                  item.FlagNC = result ? true : false;
                 })
                 .error(function (data, status, headers, config) {
                  return status;
                 });
+
               return item;
             });
           }
@@ -107,6 +109,12 @@
 
 
     $scope.CambiarFechaRenovacion = function (Producto) {
+      if (Producto.IdFabricante === 1) {
+        PedidosFactory.viabilityAddSeatMS(Producto, $scope.SessionCookie.IdEmpresa)
+        .success(function (result) {
+          Producto.AddSeatMS = result ? true : false;
+        }); 
+      }
     if (Producto.Esquema === $scope.MENSUAL){
       if (Producto.cotermMS) {
         Producto.FechaFinSuscripcion = Producto.cotermMS.FechaFin;
@@ -591,10 +599,27 @@
       });
     };
 
+    const validateFormMicrosof = function (producto) {
+      console.log('producto', producto);
+      if (producto.Cantidad && producto.IdEmpresaUsuarioFinal) {
+        if ((producto.IdTipoProducto === 3) || (!producto.FlagNC && producto.Esquema)) {
+          return true;
+        } else {
+          if (producto.FlagNC && producto.Esquema) {
+            if ((producto.AddSeatMS && (producto.cotermMS || producto.periodoAddSeat)) ||
+              (!producto.AddSeatMS && (producto.cotermMS || producto.periodoCompleto))) {
+              return true;
+            } else return false;
+          } else return false;
+        }
+      } else return false;
+    };
+    
+
     $scope.previousISVValidate = function (producto) {
       if (producto.IdFabricante !== 6) {
         if (producto.IdFabricante === 1) {
-          if (producto.Cantidad && producto.IdEmpresaUsuarioFinal && producto.Esquema ) {
+          if (validateFormMicrosof(producto)) {
             return $scope.validateAgreementCSP(producto);
           }
           else {
@@ -938,7 +963,7 @@
     }
   };
 
-  ProductosReadController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'PlanPremiumFactory', 'ProductosFactory','AmazonDataFactory', 'FabricantesFactory', 'TiposProductosFactory', 'PedidoDetallesFactory', 'TipoCambioFactory', 'ProductoGuardadosFactory', 'EmpresasXEmpresasFactory', 'UsuariosFactory', 'ActualizarCSNFactory', '$anchorScroll', 'EmpresasFactory', 'ManejoLicencias'];
+  ProductosReadController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'PlanPremiumFactory', 'ProductosFactory','AmazonDataFactory', 'FabricantesFactory', 'TiposProductosFactory', 'PedidoDetallesFactory', 'TipoCambioFactory', 'ProductoGuardadosFactory', 'EmpresasXEmpresasFactory', 'UsuariosFactory', 'ActualizarCSNFactory', '$anchorScroll', 'EmpresasFactory', 'ManejoLicencias', 'PedidosFactory'];
 
   angular.module('marketplace').controller('ProductosReadController', ProductosReadController);
 }());
