@@ -644,6 +644,14 @@
         }}
       })
 
+      .when('/MonitorContratos', {
+        templateUrl: 'app/views/Autodesk/MonitorContratos.html',
+        resolve: { 'check': function ($location, $cookies) {
+          var Session = $cookies.getObject('Session');
+          if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 8 || Session.IdTipoAcceso === 10)) { $location.path('/404'); }
+        }}
+      })
+
       .when('/FacturacionAzure', {
         controller: 'FacturacionController', templateUrl: 'app/views/Facturacion/FacturacionAzure.html',
         resolve: { 'check': function ($location, $cookies) {
