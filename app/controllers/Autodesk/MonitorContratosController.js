@@ -35,13 +35,20 @@
         });
     };
 
-    
+    const getContactUsers = function (customer) {
+      MonitorContratosFactory.getUserEndCustomer(customer)
+        .then(result => {
+          $scope.contactos = result.data.data;
+          $scope.renovar = {};
+        });
+    };
 
     $scope.init();
 
     $scope.ActualizarMonitor = function () {
       let endCustomerCSN = $scope.EmpresaSelect;
         getContractCustomer(endCustomerCSN);
+        getContactUsers(endCustomerCSN);
     };
   };
 

@@ -154,7 +154,7 @@
                         <div class="modal-body">
                             <div class="form-group has-feedback">
                                 <label for="Contacto">*Contacto </label>
-                                <select name="Renovar" id="Renovar" class="form-control selectOption" ng-model="Renovar.IdUsuarioContacto" ng-options="Contacto.IdUsuario as Contacto.Nombre + ' ('+ Contacto.CorreoElectronico +')' for Contacto in Contactos">
+                                <select name="Renovar" id="Renovar" class="form-control selectOption" ng-model="Renovar.IdUsuarioContacto" ng-options="Contacto.IdUsuario as Contacto.Nombre + ' ('+ Contacto.CorreoElectronico +')' for Contacto in contactos">
                                         <option ng-selected="true" value="">Selecciona un contacto...</option>
                                     </select>
                             </div>
@@ -187,7 +187,7 @@
                         <div class="col-sm-12 col-md-12 col-lg-12 modal-body">
                             <div class="col-sm-6 col-md-6 col-lg-6 form-group has-feedback">
                                 <label >Contacto </label>
-                                <select class="form-control selectOption" ng-model="tradeIn.IdUsuarioContacto" ng-options="Contacto.IdUsuario as Contacto.Nombre + ' ('+ Contacto.CorreoElectronico +')' for Contacto in Contactos">
+                                <select class="form-control selectOption" ng-model="tradeIn.IdUsuarioContacto" ng-options="Contacto.IdUsuario as Contacto.Nombre + ' ('+ Contacto.CorreoElectronico +')' for Contacto in contactos">
                                         <option ng-selected="true" value="">Selecciona un contacto...</option>
                                     </select>
                             </div>

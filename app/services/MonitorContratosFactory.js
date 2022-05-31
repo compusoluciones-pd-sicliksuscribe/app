@@ -20,6 +20,11 @@
         factory.refreshToken();
         return $http.get($rootScope.API + 'autodesk/get-contract-customer/' + EndCustomerCSN);
       };
+
+      factory.getUserEndCustomer = (EndCustomerCSN) => {
+        factory.refreshToken();
+        return $http.get($rootScope.API + 'autodesk/get-userEndCustomer/' + EndCustomerCSN);
+      }
   
       return factory;
     };
