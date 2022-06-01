@@ -47,7 +47,8 @@
           error(result.data);
           $location.path('/Productos');
         });
-    };
+    });
+  }
 
     const esquemaAzurePlan = 8;
     const getPaymentMethods = function (id) {
