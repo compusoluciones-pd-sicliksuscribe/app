@@ -314,26 +314,19 @@
       pedido.Detalles[0].PorCancelar = 0;
       PedidoDetallesFactory.putPedidoDetalle(PedidoActualizado)
         .success(async PedidoDetalleSuccess => {
-          if (pedido.IdFabricante === 1 && pedido.productoNC) {
-            await ManejoLicencias.updateQuantityRenew(pedido.IdMicrosoftUF, pedido.IdSuscripcion, detalles.CantidadProxima)
-              .then(() => $scope.ShowToast('Se actualizo la cantidad a renovar en Microsoft', 'success'))
-              .catch(() => $scope.ShowToast('No fue posible actualizar la cantidad a renovar en Microsoft', 'danger'))
-          }
-          else {
-            await PedidoDetallesFactory.postPartitionFlag(pedido)
-              .then(() => {
-                if (PedidoDetalleSuccess.success) {
-                  detalles.MostrarCantidad = 0;
-                  detalles.PorCancelar = 0;
-                  $scope.ShowToast(PedidoDetalleSuccess.message, 'success');
-                } else {
-                  $scope.ShowToast(PedidoDetalleSuccess.message, 'danger');
-                }
-              })
-              .catch(result => {
-                $scope.ShowToast(result.data.message, 'danger');
-              })
-          }
+          await PedidoDetallesFactory.postPartitionFlag(pedido)
+            .then(() => {
+              if (PedidoDetalleSuccess.success) {
+                detalles.MostrarCantidad = 0;
+                detalles.PorCancelar = 0;
+                $scope.ShowToast(PedidoDetalleSuccess.message, 'success');
+              } else {
+                $scope.ShowToast(PedidoDetalleSuccess.message, 'danger');
+              }
+            })
+            .catch(result => {
+              $scope.ShowToast(result.data.message, 'danger');
+            })
         })
         .error(function (data, status, headers, config) {
           $scope.ShowToast('No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde', 'danger');
