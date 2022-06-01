@@ -71,6 +71,11 @@
       return $http.post($rootScope.API + 'autodesk/trade-in', contractData);
     };
 
+    factory.viabilityAddSeatMS = (order, idEmpresa) => {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'orders/existing-order-microsoft', { IdProducto: order.IdProducto, IdEmpresaDistribuidor: idEmpresa, IdEmpresaUsuarioFinal: order.IdEmpresaUsuarioFinal, IdEsquemaRenovacion: order.Esquema});
+    };
+
     return factory;
   };
 
