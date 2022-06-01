@@ -132,6 +132,11 @@
       return $http.post($rootScope.API + 'shopping-cart/credit-card-payments/openpay', charges);
     };
 
+    factory.verificarEstatus3ds = function (idCharge) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'shopping-cart/credit-card-payments/openpay/checkStatus3ds/' + idCharge);
+    };
+
     factory.getPrepararTarjetaCreditoFinalUser = function (currentDistribuidor) {
       factory.refreshToken();
       return $http.post($rootScope.API + 'shopping-cart/credit-card-payments/final-user/' + currentDistribuidor);

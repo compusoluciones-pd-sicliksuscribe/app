@@ -482,7 +482,13 @@
       PedidoDetallesFactory.pagarTarjetaOpenpay(charges)
         .then(function (response) {
           if (response.data.statusCode === 200) {
-            angular.element(document.getElementById('divComprar')).scope().CreditCardPayment(response.data.content.statusCharge, response.data.content.paymentId);
+            if (response.data.content.statusCharge == 'charge_pending') {
+              $cookies.putObject('paymentId', response.data.content.paymentId);
+              // $location.path(response.data.content.redirect_url);
+              $location.path('/confirmacionCompra');
+            } else {
+              angular.element(document.getElementById('divComprar')).scope().CreditCardPayment(response.data.content.statusCharge, response.data.content.paymentId);
+            }
           } else {
             printError(response.data.message);
           }
