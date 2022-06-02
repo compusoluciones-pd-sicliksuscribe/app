@@ -483,9 +483,9 @@
         .then(function (response) {
           if (response.data.statusCode === 200) {
             if (response.data.content.statusCharge == 'charge_pending') {
+              $cookies.remove('paymentId');
               $cookies.putObject('paymentId', response.data.content.paymentId);
-              // $location.path(response.data.content.redirect_url);
-              $location.path('/confirmacionCompra');
+              window.location.href = response.data.content.redirect_url;
             } else {
               angular.element(document.getElementById('divComprar')).scope().CreditCardPayment(response.data.content.statusCharge, response.data.content.paymentId);
             }

@@ -648,7 +648,7 @@
         templateUrl: 'app/views/openpay/confirmacion3ds.html',
         resolve: { 'check': function ($location, $cookies) {
           var Session = $cookies.getObject('Session');
-          if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 8 || Session.IdTipoAcceso === 10)) { $location.path('/404'); }
+          if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 10)) { $location.path('/404'); }
         }}
       })
 
