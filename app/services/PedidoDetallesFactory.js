@@ -311,6 +311,12 @@
       factory.refreshToken();
       return $http.post($rootScope.API + 'autodesk/update-subscriptions', {numeroSeries, idEsquemaRenovacion});
     };
+
+    factory.InsertarOrdenCompra = (idPedido, ordenCompraProxima) => {
+      factory.refreshToken();
+      return $http.put($rootScope.API + 'orders/InsertOrdenCompraProxima/', { idPedido: idPedido, ordenCompraProxima: ordenCompraProxima });
+    };
+
     return factory;
   };
 

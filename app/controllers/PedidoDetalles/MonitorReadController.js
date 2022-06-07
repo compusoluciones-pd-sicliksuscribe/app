@@ -660,6 +660,20 @@
       : document.getElementById('noExtender').style.display = 'block';
     };
 
+    $scope.InsertarOrdenCompra = function (idPedido,ordenCompraProxima) {
+      const order = {
+        IdPedido: idPedido,
+        OrdenCompraProxima: ordenCompraProxima
+      }
+      PedidoDetallesFactory.InsertarOrdenCompra(order.IdPedido,order.OrdenCompraProxima)
+      .then(result => {
+        $scope.ShowToast(result.data.message, 'success');
+      })
+      .catch(result => {
+        $scope.ShowToast(result.data.message, 'danger');
+    });
+  }
+
     $scope.cerrarModal = modal => {
       document.getElementById(modal).style.display = 'none';
     };
