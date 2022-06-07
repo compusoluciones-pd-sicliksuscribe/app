@@ -99,15 +99,15 @@
         case 3004:
           return 'La tarjeta ha sido rechazada.';
         case 3005:
-          return 'La tarjeta ha sido rechazada por el sistema antifraude.';
+          return 'La tarjeta fue declinada por el banco.';
         case 3006:
           return 'La operación no esta permitida para este cliente o esta transacción.';
         case 3009:
           return 'La tarjeta fue reportada como perdida.';
         case 3010:
-          return 'El banco ha restringido la tarjeta.';
+          return 'La tarjeta fue declinada por el banco.';
         case 3011:
-          return 'El banco ha solicitado que la tarjeta sea retenida. Contacte al banco.';
+          return 'La tarjeta fue declinada por el banco. Contacte al banco.';
         case 3012:
           return 'Se requiere solicitar al banco autorización para realizar este pago.';
         case 3201:
