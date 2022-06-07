@@ -600,14 +600,14 @@
     };
 
     const validateFormMicrosof = function (producto) {
-      console.log('producto', producto);
       if (producto.Cantidad && producto.IdEmpresaUsuarioFinal) {
         if ((producto.IdTipoProducto === 3) || (!producto.FlagNC && producto.Esquema)) {
           return true;
         } else {
           if (producto.FlagNC && producto.Esquema) {
             if ((producto.AddSeatMS && (producto.cotermMS || producto.periodoAddSeat)) ||
-              (!producto.AddSeatMS && (producto.cotermMS || producto.periodoCompleto))) {
+              (!producto.AddSeatMS && $scope.cotermMSByEschema && (producto.cotermMS || producto.periodoCompleto)) ||
+              (!producto.AddSeatMS && !$scope.cotermMSByEschema)) {
               return true;
             } else return false;
           } else return false;
