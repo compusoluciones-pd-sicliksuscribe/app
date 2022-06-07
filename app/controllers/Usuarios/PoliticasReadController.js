@@ -6,11 +6,12 @@
     let terminosAD = 'https://politicas-clicksuscribe.s3.amazonaws.com/PoliticasAD.pdf';
     let cancelaciones = 'https://politicas-clicksuscribe.s3.amazonaws.com/Cancelaciones.pdf';
     let entrega = 'https://politicas-clicksuscribe.s3.amazonaws.com/Entregas.pdf';
+    let TyC_ClickSuscribe = 'https://politicas-clicksuscribe.s3.us-east-1.amazonaws.com/TyC_ClickSuscribe.pdf';
 
     $scope.init = function () {
       let route = $routeParams.politic;
       if (route === 'TyC') {
-        $scope.politics('tycMS');
+        $scope.politics('tycCLICK');
       } 
       else if (route === 'Cancelaciones') {
         $scope.politics('cancel');
@@ -27,6 +28,9 @@
           break;
         case 'tycAD':
           rutaPDF = terminosAD;
+          break;
+        case 'tycCLICK':
+          rutaPDF = TyC_ClickSuscribe;
           break;
         case 'cancel':
           rutaPDF = cancelaciones;
