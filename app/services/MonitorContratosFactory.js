@@ -25,6 +25,11 @@
         factory.refreshToken();
         return $http.get($rootScope.API + 'autodesk/get-userEndCustomer/' + EndCustomerCSN);
       }
+
+      factory.renewContract = function (contractData) {
+        factory.refreshToken();
+        return $http.post($rootScope.API + 'autodesk/contract-subscriptions/renew', contractData);
+      };
   
       return factory;
     };
