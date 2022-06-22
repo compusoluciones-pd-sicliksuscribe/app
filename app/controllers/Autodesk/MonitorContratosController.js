@@ -116,14 +116,12 @@
       });
     };
 
-    $scope.ActualizarPartition = function (subscriptionNumber){
+    $scope.ActualizarPartition = function (subscriptionNumber) {
       $scope.contracts.forEach(contract => {
         contract.subscriptions.forEach(subscription => {
           if (subscription.subscription_reference_number === subscriptionNumber) {
-            if(subscription.quantityToUpdate <= subscription.quantity ){
-              return;
-            }
-            else{
+            if (subscription.quantityToUpdate <= subscription.quantity) return;
+            else {
               $scope.ShowToast('No se puede actualizar a un número mayor de suscripciones.', 'danger');
               subscription.quantityToUpdate = null;
             }
