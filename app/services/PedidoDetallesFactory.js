@@ -204,7 +204,7 @@
 
     factory.removeRenew = function (pedido) {
       factory.refreshToken();
-      return $http.delete($rootScope.API + 'shopping-cart/renew/order/' + pedido.IdPedido + '/end-user/' + pedido.IdEmpresaUsuarioFinal);
+      return $http.delete($rootScope.API + 'shopping-cart/renew/order/' + pedido.IdPedido);
     };
 
     factory.preparePayPal = function (params) {
