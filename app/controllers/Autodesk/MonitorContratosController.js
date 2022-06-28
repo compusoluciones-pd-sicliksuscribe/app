@@ -24,7 +24,10 @@
               contract.renovacion = contract.contract_end_date
               contract.esquemaRenovacion = (contract.contract_term === 'Annual') ? 'Anual' : 'Cada 3 años';
               contract.etiquetaTermSwitch = (contract.contract_term === '3-Year') ? 'Actualizar periodo a un año' : 'Actualizar periodo a tres años';
-              contract.subscriptions.forEach(subscription => subscription.MostrarCantidad = false);
+              contract.subscriptions.forEach(subscription => {
+                subscription.MostrarCantidad = false
+                if (!subscription.subs_ready || subscription.siclick_status) contract.termSwitchStatus = true
+              });
             });
           }
           if(result.data.data.length > 0){
@@ -74,7 +77,7 @@
       let subscriptionsForRenewal = [];
       contract.subscriptions.forEach(subscription =>{
         if(subscription.forRenewal){
-          let {subs_ready, MostrarCantidad, forRenewal, ...subscriptionClone} = subscription
+          let {subs_ready, MostrarCantidad, forRenewal, siclick_status, ...subscriptionClone} = subscription
           subscriptionsForRenewal.push(subscriptionClone);
         }
       });

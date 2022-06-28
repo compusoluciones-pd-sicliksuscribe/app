@@ -43,9 +43,10 @@
                     ng-click="getEndDateContract(contract.IdContrato, contract.EstatusPedido);">
                         Extender
                     </button>
-                    <div ng-show="contract.subs_ready">
+                    <div ng-show="(contract.subs_ready  && !contract.siclick_status)">
                         <button id="ActualizarEsquema" class="pull-right btn btn-monitor-contratos "
-                        ng-click="actualizarEsquema(contract.NumeroContrato, contract.Detalles, contract.IdEsquemaRenovacion)">
+                        ng-disabled="(contract.termSwitchStatus)"
+                        ng-click="actualizarEsquema(contract.contract_number, contract.contract_term)">
                             {{contract.etiquetaTermSwitch}}
                         </button>
                         <button id="TradeIn" class="pull-right btn btn-monitor-contratos "
@@ -123,7 +124,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4" ng-show="subscription.subs_ready">
+                        <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4" ng-show="(subscription.subs_ready && !subscription.siclick_status)">
                             <div  style="position: relative; left: 100%;">
                                 <label tooltip="Seleccionar número de serie">
                                    <input class="ng-pristine ng-untouched ng-valid" ng-model="subscription.forRenewal" type="checkbox" style="transform: scale(1.6);" />
