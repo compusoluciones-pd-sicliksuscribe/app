@@ -30,6 +30,11 @@
         factory.refreshToken();
         return $http.post($rootScope.API + 'autodesk/contract-subscriptions/renew', contractData);
       };
+
+      factory.actualizarEsquemaRenovacion = (contractNumber, serialNumber, contractTerm) => {
+        factory.refreshToken();
+        return $http.post($rootScope.API + 'autodesk/update-subscriptions', {contractNumber, serialNumber, contractTerm});
+      };
   
       return factory;
     };

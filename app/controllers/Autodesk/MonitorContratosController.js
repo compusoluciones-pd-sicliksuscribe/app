@@ -1,5 +1,5 @@
 (function () {
-  var MonitorContratosController = function ($scope, $log, $cookies, $location, EmpresasXEmpresasFactory, PedidoDetallesFactory, $uibModal, $filter, MonitorContratosFactory, FabricantesFactory, PedidosFactory, EmpresasFactory, UsuariosFactory, AmazonDataFactory, ActualizarCSNFactory) {
+  var MonitorContratosController = function ($scope, $log, $cookies, $location, $uibModal, $filter, MonitorContratosFactory) {
     $scope.vacio = 0;
     $scope.Renovar = {};
     $scope.SessionCookie = $cookies.getObject('Session');
@@ -133,10 +133,38 @@
       })
     };
 
+    $scope.actualizarEsquema = function (contractNumber, contractTerm){
+      console.log(contractNumber, contractTerm);
+      let bandTermSwitch = true;
+      const contract = $scope.contracts.find(contract => contract.contract_number === contractNumber);
+      const serialNumber = contract.subscriptions.map(subscription => {
+        if(subscription.deployment === 'N') bandTermSwitch = false
+        return subscription.subscription_reference_number
+      })
+      if(bandTermSwitch){
+        MonitorContratosFactory.actualizarEsquemaRenovacion(contractNumber, serialNumber, contractTerm)
+      .then(result => {
+        console.log(result)
+        if (result.data.statusCode === 400) {
+          $scope.ShowToast(result.data.message, 'danger');
+        }
+        else {
+          contract.termSwitchStatus = true;
+          contract.subscriptions.forEach(subscription => subscription.siclick_status = true);
+          $scope.ShowToast(result.data.message, 'success');
+        }
+      })
+      .catch(result => {
+        $scope.ShowToast(result.data.message, 'danger');
+      });
+      }else {
+        $scope.ShowToast('Cambio de esquema no disponible en series multi usuario.', 'danger');
+      }
+    }
 
   };
 
-  MonitorContratosController.$inject = ['$scope', '$log', '$cookies', '$location', 'EmpresasXEmpresasFactory', 'PedidoDetallesFactory', '$uibModal', '$filter', 'MonitorContratosFactory', 'FabricantesFactory', 'PedidosFactory', 'EmpresasFactory', 'UsuariosFactory','AmazonDataFactory', 'ActualizarCSNFactory'];
+  MonitorContratosController.$inject = ['$scope', '$log', '$cookies', '$location', '$uibModal', '$filter', 'MonitorContratosFactory'];
 
   angular.module('marketplace').controller('MonitorContratosController', MonitorContratosController);
 
