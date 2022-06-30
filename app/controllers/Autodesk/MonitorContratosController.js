@@ -3,6 +3,8 @@
     $scope.vacio = 0;
     $scope.Renovar = {};
     $scope.SessionCookie = $cookies.getObject('Session');
+    $scope.procesandoExtension = false;
+    $scope.procesandoExtensionLbl = 'Extender contrato';
 
     $scope.init = function () {
       MonitorContratosFactory.getEndCustomer()
@@ -21,18 +23,18 @@
           if (result.status === 200) {
             $scope.contracts = result.data.data;
             $scope.contracts.forEach(contract => {
-              contract.renovacion = contract.contract_end_date
+              contract.renovacion = contract.contract_end_date;
               contract.esquemaRenovacion = (contract.contract_term === 'Annual') ? 'Anual' : 'Cada 3 años';
               contract.etiquetaTermSwitch = (contract.contract_term === '3-Year') ? 'Actualizar periodo a un año' : 'Actualizar periodo a tres años';
               contract.subscriptions.forEach(subscription => {
-                subscription.MostrarCantidad = false
+                subscription.MostrarCantidad = false;
                 if (!subscription.subs_ready || subscription.siclick_status) contract.termSwitchStatus = true
               });
             });
           }
-          if(result.data.data.length > 0){
+          if (result.data.data.length > 0) {
             $scope.vacio = 1;
-          }else{
+          } else {
             $scope.vacio = 0;
           }
         })
@@ -52,41 +54,61 @@
     const renewContract = function (contractData) {
       MonitorContratosFactory.renewContract(contractData)
         .then(result => {
-          if(result.data.success) {
+          if (result.data.success) {
             $scope.ShowToast(result.data.message, 'success');
             $scope.ActualizarMenu();
             $scope.addPulseCart();
             setTimeout($scope.removePulseCart, 9000);
             $location.path('/Carrito');
-          } else  $scope.ShowToast(result.data.message, 'danger');
+          } else $scope.ShowToast(result.data.message, 'danger');
         })
         .catch(result => {
           $scope.ShowToast(result.data.message, 'danger');
         });
     };
 
+    const addLimitExtensionDays = date => {
+      const LIMIT_EXTENSION_DAYS = 1095;
+      date.setDate(date.getDate() + LIMIT_EXTENSION_DAYS);
+      return date;
+    };
+
+    const getExtensionDates = (contractEndDate, contracts) => {
+      const limitDateInf = new Date(contractEndDate).setDate(new Date(contractEndDate).getDate() + 1);
+      const limitDateSup = addLimitExtensionDays(new Date());
+      return contracts.map(contract => {
+        const currentContractEndDate = new Date(contract.contract_end_date).setDate(new Date(contract.contract_end_date).getDate() + 1);
+        if (currentContractEndDate > limitDateInf && currentContractEndDate <= limitDateSup) return { contractNumber: contract.contract_number, endDate: contract.contract_end_date };
+      });
+    };
+
+    const showExtrensionModal = currentContract => {
+      $scope.opcionesExtencion.length > 0 ? $(`#extenderModal${currentContract}`).modal('show')
+      : $('#noExtender').modal('show');
+    };
+
     $scope.init();
 
     $scope.ActualizarMonitor = function () {
       let endCustomerCSN = $scope.EmpresaSelect;
-        getContractCustomer(endCustomerCSN);
-        getContactUsers(endCustomerCSN);
+      getContractCustomer(endCustomerCSN);
+      getContactUsers(endCustomerCSN);
     };
 
     $scope.AgregarContrato = function (contract) {
       let subscriptionsForRenewal = [];
-      contract.subscriptions.forEach(subscription =>{
-        if(subscription.forRenewal){
+      contract.subscriptions.forEach(subscription => {
+        if (subscription.forRenewal) {
           let {subs_ready, MostrarCantidad, forRenewal, siclick_status, ...subscriptionClone} = subscription
           subscriptionsForRenewal.push(subscriptionClone);
         }
       });
       
-      if(subscriptionsForRenewal.length <= 0){
+      if (subscriptionsForRenewal.length <= 0) {
         $scope.Renovar.contrato = '';
         $scope.Renovar.suscripciones = [];
         $scope.ShowToast('Selecciona una serie para renovar', 'warning');
-      }else{
+      } else {
         $scope.Renovar.contrato = contract.contract_number;
         $scope.Renovar.suscripciones = subscriptionsForRenewal;
         $('#renovarModal').modal('show');
@@ -161,6 +183,14 @@
         $scope.ShowToast('Cambio de esquema no disponible en series multi usuario.', 'danger');
       }
     }
+
+
+    $scope.getExtensionDateModal = (contractEndDate, currentContract) => {
+      const extensionDates = getExtensionDates(contractEndDate, $scope.contracts);
+      const extensionDatesAux = extensionDates.filter(item => item !== undefined);
+      $scope.opcionesExtencion = extensionDatesAux;
+      showExtrensionModal(currentContract);
+    };
 
   };
 

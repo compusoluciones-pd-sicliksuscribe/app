@@ -40,7 +40,7 @@
                 </div>
                 <div class="col-xs-12 col-sm-2 col-md-6 col-lg-6">
                     <button id="Extender" class="pull-right btn btn-monitor-contratos"
-                    ng-click="getEndDateContract(contract.IdContrato, contract.EstatusPedido);">
+                    ng-click="getExtensionDateModal(contract.contract_end_date, contract.contract_number);">
                         Extender
                     </button>
                     <div ng-show="(contract.subs_ready  && !contract.siclick_status)">
@@ -217,7 +217,7 @@
                 </div>
             </div>
             <!-- Modal de Extencion -->
-            <div id="extenderModal{{contract.IdContrato}}" class="modal fade in" tabindex="-1" role="dialog">
+            <div id="extenderModal{{contract.contract_number}}" class="modal fade in" tabindex="-1" role="dialog">
                 <div class="modal-dialog" role="document">
                     <div class="divLoading" data-cargando>
                         <div class=""><img src="images/ripple.svg" /></div>
@@ -229,12 +229,12 @@
                         </div>
                         <div class="modal-body">
                             <p class="alert alert-info">
-                                Las extenciones de contrato están destinadas a emparejar la fecha de término entre contratos de un usuario final. 
-                                Podrá seleccionar entre las fechas fin de contratos que terminen en el futuro y estén registrados en clicksuscribe.
+                                Las extenciones de contrato están destinadas a emparejar la fecha de término entre contratos de un usuario final(UF). 
+                                Podrá seleccionar entre las fechas fin de contratos que terminen en el futuro para este UF.
                               </p>
                             <div class="form-group has-feedback col-xs-7 col-sm-7 col-md-7 col-lg-7">
                             <h5><b>Selecciona la nueva fecha fin para el contrato:</b></h5>
-                                <select id="NvaFechaFin" name="NvaFechaFin" class="form-control selectOption" ng-model="Extender.IdContrato" ng-options="OpcionExtencion.IdContrato as (OpcionExtencion.NumeroContrato + ' - ' + OpcionExtencion.FechaFin) for OpcionExtencion in OpcionesExtencion">
+                                <select id="NvaFechaFin" name="NvaFechaFin" class="form-control selectOption" ng-model="Extender.IdContrato" ng-options="opcionExtencion.contractNumber as (opcionExtencion.contractNumber + ' - ' + opcionExtencion.endDate) for opcionExtencion in opcionesExtencion">
                                     <option ng-selected="true" value="">Selecciona una nueva fecha fin</option>
                                 </select>
                             </div>
@@ -242,7 +242,7 @@
                             <div class="form-group">
                                 <h5><b>Nota:</b></h5>
                                 <p>
-                                  Al dar clic en <b>Extender contrato</b>, se agregarán al carrito de compras todos los productos que estén incluidos en el contrato con la cantidad actual de licencias activas</b>.
+                                  Al dar clic en <b>Extender contrato</b>, se agregarán al carrito de compras todas las series que estén incluidas en el contrato.
                                 </p>
                             </div>
                         </div>
@@ -263,7 +263,7 @@
                         </div>
                         <div class="modal-body">
                             <p class="alert alert-info">
-                                No es posible extender este contrato. No se encontraron contratos dentro de clicksuscribe que terminen en el futuro para el cliente seleccionado.
+                                No es posible extender este contrato. No se encontraron contratos que terminen en el futuro para el cliente seleccionado.
                               </p>
                         </div>
                         <div class="modal-footer">
