@@ -269,6 +269,7 @@
       var datosTarjeta = { 'TarjetaResultIndicator': resultIndicator, 'TarjetaSessionVersion': sessionVersion, 'PedidosAgrupados': $cookies.getObject('pedidosAgrupados') };
       if (datosTarjeta.PedidosAgrupados) {
         if (datosTarjeta.PedidosAgrupados[0].Renovacion) {
+          console.log('44444  $scope.ComprarConTarjetaTuClick', datosTarjeta.PedidosAgrupados, datosTarjeta.PedidosAgrupados[0].Renovacion);
           PedidosFactory.patchPaymentInformation(datosTarjeta)
             .success(function (compra) {
               PedidosFactory.patchPedidosParaRenovar({'PedidosAgrupados': $cookies.getObject('pedidosAgrupados')})

@@ -12,13 +12,97 @@
     $scope.DeshabilitarPagar = false;
     $scope.todos = 0;
     $scope.paymethod = 1;
+    $scope.creditCardType = 0;
+    let creditCardName = '';
+    const ccVisaMcLength = 16;
+    const ccAmexLength = 15;
+    const ccLengthNameMin = 5;
+    const ccLengthNameMax = 80;
     const paymentMethods = {
       CREDIT_CARD: 1,
       CS_CREDIT: 2,
       PAYPAL: 3,
       PREPAY: 4
     };
-  
+    const creditCardNames = {
+      VISA: 'Visa',
+      MASTERCARD: 'Mastercard',
+      AMEX: 'American Express'
+    };
+    const creditCardTypes = {
+      VISA: 1,
+      MASTERCARD: 1,
+      AMEX: 2,
+      OTRO: 3
+    };
+    let deviceSessionId = '';
+    let tokenId = '';
+    $scope.meses = [{ nombre: 'Enero', valor: '01' }, { nombre: 'Febrero', valor: '02' }, { nombre: 'Marzo', valor: '03' }, { nombre: 'Abril', valor: '04' }, { nombre: 'Mayo', valor: '05' }, { nombre: 'Junio', valor: '06' }, { nombre: 'Julio', valor: '07' }, { nombre: 'Agosto', valor: '08' }, { nombre: 'Septiembre', valor: '09' }, { nombre: 'Octubre', valor: '10' }, { nombre: 'Noviembre', valor: '11' }, { nombre: 'Diciembre', valor: '12' }];
+    const getCardError = (errorCode) => {
+      switch (errorCode) {
+        case 1001:
+          return 'El número de tarjeta debería de tener 3 dígitos (4 si es American Express).';
+        case 2004:
+          return 'El número de tarjeta es inválido.';
+        case 2005:
+          return 'La fecha de expiración de la tarjeta es anterior a la fecha actual.';
+        case 2006:
+          return 'El código de seguridad de la tarjeta (CVV2) no fue proporcionado.';
+        case 2007:
+          return 'El número de tarjeta es de prueba, solamente puede usarse en Sandbox.';
+        case 2008:
+          return 'La tarjeta no es valida para pago con puntos.';
+        case 2009:
+          return 'El código de seguridad de la tarjeta (CVV2) es inválido.';
+        case 2010:
+          return 'Autenticación 3D Secure fallida.';
+        case 2011:
+          return 'Tipo de tarjeta no soportada.';
+        case 3001:
+          return 'La tarjeta fue declinada por el banco.';
+        case 3002:
+          return 'La tarjeta ha expirado.';
+        case 3003:
+          return 'La tarjeta no tiene fondos suficientes.';
+        case 3004:
+          return 'La tarjeta ha sido rechazada.';
+        case 3005:
+          return 'La tarjeta ha sido rechazada por el sistema antifraude.';
+        case 3006:
+          return 'La operación no esta permitida para este cliente o esta transacción.';
+        case 3009:
+          return 'La tarjeta fue reportada como perdida.';
+        case 3010:
+          return 'El banco ha restringido la tarjeta.';
+        case 3011:
+          return 'El banco ha solicitado que la tarjeta sea retenida. Contacte al banco.';
+        case 3012:
+          return 'Se requiere solicitar al banco autorización para realizar este pago.';
+        case 3201:
+          return 'Comercio no autorizado para procesar pago a meses sin intereses.';
+        case 3203:
+          return 'Promoción no valida para este tipo de tarjetas.';
+        case 3204:
+          return 'El monto de la transacción es menor al mínimo permitido para la promoción.';
+        case 3205:
+          return 'Promoción no permitida.';
+        case 4013:
+          return 'El monto de transacción está fuera de los límites permitidos.';
+        default:
+          return 'Ocurrió un error, contactar a soporte.';
+      }
+    };
+
+    const setCCDates = () => {
+      const dateCC = new Date();
+      let yearNow = parseInt(dateCC.getFullYear().toString().substr(-2));
+      let yearMax = yearNow + 10;
+      $scope.anios = [];
+      for (yearNow; yearNow <= yearMax; yearNow++) {
+        $scope.anios.push(yearNow);
+      }
+    };
+
     function groupBy (array, f) {
       var groups = {};
       array.forEach(function (o) {
@@ -55,6 +139,15 @@
       }
     };
 
+    $scope.modalTdcPagado = function () {
+      let modalPagoMonitor = document.getElementById('modalTdcpagado');
+      modalPagoMonitor.style.display = 'block';
+    };
+
+    $scope.recargarMonitor = () => {
+      location.reload();
+    };
+
     $scope.init = function () {
       if ($scope.currentPath === '/MonitorPagos') {
         $scope.CheckCookie();
@@ -64,7 +157,6 @@
       $location.path('/MonitorPagos');
       PedidoDetallesFactory.getPendingOrdersToPay()
         .success(function (ordersToPay) {
-          console.log("orders to pay ",ordersToPay);
           $scope.Pedidos = ordersToPay.data;
           if (!ordersToPay.data || ordersToPay.data.length === 0) {
             return $scope.DeshabilitarPagar = true;
@@ -96,7 +188,17 @@
             $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
           });
       }
+      $cookies.remove('tipoTarjetaCreditoMonitor');
+      let deshabilitarTc = document.getElementById('deshabilitarTc');
+      if (document.getElementById('Tarjeta').checked) {
+        deshabilitarTc.style.display = 'none';
+        $('#btnSiguiente').prop('disabled', true);
+      } else {
+        $('#btnSiguiente').prop('disabled', false);
+        deshabilitarTc.style.display = 'block';
+      }
     };
+
     $scope.init();
 
     $scope.isPayingWithCreditCard = function () {
@@ -114,12 +216,47 @@
       return IdFormaPago === paymentMethods.PREPAY;
     };
 
+    const limpiarPedido = () => {
+      for (var x = 0; x < $scope.PedidosAgrupados.length; x++) {
+        $scope.PedidosObj[$scope.PedidosAgrupados[x][0].IdPedido].Check = false;
+        $scope.pedidosPorPagar($scope.PedidosAgrupados[x][0].IdPedido);
+      }
+      $scope.PedidosSeleccionadosParaPagar = [];
+      $scope.ServicioElectronico = 0;
+      $scope.Subtotal = 0;
+      $scope.Iva = 0;
+      $scope.Total = 0;
+    };
+
     $scope.ActualizarFormaPago = function (moneda) {
+      let deshabilitarTc = document.getElementById('deshabilitarTc');
+      limpiarPedido();
       $scope.paymethod = moneda;
       if ($scope.isPayingWithCreditCard() || $scope.isPayingWithPaypal()) {
         $scope.Distribuidor.MonedaPago = 'Pesos';
       }
+      if (moneda !== paymentMethods.CREDIT_CARD) {
+        $('#btnSiguiente').prop('disabled', false);
+        deshabilitarTc.style.display = 'block';
+      } else {
+        if (document.getElementById('Tarjeta').checked && !$cookies.getObject('tipoTarjetaCreditoMonitor')) {
+          deshabilitarTc.style.display = 'none';
+          $('#btnSiguiente').prop('disabled', true);
+        } else {
+          deshabilitarTc.style.display = 'block';
+          $('#btnSiguiente').prop('disabled', false);
+        }
+      }
       CambiarMoneda();
+    };
+
+    $scope.tipoTarjetaMonitor = (tipo) => {
+      let deshabilitarTc = document.getElementById('deshabilitarTc');
+      $cookies.putObject('tipoTarjetaCreditoMonitor', tipo);
+      tipo === 1 ? creditCardName = 'Visa/Mastercard' : creditCardName = 'American Express';
+      $('#btnSiguiente').prop('disabled', false);
+      deshabilitarTc.style.display = 'block';
+      limpiarPedido();
     };
 
     $scope.CambiarMoneda = CambiarMoneda;
@@ -127,16 +264,16 @@
     $scope.cambiaMoneda = function (tipoMoneda, key) {
       $scope.Distribuidor.MonedaPago = tipoMoneda || 'Pesos';
       $scope.pedidosPorPagar(key);
-    }
+    };
 
     var CambiarMoneda = function (tipoMoneda, key) {
       $scope.Distribuidor.MonedaPago = tipoMoneda || 'Pesos';
       const MonedaPago = $scope.Distribuidor.MonedaPago;
       $scope.pedidosPorPagar(key);
       EmpresasFactory.putCambiaMonedaMonitorPXP($scope.PedidosSeleccionadosParaPagar, MonedaPago)
-      .then(function (result) {
-      })
-      .catch(function (result) { error(result.data); });
+        .then(function (result) {
+        })
+        .catch(function (result) { error(result.data); });
     };
 
     $scope.ActualizarPagoAutomatico = function () {
@@ -159,7 +296,7 @@
       var subtotal = 0;
       for (var x = 0; x < $scope.Pedidos.length; x++) {
         if ($scope.Pedidos[x].IdPedido == key) {
-          subtotal += $scope.Pedidos[x].PrecioRenovacion * $scope.Pedidos[x].CantidadProxima  * $scope.Pedidos[x].TipoCambio;
+          subtotal += $scope.Pedidos[x].PrecioRenovacion * $scope.Pedidos[x].CantidadProxima * $scope.Pedidos[x].TipoCambio;
         }
       }
       return subtotal;
@@ -201,13 +338,14 @@
         }
       }
       if ($scope.PedidosSeleccionadosParaPagar.length === 0) {
+        $scope.PedidosSeleccionadosParaPagar = [];
         $scope.ServicioElectronico = 0;
         $scope.Subtotal = 0;
         $scope.Iva = 0;
         $scope.Total = 0;
       }
       if ($scope.PedidosSeleccionadosParaPagar.length !== 0 && document.getElementById('Prepago').checked) {
-        PedidoDetallesFactory.monitorCalculationsPrepaid({ Pedidos: $scope.PedidosSeleccionadosParaPagar }, $scope.Distribuidor.MonedaPago)
+        PedidoDetallesFactory.monitorCalculationsPrepaid({Pedidos: $scope.PedidosSeleccionadosParaPagar, tipoTarjeta: false}, $scope.Distribuidor.MonedaPago)
           .success(function (calculations) {
             if (calculations.total) {
               $scope.Subtotal = calculations.subtotal;
@@ -225,28 +363,10 @@
             $scope.ShowToast('No pudimos realizar los cálculos, por favor intenta de nuevo más tarde.', 'danger');
           });
       }
-      // if ($scope.PedidosSeleccionadosParaPagar.length !== 0 && document.getElementById('PayPal').checked) {
-      //   PedidoDetallesFactory.monitorCalculationsPayPal({ Pedidos: $scope.PedidosSeleccionadosParaPagar })
-      //     .success(function (calculations) {
-      //       if (calculations.total) {
-      //         $scope.ServicioElectronico = calculations.electronicService;
-      //         $scope.Subtotal = calculations.subtotal;
-      //         $scope.Iva = calculations.iva;
-      //         $scope.Total = calculations.total;
-      //       } else {
-      //         $scope.ServicioElectronico = 0;
-      //         $scope.Subtotal = 0;
-      //         $scope.Iva = 0;
-      //         $scope.Total = 0;
-      //       }
-      //     })
-      //     .error(function (data, status, headers, config) {
-      //       $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
-      //       $scope.ShowToast('No pudimos realizar los cálculos, por favor intenta de nuevo más tarde.', 'danger');
-      //     });
-      // }
       if ($scope.PedidosSeleccionadosParaPagar.length !== 0 && document.getElementById('Tarjeta').checked) {
-        PedidoDetallesFactory.monitorCalculations({ Pedidos: $scope.PedidosSeleccionadosParaPagar })
+        if ($cookies.getObject('tipoTarjetaCreditoMonitor') && $scope.PedidosSeleccionadosParaPagar.length !== 0) {
+          let tipoTarjeta = $cookies.getObject('tipoTarjetaCreditoMonitor');
+          PedidoDetallesFactory.monitorCalculations({Pedidos: $scope.PedidosSeleccionadosParaPagar, tipoTarjeta})
           .success(function (calculations) {
             if (calculations.total) {
               $scope.ServicioElectronico = calculations.electronicService;
@@ -267,6 +387,9 @@
 
             $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
           });
+        } else {
+          $scope.ShowToast('Selecciona el tipo de tarjeta con la que quieres pagar.', 'danger');
+        }
       }
     };
 
@@ -281,12 +404,16 @@
     $scope.checkPayment = function () {
       if (document.getElementById('Tarjeta').checked) {
         $scope.pagar();
-      // } else if (document.getElementById('PayPal').checked) {
-      //   $scope.preparePayPal();
       } else if (document.getElementById('Prepago').checked) {
         $scope.preparePrePaid();
       }
     };
+
+    $scope.abreModal = function () {
+      let modalPagoMonitor = document.getElementById('modalPagoMonitor');
+      modalPagoMonitor.style.display = 'block';
+    };
+
 
     $scope.pagar = function () {
       if ($scope.PedidosSeleccionadosParaPagar.length > 0) {
@@ -294,42 +421,21 @@
           .success(function (Datos) {
             var expireDate = new Date();
             expireDate.setTime(expireDate.getTime() + 600 * 2000);
-            Datos.data["0"].pedidosAgrupados[0].TipoCambio = $scope.TipoCambio;
-            $cookies.putObject('pedidosAgrupados', Datos.data["0"].pedidosAgrupados, { 'expires': expireDate, secure: $rootScope.secureCookie });
+            Datos.data.pedidosAgrupados[0].TipoCambio = $scope.TipoCambio;
+            $cookies.putObject('pedidosAgrupados', Datos.data.pedidosAgrupados, { 'expires': expireDate, secure: $rootScope.secureCookie });
             if (Datos.success) {
               if ($cookies.getObject('pedidosAgrupados')) {
-
-                Checkout.configure({
-                  merchant: Datos.data["0"].merchant,
-                  session: { id: Datos.data["0"].session_id },
-                  order:
-                  {
-                    amount: Datos.data['0'].total,
-                    currency: Datos.data["0"].moneda,
-                    description: 'Pago tarjeta bancaria',
-                    id: Datos.data["0"].pedidos,
-                  },
-                  interaction:
-                  {
-                    merchant:
-                    {
-                      name: 'CompuSoluciones',
-                      address:
-                      {
-                        line1: 'CompuSoluciones y Asociados, S.A. de C.V.',
-                        line2: 'Av. Mariano Oterno No. 1105',
-                        line3: 'Col. Rinconada del Bosque C.P. 44530',
-                        line4: 'Guadalajara, Jalisco. México'
-                      },
-                      email: 'order@yourMerchantEmailAddress.com',
-                      phone: '+1 123 456 789 012',
-                    },
-                    displayControl: { billingAddress: 'HIDE', orderSummary: 'SHOW' },
-                    locale: 'es_MX',
-                    theme: 'default'
-                  }
-                });
-                Checkout.showLightbox();
+                setCCDates();
+                $scope.pedidos = Datos.data.pedidos;
+                $scope.amount = $scope.Total.toFixed(2);
+                $scope.FormatedAmountMonitor = String($scope.amount).replace(/(?<!\..*)(\d)(?=(?:\d{3})+(?:\.|$))/g, '$1,');
+                $scope.currency = Datos.data.moneda;
+                OpenPay.setId(Datos.data.opId);
+                OpenPay.setApiKey(Datos.data.opPublic);
+                OpenPay.setSandboxMode(true); //  descomentar esta linea cuando haya pruebas
+                deviceSessionId = OpenPay.deviceData.setup('payment-form-monitor', 'deviceIdHiddenFieldName');
+                $('#deviceSessionId').val(deviceSessionId);
+                $scope.abreModal();
               }
             }
           })
@@ -345,44 +451,131 @@
       }
     };
 
+    $('#payButton').on('click', function (event) {
+      const creditCardNumber = document.getElementById('cardNumber').value;
+      const creditCardFormated = creditCardNumber.split(' ').join('');
+      const holderName = document.getElementById('cardName').value;
+      let holderNameFormated = holderName.replace(/  +/g, ' ');
+      if (holderNameFormated[0] == ' ') holderNameFormated = holderNameFormated.substring(1);
+      const ccexpmonth = document.getElementById('ccexpmonthMonitor').value;
+      const ccexpyear = document.getElementById('ccexpyearMonitor').value;
+      const cvv = document.getElementById('cvvMonitor').value;
+      const cardType = OpenPay.card.cardType(creditCardFormated);
+      document.getElementById('cardName').value = holderNameFormated;
+      switch (cardType) {
+        case creditCardNames.VISA:
+          $scope.creditCardType = creditCardTypes.VISA;
+          break;
+        case creditCardNames.MASTERCARD:
+          $scope.creditCardType = creditCardTypes.MASTERCARD;
+          break;
+        case creditCardNames.AMEX:
+          $scope.creditCardType = creditCardTypes.AMEX;
+          break;
+        default:
+          $scope.creditCardType = creditCardTypes.OTRO;
+      }
+
+      const validateCreditCard = () => {
+        event.preventDefault();
+        $('#payButton').prop('disabled', true);
+        OpenPay.token.create({
+          'card_number': creditCardFormated,
+          'holder_name': holderNameFormated,
+          'expiration_year': ccexpyear,
+          'expiration_month': ccexpmonth,
+          'cvv2': cvv
+        }, successCallbak, errorCallbak);
+      };
+
+      if (holderName.replace(/ /g, '').length < ccLengthNameMin) {
+        printError('El nombre del titular debe contar con 5 o más caracteres.');
+      } else {
+        if (holderName.replace(/ /g, '').length > ccLengthNameMax) {
+          printError('El nombre del titular es demasiado largo (máximo 80 caracteres).');
+        } else {
+          if (creditCardFormated.replace(/ /g, '').length !== ccVisaMcLength && creditCardFormated.trim().length !== ccAmexLength) {
+            printError(`Los dígitos de tu tarjeta <b>${creditCardName}</b> están incompletos, verificalos.`);
+          } else {
+            if ($scope.creditCardType !== $cookies.getObject('tipoTarjetaCreditoMonitor')) {
+              printError(`El tipo de tarjeta no es válido y no concuerda con el tipo seleccionado anteriormente (<b>${creditCardName}</b>), favor de actualizar tu información.`);
+            } else {
+              if ($scope.creditCardType === creditCardTypes.VISA || $scope.creditCardType === creditCardTypes.MASTERCARD) {
+                if (creditCardFormated.length !== ccVisaMcLength) {
+                  printError(`El tipo de tarjetas <b>${cardType}</b> debería contar con 16 dígitos.`);
+                } else {
+                  validateCreditCard();
+                }
+              } else if ($scope.creditCardType === creditCardTypes.AMEX) {
+                if (creditCardFormated.length !== ccAmexLength) {
+                  printError(`El tipo de tarjetas <b>${cardType}</b> debería contar con 15 dígitos.`);
+                } else {
+                  validateCreditCard();
+                }
+              }
+            }
+          }
+        }
+      }
+    });
+
+    const successCallbak = function (response) {
+      $('#responseDivMonitor').html('').addClass('ocultar').removeClass('alert alert-danger');
+      tokenId = response.data.id;
+      $('#tokenId').val(tokenId);
+
+      const charges = {
+        source_id: tokenId,
+        amount: $scope.amount,
+        currency: $scope.currency,
+        description: $scope.pedidos,
+        device_session_id: deviceSessionId,
+        pedidosAgrupados: $cookies.getObject('pedidosAgrupados')
+      };
+      PedidoDetallesFactory.pagarTarjetaOpenpay(charges)
+        .then(function (response) {
+          if (response.data.statusCode === 200) {
+            if (response.data.content.statusCharge == 'charge_pending') {
+              $cookies.remove('paymentId');
+              $cookies.putObject('paymentId', response.data.content.paymentId);
+              window.location.href = response.data.content.redirect_url;
+            } else {
+              angular.element(document.getElementById('divComprar')).scope().CreditCardPayment(response.data.content.statusCharge, response.data.content.paymentId);
+              $scope.cerrarModal('modalPagoMonitor');
+            }
+          } else {
+            printError(response.data.message);
+          }
+        })
+        .catch(function (response) {
+          $scope.ShowToast('Ocurrió un error al procesar el pago. de tipo: ' + response.data.message, 'danger');
+        });
+    };
+
+    $scope.btnTdc = (statusCharge, paymentId) => {
+      angular.element(document.getElementById('divComprar')).scope().CreditCardPayment(statusCharge, paymentId);
+    };
+
+    const printError = (messageError) => {
+      $('#responseDivMonitor').html(messageError).removeClass('ocultar').removeClass().addClass('alert alert-danger');
+      $('#payButton').prop('disabled', false);
+    };
+
+    const errorCallbak = function (response) {
+      let desc = response.data.error_code != undefined ?
+        response.data.error_code : response.message;
+      printError(getCardError(response.data.error_code));
+    };
+
+    $scope.cerrarModal = modal => {
+      document.getElementById(modal).style.display = 'none';
+    };
+
     const getActualSubdomain = function () {
       let subdomain = window.location.href;
       subdomain = subdomain.replace('/#/MonitorPagos', '');
       return subdomain;
     };
-
-    // $scope.preparePayPal = function () {
-    //   if ($scope.PedidosSeleccionadosParaPagar.length > 0) {
-    //     const actualSubdomain = getActualSubdomain();
-    //     PedidoDetallesFactory.payWithPaypal({ Pedidos: $scope.PedidosSeleccionadosParaPagar })
-    //     .success(function (response) {
-    //       var expireDate = new Date();
-    //       expireDate.setTime(expireDate.getTime() + 600 * 2000);
-    //       const paypalNextPayment = {
-    //         electronicServiceByOrder: response.data.electronicServiceByOrder,
-    //         TipoCambio: $scope.TipoCambio
-    //       };
-    //       $cookies.putObject('paypalNextPayment', paypalNextPayment, { expires: expireDate, secure: $rootScope.secureCookie });
-    //       $cookies.putObject('orderIds', $scope.PedidosSeleccionadosParaPagar, { expires: expireDate, secure: $rootScope.secureCookie });
-    //       PedidoDetallesFactory.preparePayPal({ orderIds: $scope.PedidosSeleccionadosParaPagar, url: 'MonitorPagos', actualSubdomain })
-    //         .then(function (response) {
-    //           if (response.data.state === 'created') {
-    //             const paypal = response.data.links.filter(function (item) {
-    //               if (item.method === 'REDIRECT') return item.href;
-    //             })[0];
-    //             location.href = paypal.href;
-    //           } else {
-    //             $scope.ShowToast('Ocurrió un error al procesar el pago.', 'danger');
-    //           }
-    //         });
-    //     })
-    //     .catch(function (response) {
-    //       $scope.ShowToast('Ocurrió un error al procesar el pago. de tipo: ' + response.data.message, 'danger');
-    //     });
-    //   } else {
-    //     $scope.ShowToast('Selecciona al menos un pedido para pagar.', 'danger');
-    //   }
-    // };
 
     $scope.ComprarConPayPal = function (resultPaypal) {
       const paypalNextPayment = $cookies.getObject('paypalNextPayment');
@@ -419,21 +612,102 @@
     $scope.preparePrePaid = function () {
       if ($scope.PedidosSeleccionadosParaPagar.length > 0) {
         PedidoDetallesFactory.payWithPrePaid({ Pedidos: $scope.PedidosSeleccionadosParaPagarPrepaid }, $scope.Distribuidor.MonedaPago)
-        .success(function (response) {
-          if (response.statusCode === 400) {
-            $scope.ShowToast(response.message, 'danger');
-          } else {
-            $scope.ShowToast('Pago realizado correctamente.', 'success');
-            $location.path('/MonitorPagos/refrescar');
-          }
-        })
-        .catch(function (response) {
-          $scope.ShowToast('Algo salió mal con tu pedido, por favor ponte en contacto con tu equipo de soporte CompuSoluciones para más información.', 'danger');
-        });
+          .success(function (response) {
+            if (response.statusCode === 400) {
+              $scope.ShowToast(response.message, 'danger');
+            } else {
+              $scope.ShowToast('Pago realizado correctamente.', 'success');
+              $location.path('/MonitorPagos/refrescar');
+            }
+          })
+          .catch(function (response) {
+            $scope.ShowToast('Algo salió mal con tu pedido, por favor ponte en contacto con tu equipo de soporte CompuSoluciones para más información.', 'danger');
+          });
       } else {
         $scope.ShowToast('Selecciona al menos un pedido para pagar.', 'danger');
       }
     };
+
+
+    let globalNumber = 0;
+    let maxlengthNumber = 17;
+    function _getcaret(input) {
+        if ('selectionStart' in input) {
+            return input.selectionStart;
+        } else if (document.selection) {
+            input.focus();
+            let sel = document.selection.createRange();
+            let selLen = document.selection.createRange().text.length;
+            sel.moveStart('character', -input.value.length);
+            return sel.text.length - selLen;
+        }
+    }
+    function _setcaret(input, pos) {
+        if (input.setSelectionRange) {
+            input.focus()
+            input.setSelectionRange(pos, pos)
+        } else if (input.createTextRange) {
+            let range = input.createTextRange();
+            range.move('character', pos);
+            range.select();
+        }
+    }
+
+    function _format_465(cc) {
+        return [cc.substring(0, 4), cc.substring(4, 10), cc.substring(10, 15)].join(' ').trim()
+    }
+    function _format_4444(cc) {
+        return cc ? cc.match(/[0-9]{1,4}/g).join(' ') : ''
+    }
+    _CARD_TYPES = [
+        { 'type': 'visa', 'pattern': /^4/, 'format': _format_4444, 'maxlength': 16 },
+        { 'type': 'master', 'pattern': /^(5[12345])|(2[2-7])/, 'format': _format_4444, 'maxlength': 16 },
+        { 'type': 'amex', 'pattern': /^3[47]/, 'format': _format_465, 'maxlength': 15 },
+    ]
+    function _format_cardnumber(cc, maxlength) {
+        cc = cc.replace(/[^0-9]+/g, '')
+
+        for (let i in _CARD_TYPES) {
+            const ct = _CARD_TYPES[i]
+            if (cc.match(ct.pattern)) {
+                cc = cc.substring(0, ct.maxlength)
+                return ct.format(cc)
+            }
+        }
+
+        return _format_4444(cc)
+    }
+
+    function _set_creditcard_number(event) {
+        const input = event.target
+        const maxlength = input.getAttribute('maxlength')
+        let oldval = input.value
+        let caret_position = _getcaret(input)
+        let before_caret = oldval.substring(0,caret_position)
+        before_caret = _format_cardnumber(before_caret)
+        caret_position = before_caret.length;
+        let newNumber = oldval.replace(/ /g,'');
+        if(newNumber.length >= maxlengthNumber) {
+            return input.value = globalNumber;
+        }else {
+            let newvalue = _format_cardnumber(oldval, maxlength);
+            globalNumber = newvalue;
+            if(oldval==newvalue) return
+            input.value = newvalue
+            _setcaret(input, caret_position)
+        }
+    }
+
+    function make_credit_card_input(input) {
+        input.addEventListener('input',_set_creditcard_number)
+        input.addEventListener('keyup',_set_creditcard_number)
+        input.addEventListener('keydown',_set_creditcard_number)
+        input.addEventListener('keypress',_set_creditcard_number)
+        input.addEventListener('change',_set_creditcard_number)
+    }
+
+    make_credit_card_input(document.getElementById("cardNumber"));
+
   };
   MonitorPagos.$inject = ['$scope', '$log', '$rootScope', '$cookies', '$location', '$uibModal', '$filter', 'PedidoDetallesFactory', 'EmpresasFactory', 'PedidosFactory'];
 

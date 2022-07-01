@@ -1,4 +1,4 @@
-<div class="container" ng-swipe-right="" ng-swipe-left="">
+<div class="container" ng-swipe-right="" ng-swipe-left="" >
     <!-- The Modal -->
     <div class="modal" id="modalTipoMoneda" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -7,13 +7,18 @@
                     <h4 class="modal-title">Forma de Pago</h4>
                 </div>
                 <div class="modal-body">
-                    <p>Su moneda de pago (pesos/dólares) es distinto al pedido {{ tipoMonedaCambio.IdPedido}} realizado para éste mismo usuario.
-                        <br> Si desea continuar con una moneda pago distinta para el mismo usuario, haga click en "Aceptar". <br> Si desea unificar moneda pago haga click en "Modificar moneda pago" y seleccione la moneda pago correspondiente.
+                    <p>Su moneda de pago (pesos/dólares) es distinto al pedido {{ tipoMonedaCambio.IdPedido}} realizado
+                        para éste mismo usuario.
+                        <br> Si desea continuar con una moneda pago distinta para el mismo usuario, haga click en
+                        "Aceptar". <br> Si desea unificar moneda pago haga click en "Modificar moneda pago" y seleccione
+                        la moneda pago correspondiente.
                     </p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-success" ng-click="modalNotificacionCarrito();">Aceptar</button>
-                    <button type="button" class="btn btn-primary" ng-click="modalNotificacionComprar();">Modificar moneda pago</button>
+                    <button type="button" class="btn btn-success"
+                        ng-click="modalNotificacionCarrito();">Aceptar</button>
+                    <button type="button" class="btn btn-primary" ng-click="modalNotificacionComprar();">Modificar
+                        moneda pago</button>
                 </div>
             </div>
         </div>
@@ -35,7 +40,7 @@
         Debido a problemas con la plataforma actual para pagos con tarjeta, en este momento no es posible realizar transacciones con tarjetas <b>VISA</b>. 
         <br>
         Nos encontramos trabajando en ello, gracias por su comprensión.
-	</div>
+    </div>
 
     <h2>Detalle de los pedidos</h2>
     <hr>
@@ -53,18 +58,23 @@
             </div>
             <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
                 <div class="form-group">
-                    <div ng-if="pedido.IdFabricante !== 10"><label for="IdEmpresaUsuarioFinal">Usuario final:&nbsp;</label>{{ pedido.NombreEmpresa }}</div>
-                        <div ng-if="pedido.IdFabricante === 10"><label for="IdEmpresaUsuarioFinal">Consola:&nbsp;</label>{{ pedido.NombreConsola }}<br></div>
+                    <div ng-if="pedido.IdFabricante !== 10"><label for="IdEmpresaUsuarioFinal">Usuario
+                            final:&nbsp;</label>{{ pedido.NombreEmpresa }}</div>
+                    <div ng-if="pedido.IdFabricante === 10"><label for="IdEmpresaUsuarioFinal">Consola:&nbsp;</label>{{
+                        pedido.NombreConsola }}<br></div>
                     <label>Marca de los productos:</label> {{ pedido.NombreFabricante }} <br>
-                    <label>Duración del periodo: del {{ pedido.FechaInicio }} al {{ pedido.FechaFin  }}</label> <br>
+                    <label>Duración del periodo: del {{ pedido.FechaInicio }} al {{ pedido.FechaFin }}</label> <br>
                     <label>Orden de compra:</label> {{ pedido.OrdenCompra ? pedido.OrdenCompra : 'No registrada' }} <br>
                     <label>Renovación del periodo:</label> {{ pedido.NombreEsquemaRenovacion }}
                     <div ng-if="pedido.IdFabricante === 2">
                         <label>Contrato: </label> {{ pedido.ContratoBaseAutodesk || 'Nuevo' }} <br>
                         <label>Tipo de orden: </label>
                         <span ng-if="pedido.IdAccionAutodesk === 1 && !pedido.Renovado">Orden inicial</span>
-                        <span ng-if="(pedido.IdAccionAutodesk === 2 || pedido.IdAccionAutodesk === 3) && !pedido.Renovado">Add-On</span>
-                        <span ng-if="(pedido.IdAccionAutodesk === 2 || pedido.IdAccionAutodesk === 3) && pedido.Renovado">Add-On (Renovación)</span>
+                        <span
+                            ng-if="(pedido.IdAccionAutodesk === 2 || pedido.IdAccionAutodesk === 3) && !pedido.Renovado">Add-On</span>
+                        <span
+                            ng-if="(pedido.IdAccionAutodesk === 2 || pedido.IdAccionAutodesk === 3) && pedido.Renovado">Add-On
+                            (Renovación)</span>
                         <span ng-if="pedido.IdAccionAutodesk === 4">Renovación</span>
                         <span ng-if="pedido.IdAccionAutodesk === 5">Extensión</span>
                     </div>
@@ -72,10 +82,12 @@
             </div>
             <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
                 <div class="form-group">
-                    <div ng-if="pedido.IdFabricante === 2"><label><input type="checkbox" ng-model="pedido.SP" style="margin-right: 1em" disabled>Petición especial (SP)</label></div>
+                    <div ng-if="pedido.IdFabricante === 2"><label><input type="checkbox" ng-model="pedido.SP"
+                                style="margin-right: 1em" disabled>Petición especial (SP)</label></div>
                     <label>Forma de pago:</label> {{ pedido.Forma }} <br>
                     <label>Tipo de cambio:</label> {{ pedido.TipoCambio | currency: "$":2 }} {{ pedido.MonedaPago }}<br>
-                    <label>Subtotal:</label> {{ calcularSubTotal(pedido.IdPedido) | currency }} {{ pedido.MonedaPago }} <br>
+                    <label>Subtotal:</label> {{ calcularSubTotal(pedido.IdPedido) | currency }} {{ pedido.MonedaPago }}
+                    <br>
                     <label>IVA:</label> {{ calcularIVA(pedido.IdPedido) | currency }} {{ pedido.MonedaPago }}
                 </div>
             </div>
@@ -110,21 +122,27 @@
                 <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
                     <div class="form-group">
                         <label for="">Cantidad:</label> {{ producto.Cantidad }} <br>
-                        <label ng-show="pedido.IdFabricante !== 10 || pedido.IdProducto == 74" for="">Precio unitario:</label>
-                        <label ng-show="pedido.IdFabricante === 10" for="">Precio de consumo:</label>{{ calculatePriceWithExchangeRate(pedido, producto, 'PrecioUnitario') | currency }} {{ pedido.MonedaPago }}
+                        <label ng-show="pedido.IdFabricante !== 10 || pedido.IdProducto == 74" for="">Precio
+                            unitario:</label>
+                        <label ng-show="pedido.IdFabricante === 10" for="">Precio de consumo:</label>{{
+                        calculatePriceWithExchangeRate(pedido, producto, 'PrecioUnitario') | currency }} {{
+                        pedido.MonedaPago }}
                         <br>
-                        <label ng-hide="pedido.IdFabricante === 10 || pedido.IdFabricante === 2" for="">Precio renovación: {{ calculatePriceWithExchangeRate(pedido, producto, 'PrecioUnitario') | currency}} {{ pedido.MonedaPago }}</label>
+                        <label ng-hide="pedido.IdFabricante === 10 || pedido.IdFabricante === 2" for="">Precio
+                            renovación: {{ calculatePriceWithExchangeRate(pedido, producto, 'PrecioUnitario') |
+                            currency}} {{ pedido.MonedaPago }}</label>
                     </div>
                 </div>
                 <div class="form-group col-xs-12 col-sm-12 col-md-3 col-lg-3">
                     <div class="form-group">
 
                         <span ng-show="producto.PrimeraCompraMicrosoft">
-								<label for="">Total del producto:</label>
-								<br>
-             				 <del style="font-size:11px;">{{ calcularProductTotal(pedido, producto, 'PrecioUnitario') | currency }} {{ pedido.MonedaPago }}</del>
-              				 <b style="color:#68953B;">GRATIS!</b>
-						</span>
+                            <label for="">Total del producto:</label>
+                            <br>
+                            <del style="font-size:11px;">{{ calcularProductTotal(pedido, producto, 'PrecioUnitario') |
+                                currency }} {{ pedido.MonedaPago }}</del>
+                            <b style="color:#68953B;">GRATIS!</b>
+                        </span>
 
                     </div>
                 </div>
@@ -136,8 +154,12 @@
     <div class="form-group row">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <p><b>Importante!</b></p>
-            <p>Recibirá una factura por cada pedido generado, consulte las fechas de vencimiento establecidas en su factura para realizar su pago correspondiente, de lo contrario se darán de baja los productos del pedido y no se renovarán.</p>
-            <p>Si deseas disminuir la cantidad de un producto o cancelar la suscripción, podrás hacerlo en el <a href="#/Monitor">monitor de pedidos por cliente</a>. Tienes hasta 4 días antes de la finalización del periodo para hacer este cambio y se verá
+            <p>Recibirá una factura por cada pedido generado, consulte las fechas de vencimiento establecidas en su
+                factura para realizar su pago correspondiente, de lo contrario se darán de baja los productos del pedido
+                y no se renovarán.</p>
+            <p>Si deseas disminuir la cantidad de un producto o cancelar la suscripción, podrás hacerlo en el <a
+                    href="#/Monitor">monitor de pedidos por cliente</a>. Tienes hasta 4 días antes de la finalización
+                del periodo para hacer este cambio y se verá
                 reflejado hasta la renovación del próximo.</p>
         </div>
     </div>
@@ -156,8 +178,192 @@
         </div>
         <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
             <div class="form-group">
-                <button type="button" ng-click="Comprar();" class="btn btn-primary btn-block" ng-disabled="btnComprarBloqueado">Comprar</button>
+                <button type="button" ng-click="Comprar();" class="btn btn-primary btn-block"
+                    ng-disabled="btnComprarBloqueado">Comprar</button>
             </div>
         </div>
     </div>
+
+
+    <div id="modalPagoTC" class="modal fade in" role="dialog">
+        <div class="divLoading" data-cargando>
+            <div class=""><img src="images/ripple.svg" /></div>
+        </div>
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content modal-op">
+
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button type="button" ng-click="cerrarModal('modalPagoTC')" class="close"
+                                data-dismiss="modal">
+                                &times;
+                            </button>
+                            <h3 class="modal-title text-center"><b>Pago con tarjeta</b></h3>
+                            <div class="w100">
+                                <form id="payment-form">
+                                    <input type="hidden" name="token_id" id="token_id" />
+                                    <input type="hidden" name="device_session_id" id="device_session_id" />
+
+
+
+                                    <div class=" pymnt-itm card active">
+                                        <div class="row">
+                                            <div class="col-md-12 col-lg-12">
+                                                <div class="alert ocultar" role="alert" id="responseDiv"></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="grayBorder col-md-4 col-lg-4 col-sm-12 col-xs-12 hidden-sm hidden-xs"
+                                                style="padding-left: 40px;">
+
+                                                <h4>Tarjetas de crédito</h4>
+                                                <img src="../../../images/open-pay/cards1.png" alt="" />
+                                            </div>
+
+                                            <div class="grayBorder col-md-4 col-lg-4 col-sm-12 col-xs-12 hidden-md hidden-lg hidden-xl"
+                                                style="padding-left: 24px;">
+                                                <h4>Tarjetas de crédito</h4>
+                                                <img src="../../../images/open-pay/cards1.png" alt="" />
+                                            </div>
+
+                                            <div class="col-md-8 col-lg-8 col-sm-12 col-xs-12 hidden-sm hidden-xs"
+                                                style="padding-left: 40px;">
+                                                <h4>Tarjetas de débito</h4>
+                                                <img src="../../../images/open-pay/cards2.png" alt="" />
+                                            </div>
+
+                                            <div class="col-md-8 col-lg-8 col-sm-12 col-xs-12 hidden-md hidden-lg hidden-xl"
+                                                style="padding-left: 24px;">
+                                                <h4>Tarjetas de débito</h4>
+                                                <img src="../../../images/open-pay/debito1.PNG" alt="" />
+                                                <img src="../../../images/open-pay/debito2.PNG" alt="" />
+                                            </div>
+                                        </div>
+
+                                        <div class="row" style="margin-top: 25px; padding-left: 20px;">
+                                            <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12 nameAndNumber">
+                                                <label class="paddingTop">Nombre del titular</label>
+                                                <input type="text" placeholder="Como aparece en la tarjeta" required onpaste="return false;"
+                                                    onchange="this.value = this.value.replace(/  +/g, ' ').toUpperCase();" onpaste="return false;"
+                                                    data-openpay-card="holder_name" maxlength="80"
+                                                    onkeydown="return /[a-z]/i.test(event.key) || event.code == 'Space';"
+                                                    id="cc-name-input" ng-model="name" />
+                                            </div>
+
+                                            <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12 nameAndNumber">
+                                                <label class="paddingTop">Número de tarjeta</label>
+                                                <input type="text" id="cc-number-input" class="cc-number-input" autocomplete="off" required
+                                                    data-openpay-card="card_number" maxlength="19"
+                                                    ng-model="cardNumber"  spellcheck="false" />
+                                                <a ng-show="errorCard">{{errorCardMessage}}</a>
+                                            </div>
+                                        </div>
+
+                                        <div class="row" style="margin-top: 10px; padding-left: 20px;">
+                                            <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12 nameAndNumber">
+                                                <label class="paddingTop">Fecha de expiración</label>
+                                                <div class="row">
+                                                    <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+                                                        <div class="nameAndNumber half l">
+                                                            <select data-openpay-card="expiration_month"
+                                                                id="ccexpmonth">
+                                                                <option ng-repeat="mes in meses" value="{{mes.valor}}">
+                                                                    {{mes.nombre}}</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+                                                        <div class="nameAndNumber half l">
+                                                            <select data-openpay-card="expiration_year" id="ccexpyear">
+                                                                <option ng-repeat="anio in anios" value="{{anio}}">
+                                                                    {{anio}}</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12 nameAndNumber">
+                                                <label class="paddingTop">Código de seguridad</label>
+                                                <div class="row">
+                                                    <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
+                                                        <input type="password" placeholder="3 dígitos"
+                                                            autocomplete="off" onpaste="return false;"
+                                                            onkeypress="if ( isNaN( String.fromCharCode(event.keyCode)) || event.code == 'Space') return false;"
+                                                            maxlength="4" data-openpay-card="cvv2" id="cvv"
+                                                            spellcheck="false" />
+                                                    </div>
+                                                    <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
+                                                        <center>
+                                                            <img src="../../../images/open-pay/cvv.png" alt=""
+                                                                class="paddingTop" />
+                                                        </center>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row" style="margin-top: 27px; padding-left: 20px;">
+
+
+                                            <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12 nameAndNumber">
+                                                <div class="row">
+                                                    <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+                                                        <center>
+                                                            <div class="logo">
+                                                                Transacciones realizadas vía:
+                                                            </div>
+                                                            <img src="../../../images/open-pay/openpay.png"
+                                                                class="paddingTop" />
+                                                        </center>
+                                                    </div>
+                                                    <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+                                                        <div class="row">
+                                                            <div class="col-md-2 col-lg-2 col-sm-2 col-xs-2">
+                                                                <img src="../../../images/open-pay/security.png"
+                                                                    class="paddingTop" />
+                                                            </div>
+                                                            <div class="col-md-10 col-lg-10 col-sm-10 col-xs-10">
+                                                                <div class="shield ">
+                                                                    Tus pagos se realizan de forma segura con
+                                                                    encriptación de 256 bits
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-5 col-lg-5 col-sm-12 col-xs-12 nameAndNumber"></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-8 col-lg-8 col-sm-4 col-xs-4"></div>
+                                            <div class="col-md-4 col-lg-4 col-sm-8 col-xs-8 nameAndNumber">
+                                                <label class="totalLabel" ng-if="amount"> Total: {{FormatedAmount}}
+                                                    {{currency}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-10 col-lg-10 col-sm-10 col-xs-10"></div>
+                                            <div class="col-md-2 col-lg-2 col-sm-2 col-xs-2">
+                                                <div class="bkng-tb-cntnt">
+                                                    <input type="submit" class="button text-right" id="pay-button"
+                                                        value="Pagar" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>

@@ -1,0 +1,26 @@
+<div class="container" ng-controller="Confirmar3dsController" ng-swipe-right="" ng-swipe-left="">
+
+  <div class="row">
+    <div class="col-sm-12 vcenter">
+      <div class="d-flex justify-content-center align-middle text-center">
+        <h1 style="border-bottom: 1px solid #68953b; padding-bottom: 17px">Cofirmando compra, por favor espera unos
+          instantes.</h1>
+        <h3>Por favor no salgas de éste sitio mientras terminamos de validar tu compra.</h3>
+        <img ng-show="showGif" class="logoFooter" src="images/preloaderOpenpay.gif"
+        height="200" width="200">
+      </div>
+      
+      <div class="row">
+        <div class="col-md-12 col-lg-12">
+            <div class="alert ocultar" role="alert" id="responseDiv"></div>
+        </div>
+        <div class="col-md-12 col-lg-12" ng-show="buttonBack">
+          <button type="button" class="btn btn-success"
+            ng-click="redireccionCarrito();">Volver al carrito</button>
+      </div>
+    </div>
+
+    </div>
+  </div>
+
+</div>
