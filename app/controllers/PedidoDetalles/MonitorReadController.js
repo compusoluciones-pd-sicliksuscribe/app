@@ -1,5 +1,5 @@
 (function () {
-  var MonitorReadController = function ($scope, $log, $cookies, $location, EmpresasXEmpresasFactory, PedidoDetallesFactory, $uibModal, $filter, FabricantesFactory, PedidosFactory, EmpresasFactory, UsuariosFactory, AmazonDataFactory, ActualizarCSNFactory) {
+  var MonitorReadController = function ($scope, $log, $cookies, $location, EmpresasXEmpresasFactory, PedidoDetallesFactory, $uibModal, $filter, FabricantesFactory, PedidosFactory, EmpresasFactory, UsuariosFactory, AmazonDataFactory, ActualizarCSNFactory, ProductosFactory, ManejoLicencias) {
     $scope.EmpresaSelect = 0;
     var Params = {};
     $scope.form = {};
@@ -56,6 +56,11 @@
                 detalle.NumeroSerie && detalle.EstatusFabricante === 'accepted' && detalle.PedidoAFabricante
                 ? pedido.listoRenovar = 1 : pedido.listoRenovar = 0;
               });
+              ProductosFactory.getNCProduct(pedido.Detalles[0].IdErp)
+              .success(function (result) {
+              pedido.productoNC = result ? true : false;
+              });
+              pedido.optionDeleteMS = pedido.EsOrdenInicial === 0 ? false : evaluationDeleteMS(pedido.FechaInicio);
               pedido.TermSwitch = pedido.EstatusContrato === 'term-switch';
               pedido.etiquetaTermSwitch = (pedido.IdEsquemaRenovacion == 5) ? 'Actualizar periodo a un año' : 'Actualizar periodo a tres años';
             });
@@ -66,6 +71,13 @@
           $scope.ShowToast(result.data.message, 'danger');
         });
     };
+
+    const evaluationDeleteMS = function (FechaInicio) {
+      const now = new Date();
+      const limitDate = new Date(FechaInicio);
+      limitDate.setDate(limitDate.getDate() + 5);
+      return now > limitDate ? false : true;
+    }
 
     const getContactUsers = function () {
       UsuariosFactory.getUsuariosContacto($scope.EmpresaSelect)
@@ -303,18 +315,18 @@
       PedidoDetallesFactory.putPedidoDetalle(PedidoActualizado)
         .success(async PedidoDetalleSuccess => {
           await PedidoDetallesFactory.postPartitionFlag(pedido)
-          .then(() => {
-            if (PedidoDetalleSuccess.success) {
-              detalles.MostrarCantidad = 0;
-              detalles.PorCancelar = 0;
-              $scope.ShowToast(PedidoDetalleSuccess.message, 'success');
-            } else {
-              $scope.ShowToast(PedidoDetalleSuccess.message, 'danger');
-            }
-          })
-          .catch(result => {
-            $scope.ShowToast(result.data.message, 'danger');
-          });
+            .then(() => {
+              if (PedidoDetalleSuccess.success) {
+                detalles.MostrarCantidad = 0;
+                detalles.PorCancelar = 0;
+                $scope.ShowToast(PedidoDetalleSuccess.message, 'success');
+              } else {
+                $scope.ShowToast(PedidoDetalleSuccess.message, 'danger');
+              }
+            })
+            .catch(result => {
+              $scope.ShowToast(result.data.message, 'danger');
+            })
         })
         .error(function (data, status, headers, config) {
           $scope.ShowToast('No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde', 'danger');
@@ -326,6 +338,18 @@
       FechaFin.setDate(22);
       FechaFin.setMonth(FechaFin.getMonth() + 2);
       return FechaFin;
+    };
+
+    $scope.actualizarEstatusRenovacion = function(status, pedido){
+      ManejoLicencias.updateStatusAutoRenew(pedido.IdMicrosoftUF, pedido.IdSuscripcion, status, pedido.Detalles[0].IdPedidoDetalle, pedido.Detalles[0].Cantidad, pedido.Detalles[0].CantidadProxima)
+      .then(function () {
+        if (!status) { 
+          $scope.ShowToast('Se desactivo la renovación automática', 'success');
+        } else $scope.ShowToast('Se activo la renovación automática', 'success');
+      })
+      .catch(function () {
+        $scope.ShowToast('No es posible actualizar el estatus de renovación automática', 'danger');
+      })
     };
 
     $scope.CancelarRenovacion = function (pedido, detalles) {
@@ -365,7 +389,8 @@
         FechaFin: hoy.getFullYear() + '-' + (hoy.getUTCMonth() + 1).toString().padStart(2, 0) + '-' + hoy.getDate().toString().padStart(2, 0),
         IdProducto: Detalles.IdProducto,
         IdEsquemaRenovacion: Pedido.IdEsquemaRenovacion,
-        IdPedido: Pedido.IdPedido
+        IdPedido: Pedido.IdPedido,
+        ProductoNC: Pedido.productoNC,
       };
       if (Pedido.IdFabricante === 1) {
         PedidoDetallesFactory.putPedidoDetalleMicrosoft(order)
@@ -635,6 +660,20 @@
       : document.getElementById('noExtender').style.display = 'block';
     };
 
+    $scope.InsertarOrdenCompra = function (idPedido,ordenCompraProxima) {
+      const order = {
+        IdPedido: idPedido,
+        OrdenCompraProxima: ordenCompraProxima
+      }
+      PedidoDetallesFactory.InsertarOrdenCompra(order.IdPedido,order.OrdenCompraProxima)
+      .then(result => {
+        $scope.ShowToast(result.data.message, 'success');
+      })
+      .catch(result => {
+        $scope.ShowToast(result.data.message, 'danger');
+    });
+  }
+
     $scope.cerrarModal = modal => {
       document.getElementById(modal).style.display = 'none';
     };
@@ -721,7 +760,7 @@
   
   };
 
-  MonitorReadController.$inject = ['$scope', '$log', '$cookies', '$location', 'EmpresasXEmpresasFactory', 'PedidoDetallesFactory', '$uibModal', '$filter', 'FabricantesFactory', 'PedidosFactory', 'EmpresasFactory', 'UsuariosFactory','AmazonDataFactory', 'ActualizarCSNFactory'];
+  MonitorReadController.$inject = ['$scope', '$log', '$cookies', '$location', 'EmpresasXEmpresasFactory', 'PedidoDetallesFactory', '$uibModal', '$filter', 'FabricantesFactory', 'PedidosFactory', 'EmpresasFactory', 'UsuariosFactory','AmazonDataFactory', 'ActualizarCSNFactory', 'ProductosFactory', 'ManejoLicencias'];
 
   angular.module('marketplace').controller('MonitorReadController', MonitorReadController);
 

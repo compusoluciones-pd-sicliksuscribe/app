@@ -194,6 +194,16 @@
       return $http.get($rootScope.API + 'enterprise/verifySignedReseller/' + IdEmpresa);
     };
 
+    factory.postTerminosNuevoComercio = function (Empresa) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'Empresas/TerminosNuevoComercio', Empresa);
+    };
+
+    factory.getTerminosNuevoComercio = function (IdEmpresa) {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'Empresas/GetTerminosNuevoComercio/' + IdEmpresa);
+    };
+
     return factory;
   };
 

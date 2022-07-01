@@ -4,6 +4,8 @@
     $scope.legacyCSP = 0;
     $scope.error = false;
     $scope.Distribuidor = {};
+    $scope.flagAnnualMensual = 0;
+    $scope.flagTYC=0;
     const ON_DEMAND = 3;
     const ELECTRONIC_SERVICE = 74;
     const paymentMethods = {
@@ -37,12 +39,16 @@
         .then(function (result) {
           $scope.Distribuidor = result.data[0];
           $scope.Distribuidor.MonedaPago = 'Pesos';
+          EmpresasFactory.getTerminosNuevoComercio($scope.Distribuidor.IdEmpresa)
+          .then (function (response){
+            $scope.Distribuidor.NuevoComercioTYC = response.data.Firma;
         })
         .catch(function (result) {
           error(result.data);
           $location.path('/Productos');
         });
-    };
+    });
+  }
 
     const esquemaAzurePlan = 8;
     const getPaymentMethods = function (id) {
@@ -102,7 +108,8 @@
     const getOrderDetails = function (validate) {
       return PedidoDetallesFactory.getPedidoDetalles()
         .then(function (result) {
-          $scope.legacyCSP = 0;
+          $scope.flagAnnualMensual = 0;
+          $scope.flagTYC = 0;
           $scope.orden = new Array(result.data.data.length);
           $scope.PedidoDetalles = result.data.data;
           if ($scope.PedidoDetalles[0].IdFormaPago === 1) validarTC();
@@ -120,7 +127,8 @@
             elem.Forma = getPaymentMethods(elem.IdFormaPago);
             elem.NombreFabricante = getMakers(elem.IdFabricante);
             elem.Productos.forEach(function (item) {
-              if (item.IdFabricante === makers.MICROSOFT && item.NumeroSerie === "CREATEORDER" && IdEsquemaRenovacion !== esquemaAzurePlan) $scope.legacyCSP ++;
+              if (item.IdFabricante === 1 && elem.IdEsquemaRenovacion === 9 && elem.IdFormaPago!==2) {$scope.flagAnnualMensual ++;}
+              if (item.IdFabricante === 1 && $scope.Distribuidor.NuevoComercioTYC === 0) {$scope.flagTYC ++;}
               if (item.PrecioUnitario == null) $scope.error = true;
             });
           });
@@ -130,12 +138,15 @@
           if (!validate) {
             $scope.ValidarFormaPago();
           }
-          if ($scope.legacyCSP >= 1) {
+          if ($scope.flagAnnualMensual >= 1) {
             $('#btnSiguiente').prop('disabled', true);
-            $scope.ShowToast('Las compras nuevas de productos Microsoft no se pueden procesar por CSP Legacy. Contacta a tu agente de ventas.', 'danger');
-          } else {
-            $('#btnSiguiente').prop('disabled', false);
-          }
+            $scope.ShowToast('Las compras de esquema anual con facturación mensual se deben finalizar con la forma de pago de crédito.', 'danger');
+           }else if ($scope.flagTYC >= 1) {
+            $('#btnSiguiente').prop('disabled', true);
+            $scope.ShowToast('Debes firmar los Terminos y Condiciones del Nuevo Comercio de Microsoft para continuar con tu compra', 'danger');
+           } else {
+             $('#btnSiguiente').prop('disabled', false);
+           }
         })
         .then(function () {
           if ($scope.isPayingWithCSCredit()) validarCarrito();

@@ -326,6 +326,12 @@
       factory.refreshToken();
       return $http.post($rootScope.API + 'shopping-cart/set-creditCardType', { PedidoDetalles, tipoTarjeta });
     };
+
+    factory.InsertarOrdenCompra = (idPedido, ordenCompraProxima) => {
+      factory.refreshToken();
+      return $http.put($rootScope.API + 'orders/InsertOrdenCompraProxima/', { idPedido: idPedido, ordenCompraProxima: ordenCompraProxima });
+    };
+
     return factory;
   };
 

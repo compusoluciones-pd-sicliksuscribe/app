@@ -48,7 +48,7 @@
                       <td>{{equipo.totalSeats}}</td>
                       <td>{{equipo.premiumEligibleSeats}}</td>
                       <td>{{equipo.premiumSeats}}</td>
-                      <td>{{equipo.premiumDelta || '-'}}</td>
+                      <td>{{equipo.premiumDelta || equipo.premiumEligibleSeats - equipo.premiumSeats}}</td>
                     </tr>
                 </table>
             </div>

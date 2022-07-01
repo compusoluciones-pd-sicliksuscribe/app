@@ -68,6 +68,14 @@
               } else {
                 $scope.Empresas = Empresas;
                 if ($scope.Empresas.length > 0) {
+                  for (let i = 0; i < $scope.Empresas.length; i++) {
+                    EmpresasFactory.getTerminosNuevoComercio($scope.Empresas[i].IdEmpresa)
+                    .success(result => {
+                      result.Firma === 1 ?
+                        $scope.Empresas[i].CartaTerminosMicrosoft = 1: 
+                        $scope.Empresas[i].CartaTerminosMicrosoft = 0;
+                    });
+                  };
                   $scope.TablaVisible = true;
                 } else {
                   $scope.Empresas = null;
@@ -109,6 +117,13 @@
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
     };
+
+    $scope.ActualizarTerminosMicrosoft = function (Empresa) {
+      EmpresasFactory.postTerminosNuevoComercio(Empresa)
+        .success(function (result) {
+          $scope.ShowToast('Estado de terminos actualizado', 'success');
+        })
+    }
 
     $scope.ActualizarIdNivelDistribuidor = function (Empresa) {
       var parametros = { IdEmpresa: Empresa.IdEmpresa, IdNivelDistribuidor: Empresa.IdNivelDistribuidor };
