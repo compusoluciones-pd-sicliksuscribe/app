@@ -156,7 +156,6 @@
     };
 
     $scope.actualizarEsquema = function (contractNumber, contractTerm){
-      console.log(contractNumber, contractTerm);
       let bandTermSwitch = true;
       const contract = $scope.contracts.find(contract => contract.contract_number === contractNumber);
       const serialNumber = contract.subscriptions.map(subscription => {
@@ -166,7 +165,6 @@
       if(bandTermSwitch){
         MonitorContratosFactory.actualizarEsquemaRenovacion(contractNumber, serialNumber, contractTerm)
       .then(result => {
-        console.log(result)
         if (result.data.statusCode === 400) {
           $scope.ShowToast(result.data.message, 'danger');
         }
