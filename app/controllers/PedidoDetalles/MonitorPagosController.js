@@ -432,7 +432,7 @@
                 $scope.currency = Datos.data.moneda;
                 OpenPay.setId(Datos.data.opId);
                 OpenPay.setApiKey(Datos.data.opPublic);
-                OpenPay.setSandboxMode(true); //  descomentar esta linea cuando haya pruebas
+                OpenPay.setSandboxMode(false);
                 deviceSessionId = OpenPay.deviceData.setup('payment-form-monitor', 'deviceIdHiddenFieldName');
                 $('#deviceSessionId').val(deviceSessionId);
                 $scope.abreModal();

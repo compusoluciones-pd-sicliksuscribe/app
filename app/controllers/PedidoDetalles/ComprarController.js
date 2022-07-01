@@ -378,7 +378,7 @@
                   $scope.currency = Datos.data[0].moneda;
                   OpenPay.setId(Datos.data['0'].opId);
                   OpenPay.setApiKey(Datos.data['0'].opPublic);
-                  OpenPay.setSandboxMode(true); //  descomentar esta linea cuando haya pruebas
+                  OpenPay.setSandboxMode(false);
                   deviceSessionId = OpenPay.deviceData.setup('payment-form', 'deviceIdHiddenFieldName');
                   $('#device_session_id').val(deviceSessionId);
                   modalTC.style.display = 'block';
