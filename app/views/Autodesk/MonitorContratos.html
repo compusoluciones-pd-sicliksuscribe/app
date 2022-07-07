@@ -45,17 +45,17 @@
                     </button>
                     <div ng-show="(contract.subs_ready  && !contract.siclick_status)">
                         <button id="ActualizarEsquema" class="pull-right btn btn-monitor-contratos "
-                        ng-disabled="(contract.termSwitchStatus)"
+                        ng-disabled="(contract.tradein(contract);">
+                            Trade in
+                        </button>
+                        <button id="Renovar" class="pull-right btn btn-monitor-contratos "
+                        data-toggle="modal" ngermSwitchStatus)"
                         ng-click="actualizarEsquema(contract.contract_number, contract.contract_term)">
                             {{contract.etiquetaTermSwitch}}
                         </button>
                         <button id="TradeIn" class="pull-right btn btn-monitor-contratos "
                         data-toggle="modal" data-target="#renovacionTradeIn"
-                        ng-click="agregarInfoTradein(contract);">
-                            Trade in
-                        </button>
-                        <button id="Renovar" class="pull-right btn btn-monitor-contratos "
-                        data-toggle="modal" ng-click="AgregarContrato(contract);">
+                        ng-click="agregarInfoT-click="AgregarContrato(contract);">
                             Renovar
                         </button>
                     </div>
@@ -224,7 +224,7 @@
                     </div>                
                     <div class="modal-content">
                         <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cerrarModal('extenderModal{{contract.IdContrato}}')"><span aria-hidden="true">&times;</span></button>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                             <h4 class="modal-title"><b>Solicitud de extensión de contrato (co-term)</b></h4>
                         </div>
                         <div class="modal-body">
@@ -234,7 +234,7 @@
                               </p>
                             <div class="form-group has-feedback col-xs-7 col-sm-7 col-md-7 col-lg-7">
                             <h5><b>Selecciona la nueva fecha fin para el contrato:</b></h5>
-                                <select id="NvaFechaFin" name="NvaFechaFin" class="form-control selectOption" ng-model="Extender.IdContrato" ng-options="opcionExtencion.contractNumber as (opcionExtencion.contractNumber + ' - ' + opcionExtencion.endDate) for opcionExtencion in opcionesExtencion">
+                                <select id="NvaFechaFin" name="NvaFechaFin" class="form-control selectOption" ng-model="extensionDate" ng-options="opcionExtencion.endDate as (opcionExtencion.contractNumber + ' - ' + opcionExtencion.endDate) for opcionExtencion in opcionesExtencion">
                                     <option ng-selected="true" value="">Selecciona una nueva fecha fin</option>
                                 </select>
                             </div>
@@ -247,8 +247,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal" style="padding: .8em 1.4em" ng-click="cerrarModal('extenderModal{{contract.IdContrato}}')" ng-disabled="procesandoExtension">Regresar</button> 
-                            <button type="button" class="btn btn-info" data-dismiss="modal" ng-click="solicitarExtension(contract.IdContrato)" ng-disabled="procesandoExtension" style="padding: .8em 1.4em">{{procesandoExtensionLbl}}</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal" style="padding: .8em 1.4em">Regresar</button> 
+                            <button type="button" class="btn btn-info" ng-click="makeExtension(contract, extensionDate)" style="padding: .8em 1.4em">Extender contrato</button>
                         </div>
                     </div>
                 </div>
@@ -262,12 +262,12 @@
                             <h4 class="modal-title"><b>Solicitud de extensión de contrato (co-term)</b></h4>
                         </div>
                         <div class="modal-body">
-                            <p class="alert alert-info">
+                            <p>
                                 No es posible extender este contrato. No se encontraron contratos que terminen en el futuro para el cliente seleccionado.
                               </p>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal" style="padding: .8em 1.4em" ng-click="cerrarModal('noExtender')">Aceptar</button> 
+                            <button type="button" class="btn btn-default" data-dismiss="modal" style="padding: .8em 1.4em">Aceptar</button> 
                         </div>
                     </div>
                 </div>

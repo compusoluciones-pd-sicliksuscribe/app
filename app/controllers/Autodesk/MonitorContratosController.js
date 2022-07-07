@@ -3,8 +3,6 @@
     $scope.vacio = 0;
     $scope.Renovar = {};
     $scope.SessionCookie = $cookies.getObject('Session');
-    $scope.procesandoExtension = false;
-    $scope.procesandoExtensionLbl = 'Extender contrato';
 
     $scope.init = function () {
       MonitorContratosFactory.getEndCustomer()
@@ -87,6 +85,24 @@
       : $('#noExtender').modal('show');
     };
 
+    const extendContract = contractData => {
+      MonitorContratosFactory.extendContract(contractData)
+        .then(result => {
+          $(`#extenderModal${contractData.contractNumber}`).modal('hide');
+          if (result.data.success) {
+            $scope.ShowToast(result.data.message, 'success');
+            $scope.ActualizarMenu();
+            $scope.addPulseCart();
+          } else {
+            $scope.ShowToast(result.data.message, 'danger');
+          }
+        })
+        .catch(result => {
+          $(`#extenderModal${contractData.contractNumber}`).modal('hide');
+          $scope.ShowToast(result.data.message, 'danger');
+        });
+    };
+
     $scope.init();
 
     $scope.ActualizarMonitor = function () {
@@ -151,23 +167,21 @@
               subscription.quantityToUpdate = null;
             }
           }
-        })
-      })
+        });
+      });
     };
 
     $scope.actualizarEsquema = function (contractNumber, contractTerm){
       let bandTermSwitch = true;
       const contract = $scope.contracts.find(contract => contract.contract_number === contractNumber);
       const serialNumber = contract.subscriptions.map(subscription => {
-        if(subscription.deployment === 'N') bandTermSwitch = false
-        return subscription.subscription_reference_number
-      })
-      if(bandTermSwitch){
+        if (subscription.deployment === 'N') bandTermSwitch = false;
+        return subscription.subscription_reference_number;
+      });
+      if (bandTermSwitch) {
         MonitorContratosFactory.actualizarEsquemaRenovacion(contractNumber, serialNumber, contractTerm)
       .then(result => {
-        if (result.data.statusCode === 400) {
-          $scope.ShowToast(result.data.message, 'danger');
-        }
+        if (result.data.statusCode === 400) $scope.ShowToast(result.data.message, 'danger');
         else {
           contract.termSwitchStatus = true;
           contract.subscriptions.forEach(subscription => subscription.siclick_status = true);
@@ -177,11 +191,10 @@
       .catch(result => {
         $scope.ShowToast(result.data.message, 'danger');
       });
-      }else {
+      } else {
         $scope.ShowToast('Cambio de esquema no disponible en series multi usuario.', 'danger');
       }
-    }
-
+    };
 
     $scope.getExtensionDateModal = (contractEndDate, currentContract) => {
       const extensionDates = getExtensionDates(contractEndDate, $scope.contracts);
@@ -190,10 +203,43 @@
       showExtrensionModal(currentContract);
     };
 
+    $scope.makeExtension = (contractData, extensionDate) => {
+      if (extensionDate) {
+        const { IdEmpresa } = $scope.selectEmpresas.find(empresa => empresa.csn === $scope.EmpresaSelect);
+        const subs = contractData.subscriptions.map(sub => ({
+          subscription_reference_number: sub.subscription_reference_number,
+          subscription_type: sub.subscription_type,
+          quantity: sub.quantity,
+          seats: sub.seats,
+          pack_size: sub.pack_size,
+          description: sub.description,
+          deployment: sub.deployment,
+          switch_type: sub.switch_type,
+          opportunity_number: sub.opportunity_number,
+          contract_number: sub.contract_number,
+          contract_start_date: sub.contract_start_date,
+          contract_end_date: sub.contract_end_date,
+          contract_term: sub.contract_term,
+          endCustomer_contract_manager_first: sub.endCustomer_contract_manager_first,
+          endCustomer_contract_manager_last: sub.endCustomer_contract_manager_last,
+          endCustomer_contract_manager_email: sub.endCustomer_contract_manager_email,
+          quantityToUpdate: sub.quantityToUpdate
+        }));
+        let payload = {
+          contractNumber: contractData.contract_number,
+          finalUserId: IdEmpresa,
+          extensionDate,
+          subscriptions: subs
+        };
+        extendContract(payload);
+        payload = {};
+      } else {
+        $scope.ShowToast('Especifica una fecha fin para la extensión del contrato.', 'warning');
+      }
+    };
   };
 
   MonitorContratosController.$inject = ['$scope', '$log', '$cookies', '$location', '$uibModal', '$filter', 'MonitorContratosFactory'];
 
   angular.module('marketplace').controller('MonitorContratosController', MonitorContratosController);
-
 }());
