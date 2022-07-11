@@ -4,7 +4,6 @@
 
     $scope.init = function () {
       $scope.navCollapsed = true;
-      $scope.correoCorrecto = false;
     };
 
     $scope.init();
@@ -13,10 +12,9 @@
         UsuariosFactory.postRestablecer($scope.Usuario)
           .success(function (result) {
             $scope.Usuario.Respuesta = result.message;
-            if (result.name === 'Error'){$scope.ShowToast(result.message, 'danger');}
+            if (result.name === 'Error'){$scope.ShowToast(result.message, 'success');}
             else {
               $scope.ShowToast(result.message, 'success');
-              $scope.correoCorrecto = true;
             }
           })
           .error(function (data, status, headers, config) {
