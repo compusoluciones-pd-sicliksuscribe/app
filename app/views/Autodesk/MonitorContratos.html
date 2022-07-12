@@ -45,17 +45,17 @@
                     </button>
                     <div ng-show="(contract.subs_ready  && !contract.siclick_status)">
                         <button id="ActualizarEsquema" class="pull-right btn btn-monitor-contratos "
-                        ng-disabled="(contract.tradein(contract);">
-                            Trade in
-                        </button>
-                        <button id="Renovar" class="pull-right btn btn-monitor-contratos "
-                        data-toggle="modal" ngermSwitchStatus)"
+                        data-toggle="modal" ng-disabled="(contract.termSwitchStatus)"
                         ng-click="actualizarEsquema(contract.contract_number, contract.contract_term)">
                             {{contract.etiquetaTermSwitch}}
                         </button>
-                        <button id="TradeIn" class="pull-right btn btn-monitor-contratos "
-                        data-toggle="modal" data-target="#renovacionTradeIn"
-                        ng-click="agregarInfoT-click="AgregarContrato(contract);">
+                        <button id="TradeIn" class="pull-right btn btn-monitor-contratos" 
+                        data-toggle="modal" ng-click="AgregarTradeIn(contract);">
+                            Trade in
+                        </button>
+                        <button id="Renovar" class="pull-right btn btn-monitor-contratos "
+                        data-toggle="modal"
+                        ng-click="AgregarContrato(contract);">
                             Renovar
                         </button>
                     </div>
@@ -99,7 +99,7 @@
                                     </div>
                                     <div class="form-group col-xs-12 col-sm-12 col-md-8 col-lg-8">
                                         <input type="number" class="form-control" ng-model="subscription.quantityToUpdate" 
-                                        min="1" max="{{ subscription.quantity }}" ng-change="ActualizarPartition(subscription.subscription_reference_number)"
+                                        min="1" max="{{ subscription.quantity }}" ng-keyup="ActualizarPartition(subscription.subscription_reference_number)"
                                         onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : (event.charCode === 46 || event.charCode >= 48) && event.charCode <= 57"/>
                                     </div>
                                 </div>
@@ -181,28 +181,12 @@
                             <h4 class="modal-title">Solicitud de renovación trade in</h4>
                         </div>
                         <div class="col-sm-12 col-md-12 col-lg-12 modal-body">
-                            <div class="col-sm-6 col-md-6 col-lg-6 form-group has-feedback">
+                            <div class="col-sm-12 col-md-12 col-lg-12 form-group has-feedback">
                                 <label >Contacto </label>
-                                <select class="form-control selectOption" ng-model="tradeIn.IdUsuarioContacto" ng-options="Contacto.IdUsuario as Contacto.Nombre + ' ('+ Contacto.CorreoElectronico +')' for Contacto in contactos">
+                                <select class="form-control selectOption" ng-model="TradeIn.IdUsuarioContacto" ng-options="Contacto.IdUsuario as Contacto.Nombre + ' ('+ Contacto.CorreoElectronico +')' for Contacto in contactos">
                                         <option ng-selected="true" value="">Selecciona un contacto...</option>
                                     </select>
                             </div>
-                            <br>
-                            <br>
-                            <div class="col-lg-12 col-md-12 col-sm-12">
-                                <div style="text-align: center;">
-                                    <label class="col-lg-4 col-md-4 col-sm-4">Numero de serie</label>
-                                    <label class="col-lg-3 col-md-3 col-sm-3">Cantidad</label>
-                                    <label class="col-lg-3 col-md-3 col-sm-3">Cantidad trade in</label>
-                                </div>
-                                <div class="row" ng-repeat="detalle in tradeIn.detalles"  style="text-align: center;">
-                                    <div class="col-lg-4 col-md-4 col-sm-4" style="margin-top:.6em"> {{detalle.NumeroSerie}}</div>
-                                    <div class="col-lg-3 col-md-3 col-sm-3" style="margin-top:.6em">{{detalle.Cantidad}}</div>
-                                    <input type="text" maxlength="3" onKeypress="if (event.keyCode < 48 || event.keyCode > 57) event.returnValue = false;" ng-model="detalle.cantidadProxTradeIn" class="form-control col-lg-3 col-md-3 col-sm-3" style="width: 3.5em; margin-left: 3em; margin-bottom: .5em" />
-                                </div>
-                            </div>
-                            <br>
-                            <br>
                             <div class="col-sm-12 col-md-12 col-lg-12 form-group alert alert-info" style="margin-top: 2em;">
                                 <p>
                                    Al dar click en <b>Continuar</b>, se agregarán al carrito de compras todos los productos que estén incluidos en el contrato con el estatus de <b>Aceptado</b>
@@ -211,7 +195,7 @@
                         </div>
                         <div class="col-sm-12 col-md-12 col-lg-12 modal-footer">
                             <button type="button" class="btn btn-default btn-modal" data-dismiss="modal">Regresar</button>
-                            <button type="button" class="btn btn-primary btn-modal" ng-click="solicitarRenovacionTradein();">Continuar</button>
+                            <button type="button" class="btn btn-primary btn-modal" ng-click="SolicitarRenovacionTradein();">Continuar</button>
                         </div>
                     </div>
                 </div>

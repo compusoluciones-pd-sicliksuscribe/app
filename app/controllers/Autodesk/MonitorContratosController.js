@@ -2,6 +2,7 @@
   var MonitorContratosController = function ($scope, $log, $cookies, $location, $uibModal, $filter, MonitorContratosFactory) {
     $scope.vacio = 0;
     $scope.Renovar = {};
+    $scope.TradeIn = {};
     $scope.SessionCookie = $cookies.getObject('Session');
 
     $scope.init = function () {
@@ -58,6 +59,22 @@
             $scope.addPulseCart();
             setTimeout($scope.removePulseCart, 9000);
             $location.path('/Carrito');
+          } else $scope.ShowToast(result.data.message, 'danger');
+        })
+        .catch(result => {
+          $scope.ShowToast(result.data.message, 'danger');
+        });
+    };
+
+    const tradeInContract = function (contractData) {
+      MonitorContratosFactory.tradeInContract(contractData)
+        .then(result => {
+          if (result.data.success) {
+            $scope.ShowToast(result.data.message, 'success');
+          //   $scope.ActualizarMenu();
+          //   $scope.addPulseCart();
+          //   setTimeout($scope.removePulseCart, 9000);
+          //   $location.path('/Carrito');
           } else $scope.ShowToast(result.data.message, 'danger');
         })
         .catch(result => {
@@ -131,6 +148,37 @@
       }
     };
 
+    $scope.AgregarTradeIn = function (contract){
+      let subscriptionsForTradeIn = [];
+      contract.subscriptions.forEach(subscription => {
+        if (subscription.forRenewal) {
+          let {subs_ready, MostrarCantidad, forRenewal, siclick_status, ...subscriptionClone} = subscription
+          subscriptionsForTradeIn.push(subscriptionClone);
+        }
+      });
+
+      if (subscriptionsForTradeIn.length <= 0) {
+        $scope.TradeIn.contrato = '';
+        $scope.TradeIn.suscripciones = [];
+        $scope.ShowToast('Selecciona una serie para trade in', 'warning');
+      }else if(subscriptionsForTradeIn.some(subscription => subscription.deployment !== 'N')){
+        $scope.TradeIn.contrato = '';
+        $scope.TradeIn.suscripciones = [];
+        $scope.ShowToast('Trade In solo es disponible para series Multi Usuario', 'warning');
+      } 
+      else if(subscriptionsForTradeIn.some(subscription => !subscription.quantityToUpdate)){
+        $scope.TradeIn.contrato = '';
+        $scope.TradeIn.suscripciones = [];
+        $scope.ShowToast('Tenemos que recordar que para Trade In es necesario indicar la cantidad', 'warning');
+      } 
+      else {
+        $scope.TradeIn.contrato = contract.contract_number;
+        $scope.TradeIn.suscripciones = subscriptionsForTradeIn;
+        $('#renovacionTradeIn').modal('show');
+      }
+      
+    };
+
     $scope.SolicitarRenovacion = function () {
       if ($scope.Renovar.IdUsuarioContacto && $scope.Renovar.contrato) {
         const { IdEmpresa } = $scope.selectEmpresas.find(empresa => empresa.csn === $scope.EmpresaSelect);
@@ -142,6 +190,23 @@
           IdUsuarioContacto: $scope.Renovar.IdUsuarioContacto
         };
         renewContract(payload);
+      } else {
+        $scope.ShowToast('Selecciona un usuario de contacto', 'warning');
+      }
+    };
+
+    $scope.SolicitarRenovacionTradein = function() {
+      if ($scope.TradeIn.IdUsuarioContacto && $scope.TradeIn.contrato) {
+        const { IdEmpresa } = $scope.selectEmpresas.find(empresa => empresa.csn === $scope.EmpresaSelect);
+        const payload = {
+          Contrato: $scope.TradeIn.contrato,
+          Suscripciones: $scope.TradeIn.suscripciones,
+          EmpresaUsuarioFinalCSN: $scope.EmpresaSelect,
+          IdEmpresaUsuarioFinal: IdEmpresa,
+          IdUsuarioContacto: $scope.TradeIn.IdUsuarioContacto
+        };
+        console.log(payload);
+        tradeInContract(payload);
       } else {
         $scope.ShowToast('Selecciona un usuario de contacto', 'warning');
       }

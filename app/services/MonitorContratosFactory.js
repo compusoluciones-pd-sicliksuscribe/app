@@ -41,6 +41,11 @@
       return $http.post($rootScope.API + 'autodesk/contracts/extend', contractData);
     };
 
+    factory.tradeInContract = function (contractData) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'autodesk/trade-in', contractData);
+    };
+
     return factory;
   };
 
