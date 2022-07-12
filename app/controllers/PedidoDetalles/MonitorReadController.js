@@ -678,8 +678,8 @@
       document.getElementById(modal).style.display = 'none';
     };
 
-    $scope.solicitarExtension = IdContrato => {
-      if ($scope.Extender.IdContrato) {
+    $scope.solicitarExtension = () => {
+      if ($scope.Extender.numeroContrato) {
         let payload = {
           IdContrato: IdContrato,
           IdEmpresaUsuarioFinal: $scope.EmpresaSelect,
