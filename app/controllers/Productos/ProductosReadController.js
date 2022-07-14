@@ -310,13 +310,13 @@
             Producto.contratos = respuesta.data;
             if (Producto.contratos.length >= 1 && Producto.Especializacion !== PREMIUM) {
               Producto.TieneContrato = true;
-              Producto.IdPedidoContrato = respuesta.data[0].IdPedido;
+              Producto.numeroContrato = respuesta.data[0].contract_number;
             }
             else if (Producto.contratos.length === 0 || Producto.Especializacion === PREMIUM) {
               Producto.TieneContrato = false;
-              Producto.IdPedidoContrato = 0;
+              Producto.numeroContrato = 'Nuevo contrato...';
             }
-            Producto.contratos.unshift({ IdPedido: 0, NumeroContrato: 'Nuevo contrato...' });
+            Producto.contratos.unshift({contract_number: 'Nuevo contrato...' });
             setProtectedRebatePrice(Producto.IdEmpresaUsuarioFinal);
           } else {
             $scope.ShowToast('No pudimos cargar la información de tus contratos, por favor intenta de nuevo más tarde.', 'danger');

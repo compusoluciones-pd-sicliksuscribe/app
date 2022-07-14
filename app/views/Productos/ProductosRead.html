@@ -239,9 +239,9 @@
                                                     <span class="input-group-addon green white">
                                                 <span class="glyphicon glyphicon-file"></span>
                                             </span>
-                                            <select id="contrato" name="contrato" class="form-control selectOption ufs" ng-model="Producto.IdPedidoContrato" ng-options="contrato.IdPedido as contrato.NumeroContrato for contrato in Producto.contratos"
-                                                ng-change="contractSetted(Producto)" ng-required="contrato.NumeroContrato !== ''", ng-disabled="Producto.Especializacion === 'Planes Premium'">
-                                                <option ng-disabled="" ng-selected="true" ng-value="0">Nuevo contrato...</option>
+                                            <select id="contrato" name="contrato" class="form-control selectOption ufs" ng-model="Producto.numeroContrato" ng-options="contrato.contract_number as contrato.contract_number for contrato in Producto.contratos"
+                                                ng-change="contractSetted(Producto)" ng-required="contrato.contract_number !== ''", ng-disabled="Producto.Especializacion === 'Planes Premium'">
+                                                <option ng-disabled="" ng-selected="true" ng-value="Nuevo contrato...">Nuevo contrato...</option>
                                             </select>
                                         </div>
                                     </div>    
