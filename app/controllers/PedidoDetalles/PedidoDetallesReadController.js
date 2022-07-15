@@ -6,6 +6,7 @@
     $scope.Distribuidor = {};
     $scope.flagAnnualMensual = 0;
     $scope.flagTYC=0;
+    $scope.flagLCO='';
     const ON_DEMAND = 3;
     const ELECTRONIC_SERVICE = 74;
     const paymentMethods = {
@@ -110,6 +111,7 @@
         .then(function (result) {
           $scope.flagAnnualMensual = 0;
           $scope.flagTYC = 0;
+          $scope.flagLCO = '';
           $scope.orden = new Array(result.data.data.length);
           $scope.PedidoDetalles = result.data.data;
           if ($scope.PedidoDetalles[0].IdFormaPago === 1) validarTC();
@@ -127,8 +129,10 @@
             elem.Forma = getPaymentMethods(elem.IdFormaPago);
             elem.NombreFabricante = getMakers(elem.IdFabricante);
             elem.Productos.forEach(function (item) {
+              console.log(elem.Productos[0]);
               if (item.IdFabricante === 1 && elem.IdEsquemaRenovacion === 9 && elem.IdFormaPago!==2) {$scope.flagAnnualMensual ++;}
               if (item.IdFabricante === 1 && $scope.Distribuidor.NuevoComercioTYC === 0) {$scope.flagTYC ++;}
+              if (item.IdFabricante === 1 && elem.Productos[0].NumeroSerie === 'CREATEORDER' && elem.Productos[0].validacion === 0){$scope.flagLCO += elem.Productos[0].IdPedido +' ';}
               if (item.PrecioUnitario == null) $scope.error = true;
             });
           });
@@ -144,7 +148,10 @@
            }else if ($scope.flagTYC >= 1) {
             $('#btnSiguiente').prop('disabled', true);
             $scope.ShowToast('Debes firmar los Terminos y Condiciones del Nuevo Comercio de Microsoft para continuar con tu compra', 'danger');
-           } else {
+           }else if ($scope.flagLCO !== '') {
+            $('#btnSiguiente').prop('disabled', true);
+            $scope.ShowToast('Tu carrito no se puede procesar por los siguientes pedidos: '+$scope.flagLCO+' debido a politicas de Microsoft. Para poder continuar elimine dicho pedido del carrito', 'danger');
+           }  else {
              $('#btnSiguiente').prop('disabled', false);
            }
         })
