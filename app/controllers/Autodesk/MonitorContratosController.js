@@ -71,10 +71,10 @@
         .then(result => {
           if (result.data.success) {
             $scope.ShowToast(result.data.message, 'success');
-          //   $scope.ActualizarMenu();
-          //   $scope.addPulseCart();
-          //   setTimeout($scope.removePulseCart, 9000);
-          //   $location.path('/Carrito');
+            $scope.ActualizarMenu();
+            $scope.addPulseCart();
+            setTimeout($scope.removePulseCart, 9000);
+            $location.path('/Carrito');
           } else $scope.ShowToast(result.data.message, 'danger');
         })
         .catch(result => {
@@ -205,7 +205,6 @@
           IdEmpresaUsuarioFinal: IdEmpresa,
           IdUsuarioContacto: $scope.TradeIn.IdUsuarioContacto
         };
-        console.log(payload);
         tradeInContract(payload);
       } else {
         $scope.ShowToast('Selecciona un usuario de contacto', 'warning');
