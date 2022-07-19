@@ -144,7 +144,7 @@
           }
           if ($scope.flagAnnualMensual !== '') {
             $('#btnSiguiente').prop('disabled', true);
-            $scope.ShowToast('Tu carrito no se puede procesar por los siguientes pedidos: '+scope.flagAnnualMensual+' debido que las compras con un esquema anual con facturación mensual se deben finalizar con la forma de pago de crédito.', 'danger');
+            $scope.ShowToast('Tu carrito no se puede procesar por los siguientes pedidos: '+$scope.flagAnnualMensual+' debido que las compras con un esquema anual con facturación mensual se deben finalizar con la forma de pago de crédito.', 'danger');
            }else if ($scope.flagTYC >= 1) {
             $('#btnSiguiente').prop('disabled', true);
             $scope.ShowToast('Debes firmar los Terminos y Condiciones del Nuevo Comercio de Microsoft para continuar con tu compra', 'danger');
