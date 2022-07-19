@@ -33,6 +33,8 @@
     $scope.ANUAL = 2;
     $scope.ANUAL_MENSUAL = 9;
 
+    $scope.MICROSOFT = 1;
+
     $scope.esquemaRenovacionModel = {};
 
     const PREMIUM = "Planes Premium";
@@ -476,8 +478,7 @@
       if (product.tiers) {
         return estimateTieredTotal(product.tiers, quantity);
       }
-
-      if (product.IdEsquemaRenovacion === $scope.ANUAL) {
+      if (product.IdEsquemaRenovacion === $scope.ANUAL && product.IdFabricante === $scope.MICROSOFT) {
         return $scope.estimateTotalAnnual(product,quantity);
       }
       const price = product.PorcentajeDescuento > 0 ? product.PrecioDescuento : product.PrecioProrrateo;
