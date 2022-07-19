@@ -4,7 +4,7 @@
     $scope.legacyCSP = 0;
     $scope.error = false;
     $scope.Distribuidor = {};
-    $scope.flagAnnualMensual = 0;
+    $scope.flagAnnualMensual = '';
     $scope.flagTYC=0;
     $scope.flagLCO='';
     const ON_DEMAND = 3;
@@ -109,7 +109,7 @@
     const getOrderDetails = function (validate) {
       return PedidoDetallesFactory.getPedidoDetalles()
         .then(function (result) {
-          $scope.flagAnnualMensual = 0;
+          $scope.flagAnnualMensual = '';
           $scope.flagTYC = 0;
           $scope.flagLCO = '';
           $scope.orden = new Array(result.data.data.length);
@@ -130,7 +130,7 @@
             elem.NombreFabricante = getMakers(elem.IdFabricante);
             elem.Productos.forEach(function (item) {
               console.log(elem.Productos[0]);
-              if (item.IdFabricante === 1 && elem.IdEsquemaRenovacion === 9 && elem.IdFormaPago!==2) {$scope.flagAnnualMensual ++;}
+              if (item.IdFabricante === 1 && elem.IdEsquemaRenovacion === 9 && elem.IdFormaPago!==2) {$scope.flagAnnualMensual +=elem.Productos[0].IdPedido +' ';}
               if (item.IdFabricante === 1 && $scope.Distribuidor.NuevoComercioTYC === 0) {$scope.flagTYC ++;}
               if (item.IdFabricante === 1 && elem.Productos[0].NumeroSerie === 'CREATEORDER' && elem.Productos[0].validacion === 0){$scope.flagLCO += elem.Productos[0].IdPedido +' ';}
               if (item.PrecioUnitario == null) $scope.error = true;
@@ -142,9 +142,9 @@
           if (!validate) {
             $scope.ValidarFormaPago();
           }
-          if ($scope.flagAnnualMensual >= 1) {
+          if ($scope.flagAnnualMensual !== '') {
             $('#btnSiguiente').prop('disabled', true);
-            $scope.ShowToast('Las compras de esquema anual con facturación mensual se deben finalizar con la forma de pago de crédito.', 'danger');
+            $scope.ShowToast('Tu carrito no se puede procesar por los siguientes pedidos: '+scope.flagAnnualMensual+' debido que las compras con un esquema anual con facturación mensual se deben finalizar con la forma de pago de crédito.', 'danger');
            }else if ($scope.flagTYC >= 1) {
             $('#btnSiguiente').prop('disabled', true);
             $scope.ShowToast('Debes firmar los Terminos y Condiciones del Nuevo Comercio de Microsoft para continuar con tu compra', 'danger');
