@@ -28,12 +28,12 @@
         });
       } else {
         PromocionsFactory.getPromocions(0)
-        .success(function (Promociones) {
-          $scope.Promociones = Promociones;
-        })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
+          .then(function OnSuccess (response) {
+            $scope.Promociones = response.data;
+            //console.log($scope.Promociones);
+          }).catch(function onError (response) {
+            console.log(`data error: ${response.error}, status: ${response.status}`);
+          });
       }
     };
 

@@ -123,13 +123,13 @@
       $scope.Usuario.IdEmpresa = $scope.currentDistribuidor.IdEmpresa;
       $scope.SessionCookie = {};
       UsuariosFactory.postUsuarioIniciarSesion($scope.Usuario)
-        .success(function (result) {
-          return buildToken(result);
-        })
-        .error(function (data, status, headers, config) {
-          $scope.ShowToast('Error al iniciar sesión', 'danger');
-          $log.log('data error: ' + data + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
+        .then(function OnSuccess(result){
+        console.log('Resultado: '+result.data[0]);
+        return buildToken(result.data)
+      }).catch(function onError (error) {
+        //console.log(`data error: ${response.error}, status: ${response.status}`);
+        console.log('Error: '+error);
+      });
     };
   };
 

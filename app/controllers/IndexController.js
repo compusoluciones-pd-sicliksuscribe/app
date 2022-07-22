@@ -16,14 +16,13 @@
       if (!$scope.currentDistribuidor.IdEmpresa) {
         $scope.ProductosCarrito = 0;
         PedidoDetallesFactory.getContarProductos()
-          .success(function (cuenta) {
-            if (cuenta.success === 1) {
-              $scope.ProductosCarrito = cuenta.data[0].Cantidad;
-            }
-          })
-          .error(function (data, status, headers, config) {
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-          });
+        .then(function OnSuccess (cuenta) {
+          if (cuenta.success === 1) {
+            $scope.ProductosCarrito = cuenta.data[0].Cantidad;
+          }
+        }).catch(function onError (response) {
+          console.log(`data error: ${response.error}, status: ${response.status}`);
+        });
       } else {
         $scope.ContarProductosCarritoUF();
       }

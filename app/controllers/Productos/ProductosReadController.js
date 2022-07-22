@@ -66,26 +66,26 @@
       }
       $scope.BuscarProductos.IdTipoProducto = IdTipoProducto;
      ProductosFactory.getBuscarProductos($scope.BuscarProductos)
-        .success(function (Productos) {
-          if (Productos.success === 1) {
-            $scope.Productos = Productos.data.map(function (item) {
+        .then(Productos => {
+          if (Productos.data.success === 1) {
+            $scope.Productos = Productos.data.data.map(function (item) {
               item.IdPedidoContrato = 0;
               item.TieneContrato = true;
               item.AddSeatMS = false;
               item.tiers = formatTiers(item.tiers);
                 ProductosFactory.getNCProduct(item.IdERP)
-                .success(function (result) {
+                .then(result => {
                   item.FlagNC = result ? true : false;
                 })
-                .error(function (data, status, headers, config) {
-                 return status;
+                .catch(error =>  {
+                 return error.status;
                 });
 
               return item;
             });
           }
         })
-        .error(function (data, status, headers, config) {
+        .catch(function onError(data, status, headers, config) {
           if (status === NOT_FOUND && $scope.Pagina > 0) {
             $scope.ShowToast('No se encontraron más resultados para la búsqueda.', 'danger');
             $scope.PaginadoAtras();
@@ -97,11 +97,11 @@
         });
 
       TipoCambioFactory.getTipoCambio()
-        .success(function (TipoCambio) {
-          $scope.TipoCambio = TipoCambio.Dolar;
-          $scope.TipoCambioMs = TipoCambio.DolarMS;
+        .then(TipoCambio => {
+          $scope.TipoCambio = TipoCambio.data.Dolar;
+          $scope.TipoCambioMs = TipoCambio.data.DolarMS;
         })
-        .error(function (data, status, headers, config) {
+        .catch(error => {
           $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
           $scope.ShowToast('No pudimos obtener el tipo de cambio, por favor intenta una vez más.', 'danger');
         });
@@ -111,7 +111,7 @@
     $scope.CambiarFechaRenovacion = function (Producto) {
       if (Producto.IdFabricante === 1) {
         PedidosFactory.viabilityAddSeatMS(Producto, $scope.SessionCookie.IdEmpresa)
-        .success(function (result) {
+        .then(result => {console.log(result);
           Producto.AddSeatMS = result ? true : false;
         }); 
       }
@@ -200,39 +200,39 @@
       $scope.hayCSNUF = false;
       $scope.CheckCookie();
       FabricantesFactory.getFabricantes()
-        .success(function (Fabricantes) {
-          $scope.selectFabricantes = Fabricantes;
-        })
-        .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+      .then(Fabricantes => {
+        $scope.selectFabricantes = Fabricantes.data;
+      })
+      .catch(error => {
+        $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
-          $scope.ShowToast('No pudimos cargar la lista de fabricantes, por favor intenta de nuevo más tarde.', 'danger');
+        $scope.ShowToast('No pudimos cargar la lista de fabricantes, por favor intenta de nuevo más tarde.', 'danger');
 
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
+        $log.log('data error: ' + error.data.error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
+      });
 
       $scope.validateMPA();
 
       TiposProductosFactory.getTiposProductos()
-        .success(function (TiposProductos) {
-          $scope.selectTiposProductos = TiposProductos;
+        .then(TiposProductos => {
+          $scope.selectTiposProductos = TiposProductos.data;
         })
-        .error(function (data, status, headers, config) {
+        .catch(error => {
           $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
           $scope.ShowToast('No pudimos cargar la lista de tipos de productos, por favor intenta de nuevo más tarde.', 'danger');
 
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          $log.log('data error: ' + error.data.error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
 
       EmpresasXEmpresasFactory.getClients()
-        .success(function (Empresas) {
+        .then(Empresas => {
           $scope.selectEmpresas = Empresas.data;
         })
-        .error(function (data, status, headers, config) {
+        .catch(error => {
           $scope.ShowToast('No pudimos cargar la información de tus clientes, por favor intenta de nuevo más tarde.', 'danger');
 
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          $log.log('data error: ' + error.data.error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
 
       $scope.BuscarProductos.IdProducto = undefined;
@@ -304,7 +304,7 @@
       .catch(() => $scope.ShowToast('No pudimos cargar el csn de este cliente, por favor intenta de nuevo más tarde.', 'danger'))
       .then(() => {
       ProductosFactory.getProductContracts(Producto.IdEmpresaUsuarioFinal, Producto.IdProducto)
-        .success(function (respuesta) {
+        .then(respuesta => {
           if (respuesta.success === 1) {
             Producto.IdAccionAutodesk = 1;
             Producto.contratos = respuesta.data;
@@ -322,20 +322,20 @@
             $scope.ShowToast('No pudimos cargar la información de tus contratos, por favor intenta de nuevo más tarde.', 'danger');
           }   
         })
-        .error(function () {
+        .catch(function onError() {
           $scope.ShowToast('No pudimos cargar la información de tus contratos, por favor intenta de nuevo más tarde.', 'danger');
         })
       })
       .then(() => {
       UsuariosFactory.getUsuariosContacto(Producto.IdEmpresaUsuarioFinal)
-        .success(function (respuesta) {
+        .then(respuesta => {
           if (respuesta.success === 1) {
             Producto.usuariosContacto = respuesta.data;
           } else {
             $scope.ShowToast('No pudimos cargar la información de tus contactos, por favor intenta de nuevo más tarde.', 'danger');
           }
         })
-        .error(function () {
+        .catch(error => {
           $scope.ShowToast('No pudimos cargar la información de tus contactos, por favor intenta de nuevo más tarde.', 'danger');
         });
       })
@@ -381,14 +381,14 @@
 
     const validateISVsData = function (Producto) {
       UsuariosFactory.getUsuariosContacto(Producto.IdEmpresaUsuarioFinal)
-        .success(function (respuesta) {
+        .then(respuesta => {
           if (respuesta.success === 1) {
             Producto.usuariosContacto = respuesta.data;
           } else {
             $scope.ShowToast('No pudimos cargar la información de tus contactos, por favor intenta de nuevo más tarde.', 'danger');
           }
         })
-        .error(function () {
+        .catch(error => {
           $scope.ShowToast('No pudimos cargar la información de tus contactos, por favor intenta de nuevo más tarde.', 'danger');
         });
     };
@@ -396,7 +396,7 @@
     const validateMicrosoftData = function (Producto) {
       if (Producto.IdTipoProducto === 4 && Producto.IdFabricante === 1) {
         ProductosFactory.postComplementos(Producto)
-          .then(function (data) {
+          .then(data => {
             var IdProductoFabricanteExtra = '';
             for (var x = 0; x < data.data.length; x++) {
               IdProductoFabricanteExtra += data.data[x].IdProductoFabricante + '|';
@@ -406,7 +406,7 @@
             }
             Producto.IdProductoFabricanteExtra = IdProductoFabricanteExtra;
             PedidoDetallesFactory.postPedidoDetallesAddOns(Producto)
-              .success(function (result) {
+              .then(result => {
                 $scope.selectProductos = result.data;
                 $scope.Productos.forEach(function (producto) {
                   if (producto.IdProducto === Producto.IdProducto) {
@@ -422,8 +422,8 @@
                   }
                 }, this);
               })
-              .error(function (data, status, headers, config) {
-                $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+              .catch(error => {
+                $log.log('data error: ' + error.data.error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
               });
           });
       }
@@ -492,7 +492,7 @@
 
     $scope.AceptarTerminos = function () {
         PedidoDetallesFactory.acceptAgreement($scope.IdEmpresaUsuarioFinalTerminos)
-        .success(function (result) {
+        .then(result => {
           if (!result.success) {
             $scope.ShowToast('Ocurrió un error, favor de contactar a Soporte', 'danger');
           } else {
@@ -500,7 +500,7 @@
             $scope.terminos = false;
           }
         })
-        .catch(function (error) {
+        .catch(error => {
           $scope.ShowToast(error.data.message, 'danger');
           $log.log('data error: ' + error.data.message + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
           $scope.form.habilitar = true;
@@ -530,7 +530,7 @@
      var IdFinalUser = $scope.IdEmpresaUsuarioFinalTerminos;
      $scope.finalUser.IdFinalUser= IdFinalUser;
       UsuariosFactory.putUpdateFinalUserData( $scope.finalUser )
-        .success(function (respuesta) {
+        .then(respuesta => {
           if (respuesta.Success === 1) {
             $scope.ShowToast('Información Actualizada ','success');
             $scope.datosCompletosCustomer = true;
@@ -541,7 +541,7 @@
             document.getElementById('formModal').style.display = 'none';
           }
         })
-        .error(function () {
+        .catch(error => {
           $scope.ShowToast('No pudimos cargar la información de tus contactos, por favor intenta de nuevo más tarde.', 'danger');
         });
       }
@@ -550,7 +550,7 @@
     $scope.getCustomerAgreement = function () {
       $scope.loading = true;
       return EmpresasXEmpresasFactory.getCustomerAgreements()
-      .success(function (result) {
+      .then(result => {
         $scope.loading = false;
         if (result.downloadUri) {
           $scope.downloadURI = result.downloadUri;
@@ -558,7 +558,7 @@
           $scope.microsoftURI = true;
         }
       })
-      .catch(function (error) {
+      .catch(error => {
         $scope.ShowToast(error.data.message, 'danger');
         $log.log('data error: ' + error.data.message + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
       });
@@ -566,7 +566,7 @@
 
     $scope.validateAgreementCSP = function (producto) {
       return EmpresasXEmpresasFactory.getAcceptanceAgreementByClient(producto.IdEmpresaUsuarioFinal)
-      .success(function (result) {
+      .then(result => {
         if (!result.AceptoTerminosMicrosoft) {
           if (!validateCustomerData(result.data[0])) {
             $scope.ShowToast('Completa la información para poder aceptar los términos y condiciones', 'danger');
@@ -590,7 +590,7 @@
            
         }
       })
-      .catch(function (error) {
+      .catch(error => {
         $scope.ShowToast(error.data.message, 'danger');
         $log.log('data error: ' + error.data.message + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         $scope.form.habilitar = true;
@@ -635,7 +635,7 @@
         }
       }
       $scope.validateExistsEmail(producto)
-      .then(function (result) {
+      .then(result => {
         const { exists } = result.data;
         if (!exists) {
           $scope.AgregarCarrito(producto, producto.Cantidad, producto.IdPedidocontrato);
@@ -648,7 +648,7 @@
 
     const validateQuantity = function (producto) {
       ProductosFactory.getQuantity(producto.IdEmpresaUsuarioFinal, producto.IdProducto)
-      .then(function (result) {
+      .then(result => {
         if (result.data.Licencias === 0 ) {
           $scope.AgregarCarrito(producto, producto.Cantidad, producto.IdPedidocontrato);
         } else if ( (result.data.Licencias+producto.Cantidad) > producto.CantidadMaxima) {
@@ -702,7 +702,7 @@
       if (Producto.IdFabricante !== 2) {
         if (!NuevoProducto.IdAccionAutodesk) delete NuevoProducto.IdAccionAutodesk;
         PedidoDetallesFactory.postPedidoDetalle(NuevoProducto)
-        .success(function (PedidoDetalleResult) {
+        .then(PedidoDetalleResult => {
           if (PedidoDetalleResult.success === 1) {
             angular.element(document.getElementById('auxScope')).scope().gaAgregarCarrito(Producto);
             $scope.ShowToast(PedidoDetalleResult.message, 'success');
@@ -713,12 +713,12 @@
             $scope.ShowToast(PedidoDetalleResult.message, 'danger');
           }
         })
-        .error(function (data, status, headers, config) {
+        .catch(error => {
           $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
           $scope.ShowToast('No pudimos agregar este producto a tu carrito de compras, por favor intenta de nuevo más tarde.', 'danger');
 
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          $log.log('data error: ' + error.data.error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
       }
     };
@@ -730,7 +730,7 @@
 
     const postPedidoAutodesk = function (NuevoProducto) {
       PedidoDetallesFactory.postPedidoDetalle(NuevoProducto)
-      .success(function (PedidoDetalleResult) {
+      .then(PedidoDetalleResult => {
         if (PedidoDetalleResult.success === 1) {
           $scope.ShowToast(PedidoDetalleResult.message, 'success');
           $scope.ActualizarMenu();
@@ -740,29 +740,29 @@
           $scope.ShowToast(PedidoDetalleResult.message, 'danger');
         }
       })
-      .error(function (data, status, headers, config) {
+      .catch(error => {
         $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
         $scope.ShowToast('No pudimos agregar este producto a tu carrito de compras, por favor intenta de nuevo más tarde.', 'danger');
-        $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        $log.log('data error: ' + error.data.error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
       });
     };
 
     $scope.AgregarGuardados = function (IdProductoSeleccionado) {
       var ProductoGuardado = { IdProducto: IdProductoSeleccionado };
       ProductoGuardadosFactory.postProductoGuardado(ProductoGuardado)
-        .success(function (PedidoDetalleResult) {
+        .then(PedidoDetalleResult => {
           if (PedidoDetalleResult[0].Success == true) {
             $scope.ShowToast(PedidoDetalleResult[0].Message, 'success');
           } else {
             $scope.ShowToast(PedidoDetalleResult[0].Message, 'danger');
           }
         })
-        .error(function (data, status, headers, config) {
+        .catch(error => {
           $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
           $scope.ShowToast('No se pudo agregar este producto en la lista, por favor intenta de nuevo más tarde.', 'danger');
 
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          $log.log('data error: ' + error.data.error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
@@ -906,7 +906,7 @@
         productIdErp : Producto.IdERP,
       };
       ProductosFactory.postRequestDataVwareProduct(Product)
-      .success(function (result) {
+      .then(result => {
         if (!result.success) {
           $scope.ShowToast('No se pudo mandar la notificación intente más tarde', 'danger');
         } else {
@@ -929,7 +929,7 @@
       };
 
       AmazonDataFactory.postRequestDataAWSProduct(Product)
-      .success(function (result) {
+      .then(result => {
         if (!result.success) {
           $scope.ShowToast('No se pudo mandar la notificación intente más tarde', 'danger');
         } else {
