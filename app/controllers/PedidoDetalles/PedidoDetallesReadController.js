@@ -131,7 +131,7 @@
             elem.Productos.forEach(function (item) {
               if (item.IdFabricante === 1 && elem.IdEsquemaRenovacion === 9 && elem.IdFormaPago!==2) {$scope.flagAnnualMensual +=elem.Productos[0].IdPedido +' ';}
               if (item.IdFabricante === 1 && $scope.Distribuidor.NuevoComercioTYC === 0) {$scope.flagTYC ++;}
-              if (item.IdFabricante === 1 && elem.Productos[0].NumeroSerie === 'CREATEORDER' && elem.Productos[0].validacion === 0){$scope.flagLCO += elem.Productos[0].IdPedido +' ';}
+              if (item.IdFabricante === 1 && elem.Productos[0].NumeroSerie === 'CREATEORDER' && elem.Productos[0].validacion === 0 && IdEsquemaRenovacion !== 8){$scope.flagLCO += elem.Productos[0].IdPedido +' ';}
               if (item.PrecioUnitario == null) $scope.error = true;
             });
           });
