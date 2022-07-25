@@ -27,7 +27,8 @@
               contract.etiquetaTermSwitch = (contract.contract_term === '3-Year') ? 'Actualizar periodo a un año' : 'Actualizar periodo a tres años';
               contract.subscriptions.forEach(subscription => {
                 subscription.MostrarCantidad = false;
-                if (!subscription.subs_ready || subscription.siclick_status) contract.termSwitchStatus = true
+                if (!subscription.subs_ready || subscription.siclick_status) contract.termSwitchStatus = true;
+                subscription.implantacion = subscription.deployment === 'S' ? 'Single-user' : 'Multi-user';
               });
             });
           }
@@ -70,6 +71,7 @@
       MonitorContratosFactory.tradeInContract(contractData)
         .then(result => {
           if (result.data.success) {
+            $('#renovacionTradeIn').modal('hide');
             $scope.ShowToast(result.data.message, 'success');
             $scope.ActualizarMenu();
             $scope.addPulseCart();
@@ -78,6 +80,7 @@
           } else $scope.ShowToast(result.data.message, 'danger');
         })
         .catch(result => {
+          $('#renovacionTradeIn').modal('hide');
           $scope.ShowToast(result.data.message, 'danger');
         });
     };
@@ -132,7 +135,7 @@
       let subscriptionsForRenewal = [];
       contract.subscriptions.forEach(subscription => {
         if (subscription.forRenewal) {
-          let {subs_ready, MostrarCantidad, forRenewal, siclick_status, ...subscriptionClone} = subscription
+          let {subs_ready, MostrarCantidad, forRenewal, siclick_status, implantacion, ...subscriptionClone} = subscription
           subscriptionsForRenewal.push(subscriptionClone);
         }
       });
@@ -152,7 +155,7 @@
       let subscriptionsForTradeIn = [];
       contract.subscriptions.forEach(subscription => {
         if (subscription.forRenewal) {
-          let {subs_ready, MostrarCantidad, forRenewal, siclick_status, ...subscriptionClone} = subscription
+          let {subs_ready, MostrarCantidad, forRenewal, siclick_status, implantacion, ...subscriptionClone} = subscription
           subscriptionsForTradeIn.push(subscriptionClone);
         }
       });
@@ -164,12 +167,12 @@
       }else if(subscriptionsForTradeIn.some(subscription => subscription.deployment !== 'N')){
         $scope.TradeIn.contrato = '';
         $scope.TradeIn.suscripciones = [];
-        $scope.ShowToast('Trade In solo es disponible para series Multi Usuario', 'warning');
+        $scope.ShowToast('Trade in solo está disponible para series Multi Usuario', 'warning');
       } 
       else if(subscriptionsForTradeIn.some(subscription => !subscription.quantityToUpdate)){
         $scope.TradeIn.contrato = '';
         $scope.TradeIn.suscripciones = [];
-        $scope.ShowToast('Tenemos que recordar que para Trade In es necesario indicar la cantidad', 'warning');
+        $scope.ShowToast('Recuerda indicar la cantidad de series a utilizar en el trade in', 'warning');
       } 
       else {
         $scope.TradeIn.contrato = contract.contract_number;

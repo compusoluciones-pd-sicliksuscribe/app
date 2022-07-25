@@ -71,14 +71,9 @@
                             <ul style="list-style-type:none; padding:0%">
                                 <li> <label for="Serie">Número de serie:</label> {{ subscription.subscription_reference_number }} </li>
                                 <li> <label for="TipoProducto">Tipo de producto:</label> {{ subscription.subscription_type }} </li>
-                                <li ng-if="detalles.IdEstatusPedido === 2"> <label for="Estatus">Estatus pedido: </label> Pago pendiente </li>
-                                <li ng-if="detalles.IdEstatusPedido === 3"> <label for="Estatus">Estatus pedido: </label> Pagado </li>
-                                <li ng-if="detalles.PedidoImportado === 1"> <span style="font-size: 100%; padding-top: .3em;" class="label label-primary">Importado</span>
-                                <li ng-hide="contract.EstatusContrato === 'canceled'" ng-if="contract.AutoRenovable && detalles.PagoRenovacion"> <label for="EstatusRenovacion">Estatus de renovación:</label> Pagado </li>
-                                <li ng-hide="contract.EstatusContrato === 'canceled'" ng-if="contract.AutoRenovable && !detalles.PagoRenovacion"> <label for="EstatusRenovacion">Estatus de renovación:</label> Sin renovar </li>
-                                <li ng-if="contract.AutoRenovable && (detalles.Activo) && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 10)">
-    
-                                </li>
+                                <li ng-if="subscription.siclick_status"> <label for="Estatus">Estatus pedido: </label> Serie Ocupada </li>
+                                <li> <label for="Implantacion">Implantación: </label> {{subscription.implantacion}} </li>
+                                <li ng-if="subscription.deployment === 'N'"> <label for="SwitchType">Switch Type: </label> {{subscription.switch_type}} </li>
                             </ul>
                         </div>
     
@@ -189,7 +184,7 @@
                             </div>
                             <div class="col-sm-12 col-md-12 col-lg-12 form-group alert alert-info" style="margin-top: 2em;">
                                 <p>
-                                   Al dar click en <b>Continuar</b>, se agregarán al carrito de compras todos los productos que estén incluidos en el contrato con el estatus de <b>Aceptado</b>
+                                   Al dar click en <b>Continuar</b>, se agregarán al carrito de compras todos los productos que estén seleccionados para <b>Trade In</b>.
                                 </p>
                             </div>
                         </div>
