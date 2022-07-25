@@ -17,16 +17,16 @@
 
     $scope.descuentoActualizar = function () {
       DescuentosFactory.putDescuento($scope.Descuento)
-        .success(function (result) {
-          if (result.success) {
+        .then(result => {
+          if (result.data.success) {
             $location.path('/Descuentos');
-            $scope.ShowToast(result.message, 'success');
+            $scope.ShowToast(result.data.message, 'success');
           } else {
-            $scope.ShowToast(result.message, 'danger');
+            $scope.ShowToast(result.data.message, 'danger');
           }
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .error(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
   };

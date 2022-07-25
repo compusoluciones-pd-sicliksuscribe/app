@@ -13,20 +13,20 @@
 
     $scope.obtenerDescuentoAnual = function () {
       DescuentosFactory.getDescuentoAnual()
-        .success(function (result) {
-          if (result.success) {
-            $scope.DescuentoAnual.PorcentajeDescuento = result.data.DescuentoAnual;
-            $scope.FechaExpiracion = new Date(result.data.FechaExpiracion);
+        .then(result => {
+          if (result.data.success) {
+            $scope.DescuentoAnual.PorcentajeDescuento = result.data.data.DescuentoAnual;
+            $scope.FechaExpiracion = new Date(result.data.data.FechaExpiracion);
           } else {
-            if (result.message) {
-              $scope.ShowToast(result.message, 'danger');
+            if (result.data.message) {
+              $scope.ShowToast(result.data.message, 'danger');
             } else {
               $scope.ShowToast('No tienes descuentos activos', 'danger');
             }
           }
         })
-        .error(function (result) {
-          $scope.ShowToast(result.message, 'danger');
+        .catch(error => {
+          $scope.ShowToast(error.message, 'danger');
         });
     };
 
@@ -37,18 +37,18 @@
     };
 
     $scope.DescuentoAnual = function () {
-      var dateExpiration = document.getElementById("FechaExpiracion").value;
+      var dateExpiration = document.getElementById('FechaExpiracion').value;
       DescuentosFactory.postDescuentoAnual($scope.DescuentoAnual.PorcentajeDescuento, dateExpiration)
-          .success(function (result) {
-            if (result.success) {
+          .then(result => {
+            if (result.data.success) {
               $location.path('/Descuento-Anual');
-              $scope.ShowToast(result.message, 'success');
+              $scope.ShowToast(result.data.message, 'success');
             } else {
-              $scope.ShowToast("Ingresa una fecha válida.", 'danger');
+              $scope.ShowToast('Ingresa una fecha válida.', 'danger');
             }
           })
-          .error(function (result) {
-            $scope.ShowToast(result.message,'danger');
+          .catch(error => {
+            $scope.ShowToast(error.message, 'danger');
           });
     };
   };

@@ -42,17 +42,19 @@
 
     const addDiscount = function (product) {
       DescuentosNivelesFactory.addDiscountLevels(IdDescuento, product)
-        .then(function (result) {
+        .then(result => {
           if (result.data.success) $scope.ShowToast(result.data.message, 'success');
           else $scope.ShowToast(result.data.message, 'danger');
         })
-        .catch(function (result) { error(result.data); });
+        .catch(result => {
+          error(result.data);
+        });
     };
 
     $scope.getProducts = function () {
       $scope.porcentaje = '';
       DescuentosNivelesFactory.getDiscountLevels(IdDescuento, $scope.IdEmpresa)
-        .then(function (result) {
+        .then(result => {
           const response = result.data;
           if (!response.success) error(result.data);
           else {
@@ -66,7 +68,9 @@
             setPagination();
           }
         })
-        .catch(function (result) { error(result.data); });
+        .catch(result => {
+          error(result.data);
+        });
     };
 
     $scope.refrescarMisProductos = function () {

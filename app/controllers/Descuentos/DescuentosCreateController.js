@@ -9,42 +9,42 @@
       $scope.CheckCookie();
 
       DescuentosFactory.getEspecializaciones()
-        .success(function (Especializaciones) {
-          if (Especializaciones.success) {
-            $scope.selectEspecializaciones = Especializaciones.data;
+        .then(Especializaciones => {
+          if (Especializaciones.data.success) {
+            $scope.selectEspecializaciones = Especializaciones.data.data;
           } else {
-            $scope.ShowToast(Especializaciones.message, 'danger');
+            $scope.ShowToast(Especializaciones.data.message, 'danger');
             $location.path('/Descuentos');
           }
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
 
       DescuentosFactory.getFamilias()
-        .success(function (Familias) {
-          if (Familias.success) {
-            $scope.selectFamilias = Familias.data;
+        .then(Familias => {
+          if (Familias.data.success) {
+            $scope.selectFamilias = Familias.data.data;
           } else {
-            $scope.ShowToast(Familias.message, 'danger');
+            $scope.ShowToast(Familias.data.message, 'danger');
             $location.path('/Descuentos');
           }
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
 
       NivelesDistribuidorFactory.getNivelesDistribuidor()
-        .success(function (NivelesDistribuidor) {
-          if (NivelesDistribuidor.success) {
-            $scope.selectNivelesDistribuidor = NivelesDistribuidor.data;
+        .then(NivelesDistribuidor => {
+          if (NivelesDistribuidor.data.success) {
+            $scope.selectNivelesDistribuidor = NivelesDistribuidor.data.data;
           } else {
-            $scope.ShowToast(NivelesDistribuidor.message, 'danger');
+            $scope.ShowToast(NivelesDistribuidor.data.message, 'danger');
             $location.path('/Descuentos');
           }
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
@@ -60,16 +60,16 @@
 
     $scope.descuentoCrear = function () {
       DescuentosFactory.postDescuento($scope.Descuento)
-        .success(function (result) {
-          if (result.success) {
+        .then(result => {
+          if (result.data.success) {
             $location.path('/Descuentos');
-            $scope.ShowToast(result.message, 'success');
+            $scope.ShowToast(result.data.message, 'success');
           } else {
-            $scope.ShowToast(result.message, 'danger');
+            $scope.ShowToast(result.data.message, 'danger');
           }
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
   };
