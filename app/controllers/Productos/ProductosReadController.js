@@ -268,11 +268,7 @@
 
     $scope.init();
 
-    $scope.contractSetted = function (producto) {
-      if (producto.IdPedidoContrato) {
-        producto.IdUsuarioContacto = undefined;
-      }
-    };
+    $scope.contractSetted = producto => producto.sinContacto = (producto.numeroContrato === 'Nuevo contrato');
 
     function findEndUser (selectedId) {
       var enterprises = $scope.selectEmpresas;
@@ -304,7 +300,7 @@
       .catch(() => $scope.ShowToast('No pudimos cargar el csn de este cliente, por favor intenta de nuevo más tarde.', 'danger'))
       .then(() => {
       ProductosFactory.getProductContracts(Producto.IdEmpresaUsuarioFinal, Producto.IdProducto)
-        .success(function (respuesta) {
+        .success(respuesta => {
           if (respuesta.success === 1) {
             Producto.IdAccionAutodesk = 1;
             Producto.contratos = respuesta.data;
@@ -314,30 +310,22 @@
             }
             else if (Producto.contratos.length === 0 || Producto.Especializacion === PREMIUM) {
               Producto.TieneContrato = false;
-              Producto.numeroContrato = 'Nuevo contrato...';
+              Producto.numeroContrato = 'Nuevo contrato';
+              Producto.sinContacto = true;            
             }
-            Producto.contratos.unshift({contract_number: 'Nuevo contrato...' });
+            Producto.contratos.unshift({contract_number: 'Nuevo contrato' });
             setProtectedRebatePrice(Producto.IdEmpresaUsuarioFinal);
-          } else {
-            $scope.ShowToast('No pudimos cargar la información de tus contratos, por favor intenta de nuevo más tarde.', 'danger');
-          }   
+          } else $scope.ShowToast('No pudimos cargar la información de tus contratos, por favor intenta de nuevo más tarde.', 'danger'); 
         })
-        .error(function () {
-          $scope.ShowToast('No pudimos cargar la información de tus contratos, por favor intenta de nuevo más tarde.', 'danger');
-        })
+        .error(() => $scope.ShowToast('No pudimos cargar la información de tus contratos, por favor intenta de nuevo más tarde.', 'danger'))
       })
       .then(() => {
       UsuariosFactory.getUsuariosContacto(Producto.IdEmpresaUsuarioFinal)
         .success(function (respuesta) {
-          if (respuesta.success === 1) {
-            Producto.usuariosContacto = respuesta.data;
-          } else {
-            $scope.ShowToast('No pudimos cargar la información de tus contactos, por favor intenta de nuevo más tarde.', 'danger');
-          }
+          if (respuesta.success === 1) Producto.usuariosContacto = respuesta.data;
+          else $scope.ShowToast('No pudimos cargar la información de tus contactos, por favor intenta de nuevo más tarde.', 'danger');
         })
-        .error(function () {
-          $scope.ShowToast('No pudimos cargar la información de tus contactos, por favor intenta de nuevo más tarde.', 'danger');
-        });
+        .error(() => $scope.ShowToast('No pudimos cargar la información de tus contactos, por favor intenta de nuevo más tarde.', 'danger'));
       })
     };
 
