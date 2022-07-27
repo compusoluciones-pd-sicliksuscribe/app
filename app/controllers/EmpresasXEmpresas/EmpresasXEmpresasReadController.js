@@ -1,3 +1,6 @@
+/* eslint-disable no-extend-native */
+/* eslint-disable no-undef */
+/* eslint-disable eqeqeq */
 (function () {
   var EmpresasXEmpresasReadController = function ($scope, $log, $location, $cookies, EmpresasXEmpresasFactory, EmpresasFactory, PedidoDetallesFactory) {
     $scope.sortBy = 'NombreEmpresa';
@@ -15,58 +18,55 @@
       $scope.CheckCookie();
 
       EmpresasXEmpresasFactory.getEmpresasXEmpresas()
-        .success(function (Empresas) {
-          if (Empresas) {
-            for (var i = 0; i < Empresas.length; i++) {
-              Empresas[i].WarningCredito = false;
+        .then(Empresas => {
+          if (Empresas.data) {
+            for (var i = 0; i < Empresas.data.length; i++) {
+              Empresas.data[i].WarningCredito = false;
             }
 
-            $scope.Empresas = Empresas;
+            $scope.Empresas = Empresas.data;
 
             for (var w = 0; w < $scope.Empresas.length; w++) {
               (function (index) {
-
                 var parametros = { IdEmpresaUsuarioFinal: $scope.Empresas[index].IdEmpresa };
 
                 PedidoDetallesFactory.postWarningCredito(parametros)
-                  .success(function (result) {
-                    if (result) {
-                      if (result.success === 0) {
+                  .then(result => {
+                    if (result.data) {
+                      if (result.data.success === 0) {
                         $scope.Empresas[index].WarningCredito = true;
 
-                        $scope.ShowToast(result.message, 'danger');
-                      }
-                      else {
+                        $scope.ShowToast(result.data.message, 'danger');
+                      } else {
                         $scope.Empresas[index].WarningCredito = false;
                       }
                     }
                   })
-                  .error(function (data, status, headers, config) {
+                  .catch(error => {
                     $scope.ShowToast('No pudimos cargar tu información, por favor intenta de nuevo más tarde.', 'danger');
-                    $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+                    $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
                   });
               }(w));
             }
           }
         })
-        .error(function (data, status, headers, config) {
+        .catch(error => {
           $scope.ShowToast('No pudimos cargar tus clientes, por favor intenta de nuevo más tarde', 'danger');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
 
       EmpresasFactory.getEmpresas()
-        .success(function (data) {
-          $scope.CreditoDisponible = data[0].Credito;
+        .then(data => {
+          $scope.CreditoDisponible = data.data[0].Credito;
         })
-        .error(function (data, status, headers, config) {
+        .catch(error => {
           $scope.ShowToast('No pudimos cargar los datos de tu empresa, por favor intenta de nuevo más tarde', 'danger');
 
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
     $scope.init();
-
 
     $scope.BajaEmpresa = function (Empresa) {
       var EmpresaUpdate = {};
@@ -75,20 +75,20 @@
       EmpresaUpdate.Activo = 0;
 
       EmpresasXEmpresasFactory.putEmpresasXEmpresa(EmpresaUpdate)
-        .success(function (data) {
-          if (data[0].Success == true) {
-            $scope.ShowToast(data[0].Message, 'success');
+        .then(data => {
+          if (data.data[0].Success == true) {
+            $scope.ShowToast(data.data[0].Message, 'success');
 
             $scope.init();
           } else {
             $scope.Confirmar(Empresa.IdEmpresa);
-            $scope.ShowToast(data[0].Message, 'danger');
+            $scope.ShowToast(data.data[0].Message, 'danger');
           }
         })
-        .error(function (data, status, headers, config) {
+        .catch(error => {
           $scope.ShowToast('No pudimos dar de baja a tu cliente, por favor intenta de nuevo más tarde', 'danger');
 
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
@@ -132,20 +132,20 @@
       }
 
       EmpresasXEmpresasFactory.putEmpresasXEmpresa(Empresa)
-        .success(function (data) {
-          if (data[0].Success == true) {
-            $scope.ShowToast(data[0].Message, 'success');
+        .then(data => {
+          if (data.data[0].Success == true) {
+            $scope.ShowToast(data.data[0].Message, 'success');
 
             var parametros = { IdEmpresaUsuarioFinal: Empresa.IdEmpresa };
 
             PedidoDetallesFactory.postWarningCredito(parametros)
-              .success(function (result) {
-                if (result) {
+              .then(result => {
+                if (result.data) {
                   var WarningCredito = false;
 
-                  if (result.success === 0) {
+                  if (result.data.success === 0) {
                     WarningCredito = true;
-                    $scope.ShowToast(result.message, 'danger');
+                    $scope.ShowToast(result.data.message, 'danger');
                   } else {
                     WarningCredito = false;
                   }
@@ -158,24 +158,24 @@
                   }
                 }
               })
-              .error(function (data, status, headers, config) {
+              .catch(error => {
                 $scope.ShowToast('No pudimos cargar tu información, por favor intenta de nuevo más tarde.', 'danger');
-                $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+                $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
               });
           } else {
-            $scope.ShowToast(data[0].Message, 'danger');
+            $scope.ShowToast(data.data[0].Message, 'danger');
 
             $scope.init();
           }
         })
-        .error(function (data, status, headers, config) {
+        .catch(error => {
           $scope.ShowToast('No pudimos actualizar el crédito, por favor intenta de nuevo más tarde', 'danger');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
     $scope.NuevaEmpresa = function () {
-      $location.path("/Empresa");
+      $location.path('/Empresa');
     };
 
     $scope.PosibilidadCredito = function () {
@@ -212,38 +212,38 @@
       $scope.Tour = new Tour({
         steps: [
           {
-            element: ".newClient",
-            placement: "bottom",
-            title: "Agrega nuevos clientes",
-            content: "Da de alta un nuevo cliente y asígnale crédito para Click suscribe.",
+            element: '.newClient',
+            placement: 'bottom',
+            title: 'Agrega nuevos clientes',
+            content: 'Da de alta un nuevo cliente y asígnale crédito para Click suscribe.',
             template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>"
           },
           {
-            element: ".totalCredit",
-            placement: "bottom",
-            title: "Crédito total",
-            content: "El crédito total que tienes en Click suscribe para hacer compras o renovar suscripciones.",
+            element: '.totalCredit',
+            placement: 'bottom',
+            title: 'Crédito total',
+            content: 'El crédito total que tienes en Click suscribe para hacer compras o renovar suscripciones.',
             template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>"
           },
           {
-            element: ".asignCredit",
-            placement: "bottom",
-            title: "Crédito total asignado",
-            content: "Cantidad que ya se repartió entre tus clientes.",
+            element: '.asignCredit',
+            placement: 'bottom',
+            title: 'Crédito total asignado',
+            content: 'Cantidad que ya se repartió entre tus clientes.',
             template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>"
           },
           {
-            element: ".giveCredit",
-            placement: "bottom",
-            title: "Crédito por repartir",
-            content: "Cantidad disponible o pendiente por repartir entre tus clientes.",
+            element: '.giveCredit',
+            placement: 'bottom',
+            title: 'Crédito por repartir',
+            content: 'Cantidad disponible o pendiente por repartir entre tus clientes.',
             template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>"
           },
           {
-            element: ".pesosCredit",
-            placement: "left",
-            title: "Asigna crédito",
-            content: "Asígnale crédito a cada cliente en base a tu monto total.",
+            element: '.pesosCredit',
+            placement: 'left',
+            title: 'Asigna crédito',
+            content: 'Asígnale crédito a cada cliente en base a tu monto total.',
             template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>"
           }
         ],
