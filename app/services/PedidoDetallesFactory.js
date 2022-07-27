@@ -177,7 +177,7 @@
       return $http.get($rootScope.API + 'orders/get-pending-orders-to-pay/tuclick/' + currentDistribuidor);
     };
 
-    factory.monitorCalculations = function (Pedidos) {
+    factory.monitorCalculations = function (Pedidos) { 
       factory.refreshToken();
       return $http.post($rootScope.API + 'orders/pending-orders-monitor-calculations/1', Pedidos);
     };

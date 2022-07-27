@@ -368,11 +368,11 @@
           let tipoTarjeta = $cookies.getObject('tipoTarjetaCreditoMonitor');
           PedidoDetallesFactory.monitorCalculations({Pedidos: $scope.PedidosSeleccionadosParaPagar, tipoTarjeta})
           .success(function (calculations) {
-            if (calculations.total) {
-              $scope.ServicioElectronico = calculations.electronicService;
-              $scope.Subtotal = calculations.subtotal;
-              $scope.Iva = calculations.iva;
-              $scope.Total = calculations.total;
+            if (calculations.OrderTotal) {
+              $scope.ServicioElectronico = calculations.totalCharges[0].electronicServiceTotal;
+              $scope.Subtotal = calculations.totalCharges[0].subtotalOrders;
+              $scope.Iva = calculations.totalCharges[0].ivaOrders;
+              $scope.Total = calculations.totalCharges[0].totalOrders;
             } else {
               $scope.ServicioElectronico = 0;
               $scope.Subtotal = 0;
@@ -417,7 +417,8 @@
 
     $scope.pagar = function () {
       if ($scope.PedidosSeleccionadosParaPagar.length > 0) {
-        PedidoDetallesFactory.payWidthCard({ Pedidos: $scope.PedidosSeleccionadosParaPagar })
+        let tipoTarjeta = $cookies.getObject('tipoTarjetaCreditoMonitor');
+        PedidoDetallesFactory.payWidthCard({ Pedidos: $scope.PedidosSeleccionadosParaPagar, tipoTarjeta })
           .success(function (Datos) {
             var expireDate = new Date();
             expireDate.setTime(expireDate.getTime() + 600 * 2000);
@@ -532,6 +533,8 @@
         device_session_id: deviceSessionId,
         pedidosAgrupados: $cookies.getObject('pedidosAgrupados')
       };
+      
+
       PedidoDetallesFactory.pagarTarjetaOpenpay(charges)
         .then(function (response) {
           if (response.data.statusCode === 200) {
