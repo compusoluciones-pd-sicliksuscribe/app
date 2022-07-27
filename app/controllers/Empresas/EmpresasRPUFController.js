@@ -53,7 +53,7 @@
       var IdEmpresasXEmpresa = Empresa.IdEmpresasXEmpresa;
       var nivel = { IdEmpresasXEmpresa: IdEmpresasXEmpresa, IdNivelDis: IdNivelDis };
       NivelesDistribuidorFactory.asignarNivelTuclick(nivel)
-        .then(function (result) {
+        .then(result => {
           var response = result.data;
           if (!response.success) {
             error(result.data);
@@ -62,12 +62,12 @@
             $scope.ShowToast('Nivel asignado.', 'success');
           }
         })
-        .catch(function (result) { error(result.data); });
+        .catch(result => { error(result.data); });
     };
 
     $scope.removerNivel = function (id) {
       NivelesDistribuidorFactory.removerNivelTuclick(id)
-        .then(function (result) {
+        .then(result => {
           var response = result.data;
           if (!response.success) {
             error(result.data);
@@ -76,7 +76,7 @@
             $scope.ShowToast('Nivel removido.', 'success');
           }
         })
-        .catch(function (result) { error(result.data); });
+        .catch(result => { error(result.data); });
     };
   };
   EmpresasRPUFController.$inject = ['$scope', '$log', '$cookies', '$location', '$uibModal', '$filter', 'EmpresasXEmpresasFactory', 'NivelesDistribuidorFactory', '$routeParams'];

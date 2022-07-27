@@ -14,13 +14,13 @@
       $scope.cambiaAgenteAutodesk = false;
 
       NivelesDistribuidorFactory.getNivelesDistribuidor()
-        .success(function (NivelesDistribuidor) {
-          if (NivelesDistribuidor.success) {
-            $scope.selectNivelesDistribuidor = NivelesDistribuidor.data;
+        .then(NivelesDistribuidor => {
+          if (NivelesDistribuidor.data.success) {
+            $scope.selectNivelesDistribuidor = NivelesDistribuidor.data.data;
           }
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
@@ -29,26 +29,26 @@
     $scope.BajaEmpresa = function (index, IdEmpresa) {
       var Datos = { IdEmpresa: IdEmpresa, Activo: 0 };
       EmpresasFactory.validarBajaEmpresa(Datos)
-        .success(function (result) {
-          if (result[0].Success == true) {
+        .then(result => {
+          if (result.data[0].Success == true) {
             $scope.Empresas.splice(index, 1);
             EmpresasFactory.putEmpresa(Datos)
-              .success(function (result) {
-                if (result[0].Success == false) {
-                  $scope.ShowToast(result[0].Message, 'danger');
+              .then(result => {
+                if (result.data[0].Success == false) {
+                  $scope.ShowToast(result.data[0].Message, 'danger');
                 } else {
                   $scope.ShowToast('Empresa dada de baja', 'success');
                 }
               })
-              .error(function (data, status, headers, config) {
-                $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+              .catch(error => {
+                $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
               });
           } else {
-            $scope.ShowToast(result[0].Message, 'danger');
+            $scope.ShowToast(result.data[0].Message, 'danger');
           }
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
@@ -59,19 +59,19 @@
 
     $scope.BuscarEmpresas = function (busqueda) {
       EmpresasFactory.getEmpresa($scope.Empresa.Busqueda)
-        .success(function (Empresas) {
+        .then(Empresas => {
           if (Empresas) {
             try {
-              if (Empresas[0].Success == false || Empresas.length == null || Empresas.length == 'undefined') {
+              if (Empresas.data[0].Success == false || Empresas.data.length == null || Empresas.data.length == 'undefined') {
                 $scope.Empresas = null;
                 $scope.TablaVisible = false;
               } else {
-                $scope.Empresas = Empresas;
+                $scope.Empresas = Empresas.data;
                 if ($scope.Empresas.length > 0) {
                   for (let i = 0; i < $scope.Empresas.length; i++) {
                     EmpresasFactory.getTerminosNuevoComercio($scope.Empresas[i].IdEmpresa)
-                    .success(result => {
-                      result.Firma === 1 ?
+                    .then(result => {
+                      result.data.Firma === 1 ?
                         $scope.Empresas[i].CartaTerminosMicrosoft = 1: 
                         $scope.Empresas[i].CartaTerminosMicrosoft = 0;
                     });
@@ -93,9 +93,9 @@
             $scope.TablaVisible = false;
           }
         })
-        .error(function (data, status, headers, config) {
+        .catch(error => {
           $scope.TablaVisible = false;
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
@@ -106,73 +106,76 @@
       if (Empresa.CartaConfirmacion2 == true || Empresa.CartaConfirmacion2 == 1) { CartaConfirmacion2 = 1; } else { CartaConfirmacion2 = 0; }
       var parametros = { IdEmpresa: Empresa.IdEmpresa, CartaConfirmacion1: CartaConfirmacion1, CartaConfirmacion2: CartaConfirmacion2 };
       EmpresasFactory.postCartaConfirmacion(parametros)
-        .success(function (result) {
-          if (result.success) {
-            $scope.ShowToast(result.message, 'success');
+        .then(result => {
+          if (result.data.success) {
+            $scope.ShowToast(result.data.message, 'success');
           } else {
-            $scope.ShowToast(result.message, 'danger');
+            $scope.ShowToast(result.data.message, 'danger');
           }
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
     $scope.ActualizarTerminosMicrosoft = function (Empresa) {
       EmpresasFactory.postTerminosNuevoComercio(Empresa)
-        .success(function (result) {
+        .then(result => {
           $scope.ShowToast('Estado de terminos actualizado', 'success');
         })
-    }
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
+        });
+    };
 
     $scope.ActualizarIdNivelDistribuidor = function (Empresa) {
       var parametros = { IdEmpresa: Empresa.IdEmpresa, IdNivelDistribuidor: Empresa.IdNivelDistribuidor };
       EmpresasFactory.putActualizarNivelDistribuidor(parametros)
-        .success(function (result) {
-          if (result.success) {
-            $scope.ShowToast(result.message, 'success');
+        .then(result => {
+          if (result.data.success) {
+            $scope.ShowToast(result.data.message, 'success');
           } else {
-            $scope.ShowToast(result.message, 'danger');
+            $scope.ShowToast(result.data.message, 'danger');
           }
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
     $scope.ActualizarIdNivelDistribuidorMicrosoft = function (Empresa) {
       var parametros = { IdEmpresa: Empresa.IdEmpresa, IdNivelDistribuidor: Empresa.IdNivelDistribuidorMicrosoft };
       EmpresasFactory.putActualizarNivelDistribuidorMicrosoft(parametros)
-        .success(function (result) {
-          if (result.success) {
-            $scope.ShowToast(result.message, 'success');
+        .then(result => {
+          if (result.data.success) {
+            $scope.ShowToast(result.data.message, 'success');
           } else {
-            $scope.ShowToast(result.message, 'danger');
+            $scope.ShowToast(result.data.message, 'danger');
           }
         }
       )
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
-      };
+    };
 
     $scope.ActualizarAgentes = function (Empresa) {
-      var parametros = { IdEmpresa: Empresa.IdEmpresa, AgenteMicrosoft: Empresa.AgenteMicrosoft, AgenteAutodesk: Empresa.AgenteAutodesk, AgenteAutodeskRenovacion: Empresa.AgenteAutodeskRenovacion ,AgenteAmazon : Empresa.AgenteAmazon };
-      if (typeof Empresa.AgenteMicrosoft === 'undefined' || typeof Empresa.AgenteAutodesk === 'undefined' || typeof Empresa.AgenteAutodeskRenovacion === 'undefined'|| typeof Empresa.AgenteAmazon === 'undefined') {
+      var parametros = { IdEmpresa: Empresa.IdEmpresa, AgenteMicrosoft: Empresa.AgenteMicrosoft, AgenteAutodesk: Empresa.AgenteAutodesk, AgenteAutodeskRenovacion: Empresa.AgenteAutodeskRenovacion, AgenteAmazon: Empresa.AgenteAmazon };
+      if (typeof Empresa.AgenteMicrosoft === 'undefined' || typeof Empresa.AgenteAutodesk === 'undefined' || typeof Empresa.AgenteAutodeskRenovacion === 'undefined' || typeof Empresa.AgenteAmazon === 'undefined') {
         $scope.ShowToast('El nombre del agente solo debe contener letras y una longitud menor a 10 caracteres.', 'danger');
       } else {
         EmpresasFactory.putActualizarAgenteMarca(parametros)
-          .success(function (result) {
-            if (result.success) {
-              $scope.ShowToast(result.message, 'success');
+          .then(result => {
+            if (result.data.success) {
+              $scope.ShowToast(result.data.message, 'success');
               Empresa.cambiaAgente = false;
               Empresa.cambiaAgenteAutodesk = false;
             } else {
-              $scope.ShowToast(result.message, 'danger');
+              $scope.ShowToast(result.data.message, 'danger');
             }
           })
-          .error(function (data, status, headers, config) {
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          .catch(error => {
+            $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
           });
       }
     };

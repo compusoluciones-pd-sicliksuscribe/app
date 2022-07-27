@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 (function () {
   var EmpresasCreateController = function ($scope, $log, $cookies, $location, EmpresasFactory, EstadosFactory, UsuariosFactory) {
     $scope.Empresa = {};
@@ -17,23 +18,23 @@
       $scope.CheckCookie();
 
       EstadosFactory.getEstados()
-        .success(function (result) {
-          $scope.Combo.EstadoOptions = result;
+        .then(result => {
+          $scope.Combo.EstadoOptions = result.data;
           $scope.Combo.TipoRFC = [{ Nombre: 'Persona Física' }, { Nombre: 'Persona Moral' }];
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
 
       $scope.Empresa.Lada = 52;
 
       EmpresasFactory.getIndustrias()
-      .success(function (result) {
-        $scope.selectIndustrias = result.data;
-      })
-      .error(function (data, status, headers, config) {
-        $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-      });
+        .then(result => {
+          $scope.selectIndustrias = result.data.data;
+        })
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
+        });
     };
 
     $scope.init();
@@ -41,6 +42,7 @@
     $scope.tel = function () {
       if ($scope.Empresa.TelefonoContacto.length == 10) {
         var value = $scope.Empresa.TelefonoContacto;
+        // eslint-disable-next-line no-unused-vars
         var country, city, number;
 
         country = 1;
@@ -52,20 +54,20 @@
       }
     };
 
-    function isNumeric(num) {
+    function isNumeric (num) {
       return !isNaN(num);
     }
 
     $scope.ValidarRFC = function () {
       EmpresasFactory.checkRFC({ RFC: $scope.Empresa.RFC })
-        .success(function (result) {
-          if (result[0].Success === 1) {
+        .then(result => {
+          if (result.data[0].Success === 1) {
             for (var i = 0; i < $scope.Empresa.RFC.length; i++) {
-              if ($scope.Empresa.RFC[i] == "-" || $scope.Empresa.RFC[i] == ' ' || $scope.Empresa.RFC[i] == '/' || $scope.Empresa.RFC[i] == '.' || $scope.Empresa.RFC[i] == ',') {
+              if ($scope.Empresa.RFC[i] == '-' || $scope.Empresa.RFC[i] == ' ' || $scope.Empresa.RFC[i] == '/' || $scope.Empresa.RFC[i] == '.' || $scope.Empresa.RFC[i] == ',') {
                 $scope.frm.RFC.$invalid = true;
                 $scope.frm.RFC.$pristine = false;
                 $scope.valido = false;
-                $scope.mensajerfc = 'El RFC es Incorrecto'
+                $scope.mensajerfc = 'El RFC es Incorrecto';
               } else {
                 $scope.valido = true;
                 $scope.frm.RFC.$invalid = false;
@@ -123,8 +125,8 @@
             $scope.mensajerfc = 'Este RFC ya está registrado como distribuidor.';
           }
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
@@ -132,8 +134,8 @@
       $scope.Empresa.DominioMicrosoft = $scope.Empresa.DominioMicrosoft.trim();
       if ($scope.Empresa.DominioMicrosoft) {
         EmpresasFactory.revisarDominio($scope.Empresa.DominioMicrosoft)
-          .success(function (result) {
-            if (result === false) {
+          .then(result => {
+            if (result.data === false) {
               $scope.frm.DominioMicrosoft.$pristine = false;
               $scope.frm.DominioMicrosoft.$invalid = true;
               $scope.Empresa.MensajeDominio = 'Ya existe el dominio, Intenta con uno diferente.';
@@ -143,8 +145,8 @@
               $scope.aceptarButton = true;
             }
           })
-          .error(function (info) {
-            $scope.ShowToast(info.message, 'danger');
+          .catch(error => {
+            $scope.ShowToast(error.message, 'danger');
             $scope.aceptarButton = false;
           });
       }
@@ -152,8 +154,8 @@
 
     $scope.ComboRFC = function () {
       EmpresasFactory.checkRFC({ RFC: $scope.Empresa.RFC })
-        .success(function (result) {
-          if (result[0].Success === 1) {
+        .then(result => {
+          if (result.data[0].Success === 1) {
             if ($scope.Empresa.TipoRFC == undefined) {
               $scope.frm.RFC.$invalid = true;
               $scope.frm.RFC.$pristine = false;
@@ -164,7 +166,7 @@
               $scope.frm.RFC.$invalid = false;
               if ($scope.Empresa.RFC != undefined) {
                 for (var i = 0; i < $scope.Empresa.RFC.length; i++) {
-                  if ($scope.Empresa.RFC[i] == "-" || $scope.Empresa.RFC[i] == ' ' || $scope.Empresa.RFC[i] == '/' || $scope.Empresa.RFC[i] == '.' || $scope.Empresa.RFC[i] == ',') {
+                  if ($scope.Empresa.RFC[i] == '-' || $scope.Empresa.RFC[i] == ' ' || $scope.Empresa.RFC[i] == '/' || $scope.Empresa.RFC[i] == '.' || $scope.Empresa.RFC[i] == ',') {
                     $scope.frm.RFC.$invalid = true;
                     $scope.frm.RFC.$pristine = false;
                     $scope.valido = false;
@@ -221,15 +223,15 @@
             $scope.mensajerfc = 'Este RFC ya está registrado como distribuidor.';
           }
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
     $scope.EmpresaCreate = function () {
       UsuariosFactory.getCorreo($scope.Empresa)
-        .success(function (result) {
-          if (result[0].Success == 0) {
+        .then(result => {
+          if (result.data[0].Success == 0) {
             $scope.AlertaDominio = 'El Correo ya está registrado, intenta con un correo diferente.';
           } else {
             if ($scope.frm.NombreEmpresa.$invalid == true) {
@@ -266,23 +268,23 @@
             if ($scope.frm.Telefono.$invalid == true) {
               $scope.frm.Telefono.$pristine = false;
             }
-            if (!$scope.Empresa.DominioMicrosoft || $scope.Empresa.DominioMicrosoft === ''){
+            if (!$scope.Empresa.DominioMicrosoft || $scope.Empresa.DominioMicrosoft === '') {
               delete $scope.Empresa.DominioMicrosoft;
             }
-            console.log($scope.Empresa)
+            console.log($scope.Empresa);
             $scope.loading = true;
             $scope.Empresa.Formulario = true;
             EmpresasFactory.postEmpresa($scope.Empresa)
-                .success(function (result) {
+                .then(result => {
                   var re, me, dat;
-                  if (result[0]) {
-                    re = result[0].Success;
-                    me = result[0].Message;
-                    dat = result[0].Dato;
+                  if (result.data[0]) {
+                    re = result.data[0].Success;
+                    me = result.data[0].Message;
+                    dat = result.data[0].Dato;
                   } else {
-                    re = result.success;
-                    me = result.message;
-                    dat = result.dato;
+                    re = result.data.success;
+                    me = result.data.message;
+                    dat = result.data.dato;
                   }
                   if (re) {
                     $scope.loading = false;
@@ -298,12 +300,13 @@
                     }
                   }
                 })
-                .error(function (error) {
+                .catch(error => {
                   $scope.ShowToast(error.message, 'danger');
                 });
           }
         })
-        .error(function (data, status, headers, config) {
+        .catch(error => {
+          $log.log(error);
         });
     };
 

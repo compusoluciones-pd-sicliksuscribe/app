@@ -1,3 +1,4 @@
+/* eslint-disable handle-callback-err */
 (function () {
   var ConfiguracionUpdateController = function ($scope, $log, $location, $cookies, $routeParams, EmpresasFactory, FileUploader, AccesosAmazonFactory) {
     $scope.init = function () {
@@ -5,17 +6,17 @@
       var cookie = $cookies.getObject('Session');
       $scope.IdEmpresa = cookie.IdEmpresa;
       EmpresasFactory.getMiSitio()
-        .success(function (miClickSuscribe) {
-          if (miClickSuscribe.success) {
-            $scope.miSitio = miClickSuscribe.data[0];
+        .then(miClickSuscribe => {
+          if (miClickSuscribe.data.success) {
+            $scope.miSitio = miClickSuscribe.data.data[0];
           } else {
-            $scope.ShowToast(miClickSuscribe.message, 'danger');
+            $scope.ShowToast(miClickSuscribe.data.message, 'danger');
           }
         })
-        .error(function (data, status, headers, config) {
+        .catch(error => {
           $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
           $scope.ShowToast('No pudimos cargar la información de tu sitio, por favor intenta de nuevo más tarde.', 'danger');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
@@ -24,21 +25,21 @@
     /** Actualiza los datos de la empresa para su sitio **/
     function putMiSitio () {
       EmpresasFactory.putMiSitio($scope.miSitio)
-        .success(function (actualizacion) {
-          if (actualizacion.success) {
-            $scope.ShowToast(actualizacion.message, 'success');
+        .then(actualizacion => {
+          if (actualizacion.data.success) {
+            $scope.ShowToast(actualizacion.data.message, 'success');
           } else {
-            if (actualizacion.sqlMessage) {
+            if (actualizacion.data.sqlMessage) {
               $scope.ShowToast('Error de base de datos, contactar a soporte.', 'danger');
             } else {
-              $scope.ShowToast(actualizacion.message, 'danger');
+              $scope.ShowToast(actualizacion.data.message, 'danger');
             }
           }
         })
-        .error(function (data, status, headers, config) {
+        .catch(error => {
           $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
           $scope.ShowToast('No pudimos cargar la lista de productos, por favor intenta de nuevo más tarde.', 'danger');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     }
 
@@ -160,14 +161,14 @@
     /** Una vez que se termino de anexar va y busca las credenciales de Amazon y lasa pasa a la función subirImagen junto con el archivo para comenzar la subida **/
     uploader.onCompleteItem = function (fileItem, response, status, headers) {
       AccesosAmazonFactory.getAccesosAmazon()
-        .success(function (result) {
-          if (result[0].Success === true) {
+        .then(result => {
+          if (result.data[0].Success === true) {
             subirImagen(fileItem, result);
           } else {
-            $scope.ShowToast(result[0].Message, 'danger');
+            $scope.ShowToast(result.data[0].Message, 'danger');
           }
         })
-        .error(function (data, status, headers, config) {
+        .catch(error => {
           $scope.ShowToast('Error al obtener la conexión', 'danger');
         });
     };
@@ -175,14 +176,14 @@
       /** Una vez que se termino de anexar va y busca las credenciales de Amazon y lasa pasa a la función subirImagen junto con el archivo para comenzar la subida **/
     uploaderIcon.onCompleteItem = function (fileItem, response, status, headers) {
       AccesosAmazonFactory.getAccesosAmazon()
-        .success(function (result) {
-          if (result[0].Success === true) {
-            subirImagenIcon(fileItem, result);
+        .then(result => {
+          if (result.data[0].Success === true) {
+            subirImagenIcon(fileItem, result.data);
           } else {
-            $scope.ShowToast(result[0].Message, 'danger');
+            $scope.ShowToast(result.data[0].Message, 'danger');
           }
         })
-        .error(function (data, status, headers, config) {
+        .catch(error => {
           $scope.ShowToast('Error al obtener la conexión', 'danger');
         });
     };
@@ -190,14 +191,14 @@
      /** Una vez que se termino de anexar va y busca las credenciales de Amazon y lasa pasa a la función subirImagen junto con el archivo para comenzar la subida **/
     uploadPDF.onCompleteItem = function (fileItem, response, status, headers) {
       AccesosAmazonFactory.getAccesosAmazon()
-        .success(function (result) {
-          if (result[0].Success === true) {
-            subirPDF(fileItem, result);
+        .then(result => {
+          if (result.data[0].Success === true) {
+            subirPDF(fileItem, result.data);
           } else {
-            $scope.ShowToast(result[0].Message, 'danger');
+            $scope.ShowToast(result.data[0].Message, 'danger');
           }
         })
-        .error(function (data, status, headers, config) {
+        .catch(error => {
           $scope.ShowToast('Error al obtener la conexión', 'danger');
         });
     };

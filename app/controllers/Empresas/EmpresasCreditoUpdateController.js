@@ -2,6 +2,7 @@
   var EmpresasCreditoUpdateController = function ($scope, $log, $location, $cookies, $routeParams, EmpresasFactory) {
     var IdEmpresa = $routeParams.IdEmpresa;
 
+    // eslint-disable-next-line no-unused-vars
     var Session = {};
 
     Session = $cookies.getObject('Session');
@@ -12,11 +13,11 @@
       $scope.CheckCookie();
 
       EmpresasFactory.getEmpresa(IdEmpresa)
-        .success(function (Empresa) {
-          $scope.Empresa = Empresa[0];
+        .then(Empresa => {
+          $scope.Empresa = Empresa.data[0];
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
@@ -31,21 +32,21 @@
         };
 
       EmpresasFactory.putEmpresa(Empresa)
-        .success(function (result) {
-          if (result.success === 1) {
-            $scope.ShowToast(result.message, 'success');
-            $location.path("/Empresas");
+        .then(result => {
+          if (result.data.success === 1) {
+            $scope.ShowToast(result.data.message, 'success');
+            $location.path('/Empresas');
           } else {
-            $scope.ShowToast(result.message, 'danger');
+            $scope.ShowToast(result.data.message, 'danger');
           }
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
     $scope.EmpresaCancel = function () {
-      $location.path("/Empresas");
+      $location.path('/Empresas');
     };
   };
 

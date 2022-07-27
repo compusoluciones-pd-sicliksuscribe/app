@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 (function () {
   var EmpresasCompletarController = function ($scope, $log, $location, $cookies, $routeParams, EmpresasFactory, EmpresasXEmpresasFactory, EstadosFactory, UsuariosFactory, UsuariosXEmpresasFactory) {
     var IdEmpresaDistribuidor = $routeParams.IdEmpresa;
@@ -19,59 +20,59 @@
       $scope.esNavegadorSoportado();
       $scope.CheckCookie();
       EmpresasFactory.getEmpresa(IdEmpresaDistribuidor)
-        .success(function (Empresa) {
-          $scope.EmpresaD = Empresa[0];
+        .then(Empresa => {
+          $scope.EmpresaD = Empresa.data[0];
           $scope.Combo.TipoRFC = [{
             Nombre: 'Persona Física'
           }, {
             Nombre: 'Persona Moral'
           }];
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
 
       EmpresasFactory.getCliente(IdMicrosoft)
-        .success(function (Empresa) {
-          if (!$scope.direccionValida(Empresa.defaultAddress)) {
+        .then(Empresa => {
+          if (!$scope.direccionValida(Empresa.data.defaultAddress)) {
             $scope.ShowToast('El cliente no cuenta con toda la información para ser importado, actualiza sus datos entrando a partner center ', 'danger');
             return;
           }
           $scope.direccionValidada = true;
-          DatosMicrosoft = Empresa;
-          if (!Empresa.email) {
+          DatosMicrosoft = Empresa.data;
+          if (!Empresa.data.email) {
             $scope.MostrarCorreo = true;
           } else {
             $scope.MostrarCorreo = false;
-            $scope.Empresa.CorreoContacto = Empresa.email;
-            $scope.validiaMail(Empresa.email);
+            $scope.Empresa.CorreoContacto = Empresa.data.email;
+            $scope.validiaMail(Empresa.data.email);
           }
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
 
-        EmpresasFactory.getIndustrias()
-      .success(function (result) {
-        $scope.selectIndustrias = result.data;
+      EmpresasFactory.getIndustrias()
+      .then(result => {
+        $scope.selectIndustrias = result.data.data;
       })
-      .error(function (data, status, headers, config) {
-        $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+      .catch(error => {
+        $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
       });
     };
 
     $scope.init();
 
     $scope.direccionValida = function (direccion) {
-      if (direccion.addressLine1 && direccion.city && direccion.country && direccion.phoneNumber
-        && direccion.postalCode && direccion.state) return true;
+      if (direccion.addressLine1 && direccion.city && direccion.country && direccion.phoneNumber &&
+        direccion.postalCode && direccion.state) return true;
       return false;
     };
 
     $scope.validiaMail = function (email, callMeMaybe) {
       EmpresasFactory.validaMail(email)
-        .success(function (mail) {
-          if (mail.data[0].Existe === 1) {
+        .then(mail => {
+          if (mail.data.data[0].Existe === 1) {
             $scope.MostrarCorreo = true;
             $scope.CorreoRepetido = true;
           } else {
@@ -82,8 +83,8 @@
             callMeMaybe();
           }
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
@@ -95,10 +96,12 @@
       if ($scope.Empresa.MonedaPago !== 'Pesos' && $scope.Empresa.MonedaPago !== 'Dólares') {
         return $scope.ShowToast('Selecciona una moneda de pago.', 'danger');
       }
+      // eslint-disable-next-line eqeqeq
       if ($scope.Empresa.IdFormaPagoPredilecta != 1 && $scope.Empresa.IdFormaPagoPredilecta != 2) {
         return $scope.ShowToast('Selecciona una forma de pago.', 'danger');
       }
-      if ($scope.Empresa.MonedaPago === 'Dólares' && $scope.Empresa.IdFormaPagoPredilecta == 1){
+      // eslint-disable-next-line eqeqeq
+      if ($scope.Empresa.MonedaPago === 'Dólares' && $scope.Empresa.IdFormaPagoPredilecta == 1) {
         return $scope.ShowToast('Para pagar con tarjeta es necesario que la moneda sea Pesos.', 'danger');
       }
 
@@ -106,16 +109,16 @@
         RFC: $scope.Empresa.RFC
       };
       EmpresasFactory.revisarRFC(ObjRFC)
-        .success(function (result) {
-          if (result[0].Success === 1) {
+        .then(result => {
+          if (result.data[0].Success === 1) {
             $scope.frm.RFC.$invalid = true;
             $scope.frm.RFC.$pristine = false;
-            $scope.mensajerfc = result[0].Message;
+            $scope.mensajerfc = result.data[0].Message;
 
             EmpresasFactory.checkRFCImport($scope.Empresa.RFC)
-            .success(function (result) {
-              const empresaxempresa = result.datosUf.empresaXEmpresa[0];
-              const empresaexist = result.datosUf.validateExist[0];
+            .then(result => {
+              const empresaxempresa = result.data.datosUf.empresaXEmpresa[0];
+              const empresaexist = result.data.datosUf.validateExist[0];
               if (IdEmpresaDistribuidor == empresaxempresa.IdEmpresaDistribuidor) {
                 $scope.abrirModal('avisoModal');
               } else if (empresaexist.idEmpresa) {
@@ -126,15 +129,15 @@
             $scope.importar();
           }
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
     $scope.importar = function () {
       UsuariosXEmpresasFactory.getUsuariosXEmpresa(IdEmpresaDistribuidor)
-      .success(function (UsuariosXEmpresas) {
-        if (UsuariosXEmpresas.length === 0) {
+      .then(UsuariosXEmpresas => {
+        if (UsuariosXEmpresas.data.length === 0) {
           $scope.ShowToast('Agrega un administrador, para el distribuidor.', 'danger');
         } else {
           var ObjMicrosoft = {
@@ -154,24 +157,24 @@
             DominioMicrosoftUF: Dominio,
             IdIndustria: $scope.Empresa.IdIndustria,
             IdEmpresaDistribuidor: IdEmpresaDistribuidor,
-            IdUsuario: UsuariosXEmpresas[0].IdUsuario,
+            IdUsuario: UsuariosXEmpresas.data[0].IdUsuario,
             MonedaPago: $scope.Empresa.MonedaPago,
             IdFormaPagoPredilecta: $scope.Empresa.IdFormaPagoPredilecta,
             ImportarOrdenes: $scope.Empresa.importarOrdenes
           };
           EmpresasFactory.postEmpresaMicrosoft(ObjMicrosoft)
-            .success(function () {
+            .then(() => {
               $location.path('/Empresas');
               $scope.ShowToast('Se está importando la empresa, por favor espere ', 'success');
             })
-            .error(function (data, status, headers, config) {
-              $scope.ShowToast(data.message, 'danger');
-              $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+            .catch(error => {
+              $scope.ShowToast(error.message, 'danger');
+              $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
             });
         }
       })
-      .error(function (data, status, headers, config) {
-        $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+      .catch(error => {
+        $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
       });
     };
 
@@ -185,8 +188,8 @@
 
     $scope.ValidarRFC = function () {
       EmpresasFactory.checkRFC({ RFC: $scope.Empresa.RFC })
-        .success(function (result) {
-          if (result[0].Success === 1) {
+        .then(result => {
+          if (result.data[0].Success === 1) {
             for (var i = 0; i < $scope.Empresa.RFC.length; i++) {
               if ($scope.Empresa.RFC[i] == '-' || $scope.Empresa.RFC[i] == ' ' || $scope.Empresa.RFC[i] == '/' || $scope.Empresa.RFC[i] == '.' || $scope.Empresa.RFC[i] == ',') {
                 $scope.frm.RFC.$invalid = true;
@@ -241,7 +244,6 @@
                       }
                     }
                   }
-
                 }
               }
             }
@@ -251,8 +253,8 @@
             $scope.mensajerfc = 'Este RFC ya está registrado como distribuidor.';
           }
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
     $scope.abrirModal = function (modal) {
@@ -263,8 +265,8 @@
     };
     $scope.ComboRFC = function () {
       EmpresasFactory.checkRFC({ RFC: $scope.Empresa.RFC })
-        .success(function (result) {
-          if (result[0].Success === 1) {
+        .then(result => {
+          if (result.data[0].Success === 1) {
             if ($scope.Empresa.TipoRFC == undefined) {
               $scope.frm.RFC.$invalid = true;
               $scope.frm.RFC.$pristine = false;
@@ -332,8 +334,8 @@
             $scope.mensajerfc = 'Este RFC ya está registrado como distribuidor.';
           }
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
   };

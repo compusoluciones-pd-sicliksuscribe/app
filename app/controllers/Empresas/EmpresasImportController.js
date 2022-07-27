@@ -1,6 +1,5 @@
 (function () {
   var EmpresasImportController = function ($scope, $log, $location, $cookies, $routeParams, EmpresasFactory, EmpresasXEmpresasFactory, EstadosFactory, UsuariosFactory) {
-
     var IdEmpresa = $routeParams.IdEmpresa;
     $scope.IdEmpresaDistribuidor = IdEmpresa;
     $scope.EmpresasM = {};
@@ -11,30 +10,29 @@
       $scope.CheckCookie();
 
       EmpresasFactory.getEmpresa(IdEmpresa)
-        .success(function (Empresa) {
-          $scope.Empresa = Empresa[0];
+        .then(Empresa => {
+          $scope.Empresa = Empresa.data[0];
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
 
       EmpresasFactory.getEmpresasMicrosoft()
-        .success(function (Empresas) {
-          $scope.EmpresasM = Empresas.items;
+        .then(Empresas => {
+          $scope.EmpresasM = Empresas.data.items;
           $scope.Combo.TipoRFC = [{ Nombre: 'Persona Física' }, { Nombre: 'Persona Moral' }];
           $scope.listaAux = $scope.EmpresasM;
           pagination();
-
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
     $scope.filter = () => {
-      $scope.listaAux = $scope.EmpresasM.filter(function (str) { return str.companyProfile.companyName.indexOf($scope.EmpresaFilter) !== -1; })
+      $scope.listaAux = $scope.EmpresasM.filter(str => { return str.companyProfile.companyName.indexOf($scope.EmpresaFilter) !== -1; });
       pagination();
-    }
+    };
 
     const pagination = () => {
       $scope.filtered = [];
@@ -43,6 +41,7 @@
       $scope.maxSize = 5;
 
       $scope.$watch('currentPage + numPerPage', function () {
+        // eslint-disable-next-line one-var
         let begin = (($scope.currentPage - 1) * $scope.numPerPage),
           end = begin + $scope.numPerPage;
         $scope.filtered = $scope.listaAux.slice(begin, end);
@@ -52,11 +51,11 @@
     $scope.init();
 
     $scope.Regresar = function () {
-      $location.path("/Empresas");
+      $location.path('/Empresas');
     };
 
     $scope.ImportarEmpresa = function (IdEmpresaDistribuidor, IdMicrosoft, Dominio, Name) {
-      $location.path("/Empresas/Importar/" + IdEmpresaDistribuidor + "/" + IdMicrosoft + "/" + Dominio + "/" + Name);
+      $location.path(`/Empresas/Importar/${IdEmpresaDistribuidor}/${IdMicrosoft}/${Dominio}/${Name}`);
     };
   };
 

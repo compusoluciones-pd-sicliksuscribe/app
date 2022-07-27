@@ -62,14 +62,16 @@
           DescuentoPromo: Number(empresa.DescuentoPromo)
         };
         EmpresasXEmpresasFactory.updateDiscountAzure(bodyData)
-              .then(function (response) {
+              .then(response => {
                 if (response.data.success) {
                   $scope.ShowToast('Porcentaje actualizado', 'success');
                 } else {
                   error(response.data);
                 }
               })
-              .catch(function (result) { error(result.data); });
+              .catch(error => {
+                error(error.data);
+              });
       } else {
         $scope.ShowToast('La cantidad no debe ser mayor a 6', 'danger');
       }
@@ -81,7 +83,7 @@
         DescuentoPromo: 0
       };
       EmpresasXEmpresasFactory.updateDiscountAzure(bodyData)
-          .then(function (response) {
+          .then(response => {
             if (response.data.success) {
               $scope.ShowToast('Se actulizó el porcentaje', 'success');
               empresa.DescuentoPromo = 0;
@@ -89,7 +91,9 @@
               error(response.data);
             }
           })
-          .catch(function (result) { error(result.data); });
+          .catch(error => {
+            error(error.data);
+          });
     };
   };
 

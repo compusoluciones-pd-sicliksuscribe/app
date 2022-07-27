@@ -18,8 +18,8 @@
       $scope.CheckCookie();
 
       EmpresasFactory.getClientes()
-      .success(function (Empresa) {
-        const consultaEmpresa = Empresa.data.filter(function (getEnterprise) {
+      .then(Empresa => {
+        const consultaEmpresa = Empresa.data.data.filter(function (getEnterprise) {
           if (getEnterprise.IdEmpresa === Number(IdEmpresa)) {
             $scope.Empresa = getEnterprise;
             return getEnterprise;
@@ -31,10 +31,10 @@
           $scope.domainCancel();
         }
       })
-      .error(function (data, status, headers, config) {
+      .catch(error => {
         $scope.ShowToast('No pudimos cargar la información de tus clientes, por favor intenta de nuevo más tarde.', 'danger');
 
-        $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
       });
     };
 
@@ -44,7 +44,7 @@
       $scope.Empresa.DominioMicrosoft = $scope.Empresa.DominioMicrosoft.trim();
       if ($scope.Empresa.DominioMicrosoft) {
         EmpresasFactory.revisarDominio($scope.Empresa.DominioMicrosoft)
-            .success(function (result) {
+            .then(result => {
               if (result === 'false') {
                 $scope.frm.DominioMicrosoft.$pristine = false;
                 $scope.frm.DominioMicrosoft.$invalid = true;
@@ -53,8 +53,8 @@
                 $scope.frm.DominioMicrosoft.$pristine = true;
               }
             })
-            .error(function (data, status, headers, config) {
-              $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+            .catch(error => {
+              $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
             });
       } else {
         $scope.frm.DominioMicrosoft.$pristine = false;
@@ -72,14 +72,14 @@
         $scope.Empresa.MensajeDominio = 'Ingresa un Dominio Válido.';
       } else {
         EmpresasFactory.changeDomain($scope.Empresa.IdEmpresa, enterprise)
-        .success(function (result) {
+        .then(result => {
           $cookies.putObject('Session', Session, { secure: $rootScope.secureCookie });
           $scope.ActualizarDatosSession();
           $location.path('/index');
           $scope.ShowToast('Empresa Actualizada', 'success');
         })
-        .error(function (data, status, headers, config) {
-          $scope.ShowToast(data.message, 'danger');
+        .catch(error => {
+          $scope.ShowToast(error.message, 'danger');
         });
       }
     };

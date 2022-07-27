@@ -1,5 +1,4 @@
 (function () {
-
   var EmpresasRPController = function ($scope, $log, $cookies, $location, $uibModal, $filter, EmpresasXEmpresasFactory, NivelesDistribuidorFactory, $routeParams) {
     $scope.MostrarMensajeError = false;
     $scope.Empresas = [];
@@ -28,7 +27,7 @@
 
     var obtenerEmpresas = function () {
       EmpresasXEmpresasFactory.getExchangeRateByIdEmpresa($routeParams.IdEmpresa)
-        .then(function (respuesta) {
+        .then(respuesta => {
           var data = respuesta.data;
           var respuestaExitosa = data.success === 1;
           var empresas = data.data;
@@ -42,12 +41,12 @@
             $scope.Empresas = empresasConFormato;
           }
         })
-        .catch(function (result) { error(result.data); });
+        .catch(result => { error(result.data); });
     };
 
     var obtenerNiveles = function () {
       NivelesDistribuidorFactory.getNivelesDistribuidor()
-        .then(function (result) {
+        .then(result => {
           var response = result.data;
           if (!response.success) {
             error(result.data);
@@ -55,7 +54,7 @@
             $scope.Niveles = response.data;
           }
         })
-        .catch(function (result) { error(result.data); });
+        .catch(result => { error(result.data); });
     };
 
     $scope.init = function () {
@@ -72,7 +71,7 @@
       var IdEmpresasXEmpresa = Empresa.IdEmpresasXEmpresa;
       var nivel = { IdEmpresasXEmpresa: IdEmpresasXEmpresa, IdNivelCS: IdNivelCS };
       NivelesDistribuidorFactory.asignarNivel(nivel)
-        .then(function (result) {
+        .then(result => {
           var response = result.data;
           if (!response.success) {
             error(result.data);
@@ -81,12 +80,12 @@
             $scope.ShowToast('Nivel asignado.', 'success');
           }
         })
-        .catch(function (result) { error(result.data); });
+        .catch(result => { error(result.data); });
     };
 
     $scope.removerNivel = function (id) {
       NivelesDistribuidorFactory.removerNivel(id)
-        .then(function (result) {
+        .then(result => {
           var response = result.data;
           if (!response.success) {
             error(result.data);
@@ -95,13 +94,13 @@
             $scope.ShowToast('Nivel removido.', 'success');
           }
         })
-        .catch(function (result) { error(result.data); });
+        .catch(result => { error(result.data); });
     };
 
     var tipoDeCambioValido = function (tipoDeCambio) {
       return tipoDeCambio > 0;
     };
-    //no se va a utilizar
+    // no se va a utilizar
     // var actualizaTipoDeCambioATodasLasEmpresas = function () {
     //   $scope.Empresas = $scope.Empresas.map(function (Empresa) {
     //     Empresa.TipoCambioRP = $scope.RPTodos;
@@ -123,7 +122,7 @@
       };
     };
 
-    //no se va a utilizar
+    // no se va a utilizar
     // $scope.ActualizarTodos = function () {
     //   if (tipoDeCambioValido($scope.RPTodos)) {
     //     actualizaTipoDeCambioATodasLasEmpresas();
@@ -150,7 +149,7 @@
         if (tipoDeCambioValido(Empresa.TipoCambioRP)) {
           var datosDePeticion = prepararDatosDePeticion(Empresa);
           EmpresasXEmpresasFactory.postExchangeRate(datosDePeticion)
-            .then(function (respuesta) {
+            .then(respuesta => {
               var data = respuesta.data;
               var respuestaExitosa = data.success === 1;
               if (respuestaExitosa) {
@@ -159,7 +158,7 @@
                 $scope.ShowToast('Error al actualizar el tipo de cambio.', 'danger');
               }
             })
-            .catch(function (result) { error(result.data); });
+            .catch(result => { error(result.data); });
           Empresa.MostrarMensajeError = false;
         }
       } else {
