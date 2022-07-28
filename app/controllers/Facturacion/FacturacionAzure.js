@@ -4,6 +4,7 @@
     $scope.pendienteDeActualizar = false;
 
     const obtenerOrdenes = async () => {
+
       FacturacionAzure.ordersBillAzure()
         .then(result => {
           if (result.data.consumption.length) {

@@ -33,9 +33,9 @@
     $scope.regimen = [];
     function init () {
       EmpresasFactory.getEmpresa($scope.SessionCookie.IdEmpresa)
-        .success(function (resultado) {
-          var empresa = resultado[0];
-          if (resultado[0].IdEmpresa) {
+        .then(resultado => {
+          var empresa = resultado.data[0];
+          if (resultado.data[0].IdEmpresa) {
             $scope.InfoFactura.rfc = empresa.RFC;
             $scope.InfoFactura.nombre = empresa.NombreEmpresa;
             $scope.InfoFactura.IdEmpresa = empresa.IdEmpresa;
@@ -58,17 +58,17 @@
               $scope.regimen = $scope.regimenMoral;
             }
           } else {
-            if (resultado.message) {
-              $scope.Mensaje = resultado.message;
-              $scope.ShowToast(resultado.message, 'danger');
+            if (resultado.data.message) {
+              $scope.Mensaje = resultado.data.message;
+              $scope.ShowToast(resultado.data.message, 'danger');
             } else {
               $scope.Mensaje = 'Error de conexion con los servidores de datos, intenta refrescar la pagina o esperar unos minutos';
               $scope.ShowToast('Error de conexion con los servidores de datos, intenta refrescar la pagina o esperar unos minutos', 'danger');
             }
           }
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
@@ -97,22 +97,22 @@
         formData.append('email', InfoFactura.email);
         setTimeout(isItReadyYet, 100);
         FacturacionFactory.postDarDeAlta(formData)
-          .success(function (resultado) {
-            if (resultado.success === 1) {
+          .then(resultado => {
+            if (resultado.data.success === 1) {
               $scope.ShowToast('Datos confirmados.', 'success');
               $location.path('/facturas-pendientes/');
             } else {
-              if (resultado.message) {
-                $scope.Mensaje = resultado.message;
-                $scope.ShowToast(resultado.message, 'danger');
+              if (resultado.data.message) {
+                $scope.Mensaje = resultado.data.message;
+                $scope.ShowToast(resultado.data.message, 'danger');
               } else {
                 $scope.Mensaje = 'No pudimos enviar tu solicitud, por favor verifica tus datos o intenta de nuevo más tarde.';
                 $scope.ShowToast('No pudimos enviar tu solicitud, por favor verifica tus datos o intenta de nuevo más tarde.', 'danger');
               }
             }
           })
-          .error(function (data, status, headers, config) {
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          .catch(error => {
+            $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
           });
       }
     };

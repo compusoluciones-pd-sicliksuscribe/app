@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 (function () {
   var FacturacionReadController = function ($scope, $log, $cookies, $location, $uibModal, $filter, FacturacionFactory, EmpresasFactory, $routeParams) {
     var FilteredOrders = [];
@@ -50,9 +51,9 @@
     $scope.DeshabilitarFacturar = false;
     $scope.init = function () {
       FacturacionFactory.selectBills()
-        .success(function (data) {
-          var sanitizedData = data.data.map(function (factura) {
-            factura.Total = factura.Detalles.reduce(function (total, detalle) {
+        .then(data => {
+          var sanitizedData = data.data.data.map((factura) => {
+            factura.Total = factura.Detalles.reduce((total, detalle) => {
               var totalDetalle = (detalle.Cantidad * detalle.PrecioUnitario) * 1.16;
               return total + totalDetalle;
             }, 0);
@@ -62,24 +63,24 @@
           FilteredOrders = sanitizedData;
           $scope.search();
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
       FacturacionFactory.billStatus()
-        .success(function (data) {
-          $scope.Estatus = data.data;
+        .then(data => {
+          $scope.Estatus = data.data.data;
           $scope.EstatusSelect.IdEstatusFactura = 1;
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
 
       FacturacionFactory.datesBills()
-        .success(function (data) {
-          $scope.Years = data.data;
+        .then(data => {
+          $scope.Years = data.data.data;
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
 
       $scope.MesActual = {};
@@ -98,8 +99,6 @@
           { id: '11', mes: 'Noviembre' },
           { id: '12', mes: 'Diciembre' }
       ];
-
-     
 
       let hoy = new Date();
       let month = hoy.getMonth() + 1;
@@ -149,17 +148,17 @@
     $scope.timbrarFactura = function () {
       $scope.pedidosSeleccionados.forEach(function (id) {
         FacturacionFactory.ringById(id)
-          .success(function (result) {
-            if (result.success === 1) {
+          .then(result => {
+            if (result.data.success === 1) {
               $scope.ShowToast('Factura timbrada.', 'success');
             } else {
-              $scope.ShowToast(result.message, 'danger');
+              $scope.ShowToast(result.data.message, 'danger');
             }
             $scope.pedidosSeleccionados = [];
             $scope.init();
           })
-          .error(function (data, status, headers, config) {
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          .catch(error => {
+            $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
           });
       });
     };
@@ -167,11 +166,11 @@
     function validarRegistroFacturacion () {
       var IdUsuario = $scope.SessionCookie.IdEmpresa;
       EmpresasFactory.getEmpresa(IdUsuario)
-        .success(function (resultado) {
-          var altaFacturacion = resultado[0].AltaFacturacion;
+        .then(resultado => {
+          var altaFacturacion = resultado.data[0].AltaFacturacion;
           if (altaFacturacion === 0) {
             $location.path('/actualizar-datos-facturacion');
-          }   
+          }
         });
     }
 

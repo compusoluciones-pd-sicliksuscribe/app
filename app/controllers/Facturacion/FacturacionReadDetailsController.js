@@ -51,22 +51,22 @@
       }
       var factura = { IdFactura: IdFactura, TipoCambio: $scope.tipoCambio };
       FacturacionFactory.updateExtras(factura)
-        .success(function (result) {
-          if (result.success === 1) {
+        .then(result => {
+          if (result.data.success === 1) {
             $scope.ShowToast('Tipo de cambio Actualizado.', 'success');
             tipoDeCambioUpdated = true;
           }
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
     $scope.changeMonedaPago = function () {
       var factura = { IdFactura: IdFactura, MonedaPago: $scope.monedaPago, TipoCambio: $scope.tipoCambio, FormaDePago: $scope.formaDePagoActual.id };
       FacturacionFactory.updateExtras(factura)
-        .success(function (result) {
-          if (result.success === 1) {
+        .then(result => {
+          if (result.data.success === 1) {
             $scope.factura.conceptos = $scope.factura.conceptos.map(function (concepto) {
               if ($scope.monedaPago === 'Pesos') {
                 concepto.precio = (concepto.precioOrigianl * $scope.tipoCambio);
@@ -85,21 +85,21 @@
             $scope.ShowToast('Moneda de pago Actualizada.', 'success');
           }
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
     $scope.changeFormaPago = function () {
       var factura = { IdFactura: IdFactura, FormaDePago: $scope.formaDePagoActual.id };
       FacturacionFactory.updateExtras(factura)
-        .success(function (result) {
-          if (result.success === 1) {
+        .then(result => {
+          if (result.data.success === 1) {
             $scope.ShowToast('Forma de pago Actualizada.', 'success');
           }
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
@@ -130,8 +130,8 @@
     $scope.borraConcepto = function (id) {
       var IdFacturaDetalle = $scope.factura.conceptos[id].IdFacturaDetalle;
       FacturacionFactory.deleteBill(IdFacturaDetalle)
-        .success(function (result) {
-          if (result.success === 1) {
+        .then(result => {
+          if (result.data.success === 1) {
             $scope.factura.conceptos = $scope.factura.conceptos.filter(function (v, i) {
               return i !== id;
             });
@@ -140,8 +140,8 @@
             $scope.ShowToast('Problemas de conexión con el servicio, intenta más tarde. (borrarConcepto)', 'danger');
           }
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
@@ -168,8 +168,8 @@
         MonedaPrecio: 'Pesos'
       };
       FacturacionFactory.createBill(nuevoConcepto)
-        .success(function (result) {
-          if (result.success === 1) {
+        .then(result => {
+          if (result.data.success === 1) {
             $scope.concepto.precioOrigianl = $scope.concepto.precio;
             $scope.factura.conceptos.push($scope.concepto);
             $scope.concepto = {};
@@ -180,23 +180,23 @@
             $scope.ShowToast('Problemas de conexión con el servicio, intenta más tarde. (createBill)', 'danger');
           }
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
     $scope.cancelarFactura = function () {
       FacturacionFactory.cancelBill(IdFactura)
-      .success(function (resultado) {
-        if (resultado.success === 1) {
+      .then(resultado => {
+        if (resultado.data.success === 1) {
           $scope.ShowToast('Cancelado para facturar', 'success');
           $location.path('/facturas-pendientes/');
         } else {
           $scope.ShowToast('Problemas de conexión con el servicio, intenta más tarde. (cancelBill)', 'danger');
         }
       })
-      .error(function (data, status, headers, config) {
-        $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+      .catch(error => {
+        $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
       });
     };
 
@@ -204,16 +204,16 @@
       var obj = { IdFactura: IdFactura, IdEstatusFactura: '1' };
       var conceptoActivado = Object.assign({}, obj);
       FacturacionFactory.activateBill(conceptoActivado)
-        .success(function (resultado) {
-          if (resultado.success === 1) {
+        .then(resultado => {
+          if (resultado.data.success === 1) {
             $scope.ShowToast('Concepto Actualizado.', 'success');
             $location.path('/facturas-pendientes/');
           } else {
             $scope.ShowToast('Problemas de conexión con el servicio, intenta más tarde. (activateBill)', 'danger');
           }
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
@@ -239,15 +239,15 @@
       delete conceptoEditado.urlPDF;
       delete conceptoEditado.FechaActivo;
       FacturacionFactory.updateBill(conceptoEditado)
-        .success(function (resultado) {
-          if (resultado.success === 1) {
+        .then(resultado => {
+          if (resultado.data.success === 1) {
             $scope.ShowToast('Concepto Actualizado.', 'success');
           } else {
             $scope.ShowToast('Problemas de conexión con el servicio, intenta más tarde. (updateBill)', 'danger');
           }
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
@@ -263,14 +263,14 @@
 
     function init () {
       FacturacionFactory.selectBillsDetails(IdFactura)
-        .success(function (result) {
-          if (result.message === 'IdFactura incorrecta') {
+        .then(result => {
+          if (result.data.message === 'IdFactura incorrecta') {
             $location.path('/facturas-pendientes');
           }
-          if (result.data.length === 0) {
+          if (result.data.data.length === 0) {
             return;
           }
-          var conceptos = result.data.map(function (concepto) {
+          var conceptos = result.data.data.map(function (concepto) {
             concepto.cantidad = concepto.Cantidad;
             concepto.precio = concepto.PrecioUnitario;
             concepto.descripcion = concepto.NombreProducto;
@@ -285,21 +285,21 @@
             delete concepto.FechaActivo;
             return concepto;
           });
-          if (result.success === 1) {
+          if (result.data.success === 1) {
             $scope.factura.conceptos = conceptos;
             $scope.calculaPrecios();
           }
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
       FacturacionFactory.getReceptor(IdFactura)
-        .success(function (result) {
-          if (result.data.length === 0) {
+        .then(result => {
+          if (result.data.data.length === 0) {
             return;
           }
-          if (result.success === 1) {
-            var data = result.data[0];
+          if (result.data.success === 1) {
+            var data = result.data.data[0];
             $scope.factura.receptor.rfc = data.RFC;
             $scope.factura.receptor.IdEstatusFactura = data.IdEstatusFactura;
             $scope.factura.receptor.nombre = data.Nombre;
@@ -312,24 +312,24 @@
             $scope.ShowToast('Problemas de conexión con el servicio, intenta más tarde. (getReceptor)', 'danger');
           }
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     }
 
     $scope.timbrarFactura = function () {
       FacturacionFactory.ringById(IdFactura)
-        .success(function (result) {
-          if (result.success === 1) {
+        .then(result => {
+          if (result.data.success === 1) {
             $scope.ShowToast('Factura timbrada.', 'success');
            // $location.path('/facturas-pendientes/');
             init();
           } else {
-            $scope.ShowToast(result.message, 'danger');
+            $scope.ShowToast(result.data.message, 'danger');
           }
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
