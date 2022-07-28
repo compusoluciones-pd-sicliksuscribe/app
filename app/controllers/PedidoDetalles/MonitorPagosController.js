@@ -524,17 +524,17 @@
       $('#responseDivMonitor').html('').addClass('ocultar').removeClass('alert alert-danger');
       tokenId = response.data.id;
       $('#tokenId').val(tokenId);
-
+      const desctriptionOrders = $cookies.getObject('pedidosAgrupados').map(function (pedido) {
+        return pedido.IdPedido;
+      });
       const charges = {
         source_id: tokenId,
         amount: $scope.amount,
         currency: $scope.currency,
-        description: $scope.pedidos,
+        description: `(${$cookies.getObject('tipoTarjetaCreditoMonitor')})Monitor: ${desctriptionOrders.toString()}`,
         device_session_id: deviceSessionId,
         pedidosAgrupados: $cookies.getObject('pedidosAgrupados')
       };
-      
-
       PedidoDetallesFactory.pagarTarjetaOpenpay(charges)
         .then(function (response) {
           if (response.data.statusCode === 200) {

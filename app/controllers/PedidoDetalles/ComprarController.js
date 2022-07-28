@@ -471,11 +471,14 @@
       $('#responseDiv').html('').addClass('ocultar').removeClass('alert alert-danger');
       tokenId = response.data.id;
       $('#token_id').val(tokenId);
+      const desctriptionOrders = $cookies.getObject('pedidosAgrupados').map(function (pedido) {
+        return pedido.IdPedido;
+      });
       const charges = {
         source_id: tokenId,
         amount: $scope.amount,
         currency: $scope.currency,
-        description: $scope.pedidos,
+        description: `(${$cookies.getObject('tipoTarjetaCredito')})Carrito: ${desctriptionOrders.toString()}`,
         device_session_id: deviceSessionId,
         pedidosAgrupados: $cookies.getObject('pedidosAgrupados')
       };
