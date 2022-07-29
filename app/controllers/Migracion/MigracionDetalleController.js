@@ -76,7 +76,7 @@
     $scope.init = function () {
       if ($scope.idMigracion !== '0') {
         MigracionFactory.getMigracion($scope.idMigracion)
-          .then(function (response) {
+          .then(response => {
             if (response.data.data.length === 0) {
               $location.path('/migraciones/0');
               $scope.ShowToast(response.data.message, 'danger');
@@ -102,7 +102,7 @@
     $scope.validarDominio = function () {
       if ($scope.datosDeMigracion.Dominio.trim() !== '') {
         MigracionFactory.getDominio($scope.datosDeMigracion)
-          .then(function (response) {
+          .then(response => {
             if (response.data.success === 0) {
               $scope.datosDeMigracion.NombreCliente = '';
               return $scope.ShowToast(response.data.message, 'danger');
@@ -160,7 +160,7 @@
       };
       objParaActualizar[$scope.nombrePorActualizar] = 1;
       MigracionFactory.patchMigracion(objParaActualizar)
-        .then(function (response) {
+        .then(response => {
           if (response.data.success) {
             return $scope.ShowToast(response.data.message, 'success');
           }
@@ -207,7 +207,7 @@
       }
       if ($scope.pasoActual === 0) {
         $scope.crearMigracion()
-          .then(function (response) {
+          .then(response => {
             if (response.data.success) {
               $location.path('/migraciones/' + response.data.data.insertId);
               return $scope.ShowToast(response.data.message, 'success');
@@ -222,13 +222,13 @@
       }
       if ($scope.pasoActual === 2) {
         $scope.importarDominio()
-          .then(function (resultado) {
+          .then(resultado => {
             if (resultado.data.success === 0) {
               return $scope.ShowToast(resultado.data.message, 'danger');
             }
             $scope.actualizarSiguientePaso();
           })
-          .catch(function (err) {
+          .catch(err => {
             if (err.success === 0) {
               return $scope.ShowToast(err.message, 'danger');
             }
@@ -236,8 +236,7 @@
       }
       if ($scope.pasoActual === 3) {
         $scope.crearAdministrador()
-          .then(function (resultado) {
-            console.log(resultado);
+          .then(resultado => {
             if (resultado.data.success === 0) {
               return $scope.ShowToast(resultado.data.message, 'danger');
             }

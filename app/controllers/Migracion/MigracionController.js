@@ -6,7 +6,7 @@
 
     $scope.init = function () {
       MigracionFactory.getMigraciones()
-        .then(function (response) {
+        .then(response => {
           $scope.migraciones = response.data.Migraciones;
         })
         .catch(console.log);
