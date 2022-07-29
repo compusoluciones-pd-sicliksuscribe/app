@@ -347,10 +347,10 @@
       if ($scope.PedidosSeleccionadosParaPagar.length !== 0 && document.getElementById('Prepago').checked) {
         PedidoDetallesFactory.monitorCalculationsPrepaid({Pedidos: $scope.PedidosSeleccionadosParaPagar, tipoTarjeta: false}, $scope.Distribuidor.MonedaPago)
           .success(function (calculations) {
-            if (calculations.total) {
-              $scope.Subtotal = calculations.subtotal;
-              $scope.Iva = calculations.iva;
-              $scope.Total = calculations.total;
+            if (calculations.OrderTotal) {
+              $scope.Subtotal = calculations.totalCharges[0].subtotalOrders;
+              $scope.Iva = calculations.totalCharges[0].ivaOrders;
+              $scope.Total = calculations.totalCharges[0].totalOrders;
             } else {
               $scope.Subtotal = 0;
               $scope.Iva = 0;
