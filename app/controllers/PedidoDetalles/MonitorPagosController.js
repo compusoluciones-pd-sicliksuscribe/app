@@ -347,10 +347,10 @@
       if ($scope.PedidosSeleccionadosParaPagar.length !== 0 && document.getElementById('Prepago').checked) {
         PedidoDetallesFactory.monitorCalculationsPrepaid({Pedidos: $scope.PedidosSeleccionadosParaPagar, tipoTarjeta: false}, $scope.Distribuidor.MonedaPago)
           .success(function (calculations) {
-            if (calculations.total) {
-              $scope.Subtotal = calculations.subtotal;
-              $scope.Iva = calculations.iva;
-              $scope.Total = calculations.total;
+            if (calculations.OrderTotal) {
+              $scope.Subtotal = calculations.totalCharges[0].subtotalOrders;
+              $scope.Iva = calculations.totalCharges[0].ivaOrders;
+              $scope.Total = calculations.totalCharges[0].totalOrders;
             } else {
               $scope.Subtotal = 0;
               $scope.Iva = 0;
@@ -524,17 +524,17 @@
       $('#responseDivMonitor').html('').addClass('ocultar').removeClass('alert alert-danger');
       tokenId = response.data.id;
       $('#tokenId').val(tokenId);
-
+      const desctriptionOrders = $cookies.getObject('pedidosAgrupados').map(function (pedido) {
+        return pedido.IdPedido;
+      });
       const charges = {
         source_id: tokenId,
         amount: $scope.amount,
         currency: $scope.currency,
-        description: $scope.pedidos,
+        description: `(${$cookies.getObject('tipoTarjetaCreditoMonitor')})Monitor: ${desctriptionOrders.toString()}`,
         device_session_id: deviceSessionId,
         pedidosAgrupados: $cookies.getObject('pedidosAgrupados')
       };
-      
-
       PedidoDetallesFactory.pagarTarjetaOpenpay(charges)
         .then(function (response) {
           if (response.data.statusCode === 200) {
