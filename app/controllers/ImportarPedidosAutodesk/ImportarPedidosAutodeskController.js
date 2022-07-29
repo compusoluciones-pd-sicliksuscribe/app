@@ -1,6 +1,5 @@
 (function () {
   var ImportarPedidosAutodeskController = function ($scope, $log, $location, $cookies, $routeParams, ImportarPedidosAutodeskFactory, UsuariosFactory, EstadosFactory, EmpresasFactory, $anchorScroll, lodash) {
-
     $scope.getSubscriptionData = function (resellerCsn, contractEndDate) {
       if (resellerCsn && contractEndDate) {
         return ImportarPedidosAutodeskFactory.getSubscriptionData(resellerCsn, contractEndDate)
@@ -66,21 +65,21 @@
 
     const getEstados = function () {
       EstadosFactory.getEstados()
-      .success(function (result) {
-        $scope.EstadoOptions = result;
+      .then(result => {
+        $scope.EstadoOptions = result.data;
       })
-      .error(function (data, status, headers, config) {
-        $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+      .catch(error => {
+        $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
       });
     };
 
     const getIndustrias = function () {
       EmpresasFactory.getIndustrias()
-      .success(function (result) {
-        $scope.selectIndustrias = result.data;
+      .then(result => {
+        $scope.selectIndustrias = result.data.data;
       })
-      .error(function (data, status, headers, config) {
-        $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+      .catch(error => {
+        $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
       });
     };
 
@@ -373,16 +372,16 @@
           IdTipoAcceso: ADMIN_END_USER
         };
         UsuariosFactory.postContact(infoContacto)
-          .success(function (result) {
-            if (result.data.error === 0) {
-              $scope.ShowToast(` ${result.message}.`, 'success');
+          .then(result => {
+            if (result.data.data.error === 0) {
+              $scope.ShowToast(` ${result.data.message}.`, 'success');
               limipiarModalContacto();
             } else {
-              $scope.ShowToast(`Hubo un error al tratar de registrar el contacto: ${result.data.message}.`, 'danger');
+              $scope.ShowToast(`Hubo un error al tratar de registrar el contacto: ${result.data.data.message}.`, 'danger');
             }
           })
-          .catch(result => {
-            $scope.ShowToast(`Hubo un error al tratar de registrar el contacto: ${result.data.message}.`, 'danger');
+          .catch(error => {
+            $scope.ShowToast(`Hubo un error al tratar de registrar el contacto: ${error.data.message}.`, 'danger');
           });
       } else {
         $scope.ShowToast('Asegurese de registrar distribuidor y usuario final', 'warning');
@@ -432,18 +431,18 @@
           PorcentajeSaldoFavor: '00.00'
         };
         ImportarPedidosAutodeskFactory.postEmpresa(infoEmpresa)
-          .success(function (result) {
-            if (result.data.error === 0) {
-              $scope.ShowToast(` ${result.message}.`, 'success');
+          .then(result => {
+            if (result.data.data.error === 0) {
+              $scope.ShowToast(` ${result.data.message}.`, 'success');
               limipiarModalEmpresa();
               $scope.deshabilitado = false;
             } else {
-              $scope.ShowToast(`Hubo un error al tratar de registrar la empresa: ${result.data.message}.`, 'danger');
+              $scope.ShowToast(`Hubo un error al tratar de registrar la empresa: ${result.data.data.message}.`, 'danger');
               $scope.deshabilitado = false;
             }
           })
-          .catch(result => {
-            $scope.ShowToast(`Hubo un error al tratar de registrar la empresa: ${result.data.message}.`, 'danger');
+          .catch(error => {
+            $scope.ShowToast(`Hubo un error al tratar de registrar la empresa: ${error.data.message}.`, 'danger');
             $scope.deshabilitado = false;
           });
       } else {
@@ -532,18 +531,18 @@
           $scope.deshabilitado = false;
         } else {
           ImportarPedidosAutodeskFactory.postContratoOtroMayorista(infoContrato)
-          .success(result => {
-            if (result.success === 1) {
+          .then(result => {
+            if (result.data.success === 1) {
               $scope.ShowToast('Contrato importado con éxito.', 'success');
               limipiarModalImportacion();
               $scope.deshabilitado = false;
             } else {
-              $scope.ShowToast(`${result.data.message}`, 'danger');
+              $scope.ShowToast(`${result.data.data.message}`, 'danger');
               $scope.deshabilitado = false;
             }
           })
-          .catch(result => {
-            $scope.ShowToast(`Hubo un error al tratar de importar el contrato: ${result.data.message}.`, 'danger');
+          .catch(error => {
+            $scope.ShowToast(`Hubo un error al tratar de importar el contrato: ${error.data.message}.`, 'danger');
             $scope.deshabilitado = false;
           });
         }
