@@ -1,3 +1,4 @@
+/* eslint-disable one-var */
 (function () {
   var MonitorMPNController = function ($scope, $log, $location, $cookies, $routeParams, MonitorMPNFactory, $anchorScroll, lodash) {
     const getMonitorData = function () {
@@ -7,7 +8,7 @@
           $scope.listaDistAux = result.data;
           pagination();
         })
-        .catch(function () {
+        .catch(() => {
           $scope.ShowToast('No pudimos cargar la lista de detalles, por favor intenta de nuevo más tarde.', 'danger');
         });
     };
@@ -45,8 +46,8 @@
     $scope.actializarMPN = function (IdEmpresa, mpn) {
       if (mpn) {
         return MonitorMPNFactory.getMPIDInformation(mpn)
-        .success(function (response) {
-          response.data.status === 'active' ? $scope.isMPNIDActive = true : $scope.isMPNIDActive = false;
+        .then(response => {
+          response.data.data.status === 'active' ? $scope.isMPNIDActive = true : $scope.isMPNIDActive = false;
           if ($scope.isMPNIDActive) {
             MonitorMPNFactory.updateMPNID(IdEmpresa, mpn)
               .then(MonitorMPNFactory.updateOrderDetails(IdEmpresa))
@@ -58,8 +59,8 @@
             $scope.ShowToast('El MPNID no es válido. El campo no será actualizado.', 'danger');
           }
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
       } else {
         $scope.ShowToast('Actualice el valor en la columna MPNID para hacer la actualización.', 'warning');
@@ -69,17 +70,17 @@
     $scope.verificarMPN = function (valor) {
       if (valor) {
         return MonitorMPNFactory.getMPIDInformation(valor)
-        .success(function (response) {
-          response.data.status === 'active' ? $scope.isMPNIDActive = true : $scope.isMPNIDActive = false;
+        .then(response => {
+          response.data.data.status === 'active' ? $scope.isMPNIDActive = true : $scope.isMPNIDActive = false;
           if ($scope.isMPNIDActive) {
-            $scope.partnerName = response.data.responseMS.partnerName;
+            $scope.partnerName = response.data.data.responseMS.partnerName;
             $scope.ShowToast(`El MPNID corresponde al distribuidor ${$scope.partnerName}`, 'success');
           } else {
             $scope.ShowToast('El MPNID no es válido.', 'danger');
           }
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
       } else {
         $scope.ShowToast('Actualice el valor en la columna MPNID para hacer la validación.', 'warning');

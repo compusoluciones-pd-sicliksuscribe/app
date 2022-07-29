@@ -101,7 +101,6 @@
         let begin = (($scope.currentPage - 1) * $scope.numPerPage),
           end = begin + $scope.numPerPage;
         $scope.filtered = $scope.listaAux.slice(begin, end);
-        
       });
     };
 
