@@ -9,11 +9,11 @@
 
     const getLevels = function () {
       NivelesClienteFinalFactory.getLevels()
-        .then(function (result) {
+        .then(result => {
           $scope.levels = result.data.data;
         })
-        .catch(function (result) {
-          $scope.ShowToast(!result.data ? 'Ha ocurrido un error, inténtelo más tarde.' : result.data.message, 'danger');
+        .catch(error => {
+          $scope.ShowToast(!error.data ? 'Ha ocurrido un error, inténtelo más tarde.' : error.data.message, 'danger');
         });
     };
 
@@ -31,7 +31,7 @@
 
     $scope.deleteLevel = function (level) {
       NivelesClienteFinalFactory.deleteLevel(level.IdNivelEmpresaUsuarioFinal)
-        .then(function (result) {
+        .then(result => {
           $scope.levels.forEach(function (property, index) {
             if (property.IdNivelEmpresaUsuarioFinal === level.IdNivelEmpresaUsuarioFinal) {
               $scope.levels.splice(index, 1);
@@ -39,9 +39,9 @@
           });
           return result;
         })
-        .then(function (result) { $scope.ShowToast(result.data.message, 'success'); })
-        .catch(function (result) {
-          $scope.ShowToast(!result.data ? 'Ha ocurrido un error, inténtelo más tarde.' : result.data.message, 'danger');
+        .then(result => { $scope.ShowToast(result.data.message, 'success'); })
+        .catch(error => {
+          $scope.ShowToast(!error.data ? 'Ha ocurrido un error, inténtelo más tarde.' : error.data.message, 'danger');
         });
     };
 
@@ -49,12 +49,12 @@
       const enterpriseId = $scope.session.IdEmpresa;
       const newLevel = { IdEmpresaDistribuidor: enterpriseId, Nivel: level };
       NivelesClienteFinalFactory.addLevel(newLevel)
-        .then(function (result) {
+        .then(result => {
           $scope.ShowToast(result.data.message, 'success');
           $scope.newLevel = '';
           $scope.init();
         })
-        .catch(function (result) {
+        .catch(result => {
           $scope.ShowToast(!result.data ? 'Ha ocurrido un error, inténtelo más tarde.' : result.data.message, 'danger');
         });
     };

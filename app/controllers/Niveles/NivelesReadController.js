@@ -7,16 +7,16 @@
     $scope.init = function () {
       $scope.CheckCookie();
       NivelesDistribuidorFactory.getNivelesDistribuidor()
-        .success(function (resultNiveles) {
-          if (resultNiveles.success) {
-            $scope.Niveles = resultNiveles.data;
+        .then(resultNiveles => {
+          if (resultNiveles.data.success) {
+            $scope.Niveles = resultNiveles.data.data;
             $scope.Nivel.Nivel = '';
           } else {
-            $scope.ShowToast(resultNiveles.message, 'danger');
+            $scope.ShowToast(resultNiveles.data.message, 'danger');
           }
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
@@ -29,22 +29,22 @@
 
     $scope.agregarNivel = function () {
       NivelesDistribuidorFactory.postNivelesDistribuidor($scope.Nivel)
-        .success(function (result) {
-          if (result.success) {
-            $scope.ShowToast(result.message, 'success');
+        .then(result => {
+          if (result.data.success) {
+            $scope.ShowToast(result.data.message, 'success');
             $scope.init();
           } else {
-            $scope.ShowToast(result.message, 'danger');
+            $scope.ShowToast(result.data.message, 'danger');
           }
         })
-        .error(function (data, status, headers, config) {
+        .catch(error => {
           $scope.ShowToast('No pudimos eliminar el descuento seleccionado. Intenta de nuevo más tarde.', 'danger');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
     $scope.eliminarNivel = function (Nivel) {
-      $scope.Niveles.forEach(function (Elemento, Index) {
+      $scope.Niveles.forEach((Elemento, Index) => {
         if (Elemento.IdNivelDistribuidor === Nivel.IdNivelDistribuidor) {
           $scope.Niveles.splice(Index, 1);
           return false;
@@ -52,17 +52,17 @@
       });
 
       NivelesDistribuidorFactory.deleteNivelesDistribuidor(Nivel.IdNivelDistribuidor)
-        .success(function (result) {
-          if (result.success) {
-            $scope.ShowToast(result.message, 'success');
+        .then(result => {
+          if (result.data.success) {
+            $scope.ShowToast(result.data.message, 'success');
           } else {
             $scope.init();
-            $scope.ShowToast(result.message, 'danger');
+            $scope.ShowToast(result.data.message, 'danger');
           }
         })
-        .error(function (data, status, headers, config) {
+        .catch(error => {
           $scope.ShowToast('No pudimos eliminar el descuento seleccionado. Intenta de nuevo más tarde.', 'danger');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
