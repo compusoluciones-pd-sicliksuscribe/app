@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 (function () {
   var ComprarUFController = function ($scope, $log, $rootScope, $location, $cookies, PedidoDetallesFactory, TipoCambioFactory, PedidosFactory, EmpresasFactory, $route) {
     $scope.currentPath = $location.path();
@@ -6,7 +7,7 @@
     $scope.error = false;
     $scope.currentDistribuidor = $cookies.getObject('currentDistribuidor');
     $scope.Session = $cookies.getObject('Session');
-  
+
     const error = function (message) {
       $scope.ShowToast(!message ? 'Ha ocurrido un error, inténtelo más tarde.' : message, 'danger');
       $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
@@ -14,7 +15,7 @@
 
     const getOrderDetails = function () {
       return PedidoDetallesFactory.getPedidoDetallesUf($scope.currentDistribuidor.IdEmpresa)
-        .then(function (result) {
+        .then(result => {
           if (result.data.success) $scope.PedidoDetalles = result.data.data;
           // console.log(' result.data.data' + JSON.stringify(result.data.data));
           $scope.PedidoDetalles.forEach(function (elem) {
@@ -24,7 +25,7 @@
           });
           if ($scope.error) $location.path('uf/Productos');
         })
-        .catch(function (result) {
+        .catch(result => {
           $location.path('uf/Carrito/e');
           error('No pudimos cargar tu información, por favor intenta de nuevo más tarde.');
         });
@@ -32,11 +33,11 @@
 
     const getEnterprises = function () {
       return EmpresasFactory.getEmpresas()
-        .then(function (result) {
+        .then(result => {
           // console.log(' result.data.data' + JSON.stringify(result.data[0]));
           $scope.Distribuidor = result.data[0];
         })
-        .catch(function (result) {
+        .catch(result => {
           error('No pudimos cargar los datos de tu empresa, por favor intenta de nuevo más tarde');
           $location.path('uf/Carrito/e');
         });
@@ -44,7 +45,7 @@
 
     const comprarProductos = function () {
       PedidoDetallesFactory.getComprarFinalUser($scope.currentDistribuidor.IdEmpresa)
-        .then(function (response) {
+        .then(response => {
           if (response.data.success) {
             $scope.ShowToast(response.data.message, 'success');
             $scope.ActualizarMenu();
@@ -58,7 +59,7 @@
 
     $scope.prepararPedidos = function () {
       PedidoDetallesFactory.getPrepararCompraFinalUser(1, $scope.currentDistribuidor.IdEmpresa)
-        .then(function (result) {
+        .then(result => {
           if (result.data.success) $scope.ShowToast(result.data.message, 'success');
           else {
             $scope.ShowToast(result.data.message, 'danger');
@@ -79,7 +80,7 @@
       $location.url($location.path());
       if (paymentId && token && PayerID && orderIds) {
         PedidoDetallesFactory.confirmarPaypal({ paymentId, PayerID, orderIds })
-          .then(function (response) {
+          .then(response => {
             if (response.data.state === 'approved') {
               const PedidosAgrupados = orderIds.map(function (id) { return ({ id }); });
               const datosPaypal = { TarjetaResultIndicator: paymentId, TarjetaSessionVersion: PayerID, PedidosAgrupados };
@@ -99,7 +100,7 @@
         $scope.CheckCookie();
         confirmarPaypal();
         $scope.prepararPedidos();
-      }      
+      }
     };
 
     $scope.init();
@@ -107,13 +108,13 @@
     $scope.ActualizarFormaPago = function (IdFormaPago) {
       var empresa = { IdFormaPagoPredilecta: IdFormaPago };
       EmpresasFactory.putEmpresaFormaPago(empresa)
-        .then(function (result) {
+        .then(result => {
           if (result.data.success) {
             $scope.ShowToast(result.data.message, 'success');
             $scope.init();
           } else $scope.ShowToast(result.data.message, 'danger');
         })
-        .catch(function (result) { error(result.data); });
+        .catch(result => { error(result.data); });
     };
 
     $scope.calcularSubTotal = function (IdPedido) {
@@ -170,39 +171,39 @@
 
     $scope.PagarTarjeta = function () {
       PedidoDetallesFactory.getPrepararTarjetaCreditoFinalUser($scope.currentDistribuidor.IdEmpresa)
-        .success(function (Datos) {
-          if (Datos.success) {
+        .then(Datos => {
+          if (Datos.data.success) {
             var expireDate = new Date();
             expireDate.setTime(expireDate.getTime() + 600 * 2000);
-            $cookies.putObject('pedidosAgrupados', Datos.data['0'].pedidosAgrupados, { 'expires': expireDate, secure: $rootScope.secureCookie });
+            $cookies.putObject('pedidosAgrupados', Datos.data.data['0'].pedidosAgrupados, { 'expires': expireDate, secure: $rootScope.secureCookie });
             if ($cookies.getObject('pedidosAgrupados')) {
               PedidoDetallesFactory.getOwnCreditCardData($scope.currentDistribuidor.IdEmpresa)
-              .success(function (result) {
+              .then(result => {
                 Checkout.configure({
-                  merchant: Datos.data['0'].merchant,
-                  session: { id: Datos.data['0'].session_id },
+                  merchant: Datos.data.data['0'].merchant,
+                  session: { id: Datos.data.data['0'].session_id },
                   order:
                   {
-                    amount: Datos.data['0'].total,
-                    currency: Datos.data['0'].moneda,
+                    amount: Datos.data.data['0'].total,
+                    currency: Datos.data.data['0'].moneda,
                     description: 'Pago tarjeta bancaria',
-                    id: Datos.data['0'].pedidos
+                    id: Datos.data.data['0'].pedidos
                   },
                   interaction:
                   {
                     merchant:
                     {
-                      name: result.NombreEmpresa || 'CompuSoluciones',
+                      name: result.data.NombreEmpresa || 'CompuSoluciones',
                       address:
                       {
-                        line1: result.RazonSocial || 'CompuSoluciones y Asociados, S.A. de C.V.',
-                        line2: result.Direccion || 'Av. Mariano Oterno No. 1105',
-                        line3: `${result.Colonia} C.P. ${result.CodigoPostal}` || 'Col. Rinconada del Bosque C.P. 44530',
-                        line4: `${result.Ciudad}, ${result.Estado}. México` || 'Guadalajara, Jalisco. México'
+                        line1: result.data.RazonSocial || 'CompuSoluciones y Asociados, S.A. de C.V.',
+                        line2: result.data.Direccion || 'Av. Mariano Oterno No. 1105',
+                        line3: `${result.data.Colonia} C.P. ${result.data.CodigoPostal}` || 'Col. Rinconada del Bosque C.P. 44530',
+                        line4: `${result.data.Ciudad}, ${result.data.Estado}. México` || 'Guadalajara, Jalisco. México'
                       },
 
-                      email: result.Email || 'order@yourMerchantEmailAddress.com',
-                      phone: result.TelefonoContacto || '+1 123 456 789 012'
+                      email: result.data.Email || 'order@yourMerchantEmailAddress.com',
+                      phone: result.data.TelefonoContacto || '+1 123 456 789 012'
                     },
                     displayControl: { billingAddress: 'HIDE', orderSummary: 'SHOW' },
                     locale: 'es_MX',
@@ -218,9 +219,9 @@
             $scope.ShowToast('Algo salió mal con el pago con tarjeta bancaria, favor de intentarlo una vez más.', 'danger');
           }
         })
-        .error(function (data, status, headers, config) {
+        .catch(error => {
           $scope.ShowToast('Error al obtener el tipo de cambio API Intelisis.', 'danger');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
@@ -239,7 +240,7 @@
       expireDate.setTime(expireDate.getTime() + 600 * 2000);
       $cookies.putObject('orderIds', orderIds, { expires: expireDate, secure: $rootScope.secureCookie });
       PedidoDetallesFactory.prepararPaypalFinalUser({ orderIds, url: 'uf/Comprar', actualSubdomain, IdUsuarioCompra: $scope.Session.IdUsuario })
-        .then(function (response) {
+        .then(response => {
           if (response.data.message === 'free') comprarProductos();
           else if (response.data.state === 'created') {
             const paypal = response.data.links.filter(function (item) {
@@ -250,7 +251,7 @@
             $scope.ShowToast('Ocurrió un error al procesar el pago.', 'danger');
           }
         })
-        .catch(function (response) {
+        .catch(response => {
           $scope.ShowToast('Ocurrió un error al procesar el pago. de tipo: ' + response.data.message, 'danger');
         });
     };
@@ -271,40 +272,40 @@
         if (datosTarjeta.PedidosAgrupados[0].Renovacion) {
           console.log('44444  $scope.ComprarConTarjetaTuClick', datosTarjeta.PedidosAgrupados, datosTarjeta.PedidosAgrupados[0].Renovacion);
           PedidosFactory.patchPaymentInformation(datosTarjeta)
-            .success(function (compra) {
+            .then(compra => {
               PedidosFactory.patchPedidosParaRenovar({'PedidosAgrupados': $cookies.getObject('pedidosAgrupados')})
-              .success(function (result) {
+              .then(result => {
               })
-              .error(function (data, status, headers, config) {
-                $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+              .catch(error => {
+                $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
               });
               $cookies.remove('pedidosAgrupados');
-              if (compra.success === 1) {
-                $scope.ShowToast(compra.message, 'success');
+              if (compra.data.success === 1) {
+                $scope.ShowToast(compra.data.message, 'success');
                 $location.path('/MonitorPagos/uf/refrescar');
               }
             })
-            .error(function (data, status, headers, config) {
-              $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+            .catch(error => {
+              $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
             });
         } else {
           PedidosFactory.putPedido(datosTarjeta)
-            .success(function (putPedidoResult) {
+            .then(putPedidoResult => {
               $cookies.remove('pedidosAgrupados');
-              if (putPedidoResult.success) {
+              if (putPedidoResult.data.success) {
                 PedidoDetallesFactory.getComprarFinalUser($scope.currentDistribuidor.IdEmpresa)
-                  .success(function (compra) {
-                    if (compra.success === 1) {
-                      $scope.ShowToast(compra.message, 'success');
+                  .then(compra => {
+                    if (compra.data.success === 1) {
+                      $scope.ShowToast(compra.data.message, 'success');
                       $scope.ActualizarMenu();
                       $location.path('/');
                     } else {
                       $location.path('uf/Carrito');
-                      $scope.ShowToast(compra.message, 'danger');
+                      $scope.ShowToast(compra.data.message, 'danger');
                     }
                   })
-                  .error(function (data, status, headers, config) {
-                    $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+                  .catch(error => {
+                    $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
                   });
               } else {
                 $scope.ShowToast('Algo salió mal con tu pedido, por favor ponte en contacto con tu equipo de soporte CompuSoluciones para más información.', 'danger');
@@ -312,9 +313,9 @@
                 $location.path('uf/Carrito');
               }
             })
-            .error(function (data, status, headers, config) {
+            .catch(error => {
               $cookies.remove('pedidosAgrupados');
-              $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+              $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
             });
         }
       } else {

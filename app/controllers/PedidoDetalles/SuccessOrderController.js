@@ -38,12 +38,12 @@
           if (elemento.IdFabricante === MICROSOFT) {
             $scope.MPNID = elemento.IdMicrosoftDist;
             PedidoDetallesFactory.getMPIDInformation(parseInt($scope.MPNID))
-            .success(function (response) {
-              response.data.status === 'active' ? $scope.isMPNIDActive = true : $scope.isMPNIDActive = false;
+            .then(response => {
+              response.data.data.status === 'active' ? $scope.isMPNIDActive = true : $scope.isMPNIDActive = false;
               if (!$scope.isMPNIDActive) $scope.abrirModal('isValidMPNIDModal');
             })
-            .error(function (data, status, headers, config) {
-              $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+            .catch(error => {
+              $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
             });
           }
         });

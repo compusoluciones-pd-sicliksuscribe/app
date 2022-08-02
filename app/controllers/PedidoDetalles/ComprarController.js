@@ -174,7 +174,7 @@
 
     const getOrderDetails = function () {
       return PedidoDetallesFactory.getPedidoDetalles()
-        .then(function (result) {
+        .then(result => {
           if (result.data.success) $scope.PedidoDetalles = result.data.data;
           $scope.PedidoDetalles.forEach(function (elem) {
             elem.Forma = getPaymentMethods(elem.IdFormaPago);
@@ -185,7 +185,7 @@
           });
           if ($scope.error) $location.path('/Productos');
         })
-        .catch(function (result) {
+        .catch(error  => {
           $location.path('/Carrito/e');
           error('No pudimos cargar tu información, por favor intenta de nuevo más tarde.');
         });
@@ -235,12 +235,12 @@
 
     $scope.prepararPedidos = function () {
       PedidoDetallesFactory.getPrepararCompra(1)
-        .then(function (result) {
+        .then(result => {
           if (result.data.success) $scope.ShowToast(result.data.message, 'success');
         })
         .then(getOrderDetails)
         .then(getEnterprises)
-        .catch(function (result) {
+        .catch(error => {
           error(result.data.message);
           $location.path('/Carrito/e');
         });
@@ -255,7 +255,7 @@
       $location.url($location.path());
       if (paymentId && token && PayerID && orderIds) {
         PedidoDetallesFactory.confirmarPaypal({ paymentId, PayerID, orderIds })
-          .then(function (response) {
+          .then(response => {
             if (response.data.state === 'approved') {
               const PedidosAgrupados = orderIds.map(function (id) { return ({ id }); });
               const datosPaypal = { TarjetaResultIndicator: paymentId, TarjetaSessionVersion: PayerID, PedidosAgrupados };
@@ -264,8 +264,8 @@
             }
             if (response.data.state === 'failed') $scope.ShowToast('Ocurrió un error al intentar confirmar la compra con Paypal. Intentalo más tarde.', 'danger');
           })
-          .catch(function (response) {
-            $scope.ShowToast('Ocurrió un error de tipo: "' + response.data.message + '". Contacte con soporte de Compusoluciones.', 'danger');
+          .catch(error => {
+            $scope.ShowToast('Ocurrió un error de tipo: "' + error.data.message + '". Contacte con soporte de Compusoluciones.', 'danger');
           });
       }
     };
@@ -283,13 +283,13 @@
     $scope.ActualizarFormaPago = function (IdFormaPago) {
       var empresa = { IdFormaPagoPredilecta: IdFormaPago };
       EmpresasFactory.putEmpresaFormaPago(empresa)
-        .then(function (result) {
+        .then(result => {
           if (result.data.success) {
             $scope.ShowToast(result.data.message, 'success');
             $scope.init();
           } else $scope.ShowToast(result.data.message, 'danger');
         })
-        .catch(function (result) { error(result.data); });
+        .catch(error => { error(error.data); });
     };
 
     $scope.calcularSubTotal = function (IdPedido) {
@@ -364,20 +364,20 @@
         }
         $cookies.getObject('tipoTarjetaCredito') === 1 ? creditCardName = 'Visa/Mastercard' : creditCardName = 'American Express';
         PedidoDetallesFactory.getPrepararTarjetaCredito()
-          .success(function (Datos) {
+          .then(Datos => {
             var expireDate = new Date();
             expireDate.setTime(expireDate.getTime() + 600 * 2000); /* 20 minutos */
-            $cookies.putObject('pedidosAgrupados', Datos.data['0'].pedidosAgrupados, { 'expires': expireDate, secure: $rootScope.secureCookie });
-            if (Datos.data['0'].total > 0) {
-              if (Datos.success) {
+            $cookies.putObject('pedidosAgrupados', Datos.data.data['0'].pedidosAgrupados, { 'expires': expireDate, secure: $rootScope.secureCookie });
+            if (Datos.data.data['0'].total > 0) {
+              if (Datos.data.success) {
                 if ($cookies.getObject('pedidosAgrupados')) {
                   setCCDates();
-                  $scope.pedidos = Datos.data[0].pedidos;
-                  $scope.amount = Datos.data[0].total;
-                  $scope.FormatedAmount = String(Datos.data[0].total).replace(/(?<!\..*)(\d)(?=(?:\d{3})+(?:\.|$))/g, '$1,');
-                  $scope.currency = Datos.data[0].moneda;
-                  OpenPay.setId(Datos.data['0'].opId);
-                  OpenPay.setApiKey(Datos.data['0'].opPublic);
+                  $scope.pedidos = Datos.data.data[0].pedidos;
+                  $scope.amount = Datos.data.data[0].total;
+                  $scope.FormatedAmount = String(Datos.data.data[0].total).replace(/(?<!\..*)(\d)(?=(?:\d{3})+(?:\.|$))/g, '$1,');
+                  $scope.currency = Datos.data.data[0].moneda;
+                  OpenPay.setId(Datos.data.data['0'].opId);
+                  OpenPay.setApiKey(Datos.data.data['0'].opPublic);
                   OpenPay.setSandboxMode(false);
                   deviceSessionId = OpenPay.deviceData.setup('payment-form', 'deviceIdHiddenFieldName');
                   $('#device_session_id').val(deviceSessionId);
@@ -392,9 +392,9 @@
               $scope.ShowToast('Algo salió mal con el pago con tarjeta bancaria, favor de intentarlo una vez más.', 'danger');
             }
           })
-          .error(function (data, status, headers, config) {
-            const error = !data.message ? 'Ocurrió un error al procesar la solicitud. Intentalo de nuevo.' : data.message;
-            $scope.ShowToast(error, 'danger');
+          .catch(error => {
+            const errors = !error.data.message ? 'Ocurrió un error al procesar la solicitud. Intentalo de nuevo.' : error.data.message;
+            $scope.ShowToast(errors, 'danger');
           });
       }
     };
@@ -570,33 +570,33 @@
       if (datosTarjeta.PedidosAgrupados) {
         if (datosTarjeta.PedidosAgrupados[0].Renovacion) {
           PedidosFactory.patchPaymentInformation(datosTarjeta)
-            .success(function (compra) {
+            .then(compra => {
               $cookies.remove('pedidosAgrupados');
-              if (compra.success === 1) {
+              if (compra.data.success === 1) {
                 let modalPagado = document.getElementById('modalTdcpagado');
                 modalPagado.style.display = 'block';
               }
             })
-            .error(function (data, status, headers, config) {
-              $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+            .catch(error => {
+              $log.log('data error: ' + error.error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
             });
         } else {
           PedidosFactory.putPedido(datosTarjeta)
-            .success(function (putPedidoResult) {
+            .then(putPedidoResult => {
               $cookies.remove('pedidosAgrupados');
-              if (putPedidoResult.success) {
+              if (putPedidoResult.data.success) {
                 PedidoDetallesFactory.getComprar()
-                  .success(function (compra) {
-                    if (compra) {
+                  .then(compra => {
+                    if (compra.data) {
                       $scope.ActualizarMenu();
-                      orderCookie(compra);
+                      orderCookie(compra.data);
                     } else {
                       $location.path('/Carrito');
-                      $scope.ShowToast(compra.message, 'danger');
+                      $scope.ShowToast(compra.data.message, 'danger');
                     }
                   })
-                  .error(function (data, status, headers, config) {
-                    $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+                  .catch(error => {
+                    $log.log('data error: ' + error.error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
                   });
               } else {
                 $scope.ShowToast('Algo salió mal con tu pedido, por favor ponte en contacto con tu equipo de soporte CompuSoluciones para más información.', 'danger');

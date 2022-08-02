@@ -16,18 +16,18 @@
     $scope.init = function () {
       $scope.CheckCookie();
       FabricantesFactory.getFabricantes()
-        .success(function (Fabricantes) {
-          $scope.selectFabricantes = Fabricantes;
+        .then(Fabricantes => {
+          $scope.selectFabricantes = Fabricantes.data;
         })
-        .error(function (data, status, headers, config) {
+        .catch(error => {
           $scope.ShowToast('No pudimos cargar la lista de fabricantes, por favor intenta de nuevo más tarde.', 'danger');
         });
       EmpresasXEmpresasFactory.getEmpresasXEmpresas()
-        .success(function (Empresas) {
-          $scope.selectEmpresas = Empresas;
+        .then(Empresas => {
+          $scope.selectEmpresas = Empresas.data;
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error.error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
 
       if ($cookies.getObject('Session').IdTipoAcceso == 4 || $cookies.getObject('Session').IdTipoAcceso == 5 || $cookies.getObject('Session').IdTipoAcceso == 6) {
@@ -41,7 +41,7 @@
 
     const getOrderPerCustomer = function (customer) {
       PedidoDetallesFactory.getOrderPerCustomer(Params)
-        .then(function (result) {
+        .then(result => {
           if (result.status === 204) {
             $scope.Vacio = 0;
             $scope.Pedidos = {};
@@ -50,14 +50,14 @@
             $scope.Vacio = 1;
           }
         })
-        .catch(function (result) {
-          $scope.ShowToast(result.data.message, 'danger');
+        .catch(error => {
+          $scope.ShowToast(error.data.message, 'danger');
         });
     };
 
     const getOrderPerCustomerTuClick = function (customer) {
       PedidoDetallesFactory.getOrderPerCustomerTuClick(Params)
-        .then(function (result) {
+        .then(result => {
           if (result.status === 204) {
             $scope.Vacio = 0;
             $scope.Pedidos = '';
@@ -66,8 +66,8 @@
             $scope.Vacio = 1;
           }
         })
-        .catch(function (result) {
-          $scope.ShowToast(result.data.message, 'danger');
+        .catch(error => {
+          $scope.ShowToast(error.data.message, 'danger');
         });
     };
 
@@ -86,7 +86,7 @@
           $scope.Contactos = result.data.data;
           $scope.Renovar = {};
         });
-    }
+    };
 
     const getContactUsers = function () {
       if ($scope.currentDistribuidor) {
@@ -105,8 +105,8 @@
           setTimeout($scope.removePulseCart, 9000);
           $location.path('uf/Carrito');
         })
-        .catch(result => {
-          $scope.ShowToast(result.data.message, 'danger');
+        .catch(error => {
+          $scope.ShowToast(error.data.message, 'danger');
         });
     };
 
@@ -135,7 +135,6 @@
         if (Params.IdFabricante === 2) getContactUsers();
       }
     };
-
 
     $scope.ActualizarCantidad = function (IdPedidoDetalle) {
       $scope.Pedidos.forEach(function (Pedido) {
@@ -176,15 +175,15 @@
         MonedaPagoProxima: pedido.MonedaPagoProxima
       };
       PedidosFactory.putPedidoPago(APedido)
-        .success(function (result) {
-          if (result.success === 0) {
-            $scope.ShowToast(result.message, 'danger');
+        .then(result => {
+          if (result.data.success === 0) {
+            $scope.ShowToast(result.data.message, 'danger');
           } else {
             $scope.ActualizarPedidosAlCambiarMonedaOFormaPago(APedido);
-            $scope.ShowToast(result.message, 'success');
+            $scope.ShowToast(result.data.message, 'success');
           }
         })
-        .error(function (data, status, headers, config) {
+        .catch(error => {
           $scope.ShowToast('No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde', 'danger');
         });
     };
@@ -196,15 +195,15 @@
         MonedaPagoProxima: pedido.MonedaPagoProxima
       };
       PedidosFactory.putPedidoPago(APedido)
-        .success(function (result) {
-          if (result.success === 0) {
-            $scope.ShowToast(result.message, 'danger');
+        .then(result => {
+          if (result.data.success === 0) {
+            $scope.ShowToast(result.data.message, 'danger');
           } else {
             $scope.ActualizarPedidosAlCambiarMonedaOFormaPago(APedido);
-            $scope.ShowToast(result.message, 'success');
+            $scope.ShowToast(result.data.message, 'success');
           }
         })
-        .error(function (data, status, headers, config) {
+        .catch(error => {
           $scope.ShowToast('No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde', 'danger');
         });
     };
@@ -236,16 +235,16 @@
         }
       }
       PedidoDetallesFactory.putPedidoDetalle(PedidoActualizado)
-        .success(function (PedidoDetalleSuccess) {
-          if (PedidoDetalleSuccess.success) {
+        .then(PedidoDetalleSuccess => {
+          if (PedidoDetalleSuccess.data.success) {
             detalles.MostrarCantidad = 0;
             detalles.PorCancelar = 0;
-            $scope.ShowToast(PedidoDetalleSuccess.message, 'success');
+            $scope.ShowToast(PedidoDetalleSuccess.data.message, 'success');
           } else {
-            $scope.ShowToast(PedidoDetalleSuccess.message, 'danger');
+            $scope.ShowToast(PedidoDetalleSuccess.data.message, 'danger');
           }
         })
-        .error(function (data, status, headers, config) {
+        .catch(error => {
           $scope.ShowToast('No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde', 'danger');
         });
     };
@@ -266,13 +265,13 @@
         IdPedidoDetalle: detalles.IdPedidoDetalle
       };
       PedidoDetallesFactory.putPedidoDetalle(params)
-        .then(function (result) {
+        .then(result => {
           detalles.PorCancelar = 1;
           detalles.MostrarCantidad = 0;
           $scope.ShowToast(result.data.message, 'success');
         })
-        .catch(function (result) {
-          $scope.ShowToast(result.data.message, 'danger');
+        .catch(error => {
+          $scope.ShowToast(error.data.message, 'danger');
         });
     };
 
@@ -290,15 +289,15 @@
         IdPedidoDetalle: Detalles.IdPedidoDetalle
       };
       PedidoDetallesFactory.putPedidoDetalle(order)
-        .success(function (result) {
+        .then(result => {
           $scope.ShowToast('Suscripción cancelada.', 'success');
           $scope.$emit('UNLOAD');
           $scope.Cancelar = false;
           $scope.ActualizarMonitor();
           $scope.form.habilitar = false;
         })
-        .error(function (data, status, headers, config) {
-          $scope.ShowToast(data.message, 'danger');
+        .catch(error => {
+          $scope.ShowToast(error.data.message, 'danger');
         });
     };
 
@@ -316,9 +315,9 @@
         order.PorActualizarCantidad = 1;
       }
       PedidoDetallesFactory.putPedidoDetalle(order)
-        .success(function (result) {
-          if (!result.success) {
-            $scope.ShowToast(result.message, 'danger');
+        .then(result => {
+          if (!result.data.success) {
+            $scope.ShowToast(result.data.message, 'danger');
           } else {
             $scope.ShowToast('Suscripción reanudada.', 'success');
           }
@@ -326,7 +325,7 @@
           $scope.ActualizarMonitor();
           $scope.form.habilitar = false;
         })
-        .catch(function (error) {
+        .catch(error => {
           $scope.ShowToast(error.data.message, 'danger');
           $log.log('data error: ' + error.data.message + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
           $scope.form.habilitar = true;

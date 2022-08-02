@@ -1,3 +1,6 @@
+/* eslint-disable handle-callback-err */
+/* eslint-disable no-undef */
+/* eslint-disable eqeqeq */
 (function () {
   var MonitorPagosUF = function ($scope, $log, $rootScope, $cookies, $location, $uibModal, $filter, PedidoDetallesFactory, EmpresasFactory, PedidosFactory) {
     $scope.PedidoSeleccionado = 0;
@@ -55,19 +58,19 @@
       }
       $location.path('/MonitorPagos/uf');
       PedidoDetallesFactory.getPendingOrdersToPayTuClick($scope.currentDistribuidor.IdEmpresa)
-        .success(function (ordersToPay) {
-          $scope.Pedidos = ordersToPay.data;
-          if (!ordersToPay.data || ordersToPay.data.length === 0) {
+        .then(ordersToPay => {
+          $scope.Pedidos = ordersToPay.data.data;
+          if (!ordersToPay.data.data || ordersToPay.data.data.length === 0) {
             $scope.DeshabilitarPagar = true;
             return $scope.DeshabilitarPagar;
           }
-          $scope.PedidosAgrupados = groupBy(ordersToPay.data, function (item) { return [item.IdPedido]; });
+          $scope.PedidosAgrupados = groupBy(ordersToPay.data.data, function (item) { return [item.IdPedido]; });
           for (let x = 0; x < $scope.PedidosAgrupados.length; x++) {
             $scope.PedidosObj[$scope.PedidosAgrupados[x][0].IdPedido] = $scope.PedidosAgrupados[x][0];
           }
-          $scope.TipoCambio = ordersToPay.data[0].TipoCambio;
+          $scope.TipoCambio = ordersToPay.data.data[0].TipoCambio;
         })
-        .error(function (data, status, headers, config) {
+        .catch(error => {
           $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
           $scope.ShowToast('No pudimos cargar los pedidos por pagar, por favor intenta de nuevo más tarde.', 'danger');
@@ -77,15 +80,15 @@
 
       if ($cookies.getObject('Session').IdTipoAcceso == 2 || $cookies.getObject('Session').IdTipoAcceso == 3 || $cookies.getObject('Session').IdTipoAcceso == 4) {
         EmpresasFactory.getEmpresa($scope.currentDistribuidor.IdEmpresa)
-          .success(function (empresa) {
-            $scope.infoEmpresa = empresa[0];
+          .then(empresa => {
+            $scope.infoEmpresa = empresa.data[0];
           })
-          .error(function (data, status, headers, config) {
+          .catch(error => {
             $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
             $scope.ShowToast('No pudimos cargar la información, por favor intenta de nuevo más tarde.', 'danger');
 
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+            $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
           });
       }
     };
@@ -154,12 +157,12 @@
       }
       if ($scope.PedidosSeleccionadosParaPagar.length !== 0 && document.getElementById('PayPal').checked) {
         PedidoDetallesFactory.monitorCalculationsTuClick({ Pedidos: $scope.PedidosSeleccionadosParaPagar }, $scope.currentDistribuidor.IdEmpresa, PAYPAL)
-          .success(function (calculations) {
-            if (calculations.total) {
-              $scope.ServicioElectronico = calculations.electronicService;
-              $scope.Subtotal = calculations.subtotal;
-              $scope.Iva = calculations.iva;
-              $scope.Total = calculations.total;
+          .then(calculations => {
+            if (calculations.data.total) {
+              $scope.ServicioElectronico = calculations.data.electronicService;
+              $scope.Subtotal = calculations.data.subtotal;
+              $scope.Iva = calculations.data.iva;
+              $scope.Total = calculations.data.total;
             } else {
               $scope.ServicioElectronico = 0;
               $scope.Subtotal = 0;
@@ -167,22 +170,22 @@
               $scope.Total = 0;
             }
           })
-          .error(function (data, status, headers, config) {
+          .catch(error => {
             $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
             $scope.ShowToast('No pudimos realizar los cálculos, por favor intenta de nuevo más tarde.', 'danger');
 
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+            $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
           });
       }
       if ($scope.PedidosSeleccionadosParaPagar.length !== 0 && document.getElementById('Tarjeta').checked) {
         PedidoDetallesFactory.monitorCalculationsTuClick({ Pedidos: $scope.PedidosSeleccionadosParaPagar }, $scope.currentDistribuidor.IdEmpresa, CREDIT_CARD)
-          .success(function (calculations) {
+          .then(calculations => {
             if (calculations.total) {
-              $scope.ServicioElectronico = calculations.electronicService;
-              $scope.Subtotal = calculations.subtotal;
-              $scope.Iva = calculations.iva;
-              $scope.Total = calculations.total;
+              $scope.ServicioElectronico = calculations.data.electronicService;
+              $scope.Subtotal = calculations.data.subtotal;
+              $scope.Iva = calculations.data.iva;
+              $scope.Total = calculations.data.total;
             } else {
               $scope.ServicioElectronico = 0;
               $scope.Subtotal = 0;
@@ -190,12 +193,12 @@
               $scope.Total = 0;
             }
           })
-          .error(function (data, status, headers, config) {
+          .catch(error => {
             $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
             $scope.ShowToast('No pudimos realizar los cálculos, por favor intenta de nuevo más tarde.', 'danger');
 
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+            $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
           });
       }
     };
@@ -211,8 +214,7 @@
     $scope.checkPayment = function () {
       if (document.getElementById('Tarjeta').checked) {
         $scope.pagar();
-      }
-      else if (document.getElementById('PayPal').checked) {
+      } else if (document.getElementById('PayPal').checked) {
         $scope.preparePayPal();
       }
     };
@@ -220,41 +222,41 @@
     $scope.pagar = function () {
       if ($scope.PedidosSeleccionadosParaPagar.length > 0) {
         PedidoDetallesFactory.payWidthCardTuClick({ Pedidos: $scope.PedidosSeleccionadosParaPagar }, $scope.currentDistribuidor.IdEmpresa)
-          .success(function (Datos) {
-            if (Datos.success) {
+          .then(Datos => {
+            if (Datos.data.success) {
               var expireDate = new Date();
               expireDate.setTime(expireDate.getTime() + 600 * 2000);
-              Datos.data["0"].pedidosAgrupados[0].TipoCambio = $scope.TipoCambio;
-              $cookies.putObject('pedidosAgrupados', Datos.data["0"].pedidosAgrupados, { 'expires': expireDate, secure: $rootScope.secureCookie });
-              if (Datos.success) {
+              Datos.data.data['0'].pedidosAgrupados[0].TipoCambio = $scope.TipoCambio;
+              $cookies.putObject('pedidosAgrupados', Datos.data.data['0'].pedidosAgrupados, { 'expires': expireDate, secure: $rootScope.secureCookie });
+              if (Datos.data.success) {
                 if ($cookies.getObject('pedidosAgrupados')) {
                   PedidoDetallesFactory.getOwnCreditCardData($scope.currentDistribuidor.IdEmpresa)
-                  .success(function (result) {
+                  .then(result => {
                     Checkout.configure({
-                      merchant: Datos.data["0"].merchant,
-                      session: { id: Datos.data["0"].session_id },
+                      merchant: Datos.data['0'].merchant,
+                      session: { id: Datos.data['0'].session_id },
                       order:
                       {
                         amount: Datos.data['0'].total,
-                        currency: Datos.data["0"].moneda,
+                        currency: Datos.data['0'].moneda,
                         description: 'Pago tarjeta bancaria',
-                        id: Datos.data["0"].pedidos,
+                        id: Datos.data['0'].pedidos
                       },
                       interaction:
                       {
                         merchant:
                         {
-                          name: result.NombreEmpresa || 'CompuSoluciones',
+                          name: result.data.NombreEmpresa || 'CompuSoluciones',
                           address:
                           {
-                            line1: result.RazonSocial || 'CompuSoluciones y Asociados, S.A. de C.V.',
-                            line2: result.Direccion || 'Av. Mariano Oterno No. 1105',
-                            line3: `${result.Colonia} C.P. ${result.CodigoPostal}` || 'Col. Rinconada del Bosque C.P. 44530',
-                            line4: `${result.Ciudad}, ${result.Estado}. México` || 'Guadalajara, Jalisco. México'
+                            line1: result.data.RazonSocial || 'CompuSoluciones y Asociados, S.A. de C.V.',
+                            line2: result.data.Direccion || 'Av. Mariano Oterno No. 1105',
+                            line3: `${result.data.Colonia} C.P. ${result.data.CodigoPostal}` || 'Col. Rinconada del Bosque C.P. 44530',
+                            line4: `${result.data.Ciudad}, ${result.data.Estado}. México` || 'Guadalajara, Jalisco. México'
                           },
 
-                          email: result.Email || 'order@yourMerchantEmailAddress.com',
-                          phone: result.TelefonoContacto || '+1 123 456 789 012'
+                          email: result.data.Email || 'order@yourMerchantEmailAddress.com',
+                          phone: result.data.TelefonoContacto || '+1 123 456 789 012'
                         },
                         displayControl: { billingAddress: 'HIDE', orderSummary: 'SHOW' },
                         locale: 'es_MX',
@@ -266,17 +268,16 @@
                   });
                 }
               }
-            }
-            else {
+            } else {
               $scope.ShowToast('Tu distribuidor no cuenta con el servicio de pago con tarjeta.', 'danger');
             }
           })
-          .error(function (data, status, headers, config) {
+          .catch(error => {
             $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
             $scope.ShowToast('No pudimos conectarnos con el banco, por favor intenta de nuevo más tarde.', 'danger');
 
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+            $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
           });
       } else {
         $scope.ShowToast('Selecciona al menos un pedido para pagar.', 'danger');
@@ -293,17 +294,17 @@
       if ($scope.PedidosSeleccionadosParaPagar.length > 0) {
         const actualSubdomain = getActualSubdomain();
         PedidoDetallesFactory.payWithPaypalTuClick({ Pedidos: $scope.PedidosSeleccionadosParaPagar }, $scope.currentDistribuidor.IdEmpresa)
-        .success(function (response) {
+        .then(response => {
           var expireDate = new Date();
           expireDate.setTime(expireDate.getTime() + 600 * 2000);
           const paypalNextPayment = {
-            electronicServiceByOrder: response.data.electronicServiceByOrder,
+            electronicServiceByOrder: response.data.data.electronicServiceByOrder,
             TipoCambio: $scope.TipoCambio
           };
           $cookies.putObject('paypalNextPayment', paypalNextPayment, { expires: expireDate, secure: $rootScope.secureCookie });
           $cookies.putObject('orderIds', $scope.PedidosSeleccionadosParaPagar, { expires: expireDate, secure: $rootScope.secureCookie });
           PedidoDetallesFactory.prepararPaypalFinalUser({ orderIds: $scope.PedidosSeleccionadosParaPagar, url: 'MonitorPagos/uf', actualSubdomain, IdUsuarioCompra: $scope.Session.IdUsuario })
-            .then(function (response) {
+            .then(response => {
               if (!response.data.state) {
                 $scope.ShowToast('El distribuidor no cuenta con el servicio de pago con Paypal.', 'danger');
               } else {
@@ -318,8 +319,8 @@
               }
             });
         })
-        .catch(function (response) {
-          $scope.ShowToast('Ocurrió un error al procesar el pago. de tipo: ' + response.data.message, 'danger');
+        .catch(error => {
+          $scope.ShowToast('Ocurrió un error al procesar el pago. de tipo: ' + error.data.message, 'danger');
         });
       } else {
         $scope.ShowToast('Selecciona al menos un pedido para pagar.', 'danger');
@@ -340,18 +341,18 @@
       };
       if (datosPayPal.PedidosAgrupados) {
         PedidosFactory.patchPaymentInformation(datosPayPal)
-          .success(function (compra) {
+          .then(compra => {
             $cookies.remove('pedidosAgrupados');
             $cookies.remove('TipoCambio');
             $cookies.remove('electronicServiceByOrder');
-            if (compra.success === 1) {
-              $scope.ShowToast(compra.message, 'success');
+            if (compra.data.success === 1) {
+              $scope.ShowToast(compra.data.message, 'success');
               // $location.path('/MonitorPagos/refrescar');
               $scope.init();
             }
           })
-          .error(function (data, status, headers, config) {
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          .catch(error => {
+            $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
           });
       } else {
         $scope.ShowToast('Algo salió mal con tu pedido, por favor ponte en contacto con tu equipo de soporte CompuSoluciones para más información.', 'danger');

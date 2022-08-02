@@ -36,14 +36,14 @@
 
     const getEnterprises = function () {
       return EmpresasFactory.getEmpresas()
-        .then(function (result) {
+        .then(result => {
           $scope.Distribuidor = result.data[0];
           $scope.Distribuidor.MonedaPago = 'Pesos';
           EmpresasFactory.getTerminosNuevoComercio($scope.Distribuidor.IdEmpresa)
-          .then (function (response){
+          .then (response => {
             $scope.Distribuidor.NuevoComercioTYC = response.data.Firma;
         })
-        .catch(function (result) {
+        .catch(result => {
           error(result.data);
           $location.path('/Productos');
         });
@@ -107,7 +107,7 @@
 
     const getOrderDetails = function (validate) {
       return PedidoDetallesFactory.getPedidoDetalles()
-        .then(function (result) {
+        .then(result => {
           $scope.flagAnnualMensual = 0;
           $scope.flagTYC = 0;
           $scope.orden = new Array(result.data.data.length);
@@ -148,13 +148,13 @@
              $('#btnSiguiente').prop('disabled', false);
            }
         })
-        .then(function () {
+        .then(() => {
           if ($scope.isPayingWithCSCredit()) validarCarrito();
         })
-        .then(function () {
+        .then(() => {
           if ($scope.isPayWithPrepaid()) CambiarMonedaPrepaid();
         })
-        .catch(function (result) {
+        .catch(result => {
           error(result.data);
           $location.path('/Productos');
         });
@@ -163,7 +163,7 @@
     const validarCarrito = function () {
       if (parseInt($scope.Distribuidor.IdFormaPagoPredilecta) === 2) {
         return PedidoDetallesFactory.getValidarCarrito()
-        .then(function (result) {
+        .then(result => {
           $scope.datosValidarCarrito = result.data.data;
           $scope.PedidoDetalles.forEach(function (item) {
             result.data.data.forEach(function (user) {
@@ -191,38 +191,38 @@
         empresa = { IdFormaPagoPredilecta: paymentMethods.CS_CREDIT } : empresa = { IdFormaPagoPredilecta: IdFormaPago || $scope.Distribuidor.IdFormaPagoPredilecta };
       } else empresa = { IdFormaPagoPredilecta: IdFormaPago || $scope.Distribuidor.IdFormaPagoPredilecta };
       EmpresasFactory.putEmpresaFormaPago(empresa)
-        .then(function (result) {
+        .then(result => {
           if (result.data.success) {
             $scope.ShowToast(result.data.message, 'success');
             CambiarMoneda();
             getOrderDetails(true);
           } else $scope.ShowToast(result.data.message, 'danger');
         })
-        .catch(function (result) { error(result.data); });
+        .catch( result => { error(result.data); });
     };
 
     var CambiarMoneda = function (tipoMoneda) {
       $scope.Distribuidor.MonedaPago = tipoMoneda || 'Pesos';
       const MonedaPago = $scope.Distribuidor.MonedaPago;
       EmpresasFactory.putEmpresaCambiaMoneda({ MonedaPago })
-      .then(function (result) {
+      .then(result => {
         if (result.data.success) {
           $scope.ShowToast(result.data.message, 'success');
           getOrderDetails(true);
         } else $scope.ShowToast(result.data.message, 'danger');
       })
-      .catch(function (result) { error(result.data); });
+      .catch(result => { error(result.data); });
     };
 
     var CambiarMonedaPrepaid = function () {
       const MonedaPago = $scope.Distribuidor.MonedaPago;
       EmpresasFactory.putEmpresaCambiaMoneda({ MonedaPago })
-      .then(function (result) {
+      .then(result => {
         if (!result.data.success) {
           $scope.ShowToast(result.data.message, 'danger');
         }
       })
-      .catch(function (result) { error(result.data); });
+      .catch(result => { error(result.data); });
     };
 
     const getUsuarioCompra = () => {
@@ -248,7 +248,7 @@
       getEnterprises()
         .then(getOrderDetails)
         .then(ActualizarFormaPago)
-        .catch(function (result) { error(result.data); });
+        .catch(result => { error(result.data); });
     };
 
     $scope.init();
@@ -264,18 +264,18 @@
       });
       if (PedidoDetalle.IdFabricante !== makers.AWS) {
         return PedidoDetallesFactory.deletePedidoDetalles(PedidoDetalle.IdPedidoDetalle)
-        .success(function (PedidoDetalleResult) {
-          if (!PedidoDetalleResult.success) {
-            $scope.ShowToast(PedidoDetalleResult.message, 'danger');
+        .then(PedidoDetalleResult => {
+          if (!PedidoDetalleResult.data.success) {
+            $scope.ShowToast(PedidoDetalleResult.data.message, 'danger');
           } else {
             $scope.ActualizarMenu();
-            $scope.ShowToast(PedidoDetalleResult.message, 'success');
+            $scope.ShowToast(PedidoDetalleResult.data.message, 'success');
           }
           return getOrderDetails(true);
         })
-        .error(function (data, status, headers, config) {
+        .catch(error => {
           $scope.ShowToast('No pudimos quitar el producto seleccionado. Intenta de nuevo más tarde.', 'danger');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
       } else {
         $scope.ShowToast('No pudimos quitar el producto seleccionado, corresponde a un producto de AWS.', 'danger');
@@ -371,7 +371,7 @@
         IdEmpresaUsuarioFinal: pedido.IdEmpresaUsuarioFinal
       };
       PedidoDetallesFactory.removeRenew(params)
-        .then(function (result) {
+        .then(result => {
           $scope.PedidoDetalles.forEach(function (order, indexOrder) {
             if (pedido.IdPedido === order.IdPedido) {
               $scope.PedidoDetalles.splice(indexOrder, 1);
@@ -392,7 +392,7 @@
         IdEmpresaUsuarioFinal: pedido.IdEmpresaUsuarioFinal
       };
       PedidoDetallesFactory.removeExt(params)
-        .then(function (result) {
+        .then(result => {
           $scope.PedidoDetalles.forEach(function (order, indexOrder) {
             if (pedido.IdPedido === order.IdPedido) {
               $scope.PedidoDetalles.splice(indexOrder, 1);
@@ -504,7 +504,7 @@
       else {
         $scope.PedidoDetalles.forEach(function (order) {
           PedidoDetallesFactory.idOrderComparePaymentCurrency(order)
-          .then(function (result) {
+          .then(result => {
             result.data.data.forEach(function (compararPedidosAnteriores) {
               if (order.MonedaPago !== compararPedidosAnteriores.MonedaPago && order.IdFabricante === 1) {
                 $cookies.putObject('compararPedidosAnteriores', compararPedidosAnteriores);
@@ -512,7 +512,7 @@
               }
             });
           })
-          .catch(function (result) {
+          .catch(result => {
             $scope.ShowToast(result.data.message, 'danger');
           });
           if (!order.IdEmpresaUsuarioFinal) next = false;

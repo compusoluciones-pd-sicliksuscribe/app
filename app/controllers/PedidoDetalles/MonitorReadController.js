@@ -20,18 +20,18 @@
       $scope.procesandoExtensionLbl = 'Extender contrato';
       $scope.CheckCookie();
       FabricantesFactory.getFabricantes()
-        .success(function (Fabricantes) {
-          $scope.selectFabricantes = Fabricantes;
+        .then(Fabricantes => {
+          $scope.selectFabricantes = Fabricantes.data
         })
-        .error(function (data, status, headers, config) {
+        .catch(error => {
           $scope.ShowToast('No pudimos cargar la lista de fabricantes, por favor intenta de nuevo más tarde.', 'danger');
         });
       EmpresasXEmpresasFactory.getEmpresasXEmpresas()
-        .success(function (Empresas) {
-          $scope.selectEmpresas = Empresas;
+        .then(Empresas => {
+          $scope.selectEmpresas = Empresas.data;
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
 
       if ($cookies.getObject('Session').IdTipoAcceso == 4 || $cookies.getObject('Session').IdTipoAcceso == 5 || $cookies.getObject('Session').IdTipoAcceso == 6) {
@@ -45,7 +45,7 @@
 
     const getOrderPerCustomer = function (customer) {
       PedidoDetallesFactory.getOrderPerCustomer(Params)
-        .then(function (result) {
+        .then(result => {
           if (result.status === 204) {
             $scope.Vacio = 0;
             $scope.Pedidos = '';
@@ -57,8 +57,8 @@
                 ? pedido.listoRenovar = 1 : pedido.listoRenovar = 0;
               });
               ProductosFactory.getNCProduct(pedido.Detalles[0].IdErp)
-              .success(function (result) {
-              pedido.productoNC = result ? true : false;
+              .then(result => {
+              pedido.productoNC = result.data ? true : false;
               });
               pedido.optionDeleteMS = pedido.EsOrdenInicial === 0 ? false : evaluationDeleteMS(pedido.FechaInicio);
               pedido.TermSwitch = pedido.EstatusContrato === 'term-switch';
@@ -67,7 +67,7 @@
             $scope.Vacio = 1;
           }
         })
-        .catch(function (result) {
+        .catch(result => {
           $scope.ShowToast(result.data.message, 'danger');
         });
     };
@@ -236,15 +236,15 @@
         MonedaPagoProxima: pedido.MonedaPagoProxima
       };
       PedidosFactory.putPedidoPago(APedido)
-        .success(function (result) {
-          if (result.success === 0) {
-            $scope.ShowToast(result.message, 'danger');
+        .then(result => {
+          if (result.data.success === 0) {
+            $scope.ShowToast(result.data.message, 'danger');
           } else {
             $scope.ActualizarPedidosAlCambiarMonedaOFormaPago(APedido);
-            $scope.ShowToast(result.message, 'success');
+            $scope.ShowToast(result.data.message, 'success');
           }
         })
-        .error(function (data, status, headers, config) {
+        .catch(error => {
           $scope.ShowToast('No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde', 'danger');
         });
     };
@@ -256,15 +256,15 @@
         MonedaPagoProxima: pedido.MonedaPagoProxima
       };
       PedidosFactory.putPedidoPago(APedido)
-        .success(function (result) {
-          if (result.success === 0) {
-            $scope.ShowToast(result.message, 'danger');
+        .then(result => {
+          if (result.data.success === 0) {
+            $scope.ShowToast(result.data.message, 'danger');
           } else {
             $scope.ActualizarPedidosAlCambiarMonedaOFormaPago(APedido);
-            $scope.ShowToast(result.message, 'success');
+            $scope.ShowToast(result.data.message, 'success');
           }
         })
-        .error(function (data, status, headers, config) {
+        .catch( error => {
           $scope.ShowToast('No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde', 'danger');
         });
     };
@@ -313,22 +313,22 @@
       }
       pedido.Detalles[0].PorCancelar = 0;
       PedidoDetallesFactory.putPedidoDetalle(PedidoActualizado)
-        .success(async PedidoDetalleSuccess => {
+        .then(async PedidoDetalleSuccess => {
           await PedidoDetallesFactory.postPartitionFlag(pedido)
             .then(() => {
-              if (PedidoDetalleSuccess.success) {
+              if (PedidoDetalleSuccess.data.success) {
                 detalles.MostrarCantidad = 0;
                 detalles.PorCancelar = 0;
-                $scope.ShowToast(PedidoDetalleSuccess.message, 'success');
+                $scope.ShowToast(PedidoDetalleSuccess.data.message, 'success');
               } else {
-                $scope.ShowToast(PedidoDetalleSuccess.message, 'danger');
+                $scope.ShowToast(PedidoDetalleSuccess.data.message, 'danger');
               }
             })
             .catch(result => {
               $scope.ShowToast(result.data.message, 'danger');
             })
         })
-        .error(function (data, status, headers, config) {
+        .catch(error => {
           $scope.ShowToast('No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde', 'danger');
         });
     };
@@ -394,9 +394,9 @@
       };
       if (Pedido.IdFabricante === 1) {
         PedidoDetallesFactory.putPedidoDetalleMicrosoft(order)
-        .success(function (result) {
-          if (result.success === 0 || result.name === 'Error') {
-            $scope.ShowToast(result.message, 'danger');
+        .then(result => {
+          if (result.data.success === 0 || result.data.name === 'Error') {
+            $scope.ShowToast(result.data.message, 'danger');
           } else {
             $scope.ShowToast('Suscripción cancelada.', 'success');
           }
@@ -404,22 +404,22 @@
           $scope.Cancelar = false;
           $scope.ActualizarMonitor();
           $scope.form.habilitar = false;
-          if (!result) $scope.ShowToast('Ocurrió un error.', 'danger');
+          if (!result.data) $scope.ShowToast('Ocurrió un error.', 'danger');
         })
-        .error(function (data, status, headers, config) {
-          $scope.ShowToast(data.message, 'danger');
+        .catch(error => {
+          $scope.ShowToast(error.data.message, 'danger');
         });
       } else {
         PedidoDetallesFactory.putPedidoDetalle(order)
-        .success(function (result) {
+        .then(result => {
           $scope.ShowToast('Suscripción cancelada.', 'success');
           $scope.$emit('UNLOAD');
           $scope.Cancelar = false;
           $scope.ActualizarMonitor();
           $scope.form.habilitar = false;
         })
-        .error(function (data, status, headers, config) {
-          $scope.ShowToast(data.message, 'danger');
+        .catch(error => {
+          $scope.ShowToast(error.data.message, 'danger');
         });
       }
     };
@@ -437,13 +437,13 @@
       const MENSUAL = 1;
       if (pedido.IdEsquemaRenovacion === MENSUAL) {
         PedidoDetallesFactory.getProratePriceMonth(pedido, detalle)
-        .success(function (result) {
-          $scope.prorrateo = result.data;
+        .then(result => {
+          $scope.prorrateo = result.data.data;
         });
       } else {
         PedidoDetallesFactory.getProratePriceAnnual(pedido, detalle)
-        .success(function (result) {
-          $scope.prorrateo = result.data;
+        .then(result => {
+          $scope.prorrateo = result.data.data;
         });
       }
     };
@@ -467,16 +467,16 @@
       $scope.$emit('LOAD');
       Pedido.IdPedidoDetalle = Detalles.IdPedidoDetalle;
       PedidoDetallesFactory.updateProductoAutodesk(Pedido, 0)
-        .success(function (result) {
-          if (result.success === 1) {
-            $scope.ShowToast(result.message, 'success');
+        .then(result => {
+          if (result.data.success === 1) {
+            $scope.ShowToast(result.data.message, 'success');
             $scope.$emit('UNLOAD');
             $scope.Cancelar = false;
             $scope.ActualizarMonitor();
             $scope.form.habilitar = false;
           }
         })
-        .error(function (error) {
+        .catch(error => {
           $scope.ShowToast(error, 'danger');
         });
     };
@@ -484,9 +484,9 @@
     $scope.ReanudarPedidoAutodesk = function (Pedido, Detalles) {
       Pedido.IdPedidoDetalle = Detalles.IdPedidoDetalle;
       PedidoDetallesFactory.updateProductoAutodesk(Pedido, 1)
-        .success(function (result) {
-          if (!result.success) {
-            $scope.ShowToast(result.message, 'danger');
+        .then(result => {
+          if (!result.data.success) {
+            $scope.ShowToast(result.data.message, 'danger');
           } else {
             $scope.ShowToast('Suscripción reanudada.', 'success');
           }
@@ -494,7 +494,7 @@
           $scope.ActualizarMonitor();
           $scope.form.habilitar = false;
         })
-        .catch(function (error) {
+        .catch(error => {
           $scope.ShowToast(error.data.message, 'danger');
           $log.log('data error: ' + error.data.message + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
           $scope.form.habilitar = true;
@@ -523,17 +523,17 @@
       }
       if (pedido.IdFabricante === 1) {
         PedidoDetallesFactory.putPedidoDetalleMicrosoft(order)
-        .success(function (result) {
-          if (!result) {
+        .then(result => {
+          if (!result.data) {
             $scope.ShowToast('Ocurrió un error', 'danger');
           } else {
-            $scope.ShowToast(result.message, 'danger');
+            $scope.ShowToast(result.data.message, 'danger');
           }
           $scope.form.habilitar = true;
           $scope.ActualizarMonitor();
           $scope.form.habilitar = false;
         })
-        .catch(function (error) {
+        .catch(error => {
           $scope.ShowToast(error.data.message, 'danger');
           $log.log('data error: ' + error.data.message + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
           $scope.form.habilitar = true;
@@ -542,9 +542,9 @@
         });
       } else {
         PedidoDetallesFactory.putPedidoDetalle(order)
-        .success(function (result) {
-          if (!result.success) {
-            $scope.ShowToast(result.message, 'danger');
+        .then(result => {
+          if (!result.data.success) {
+            $scope.ShowToast(result.data.message, 'danger');
           } else {
             $scope.ShowToast('Suscripción reanudada.', 'success');
           }
@@ -552,7 +552,7 @@
           $scope.ActualizarMonitor();
           $scope.form.habilitar = false;
         })
-        .catch(function (error) {
+        .catch(error => {
           $scope.ShowToast(error.data.message, 'danger');
           $log.log('data error: ' + error.data.message + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
           $scope.form.habilitar = true;
@@ -585,14 +585,14 @@
 
     const getTerminos = function (IdEmpresa) {
       EmpresasXEmpresasFactory.getAcceptanceAgreementByClient(IdEmpresa)
-        .success(function (result) {
-          if (!result.AceptoTerminosMicrosoft) {
+        .then(result => {
+          if (!result.data.AceptoTerminosMicrosoft) {
             $scope.terminos = false;
           } else {
             $scope.terminos = true;
           }
         })
-        .catch(function (error) {
+        .catch(error => {
           $scope.ShowToast(error.data.message, 'danger');
           $log.log('data error: ' + error.data.message + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
           $scope.form.habilitar = true;
@@ -603,8 +603,8 @@
 
     $scope.AceptarTerminos = function (IdEmpresa) {
       PedidoDetallesFactory.acceptAgreement(IdEmpresa)
-      .success(function (result) {
-        if (!result.success) {
+      .then(result => {
+        if (!result.data.success) {
           $scope.ShowToast('Ocurrió un error, favor de contactar a Soporte', 'danger');
         } else {
           $scope.ShowToast('Terminos y condiciones aceptados.', 'success');
@@ -614,7 +614,7 @@
         $scope.ActualizarMonitor();
         $scope.form.habilitar = false;
       })
-      .catch(function (error) {
+      .catch(error => {
         $scope.ShowToast(error.data.message, 'danger');
         $log.log('data error: ' + error.data.message + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         $scope.form.habilitar = true;

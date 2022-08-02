@@ -1,6 +1,7 @@
+/* eslint-disable eqeqeq */
+/* eslint-disable no-undef */
 (function () {
   var Confirmar3dsController = function ($scope, $log, $cookies, $location, $uibModal, $filter, PedidoDetallesFactory, $routeParams) {
-    
     $scope.showGif = true;
     $scope.buttonBack = false;
 
@@ -9,7 +10,7 @@
     };
 
     $scope.redireccionCarrito = () => {
-      window.location.href = "#/Carrito";
+      window.location.href = '#/Carrito';
     };
 
     const redireccionPagado = (openpayStatus, paymentId) => {
@@ -18,10 +19,10 @@
 
     const redireccionMal = () => {
       setTimeout($scope.redireccionCarrito, 5000);
-    }
+    };
     const redireccionBien = (openpayStatus, paymentId) => {
       setTimeout(redireccionPagado(openpayStatus, paymentId), 5000);
-    }
+    };
 
     const verificarPago = () => {
       const idCharge = $cookies.getObject('paymentId');
@@ -41,7 +42,6 @@
               $scope.showGif = false;
               $scope.buttonBack = true;
             }
-            
           }
         })
         .catch(function (response) {
@@ -49,12 +49,11 @@
         });
     };
 
-
     $scope.init = function () {
       window.onload = function () {
         window.onbeforeunload = confirmExit;
-        function confirmExit() {
-          return "Por favor, permanece en la página.";
+        function confirmExit () {
+          return 'Por favor, permanece en la página.';
         }
       };
       verificarPago();

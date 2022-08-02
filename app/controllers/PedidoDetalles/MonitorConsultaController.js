@@ -1,3 +1,6 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
+/* eslint-disable eqeqeq */
 (function () {
   var MonitorConsultaController = function ($scope, $log, $cookies, $location, $uibModal, $filter, PedidoDetallesFactory, $routeParams) {
     $scope.Pedidos = [];
@@ -32,8 +35,8 @@
       var CSV = '';
       CSV += ReportTitle + '\r\n\n';
       if (ShowLabel) {
-        var row = '';
-        for (var index in arrData[0]) {
+        let row = '';
+        for (let index in arrData[0]) {
           row += index + ',';
         }
         row = row.slice(0, -1);
@@ -41,8 +44,8 @@
       }
 
       for (var i = 0; i < arrData.length; i++) {
-        var row = '';
-        for (var index in arrData[i]) {
+        let row = '';
+        for (let index in arrData[i]) {
           row += '"' + arrData[i][index] + '",';
         }
         row.slice(0, row.length - 1);
@@ -82,19 +85,19 @@
         delete element.EstatusUF;
       });
       return data;
-    }
+    };
 
     $scope.GenerarReporte = function () {
       var d = new Date();
       var NombreReporte = 'Ventas tuclick';
-      if(FilteredOrders.length > 0) {
+      if (FilteredOrders.length > 0) {
         const newOrders = FilteredOrders;
         const cleanData = cleanObject(newOrders);
         var repeat = Math.ceil(cleanData.length / maxSize);
         for (var j = 0; j < repeat; j++) {
           var start = j * maxSize;
           var end = start + maxSize;
-          var parte =  cleanData.slice(start, end);
+          var parte = cleanData.slice(start, end);
           var number = j + 1;
           NombreReporte = NombreReporte + '_' + number;
           $scope.JSONToCSVConvertor(parte, NombreReporte, true);
@@ -103,33 +106,33 @@
         $scope.ShowToast('Sin registros', 'danger');
       }
       return;
-  };
+    };
 
     const getDistributorInformation = function () {
       PedidoDetallesFactory.getDistributorData()
-        .then(function (result) {
+        .then(result => {
           $scope.Pedidos = result.data.data;
           FilteredOrders = result.data.data;
           $scope.search();
         })
-        .catch(function (result) {
-          $scope.ShowToast(result.data.message, 'danger');
+        .catch(error => {
+          $scope.ShowToast(error.data.message, 'danger');
         });
 
       PedidoDetallesFactory.datesOrders()
-        .then(function (result) {
+        .then(result => {
           $scope.Years = result.data.data;
         })
-        .catch(function (result) {
-          $scope.ShowToast(result.data.message, 'danger');
+        .catch(error => {
+          $scope.ShowToast(error.data.message, 'danger');
         });
 
       PedidoDetallesFactory.getFinalUser()
-        .then(function (result) {
+        .then(result => {
           $scope.selectFinalUser = result.data.data;
         })
-        .catch(function (result) {
-          $scope.ShowToast(result.data.message, 'danger');
+        .catch(error => {
+          $scope.ShowToast(error.data.message, 'danger');
         });
 
       $scope.MesActual = {};

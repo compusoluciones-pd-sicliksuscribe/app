@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 (function () {
   const ON_DEMAND = 3;
   const CREDIT_CARD = 1;
@@ -30,10 +31,10 @@
 
     const getEnterprises = function () {
       return EmpresasFactory.getEmpresas()
-        .then(function (result) {
+        .then(result => {
           $scope.Distribuidor = result.data[0];
         })
-        .catch(function (result) {
+        .catch(result => {
           error(result.data);
           $location.path('uf/Productos');
         });
@@ -89,7 +90,7 @@
 
     const getOrderDetails = function (validate) {
       return PedidoDetallesFactory.getPedidoDetallesUf($scope.currentDistribuidor.IdEmpresa)
-        .then(function (result) {
+        .then(result => {
           if (result.data.success) {
             if (result.data.data[0]) {
               $scope.opcionCFDI = result.data.data[0].claveCFDI;
@@ -110,15 +111,15 @@
             }
           }
         })
-        .then(function () {
+        .then(() => {
           if ($scope.isPayingWithCSCredit()) validarCarrito();
         })
-        .catch(function (result) { error(result.data); });
+        .catch(result => { error(result.data); });
     };
 
     const validarCarrito = function () {
       return PedidoDetallesFactory.getValidarCarrito()
-        .then(function (result) {
+        .then(result => {
           if (result.data.success) {
             $scope.PedidoDetalles.forEach(function (item) {
               if ($scope.Distribuidor.IdFormaPagoPredilecta === 1 && item.MonedaPago !== 'Pesos') {
@@ -134,11 +135,11 @@
               });
             });
           } else {
-            //$scope.ShowToast('No pudimos validar tu carrito de compras, por favor intenta de nuevo.', 'danger');
+            // $scope.ShowToast('No pudimos validar tu carrito de compras, por favor intenta de nuevo.', 'danger');
             // $location.path('uf/Productos');
           }
         })
-        .catch(function (result) {
+        .catch(result => {
           error(result.data);
           $location.path('uf/Productos');
         });
@@ -147,26 +148,26 @@
     var ActualizarFormaPago = function (IdFormaPago) {
       var empresa = {IdFormaPagoPredilecta: IdFormaPago || $scope.Distribuidor.IdFormaPagoPredilecta};
       EmpresasFactory.putEmpresaFormaPagoFinalUser(empresa)
-        .then(function (result) {
+        .then(result => {
           if (result.data.success) {
             $scope.ShowToast(result.data.message, 'success');
             CambiarMoneda();
             getOrderDetails();
           } else $scope.ShowToast(result.data.message, 'danger');
         })
-        .catch(function (result) { error(result.data); });
+        .catch(result => { error(result.data); });
     };
 
     var CambiarMoneda = function (tipoMoneda) {
       var moneda = { MonedaPago: tipoMoneda || 'Pesos' };
       EmpresasFactory.putEmpresaCambiaMonedaFinalUser(moneda)
-      .then(function (result) {
+      .then(result => {
         if (result.data.success) {
           $scope.ShowToast(result.data.message, 'success');
           getOrderDetails();
         } else $scope.ShowToast(result.data.message, 'danger');
       })
-      .catch(function (result) { error(result.data); });
+      .catch(result => { error(result.data); });
     };
 
     $scope.CambiarUsoCFDI = () => {
@@ -175,17 +176,17 @@
         orders.push(order.IdPedido);
       });
       PedidoDetallesFactory.putUseCFDI($scope.opcionCFDI, orders)
-      .then(function (result) {
+      .then(result => {
         if (result.data.success) {
           $scope.ShowToast(result.data.message, 'success');
         } else $scope.ShowToast('Selecciona una opción valida', 'danger');
       })
-      .catch(function (result) { error(result.data); });
+      .catch(result => { error(result.data); });
     };
 
     $scope.init = function () {
       PedidoDetallesFactory.getUseCFDI()
-        .then(function (result) { 
+        .then(result => {
           $scope.useCFDI = result.data.useCFDIList;
         });
       $scope.CheckCookie();
@@ -193,22 +194,22 @@
         .then(getEnterprises)
         .then(getOrderDetails)
         .then(ActualizarFormaPago)
-        .catch(function (result) { error(result.data); });
+        .catch(result => { error(result.data); });
     };
 
     $scope.init();
 
     const QuitarProductoFinalUser = function (PedidoDetalle) {
       ComprasUFFactory.deleteComprasUF(PedidoDetalle.IdCompraUF)
-        .success(function (PedidoDetalleResult) {
-          if (PedidoDetalleResult.success) {
+        .then(PedidoDetalleResult => {
+          if (PedidoDetalleResult.data.success) {
           } else {
-            $scope.ShowToast(PedidoDetalleResult.message, 'danger');
+            $scope.ShowToast(PedidoDetalleResult.data.message, 'danger');
           }
         })
-        .error(function (data, status, headers, config) {
+        .catch(error => {
           $scope.ShowToast('No pudimos quitar el producto seleccionado. Intenta de nuevo más tarde.', 'danger');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
@@ -224,19 +225,19 @@
       });
 
       PedidoDetallesFactory.deletePedidoDetalles(PedidoDetalle.IdPedidoDetalle)
-        .success(function (PedidoDetalleResult) {
-          if (!PedidoDetalleResult.success) {
-            $scope.ShowToast(PedidoDetalleResult.message, 'danger');
+        .then(PedidoDetalleResult => {
+          if (!PedidoDetalleResult.data.success) {
+            $scope.ShowToast(PedidoDetalleResult.data.message, 'danger');
             getOrderDetails(true);
           } else {
             $scope.ActualizarMenu();
-            $scope.ShowToast(PedidoDetalleResult.message, 'success');
+            $scope.ShowToast(PedidoDetalleResult.data.message, 'success');
           }
         })
         .then(QuitarProductoFinalUser(PedidoDetalle))
-        .error(function (data, status, headers, config) {
+        .catch(error => {
           $scope.ShowToast('No pudimos quitar el producto seleccionado. Intenta de nuevo más tarde.', 'danger');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
@@ -246,11 +247,11 @@
         IdPedido: value.IdPedido
       };
       PedidosFactory.putCodigoPromocion(order)
-        .then(function (result) {
+        .then(result => {
           $scope.init();
           $scope.ShowToast(result.data.message, 'success');
         })
-        .catch(function (result) { error(result.data); });
+        .catch(result => { error(result.data); });
     };
 
     $scope.ValidarFormaPago = function () {

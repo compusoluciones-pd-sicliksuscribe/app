@@ -5,8 +5,8 @@
     $scope.MostrarMensaje = false;
     $scope.init = function () {
       PedidoDetallesFactory.getAzureUsage(IdPedido)
-        .success(function (usage) {
-          if (usage.data.length < 1) {
+        .then(usage => {
+          if (usage.data.data.length < 1) {
             $scope.Mostrar = false;
             $scope.MostrarMensaje = true;
           } else {
@@ -14,7 +14,7 @@
             $scope.MostrarMensaje = false;
           }
           $scope.Total = 0;
-          $scope.UsageDetails = usage.data.map(function(item){
+          $scope.UsageDetails = usage.data.data.map((item) => {
             if (item.Unidad === 'Hours') {
               item.Utilizado = Number(item.Utilizado).toFixed(2);
             } else {
@@ -23,19 +23,17 @@
             $scope.Total += Number(item.Total);
             return item;
           });
-          $scope.FechaActualizacion = usage.data[0].FechaActivo;
+          $scope.FechaActualizacion = usage.data.data[0].FechaActivo;
         })
-        .error(function (data, status, headers, config) {
+        .catch(error => {
           $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
           $scope.ShowToast('No pudimos cargar la lista de fabricantes, por favor intenta de nuevo más tarde.', 'danger');
 
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
-
     };
     $scope.init();
-
   };
   DetallesAzureController.$inject = ['$scope', '$log', '$cookies', '$location', '$uibModal', '$filter', 'PedidoDetallesFactory', '$routeParams'];
 

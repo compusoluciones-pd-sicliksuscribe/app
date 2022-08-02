@@ -122,7 +122,7 @@
       $location.url($location.path());
       if (paymentId && token && PayerID && orderIds) {
         PedidoDetallesFactory.confirmPayPal({ paymentId, PayerID, orderIds })
-          .then(function (response) {
+          .then(response => {
             if (response.data.state === 'approved') {
               $scope.ComprarConPayPal({ paymentId, PayerID, orderIds });
               $location.path('/MonitorPagos');
@@ -132,8 +132,8 @@
               $location.path('/MonitorPagos');
             }
           })
-          .catch(function (response) {
-            $scope.ShowToast('Ocurrió un error de tipo: "' + response.data.message + '". Contacte con soporte de Compusoluciones.', 'danger');
+          .catch(error => {
+            $scope.ShowToast('Ocurrió un error de tipo: "' + error.data.message + '". Contacte con soporte de Compusoluciones.', 'danger');
             $location.path('/MonitorPagos');
           });
       }
@@ -156,36 +156,36 @@
       }
       $location.path('/MonitorPagos');
       PedidoDetallesFactory.getPendingOrdersToPay()
-        .success(function (ordersToPay) {
-          $scope.Pedidos = ordersToPay.data;
-          if (!ordersToPay.data || ordersToPay.data.length === 0) {
+        .then(ordersToPay => {
+          $scope.Pedidos = ordersToPay.data.data;
+          if (!ordersToPay.data.data || ordersToPay.data.data.length === 0) {
             return $scope.DeshabilitarPagar = true;
           }
-          $scope.PedidosAgrupados = groupBy(ordersToPay.data, function (item) { return [item.IdPedido]; });
+          $scope.PedidosAgrupados = groupBy(ordersToPay.data.data, function (item) { return [item.IdPedido]; });
           for (let x = 0; x < $scope.PedidosAgrupados.length; x++) {
             $scope.PedidosObj[$scope.PedidosAgrupados[x][0].IdPedido] = $scope.PedidosAgrupados[x][0];
           }
-          $scope.TipoCambio = ordersToPay.data[0].TipoCambio;
+          $scope.TipoCambio = ordersToPay.data.data[0].TipoCambio;
         })
-        .error(function (data, status, headers, config) {
+        .catch(error => {
           $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
           $scope.ShowToast('No pudimos cargar los pedidos por pagar, por favor intenta de nuevo más tarde.', 'danger');
 
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
 
       if ($cookies.getObject('Session').IdTipoAcceso == 2 || $cookies.getObject('Session').IdTipoAcceso == 3) {
         EmpresasFactory.getEmpresa($cookies.getObject('Session').IdEmpresa)
-          .success(function (empresa) {
-            $scope.infoEmpresa = empresa[0];
+          .then(empresa => {
+            $scope.infoEmpresa = empresa.data[0];
           })
-          .error(function (data, status, headers, config) {
+          .catch(error => {
             $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
             $scope.ShowToast('No pudimos cargar la información, por favor intenta de nuevo más tarde.', 'danger');
 
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+            $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
           });
       }
       $cookies.remove('tipoTarjetaCreditoMonitor');
@@ -271,24 +271,24 @@
       const MonedaPago = $scope.Distribuidor.MonedaPago;
       $scope.pedidosPorPagar(key);
       EmpresasFactory.putCambiaMonedaMonitorPXP($scope.PedidosSeleccionadosParaPagar, MonedaPago)
-        .then(function (result) {
+        .then(result => {
         })
-        .catch(function (result) { error(result.data); });
+        .catch(result => { error(result.data); });
     };
 
     $scope.ActualizarPagoAutomatico = function () {
       EmpresasFactory.updateAutomaticPayment($scope.infoEmpresa.RealizarCargoAutomatico)
-        .success(function (result) {
-          if (result.success === 1) {
-            $scope.ShowToast(result.message, 'success');
+        .then(result => {
+          if (result.data.success === 1) {
+            $scope.ShowToast(result.data.message, 'success');
           }
         })
-        .error(function (data, status, headers, config) {
+        .catch(error => {
           $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
           $scope.ShowToast('No pudimos cargar la información, por favor intenta de nuevo más tarde.', 'danger');
 
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
@@ -346,11 +346,11 @@
       }
       if ($scope.PedidosSeleccionadosParaPagar.length !== 0 && document.getElementById('Prepago').checked) {
         PedidoDetallesFactory.monitorCalculationsPrepaid({Pedidos: $scope.PedidosSeleccionadosParaPagar, tipoTarjeta: false}, $scope.Distribuidor.MonedaPago)
-          .success(function (calculations) {
-            if (calculations.total) {
-              $scope.Subtotal = calculations.subtotal;
-              $scope.Iva = calculations.iva;
-              $scope.Total = calculations.total;
+          .then(calculations => {
+            if (calculations.data.total) {
+              $scope.Subtotal = calculations.data.subtotal;
+              $scope.Iva = calculations.data.iva;
+              $scope.Total = calculations.data.total;
             } else {
               $scope.Subtotal = 0;
               $scope.Iva = 0;
@@ -358,7 +358,7 @@
             }
             $scope.ServicioElectronico = 0;
           })
-          .error(function (data, status, headers, config) {
+          .catch(error => {
             $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
             $scope.ShowToast('No pudimos realizar los cálculos, por favor intenta de nuevo más tarde.', 'danger');
           });
@@ -367,12 +367,12 @@
         if ($cookies.getObject('tipoTarjetaCreditoMonitor') && $scope.PedidosSeleccionadosParaPagar.length !== 0) {
           let tipoTarjeta = $cookies.getObject('tipoTarjetaCreditoMonitor');
           PedidoDetallesFactory.monitorCalculations({Pedidos: $scope.PedidosSeleccionadosParaPagar, tipoTarjeta})
-          .success(function (calculations) {
-            if (calculations.total) {
-              $scope.ServicioElectronico = calculations.electronicService;
-              $scope.Subtotal = calculations.subtotal;
-              $scope.Iva = calculations.iva;
-              $scope.Total = calculations.total;
+          .then(calculations => {
+            if (calculations.data.total) {
+              $scope.ServicioElectronico = calculations.data.electronicService;
+              $scope.Subtotal = calculations.data.subtotal;
+              $scope.Iva = calculations.data.iva;
+              $scope.Total = calculations.data.total;
             } else {
               $scope.ServicioElectronico = 0;
               $scope.Subtotal = 0;
@@ -380,12 +380,12 @@
               $scope.Total = 0;
             }
           })
-          .error(function (data, status, headers, config) {
+          .catch(error => {
             $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
             $scope.ShowToast('No pudimos realizar los cálculos, por favor intenta de nuevo más tarde.', 'danger');
 
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+            $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
           });
         } else {
           $scope.ShowToast('Selecciona el tipo de tarjeta con la que quieres pagar.', 'danger');
@@ -418,20 +418,20 @@
     $scope.pagar = function () {
       if ($scope.PedidosSeleccionadosParaPagar.length > 0) {
         PedidoDetallesFactory.payWidthCard({ Pedidos: $scope.PedidosSeleccionadosParaPagar })
-          .success(function (Datos) {
+          .then(Datos => {
             var expireDate = new Date();
             expireDate.setTime(expireDate.getTime() + 600 * 2000);
-            Datos.data.pedidosAgrupados[0].TipoCambio = $scope.TipoCambio;
-            $cookies.putObject('pedidosAgrupados', Datos.data.pedidosAgrupados, { 'expires': expireDate, secure: $rootScope.secureCookie });
-            if (Datos.success) {
+            Datos.data.data.pedidosAgrupados[0].TipoCambio = $scope.TipoCambio;
+            $cookies.putObject('pedidosAgrupados', Datos.data.data.pedidosAgrupados, { 'expires': expireDate, secure: $rootScope.secureCookie });
+            if (Datos.data.success) {
               if ($cookies.getObject('pedidosAgrupados')) {
                 setCCDates();
-                $scope.pedidos = Datos.data.pedidos;
+                $scope.pedidos = Datos.data.data.pedidos;
                 $scope.amount = $scope.Total.toFixed(2);
                 $scope.FormatedAmountMonitor = String($scope.amount).replace(/(?<!\..*)(\d)(?=(?:\d{3})+(?:\.|$))/g, '$1,');
-                $scope.currency = Datos.data.moneda;
-                OpenPay.setId(Datos.data.opId);
-                OpenPay.setApiKey(Datos.data.opPublic);
+                $scope.currency = Datos.data.data.moneda;
+                OpenPay.setId(Datos.data.data.opId);
+                OpenPay.setApiKey(Datos.data.data.opPublic);
                 OpenPay.setSandboxMode(false);
                 deviceSessionId = OpenPay.deviceData.setup('payment-form-monitor', 'deviceIdHiddenFieldName');
                 $('#deviceSessionId').val(deviceSessionId);
@@ -439,12 +439,12 @@
               }
             }
           })
-          .error(function (data, status, headers, config) {
+          .catch(error => {
             $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
             $scope.ShowToast('No pudimos conectarnos con el banco, por favor intenta de nuevo más tarde.', 'danger');
 
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+            $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
           });
       } else {
         $scope.ShowToast('Selecciona al menos un pedido para pagar.', 'danger');
@@ -533,7 +533,7 @@
         pedidosAgrupados: $cookies.getObject('pedidosAgrupados')
       };
       PedidoDetallesFactory.pagarTarjetaOpenpay(charges)
-        .then(function (response) {
+        .then(response => {
           if (response.data.statusCode === 200) {
             if (response.data.content.statusCharge == 'charge_pending') {
               $cookies.remove('paymentId');
@@ -547,8 +547,8 @@
             printError(response.data.message);
           }
         })
-        .catch(function (response) {
-          $scope.ShowToast('Ocurrió un error al procesar el pago. de tipo: ' + response.data.message, 'danger');
+        .catch(error => {
+          $scope.ShowToast('Ocurrió un error al procesar el pago. de tipo: ' + error.data.message, 'danger');
         });
     };
 
@@ -591,17 +591,17 @@
       };
       if (datosPayPal.PedidosAgrupados) {
         PedidosFactory.patchPaymentInformation(datosPayPal)
-          .success(function (compra) {
+          .then(compra => {
             $cookies.remove('pedidosAgrupados');
             $cookies.remove('TipoCambio');
             $cookies.remove('electronicServiceByOrder');
-            if (compra.success === 1) {
-              $scope.ShowToast(compra.message, 'success');
+            if (compra.data.success === 1) {
+              $scope.ShowToast(compra.data.message, 'success');
               $location.path('/MonitorPagos/refrescar');
             }
           })
-          .error(function (data, status, headers, config) {
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          .catch(error => {
+            $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
           });
       } else {
         $scope.ShowToast('Algo salió mal con tu pedido, por favor ponte en contacto con tu equipo de soporte CompuSoluciones para más información.', 'danger');
@@ -612,15 +612,15 @@
     $scope.preparePrePaid = function () {
       if ($scope.PedidosSeleccionadosParaPagar.length > 0) {
         PedidoDetallesFactory.payWithPrePaid({ Pedidos: $scope.PedidosSeleccionadosParaPagarPrepaid }, $scope.Distribuidor.MonedaPago)
-          .success(function (response) {
-            if (response.statusCode === 400) {
-              $scope.ShowToast(response.message, 'danger');
+          .then(response => {
+            if (response.data.statusCode === 400) {
+              $scope.ShowToast(response.data.message, 'danger');
             } else {
               $scope.ShowToast('Pago realizado correctamente.', 'success');
               $location.path('/MonitorPagos/refrescar');
             }
           })
-          .catch(function (response) {
+          .catch(error => {
             $scope.ShowToast('Algo salió mal con tu pedido, por favor ponte en contacto con tu equipo de soporte CompuSoluciones para más información.', 'danger');
           });
       } else {
