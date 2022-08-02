@@ -1,6 +1,5 @@
 (function () {
   var PowerBIReadController = function ($scope, $log, $cookies, $location, $uibModal, $filter, PedidoDetallesFactory, $routeParams) {
-
     $scope.init = function () {
 
     };

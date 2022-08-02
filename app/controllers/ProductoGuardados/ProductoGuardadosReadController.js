@@ -1,6 +1,7 @@
+/* eslint-disable eqeqeq */
+/* eslint-disable standard/object-curly-even-spacing */
 (function () {
   var ProductoGuardadosReadController = function ($scope, $log, $location, $cookies, ProductoGuardadosFactory, PedidoDetallesFactory) {
-
     $scope.sortBy = 'Nombre';
     $scope.reverse = false;
 
@@ -8,11 +9,11 @@
       $scope.CheckCookie();
 
       ProductoGuardadosFactory.getProductoGuardados()
-        .success(function (ProductoGuardados) {
-          $scope.ProductoGuardados = ProductoGuardados;
+        .then(ProductoGuardados => {
+          $scope.ProductoGuardados = ProductoGuardados.data;
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
@@ -27,25 +28,23 @@
       var ProductoGuardado = { IdPedido: $cookies.getObject('Pedido').IdPedidoActual, IdProducto: Producto.IdProducto, Cantidad: 1};
 
       PedidoDetallesFactory.postPedidoDetalle(ProductoGuardado)
-        .success(function (PedidoDetalleResult) {
-          if (PedidoDetalleResult[0].Success == true) {
-            $scope.ShowToast(PedidoDetalleResult[0].Message + " podrás cambiar la cantidad desde ahí", 'success');
+        .then(PedidoDetalleResult => {
+          if (PedidoDetalleResult.data[0].Success == true) {
+            $scope.ShowToast(PedidoDetalleResult.data[0].Message + ' podrás cambiar la cantidad desde ahí', 'success');
             $scope.ActualizarMenu();
-          }
-          else {
-            $scope.ShowToast(PedidoDetalleResult[0].Message, 'danger');
+          } else {
+            $scope.ShowToast(PedidoDetalleResult.data[0].Message, 'danger');
           }
         })
-        .error(function (data, status, headers, config) {
+        .catch(error => {
           $scope.ShowToast('No pudimos agregar este producto a tu carrito de compras, por favor intenta de nuevo más tarde.', 'danger');
 
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
     $scope.QuitarProducto = function (ProductoQuitar) {
       $scope.ProductoGuardados.forEach(function (Elemento, Index) {
-
         if (Elemento.IdProductoGuardado == ProductoQuitar.IdProductoGuardado) {
           $scope.ProductoGuardados.splice(Index, 1);
           return false;
@@ -53,19 +52,18 @@
       });
 
       ProductoGuardadosFactory.putProductoGuardado(ProductoQuitar)
-        .success(function (PedidoGuardadoResult) {
-          if (PedidoGuardadoResult[0].Success == false) {
+        .then(PedidoGuardadoResult => {
+          if (PedidoGuardadoResult.data[0].Success == false) {
             $scope.init();
-            $scope.ShowToast(PedidoGuardadoResult[0].Message, 'danger');
-          }
-          else {
-            $scope.ShowToast(PedidoGuardadoResult[0].Message, 'success');
+            $scope.ShowToast(PedidoGuardadoResult.data[0].Message, 'danger');
+          } else {
+            $scope.ShowToast(PedidoGuardadoResult.data[0].Message, 'success');
           }
         })
-        .error(function (data, status, headers, config) {
+        .catch(error => {
           $scope.ShowToast('No pudimos quitar el producto seleccionado. Intenta de nuevo más tarde.', 'danger');
 
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
   };
