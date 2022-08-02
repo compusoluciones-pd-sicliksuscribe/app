@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 (function () {
   var MisProductosReadController = function ($scope, $log, $location, $cookieStore, $routeParams, ProductosFactory) {
     $scope.sortBy = 'Nombre';
@@ -47,20 +48,20 @@
         return;
       }
       ProductosFactory.getMisProductos($scope.IdEmpresa)
-        .success(function (misProductos) {
-          $scope.Productos = misProductos.data;
+        .then(misProductos => {
+          $scope.Productos = misProductos.data.data;
           $scope.getNumberOfPages = new Array(Math.ceil($scope.Productos.length / 50));
-          productosEnCache[$scope.IdEmpresa] = misProductos.data.map(p => {
+          productosEnCache[$scope.IdEmpresa] = misProductos.data.data.map(p => {
             p.name = p.Nombre.toLowerCase();
             return p;
           });
           filteredProducts = productosEnCache[$scope.IdEmpresa];
           setPagination();
         })
-        .error(function (data, status, headers, config) {
+        .catch(error => {
           $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
           $scope.ShowToast('No pudimos cargar la lista de productos, por favor intenta de nuevo más tarde.', 'danger');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
@@ -131,7 +132,7 @@
     };
     /* Validar los campos de forma que mande el toast sin hacer operaciones en el api */
     $scope.validaActualizar = function (producto) {
-      if (producto.Fabricante === "Autodesk") {
+      if (producto.Fabricante === 'Autodesk') {
         return $scope.validaActualizarAutodesk(producto);
       }
       if (producto.Precio > 9999999) {
@@ -161,24 +162,22 @@
       return true;
     };
 
-
-
     $scope.Actualizar = function (producto) {
       if (!$scope.validaActualizar(producto)) {
         return;
       }
       ProductosFactory.putMiProducto(producto)
-        .success(function (actualizacion) {
-          if (actualizacion.success) {
-            $scope.ShowToast(actualizacion.message, 'success');
+        .then(actualizacion => {
+          if (actualizacion.data.success) {
+            $scope.ShowToast(actualizacion.data.message, 'success');
           } else {
-            $scope.ShowToast(actualizacion.message, 'danger');
+            $scope.ShowToast(actualizacion.data.message, 'danger');
           }
         })
-        .error(function (data, status, headers, config) {
+        .catch(error => {
           $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
           $scope.ShowToast('No pudimos cargar la lista de productos, por favor intenta de nuevo más tarde.', 'danger');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
           $scope.init();
         });
     };
@@ -243,19 +242,19 @@
         return newP;
       });
       ProductosFactory.putMisProductos(pFormat)
-        .success(function (actualizacion) {
-          if (actualizacion.success) {
-            $scope.ShowToast(actualizacion.message, 'success');
+        .then(actualizacion => {
+          if (actualizacion.data.success) {
+            $scope.ShowToast(actualizacion.data.message, 'success');
             $scope.porcentaje = null;
             $scope.init();
           } else {
-            $scope.ShowToast(actualizacion.message, 'danger');
+            $scope.ShowToast(actualizacion.data.message, 'danger');
           }
         })
-        .error(function (data, status, headers, config) {
+        .catch(error => {
           $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
           $scope.ShowToast('No pudimos cargar la lista de productos, por favor intenta de nuevo más tarde.', 'danger');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
@@ -292,7 +291,7 @@
     };
   };
 
-  MisProductosReadController.$inject = ['$scope', '$log', '$location', '$cookieStore', '$routeParams', 'ProductosFactory'];
+  MisProductosReadController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'ProductosFactory'];
 
   angular.module('marketplace').controller('MisProductosReadController', MisProductosReadController);
 }());

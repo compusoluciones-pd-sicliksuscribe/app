@@ -579,8 +579,8 @@
         } else {
 
           EmpresasFactory.getTerminosNuevoComercio($scope.IdEmpresa)
-          .success(result => {
-            if (result.Firma === 1) {
+          .then(result => {
+            if (result.data.Firma === 1) {
               $scope.AgregarCarrito(producto, producto.Cantidad, producto.IdPedidocontrato);
             } else {
               $scope.ShowToast('No has aceptado los términos y condiciones de nuevo comercio', 'danger');
