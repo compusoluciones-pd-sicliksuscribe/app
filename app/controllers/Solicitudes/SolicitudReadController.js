@@ -3,18 +3,18 @@
     $scope.EstatusSelect = {};
     $scope.init = function () {
       EmpresasFactory.getSolicitudes()
-        .success(function (result) {
-          $scope.Solicitudes = result.data;
+        .then(result => {
+          $scope.Solicitudes = result.data.data;
         })
-        .error(function (data) {
+        .catch(data => {
           $scope.ShowToast('Error al cargar solicitudes.', 'danger');
         });
       EmpresasFactory.getSiteStatus()
-        .success(function (result) {
-          $scope.Estatus = result.data;
+        .then(result => {
+          $scope.Estatus = result.data.data;
           $scope.EstatusSelect.IdEstatus = 1;
         })
-        .error(function (data) {
+        .catch(data => {
           $scope.ShowToast('Error al cargar estatus.', 'danger');
         });
     };
@@ -23,11 +23,11 @@
 
     $scope.patch = function (solicitud, IdEstatus) {
       EmpresasFactory.patchSolicitud({ IdSolicitud: solicitud.IdSolicitud, IdEstatus, IdEmpresa: solicitud.IdEmpresa })
-        .success(function (result) {
+        .then(result => {
           $scope.init();
-          $scope.ShowToast(result.message, 'succes');
+          $scope.ShowToast(result.data.message, 'succes');
         })
-        .error(function (data) {
+        .catch(data => {
           $scope.ShowToast('Error al actualizar solicitud.', 'danger');
         });
     };

@@ -1,6 +1,7 @@
+/* eslint-disable one-var */
+/* eslint-disable no-undef */
 (function () {
   const ReconciliacionController = function ($scope, ReconciliacionFactory) {
-
     let histogramaCsp = '';
     let histogramaClick = '';
     let ThousandsDollars = 1000;
@@ -19,7 +20,7 @@
           lastDate = new Date(histogramaCsp[0].FechaFactura);
           lastYear = lastDate.getFullYear();
           lastMonth = lastDate.getMonth() + 1;
-          (lastMonth < 10) ? lastMonth = "0" + lastMonth : '';
+          (lastMonth < 10) ? lastMonth = '0' + lastMonth : '';
           getHistogramClick(lastYear + '-' + lastMonth);
         })
         .catch(function () {
@@ -67,7 +68,7 @@
       lastDate = new Date(histogramaCsp[0].FechaFactura);
       lastYear = lastDate.getFullYear();
       lastMonth = lastDate.getMonth() + 1;
-      (lastMonth < 10) ? lastMonth = "0" + lastMonth : '';
+      (lastMonth < 10) ? lastMonth = '0' + lastMonth : '';
       $scope.getReconciliationData(lastYear + '-' + lastMonth);
       document.getElementById('dateFilter').value = lastYear + '-' + lastMonth;
 
@@ -158,7 +159,7 @@
       };
       const chart = new ApexCharts(document.querySelector('#chart'), options);
       chart.render();
-    }
+    };
 
     $scope.getReconciliationData = (lastDate) => {
       let dateFilter = '';
@@ -311,7 +312,7 @@
                   FechaFin: $scope.listaDif[item].detailsClick[itemClick].FechaFin,
                   Cantidad: $scope.listaDif[item].detailsClick[itemClick].Cantidad,
                   PrecioUnitario: `$${$scope.listaDif[item].detailsClick[itemClick].PrecioUnitario.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`,
-                  Total: `$${$scope.listaDif[item].detailsClick[itemClick].Total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`,
+                  Total: `$${$scope.listaDif[item].detailsClick[itemClick].Total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
                 });
               }
               $scope.arrayDif.push({
@@ -371,9 +372,9 @@
     $scope.filter = () => {
       $scope.listaAux = $scope.lista.filter(function (str) {
         return str.NombreEmpresa.toLowerCase().indexOf($scope.subFilter.toLowerCase()) !== -1;
-      })
+      });
       pagination();
-    }
+    };
 
     paginationDif = () => {
       $scope.filteredDif = [];
@@ -389,9 +390,9 @@
     $scope.filterDif = () => {
       $scope.listaDifAux = $scope.arrayDif.filterDif(function (str) {
         return str.NombreEmpresa.toLowerCase().indexOf($scope.subFilterDif.toLowerCase()) !== -1;
-      })
+      });
       paginationDif();
-    }
+    };
 
     getTotalClick = (date) => {
       return ReconciliacionFactory

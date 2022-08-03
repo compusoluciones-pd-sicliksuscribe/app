@@ -17,7 +17,7 @@
 
     const getSincronizadorManual = function (agente = 'all', offset) {
       return SincronizadorManualFactory.getSincronizadorManual(agente, offset)
-        .then(function (response) {
+        .then(response => {
           $scope.detallesSincronizador = response.data;
           const tamaño = $scope.detallesSincronizador.length;
           if (tamaño === 0 && $cookies.getObject('Session').IdTipoAcceso !== 1) {
@@ -26,14 +26,14 @@
           }
           return $scope.detallesSincronizador;
         })
-        .catch(function () {
+        .catch(() => {
           $scope.ShowToast('No pudimos cargar la lista de detalles, por favor intenta de nuevo más tarde.', 'danger');
         });
     };
 
     const getAgentes = function () {
       return SincronizadorManualFactory.getAgentes()
-        .then(function (response) {
+        .then(response => {
           $scope.AgentesSincronizador = response.data.data;
           return $scope.AgentesSincronizador;
         })
@@ -50,7 +50,7 @@
 
     const updateSincronizador = function (payload, detalle) {
       return SincronizadorManualFactory.updateSincronizadorManual(payload)
-      .then(function (result) {
+      .then(result => {
         $scope.detallesSincronizador = $scope.detallesSincronizador.map(function (item) {
           if (item.IdPedidoDetalle === detalle.IdPedidoDetalle) {
             if (detalle.titulo === 'Ventas') {
@@ -62,7 +62,7 @@
           return item;
         });
         $scope.ShowToast(result.data.message, 'success');
-      }).catch(function (result) {
+      }).catch(result => {
         $scope.ShowToast('No se realizaron los cambios, inténtalo más tarde.', 'danger');
       });
     };
@@ -100,7 +100,7 @@
         }]
       };
       return updateSincronizador(payload, detalle)
-        .then(function () {
+        .then(() => {
           $scope.modal = {};
         });
     };
@@ -130,7 +130,7 @@
           }]
         }, pedido);
       }))
-        .then(function () {
+        .then(() => {
           $scope.Offset = 0;
           getSincronizadorManual($scope.BuscarSuscripcion.agente, $scope.Offset);
         });
@@ -148,14 +148,14 @@
     $scope.Sincronizar = function (detalle) {
       if (detalle.accionCsp === 'Cancelar') {
         return SincronizadorManualFactory.SincronizarCancelar(detalle)
-        .then(function () {
+        .then(() => {
           $scope.ShowToast('Cambios realizados exitosamente.', 'success');
           $scope.Pagina = 0;
           $scope.Offset = $scope.Pagina * 50;
           sleep(5000);
           getSincronizadorManual($scope.BuscarSuscripcion.agente, $scope.Offset);
         })
-        .catch(function () {
+        .catch(() => {
           $scope.ShowToast('No pudimos cargar la lista de detalles, por favor intenta de nuevo más tarde.', 'danger');
         });
       }
@@ -166,7 +166,7 @@
         accionCsp: detalle.accionCsp
       };
       return SincronizadorManualFactory.Sincronizar(payload)
-      .then(function () {
+      .then(() => {
         $scope.ShowToast('Cambios realizados exitosamente.', 'success');
         $scope.Pagina = 0;
         $scope.Offset = $scope.Pagina * 50;
