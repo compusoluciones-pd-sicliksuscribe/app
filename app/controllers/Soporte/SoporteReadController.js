@@ -1,5 +1,6 @@
+/* eslint-disable handle-callback-err */
 (function () {
-  var SoporteReadController = function ($scope, $log, $cookies, $location, $uibModal, $filter, SoporteFactory , FabricantesFactory , $routeParams) {
+  var SoporteReadController = function ($scope, $log, $cookies, $location, $uibModal, $filter, SoporteFactory, FabricantesFactory, $routeParams) {
     $scope.soporteIdCategoria = '';
 
     $scope.Confirmar = function (IdSolicitud) {
@@ -11,26 +12,26 @@
     };
     const obtenerFabricantes = function () {
       FabricantesFactory.getFabricantes()
-      .success(function (Fabricantes) {
-        $scope.selectFabricantes = Fabricantes;
+      .then(Fabricantes => {
+        $scope.selectFabricantes = Fabricantes.data;
       })
-      .error(function (data, status, headers, config) {
+      .catch(error => {
         $scope.ShowToast('No pudimos cargar la lista de fabricantes, por favor intenta de nuevo más tarde.', 'danger');
       });
     };
     const obtenerCategorias = function () {
       SoporteFactory.getCategorysReport()
-          .success(function (Categorias) {
-            if (Categorias.success === 1) {
-              $scope.selectCategorias = Categorias.data;
+          .then(Categorias => {
+            if (Categorias.data.success === 1) {
+              $scope.selectCategorias = Categorias.data.data;
             }
           })
-          .error(function (data, status, headers, config) {
+          .catch(error => {
             $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
             $scope.ShowToast('No pudimos enviar tu solicitud, por favor intenta de nuevo más tarde.', 'danger');
 
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+            $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
           });
     };
 
@@ -40,33 +41,32 @@
         Categoria: $scope.soporteIdCategoria || 'all'
       };
       SoporteFactory.getSolicitudes(payload)
-      .success(function (Solicitudes) {
-        $scope.Solicitudes = Solicitudes.data;
+      .then(Solicitudes => {
+        $scope.Solicitudes = Solicitudes.data.data;
       })
-      .error(function (data, status, headers, config) {
+      .catch(error => {
         $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
         $scope.ShowToast('No pudimos cargar la lista de solicitudes, por favor intenta de nuevo más tarde.', 'danger');
 
-        $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
       });
     };
 
     $scope.BajaSolicitud = function (soporte) {
       SoporteFactory.putDeleteSupport(soporte)
-      .success(function (data) {
-          if (data) {
-            $scope.ShowToast(data, 'success');
-
-            $scope.init();
-          } else {
-            $scope.ShowToast(data, 'danger');
-          }
-        })
-        .error(function (data, status, headers, config) {
+      .then(data => {
+        if (data.data) {
+          $scope.ShowToast(data.data, 'success');
+          $scope.init();
+        } else {
+          $scope.ShowToast(data.data, 'danger');
+        }
+      })
+        .catch(error => {
           $scope.ShowToast('No pudimos dar de baja tu solicitud, por favor intenta de nuevo más tarde', 'danger');
 
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
@@ -82,10 +82,10 @@
     };
 
     $scope.EditarDetalle = function (id) {
-      $location.path('actualizar-soporte/'+id);
+      $location.path(`actualizar-soporte/${id}`);
     };
   };
-  SoporteReadController.$inject = ['$scope', '$log', '$cookies', '$location', '$uibModal', '$filter', 'SoporteFactory','FabricantesFactory', '$routeParams'];
+  SoporteReadController.$inject = ['$scope', '$log', '$cookies', '$location', '$uibModal', '$filter', 'SoporteFactory', 'FabricantesFactory', '$routeParams'];
 
   angular.module('marketplace').controller('SoporteReadController', SoporteReadController);
 }());

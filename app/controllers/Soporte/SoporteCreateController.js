@@ -1,3 +1,4 @@
+/* eslint-disable handle-callback-err */
 (function () {
   var SoporteCreateController = function ($scope, $log, $cookies, $location, $uibModal, $filter, FabricantesFactory, SoporteFactory, $routeParams) {
     $scope.selectFabricantes = {};
@@ -5,27 +6,27 @@
 
     const obtenerFabricantes = function () {
       FabricantesFactory.getFabricantes()
-      .success(function (Fabricantes) {
-        $scope.selectFabricantes = Fabricantes;
+      .then(Fabricantes => {
+        $scope.selectFabricantes = Fabricantes.data;
       })
-      .error(function (data, status, headers, config) {
+      .catch(error => {
         $scope.ShowToast('No pudimos cargar la lista de fabricantes, por favor intenta de nuevo más tarde.', 'danger');
       });
     };
 
     const obtenerCategorias = function () {
       SoporteFactory.getCategorysReport()
-          .success(function (Categorias) {
-            if (Categorias.success === 1) {
-              $scope.selectCategorias = Categorias.data;
+          .then(Categorias => {
+            if (Categorias.data.success === 1) {
+              $scope.selectCategorias = Categorias.data.data;
             }
           })
-          .error(function (data, status, headers, config) {
+          .catch(error => {
             $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
             $scope.ShowToast('No pudimos enviar tu solicitud, por favor intenta de nuevo más tarde.', 'danger');
 
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+            $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
           });
     };
 
@@ -39,18 +40,18 @@
     $scope.SolicitarSoporte = function () {
       if (!$scope.frm.$invalid) {
         SoporteFactory.postSolicitud({ Solicitud: $scope.Soporte })
-          .success(function (resultado) {
-            if (resultado.success === 1) {
+          .then(resultado => {
+            if (resultado.data.success === 1) {
               $scope.ShowToast('Solicitud enviada.', 'success');
               $location.path('monitor-soporte');
             }
           })
-          .error(function (data, status, headers, config) {
+          .catch(error => {
             $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
 
             $scope.ShowToast('No pudimos enviar tu solicitud, por favor intenta de nuevo más tarde.', 'danger');
 
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+            $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
           });
       }
     };

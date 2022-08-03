@@ -4,25 +4,25 @@
     var combo = [];
     $scope.init = function () {
       SoporteFactory.getSolicitud(idSoporte)
-        .success(function (resultado) {
-          if (resultado.success === 1) {
-            $scope.Soporte = resultado.data[0];
-            $scope.Soporte.IdEstatus = resultado.data[0].IdEstatus.toString();
+        .then(resultado => {
+          if (resultado.data.success === 1) {
+            $scope.Soporte = resultado.data.data[0];
+            $scope.Soporte.IdEstatus = resultado.data.data[0].IdEstatus.toString();
           }
-        }).error(function (data, status, headers, config) {
+        }).catch(error => {
           $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
           $scope.ShowToast('No pudimos cargar los datos del detalle, por favor intenta de nuevo más tarde.', 'danger');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
       SoporteFactory.getStatus()
-        .success(function (resultado) {
-          if (resultado.success === 1) {
-            $scope.combo = resultado.data;
+        .then(resultado => {
+          if (resultado.data.success === 1) {
+            $scope.combo = resultado.data.data;
           }
-        }).error(function (data, status, headers, config) {
+        }).catch(error => {
           $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
           $scope.ShowToast('No pudimos cargar la lista de status, por favor intenta de nuevo más tarde.', 'danger');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
     $scope.init();
@@ -33,18 +33,18 @@
           DescripcionSolucion: $scope.Soporte.DescripcionSolucion
         };
         SoporteFactory.patchSolicitud(idSoporte, soporte)
-          .success(function (resultado) {
-            if (resultado.success === 1) {
+          .then(resultado => {
+            if (resultado.data.success === 1) {
               $scope.ShowToast('Soporte actualizado.', 'success');
               $location.path('monitor-soporte');
-            }else {
-            $scope.ShowToast('Error al guardar los datos, verifica que los caracteres sean correctos.', 'danger');
-          }
+            } else {
+              $scope.ShowToast('Error al guardar los datos, verifica que los caracteres sean correctos.', 'danger');
+            }
           })
-          .error(function (data, status, headers, config) {
+          .catch(error => {
             $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
             $scope.ShowToast('No pudimos enviar tu solicitud, por favor intenta de nuevo más tarde.', 'danger');
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+            $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
           });
       }
     };
