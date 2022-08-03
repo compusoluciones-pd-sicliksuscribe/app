@@ -1,3 +1,6 @@
+/* eslint-disable handle-callback-err */
+/* eslint-disable no-undef */
+/* eslint-disable eqeqeq */
 (function () {
   var PromocionsCreateController = function ($scope, $log, $cookies, $location, PromocionsFactory, FileUploader, AccesosAmazonFactory) {
     $scope.Promocion = {};
@@ -60,14 +63,14 @@
 
     uploader.onCompleteItem = function (fileItem, response, status, headers) {
       AccesosAmazonFactory.getAccesosAmazon()
-        .success(function (result) {
-          if (result[0].Success == true) {
-            subirImagen(fileItem, result);
+        .then(result => {
+          if (result.data[0].Success == true) {
+            subirImagen(fileItem, result.data);
           } else {
-            $scope.ShowToast(result[0].Message, 'danger');
+            $scope.ShowToast(result.data[0].Message, 'danger');
           }
         })
-        .error(function (data, status, headers, config) {
+        .catch(error => {
           $scope.ShowToast('Error al intentar subir la imagen.', 'danger');
         });
     };
@@ -140,13 +143,13 @@
             $scope.ShowToast('Extensión de archivo no válida', 'danger');
           } else {
             PromocionsFactory.postPromocion($scope.Promocion)
-              .success(function (result) {
-                $scope.Promocion.IdPromocionNueva = result.Dato.insertId;
-                $scope.Promocion.Url = result.Dato.Url;
-                $scope.Promocion.IdPromocion = result.Dato.insertId;
+              .then(result => {
+                $scope.Promocion.IdPromocionNueva = result.data.Dato.insertId;
+                $scope.Promocion.Url = result.data.Dato.Url;
+                $scope.Promocion.IdPromocion = result.data.Dato.insertId;
                 uploader.queue[0].upload();
               })
-              .error(function (data, status, headers, config) {
+              .catch(error => {
                 $scope.SubiendoArchivos = false;
                 $scope.ShowToast(data.message, 'danger');
               });
@@ -162,7 +165,7 @@
       $location.path('/Promocions');
     };
 
-    function subirImagen(fileItem, data) {
+    function subirImagen (fileItem, data) {
       var fileChooser = document.getElementById('archivo_promocion');
       var file = fileChooser.files[0];
       $scope.Promocion.Url = 'https://s3.amazonaws.com/marketplace.compusoluciones.com/Anexos/' + file.name;
@@ -177,11 +180,11 @@
         } else {
           $scope.Promocion.Activo = 1;
           PromocionsFactory.putPromocion($scope.Promocion)
-            .success(function (result) {
+            .then(result => {
               $location.path('/Promocions');
               $scope.ShowToast('Promoción registrada', 'success');
             })
-            .error(function (data, status, headers, config) {
+            .catch(error => {
               $scope.SubiendoArchivos = false;
               $scope.ShowToast(data.message, 'danger');
             });

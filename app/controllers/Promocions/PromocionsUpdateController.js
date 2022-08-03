@@ -1,6 +1,8 @@
+/* eslint-disable handle-callback-err */
+/* eslint-disable no-undef */
+/* eslint-disable eqeqeq */
 (function () {
   var PromocionsUpdateController = function ($scope, $log, $location, $cookies, $routeParams, PromocionsFactory, FileUploader, AccesosAmazonFactory) {
-
     var IdPromocion = $routeParams.IdPromocion;
     $scope.Promocion = {};
     var uploader = $scope.uploader = new FileUploader({
@@ -8,13 +10,13 @@
 
     uploader.filters.push({
       name: 'imageFilter',
-      fn: function (item /*{File|FileLikeObject}*/, options) {
+      fn: function (item /* {File|FileLikeObject}*/, options) {
         var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
         return this.queue.length < 1 && '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
       }
     });
 
-    uploader.onWhenAddingFileFailed = function (item /*{File|FileLikeObject}*/, filter, options) {
+    uploader.onWhenAddingFileFailed = function (item /* {File|FileLikeObject}*/, filter, options) {
 
     };
 
@@ -107,17 +109,16 @@
       $scope.CheckCookie();
 
       PromocionsFactory.getPromocion(IdPromocion)
-        .success(function (Promocion) {
-          $scope.Promocion = Promocion[0];
+        .then(Promocion => {
+          $scope.Promocion = Promocion.data[0];
           $scope.Promocion.estatusImagen = 1;
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
     $scope.init();
-
 
     $scope.PromocionUpdate = function () {
       if (($scope.frm.$invalid)) {
@@ -127,18 +128,17 @@
         if ($scope.frm.CodigoProducto.$invalid == true) {
           $scope.frm.CodigoProducto.$pristine = false;
         }
-        $scope.ShowToast("Datos inválidos, favor de verificar", 'danger');
-      }
-      else {
+        $scope.ShowToast('Datos inválidos, favor de verificar', 'danger');
+      } else {
         $scope.Promocion.Activo = 1;
         PromocionsFactory.putPromocion($scope.Promocion)
-          .success(function (result) {
+          .then(result => {
             $location.path('/Promocions');
-            console.log(result);
-            $scope.ShowToast(result.Message, 'success');
+            console.log(result.data);
+            $scope.ShowToast(result.data.Message, 'success');
           })
-          .error(function (data, status, headers, config) {
-            $scope.ShowToast(data.Message, 'danger');
+          .catch(error => {
+            $scope.ShowToast(error.data.Message, 'danger');
           });
       }
     };
@@ -147,53 +147,52 @@
       $scope.Promocion.Activo = 0;
       console.log($scope.Promocion);
       PromocionsFactory.putPromocion($scope.Promocion)
-        .success(function (result) {
+        .then(result => {
           $location.path('/Promocions');
           $scope.ShowToast('Promoción dada de baja', 'success');
         })
-        .error(function (data, status, headers, config) {
-          $scope.ShowToast(data.message, 'danger');
+        .catch(error => {
+          $scope.ShowToast(error.data.message, 'danger');
         });
 
       AccesosAmazonFactory.getAccesosAmazon()
-        .success(function (result) {
-          if (result[0].Success == true) {
-            eliminarImagen(result);
-          }
-          else {
-            $scope.ShowToast(result[0].Message, 'danger');
+        .then(result => {
+          if (result.data[0].Success == true) {
+            eliminarImagen(result.data);
+          } else {
+            $scope.ShowToast(result.data[0].Message, 'danger');
           }
         })
-        .error(function (data, status, headers, config) {
-          $scope.ShowToast(result[0].Message, 'danger');
+        .catch(error => {
+          $scope.ShowToast(result.data[0].Message, 'danger');
         });
     };
 
     $scope.PromocionCancel = function () {
-      $location.path("/Promocions");
+      $location.path('/Promocions');
     };
 
     $scope.ImagenDelete = function () {
       $scope.Promocion.estatusImagen = 0;
     };
 
-    function eliminarImagen(data) {
+    function eliminarImagen (data) {
       var Url = $scope.Promocion.Url;
       if (Url) {
-        var resultado = Url.split("/");
+        var resultado = Url.split('/');
         var picturePath = 'Anexos' + '/' + resultado[5];
         var s3Client = new AWS.S3({
           accessKeyId: data[0].AccessKey,
           secretAccessKey: data[0].SecretAccess,
           params: {
-            Bucket: data[0].Bucket,
-          },
+            Bucket: data[0].Bucket
+          }
         });
-  
+
         s3Client.deleteObject({
-          Key: picturePath,
+          Key: picturePath
         }, function (err, data) {
-  
+
         });
       }
     };

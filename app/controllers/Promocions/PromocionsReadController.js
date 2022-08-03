@@ -1,5 +1,4 @@
 (function () {
-
   var PromocionsReadController = function ($scope, $log, $location, $cookies, PromocionsFactory) {
     $scope.sortBy = 'Nombre';
     $scope.reverse = false;
@@ -7,11 +6,11 @@
     $scope.init = function () {
       $scope.CheckCookie();
       PromocionsFactory.getPromocions($scope.SessionCookie.IdEmpresa)
-        .success(function (Promocions) {
-          $scope.Promocions = Promocions;
+        .then(Promocions => {
+          $scope.Promocions = Promocions.data;
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
