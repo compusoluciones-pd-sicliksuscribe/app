@@ -18,14 +18,14 @@
 
     $scope.BuscarEmpresas = () => {
       EmpresasFactory.getEmpresaII($scope.Empresa.Busqueda)
-        .success(Empresas => {
-          if (Empresas) {
+        .then(Empresas => {
+          if (Empresas.data) {
             try {
-              if (Empresas[0].Success === false || !Empresas.length) {
+              if (Empresas.data[0].Success === false || !Empresas.data.length) {
                 $scope.Empresas = null;
                 $scope.TablaVisible = false;
               } else {
-                $scope.Empresas = Empresas;
+                $scope.Empresas = Empresas.data;
                 if ($scope.Empresas.length > 0) {
                   $scope.TablaVisible = true;
                 } else {
@@ -44,9 +44,9 @@
             $scope.TablaVisible = false;
           }
         })
-          .error((data, status, headers, config) => {
+          .catch(error => {
             $scope.TablaVisible = false;
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+            $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
           });
     };
 
@@ -90,19 +90,19 @@
 
     $scope.AccederADistribuidor = (idEmpresa, contrasena) => {
       CambiarDistribuidorFactory.actualizarToken(idEmpresa, contrasena)
-        .success(result => {
-          if (result.success) {
+        .then(result => {
+          if (result.data.success) {
             $scope.ShowToast('Cambiando de sesión...', 'success');
             $cookies.remove('Session');
             $cookies.remove('Pedido');
             $scope.SessionCookie = {};
-            return buildToken(result);
+            return buildToken(result.data);
           } else {
-            $scope.ShowToast(result.message, 'danger');
+            $scope.ShowToast(result.data.message, 'danger');
           }
         })
-        .error((data, status, headers, config) => {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
   };
