@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 (function () {
   var TerminosReadController = function ($scope, $rootScope, $log, $location, $cookies, UsuariosFactory, jwtHelper, $sce) {
     var Session = {};
@@ -57,17 +58,17 @@
         };
 
       UsuariosFactory.postUsuarioIniciarSesion(LoginUsuario)
-        .success(function (resultLogin) {
-          if (resultLogin[0].Success == true) {
+        .then(resultLogin => {
+          if (resultLogin.data[0].Success == true) {
             UsuariosFactory.putUsuario(UsuarioActualizar)
-              .success(function (result) {
-                if (result[0].Success == true) {
+              .then(result => {
+                if (result.data[0].Success == true) {
                   UsuariosFactory.postUsuarioIniciarSesion(LoginUsuario)
-                    .success(function (result) {
-                      if (result[0].Success == true) {
+                    .then(result => {
+                      if (result.data[0].Success == true) {
                         var Session = {};
 
-                        var tokenPayload = jwtHelper.decodeToken(result[0].Token);
+                        var tokenPayload = jwtHelper.decodeToken(result.data[0].Token);
 
                         var expireDate = new Date();
 
@@ -75,7 +76,7 @@
 
                         Session =
                         {
-                          Token: result[0].Token,
+                          Token: result.data[0].Token,
                           CorreoElectronico: tokenPayload.CorreoElectronico,
                           Nombre: tokenPayload.Nombre,
                           IdUsuario: tokenPayload.IdUsuario,
@@ -102,31 +103,31 @@
                         $scope.ActualizarMenu();
 
                         if (UsuarioActualizar.LeyoTerminos == 1) {
-                          $location.path("/");
+                          $location.path('/');
                         }
                       } else {
-                        $scope.ShowToast(result[0].Message, 'danger');
+                        $scope.ShowToast(result.data[0].Message, 'danger');
                       }
                     })
-                    .error(function (data, status, headers, config) {
+                    .catch(error => {
                       $scope.ShowToast('Error, inicie sesión de nuevo', 'danger');
 
-                      $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+                      $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
                     });
                 } else {
-                  $scope.ShowToast(result[0].Message, 'danger');
+                  $scope.ShowToast(result.data[0].Message, 'danger');
                 }
               })
-              .error(function (data, status, headers, config) {
-                $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+              .catch(error => {
+                $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
               });
           } else {
-            $scope.ShowToast(resultLogin[0].Message, 'danger');
+            $scope.ShowToast(resultLogin.data[0].Message, 'danger');
           }
         })
-        .error(function (data, status, headers, config) {
+        .catch(error => {
           $scope.ShowToast('Error, inicie sesión de nuevo', 'danger');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 

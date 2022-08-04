@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 (function () {
   var UsuariosUpdateController = function ($scope, $rootScope, $log, $location, $cookies, $routeParams, UsuariosFactory, jwtHelper, UsuariosXEmpresasFactory, TiposAccesosFactory) {
     var Session = {};
@@ -13,11 +14,11 @@
 
       if (Session.IdTipoAcceso == 2 || Session.IdTipoAcceso == 4) {
         TiposAccesosFactory.getTiposAccesos()
-          .success(function (TiposAccesos) {
-            $scope.selectTiposAccesos = TiposAccesos;
+          .then(TiposAccesos => {
+            $scope.selectTiposAccesos = TiposAccesos.data;
           })
-          .error(function (data, status, headers, config) {
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          .catch(error => {
+            $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
           });
       }
 
@@ -30,37 +31,37 @@
         $scope.Usuario.ModificaContrasena = 1;
 
         UsuariosFactory.getUsuario($routeParams.IdUsuario)
-          .success(function (Usuario) {
-            if (Usuario[0].Success == true) {
-              $scope.Usuario.Lada = Usuario[0].Lada;
-              $scope.Usuario.Telefono = Usuario[0].Telefono;
+          .then(Usuario => {
+            if (Usuario.data[0].Success == true) {
+              $scope.Usuario.Lada = Usuario.data[0].Lada;
+              $scope.Usuario.Telefono = Usuario.data[0].Telefono;
             } else {
-              $scope.ShowToast(Usuario[0].Message, 'danger');
+              $scope.ShowToast(Usuario.data[0].Message, 'danger');
               $location.path('/');
             }
           })
-          .error(function (data, status, headers, config) {
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          .catch(error => {
+            $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
           });
       } else {
         UsuariosFactory.getUsuario($routeParams.IdUsuario)
-          .success(function (Usuario) {
-            if (Usuario[0].Success == true) {
-              $scope.Usuario = Usuario[0];
+          .then(Usuario => {
+            if (Usuario.data[0].Success == true) {
+              $scope.Usuario = Usuario.data[0];
               $scope.Usuario.ModificaContrasena = 0;
-              $scope.Usuario.IdUsuario = Usuario[0].IdUsuario;
+              $scope.Usuario.IdUsuario = Usuario.data[0].IdUsuario;
               $scope.Usuario.IdEmpresa = Session.IdEmpresa;
               $scope.Usuario.TipoAccesoDistribuidor = Session.IdTipoAcceso;
-              $scope.Usuario.collegeSelection = Usuario[0].IdTipoAcceso;
-              $scope.Usuario.Lada = Usuario[0].Lada;
-              $scope.Usuario.Telefono = Usuario[0].Telefono;
+              $scope.Usuario.collegeSelection = Usuario.data[0].IdTipoAcceso;
+              $scope.Usuario.Lada = Usuario.data[0].Lada;
+              $scope.Usuario.Telefono = Usuario.data[0].Telefono;
             } else {
-              $scope.ShowToast(Usuario[0].Message, 'danger');
+              $scope.ShowToast(Usuario.data[0].Message, 'danger');
               $location.path('/Usuarios');
             }
           })
-          .error(function (data, status, headers, config) {
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          .catch(error => {
+            $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
           });
       }
     };
@@ -83,26 +84,25 @@
           $scope.ShowToast('Datos inválidos, favor de verificar', 'danger');
         } else {
           UsuariosFactory.postUsuarioIniciarSesion($scope.Usuario)
-            .success(function (result) {
-              if (result[0].Success == true) {
-                if ($scope.Usuario.ContrasenaNueva != null && $scope.Usuario.ContrasenaNueva != undefined && $scope.Usuario.ContrasenaConfirmar != null && $scope.Usuario.ContrasenaConfirmar != undefined)
-                  $scope.Usuario.Contrasena = $scope.Usuario.ContrasenaNueva;
+            .then(result => {
+              if (result.data[0].Success == true) {
+                if ($scope.Usuario.ContrasenaNueva != null && $scope.Usuario.ContrasenaNueva != undefined && $scope.Usuario.ContrasenaConfirmar != null && $scope.Usuario.ContrasenaConfirmar != undefined) { $scope.Usuario.Contrasena = $scope.Usuario.ContrasenaNueva; }
                 UsuariosFactory.putUsuario($scope.Usuario)
-                  .success(function (result) {
-                    if (result[0].Success == true) {
+                  .then(result => {
+                    if (result.data[0].Success == true) {
                       UsuariosFactory.postUsuarioIniciarSesion($scope.Usuario)
-                        .success(function (result) {
-                          if (result[0].Success == true) {
+                        .then(result => {
+                          if (result.data[0].Success == true) {
                             var Session = {};
 
-                            var tokenPayload = jwtHelper.decodeToken(result[0].Token);
+                            var tokenPayload = jwtHelper.decodeToken(result.data[0].Token);
 
                             var expireDate = new Date();
 
                             expireDate.setTime(expireDate.getTime() + 600 * 60000);
 
                             Session = {
-                              Token: result[0].Token,
+                              Token: result.data[0].Token,
                               CorreoElectronico: tokenPayload.CorreoElectronico,
                               Nombre: tokenPayload.Nombre,
                               IdUsuario: tokenPayload.IdUsuario,
@@ -127,40 +127,40 @@
 
                             $scope.CheckCookie();
                           } else {
-                            $scope.ShowToast(result[0].Message, 'danger');
+                            $scope.ShowToast(result.data[0].Message, 'danger');
                           }
                         })
-                        .error(function (data, status, headers, config) {
+                        .catch(error => {
                           $scope.ShowToast('Error, inicie sesión de nuevo', 'danger');
 
-                          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+                          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
                         });
                     } else {
-                      $scope.ShowToast(result[0].Message, 'danger');
+                      $scope.ShowToast(result.data[0].Message, 'danger');
                     }
                   })
-                  .error(function (data, status, headers, config) {
-                    $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+                  .catch(error => {
+                    $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
                   });
               } else {
                 $scope.ShowToast('Autentificación no válida', 'danger');
               }
             })
-            .error(function (data, status, headers, config) {
-              $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+            .catch(error => {
+              $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
             });
         }
       } else {
         UsuariosXEmpresasFactory.putUsuariosXEmpresa($scope.Usuario)
-          .success(function (result) {
-            if (result[0].Success == true) {
+          .then(result => {
+            if (result.data[0].Success == true) {
               $location.path('/Usuarios');
             } else {
-              $scope.ShowToast(result[0].Message, 'danger');
+              $scope.ShowToast(result.data[0].Message, 'danger');
             }
           })
-          .error(function (data, status, headers, config) {
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          .catch(error => {
+            $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
           });
       }
     };
@@ -168,26 +168,26 @@
     $scope.UsuarioDelete = function () {
       $scope.Usuario.Activo = 0;
       UsuariosFactory.putUsuario($scope.Usuario)
-        .success(function (result) {
-          if (result[0].Success == true) {
+        .then(result => {
+          if (result.data[0].Success == true) {
             UsuariosXEmpresasFactory.putUsuariosXEmpresa($scope.Usuario)
-              .success(function (result) {
-                if (result[0].Success == true) {
+              .then(result => {
+                if (result.data[0].Success == true) {
                   $location.path('/Usuarios');
                   $scope.ShowToast('Usuario dado de baja', 'success');
                 } else {
-                  $scope.ShowToast(result[0].Message, 'danger');
+                  $scope.ShowToast(result.data[0].Message, 'danger');
                 }
               })
-              .error(function (data, status, headers, config) {
-                $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+              .catch(error => {
+                $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
               });
           } else {
-            $scope.ShowToast(result[0].Message, 'danger');
+            $scope.ShowToast(result.data[0].Message, 'danger');
           }
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 

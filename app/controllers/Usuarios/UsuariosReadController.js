@@ -1,6 +1,6 @@
+/* eslint-disable no-undef */
 (function () {
   var UsuariosReadController = function ($scope, $log, $location, $cookies, UsuariosFactory, UsuariosXEmpresasFactory, EmpresasFactory) {
-
     $scope.sortBy = 'Nombre';
     $scope.reverse = false;
     $scope.empresaSel = '';
@@ -14,27 +14,27 @@
       $scope.CheckCookie();
       if (Session.IdTipoAcceso !== 2) {
         EmpresasFactory.getEmpresas()
-          .success(function (Empresas) {
-            $scope.selectEmpresas = Empresas;
+          .then(Empresas => {
+            $scope.selectEmpresas = Empresas.data;
             $scope.selectEmpresas.unshift(empresaActual);
             if (!($scope.SessionCookie.IdTipoAcceso === 1 || $scope.SessionCookie.IdTipoAcceso === 8)) {
               $scope.empresaSel = $scope.selectEmpresas[0].IdEmpresa;
             }
             $scope.MostrarUsuariosEmp($scope.empresaSel);
           })
-          .error(function (data, status, headers, config) {
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          .catch(error => {
+            $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
           });
       }
       if (Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 10) {
         EmpresasFactory.getClientes()
-          .success(function (Empresas) {
-            $scope.selectEmpresas = Empresas.data;
+          .then(Empresas => {
+            $scope.selectEmpresas = Empresas.data.data;
             $scope.selectEmpresas.unshift(empresaActual);
             $scope.MostrarUsuariosEmp($scope.empresaSel);
           })
-          .error(function (data, status, headers, config) {
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          .catch(error => {
+            $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
           });
       }
     };
@@ -46,24 +46,24 @@
 
     $scope.ObtenerUsuariosPropios = function () {
       UsuariosFactory.getUsuariosPropios()
-        .success(function (UsuariosXEmpresas) {
-          $scope.Usuarios = UsuariosXEmpresas.data;
+        .then(UsuariosXEmpresas => {
+          $scope.Usuarios = UsuariosXEmpresas.data.data;
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
     $scope.ObtenerUsuariosPorCliente = function (IdEmpresa) {
       UsuariosFactory.getUsuariosContacto(IdEmpresa)
-        .success(function (UsuariosXEmpresas) {
-          $scope.Usuarios = UsuariosXEmpresas.data;
+        .then(UsuariosXEmpresas => {
+          $scope.Usuarios = UsuariosXEmpresas.data.data;
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
-    
+
     $scope.Confirmar = function (IdUsuario) {
       $scope.Usuarios.forEach(function (Usuario) {
         if (Usuario.IdUsuario === IdUsuario) {
@@ -74,19 +74,19 @@
 
     $scope.BajaUsuario = function (Usuario) {
       UsuariosFactory.putDeleteFinalUser(Usuario)
-      .success(function (data) {
-        if (data) {
-          $scope.ShowToast(data.message, 'success');
+      .then(data => {
+        if (data.data) {
+          $scope.ShowToast(data.data.message, 'success');
 
           $scope.init();
         } else {
-          $scope.ShowToast(data.message, 'danger');
+          $scope.ShowToast(data.data.message, 'danger');
         }
       })
-      .error(function (data, status, headers, config) {
+      .catch(error => {
         $scope.ShowToast('No pudimos dar de baja tu solicitud, por favor intenta de nuevo más tarde', 'danger');
 
-        $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
       });
     };
 
@@ -101,12 +101,11 @@
         }
       } else {
         UsuariosXEmpresasFactory.getUsuariosXEmpresa(empresa)
-          .success(function (UsuariosXEmpresas) {
-
-            $scope.Usuarios = UsuariosXEmpresas;
+          .then(UsuariosXEmpresas => {
+            $scope.Usuarios = UsuariosXEmpresas.data;
           })
-          .error(function (data, status, headers, config) {
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          .catch(error => {
+            $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
           });
       }
     };
@@ -117,17 +116,17 @@
       $scope.Tour = new Tour({
         steps: [
           {
-            element: ".searchOption",
-            placement: "bottom",
-            title: "Busqueda de colaboradores",
-            content: "Puedes filtrar a tus colaboradores buscando por su nombre, apellidos o correo electrónico.",
+            element: '.searchOption',
+            placement: 'bottom',
+            title: 'Busqueda de colaboradores',
+            content: 'Puedes filtrar a tus colaboradores buscando por su nombre, apellidos o correo electrónico.',
             template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>"
           },
           {
-            element: ".newColaborator",
-            placement: "bottom",
-            title: "Agrega nuevos colaboradores",
-            content: "Para poder dar de alta un nuevo colaborador da click aquí y llena la información que se te solicite.",
+            element: '.newColaborator',
+            placement: 'bottom',
+            title: 'Agrega nuevos colaboradores',
+            content: 'Para poder dar de alta un nuevo colaborador da click aquí y llena la información que se te solicite.',
             template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>"
           }
         ],

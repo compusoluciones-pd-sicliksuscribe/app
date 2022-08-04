@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 (function () {
   var PoliticasReadController = function ($scope, $routeParams, $window) {
     let rutaPDF;
@@ -12,8 +13,7 @@
       let route = $routeParams.politic;
       if (route === 'TyC') {
         $scope.politics('tycCLICK');
-      } 
-      else if (route === 'Cancelaciones') {
+      } else if (route === 'Cancelaciones') {
         $scope.politics('cancel');
       } else {
         $scope.politics('entrega');

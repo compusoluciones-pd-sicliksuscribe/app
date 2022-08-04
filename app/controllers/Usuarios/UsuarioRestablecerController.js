@@ -8,17 +8,16 @@
 
     $scope.init();
     $scope.RestablecerContrasena = function () {
-      if ($scope.Usuario.CorreoElectronico !== undefined ) {
+      if ($scope.Usuario.CorreoElectronico !== undefined) {
         UsuariosFactory.postRestablecer($scope.Usuario)
-          .success(function (result) {
-            $scope.Usuario.Respuesta = result.message;
-            if (result.name === 'Error'){$scope.ShowToast(result.message, 'success');}
-            else {
-              $scope.ShowToast(result.message, 'success');
+          .then(result => {
+            $scope.Usuario.Respuesta = result.data.message;
+            if (result.data.name === 'Error') { $scope.ShowToast(result.data.message, 'success'); } else {
+              $scope.ShowToast(result.data.message, 'success');
             }
           })
-          .error(function (data, status, headers, config) {
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          .catch(error => {
+            $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
           });
       }
     };

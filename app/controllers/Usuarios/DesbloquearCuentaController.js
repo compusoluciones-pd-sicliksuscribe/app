@@ -6,11 +6,11 @@
     $scope.init = function () {
       $scope.navCollapsed = true;
       $scope.result = UsuariosFactory.desbloquearCuenta(encryptedObject)
-        .success(function (result) {
-          $scope.result = result[0];
+        .then(result => {
+          $scope.result = result.data[0];
           $log.log('result ' + $scope.result);
         })
-        .error(function (error) {
+        .catch(error => {
           $log.log('data error: ' + error);
         });
     };

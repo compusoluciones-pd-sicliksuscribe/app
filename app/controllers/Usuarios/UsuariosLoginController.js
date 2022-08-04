@@ -1,21 +1,23 @@
+/* eslint-disable handle-callback-err */
+/* eslint-disable no-undef */
 (function () {
   var UsuariosLoginController = function ($scope, $rootScope, $log, $cookies, $location, UsuariosFactory, jwtHelper, $routeParams, EmpresasFactory) {
     $scope.Subdominio = $routeParams.Subdominio;
     $scope.validarSubdominio = function () {
       if ($scope.Subdominio) {
         EmpresasFactory.getSitio($scope.Subdominio)
-          .success(function (sitio) {
-            if (sitio.success) {
-              if (sitio.data[0]) {
+          .then(sitio => {
+            if (sitio.data.success) {
+              if (sitio.data.data[0]) {
                 var expireDate = new Date();
                 expireDate.setTime(expireDate.getTime() + 600 * 60000);
-                $cookies.putObject('currentDistribuidor', sitio.data[0], { 'expires': expireDate, secure: $rootScope.secureCookie });
+                $cookies.putObject('currentDistribuidor', sitio.data.data[0], { 'expires': expireDate, secure: $rootScope.secureCookie });
                 $scope.currentDistribuidor = $cookies.getObject('currentDistribuidor');
               }
             }
           })
-          .error(function (data, status, headers, config) {
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          .catch(error => {
+            $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
           });
       }
     };
@@ -24,41 +26,41 @@
       let decodedTokenSiclick = '';
       try {
         decodedTokenSiclick = jwtHelper.decodeToken(tokenSiclick);
-      } catch {
+      } catch (error) {
         $scope.ShowToast('Error al iniciar sesión', 'danger');
         $location.path('/Login');
       }
       UsuariosFactory.getUserDataSiclick(decodedTokenSiclick, tokenSiclick)
-        .success(function (result) {
+        .then(result => {
           const user = {
-            CorreoElectronico: result.email,
+            CorreoElectronico: result.data.email,
             IdERP: decodedTokenSiclick.customer.id
           };
           UsuariosFactory.postUsuarioIniciarSesionSiClick(user)
-            .success(function (result) {
-              if (result[0].Success) {
-                return buildToken(result);
+            .then(result => {
+              if (result.data[0].Success) {
+                return buildToken(result.data);
               } else {
-              $scope.ShowToast('No cuentas con acceso para esta plataforma', 'danger');
-              $location.path('/Login');
+                $scope.ShowToast('No cuentas con acceso para esta plataforma', 'danger');
+                $location.path('/Login');
               }
             })
-            .error(function (data, status, headers, config) {
+            .catch(error => {
               $scope.ShowToast('Error al iniciar sesión', 'danger');
-              $log.log('data error: ' + data + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+              $log.log('data error: ' + error.data + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
             });
         })
-        .error(function (data, status, headers, config) {
-          location.href = $rootScope.SICLIK_FRONT + "login/suscribe";
+        .catch(error => {
+          location.href = $rootScope.SICLIK_FRONT + 'login/suscribe';
           $scope.ShowToast('Error al iniciar sesión', 'danger');
         });
-    }
+    };
 
     $scope.init = function () {
       $scope.esNavegadorSoportado();
       $scope.navCollapsed = true;
       /* $scope.validarSubdominio();*/
-      if($routeParams.tokenSiclick) {
+      if ($routeParams.tokenSiclick) {
         getUserSiclickData($routeParams.tokenSiclick);
       }
       $scope.ActualizarMenu();
@@ -99,7 +101,7 @@
         if (Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === '4' ||
           Session.IdTipoAcceso === 5 || Session.IdTipoAcceso === '5' ||
           Session.IdTipoAcceso === 6 || Session.IdTipoAcceso === '6') {
-          //$cookies.putObject('currentDistribuidor', Session.distribuidores[0], { 'expires': expireDate, secure: $rootScope.secureCookie });
+          // $cookies.putObject('currentDistribuidor', Session.distribuidores[0], { 'expires': expireDate, secure: $rootScope.secureCookie });
         }
 
         $scope.detectarSitioActivoURL();
@@ -115,7 +117,7 @@
       } else {
         $scope.ShowToast(result[0].Message, 'danger');
       }
-    }
+    };
 
     $scope.IniciarSesion = function () {
       $cookies.remove('Session');
@@ -123,17 +125,17 @@
       $scope.Usuario.IdEmpresa = $scope.currentDistribuidor.IdEmpresa;
       $scope.SessionCookie = {};
       UsuariosFactory.postUsuarioIniciarSesion($scope.Usuario)
-        .then(function OnSuccess(result){
-        console.log('Resultado: '+result.data[0]);
-        return buildToken(result.data)
-      }).catch(function onError (error) {
-        //console.log(`data error: ${response.error}, status: ${response.status}`);
-        console.log('Error: '+error);
-      });
+        .then(function OnSuccess (result) {
+          console.log('Resultado: ' + result.data[0]);
+          return buildToken(result.data);
+        }).catch(function onError (error) {
+          // console.log(`data error: ${response.error}, status: ${response.status}`);
+          console.log('Error: ' + error);
+        });
     };
   };
 
   UsuariosLoginController.$inject = ['$scope', '$rootScope', '$log', '$cookies', '$location', 'UsuariosFactory', 'jwtHelper', '$routeParams', 'EmpresasFactory'];
 
   angular.module('marketplace').controller('UsuariosLoginController', UsuariosLoginController);
-} ());
+}());

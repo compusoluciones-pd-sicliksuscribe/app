@@ -8,15 +8,14 @@
 
     $scope.init();
 
-
     $scope.RecuperarContrasena = function () {
       UsuariosFactory.postRecuperar($scope.Usuario)
-        .success(function (Result) {
-          $scope.Usuario.Respuesta = Result;
-          $scope.ShowToast(Result, 'success');
+        .then(Result => {
+          $scope.Usuario.Respuesta = Result.data;
+          $scope.ShowToast(Result.data, 'success');
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
   };

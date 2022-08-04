@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 (function () {
   var UsuariosCreateController = function ($scope, $log, $cookies, $location, UsuariosFactory, TiposAccesosFactory, EmpresasFactory) {
     var Session = {};
@@ -14,28 +15,28 @@
       $scope.CheckCookie();
       if (Session.IdTipoAcceso !== 2 || Session.IdTipoAcceso !== 10) {
         TiposAccesosFactory.getTiposAccesos()
-          .success(function (TiposAccesos) {
-            $scope.selectTiposAccesos = TiposAccesos;
+          .then(TiposAccesos => {
+            $scope.selectTiposAccesos = TiposAccesos.data;
           })
-          .error(function (data, status, headers, config) {
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          .catch(error => {
+            $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
           });
       };
 
       if (Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 10) {
         UsuariosFactory.getAccessosParaDistribuidor()
-          .success(function (TiposAccesos) {
-            $scope.selectTiposAccesos = TiposAccesos.data;
+          .then(TiposAccesos => {
+            $scope.selectTiposAccesos = TiposAccesos.data.data;
           })
-          .error(function (data, status, headers, config) {
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          .catch(error => {
+            $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
           });
         EmpresasFactory.getClientes()
-          .success(function (Empresas) {
-            $scope.selectEmpresas = Empresas.data;
+          .then(Empresas => {
+            $scope.selectEmpresas = Empresas.data.data;
           })
-          .error(function (data, status, headers, config) {
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          .catch(error => {
+            $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
           });
       }
 
@@ -43,11 +44,11 @@
 
       if (Session.IdTipoAcceso == 1) {
         EmpresasFactory.getEmpresas()
-          .success(function (Empresas) {
-            $scope.selectEmpresas = Empresas;
+          .then(Empresas => {
+            $scope.selectEmpresas = Empresas.data;
           })
-          .error(function (data, status, headers, config) {
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          .catch(error => {
+            $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
           });
       }
     };
@@ -62,24 +63,24 @@
           user.IdTipoAcceso = $scope.Usuario.IdTipoAcceso.toString();
           user.Lada = $scope.Usuario.Lada.toString();
           UsuariosFactory.postUsuarioCliente(user)
-            .success(function (result) {
-              if (result.success === 1) {
+            .then(result => {
+              if (result.data.success === 1) {
                 $location.path('/Usuarios');
-                $scope.ShowToast(result.message, 'success');
+                $scope.ShowToast(result.data.message, 'success');
               } else {
-                $scope.ShowToast(result.message, 'danger');
+                $scope.ShowToast(result.data.message, 'danger');
                 return;
               }
             })
-            .error(function (data, status, headers, config) {
-              $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+            .catch(error => {
+              $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
             });
         }
       } else $scope.ShowToast('Alguno de los campos es invalido', 'danger');
     };
 
     $scope.UsuarioCancel = function () {
-      $location.path("/Usuarios");
+      $location.path('/Usuarios');
     };
   };
 
