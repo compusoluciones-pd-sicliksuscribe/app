@@ -227,83 +227,46 @@
     };
 
     $scope.EmpresaCreate = function () {
-      UsuariosFactory.getCorreo($scope.Empresa)
+      if ($scope.frm.NombreEmpresa.$invalid == true) $scope.frm.NombreEmpresa.$pristine = false;
+      if ($scope.frm.Direccion1.$invalid == true) $scope.frm.Direccion1.$pristine = false;
+      if ($scope.frm.RFC.$invalid == true) $scope.frm.RFC.$pristine = false;
+      if ($scope.frm.Ciudad.$invalid == true) $scope.frm.Ciudad.$pristine = false; 
+      if ($scope.Empresa.Estado == undefined) $scope.frm.Estado.$pristine = false;
+      if ($scope.frm.Postal.$invalid == true) $scope.frm.Postal.$pristine = false;
+      if ($scope.frm.Nombre.$invalid == true) $scope.frm.Nombre.$pristine = false;
+      if ($scope.frm.Apellidos.$invalid == true) $scope.frm.Apellidos.$pristine = false;
+      if ($scope.frm.CorreoElectronico.$invalid == true) $scope.frm.CorreoElectronico.$pristine = false;
+      if ($scope.frm.Telefono.$invalid == true) $scope.frm.Telefono.$pristine = false;
+      if (!$scope.Empresa.DominioMicrosoft || $scope.Empresa.DominioMicrosoft === '') delete $scope.Empresa.DominioMicrosoft;
+      $scope.loading = true;
+      $scope.Empresa.Formulario = true;
+      EmpresasFactory.postEmpresa($scope.Empresa)
         .success(function (result) {
-          if (result[0].Success == 0) {
-            $scope.AlertaDominio = 'El Correo ya está registrado, intenta con un correo diferente.';
+          var re, me, dat;
+          if (result[0]) {
+            re = result[0].Success;
+            me = result[0].Message;
+            dat = result[0].Dato;
           } else {
-            if ($scope.frm.NombreEmpresa.$invalid == true) {
-              $scope.frm.NombreEmpresa.$pristine = false;
+            re = result.success;
+            me = result.message;
+            dat = result.dato;
+          }
+          if (re) {
+            $scope.loading = false;
+            $location.path('/Clientes');
+          } else {
+            $scope.ShowToast(me, 'danger');
+            $scope.loading = false;
+            $scope.Empresa.Formulario = false;
+            if (dat == 20002) {
+              $scope.Empresa.DominioMicrosoft = '';
+              $scope.AlertaDominio = 'El dominio Microsoft ya existe, intenta con uno diferente.';
             }
-              // if ($scope.frm.DominioMicrosoft.$invalid == true) {
-              //   $scope.frm.DominioMicrosoft.$pristine = false;
-              //   $scope.Empresa.MensajeDominio = 'Ingresa un Dominio.';
-              // }
-            if ($scope.frm.Direccion1.$invalid == true) {
-              $scope.frm.Direccion1.$pristine = false;
-            }
-            if ($scope.frm.RFC.$invalid == true) {
-              $scope.frm.RFC.$pristine = false;
-            }
-            if ($scope.frm.Ciudad.$invalid == true) {
-              $scope.frm.Ciudad.$pristine = false;
-            }
-            if ($scope.Empresa.Estado == undefined) {
-              $scope.frm.Estado.$pristine = false;
-            }
-            if ($scope.frm.Postal.$invalid == true) {
-              $scope.frm.Postal.$pristine = false;
-            }
-            if ($scope.frm.Nombre.$invalid == true) {
-              $scope.frm.Nombre.$pristine = false;
-            }
-            if ($scope.frm.Apellidos.$invalid == true) {
-              $scope.frm.Apellidos.$pristine = false;
-            }
-            if ($scope.frm.CorreoElectronico.$invalid == true) {
-              $scope.frm.CorreoElectronico.$pristine = false;
-            }
-            if ($scope.frm.Telefono.$invalid == true) {
-              $scope.frm.Telefono.$pristine = false;
-            }
-            if (!$scope.Empresa.DominioMicrosoft || $scope.Empresa.DominioMicrosoft === ''){
-              delete $scope.Empresa.DominioMicrosoft;
-            }
-            console.log($scope.Empresa)
-            $scope.loading = true;
-            $scope.Empresa.Formulario = true;
-            EmpresasFactory.postEmpresa($scope.Empresa)
-                .success(function (result) {
-                  var re, me, dat;
-                  if (result[0]) {
-                    re = result[0].Success;
-                    me = result[0].Message;
-                    dat = result[0].Dato;
-                  } else {
-                    re = result.success;
-                    me = result.message;
-                    dat = result.dato;
-                  }
-                  if (re) {
-                    $scope.loading = false;
-                    $location.path('/Clientes');
-                  } else {
-                    $scope.ShowToast(me, 'danger');
-                    $scope.loading = false;
-                    $scope.Empresa.Formulario = false;
-
-                    if (dat == 20002) {
-                      $scope.Empresa.DominioMicrosoft = '';
-                      $scope.AlertaDominio = 'El dominio Microsoft ya existe, intenta con uno diferente.';
-                    }
-                  }
-                })
-                .error(function (error) {
-                  $scope.ShowToast(error.message, 'danger');
-                });
           }
         })
-        .error(function (data, status, headers, config) {
+        .error(function (error) {
+          $scope.ShowToast(error.message, 'danger');
         });
     };
 
