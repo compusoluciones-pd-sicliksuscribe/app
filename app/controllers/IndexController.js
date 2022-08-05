@@ -1,7 +1,8 @@
+/* eslint-disable no-undef */
+/* eslint-disable eqeqeq */
 'use strict';
 
 (function () {
-
   var IndexController = function ($scope, $log, $location, $cookies, $rootScope, PedidosFactory, PedidoDetallesFactory, ngToast, $uibModal, $window, UsuariosFactory, deviceDetector, ComprasUFFactory, EmpresasFactory) {
     $scope.indexBuscarProductos = {};
     $scope.SessionCookie = {};
@@ -16,13 +17,13 @@
       if (!$scope.currentDistribuidor.IdEmpresa) {
         $scope.ProductosCarrito = 0;
         PedidoDetallesFactory.getContarProductos()
-        .then(function OnSuccess (cuenta) {
-          if (cuenta.success === 1) {
-            $scope.ProductosCarrito = cuenta.data[0].Cantidad;
-          }
-        }).catch(function onError (response) {
-          console.log(`data error: ${response.error}, status: ${response.status}`);
-        });
+          .then(function OnSuccess (cuenta) {
+            if (cuenta.success === 1) {
+              $scope.ProductosCarrito = cuenta.data[0].Cantidad;
+            }
+          }).catch(function onError (response) {
+            console.log(`data error: ${response.error}, status: ${response.status}`);
+          });
       } else {
         $scope.ContarProductosCarritoUF();
       }
@@ -31,13 +32,13 @@
     $scope.ContarProductosCarritoUF = function () {
       $scope.ProductosCarrito = 0;
       ComprasUFFactory.getCantidadProductosCarrito($scope.currentDistribuidor.IdEmpresa)
-        .success(function (cuenta) {
-          if (cuenta.success) {
-            $scope.ProductosCarrito = cuenta.data[0].Cantidad;
+        .then(cuenta => {
+          if (cuenta.data.success) {
+            $scope.ProductosCarrito = cuenta.data.data[0].Cantidad;
           }
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
@@ -171,9 +172,9 @@
       var arregloCifrasVersion = deviceDetector.browser_version.split('.');
       return arregloCifrasVersion[0];
     }
-    $scope.getColor = function() {
+    $scope.getColor = function () {
       $scope.secondaryColor = $scope.currentDistribuidor.SecondaryColor === '#ffffff' ? `background:${$scope.currentDistribuidor.PrimaryColor}` : `background:${$scope.currentDistribuidor.SecondaryColor}`;
-    }
+    };
 
     $scope.init = function () {
       if (!validarNavegador(deviceDetector)) {
@@ -198,9 +199,10 @@
       subdomain = subdomain.replace(new RegExp('[.]', 'g'), '');
       subdomain = subdomain.replace('www', '');
       if (subdomain !== '') {
-        EmpresasFactory.getSitio(subdomain).success(function (empresa) {
-          if (empresa.data[0]) {
-            $scope.cambiarDistribuidor(empresa.data[0], false);
+        EmpresasFactory.getSitio(subdomain)
+        .then(empresa => {
+          if (empresa.data.data[0]) {
+            $scope.cambiarDistribuidor(empresa.data.data[0], false);
             $scope.ActualizarMenu();
             $scope.currentDistribuidor = $cookies.getObject('currentDistribuidor');
             selectNavicon($scope.currentDistribuidor.Icon);
@@ -221,8 +223,7 @@
           return true;
         }
 
-        if(!$scope.SessionCookie.IdTipoAcceso && $scope.currentDistribuidor.IdEmpresa)
-        {
+        if (!$scope.SessionCookie.IdTipoAcceso && $scope.currentDistribuidor.IdEmpresa) {
           return true;
         }
       }
@@ -245,20 +246,20 @@
       let locationfstPart;
       ga(function (tracker) {
         locationfstPart = tracker.get('location');
-      })
+      });
       ga('set', 'page', locationfstPart + '#/' + location);
       ga('send', 'pageview');
     }
 
     $scope.goToPage = function (location, carousel) {
       createLocationTracker(location);
-      if (location === 'Productos')
+      if (location === 'Productos') {
         ga('send', 'event', 'Catalogo de ' + location, 'Redireccionar', 'Redirigió a: /' + location);
-      else if (carousel) {
+      } else if (carousel) {
         ga('send', 'event', 'Catalogo de ' + location, 'Redireccionar desde carousel', 'Redirigió a: /' + location);
-      }
-      else
+      } else {
         ga('send', 'event', location, 'Redireccionar', 'Redirigió a: /' + location);
+      }
       $scope.navCollapsed = true;
       $location.path('/' + location);
     };
@@ -292,7 +293,7 @@
     $scope.gaAceptarCompra = function () {
       createLocationTracker('');
       ga('send', 'event', 'Carrito', 'Aceptar compra', 'Se aceptó la compra');
-    }
+    };
 
     $scope.calcularSubTotal = function (IdPedido) {
       let total = 0;
@@ -344,6 +345,7 @@
       try {
         $scope.navCollapsed = true;
 
+      /*
         var Session =
           {
             Token: '',
@@ -358,6 +360,7 @@
             NombreEmpresa: '',
             LeyoTerminos: ''
           };
+        */
 
         var expireDate = new Date();
 
@@ -365,7 +368,7 @@
 
         $cookies.remove('Session');
         $cookies.remove('Pedido');
-       // $cookies.remove('currentDistribuidor');
+        // $cookies.remove('currentDistribuidor');
 
         $scope.SessionCookie = {};
         $scope.currentDistribuidor = {};
@@ -377,13 +380,13 @@
         $scope = $scope.$new(true);
 
         UsuariosFactory.getCerrarSession()
-          .success(function (result) {
+          .then(result => {
             $window.location.reload();
             $location.path('/Login');
           })
-          .error(function (data, status, headers, config) {
+          .catch(error => {
             $window.location.reload();
-            $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+            $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
             $location.path('/Login');
           });
 
@@ -410,35 +413,35 @@
             title: 'Ver todos los productos',
             placement: 'bottom',
             content: 'Consulta la lista de productos filtrando por fabricante o tipo, configura el producto para agregarlos al carrito de compras.',
-            template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>",
+            template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>"
           },
           {
             element: '.one',
             placement: 'bottom',
             title: 'Mis clientes',
             content: 'Aquí podrás administrar a tus colaboradores, consultar tus clientes y ver el monitor de suscripciones.',
-            template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>",
+            template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>"
           },
           {
             element: '.four',
             title: 'Mi perfil',
             placement: 'bottom',
             content: 'Actualiza tus datos personales como tu contraseña de acceso.',
-            template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>",
+            template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>"
           },
           {
             element: '.two',
             title: 'Carrito de compras',
             placement: 'bottom',
             content: 'Aquí podrás consultar todos los productos que agregues para tu compra.',
-            template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>",
+            template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>"
           },
           {
             element: '.three',
             title: 'Buscador',
             placement: 'bottom',
             content: 'Puedes buscar cualquier producto por su nombre, fabricante, o Id.',
-            template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>",
+            template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Atrás</button><button class='btn btn-default' data-role='next'>Sig »</button><button class='btn btn-default' data-role='end'>Finalizar</button></nav></div></div>"
           }
         ],
 
@@ -456,7 +459,6 @@
         $location.path('/CambiarDistribuidor');
       }
     };
-
   };
   function selectNavicon (icon) {
     var link = document.createElement('link');

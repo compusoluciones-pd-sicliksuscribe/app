@@ -15,14 +15,15 @@
       subdomain = subdomain.replace('www', '');
 
       if (subdomain) {
-        EmpresasFactory.getSitio(subdomain).success(function (empresa) {
+        EmpresasFactory.getSitio(subdomain)
+        .then(empresa => {
           if ($scope.currentDistribuidor) {
-            PromocionsFactory.getPromocions(empresa.data[0].IdEmpresa)
-            .success(function (Promociones) {
-              $scope.Promociones = Promociones;
+            PromocionsFactory.getPromocions(empresa.data.data[0].IdEmpresa)
+            .then(Promociones => {
+              $scope.Promociones = Promociones.data;
             })
-            .error(function (data, status, headers, config) {
-              $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+            .catch(error => {
+              $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
             });
           }
         });
@@ -30,7 +31,7 @@
         PromocionsFactory.getPromocions(0)
           .then(function OnSuccess (response) {
             $scope.Promociones = response.data;
-            //console.log($scope.Promociones);
+            // console.log($scope.Promociones);
           }).catch(function onError (response) {
             console.log(`data error: ${response.error}, status: ${response.status}`);
           });

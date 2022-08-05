@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 (function () {
   var MonitorDetalleVmwareController = function ($scope, $sce, $cookies, $location, EmpresasXEmpresasFactory, PedidoDetallesFactory, $uibModal, $filter, FabricantesFactory, PedidosFactory, EmpresasFactory, UsuariosFactory) {
     $scope.SessionCookie = $cookies.getObject('Session');
@@ -22,21 +23,21 @@
     const checkUser = function () {
       if ($scope.SessionCookie.IdTipoAcceso === 2 || $scope.SessionCookie.IdTipoAcceso === 3) {
         FabricantesFactory.getUriVmwareDistributor()
-          .success(function (Uri) {
-            if (Uri) {
-              $scope.url = $sce.trustAsResourceUrl(Uri);
+          .then(Uri => {
+            if (Uri.data) {
+              $scope.url = $sce.trustAsResourceUrl(Uri.data);
             }
           })
-          .error(function () {
+          .catch(() => {
             $scope.url = '';
             $scope.ShowToast('El distribuidor no cuenta con datos en Vmware', 'danger');
           });
       } else if ($scope.SessionCookie.IdTipoAcceso === 1 || $scope.SessionCookie.IdTipoAcceso === 8) {
         FabricantesFactory.getUsersListVmware()
-          .success(function (data) {
-            $scope.selectVmware = data;
+          .then(data => {
+            $scope.selectVmware = data.data;
           })
-          .error(function () {
+          .catch(() => {
             $scope.url = '';
             $scope.ShowToast('No se encontraron datos en el mes seleccionado', 'danger');
           });
@@ -74,10 +75,10 @@
         };
         $scope.collectionDate = datosFinal;
         FabricantesFactory.getMonthlyUsageVmware(datosFinal)
-          .success(function (data) {
-            $scope.resultApi = data;
+          .then(data => {
+            $scope.resultApi = data.data;
             $scope.validate(0);
-          }).error(function () {
+          }).catch(() => {
             $scope.url = '';
             $scope.ShowToast('No se encontraron datos en la fecha seleccionada', 'danger');
           });
@@ -88,23 +89,22 @@
         if (!MonedaPago) return $scope.ShowToast('Selecciona la moneda', 'danger');
         $scope.generateAggPo = Object.assign({}, $scope.generateAggPo, { MonedaPago });
         FabricantesFactory.putVmwarePoNumber($scope.generateAggPo)
-          .success(function (data) {
-            if (data.statusCode === 200) {
+          .then(data => {
+            if (data.data.statusCode === 200) {
               $scope.ShowToast('PO number asignado', 'success');
               $('.close').click();
               $scope.searchApi($scope.generateAggPo.CollectionStartMonth);
+            } else {
+              $scope.ShowToast(data.data.message, 'danger');
             }
-            else {
-              $scope.ShowToast(data.message, 'danger');
-            }
-          }).error(function (data) {
+          }).catch(error => {
             $scope.url = '';
-            $scope.ShowToast(data.message, 'danger');
+            $scope.ShowToast(error.message, 'danger');
           });
       };
 
       $scope.generarObjPONumber = function (contract) {
-        $scope.generateAggPo = Object.assign({}, $scope.collectionDate, { ContractNumber: contract});
+        $scope.generateAggPo = Object.assign({}, $scope.collectionDate, { ContractNumber: contract });
       };
 
       $scope.validate = function (valor) {

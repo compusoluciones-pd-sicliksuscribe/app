@@ -1,6 +1,8 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-redeclare */
+/* eslint-disable eqeqeq */
 (function () {
   var ReportesController = function ($scope, $log, $location, $cookies, ReportesFactory) {
-
     $scope.perfil = $cookies.getObject('Session');
 
     $scope.reportesSel = '';
@@ -9,13 +11,13 @@
       $scope.navCollapsed = true;
       $scope.CheckCookie();
       ReportesFactory.getReportes()
-        .success(function (result) {
-          if (result) {
-            $scope.reportesSel = result.data[0];
+        .then(result => {
+          if (result.data) {
+            $scope.reportesSel = result.data.data[0];
           }
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
@@ -25,19 +27,19 @@
 
     $scope.GenerarReporte = function (params) {
       ReportesFactory.getGenerarReporte($scope.reporteSel)
-        .success(function (result) {
-          if (result) {
+        .then(result => {
+          if (result.data) {
             for (var i = 0; i < $scope.reportesSel.length; i++) {
               if ($scope.reportesSel[i].IdReporte === $scope.reporteSel) {
                 var d = new Date();
                 var sDate = ('0' + d.getDate()).slice(-2) + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + d.getFullYear() + ' ' + ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
                 var NombreReporte = $scope.reportesSel[i].NombreReporte + '_' + sDate;
 
-                var repeat = Math.ceil(result.data[0].length / maxSize);
+                var repeat = Math.ceil(result.data.data[0].length / maxSize);
                 for (var j = 0; j < repeat; j++) {
                   var start = j * maxSize;
                   var end = start + maxSize;
-                  var parte = result.data[0].slice(start, end);
+                  var parte = result.data.data[0].slice(start, end);
                   var number = j + 1;
                   NombreReporte = NombreReporte + '_' + number;
                   $scope.JSONToCSVConvertor(parte, NombreReporte, true);
@@ -47,8 +49,8 @@
             }
           }
         })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        .catch(error => {
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 

@@ -14,27 +14,27 @@
 
     $scope.obtenerVersiones = function () {
       VersionFactory.getVersiones()
-        .success(function (versiones) {
-          $scope.versiones = versiones.data;
+        .then(versiones => {
+          $scope.versiones = versiones.data.data;
           obtenerDetalle();
         })
-        .error(function (data, status, headers, config) {
+        .catch(error => {
           $scope.ShowToast('No pudimos traer las versiones.', 'danger');
           $location.path('/');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
-  
+
     var obtenerDetalle = function (Id) {
       var IdVersion = Id || 1;
       VersionFactory.getVersionDetalle(IdVersion)
-        .success(function (versiones) {
-          $scope.detalleVersion = versiones.data;
+        .then(versiones => {
+          $scope.detalleVersion = versiones.data.data;
         })
-        .error(function (data, status, headers, config) {
+        .catch(error => {
           $scope.ShowToast('No pudimos traer el detalle de la versión.', 'danger');
           $location.path('/');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          $log.log('data error: ' + error + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
         });
     };
 
@@ -49,8 +49,7 @@
 
     $scope.scrollTo = function (id) {
       $anchorScroll(id);
-    }
-
+    };
   };
 
   VersionController.$inject = ['$scope', '$log', '$location', '$cookies', '$route', 'VersionFactory', '$anchorScroll', '$routeParams'];
