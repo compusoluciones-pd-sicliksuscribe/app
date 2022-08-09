@@ -330,9 +330,9 @@
 									REANUDAR <p ng-show="pedido.CargoRealizadoProximoPedido && pedido.IdFormaPagoProxima === 4">Renovación pagada</p>
 								</button>
                             <br> <br>
-                            <input type="text" ng-model="OrdenCompraProxima" ng-show="pedido.IdFabricante === 1" class="form-control" size="30" placeholder=" Orden de Compra" ng-value="{{'pedido.OrdenCompraProxima'}}" />
+                            <input type="text" ng-model="OrdenCompraProxima" ng-show="pedido.IdFabricante === 1 && detalles.Activo === 1 " class="form-control" size="30" placeholder=" Orden de Compra" ng-value="{{'pedido.OrdenCompraProxima'}}" />
                             <br>
-                            <button class="btn btn-primary" ng-show="pedido.IdFabricante === 1" ng-disabled="!OrdenCompraProxima"  ng-click="InsertarOrdenCompra(pedido.IdPedido,OrdenCompraProxima)">ACTUALIZAR</button>
+                            <button class="btn btn-primary" ng-show="pedido.IdFabricante === 1 && detalles.Activo === 1 " ng-disabled="!OrdenCompraProxima"  ng-click="InsertarOrdenCompra(pedido.IdPedido,OrdenCompraProxima)">ACTUALIZAR</button>
                             <br>
                             <div ng-show="detalles.Mostrar">
                                 <div class="row">
