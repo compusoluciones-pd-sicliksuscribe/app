@@ -157,6 +157,7 @@
 												<li ng-show="SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 8 || SessionCookie.IdTipoAcceso == 10"><a ng-click="goToPage('ConfirmarSP');">Peticiones especiales (SP)</a></li>
 												<li ng-show="SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 8 || SessionCookie.IdTipoAcceso == 10 || SessionCookie.IdTipoAcceso === 2"><a ng-click="goToPage('MonitorPremium');">Monitor planes premium</a></li>
 												<li ng-show="SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 8 || SessionCookie.IdTipoAcceso == 10 || SessionCookie.IdTipoAcceso === 2"><a ng-click="goToPage('MonitorContratos');">Monitor de contratos</a></li>
+												<li ng-show="SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 8 || SessionCookie.IdTipoAcceso == 10 || SessionCookie.IdTipoAcceso === 2"><a ng-click="goToPage('Contactos');">Contactos</a></li>
 											</ul>
 										</li>
 
@@ -741,7 +742,8 @@
 	<script type="text/javascript" src="app/services/Microsoft/ManejoLicencias.js"></script>
 	<script type="text/javascript" src="app/controllers/Autodesk/MonitorContratosController.js"></script>
 	<script type="text/javascript" src="app/services/MonitorContratosFactory.js"></script>
-
+	<script type="text/javascript" src="app/controllers/Autodesk/ContactsController.js"></script>
+	<script type="text/javascript" src="app/services/ContactsFactory.js"></script>
 
 
 	<script src="scripts/tinycolor2-min.js"></script>
