@@ -1,5 +1,5 @@
 (function () {
-  var ProductosReadController = function ($scope, $log, $location, $cookies, $routeParams, PlanPremiumFactory, ProductosFactory, AmazonDataFactory, FabricantesFactory, TiposProductosFactory, PedidoDetallesFactory, TipoCambioFactory, ProductoGuardadosFactory, EmpresasXEmpresasFactory, UsuariosFactory, ActualizarCSNFactory, $anchorScroll, EmpresasFactory, ManejoLicencias, PedidosFactory) {
+  var ProductosReadController = function ($scope, $log, $location, $cookies, $routeParams, PlanPremiumFactory, ProductosFactory, AmazonDataFactory, FabricantesFactory, TiposProductosFactory, PedidoDetallesFactory, TipoCambioFactory, ProductoGuardadosFactory, EmpresasXEmpresasFactory, UsuariosFactory, ActualizarCSNFactory, $anchorScroll, EmpresasFactory, ManejoLicencias, PedidosFactory, ContactsFactory) {
     var BusquedaURL = $routeParams.Busqueda;
     const HRWAWRE_EXTRA_EMPOLYEES_GROUPING = 1000;
     $scope.BuscarProductos = {};
@@ -36,8 +36,12 @@
     $scope.MICROSOFT = 1;
 
     $scope.esquemaRenovacionModel = {};
+    $scope.currentProductAutodesk = {};
+    $scope.contactObject = {};
 
     const PREMIUM = "Planes Premium";
+
+    const NUMBER_OF_FIELDS_NECESSARY_TO_INSERTION = 4;
     
     
     const formatTiers = function (tiers) {
@@ -290,7 +294,7 @@
       $scope.ProtectedRP = protectedRP;
     }
 
-    const validateAutodeskData = function (Producto) {
+    const validateAutodeskData = async Producto => {
       Producto.mensajePlanPremium = '';
       ActualizarCSNFactory.getUfCSN(Producto.IdEmpresaUsuarioFinal)
       .then(result => {
@@ -337,11 +341,15 @@
       .then((r) => {
         if (r.estatus) {
         ActualizarCSNFactory.updateUfCSN(IdEmpresaUf, csn)
-          .then(result => {
+          .then(async result => { 
             result.data.success ? $scope.ShowToast('Información actualizada.', 'success') : $scope.ShowToast('No fue posible actualizar la información', 'danger');
             Producto.csnUF = Producto.IdAutodeskUF = csn;
             Producto.mensajeCSN = r.mensaje;
             Producto.color = 'rgb(25,185,50)';
+            UsuariosFactory.getUsuariosContacto(Producto.IdEmpresaUsuarioFinal)
+              .then(result => {
+                if (result.success === 1) Producto.usuariosContacto = result.data;
+              })
           })
           .catch(() => {
             $scope.ShowToast('No fue posible actualizar la información, por favor intenta más tarde.', 'danger');
@@ -419,14 +427,14 @@
       }
     };
 
-    $scope.revisarProducto = function (Producto) {
+    $scope.revisarProducto = async Producto => {
       $scope.DominioMicrosoft = $scope.selectEmpresas.filter(function (item) {
         if (Producto.IdEmpresaUsuarioFinal === item.IdEmpresa) return item;
         return false;
       })[0].IdMicrosoftUF;
       $scope.usuariosSinDominio[Producto.IdEmpresaUsuarioFinal] = $scope.DominioMicrosoft !== null;
       $scope.productoSeleccionado = Producto.IdProducto;
-      if (Producto.IdFabricante === 2) validateAutodeskData(Producto);
+      if (Producto.IdFabricante === 2) await validateAutodeskData(Producto);
       if (Producto.IdFabricante === 1 && $scope.DominioMicrosoft) validateMicrosoftData(Producto);
       if (Producto.IdFabricante === 1 && Producto.IdTipoProducto === 2) getMSCoterm(Producto);
       if (Producto.IdFabricante === 6 || Producto.IdFabricante === 11 || (Producto.IdFabricante === 5  && Producto.IdProductoFabricanteExtra !== 'Aperio')) validateISVsData(Producto);
@@ -950,9 +958,31 @@
         });
       }
     }
+
+    $scope.openModalInsert = product => {
+      $scope.currentProductAutodesk = {};
+      $scope.currentProductAutodesk = product;
+      $scope.contactObject.finalUserCsn = product.csnUF;
+      $('#modalInsert').modal('show');
+    }
+
+    $scope.insertContact = contact => {
+      if (!contact || Object.keys(contact).length < NUMBER_OF_FIELDS_NECESSARY_TO_INSERTION) $scope.ShowToast('Llena todos los campos del formulario.', 'info'); 
+      else {
+        ContactsFactory.insertContact(contact)
+        .then(async result => {
+          $('#modalInsert').modal('hide');
+          $scope.contactObject = {};
+          await $scope.revisarProducto($scope.currentProductAutodesk)
+          $scope.currentProductAutodesk = {};
+          $scope.ShowToast(result.data.message, 'success');
+        })
+        .catch(() => $scope.ShowToast('No se pudo agregar el contacto.', 'danger'));
+      }
+    };
   };
 
-  ProductosReadController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'PlanPremiumFactory', 'ProductosFactory','AmazonDataFactory', 'FabricantesFactory', 'TiposProductosFactory', 'PedidoDetallesFactory', 'TipoCambioFactory', 'ProductoGuardadosFactory', 'EmpresasXEmpresasFactory', 'UsuariosFactory', 'ActualizarCSNFactory', '$anchorScroll', 'EmpresasFactory', 'ManejoLicencias', 'PedidosFactory'];
+  ProductosReadController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'PlanPremiumFactory', 'ProductosFactory','AmazonDataFactory', 'FabricantesFactory', 'TiposProductosFactory', 'PedidoDetallesFactory', 'TipoCambioFactory', 'ProductoGuardadosFactory', 'EmpresasXEmpresasFactory', 'UsuariosFactory', 'ActualizarCSNFactory', '$anchorScroll', 'EmpresasFactory', 'ManejoLicencias', 'PedidosFactory', 'ContactsFactory'];
 
   angular.module('marketplace').controller('ProductosReadController', ProductosReadController);
 }());

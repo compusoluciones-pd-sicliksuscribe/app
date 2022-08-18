@@ -38,7 +38,7 @@
           $scope.contactObject = {};
           $scope.getContacts().then(() => $scope.ShowToast(result.data.message, 'success'));
         })
-        .catch(() => $scope.ShowToast('Hubo problemas con la conexión a la base de datos.', 'danger'));
+        .catch(() => $scope.ShowToast('No se pudo agregar el contacto.', 'danger'));
       }
     };
 
@@ -51,7 +51,7 @@
           $scope.contactObjectEdit = {};
           $scope.getContacts().then(() => $scope.ShowToast(result.data.message, 'success'));
         })
-        .catch(() => $scope.ShowToast('Hubo problemas con la conexión a la base de datos.', 'danger'));
+        .catch(() => $scope.ShowToast('No se pudo editar el contacto.', 'danger'));
       }
     };
 
@@ -63,7 +63,7 @@
           $scope.contactObjectDelete = {};
           $scope.getContacts().then(() => $scope.ShowToast(result.data.message, 'success'));
         })
-        .catch(() => $scope.ShowToast('Hubo problemas con la conexión a la base de datos.', 'danger'));
+        .catch(() => $scope.ShowToast('No se pudo eliminar la información del contacto.', 'danger'));
       }
     };
 
