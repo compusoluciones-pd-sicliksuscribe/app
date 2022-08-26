@@ -10,7 +10,6 @@
     $scope.TipoCambioMs = 0;
     $scope.Mensaje = '...';
     $scope.selectProductos = {};
-    $scope.TieneContrato = true;
     $scope.IdPedidoContrato = 0;
     $scope.DominioMicrosoft = true;
     $scope.usuariosSinDominio = {};
@@ -34,15 +33,18 @@
     $scope.ANUAL_MENSUAL = 9;
 
     $scope.MICROSOFT = 1;
+    $scope.AUTODESK = 2;
 
     $scope.esquemaRenovacionModel = {};
     $scope.currentProductAutodesk = {};
     $scope.contactObject = {};
 
     const PREMIUM = "Planes Premium";
+    $scope.INITIAL_ORDER = 1;
+    const ADD_SEAT = 2;
 
     const NUMBER_OF_FIELDS_NECESSARY_TO_INSERTION = 4;
-    
+    $scope.NEW_CONTRACT = 'Nuevo contrato';
     
     const formatTiers = function (tiers) {
       if (tiers) {
@@ -76,7 +78,6 @@
           if (Productos.success === 1) {
             $scope.Productos = Productos.data.map(function (item) {
               item.IdPedidoContrato = 0;
-              item.TieneContrato = true;
               item.AddSeatMS = false;
               item.tiers = formatTiers(item.tiers);
                 ProductosFactory.getNCProduct(item.IdERP)
@@ -310,16 +311,12 @@
           if (respuesta.success === 1) {
             Producto.IdAccionAutodesk = 1;
             Producto.contratos = respuesta.data;
-            if (Producto.contratos.length >= 1 && Producto.Especializacion !== PREMIUM) {
-              Producto.TieneContrato = true;
-              Producto.numeroContrato = respuesta.data[0].contract_number;
-            }
+            if (Producto.contratos.length >= 1 && Producto.Especializacion !== PREMIUM) Producto.numeroContrato = respuesta.data[0].contract_number;
             else if (Producto.contratos.length === 0 || Producto.Especializacion === PREMIUM) {
-              Producto.TieneContrato = false;
-              Producto.numeroContrato = 'Nuevo contrato';
+              Producto.numeroContrato = $scope.NEW_CONTRACT;
               Producto.sinContacto = true;            
             }
-            Producto.contratos.unshift({contract_number: 'Nuevo contrato' });
+            Producto.contratos.unshift({contract_number: $scope.NEW_CONTRACT });
             setProtectedRebatePrice(Producto.IdEmpresaUsuarioFinal);
           } else $scope.ShowToast('No pudimos cargar la información de tus contratos, por favor intenta de nuevo más tarde.', 'danger'); 
         })
@@ -578,7 +575,7 @@
           EmpresasFactory.getTerminosNuevoComercio($scope.IdEmpresa)
           .success(result => {
             if (result.Firma === 1) {
-              $scope.AgregarCarrito(producto, producto.Cantidad, producto.IdPedidocontrato);
+              $scope.AgregarCarrito(producto);
             } else {
               $scope.ShowToast('No has aceptado los términos y condiciones de nuevo comercio', 'danger');
             }
@@ -628,14 +625,14 @@
           return validateQuantity(producto);
         } 
         else {
-          return $scope.AgregarCarrito(producto, producto.Cantidad, producto.IdPedidocontrato);
+          return $scope.AgregarCarrito(producto);
         }
       }
       $scope.validateExistsEmail(producto)
       .then(function (result) {
         const { exists } = result.data;
         if (!exists) {
-          $scope.AgregarCarrito(producto, producto.Cantidad, producto.IdPedidocontrato);
+          $scope.AgregarCarrito(producto);
           return ProductosFactory.postIdERP(producto.IdEmpresaUsuarioFinal);
         } else {
           $scope.ShowToast('Este usuario ya cuenta con un registro de este producto, contacta a tu administrador.', 'danger');
@@ -647,10 +644,10 @@
       ProductosFactory.getQuantity(producto.IdEmpresaUsuarioFinal, producto.IdProducto)
       .then(function (result) {
         if (result.data.Licencias === 0 ) {
-          $scope.AgregarCarrito(producto, producto.Cantidad, producto.IdPedidocontrato);
+          $scope.AgregarCarrito(producto);
         } else if ( (result.data.Licencias+producto.Cantidad) > producto.CantidadMaxima) {
           $scope.ShowToast('Ha excedido la cantidad máxima de licencias disponibles para este producto', 'danger');
-        } else $scope.AgregarCarrito(producto, producto.Cantidad, producto.IdPedidocontrato);
+        } else $scope.AgregarCarrito(producto);
       });
       };
 
@@ -661,53 +658,40 @@
       return ProductosFactory.getValidateEmail(usuario.CorreoElectronico);
     };
 
-    $scope.AgregarCarrito = function (Producto, Cantidad = 1, IdPedidocontrato) {
-      var NuevoProducto = {
-        IdProducto: Producto.IdProducto,
-        Cantidad: !Producto.Cantidad ? 1 : Producto.Cantidad,
-        IdEmpresaUsuarioFinal: Producto.IdEmpresaUsuarioFinal,
+    $scope.AgregarCarrito = producto => {
+      console.log(producto);
+      let nuevoProducto = {
+        IdProducto: producto.IdProducto,
+        Cantidad: !producto.Cantidad ? 1 : producto.Cantidad,
+        IdEmpresaUsuarioFinal: producto.IdEmpresaUsuarioFinal,
         MonedaPago: 'Pesos',
-        IdEsquemaRenovacion:Producto.IdEsquemaRenovacion,
-        IdFabricante: Producto.IdFabricante,
-        CodigoPromocion: Producto.CodigoPromocion,
-        ResultadoFabricante2: Producto.IdProductoPadre,
-        Especializacion: Producto.Especializacion,
-        IdUsuarioContacto: Producto.IdUsuarioContacto,
-        IdAccionAutodesk: Producto.IdFabricante === 2 ? 1 : null,
-        IdERP: Producto.IdERP,
-        Plazo: Producto.Plazo,
-        CotermMS: Producto.cotermMS && !Producto.periodoCompleto ? fortmatDate(Producto.cotermMS.FechaFin) : null
+        IdEsquemaRenovacion:producto.IdEsquemaRenovacion,
+        IdFabricante: producto.IdFabricante,
+        CodigoPromocion: producto.CodigoPromocion,
+        ResultadoFabricante2: producto.IdProductoPadre,
+        Especializacion: producto.Especializacion,
+        IdUsuarioContacto: producto.IdUsuarioContacto,
+        IdAccionAutodesk: producto.IdFabricante === $scope.AUTODESK ? $scope.INITIAL_ORDER : null,
+        IdERP: producto.IdERP,
+        Plazo: producto.Plazo,
+        CotermMS: producto.cotermMS && !producto.periodoCompleto ? fortmatDate(producto.cotermMS.FechaFin) : null
       };
-      if (NuevoProducto.IdAccionAutodesk === 1 && !Producto.TieneContrato) {
-        return postPedidoAutodesk(NuevoProducto, Producto);
+      if (producto.numeroContrato !== $scope.NEW_CONTRACT) {
+        nuevoProducto.IdAccionAutodesk = ADD_SEAT;
+        nuevoProducto.ContratoBaseAutodesk = producto.numeroContrato;
       }
-      if (!Producto.IdUsuarioContacto && Producto.IdFabricante === 2 && Producto.TieneContrato) {
-        const contrato = Producto.contratos
-          .filter(function (p) {
-            return Producto.IdPedidoContrato === p.IdPedido;
-          })[0].NumeroContrato;
-        NuevoProducto.ContratoBaseAutodesk = contrato.trim();
-      }
-      if (NuevoProducto.IdAccionAutodesk === 1 && Producto.TieneContrato) {
-        NuevoProducto.IdAccionAutodesk = 2;
-        if (Producto.IdPedidoContrato === 0) { // Cuando se elige la acción de nuevo contrato y existen contratos adicionales disponibles
-          NuevoProducto.IdAccionAutodesk = 1;
-          delete NuevoProducto.ContratoBaseAutodesk;
-        }
-        return postPedidoAutodesk(NuevoProducto);
-      }
-      if (Producto.IdFabricante !== 2) {
-        if (!NuevoProducto.IdAccionAutodesk) delete NuevoProducto.IdAccionAutodesk;
-        PedidoDetallesFactory.postPedidoDetalle(NuevoProducto)
-        .success(function (PedidoDetalleResult) {
-          if (PedidoDetalleResult.success === 1) {
+      if (producto.IdFabricante !== $scope.AUTODESK) {
+        if (!nuevoProducto.IdAccionAutodesk) delete nuevoProducto.IdAccionAutodesk;
+        PedidoDetallesFactory.postPedidoDetalle(nuevoProducto)
+        .success(pedidoDetalleResult => {
+          if (pedidoDetalleResult.success === 1) {
             angular.element(document.getElementById('auxScope')).scope().gaAgregarCarrito(Producto);
-            $scope.ShowToast(PedidoDetalleResult.message, 'success');
+            $scope.ShowToast(edidoDetalleResult.message, 'success');
             $scope.ActualizarMenu();
             $scope.addPulseCart();
             setTimeout($scope.removePulseCart, 9000);
           } else {
-            $scope.ShowToast(PedidoDetalleResult.message, 'danger');
+            $scope.ShowToast(pedidoDetalleResult.message, 'danger');
           }
         })
         .error(function (data, status, headers, config) {
@@ -718,6 +702,7 @@
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
       }
+      return postPedidoAutodesk(nuevoProducto);
     };
 
     const fortmatDate = function (date) {
@@ -725,17 +710,15 @@
       return visualDate[2] + '-' + visualDate[1] + '-' + visualDate[0];
     }
 
-    const postPedidoAutodesk = function (NuevoProducto) {
-      PedidoDetallesFactory.postPedidoDetalle(NuevoProducto)
-      .success(function (PedidoDetalleResult) {
-        if (PedidoDetalleResult.success === 1) {
-          $scope.ShowToast(PedidoDetalleResult.message, 'success');
+    const postPedidoAutodesk = nuevoProducto => {
+      PedidoDetallesFactory.postPedidoDetalle(nuevoProducto)
+      .success(pedidoDetalleResult => {
+        if (pedidoDetalleResult.success === 1) {
+          $scope.ShowToast(pedidoDetalleResult.message, 'success');
           $scope.ActualizarMenu();
           $scope.addPulseCart();
           setTimeout($scope.removePulseCart, 1000);
-        } else {
-          $scope.ShowToast(PedidoDetalleResult.message, 'danger');
-        }
+        } else $scope.ShowToast(pedidoDetalleResult.message, 'danger');
       })
       .error(function (data, status, headers, config) {
         $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';

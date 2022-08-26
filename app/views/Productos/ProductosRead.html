@@ -303,14 +303,14 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div ng-if="(Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2  && Producto.sinContacto && Producto.IdAccionAutodesk === 1) 
+                                            <div ng-if="(Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === AUTODESK  && Producto.sinContacto && Producto.IdAccionAutodesk === INITIAL_ORDER && Producto.numeroContrato === NEW_CONTRACT) 
                                             ||  Producto.IdFabricante === 6 || (Producto.IdFabricante === 5  && Producto.IdProductoFabricanteExtra !== 'Aperio') || (Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 11)" >
+                                            <div>
                                                 <label for="contacto" >* Contacto</label><a ng-hide="!Producto.IdAutodeskUF" ng-click="openModalInsert(Producto)" class="form-group" title="Nuevo contacto" ng-show=" SessionCookie.IdTipoAcceso === 2 || SessionCookie.IdTipoAcceso === 10" style="background-blend-mode: initial">
                                                     <strong>(Añadir contacto) &nbsp;</strong><span class="glyphicon glyphicon-plus"> </span>
                                                 </a>
                                             </div>
-                                            <div class="input-group" ng-if="(Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2 && Producto.sinContacto&& Producto.IdAccionAutodesk === 1) 
-                                            ||  Producto.IdFabricante === 6 || (Producto.IdFabricante === 5  && Producto.IdProductoFabricanteExtra !== 'Aperio') || Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 11">
+                                            <div class="input-group">
                                                 <span class="input-group-addon green white">
                                                     <span class="glyphicon glyphicon-user"></span>
                                                 </span>
@@ -320,6 +320,7 @@
                                                     <option ng-selected="true" value="">Selecciona un contacto...</option>
                                                 </select>  
                                             </div>   
+                                            </div>
                                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-info" style="margin-top: .5em; padding-left: 0;"><b>{{Producto.mensajePlanPremium}}</b></div>                             
                                             <div ng-show="Producto.MostrarMensajeP" style="color:red;">
 
