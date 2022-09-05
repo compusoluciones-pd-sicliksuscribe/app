@@ -482,24 +482,31 @@
     };
 
     $scope.tipoTarjeta = (tipo, cookie) => {
-      
       if (cookie) $cookies.putObject('tipoTarjetaCredito', tipo);
       PedidoDetallesFactory.setCreditCardType($scope.PedidoDetalles, tipo)
         .then(() => $scope.ShowToast('Tipo de tarjeta actualizada.', 'success'))
         .catch(() => $scope.ShowToast('No fue posible actualizar el usuario de compra.', 'danger'));
-      $('#btnSiguiente').prop('disabled', false);
+      if ($scope.flagAnnualMensual !== '' ||
+        $scope.flagTYC >= 1 ||
+        $scope.flagLCO !== '') {
+        $('#btnSiguiente').prop('disabled', true);
+      } else {
+        $('#btnSiguiente').prop('disabled', false);
+      }
     };
 
     const validarTC = () => {
       let tipoTarjetaCredito = $cookies.getObject('tipoTarjetaCredito');
-      if (!tipoTarjetaCredito){
+      if (!tipoTarjetaCredito ||
+        $scope.flagAnnualMensual !== '' ||
+        $scope.flagTYC >= 1 ||
+        $scope.flagLCO !== '') {
         $('#btnSiguiente').prop('disabled', true);
-      }else {
+      } else {
         $scope.tipoTarjeta(tipoTarjetaCredito, false);
-        $('#TC_'+tipoTarjetaCredito).prop('checked', true);
+        $('#TC_' + tipoTarjetaCredito).prop('checked', true);
         $('#btnSiguiente').prop('disabled', false);
       }
-
     };
 
     $scope.next = function () {
