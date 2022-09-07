@@ -113,6 +113,11 @@
       return Object.keys(groups).map(function (group) { return groups[group]; });
     };
 
+    
+    const alertona = () => {
+      alert('wedasdasds');
+    }
+
     const confirmPayPal = function () {
       const paymentId = $location.search().paymentId;
       const token = $location.search().token;
@@ -147,6 +152,11 @@
     $scope.recargarMonitor = () => {
       location.reload();
     };
+    
+    function checkCCDefault() {
+      document.getElementById("TCM_1").checked = true;
+      $scope.tipoTarjetaMonitor(1);
+    }
 
     $scope.init = function () {
       if ($scope.currentPath === '/MonitorPagos') {
@@ -169,9 +179,7 @@
         })
         .error(function (data, status, headers, config) {
           $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
-
           $scope.ShowToast('No pudimos cargar los pedidos por pagar, por favor intenta de nuevo más tarde.', 'danger');
-
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
 
@@ -182,9 +190,7 @@
           })
           .error(function (data, status, headers, config) {
             $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
-
             $scope.ShowToast('No pudimos cargar la información, por favor intenta de nuevo más tarde.', 'danger');
-
             $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
           });
       }
@@ -193,6 +199,7 @@
       if (document.getElementById('Tarjeta').checked) {
         deshabilitarTc.style.display = 'none';
         $('#btnSiguiente').prop('disabled', true);
+        setTimeout(checkCCDefault, 500);
       } else {
         $('#btnSiguiente').prop('disabled', false);
         deshabilitarTc.style.display = 'block';
