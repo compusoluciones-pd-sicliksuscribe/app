@@ -113,11 +113,6 @@
       return Object.keys(groups).map(function (group) { return groups[group]; });
     };
 
-    
-    const alertona = () => {
-      alert('wedasdasds');
-    }
-
     const confirmPayPal = function () {
       const paymentId = $location.search().paymentId;
       const token = $location.search().token;
