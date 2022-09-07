@@ -155,6 +155,7 @@
 												<li ng-show="SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 8 || SessionCookie.IdTipoAcceso == 10"><a ng-click="goToPage('ParticionPedidos');">Particionar renovable</a></li>
 												<li ng-show="SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 8 || SessionCookie.IdTipoAcceso == 10 || SessionCookie.IdTipoAcceso === 2"><a ng-click="goToPage('ActualizarCSN');">Actualizar CSN cliente</a></li>
 												<li ng-show="SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 8 || SessionCookie.IdTipoAcceso == 10"><a ng-click="goToPage('ConfirmarSP');">Peticiones especiales (SP)</a></li>
+												<li ng-show="SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 8 || SessionCookie.IdTipoAcceso == 10"><a ng-click="goToPage('OpenCSN');">Venta especial canales open</a></li>
 												<li ng-show="SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 8 || SessionCookie.IdTipoAcceso == 10 || SessionCookie.IdTipoAcceso === 2"><a ng-click="goToPage('MonitorPremium');">Monitor planes premium</a></li>
 											</ul>
 										</li>
@@ -738,6 +739,15 @@
 	<script type="text/javascript" src="app/controllers/Facturacion/FacturacionAzure.js"></script>
 	<script type="text/javascript" src="app/services/Microsoft/FacturacionAzure.js"></script>
 	<script type="text/javascript" src="app/services/Microsoft/ManejoLicencias.js"></script>
+<<<<<<< Updated upstream
+=======
+	<script type="text/javascript" src="app/controllers/Autodesk/MonitorContratosController.js"></script>
+	<script type="text/javascript" src="app/services/MonitorContratosFactory.js"></script>
+	<script type="text/javascript" src="app/controllers/Autodesk/ContactsController.js"></script>
+	<script type="text/javascript" src="app/services/ContactsFactory.js"></script>
+	<script type="text/javascript" src="app/controllers/Autodesk/OpenCSNController.js"></script>
+	<script type="text/javascript" src="app/services/OpenCSNFactory.js"></script>
+>>>>>>> Stashed changes
 
 
 	<script src="scripts/tinycolor2-min.js"></script>
