@@ -122,7 +122,7 @@
                         <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4" ng-show="(subscription.subs_ready && !subscription.siclick_status)">
                             <div  style="position: relative; left: 100%;">
                                 <label tooltip="Seleccionar número de serie">
-                                   <input class="ng-pristine ng-untouched ng-valid" ng-model="subscription.forRenewal" type="checkbox" style="transform: scale(1.6);" />
+                                   <input class="ng-pristine ng-untouched ng-valid" ng-model="subscription.forRenewal" ng-click="premiumValidate(subscription,contract.subscriptions);" type="checkbox" style="transform: scale(1.6);" />
                                 </label>
                             </div>
                         </div>
@@ -145,7 +145,7 @@
                         <div class="modal-body">
                             <div class="form-group has-feedback">
                                 <label for="Contacto">*Contacto </label>
-                                <select name="Renovar" id="Renovar" class="form-control selectOption" ng-model="Renovar.IdUsuarioContacto" ng-options="Contacto.IdUsuario as Contacto.Nombre + ' ('+ Contacto.CorreoElectronico +')' for Contacto in contactos">
+                                <select name="Renovar" id="Renovar" class="form-control selectOption" ng-model="Renovar.IdUsuarioContacto" ng-options="Contacto.contact_id as Contacto.name + ' ('+ Contacto.email +')' for Contacto in contactos">
                                         <option ng-selected="true" value="">Selecciona un contacto...</option>
                                     </select>
                             </div>
@@ -178,7 +178,7 @@
                         <div class="col-sm-12 col-md-12 col-lg-12 modal-body">
                             <div class="col-sm-12 col-md-12 col-lg-12 form-group has-feedback">
                                 <label >Contacto </label>
-                                <select class="form-control selectOption" ng-model="TradeIn.IdUsuarioContacto" ng-options="Contacto.IdUsuario as Contacto.Nombre + ' ('+ Contacto.CorreoElectronico +')' for Contacto in contactos">
+                                <select class="form-control selectOption" ng-model="TradeIn.IdUsuarioContacto" ng-options="Contacto.contact_id as Contacto.name + ' ('+ Contacto.email +')' for Contacto in contactos">
                                         <option ng-selected="true" value="">Selecciona un contacto...</option>
                                     </select>
                             </div>
