@@ -1,16 +1,16 @@
-.btn-monitor-pedidos-x-cliente {
-    margin-right: .5em; 
+.btn-monitor-contratos {
+    margin-right: .8em; 
     margin-top: .5em;
-    min-width: 7em; 
-    height: 2.8em;
+    min-width: 5em; 
+    height: 2.6em;
     color: white;
     font-weight: bold;
     background-color: #4A7BAB;
 }
 
-.btn-monitor-pedidos-x-cliente:hover {
+.btn-monitor-contratos :hover {
     color: white;
-    background-color: #4a7bab94;
+    background-color: #28507794;
 }
 
 .btn-modal {
