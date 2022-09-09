@@ -38,7 +38,6 @@
                       <ul style="list-style-type:none; padding:0%">
                           <li> <label>Distribuidor:</label> {{ order.Distribuidor }} </li>
                           <li> <label>Usuario final:</label> {{ order.UsuarioFinal }} </li>
-                          <li> <label>CSN usuario final:</label> {{ order.CSNSup ? order.CSNSup : 'No registrado' }} </li>
                           <li> <label>Número de contrato:</label> {{ order.NumeroContrato ? order.NumeroContrato : 'Nuevo contrato' }} </li>
                       </ul>
                   </div>
@@ -49,7 +48,8 @@
                         <li> <label>Total:</label> {{ order.Moneda === "Pesos" ? (order.Total * order.TipoCambio) : order.Total | currency: "$":2 }} {{ order.Moneda }}</li>
                       </ul>
                       <label class="col-xs-5 col-sm-5 col-md-5 col-lg-5" style="padding-top: .6em; margin-left: 0; padding-left: 0;">CSN Distribuidor:</label>
-                      <input style="max-width: 10em;" class="form-control col-xs-4 col-sm-4 col-md-4 col-lg-4" type="text" ng-model="CodigoDescuento">
+                      <input style="max-width: 10em;" class="form-control col-xs-4 col-sm-4 col-md-4 col-lg-4" type="text" ng-model="order.resellerCSN">
+                      <a class="col-xs-1 col-sm-1 col-md-1 col-lg-1"  style="margin-top: .6em; margin-left: 1em;" ng-click="updateResellerCSN(order.resellerCSN, order.IdEmpresaDistribuidor)"><span class="glyphicon glyphicon-floppy-disk"  tooltip="Guardar"  style="font-size: 1.6em"></span></a> 
                   </div>
                   <div  class="col-xs-12 col-sm-12 col-md-offset-1 col-lg-offset-1 col-md-2 col-lg-2" style="padding-top: 2.6em;">
                       <button  class="btn btn-success" ng-click="confirmarSP(orden.IdPedido, CodigoDescuento, orden.CSNUF)">
@@ -68,7 +68,7 @@
               </div>
               <hr class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
               <div ng-repeat="detail in order.Detalles" style=" text-align: center;">
-                  <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"> {{ detail.Serie ? detail.Serie : '-' }} </div>
+                  <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"> {{ detail.Serie ? detail.Serie : '--' }} </div>
                   <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"> {{ detail.SKU }} </div>
                   <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3"> {{ detail.Producto }} </div>
                   <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1"> {{ detail.Cantidad }} </div>
