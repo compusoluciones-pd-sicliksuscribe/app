@@ -29,6 +29,11 @@
       {id: 9, esquema: 'Anual con facturación mensual' }
 
     ];
+    $scope.EsquemaRenovacionLegacy=[
+      {id: 1, esquema: 'Mensual' },
+      {id: 2, esquema: 'Anual' }
+
+    ];
     $scope.MENSUAL = 1;
     $scope.ANUAL = 2;
     $scope.ANUAL_MENSUAL = 9;
@@ -182,10 +187,11 @@
       dateByEschema.map(function (item) {
         const endDate = new Date(item.FechaFin);
         const nowDate = new Date();
-
-        if (endDate.getDate() >= nowDate.getDate() ) {
+        if(endDate.getDate()<='27'){
+        if (endDate.getDate() >= nowDate.getDate()) {
           fechaCoterm.push({ FechaFin: ('0' + endDate.getDate()).slice(-2) + '/' + ('0' + (nowDate.getMonth() + 1)).slice(-2) + "/" + (nowDate.getFullYear())});
         } else fechaCoterm.push({ FechaFin: ('0' + endDate.getDate()).slice(-2) + '/' + ('0' + (nowDate.getMonth() + 2)).slice(-2) + "/" + (nowDate.getFullYear())});
+      }
       });
     } else {
       dateByEschema.map(function (item)  {
