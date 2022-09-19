@@ -16,9 +16,9 @@
       return $http.get($rootScope.API + 'autodesk/openOrders');
     };
 
-    factory.updateResellerCSN = (resellerCSN, resellerId) => {
+    factory.updateResellerCSN = (resellerCSN, orderId) => {
       factory.refreshToken();
-      return $http.post($rootScope.API + 'autodesk/openOrders/updateResellerCSN', {resellerCSN, resellerId});
+      return $http.post($rootScope.API + 'autodesk/openOrders/updateResellerCSN', {resellerCSN, orderId});
     };
 
     factory.confirmOrder = orderId => {
