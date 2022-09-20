@@ -107,11 +107,6 @@
       return $http.put($rootScope.API + 'orders/update-status', PedidoDetalle);
     };
 
-    factory.updateProductoAutodesk = function (PedidoDetalle, flag) {
-      factory.refreshToken();
-      return $http.put($rootScope.API + 'autodesk/subscription/update/' + flag, PedidoDetalle);
-    };
-
     factory.getContarProductos = function () {
       factory.refreshToken();
       return $http.get($rootScope.API + 'PedidoDetalles/ContarProductos');
@@ -315,11 +310,6 @@
     factory.actualizarFechaInicio = (idContrato, fechaInicio, idEsquemaRenovacion) => {
       factory.refreshToken();
       return $http.post($rootScope.API + 'orders/update-start-date', { IdContrato: idContrato, FechaInicio: fechaInicio, IdEsquemaRenovacion: idEsquemaRenovacion });
-    };
-
-    factory.actualizarEsquemaRenovacion = (numeroSeries, idEsquemaRenovacion) => {
-      factory.refreshToken();
-      return $http.post($rootScope.API + 'autodesk/update-subscriptions', { numeroSeries, idEsquemaRenovacion });
     };
 
     factory.setCreditCardType = (PedidoDetalles, tipoTarjeta) => {
