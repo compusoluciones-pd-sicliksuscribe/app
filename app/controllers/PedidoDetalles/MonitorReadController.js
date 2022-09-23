@@ -114,7 +114,6 @@
       if (Params.IdFabricante === 1) {
         $scope.Contrato.tipo = 'all';
       }
-      Params.EstatusContrato = $scope.Contrato.tipo || 'all';
       if (Params.IdFabricante && $scope.EmpresaSelect) {
         getOrderPerCustomer(Params);
         if (Params.IdFabricante === 2) { 

@@ -38,12 +38,6 @@
         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
             <div class="form-group has-feedback" ng-if="(SessionCookie.IdTipoAcceso === 4 || SessionCookie.IdTipoAcceso === 6) || BuscarProductos.IdFabricante === 2">
-                <label for="TipoContrato">Estatus de contrato: </label>
-                <select name="Contrato" id="Contrato" class="form-control selectOption" ng-change="ActualizarMonitor();" ng-model="Contrato.tipo">
-                    <option value="" selected hidden></option>
-					<option ng-selected="true" value="1">Renovables</option>
-					<option value="0">No Renovados</option>
-				</select>
                 <div style="margin: 1em 0 0 0;"> 
                     <label > CSN del cliente: </label>
                     <div class="row"> 
