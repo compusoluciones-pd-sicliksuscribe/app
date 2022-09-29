@@ -399,7 +399,7 @@
     </div>
 
     <!-- Detalle pedidos Autodesk -->
-    <div ng-if="BuscarProductos.IdFabricante === 2 && EmpresaSelect" ng-repeat="pedido in Pedidos | filter:PedidoFilter" style="margin-top: 2em; background-color: rgb(248, 248, 248); padding: 1.8em;">
+    <div ng-if="BuscarProductos.IdFabricante === 2 && EmpresaSelect" ng-repeat="pedido in Pedidos | filter:PedidoFilter" style="margin-top: 2em; background-color: rgba(248, 248, 248, 0.732); padding: 1.8em;">
         <div class="row">
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                 <ul style="list-style-type:none; padding:0%">
@@ -409,12 +409,6 @@
                     <li> <label for="FechaInicio">Duración del contrato: </label> {{ pedido.FechaInicio | date:'d/MM/yyyy' }} <label>-</label> {{ pedido.FechaFin | date:'d/MM/yyyy'}} </li>
                 </ul>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="pedido.EstatusContrato === 'in-cart' || pedido.EstatusContrato === 'processing' || pedido.EstatusContrato === 'renewal' || pedido.PorExtender">
-                <div ng-if="pedido.EstatusContrato === 'in-cart' && !pedido.PorExtender"><hr><h5 class="alert alert-warning text-warning" style="border-left: .6em solid; width: 100%;"><b>El pedido para la renovación se encuentra en el carrito. Realice el pago para continuar el proceso de renovación.</b></h5></div>
-                <div ng-if="pedido.EstatusContrato === 'processing' && !pedido.PorExtender"><hr><h5 class="alert alert-info text-info" style="border-left: .6em solid;"><b>Este contrato será renovado. El siguiente periodo del contrato se habilitará al procesar la compra con Autodesk.</b></h5></div>
-                <div ng-if="pedido.EstatusContrato === 'renewal' && !pedido.PorExtender"><hr><h5 class="alert alert-info text-info" style="border-left: .6em solid;"><b>El siguiente periodo del contrato se habilitará al procesar la compra con Autodesk.</b></h5></div>
-                <div ng-if="pedido.PorExtender"><hr><h5 class="alert alert-warning text-warning" style="border-left: .6em solid;"><b>El periodo de vigencia del contrato será extendido.</b></h5></div>
-            </div>
         </div>
 
         <table class="table table-hover table-responsive border-left-right-cero">
@@ -422,16 +416,12 @@
                 <td>
 
                     <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                        <h4><b>{{ detalles.Nombre }}</b></h4><span ng-if="detalles.IdCompraUF" class="badge badge-secondary">TuClick</span></h4>
                         <ul style="list-style-type:none; padding:0%">
                             <li> <label for="Order">Número de pedido:</label> {{ detalles.IdPedido }} </li>
                             <li> <label for="Serie">Número de serie:</label> {{ detalles.NumeroSerie }} </li>
                             <li> <label for="TipoProducto">Tipo de producto:</label> {{ detalles.Tipo }} </li>
                             <li ng-if="detalles.IdEstatusPedido === 2"> <label for="Estatus">Estatus pedido: </label> Pago pendiente </li>
                             <li ng-if="detalles.IdEstatusPedido === 3"> <label for="Estatus">Estatus pedido: </label> Pagado </li>
-                            <li ng-if="detalles.PedidoImportado === 1"> <span style="font-size: 100%; padding-top: .3em;" class="label label-primary">Importado</span>
-                            <li ng-hide="pedido.EstatusContrato === 'canceled'" ng-if="pedido.AutoRenovable && detalles.PagoRenovacion"> <label for="EstatusRenovacion">Estatus de renovación:</label> Pagado </li>
-                            <li ng-hide="pedido.EstatusContrato === 'canceled'" ng-if="pedido.AutoRenovable && !detalles.PagoRenovacion"> <label for="EstatusRenovacion">Estatus de renovación:</label> Sin renovar </li>
                         </ul>
                     </div>
 
@@ -455,27 +445,19 @@
 						<label>Estatus de pedido: </label>
 						<br/>
 						<b> 
-							<div ng-show="detalles.EstatusFabricante === 'accepted'">
-								Aceptado <span class="glyphicon glyphicon-ok" title="{{ detalles.EstatusFabricante }}"> </span>
+							<div ng-show="detalles.acceptedOrder">
+								<span style="font-size: 100%; padding: .5em;" class="label label-success">Aceptado <span style="padding-top: 1.2em;" class="glyphicon glyphicon-ok" title="{{ detalles.EstatusFabricante }}"> </span></span>
 							</div>
-							<div ng-show="detalles.EstatusFabricante === 'FAILED'">
-								Error al procesar <span class="glyphicon glyphicon-remove" title="{{ detalles.EstatusFabricante }}"> </span>
+							<div ng-show="detalles.failedOrder">
+								<span style="font-size: 100%; padding: .5em;" class="label label-warning">Error al procesar <span style="padding-top: 1.2em;" class="glyphicon glyphicon-remove" title="{{ detalles.EstatusFabricante }}"> </span></span>
 							</div>
-							<div style="font-style: italic;" ng-show="detalles.EstatusFabricante === '' || !detalles.EstatusFabricante || detalles.EstatusFabricante === 'processing'">
-								Procesando... <span class="glyphicon glyphicon-time" title="{{ detalles.EstatusFabricante }}"> </span>
+							<div style="font-style: italic;" ng-show="detalles.EstatusFabricante === '' || !detalles.EstatusFabricante || detalles.processingOrder ">
+								<span style="font-size: 100%; padding: .5em;" class="label label-primary">Procesando... <span style="padding-top: 1.2em;" class="glyphicon glyphicon-time" title="{{ detalles.EstatusFabricante }}"> </span></span>
 							</div>
 						</b>
                     </div>
                 </td>
             </tr>
         </table>
-
-        <div style="visibility: hidden">
-            <div class="md-dialog-container" id="myStaticDialog">
-                <md-dialog>
-                    This is a pre-rendered dialog.
-                </md-dialog>
-            </div>
-        </div>
     </div>
 </div>

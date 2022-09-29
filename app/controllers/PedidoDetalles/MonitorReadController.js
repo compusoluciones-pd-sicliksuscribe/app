@@ -8,16 +8,15 @@
     $scope.orders = false;
     $scope.BuscarProductos = {};
     $scope.Contrato = {};
-    $scope.Contactos = [];
-    $scope.Renovar = {};
-    $scope.Extender = {};
-    $scope.tradeIn = {};
     $scope.terminos = false;
     $scope.SessionCookie = $cookies.getObject('Session');
+    const FAILED = 'FAILED';
+    const FAILED_1 = 'failed';
+    const ERROR = 'error';
+    const ACCEPTED = 'accepted';
+    const PROCESSING = 'processing';
 
     $scope.init = function () {
-      $scope.procesandoExtension = false;
-      $scope.procesandoExtensionLbl = 'Extender contrato';
       $scope.CheckCookie();
       FabricantesFactory.getFabricantes()
         .success(function (Fabricantes) {
@@ -53,8 +52,23 @@
             $scope.Pedidos = result.data.data;
             $scope.Pedidos.forEach(pedido => {
               pedido.Detalles.forEach(detalle => {
-                detalle.NumeroSerie && detalle.EstatusFabricante === 'accepted' && detalle.PedidoAFabricante
-                ? pedido.listoRenovar = 1 : pedido.listoRenovar = 0;
+                switch(detalle.EstatusFabricante) {
+                  case FAILED:
+                    detalle.failedOrder = true;
+                  break;
+                  case PROCESSING:
+                    detalle.processingOrder = true;
+                  break;
+                  case FAILED_1:
+                    detalle.failedOrder = true;
+                  break;
+                  case ERROR:
+                    detalle.failedOrder = true;
+                  break;
+                  case ACCEPTED:
+                    detalle.acceptedOrder = true;
+                  break;
+                }
               });
               ProductosFactory.getNCProduct(pedido.Detalles[0].IdErp)
               .success(function (result) {
@@ -79,30 +93,6 @@
       return now > limitDate ? false : true;
     }
 
-    const getContactUsers = function () {
-      UsuariosFactory.getUsuariosContacto($scope.EmpresaSelect)
-        .then(result => {
-          $scope.Contactos = result.data.data;
-          $scope.Renovar = {};
-        });
-    };
-
-    const renewContract = function (contractData) {
-      PedidosFactory.renewContract(contractData)
-        .then(result => {
-          if(result.data.success) {
-            $scope.ShowToast(result.data.message, 'success');
-            $scope.ActualizarMenu();
-            $scope.addPulseCart();
-            setTimeout($scope.removePulseCart, 9000);
-            $location.path('/Carrito');
-          } else  $scope.ShowToast(result.data.message, 'danger');
-        })
-        .catch(result => {
-          $scope.ShowToast(result.data.message, 'danger');
-        });
-    };
-
     $scope.init();
 
     $scope.ActualizarMonitor = function () {
@@ -116,8 +106,7 @@
       }
       if (Params.IdFabricante && $scope.EmpresaSelect) {
         getOrderPerCustomer(Params);
-        if (Params.IdFabricante === 2) { 
-          getContactUsers();
+        if (Params.IdFabricante === 2) {
           ActualizarCSNFactory.getUfCSN(Params.IdEmpresaUsuarioFinal)
           .then(result => {
             if (result.data.success) {
@@ -553,11 +542,6 @@
 
       $scope.Tour.init();
       $scope.Tour.start();
-    };
-
-    $scope.validarModal = contratoActual => {
-      $scope.OpcionesExtencion.length > 0 ? document.getElementById(`extenderModal${contratoActual}`).style.display = 'block'
-      : document.getElementById('noExtender').style.display = 'block';
     };
 
     $scope.InsertarOrdenCompra = function (idPedido,ordenCompraProxima) {
