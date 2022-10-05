@@ -8,7 +8,7 @@
     const CONFIRM_ORDER_ERROR = 'No se pudo confirmar la orden.';
     const FIELD_REQUIRED_ERROR = 'Registra un CSN antes de confirmar la orden.';
     const INVALID_CSN = ' no es un CSN válido.';
-    const VALID_CSN = 'CSN válido.'
+    const VALID_CSN = 'CSN válido.';
 
     $scope.getOrders = () => {
       OpenCSNFactory.getOpenOrders()
