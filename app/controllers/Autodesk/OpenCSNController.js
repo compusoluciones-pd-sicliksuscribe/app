@@ -37,22 +37,22 @@
       else {
         ActualizarCSNFactory.validateCSN(orderData.resellerCSN)
           .then(result => {
+            console.log(result)
             if (result.data.success) {
               if (result.data.data.error) $scope.ShowToast(orderData.resellerCSN + INVALID_CSN, WARNING);
-              else if (!result.data.data.victimCsn) {
-                $scope.ShowToast(VALID_CSN, SUCCESS);
-                OpenCSNFactory.confirmOrder(orderData.IdPedido)
-                  .then(async (result) => {
-                    if(result.data.success) {
-                      $scope.ShowToast(ORDER_CONFIRMED, SUCCESS);
-                      await $scope.updateResellerCSN(orderData.resellerCSN, orderData.IdPedido);
-                      $scope.init();
-                    } 
-                    else $scope.ShowToast(CONFIRM_ORDER_ERROR, WARNING);
-                  }
-                );
-              } 
-            } else $scope.ShowToast(supplierCSN + INVALID_CsSN, WARNING);
+              if (result.data.data.victimCsn) orderData.resellerCSN = result.data.data.csn;
+              $scope.ShowToast(VALID_CSN, SUCCESS);
+              OpenCSNFactory.confirmOrder(orderData.IdPedido)
+                .then(async (result) => {
+                  if(result.data.success) {
+                    $scope.ShowToast(ORDER_CONFIRMED, SUCCESS);
+                    await $scope.updateResellerCSN(orderData.resellerCSN, orderData.IdPedido);
+                    $scope.init();
+                  } 
+                  else $scope.ShowToast(CONFIRM_ORDER_ERROR, WARNING);
+                }
+              );
+            } else $scope.ShowToast(supplierCSN + INVALID_CSN, WARNING);
           }
         );
       }
