@@ -318,7 +318,7 @@
             Producto.contratos = respuesta.data;
             if (Producto.contratos.length >= 1 && Producto.Especializacion !== PREMIUM) {
               Producto.TieneContrato = true;
-              Producto.IdPedidoContrato = respuesta.data[0].IdPedido;
+              Producto.IdPedidoContrato = 0;
             }
             else if (Producto.contratos.length === 0 || Producto.Especializacion === PREMIUM) {
               Producto.TieneContrato = false;
