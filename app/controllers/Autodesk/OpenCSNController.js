@@ -37,7 +37,6 @@
       else {
         ActualizarCSNFactory.validateCSN(orderData.resellerCSN)
           .then(result => {
-            console.log(result)
             if (result.data.success) {
               if (result.data.data.error) $scope.ShowToast(orderData.resellerCSN + INVALID_CSN, WARNING);
               if (result.data.data.victimCsn) orderData.resellerCSN = result.data.data.csn;
