@@ -81,9 +81,9 @@
                              ng-hide="contract.EstatusContrato === 'canceled' || contract.EstatusContrato === 'notRenewed'">
                             <div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
                                 <label>Suscripciones: </label> <br>
-                                <div style="margin:0; padding:0;" ng-if="!subscription.subs_ready"> {{ subscription.quantity }} </div>
+                                <div style="margin:0; padding:0;" ng-if="!subscription.subs_ready || subscription.is_premium"> {{ subscription.quantity }} </div>
                                 
-                                <a ng-click="ActualizarCantidad(subscription.subscription_reference_number)" style="text-decoration: none" ng-show="subscription.subs_ready"> {{ subscription.quantity }} &nbsp;
+                                <a ng-click="ActualizarCantidad(subscription.subscription_reference_number)" style="text-decoration: none" ng-show="subscription.subs_ready && !subscription.is_premium"> {{ subscription.quantity }} &nbsp;
                                     <span class="glyphicon glyphicon-triangle-bottom" ng-show="!subscription.MostrarCantidad" ></span>
                                     <span class="glyphicon glyphicon-triangle-top" ng-show="subscription.MostrarCantidad"></span>
                                 </a>

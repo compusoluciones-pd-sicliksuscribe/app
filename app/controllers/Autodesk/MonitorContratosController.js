@@ -4,6 +4,7 @@
     $scope.Renovar = {};
     $scope.TradeIn = {};
     $scope.SessionCookie = $cookies.getObject('Session');
+    const PREMIUM = 'Premium'
 
     $scope.init = function () {
       MonitorContratosFactory.getEndCustomer()
@@ -27,6 +28,7 @@
               contract.etiquetaTermSwitch = (contract.contract_term === '3-Year') ? 'Actualizar periodo a un año' : 'Actualizar periodo a tres años';
               contract.subscriptions.forEach(subscription => {
                 subscription.MostrarCantidad = false;
+                if (subscription.product_line === PREMIUM) subscription.is_premium = true;
                 if (!subscription.subs_ready || subscription.siclick_status) contract.termSwitchStatus = true;
                 subscription.implantacion = subscription.deployment === 'S' ? 'Single-user' : 'Multi-user';
               });
