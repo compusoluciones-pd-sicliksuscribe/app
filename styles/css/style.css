@@ -411,7 +411,7 @@ option {
 }
 
 .dropdown-menu > li > a {
-  color: #fff;
+  color: #000000;
 }
 
 .dropdown-menu > li > a:hover {
