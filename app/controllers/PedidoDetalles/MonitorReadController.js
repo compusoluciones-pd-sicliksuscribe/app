@@ -60,7 +60,7 @@
               .success(function (result) {
               pedido.productoNC = result ? true : false;
               });
-              pedido.optionDeleteMS = pedido.EsOrdenInicial === 0 ? false : evaluationDeleteMS(pedido.FechaInicio);
+              pedido.optionDeleteMS = pedido.CancelarPedido === 0 ? false : evaluationDeleteMS(pedido.FechaInicio);
               pedido.TermSwitch = pedido.EstatusContrato === 'term-switch';
               pedido.etiquetaTermSwitch = (pedido.IdEsquemaRenovacion == 5) ? 'Actualizar periodo a un año' : 'Actualizar periodo a tres años';
             });
