@@ -656,7 +656,7 @@
         templateUrl: 'app/views/Autodesk/MonitorContratos.html',
         resolve: { 'check': function ($location, $cookies) {
           var Session = $cookies.getObject('Session');
-          if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 8 || Session.IdTipoAcceso === 10)) { $location.path('/404'); }
+          if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 10)) { $location.path('/404'); }
         }}
       })
 
@@ -672,7 +672,7 @@
         controller: 'ContactsController', templateUrl: 'app/views/Autodesk/Contacts.html',
         resolve: { 'check': function ($location, $cookies) {
           var Session = $cookies.getObject('Session');
-          if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 8 || Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 10)) { $location.path('/404'); }
+          if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 10)) { $location.path('/404'); }
         }}
       })
 
@@ -680,7 +680,7 @@
         controller: 'ContractSearchController', templateUrl: 'app/views/Autodesk/ContractSearch.html',
         resolve: { 'check': function ($location, $cookies) {
           var Session = $cookies.getObject('Session');
-          if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 8 || Session.IdTipoAcceso === 10 || Session.IdTipoAcceso === 2)) { $location.path('/404'); }
+          if (!(Session.IdTipoAcceso === 10 || Session.IdTipoAcceso === 2)) { $location.path('/404'); }
         }}
       })
       .otherwise({ redirectTo: '/404' });

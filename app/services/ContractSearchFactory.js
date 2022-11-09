@@ -11,9 +11,14 @@
 
     factory.refreshToken();
 
-    factory.getContractsData = contracNumber => {
+    factory.getContractsData = contractNumber => {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'autodesk/contract-search/get-data/' + contracNumber);
+      return $http.get($rootScope.API + 'autodesk/contract-search/get-data/' + contractNumber);
+    };
+
+    factory.associate = contractNumber => {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'autodesk/contract-search/associate', { contractNumber });
     };
 
     return factory;

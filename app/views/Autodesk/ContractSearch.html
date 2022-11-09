@@ -22,7 +22,7 @@
     <hr>
     <div class="row">
       <div class="row cotainer" ng-repeat="contract in contracts">
-        <div style="background-color: rgba(220, 220, 220, 0.4); padding: 1.5em">
+        <div style="background-color: rgba(220, 220, 220, 0.4); padding: 2em;">
           <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
             <div class="text-center form-group">
                 <div style="color:#00549F;">
@@ -38,7 +38,7 @@
             <li> <label>Esquema de renovación:</label> {{ contract.term }} </li>
             <li> <label>Fin del periodo:</label> {{ contract.endDate | date:'d/MM/yyyy' }} </li>
           </ul>
-          <button style="position: relative; float: right; bottom: 2em; height: 2.6em;" class="btn btn-primary" ng-click="confirmarParticion({{item.IdPedido}})">
+          <button style="position: relative; float:right; height: 2.6em; bottom: 2.6em;" class="btn btn-primary" ng-click="associate({{contract.contractNumber}})">
             Asociar contrato
           </button>
         </div>
