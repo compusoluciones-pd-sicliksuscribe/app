@@ -37,8 +37,9 @@
             <li> <label>Usuario final:</label> {{ contract.finalUserCSN }} - {{contract.finalUser}} </li>
             <li> <label>Esquema de renovación:</label> {{ contract.term }} </li>
             <li> <label>Fin del periodo:</label> {{ contract.endDate | date:'d/MM/yyyy' }} </li>
+            <li ng-show = "isAssociated"> <span style="font-size: 1em; padding:.4em;" class="label label-primary">Disponible en el monitor de contratos.</span> </li>
           </ul>
-          <button style="position: relative; float:right; height: 2.6em; bottom: 2.6em;" class="btn btn-primary" ng-click="associate({{contract.contractNumber}})">
+          <button ng-hide = "isAssociated" style="position: relative; float:right; height: 2.6em; bottom: 2.6em;" class="btn btn-primary" ng-click="associate({{contract.contractNumber}})">
             Asociar contrato
           </button>
         </div>

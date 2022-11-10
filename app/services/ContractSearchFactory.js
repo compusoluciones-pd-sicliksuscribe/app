@@ -21,6 +21,11 @@
       return $http.post($rootScope.API + 'autodesk/contract-search/associate', { contractNumber });
     };
 
+    factory.getResellerCSN = () => {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'autodesk/contract-search/reseller-csn');
+    };
+
     return factory;
   };
 
