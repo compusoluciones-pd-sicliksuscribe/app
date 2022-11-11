@@ -48,8 +48,9 @@
           if (result.status === 204) {
             $scope.Vacio = 0;
             $scope.Pedidos = '';
+            $scope.PedidosBusqueda = '';
           } else if (result.status === 200) {
-            $scope.Pedidos = result.data.data;
+            $scope.Pedidos = $scope.PedidosBusqueda = result.data.data;
             $scope.Pedidos.forEach(pedido => {
               pedido.Detalles.forEach(detalle => {
                 switch(detalle.EstatusFabricante) {
@@ -80,6 +81,7 @@
             });
             $scope.Vacio = 1;
           }
+          pagination();
         })
         .catch(function (result) {
           $scope.ShowToast(result.data.message, 'danger');
@@ -92,6 +94,19 @@
       limitDate.setDate(limitDate.getDate() + 5);
       return now > limitDate ? false : true;
     }
+
+    const pagination = (currentPage = 1) => {
+      $scope.filtered = [];
+      $scope.currentPage = currentPage;
+      $scope.numPerPage = 4;
+      $scope.maxSize = 5;
+
+      $scope.$watch('currentPage + numPerPage', function () {
+        let begin = (($scope.currentPage - 1) * $scope.numPerPage),
+          end = begin + $scope.numPerPage;
+        $scope.filtered = $scope.PedidosBusqueda.slice(begin, end);
+      });
+    };
 
     $scope.init();
 
@@ -560,6 +575,15 @@
 
     $scope.cerrarModal = modal => {
       document.getElementById(modal).style.display = 'none';
+    };
+
+    $scope.buscar = pedidoFilter => {
+      let resultados = [];
+      $scope.Pedidos.forEach(pedido => {
+        if (pedido.NumeroContrato.toString().toUpperCase().indexOf(pedidoFilter.toUpperCase()) >= 0) resultados.push(pedido);
+      });
+      $scope.PedidosBusqueda = resultados;
+      pagination();
     };
   
   };
