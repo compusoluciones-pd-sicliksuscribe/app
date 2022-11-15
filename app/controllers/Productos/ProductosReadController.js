@@ -34,6 +34,10 @@
       {id: 2, esquema: 'Anual' }
 
     ];
+    $scope.EsquemaRenovacionAnual=[
+      {id: 9, esquema: 'Anual con facturación mensual' },
+      {id: 2, esquema: 'Anual' }
+    ];
     $scope.MENSUAL = 1;
     $scope.ANUAL = 2;
     $scope.ANUAL_MENSUAL = 9;
@@ -76,6 +80,7 @@
         .success(function (Productos) {
           if (Productos.success === 1) {
             $scope.Productos = Productos.data.map(function (item) {
+              console.table(item);
               item.IdPedidoContrato = 0;
               item.TieneContrato = true;
               item.AddSeatMS = false;

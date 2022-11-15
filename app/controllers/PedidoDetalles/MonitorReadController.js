@@ -341,7 +341,7 @@
     };
 
     $scope.actualizarEstatusRenovacion = function(status, pedido){
-      ManejoLicencias.updateStatusAutoRenew(pedido.IdMicrosoftUF, pedido.IdSuscripcion, status, pedido.Detalles[0].IdPedidoDetalle, pedido.Detalles[0].Cantidad, pedido.Detalles[0].CantidadProxima)
+      ManejoLicencias.updateStatusAutoRenew(pedido.IdMicrosoftUF, pedido.IdSuscripcion, status, pedido.Detalles[0].IdPedidoDetalle, pedido.Detalles[0].Cantidad, pedido.Detalles[0].CantidadProxima,$cookies.getObject('Session').IdUsuario)
       .then(function () {
         if (!status) { 
           $scope.ShowToast('Se desactivo la renovación automática', 'success');
