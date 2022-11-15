@@ -65,7 +65,7 @@
 
       EmpresasFactory.getprojectsRFC()
       .success(function (projects) {
-        projects.forEach(project => {
+        projects.content.data.forEach(project => {
           $scope.rfces.push(project.rfc.trim());
         });
       })
@@ -83,9 +83,11 @@
     };
 
     $scope.changeName = function (newName) {
-      $scope.Name = newName;
-      $scope.newName = newName;
-      $scope.showEditName = false;
+      if (newName != '') {
+        $scope.Name = newName;
+        $scope.newName = newName;
+        $scope.showEditName = false;
+      }
     };
 
     $scope.cancelNameChange = function () {
@@ -130,6 +132,9 @@
       }
       if ($scope.frm.RFC.$invalid) {
         return $scope.ShowToast('Problemas con el RFC ingresado, verifique ese campo', 'danger');
+      }
+      if (!$scope.frm.Alias.$valid) {
+        return $scope.ShowToast('Problemas con el ALIAS ingresado, verifique ese campo', 'danger');
       }
 
       var ObjRFC = {
@@ -190,7 +195,7 @@
             ImportarOrdenes: $scope.Empresa.importarOrdenes
           };
 
-          console.log(ObjMicrosoft);
+          // console.log(ObjMicrosoft);
 
           EmpresasFactory.postEmpresaMicrosoft(ObjMicrosoft)
             .success(function () {
@@ -234,10 +239,8 @@
     };
 
     $scope.ValidarRFC = function () {
-      console.log($scope.Empresa.RFC);
       EmpresasFactory.checkRFC({ RFC: $scope.Empresa.RFC })
         .success(function (result) {
-          console.log(result);
           if (result[0].Success === 1) {
             for (var i = 0; i < $scope.Empresa.RFC.length; i++) {
               if ($scope.Empresa.RFC[i] == '-' || $scope.Empresa.RFC[i] == ' ' || $scope.Empresa.RFC[i] == '/' || $scope.Empresa.RFC[i] == '.' || $scope.Empresa.RFC[i] == ',') {
@@ -251,19 +254,17 @@
               }
               EmpresasFactory.getRFCbyRFC({rfc: $scope.Empresa.RFC})
               .success(function (projects) {
-                console.log(projects);
-                if (!projects.length) {
+                if (projects.content.data == undefined) {
                   $scope.frm.RFC.$invalid = true;
                   $scope.frm.RFC.$pristine = false;
                   $scope.valido = false;
-                  $scope.mensajerfc = 'El RFC es invalido, debe dar primero de alta al cliente';
+                  $scope.mensajerfc = 'El RFC es invalido, verifique este campo o dé de alta al cliente';
                 }
               })
               .error(function (data, status, headers, config) {
                 $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
               });
             }
-            console.log($scope.Empresa.RFC);
           } else {
             $scope.valido = true;
             $scope.frm.RFC.$invalid = false;
