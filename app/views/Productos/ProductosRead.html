@@ -241,7 +241,7 @@
                                                 <span class="glyphicon glyphicon-file"></span>
                                             </span>
                                             <select id="contrato" name="contrato" class="form-control selectOption ufs" ng-model="Producto.numeroContrato" ng-options="contrato.contract_number as contrato.contract_number for contrato in Producto.contratos"
-                                                ng-change="contractSetted(Producto)" ng-required="contrato.contract_number !== ''">
+                                                ng-change="contractSetted(Producto)" ng-required="contrato.contract_number !== ''" ng-disabled="Producto.Especializacion === 'Planes Premium'">
                                             </select>
                                         </div>
                                     </div>    
