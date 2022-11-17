@@ -181,17 +181,6 @@
       }
       
     };
-    $scope.premiumValidate = function (subscription, subscriptions){
-      if(subscription.product_line === "Premium"){
-        subscriptions.forEach(sub => {
-        if(subscription.subscription_reference_number !== sub.subscription_reference_number){
-          if(sub.product_line === "Premium"){
-              sub.forRenewal = !sub.forRenewal;
-          }
-        }
-      });
-      } 
-    };
 
     $scope.SolicitarRenovacion = function () {
       if ($scope.Renovar.IdUsuarioContacto && $scope.Renovar.contrato) {
