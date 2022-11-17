@@ -17,16 +17,16 @@
       });
     };
 
-    $scope.updateResellerCSN = (supplierCSN, orderId) => {
-      if (!supplierCSN) $scope.ShowToast(FIELD_REQUIRED_ERROR, WARNING);
+    $scope.updateResellerCSN = (resellerCSN, orderId, order) => {
+      if (!resellerCSN) $scope.ShowToast(FIELD_REQUIRED_ERROR, WARNING);
       else {
-        OpenCSNFactory.updateResellerCSN(supplierCSN, orderId)
+        ActualizarCSNFactory.validateCSN(resellerCSN)
           .then(result => {
-            if(result.data.success){
-              $scope.ShowToast(result.data.message, SUCCESS);
-              $scope.init();
-            } 
-            else $scope.ShowToast(RESELLER_CSN_UPDATE_ERROR, WARNING);
+            if (result.data.success) {
+              if (result.data.data.victimCsn) resellerCSN = result.data.data.csn;
+              order.resellerName = result.data.data.name;
+              $scope.ShowToast(VALID_CSN, SUCCESS);
+            } else $scope.ShowToast(supplierCSN + INVALID_CSN, WARNING);
           }
         );
       }

@@ -49,7 +49,8 @@
                       </ul>
                       <label class="col-xs-5 col-sm-5 col-md-5 col-lg-5" style="padding-top: .6em; margin-left: 0; padding-left: 0;">CSN Distribuidor:</label>
                       <input style="max-width: 10em;" class="form-control col-xs-4 col-sm-4 col-md-4 col-lg-4" type="text" ng-model="order.resellerCSN">
-                      <a class="col-xs-1 col-sm-1 col-md-1 col-lg-1"  style="margin-top: .6em; margin-left: 1em;" ng-click="updateResellerCSN(order.resellerCSN, order.IdPedido)"><span class="glyphicon glyphicon-floppy-disk"  tooltip="Guardar"  style="font-size: 1.6em"></span></a> 
+                      <a class="col-xs-1 col-sm-1 col-md-1 col-lg-1"  style="margin-top: .6em; margin-left: 1em;" ng-click="updateResellerCSN(order.resellerCSN, order.IdPedido, order)"><span class="glyphicon glyphicon-floppy-disk"  tooltip="Guardar"  style="font-size: 1.6em"></span></a> 
+                      <label ng-show="order.resellerName" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-top: .6em; margin-left: 0; padding-left: 0;">El CSN corresponde a: <b style="color: rgb(14, 168, 14);">{{ order.resellerName }}</b></label>
                   </div>
                   <div  class="col-xs-12 col-sm-12 col-md-offset-1 col-lg-offset-1 col-md-2 col-lg-2" style="padding-top: 2.6em;">
                       <button  class="btn btn-success" ng-click="confirmOrder(order)">
