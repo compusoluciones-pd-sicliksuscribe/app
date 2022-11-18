@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 (function () {
   var EmpresasReadController = function ($scope, $log, $location, $cookies, EmpresasFactory, NivelesDistribuidorFactory) {
     $scope.sortBy = 'Nombre';
@@ -71,9 +72,9 @@
                   for (let i = 0; i < $scope.Empresas.length; i++) {
                     EmpresasFactory.getTerminosNuevoComercio($scope.Empresas[i].IdEmpresa)
                     .then(result => {
-                      result.data.Firma === 1 ?
-                        $scope.Empresas[i].CartaTerminosMicrosoft = 1: 
-                        $scope.Empresas[i].CartaTerminosMicrosoft = 0;
+                      result.data.Firma === 1
+                        ? $scope.Empresas[i].CartaTerminosMicrosoft = 1
+                        : $scope.Empresas[i].CartaTerminosMicrosoft = 0;
                     });
                   };
                   $scope.TablaVisible = true;

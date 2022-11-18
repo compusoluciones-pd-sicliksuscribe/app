@@ -36,7 +36,7 @@
                 <div class="col-xs-3 col-sm-2 col-md-2 col-lg-2" style="margin-bottom: .8em;"> <input class="form-control fa-lg" type="text" pattern="[A-Za-z0-9]*" ng-model="csnValue[$index]" > </div>
                 <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="margin-bottom: .8em;"> 
                     
-                    <button class="btn btn-primary" style="min-width: 6em;" ng-click="updateUfCSN({{item.IdEmpresa}}, csnValue[$index], $index)">Validar y guardar</a> 
+                    <button class="btn btn-primary" style="min-width: 6em;" ng-click="updateUfCSN(item.IdEmpresa, csnValue[$index], $index)">Validar y guardar</a> 
                 </div>
                 <hr style="margin: 0 0 1em 0;" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             </div>
