@@ -17,43 +17,47 @@
       });
     };
 
-    $scope.updateResellerCSN = (resellerCSN, orderId, order) => {
+    $scope.updateResellerCSN = async (resellerCSN, orderId, order) => {
       if (!resellerCSN) $scope.ShowToast(FIELD_REQUIRED_ERROR, WARNING);
-      else {
-        ActualizarCSNFactory.validateCSN(resellerCSN)
-          .then(result => {
-            if (result.data.success) {
+      return ActualizarCSNFactory.validateCSN(resellerCSN)
+        .then(result => {
+          if (result.data.success) {
+            if (result.data.data.error) {
+              $scope.ShowToast(resellerCSN + INVALID_CSN, WARNING);
+              return false;
+            }
+            else {
               if (result.data.data.victimCsn) resellerCSN = result.data.data.csn;
               order.resellerName = result.data.data.name;
               $scope.ShowToast(VALID_CSN, SUCCESS);
-            } else $scope.ShowToast(supplierCSN + INVALID_CSN, WARNING);
-          }
-        );
-      }
+              OpenCSNFactory.updateResellerCSN(resellerCSN, orderId)
+                .then(result => {
+                  if(result.data.success)$scope.ShowToast(result.data.message, SUCCESS);
+                  else $scope.ShowToast(RESELLER_CSN_UPDATE_ERROR, WARNING);
+                });
+            }   
+            return true;
+          } else $scope.ShowToast(RESELLER_CSN_UPDATE_ERROR, WARNING);
+          return false;
+        });
     };
 
-    $scope.confirmOrder = orderData => {
+    $scope.confirmOrder = async orderData => {
       if(!orderData.resellerCSN) $scope.ShowToast(FIELD_REQUIRED_ERROR, WARNING);
       else {
-        ActualizarCSNFactory.validateCSN(orderData.resellerCSN)
-          .then(result => {
-            if (result.data.success) {
-              if (result.data.data.error) $scope.ShowToast(orderData.resellerCSN + INVALID_CSN, WARNING);
-              if (result.data.data.victimCsn) orderData.resellerCSN = result.data.data.csn;
-              $scope.ShowToast(VALID_CSN, SUCCESS);
+        $scope.updateResellerCSN(orderData.resellerCSN, orderData.IdPedido, orderData)
+          .then(success => {
+            if (success) {
               OpenCSNFactory.confirmOrder(orderData.IdPedido)
-                .then(async (result) => {
-                  if(result.data.success) {
-                    $scope.ShowToast(ORDER_CONFIRMED, SUCCESS);
-                    await $scope.updateResellerCSN(orderData.resellerCSN, orderData.IdPedido);
-                    $scope.init();
-                  } 
-                  else $scope.ShowToast(CONFIRM_ORDER_ERROR, WARNING);
-                }
-              );
-            } else $scope.ShowToast(supplierCSN + INVALID_CSN, WARNING);
-          }
-        );
+              .then(result => {
+                if(result.data.success) {
+                  $scope.ShowToast(ORDER_CONFIRMED, SUCCESS);
+                  $scope.init();
+                } 
+                else $scope.ShowToast(CONFIRM_ORDER_ERROR, WARNING);
+              });
+            }
+          });      
       }
     };
 
