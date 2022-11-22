@@ -126,12 +126,22 @@
       factory.refreshToken();
       return $http.post($rootScope.API + 'shopping-cart/credit-card-payments');
     };
-
+    
     factory.pagarTarjetaOpenpay = function (charges) {
       factory.refreshToken();
       return $http.post($rootScope.API + 'shopping-cart/credit-card-payments/openpay', charges);
     };
 
+    factory.getPrepararSPEI = function () {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'shopping-cart/spei-payment');
+    };
+    
+    factory.getgenerarPdfSPEI = function (charge) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'shopping-cart/spei/get-pdf', charge);
+    };
+    
     factory.verificarEstatus3ds = function (idCharge) {
       factory.refreshToken();
       return $http.get($rootScope.API + 'shopping-cart/credit-card-payments/openpay/checkStatus3ds/' + idCharge);

@@ -15,7 +15,8 @@
       CREDIT_CARD: 1,
       CS_CREDIT: 2,
       PAYPAL: 3,
-      CASH: 4
+      CASH: 4,
+      SPEI: 5
     };
     const creditCardNames = {
       VISA: 'Visa',
@@ -58,6 +59,9 @@
           break;
         case paymentMethods.CASH:
           paymentMethod = 'Transferencia';
+          break;
+        case paymentMethods.SPEI:
+          paymentMethod = 'SPEI';
           break;
         default:
           paymentMethod = 'Metodo de pago incorrecto.';
@@ -378,7 +382,7 @@
                   $scope.currency = Datos.data[0].moneda;
                   OpenPay.setId(Datos.data['0'].opId);
                   OpenPay.setApiKey(Datos.data['0'].opPublic);
-                  OpenPay.setSandboxMode(false);
+                  OpenPay.setSandboxMode(true);
                   deviceSessionId = OpenPay.deviceData.setup('payment-form', 'deviceIdHiddenFieldName');
                   $('#device_session_id').val(deviceSessionId);
                   modalTC.style.display = 'block';
@@ -551,12 +555,55 @@
         });
     };
 
+    $scope.comprarSPEI = function () {
+      PedidoDetallesFactory.getPrepararSPEI()
+        .success(function (Datos) {
+          $cookies.putObject('pedidosAgrupados', Datos.data['0'].pedidosAgrupados, { secure: $rootScope.secureCookie });
+
+          const desctriptionOrders = $cookies.getObject('pedidosAgrupados').map(function (pedido) {
+            return pedido.IdPedido;
+          });
+
+          $scope.pedidos = Datos.data[0].pedidos;
+          $scope.amount = Datos.data[0].total;
+          $scope.FormatedAmount = String(Datos.data[0].total).replace(/(?<!\..*)(\d)(?=(?:\d{3})+(?:\.|$))/g, '$1,');
+          $scope.currency = Datos.data[0].moneda;
+          OpenPay.setId(Datos.data['0'].opId);
+          OpenPay.setApiKey(Datos.data['0'].opPublic);
+          OpenPay.setSandboxMode(true);
+
+          const charges = {
+            amount: $scope.amount,
+            currency: $scope.currency,
+            description: `Carrito: ${desctriptionOrders.toString()}`,
+            device_session_id: deviceSessionId,
+            pedidosAgrupados: $cookies.getObject('pedidosAgrupados'),
+            idCarrito: $scope.pedidos
+          };
+          PedidoDetallesFactory.getgenerarPdfSPEI(charges)
+            .success(function (pdfRes) {
+              document.getElementById("pdfSPEI").innerHTML = `<embed src="${pdfRes.pdfSpei}" width="500" height="375" type="application/pdf">`;
+            })
+            .error(function (data, status, headers, config) {
+              const error = !data.message ? 'Ocurrió un error al procesar la solicitud. Intentalo de nuevo.' : data.message;
+              $scope.ShowToast(error, 'danger');
+            });
+        })
+        .error(function (data, status, headers, config) {
+          const error = !data.message ? 'Ocurrió un error al procesar la solicitud. Intentalo de nuevo.' : data.message;
+          $scope.ShowToast(error, 'danger');
+        });
+
+
+    }
+
     $scope.Comprar = function () {
       angular.element(document.getElementById('auxScope')).scope().gaComprar($scope.PedidoDetalles, $scope.Distribuidor);
       if ($scope.Distribuidor.IdFormaPagoPredilecta === paymentMethods.CREDIT_CARD) $scope.PagarTarjeta();
       if ($scope.Distribuidor.IdFormaPagoPredilecta === paymentMethods.CS_CREDIT) comprarProductos();
       if ($scope.Distribuidor.IdFormaPagoPredilecta === paymentMethods.CASH) comprarPrePago();
       if ($scope.Distribuidor.IdFormaPagoPredilecta === paymentMethods.PAYPAL) $scope.prepararPaypal();
+      if ($scope.Distribuidor.IdFormaPagoPredilecta === paymentMethods.SPEI) $scope.comprarSPEI();
     };
 
     $scope.CreditCardPayment = function (status, paymentId) {
