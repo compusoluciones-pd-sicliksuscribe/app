@@ -1,0 +1,82 @@
+<div ng-app="myApp">
+<div class="container" ng-swipe-right="" ng-swipe-left="">
+
+    <div class="row">
+        <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <h2 style="float:left;">Buscador de contratos </h2>
+        </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 alert alert-info">
+          <li type="disc">La importación de contratos desde otros mayoristas sigue haciéndose desde la pantalla de importación de contratos.</li>
+      </div>
+  </div>
+
+    <div class="row" >
+      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" style="float:right;"> 
+        <div style="float:right;" class="col-xs-4 col-sm-4 col-md-3 col-lg-3">
+          <button style="min-width: 1.2em; height: 2.5em;" class="btn btn-primary" ng-click="getContractsData(contractNumber)">
+            Buscar <span class="glyphicon glyphicon-search"></span>
+          </button>
+        </div>
+        <div class="form-group col-xs-8 col-sm-8 col-md-9 col-lg-9" style="float:right;">
+          <input class="form-control fa-lg" type="text" placeholder="Número de contrato"aria-label="Buscar" ng-model="contractNumber"  ng-keydown="$event.keyCode === 13 && getContractsData(contractNumber)">
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="row cotainer" ng-repeat="contract in contracts">
+        <div style="background-color: rgba(220, 220, 220, 0.4); padding: 2em;" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2" style="padding-right: 2.6em;">
+            <div class="text-center form-group">
+              <div style="color:#00549F;">
+                <label>Número de contrato</label>
+                <h4>{{ contract.contractNumber}}</h4>
+                <br>
+              </div>
+            </div>
+          </div>
+          <ul style="list-style-type:none; padding:0%" class="col-xs-12 col-sm-12 col-md-7 col-lg-7">
+            <li> <label>Usuario final:</label> {{ contract.finalUserCSN }} - {{contract.accountFinalUser}} </li>
+            <li> <label>Esquema de renovación:</label> {{ contract.term }} </li>
+            <li> <label>Fin del periodo:</label> {{ contract.endDate | date:'d/MM/yyyy' }} </li>
+            <li> <label>Nombre de contacto:</label> {{ contract.contactFirstName }} - {{contract.contactLastName}} </li>
+            <li> <label>Email de contacto:</label> {{ contract.contactEmail }} </li>
+            <li ng-show = "isAssociated"> <span style="font-size: 1em; padding:.4em;" class="label label-primary">Disponible en el monitor de contratos.</span> </li>
+          </ul>
+          <div  class="row col-xs-12 col-sm-12 col-md-3 col-lg-3">
+            <div  class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="height: 4em;">
+              <li ng-show="!isUFOrContactRegistered" style="list-style-type:none; color:#00549F;">
+                <span class="glyphicon glyphicon-info-sign"></span> Hay información del contrato no relacionada. El contrato será importado y con él, toda la información necesaria. 
+              </li>
+            </div>
+            <div ng-hide = "isAssociated" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-top: 2em;">
+              <button style="float:right; height: 2.6em; bottom: 2.6em; width: 6em;" class="btn btn-primary" ng-click="associate({{contract.contractNumber}})">
+                Importar contrato
+              </button>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top: 1.6em; text-align: center;" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"><label>Número de serie:</label></div>
+          <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6"><label>Descripción:</label></div>
+          <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" ><label>Línea de producto:</label></div>
+          <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><label>Cantidad:</label></div>
+        </div>
+        <hr class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin: .7em 0">
+        <div ng-repeat="detail in contract.detalles" style=" text-align: center;">
+            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="margin: 0; padding: 0;"> {{ detail.serialNumber }} </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" style="margin: 0; padding: 0;"> {{ detail.description }} </div>
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="margin: 0; padding: 0;"> {{ detail.productLine }} </div>
+            <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1" style="margin: 0; padding: 0;"> {{ detail.quantity }} </div>
+            <hr class="col-xs-12 col-sm-12 col-md-12 col-lg-12"  style="margin: .7em 0">
+        </div>
+        <br>
+      </div>
+      <div ng-show="!contracts.length" style = "text-align:center"><h4>No hay resultados.</h4></div>        
+      
+    </div>
+</div> 
+</div>

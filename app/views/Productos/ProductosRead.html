@@ -233,15 +233,15 @@
                                             </div>
 
                                             <label style="color:red" for="DominioMicrosoft" ng-show="Producto.IdFabricante === 1 && usuariosSinDominio[Producto.IdEmpresaUsuarioFinal] === false">*No cuentas con un Dominio de Microsoft para este producto.</label>&nbsp;                                            
+                                           
                                             <div ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2">
                                                 <label for="contrato" >* Contrato</label>
                                                 <div class="input-group">
                                                     <span class="input-group-addon green white">
                                                 <span class="glyphicon glyphicon-file"></span>
                                             </span>
-                                            <select id="contrato" name="contrato" class="form-control selectOption ufs" ng-model="Producto.IdPedidoContrato" ng-options="contrato.IdPedido as contrato.NumeroContrato for contrato in Producto.contratos"
-                                                ng-change="contractSetted(Producto)" ng-required="contrato.NumeroContrato !== ''", ng-disabled="Producto.Especializacion === 'Planes Premium'">
-                                                <option ng-disabled="" ng-selected="true" ng-value="0">Nuevo contrato...</option>
+                                            <select id="contrato" name="contrato" class="form-control selectOption ufs" ng-model="Producto.numeroContrato" ng-options="contrato.contract_number as contrato.contract_number for contrato in Producto.contratos"
+                                                ng-change="contractSetted(Producto)" ng-required="contrato.contract_number !== ''", ng-disabled="Producto.Especializacion === 'Planes Premium'">
                                             </select>
                                         </div>
                                     </div>    
@@ -316,29 +316,24 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="input-group" ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2 && Producto.TieneContrato && Producto.IdAccionAutodesk === 2">
-                                                <span class="input-group-addon green white">
-                                                        <span class="glyphicon glyphicon-file"></span>
-                                                </span>
-                                                <select id="contrato" name="contrato" class="form-control selectOption ufs" ng-model="Producto.IdPedidoContrato" ng-options="contrato.IdPedido as contrato.NumeroContrato for contrato in Producto.contratos"
-                                                    ng-change="contractSetted(Producto)" ng-required="contrato.NumeroContrato !== ''">
-                                                    </select>
-                                            </div>
-                                            <div ng-if="(Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2  && !Producto.IdPedidoContrato && Producto.IdAccionAutodesk === 1) 
+                                            <div ng-if="(Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === AUTODESK  && Producto.sinContacto && Producto.IdAccionAutodesk === INITIAL_ORDER && Producto.numeroContrato === NEW_CONTRACT) 
                                             ||  Producto.IdFabricante === 6 || (Producto.IdFabricante === 5  && Producto.IdProductoFabricanteExtra !== 'Aperio') || (Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 11)" >
-                                                <label for="contacto" >* Contacto</label>
+                                            <div>
+                                                <label for="contacto" >* Contacto</label><a ng-hide="!Producto.IdAutodeskUF" ng-click="openModalInsert(Producto)" class="form-group" title="Nuevo contacto" ng-show=" SessionCookie.IdTipoAcceso === 2 || SessionCookie.IdTipoAcceso === 10" style="background-blend-mode: initial">
+                                                    <strong>(Añadir contacto) &nbsp;</strong><span class="glyphicon glyphicon-plus"> </span>
+                                                </a>
                                             </div>
-                                            <div class="input-group" ng-if="(Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2 && !Producto.IdPedidoContrato && Producto.IdAccionAutodesk === 1) 
-                                            ||  Producto.IdFabricante === 6 || (Producto.IdFabricante === 5  && Producto.IdProductoFabricanteExtra !== 'Aperio') || Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 11">
+                                            <div class="input-group">
                                                 <span class="input-group-addon green white">
                                                     <span class="glyphicon glyphicon-user"></span>
                                                 </span>
                                                 <select id="contacto" name="IdEmpresaUsuarioFinal" class="form-control selectOption ufs" ng-model="Producto.IdUsuarioContacto"
-                                                    ng-options="usuario.IdUsuario as usuario.Nombre + ' ('+ usuario.CorreoElectronico +')' for usuario in Producto.usuariosContacto"
+                                                    ng-options="usuario.contact_id as usuario.name + ' ('+ usuario.email +')' for usuario in Producto.usuariosContacto"
                                                     ng-required="!Producto.IdPedidoContrato" ng-change="asientosPremium(Producto)">
                                                     <option ng-selected="true" value="">Selecciona un contacto...</option>
                                                 </select>  
                                             </div>   
+                                            </div>
                                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-info" style="margin-top: .5em; padding-left: 0;"><b>{{Producto.mensajePlanPremium}}</b></div>                             
                                             <div ng-show="Producto.MostrarMensajeP" style="color:red;">
 
@@ -540,5 +535,43 @@
     </div>
 
 </form>
+
+<div id="modalInsert" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="divLoading" data-cargando>
+            <div class=""><img src="images/ripple.svg" /></div>
+        </div>  
+        <div class="row modal-content">
+            <div class="col-sm-12 col-md-12 col-lg-12 modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Agregar contacto</h4>
+            </div>
+            <div class="col-sm-12 col-md-12 col-lg-12 modal-body">
+                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 form-group has-feedback">
+                    <label for="Cliente">Cliente relacionado:</label>
+                    <select ng-disable="true" class="form-control selectOption" ng-model="contactObject.finalUserCsn" ng-options="Empresa.IdAutodeskUf as Empresa.NombreEmpresa for Empresa in selectEmpresas" disabled>
+                      <option ng-selected="true" value="">Selecciona un cliente</option>
+			              </select>
+                </div>
+                <div class="form-group col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                  <label>Nombres:</label>
+                  <Input type="text" ng-model="contactObject.firstName" class="form-control" ng-pattern="/[a-zA-Z]$/" placeholder="Nombres" size="255" ng-maxlength="45" required>
+                </div>
+                <div class="form-group col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                  <label>Apellidos:</label>
+                  <Input type="text" ng-model="contactObject.lastName" class="form-control" ng-pattern="/[a-zA-Z]$/" placeholder="Apellidos" size="255" ng-maxlength="30">
+                </div>
+                <div class="form-group col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                  <label>Correo electrónico:</label>
+                  <Input name="CorreoElectronico" type="email" ng-model="contactObject.email" class="form-control" placeholder="Correo electrónico" size="255" ng-maxlength="50" ng-pattern="/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/" required>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-12 col-lg-12 modal-footer">
+                <button type="button" class="btn btn-default btn-modal" data-dismiss="modal">Regresar</button>
+                <button type="button" class="btn btn-primary btn-modal" ng-click="insertContact(contactObject);">Continuar</button>
+            </div>
+        </div>
+    </div>
+  </div>
 
 </div>
