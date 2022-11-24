@@ -4,7 +4,7 @@
     const SUCCESS = 'success';
     const ASSOCIATE_ERROR = 'No fue posible asociar el contrato.';
     const SEARCH_ERROR = 'No fue posible completar la busqueda, intentelo más tarde.';
-    const ASSOCIATE_MESSAGE = 'Se ha asociado el contrato. Se puede encontrar en el monitor de contratos.';
+    const ASSOCIATE_MESSAGE = 'Información importada con éxito.';
 
     $scope.init = () => {
       $scope.contracts = [];
@@ -38,6 +38,7 @@
             else {
               $scope.ShowToast(ASSOCIATE_MESSAGE, SUCCESS);
               $scope.isAssociated = true;
+              $scope.isUFOrContactRegistered = true;
             }
           })
           .catch(() => $scope.ShowToast(ASSOCIATE_ERROR, DANGER));
