@@ -180,7 +180,7 @@
       return PedidoDetallesFactory.getPedidoDetalles()
         .then(function (result) {
           if (result.data.success) $scope.PedidoDetalles = result.data.data;
-          $scope.PedidoDetalles.forEach(function (elem) {
+          $scope.PedidoDetalles.forEach(function (elem) { 
             elem.Forma = getPaymentMethods(elem.IdFormaPago);
             elem.NombreFabricante = getMakers(elem.IdFabricante);
             elem.Productos.forEach(function (item) {
@@ -582,7 +582,111 @@
           };
           PedidoDetallesFactory.getgenerarPdfSPEI(charges)
             .success(function (pdfRes) {
-              document.getElementById("pdfSPEI").innerHTML = `<embed src="${pdfRes.pdfSpei}" width="500" height="375" type="application/pdf">`;
+
+
+              
+              date = new Date(pdfRes.creation_date);
+              const dateSpei = new Date(pdfRes.creation_date).getFullYear()+'-' + (date.getMonth()+1) + '-'+date.getDate();
+              const timeSpei = new Date(pdfRes.creation_date).toLocaleTimeString();
+
+
+
+              let divPdfSPEI = document.getElementById('pdfSPEI');
+              divPdfSPEI.style.display = 'block';
+              divPdfSPEI.innerHTML = `
+                    <div class="row tituloSpei text-center">
+                    <h2>Información de pago (SPEI)</h2>
+                </div>
+                <div class="row pt-5">
+                    <div class="col-sm-6">
+                        <p>
+                          <b>Fecha y Hora:</b>
+                          <br>
+                          <span>${dateSpei} ${timeSpei}</span>
+                        </p>
+            
+                        <p>
+                            <b>Descripción de compra:</b>
+                            <br>
+                            <span>${pdfRes.description}</span>
+                        </p>
+                    </div>
+                    
+                    <div class="col-sm-6 text-center montoSpei">
+                        <div class="total">
+                            <p><b>Total a pagar / MXN</b></p>
+                            <span class="montoTotalSpei">$ ${pdfRes.amount}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <p>
+                        <h3 class="specialBlueText"><b>Como pagar</b></h3>
+                    </p>
+
+                    <div class="col-sm-6">
+                        <p><b>Desde BBVA</b></p>
+                        <p>
+                            1. Dentro del menú de "Pagar" seleccione la opción
+                            "De Servicios" e ingrese el siguiente "Número de
+                            convenio CIE"
+                        </p>
+                        <p>
+                            <b>Número de convenio CIE:</b> <span>${pdfRes.payment_method.agreement}</span>
+                        </p>
+                        <p>
+                            2. Ingrese los datos de registro para concluir con la operación
+                        </p>
+                        <p>
+                            <b>Referencia:</b> <span>${pdfRes.payment_method.name}</span>
+                        </p>
+                        <p>
+                            <b>Importe:</b> <span>$ ${pdfRes.amount} ${pdfRes.currency}</span>
+                        </p>
+                        <p>
+                            <b>Concepto:</b> <span>${pdfRes.description}</span>
+                        </p>
+                    </div>
+
+                    <div class="col-sm-6 pagoNormal">
+                        <p><b>Desde cualquier otro banco</b></p>
+                        <p>
+                            1. Ingresa a la sección de transferencias y pagos o
+                            pagos a otros bancos y proporciona los datos de
+                            la transferencia:
+                        </p>
+                        <p>
+                            <b>Beneficiario:</b> <span>Click suscribe</span>
+                        </p>
+                        <p>
+                            <b>Banco destino:</b> <span>BBVA Bancomer</span>
+                        </p>
+                        <p>
+                            <b>Clabe:</b> <span>${pdfRes.payment_method.clabe}</span>
+                        </p>
+                        <p>
+                            <b>Concepto de pago:</b> <span>${pdfRes.payment_method.name}</span>
+                        </p>
+                        <p>
+                            <b>Referencia:</b> <span>${pdfRes.payment_method.agreement}</span>
+                        </p>
+                        <p>
+                            <b>Importe:</b> <span>$${pdfRes.amount} ${pdfRes.currency}</span>
+                        </p>
+                    </div>
+                </div><!--
+                <div class="row pt-5">
+                    <span class="avisoInfo">
+                        <i>Si tienes dudas comunicate a pruebas openpay al teléfono (331) 281-5145 o al correo pruebas.openpaycs@gmail.com</i>
+                    </span>
+                </div>-->
+                <div class="row text-center pt-5 mt-5">
+                    <p class="text-success">
+                        <i>Para guardar el formato en PDF da click en el boton "Generar PDF", donde se abrirá una nueva ventana para su impresión o descarga.</i>
+                    </p>
+                    <button type="button" onclick="window.open('${pdfRes.pdfSpei}', 'Descargar_Comprobante_de_Pago')" class="btn btn-success btnRounded mt-0">Generar PDF</button>
+                </div>`;
+              document.getElementById('btnGenSpei').style.display = 'none';
             })
             .error(function (data, status, headers, config) {
               const error = !data.message ? 'Ocurrió un error al procesar la solicitud. Intentalo de nuevo.' : data.message;

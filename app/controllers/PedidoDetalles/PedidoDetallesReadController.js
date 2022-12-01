@@ -252,7 +252,7 @@
     $scope.init = async () => {
       $scope.CheckCookie();
       await PedidoDetallesFactory.getPrepararCompra(0)
-        .catch(function (result) { error(result.data); alert(1); });
+        .catch(function (result) { error(result.data);});
       if ($scope.SessionCookie.IdTipoAcceso === 10) getUsuarioCompra();
       getEnterprises()
         .then(getOrderDetails)
