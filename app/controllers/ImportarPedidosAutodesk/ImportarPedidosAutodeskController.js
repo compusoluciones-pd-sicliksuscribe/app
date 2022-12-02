@@ -158,43 +158,66 @@
       $scope.ocultarOpcionesDistModalEmpresa = true;
     };
 
+    $scope.ToUpperCase = (stringCase) => {
+      if(stringCase !== undefined) {
+        $scope.Empresa.RFC = stringCase.toUpperCase();  
+      }
+    } 
+
     $scope.conjuntarInformacionModalEmpresa = function () {
       $scope.deshabilitado = true;
       if ($scope.distribuidorSeleccionadoModalEmpresa || $scope.esDistribuidor) {
-        const infoEmpresa = {
-          IdEmpresaDistribuidor: $scope.esDistribuidor ? $scope.SessionCookie.IdEmpresa : $scope.distribuidorSeleccionadoModalEmpresa.IdEmpresa,
-          NombreEmpresa: $scope.Empresa.NombreEmpresa,
-          Direccion: $scope.Empresa.Direccion,
-          Ciudad: $scope.Empresa.Ciudad,
-          Estado: $scope.Empresa.Estado,
-          CodigoPostal: $scope.Empresa.CodigoPostal,
-          IdIndustria: $scope.Empresa.IdIndustria,
-          Nombre: $scope.Empresa.Nombre,
-          ApellidoPaterno: $scope.Empresa.ApellidoPaterno,
-          RFC: $scope.Empresa.RFC ? $scope.Empresa.RFC : 'XXXX0000XXXX',
-          CorreoElectronico: $scope.Empresa.CorreoElectronico,
-          Lada: $scope.Empresa.Lada,
-          Telefono: $scope.Empresa.Telefono,
-          IdAutodeskUF: $scope.Empresa.IdAutodeskUF,
-          ZonaImpuesto: 'Normal',
-          PorcentajeCredito: '00.00',
-          PorcentajeSaldoFavor: '00.00'
-        };
-        ImportarPedidosAutodeskFactory.postEmpresa(infoEmpresa)
-          .success(function (result) {
-            if (result.data.error === 0) {
-              $scope.ShowToast(` ${result.message}.`, 'success');
-              limipiarModalEmpresa();
-              $scope.deshabilitado = false;
-            } else {
-              $scope.ShowToast(`Hubo un error al tratar de registrar la empresa: ${result.data.message}.`, 'danger');
-              $scope.deshabilitado = false;
-            }
-          })
-          .catch(result => {
-            $scope.ShowToast(`Hubo un error al tratar de registrar la empresa: ${result.data.message}.`, 'danger');
+        if($scope.Empresa.RFC === undefined) {
+          $scope.ShowToast(`Es necesario agregar el RFC`, 'danger');
+          $scope.deshabilitado = false;
+        }
+        if($scope.Empresa.RFC.length >= 12 && $scope.Empresa.RFC.length <= 13){
+          const validateRFC = $scope.Empresa.RFC.split('');
+          if( isNaN(Number(validateRFC[0])) && isNaN(Number(validateRFC[1])) && isNaN(Number(validateRFC[2]))
+            && !isNaN(Number(validateRFC[3])) && !isNaN(Number(validateRFC[4])) && !isNaN(Number(validateRFC[5]))
+            && !isNaN(Number(validateRFC[6])) && !isNaN(Number(validateRFC[7])) && !isNaN(Number(validateRFC[8]))){
+              const infoEmpresa = {
+                IdEmpresaDistribuidor: $scope.esDistribuidor ? $scope.SessionCookie.IdEmpresa : $scope.distribuidorSeleccionadoModalEmpresa.IdEmpresa,
+                NombreEmpresa: $scope.Empresa.NombreEmpresa,
+                Direccion: $scope.Empresa.Direccion,
+                Ciudad: $scope.Empresa.Ciudad,
+                Estado: $scope.Empresa.Estado,
+                CodigoPostal: $scope.Empresa.CodigoPostal,
+                IdIndustria: $scope.Empresa.IdIndustria,
+                Nombre: $scope.Empresa.Nombre,
+                ApellidoPaterno: $scope.Empresa.ApellidoPaterno,
+                RFC: $scope.Empresa.RFC,
+                CorreoElectronico: $scope.Empresa.CorreoElectronico,
+                Lada: $scope.Empresa.Lada,
+                Telefono: $scope.Empresa.Telefono,
+                IdAutodeskUF: $scope.Empresa.IdAutodeskUF,
+                ZonaImpuesto: 'Normal',
+                PorcentajeCredito: '00.00',
+                PorcentajeSaldoFavor: '00.00'
+              };
+              ImportarPedidosAutodeskFactory.postEmpresa(infoEmpresa)
+                .success(function (result) {
+                  if (result.data.error === 0) {
+                    $scope.ShowToast(` ${result.message}.`, 'success');
+                    limipiarModalEmpresa();
+                    $scope.deshabilitado = false;
+                  } else {
+                    $scope.ShowToast(`Hubo un error al tratar de registrar la empresa: ${result.data.message}.`, 'danger');
+                    $scope.deshabilitado = false;
+                  }
+                })
+                .catch(result => {
+                  $scope.ShowToast(`Hubo un error al tratar de registrar la empresa: ${result.data.message}.`, 'danger');
+                  $scope.deshabilitado = false;
+                });
+          }else{
+            $scope.ShowToast(`El campo 'RFC' debe ser un formato valido Ejemplo: DEV810211CB2.`, 'warning');
             $scope.deshabilitado = false;
-          });
+          }
+        }else{
+          $scope.ShowToast('En el campo RFC solo se admiten letras mayúsculas y un mínimo de 12 y máximo 13 dígitos.', 'warning');
+          $scope.deshabilitado = false;
+        }
       } else {
         $scope.ShowToast('Asegurese de registrar un distribuidor', 'warning');
         $scope.deshabilitado = false;
