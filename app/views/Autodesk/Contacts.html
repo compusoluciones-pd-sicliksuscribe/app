@@ -71,7 +71,7 @@
             <div class="col-sm-12 col-md-12 col-lg-12 modal-body">
                 <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 form-group has-feedback">
                     <label for="Cliente">Cliente relacionado:</label>
-                    <select id="IdEmpresaUsuarioFinal" name="IdEmpresaUsuarioFinal" class="form-control selectOption" ng-model="contactObject.finalUserCsn" ng-options="Empresa.csn as Empresa.NombreEmpresa for Empresa in selectEmpresas" >
+                    <select id="IdEmpresaUsuarioFinal" name="IdEmpresaUsuarioFinal" class="form-control selectOption" ng-model="contactObject.finalUser" ng-options="Empresa as Empresa.NombreEmpresa for Empresa in selectEmpresas" >
                       <option ng-selected="true" value="">Selecciona un cliente</option>
 			              </select>
                 </div>
@@ -107,9 +107,9 @@
                 <h4 class="modal-title">Editar contacto</h4>
             </div>
             <div class="col-sm-12 col-md-12 col-lg-12 modal-body">
-                <div class="col-sm-12 col-md-12 col-lg-12 form-group has-feedback">
+              <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 form-group has-feedback">
                     <label for="Cliente">Cliente relacionado:</label>
-                    <select id="IdEmpresaUsuarioFinal" name="IdEmpresaUsuarioFinal" class="form-control selectOption" ng-model="contactObjectEdit.finalUserCsn" ng-options="Empresa.csn as Empresa.NombreEmpresa for Empresa in selectEmpresas" >
+                    <select id="IdEmpresaUsuarioFinal" name="IdEmpresaUsuarioFinal" class="form-control selectOption" ng-model="contactObjectEdit.finalUser" ng-options="Empresa as Empresa.NombreEmpresa for Empresa in selectEmpresas" >
                       <option ng-selected="true" value="">Selecciona un cliente</option>
 			              </select>
                 </div>

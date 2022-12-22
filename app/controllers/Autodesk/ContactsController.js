@@ -1,7 +1,7 @@
 (function () {
   var ContactsController = function ($scope, UsuariosFactory, MonitorContratosFactory, ContactsFactory) {
-    const NUMBER_OF_FIELDS_NECESSARY_TO_INSERTION = 4;
-    const NUMBER_OF_FIELDS_NECESSARY_TO_EDIT = 5;
+    const NUMBER_OF_FIELDS_NECESSARY_TO_INSERTION = 5;
+    const NUMBER_OF_FIELDS_NECESSARY_TO_EDIT = 6;
     $scope.contactObjectEdit = {};
     $scope.contactObjectDelete = {};
 
@@ -30,6 +30,9 @@
     };
 
     $scope.insertContact = contact => {
+      contact.finalUserCsn = contact.finalUser.csn;
+      contact.finalUserId = contact.finalUser.IdEmpresa;
+      delete contact.finalUser;
       if (!contact || Object.keys(contact).length < NUMBER_OF_FIELDS_NECESSARY_TO_INSERTION) $scope.ShowToast('Llena todos los campos del formulario.', 'info'); 
       else {
         ContactsFactory.insertContact(contact)
@@ -43,6 +46,9 @@
     };
 
     $scope.editContact = contact => {
+      contact.finalUserCsn = contact.finalUser.csn;
+      contact.finalUserId = contact.finalUser.IdEmpresa;
+      delete contact.finalUser;
       if (!contact || Object.keys(contact).length < NUMBER_OF_FIELDS_NECESSARY_TO_EDIT) $scope.ShowToast('Llena todos los campos del formulario.', 'info'); 
       else {
         ContactsFactory.editContact(contact)
