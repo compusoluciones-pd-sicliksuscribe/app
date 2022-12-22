@@ -195,8 +195,6 @@
             ImportarOrdenes: $scope.Empresa.importarOrdenes
           };
 
-          // console.log(ObjMicrosoft);
-
           EmpresasFactory.postEmpresaMicrosoft(ObjMicrosoft)
             .success(function () {
               $location.path('/Empresas');
