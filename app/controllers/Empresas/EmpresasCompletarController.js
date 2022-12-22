@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 (function () {
   var EmpresasCompletarController = function ($scope, $log, $location, $cookies, $routeParams, EmpresasFactory, EmpresasXEmpresasFactory, EstadosFactory, UsuariosFactory, UsuariosXEmpresasFactory) {
     var IdEmpresaDistribuidor = $routeParams.IdEmpresa;
@@ -5,6 +6,7 @@
     var Dominio = $routeParams.Dominio;
     var DatosMicrosoft;
     $scope.Name = $routeParams.Name;
+    $scope.newName = $scope.Name;
     $scope.mensajerfc = '';
     $scope.mensajeL = '';
     $scope.Combo = {};
@@ -13,7 +15,9 @@
     $scope.MostrarCorreo = false;
     $scope.CorreoRepetido = false;
     $scope.direccionValidada = false;
+    $scope.showEditName = false;
     $scope.selectIndustrias = {};
+    $scope.rfces = [];
 
     $scope.init = function () {
       $scope.esNavegadorSoportado();
@@ -51,9 +55,19 @@
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
 
-        EmpresasFactory.getIndustrias()
+      EmpresasFactory.getIndustrias()
       .success(function (result) {
         $scope.selectIndustrias = result.data;
+      })
+      .error(function (data, status, headers, config) {
+        $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+      });
+
+      EmpresasFactory.getprojectsRFC()
+      .success(function (projects) {
+        projects.content.data.forEach(project => {
+          $scope.rfces.push(project.rfc.trim());
+        });
       })
       .error(function (data, status, headers, config) {
         $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
@@ -66,6 +80,19 @@
       if (direccion.addressLine1 && direccion.city && direccion.country && direccion.phoneNumber
         && direccion.postalCode && direccion.state) return true;
       return false;
+    };
+
+    $scope.changeName = function (newName) {
+      if (newName != '') {
+        $scope.Name = newName;
+        $scope.newName = newName;
+        $scope.showEditName = false;
+      }
+    };
+
+    $scope.cancelNameChange = function () {
+      $scope.Name = $scope.newName;
+      $scope.showEditName = false;
     };
 
     $scope.validiaMail = function (email, callMeMaybe) {
@@ -83,6 +110,7 @@
           }
         })
         .error(function (data, status, headers, config) {
+          console.log('data error aqui: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config)
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
     };
@@ -90,6 +118,7 @@
     $scope.intentaImportar = function () {
       $scope.validiaMail($scope.Empresa.CorreoContacto, $scope.EmpresaImportar);
     };
+
     $scope.EmpresaImportar = function () {
       $scope.ValidarRFC();
       if ($scope.Empresa.MonedaPago !== 'Pesos' && $scope.Empresa.MonedaPago !== 'Dólares') {
@@ -101,10 +130,17 @@
       if ($scope.Empresa.MonedaPago === 'Dólares' && $scope.Empresa.IdFormaPagoPredilecta == 1){
         return $scope.ShowToast('Para pagar con tarjeta es necesario que la moneda sea Pesos.', 'danger');
       }
+      if ($scope.frm.RFC.$invalid) {
+        return $scope.ShowToast('Problemas con el RFC ingresado, verifique ese campo', 'danger');
+      }
+      if (!$scope.frm.Alias.$valid) {
+        return $scope.ShowToast('Problemas con el ALIAS ingresado, verifique ese campo', 'danger');
+      }
 
       var ObjRFC = {
         RFC: $scope.Empresa.RFC
       };
+
       EmpresasFactory.revisarRFC(ObjRFC)
         .success(function (result) {
           if (result[0].Success === 1) {
@@ -139,7 +175,7 @@
         } else {
           var ObjMicrosoft = {
             RFC: $scope.Empresa.RFC,
-            NombreEmpresa: DatosMicrosoft.companyName,
+            NombreEmpresa: $scope.Name,
             Direccion: DatosMicrosoft.defaultAddress.addressLine1,
             Ciudad: DatosMicrosoft.defaultAddress.city,
             Estado: DatosMicrosoft.defaultAddress.state,
@@ -152,13 +188,13 @@
             Lada: '52',
             IdMicrosoftUF: IdMicrosoft,
             DominioMicrosoftUF: Dominio,
-            IdIndustria: $scope.Empresa.IdIndustria,
             IdEmpresaDistribuidor: IdEmpresaDistribuidor,
             IdUsuario: UsuariosXEmpresas[0].IdUsuario,
             MonedaPago: $scope.Empresa.MonedaPago,
             IdFormaPagoPredilecta: $scope.Empresa.IdFormaPagoPredilecta,
             ImportarOrdenes: $scope.Empresa.importarOrdenes
           };
+
           EmpresasFactory.postEmpresaMicrosoft(ObjMicrosoft)
             .success(function () {
               $location.path('/Empresas');
@@ -183,6 +219,23 @@
       $location.path('/Empresas/Importar/' + IdEmpresaDistribuidor);
     };
 
+    $scope.ngModelRFCoptionsSelected = function (value) {
+      if (arguments.length) {
+        $scope.Empresa.RFC = value;
+        $scope.ValidarRFC();
+      } else {
+        return $scope.Empresa.RFC;
+      }
+    };
+
+    $scope.modelOptions = {
+      debounce: {
+        default: 500,
+        blur: 250
+      },
+      getterSetter: true
+    };
+
     $scope.ValidarRFC = function () {
       EmpresasFactory.checkRFC({ RFC: $scope.Empresa.RFC })
         .success(function (result) {
@@ -196,54 +249,19 @@
               } else {
                 $scope.valido = true;
                 $scope.frm.RFC.$invalid = false;
-
-                if ($scope.Empresa.TipoRFC == undefined) {
+              }
+              EmpresasFactory.getRFCbyRFC({rfc: $scope.Empresa.RFC})
+              .success(function (projects) {
+                if (projects.content.data == undefined) {
                   $scope.frm.RFC.$invalid = true;
                   $scope.frm.RFC.$pristine = false;
-                  $scope.mensajerfc = 'Selecciona un tipo RFC';
-                } else {
-                  $scope.valido = true;
-                  $scope.frm.RFC.$invalid = false;
-                  if ($scope.Empresa.TipoRFC === 'Persona Física') {
-                    if (isNumeric($scope.Empresa.RFC[0]) === true || isNumeric($scope.Empresa.RFC[1]) === true || isNumeric($scope.Empresa.RFC[2]) === true || isNumeric($scope.Empresa.RFC[3]) === true) {
-                      $scope.frm.RFC.$invalid = true;
-                      $scope.frm.RFC.$pristine = false;
-                      $scope.valido = false;
-                      $scope.mensajerfc = 'Los primeros 4 digitos deben ser letras.';
-                    } else {
-                      if ($scope.Empresa.RFC.length != '13') {
-                        $scope.frm.RFC.$invalid = true;
-                        $scope.frm.RFC.$pristine = false;
-                        $scope.valido = false;
-                        $scope.mensajerfc = 'El RFC debe tener 13 digitos.';
-                      } else {
-                        $scope.valido = true;
-                        $scope.frm.RFC.$invalid = false;
-                      }
-                    }
-                  }
-
-                  if ($scope.Empresa.TipoRFC === 'Persona Moral') {
-                    if (isNumeric($scope.Empresa.RFC[0]) === true || isNumeric($scope.Empresa.RFC[1]) === true || isNumeric($scope.Empresa.RFC[2]) === true) {
-                      $scope.frm.RFC.$invalid = true;
-                      $scope.frm.RFC.$pristine = false;
-                      $scope.valido = false;
-                      $scope.mensajerfc = 'Los primeros 3 digitos deben ser letras.';
-                    } else {
-                      if ($scope.Empresa.RFC.length != '12') {
-                        $scope.frm.RFC.$invalid = true;
-                        $scope.frm.RFC.$pristine = false;
-                        $scope.valido = false;
-                        $scope.mensajerfc = 'El RFC debe tener 12 digitos.';
-                      } else {
-                        $scope.valido = true;
-                        $scope.frm.RFC.$invalid = false;
-                      }
-                    }
-                  }
-
+                  $scope.valido = false;
+                  $scope.mensajerfc = 'El RFC es invalido, verifique este campo o dé de alta al cliente';
                 }
-              }
+              })
+              .error(function (data, status, headers, config) {
+                $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+              });
             }
           } else {
             $scope.valido = true;

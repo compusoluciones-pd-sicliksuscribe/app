@@ -32,9 +32,11 @@
     };
 
     $scope.filter = () => {
-      $scope.listaAux = $scope.EmpresasM.filter(function (str) { return str.companyProfile.companyName.indexOf($scope.EmpresaFilter) !== -1; })
+      $scope.listaAux = $scope.EmpresasM.filter(function (str) {
+        return str.companyProfile.companyName.indexOf($scope.EmpresaFilter) !== -1;
+      });
       pagination();
-    }
+    };
 
     const pagination = () => {
       $scope.filtered = [];
