@@ -14,4 +14,5 @@ angular.module('marketplace')
   // $rootScope.MAPI = 'http://microsoft-api.us-east-1.elasticbeanstalk.com/';
   // $rootScope.dominio = 'clicksuscribe';
   // $rootScope.secureCookie = true;
+  //$rootScope.SICLIK_REACT_FRONT = 'https://prod.d327d1j2f84eco.amplifyapp.com/';
 });

@@ -1,5 +1,5 @@
 (function () {
-  var EmpresasXEmpresasReadController = function ($scope, $log, $location, $cookies, EmpresasXEmpresasFactory, EmpresasFactory, PedidoDetallesFactory) {
+  var EmpresasXEmpresasReadController = function ($scope, $log, $location, $cookies, EmpresasXEmpresasFactory, EmpresasFactory, PedidoDetallesFactory, $window, $rootScope) {
     $scope.sortBy = 'NombreEmpresa';
     $scope.reverse = false;
     $scope.CreditoDisponible = 0;
@@ -175,7 +175,18 @@
     };
 
     $scope.NuevaEmpresa = function () {
-      $location.path("/Empresa");
+      $scope.SessionCookies = $cookies.getObject('Session');
+      $window.location.href = `${$rootScope.SICLIK_REACT_FRONT}?id=${$window.btoa($scope.CaracteresAleatorios(8)+ $window.btoa($window.btoa($scope.SessionCookies.Token))+ $scope.CaracteresAleatorios(5)).replace(/X/g,"Ys")}`;
+    };
+
+    $scope.CaracteresAleatorios = function (length) {
+      var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      var charactersLength = characters.length;
+      var result = '';
+      for (var i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      }
+      return result;
     };
 
     $scope.PosibilidadCredito = function () {
@@ -257,7 +268,7 @@
     };
   };
 
-  EmpresasXEmpresasReadController.$inject = ['$scope', '$log', '$location', '$cookies', 'EmpresasXEmpresasFactory', 'EmpresasFactory', 'PedidoDetallesFactory'];
+  EmpresasXEmpresasReadController.$inject = ['$scope', '$log', '$location', '$cookies', 'EmpresasXEmpresasFactory', 'EmpresasFactory', 'PedidoDetallesFactory', '$window', '$rootScope'];
 
   angular.module('marketplace').controller('EmpresasXEmpresasReadController', EmpresasXEmpresasReadController);
 }());
