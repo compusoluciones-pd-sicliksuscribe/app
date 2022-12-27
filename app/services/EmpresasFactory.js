@@ -206,7 +206,7 @@
 
     factory.getprojectsRFC = function () {
       factory.refreshToken();
-      return $http.get($rootScope.API_PROJECT + '/projects');
+      return $http.get($rootScope.API + 'governance/projects');
     };
 
     factory.getRFCbyRFC = function (rfc) {
