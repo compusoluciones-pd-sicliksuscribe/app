@@ -99,7 +99,7 @@
                     </div>
                     <div class="form-group col-xs-4 col-sm-4 col-md-4 col-lg-4">
                         <label>RFC</label>
-                        <Input name="ApellidoMaterno" type="text" ng-model="Empresa.RFC" class="form-control" ng-pattern="/[a-zA-Z]$/" placeholder="RFC" size="255" ng-maxlength="30" >
+                        <Input name="RFC" type="text" ng-model="Empresa.RFC" class="form-control" placeholder="RFC" size="255" ng-keyup="ToUpperCase(Empresa.RFC)">
                     </div>
                     <div class="form-group col-xs-6 col-sm-6 col-md-6 col-lg-6">
                         <label>Correo electrónico</label>
@@ -172,7 +172,6 @@
                     <select class="form-control selectOption" ng-model="Contrato.IdEsquemaRenovacion">
                         <option ng-selected="true" value="" >Selecciona un esquema...</option>
                         <option value="2">Anual</option>
-                        <option value="4">2 años</option>
                         <option value="5">3 años</option>
                     </select>
                 </div>

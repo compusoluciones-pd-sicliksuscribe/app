@@ -30,7 +30,15 @@
                 subscription.MostrarCantidad = false;
                 if (subscription.product_line === PREMIUM) subscription.is_premium = true;
                 if (!subscription.subs_ready || subscription.siclick_status) contract.termSwitchStatus = true;
-                subscription.implantacion = subscription.deployment === 'S' ? 'Single-user' : 'Multi-user';
+                if (subscription.deployment === 'S') {
+                  subscription.implantacion = 'Single-user';
+                } else if (subscription.deployment === 'N') {
+                  subscription.implantacion = 'Multi-user';
+                } else if ( subscription.deployment === 'A') {
+                  subscription.implantacion = 'Hosted';
+                } else {
+                  subscription.implantacion = 'Import Subscription';
+                }
               });
             });
           }
