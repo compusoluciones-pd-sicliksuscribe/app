@@ -55,22 +55,7 @@
       factory.refreshToken();
       return $http.post($rootScope.API + 'autodesk/contracts/renew/tuclick/' + currentDistribuidor, contractData);
     };
-
-    factory.extendContract = function (contractData) {
-      factory.refreshToken();
-      return $http.post($rootScope.API + 'autodesk/contracts/extend', contractData);
-    };
-
-    factory.getEndDateContract = function (contratoActual, distribuidor, usuarioFinal) {
-      factory.refreshToken();
-      return $http.get($rootScope.API + 'autodesk/contracts/get-end-date-contract/dist/' + distribuidor + '/uf/' + usuarioFinal + '/contrato/' + contratoActual);
-    };
-
-    factory.renovacionTradein = contractData => {
-      factory.refreshToken();
-      return $http.post($rootScope.API + 'autodesk/trade-in', contractData);
-    };
-
+    
     factory.viabilityAddSeatMS = (order, idEmpresa) => {
       factory.refreshToken();
       return $http.post($rootScope.API + 'orders/existing-order-microsoft', { IdProducto: order.IdProducto, IdEmpresaDistribuidor: idEmpresa, IdEmpresaUsuarioFinal: order.IdEmpresaUsuarioFinal, IdEsquemaRenovacion: order.Esquema});
