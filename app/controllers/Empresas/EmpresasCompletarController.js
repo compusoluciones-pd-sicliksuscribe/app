@@ -84,8 +84,8 @@
 
     $scope.changeName = function (newName) {
       if (newName != '') {
-        $scope.Name = newName;
-        $scope.newName = newName;
+        $scope.Name = newName.replace(/[^0-9A-Za-z\s()@&-]/g, '\\$&');
+        $scope.newName = newName.replace(/[^0-9A-Za-z\s()@&-]/g, '\\$&');
         $scope.showEditName = false;
       }
     };
