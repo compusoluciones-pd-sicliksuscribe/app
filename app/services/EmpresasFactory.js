@@ -214,6 +214,11 @@
       return $http.post($rootScope.API + 'governance/projects/by/rfc', rfc);
     };
 
+    factory.validateAlias = function (body) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'governance/alias', body);
+    };
+
     return factory;
   };
 

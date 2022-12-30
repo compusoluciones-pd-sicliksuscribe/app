@@ -3,18 +3,18 @@
     <br>
     <form name="frm">
 
-        <div  ng-click="showEditName = true;" ng-hide="showEditName">
+        <div name="alias" ng-click="showEditName = true;" ng-hide="showEditName">
             <span class="fa fa-pencil" style="cursor: hand;cursor: pointer;padding-right:15px;"></span>
             <h3>{{Name}}</h3>
+            <b style="color:red" ng-show="frm.alias.$invalid && !frm.alias.$pristine" class="help-block">{{mensajeAlias}}</b>
         </div>
 
         <div ng-hide="!showEditName">
             <span class="fa fa-check" ng-click="changeName(Name)" style="cursor: hand;cursor: pointer;padding-right:15px;"></span>
             <span class="fa fa-times" ng-click="cancelNameChange()" style="cursor: hand;cursor: pointer;padding-right:15px;"></span>
 
-            <input name="Alias" type="text" value={{Name}} ng-model="Name" style=" color: #324e63; outline: none; outline-style: none; border-top: none;
+            <input name="alias" type="text" value={{Name}} ng-model="Name" style=" color: #324e63; outline: none; outline-style: none; border-top: none;
                     border-left: none; border-right: none; border-bottom: solid #eeeeee 1px; font-size:18pt;"/>
-
         </div>
 
         <hr>

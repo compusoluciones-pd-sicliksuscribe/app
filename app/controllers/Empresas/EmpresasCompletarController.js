@@ -5,9 +5,10 @@
     var IdMicrosoft = $routeParams.IdMicrosoft;
     var Dominio = $routeParams.Dominio;
     var DatosMicrosoft;
-    $scope.Name = $routeParams.Name;
+    $scope.Name = $routeParams.Name.replace(/[^0-9A-Za-z\s()@&-]/g, '');
     $scope.newName = $scope.Name;
     $scope.mensajerfc = '';
+    $scope.mensajeAlias = '';
     $scope.mensajeL = '';
     $scope.Combo = {};
     $scope.Empresa = {};
@@ -65,8 +66,10 @@
 
       EmpresasFactory.getprojectsRFC()
       .success(function (projects) {
-        projects.content.data.forEach(project => {
-          $scope.rfces.push(project.rfc.trim());
+        projects.content.data.map((project, index) => {
+          if (project.rfc != null) {
+            $scope.rfces.push(project.rfc.trim());
+          }
         });
       })
       .error(function (data, status, headers, config) {
@@ -77,16 +80,17 @@
     $scope.init();
 
     $scope.direccionValida = function (direccion) {
-      if (direccion.addressLine1 && direccion.city && direccion.country && direccion.phoneNumber
-        && direccion.postalCode && direccion.state) return true;
+      if (direccion.addressLine1 && direccion.city && direccion.country && direccion.phoneNumber &&
+        direccion.postalCode && direccion.state) return true;
       return false;
     };
 
     $scope.changeName = function (newName) {
       if (newName != '') {
-        $scope.Name = newName.replace(/[^0-9A-Za-z\s()@&-]/g, '\\$&');
-        $scope.newName = newName.replace(/[^0-9A-Za-z\s()@&-]/g, '\\$&');
+        $scope.Name = newName.replace(/[^0-9A-Za-z\s()@&-]/g, '');
+        $scope.newName = newName.replace(/[^0-9A-Za-z\s()@&-]/g, '');
         $scope.showEditName = false;
+        $scope.ValidarAlias();
       }
     };
 
@@ -110,7 +114,6 @@
           }
         })
         .error(function (data, status, headers, config) {
-          console.log('data error aqui: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config)
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
     };
@@ -121,20 +124,22 @@
 
     $scope.EmpresaImportar = function () {
       $scope.ValidarRFC();
+      $scope.ValidarAlias();
+
       if ($scope.Empresa.MonedaPago !== 'Pesos' && $scope.Empresa.MonedaPago !== 'Dólares') {
         return $scope.ShowToast('Selecciona una moneda de pago.', 'danger');
       }
       if ($scope.Empresa.IdFormaPagoPredilecta != 1 && $scope.Empresa.IdFormaPagoPredilecta != 2) {
         return $scope.ShowToast('Selecciona una forma de pago.', 'danger');
       }
-      if ($scope.Empresa.MonedaPago === 'Dólares' && $scope.Empresa.IdFormaPagoPredilecta == 1){
+      if ($scope.Empresa.MonedaPago === 'Dólares' && $scope.Empresa.IdFormaPagoPredilecta == 1) {
         return $scope.ShowToast('Para pagar con tarjeta es necesario que la moneda sea Pesos.', 'danger');
       }
       if ($scope.frm.RFC.$invalid) {
-        return $scope.ShowToast('Problemas con el RFC ingresado, verifique ese campo', 'danger');
+        return $scope.ShowToast('Problemas con el RFC ingresado, verifique el campo', 'danger');
       }
-      if (!$scope.frm.Alias.$valid) {
-        return $scope.ShowToast('Problemas con el ALIAS ingresado, verifique ese campo', 'danger');
+      if (!$scope.frm.alias.$pristine) {
+        return $scope.ShowToast('El nombre de alias es invalido o ya se encuentra registrado, ingrese uno nuevo', 'danger');
       }
 
       var ObjRFC = {
@@ -252,7 +257,7 @@
               }
               EmpresasFactory.getRFCbyRFC({rfc: $scope.Empresa.RFC})
               .success(function (projects) {
-                if (projects.content.data == undefined) {
+                if (projects.content.data.rfc == undefined) {
                   $scope.frm.RFC.$invalid = true;
                   $scope.frm.RFC.$pristine = false;
                   $scope.valido = false;
@@ -273,6 +278,24 @@
           $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
         });
     };
+
+    $scope.ValidarAlias = function () {
+      EmpresasFactory.validateAlias({ alias: $scope.Name, idEnterprise: IdEmpresaDistribuidor })
+      .success(function (aliasProjects) {
+        if (aliasProjects.content.availability == false) {
+          $scope.frm.alias.$invalid = true;
+          $scope.frm.alias.$pristine = false;
+          $scope.mensajeAlias = 'El nombre de alias es invalido o ya se encuentra registrado';
+        } else {
+          $scope.frm.alias.$invalid = false;
+          $scope.frm.alias.$pristine = true;
+        }
+      })
+      .error(function (data, status, headers, config) {
+        $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+      });
+    };
+
     $scope.abrirModal = function (modal) {
       document.getElementById(modal).style.display = 'block';
     };
