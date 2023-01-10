@@ -582,14 +582,11 @@
           };
           PedidoDetallesFactory.getgenerarPdfSPEI(charges)
             .success(function (pdfRes) {
-
-
+              
               
               date = new Date(pdfRes.creation_date);
-              const dateSpei = new Date(pdfRes.creation_date).getFullYear()+'-' + (date.getMonth()+1) + '-'+date.getDate();
-              const timeSpei = new Date(pdfRes.creation_date).toLocaleTimeString();
-
-
+              const dateSpei = new Date(pdfRes.fechaCreacion).getFullYear()+'-' + (date.getMonth()+1) + '-'+date.getDate();
+              const timeSpei = new Date(pdfRes.fechaVencimiento).toLocaleTimeString();
 
               let divPdfSPEI = document.getElementById('pdfSPEI');
               divPdfSPEI.style.display = 'block';
@@ -615,7 +612,7 @@
                     <div class="col-sm-6 text-center montoSpei">
                         <div class="total">
                             <p><b>Total a pagar / MXN</b></p>
-                            <span class="montoTotalSpei">$ ${pdfRes.amount}</span>
+                            <span class="montoTotalSpei">$ ${pdfRes.monto}</span>
                         </div>
                     </div>
                 </div>
@@ -641,10 +638,10 @@
                             <b>Referencia:</b> <span>${pdfRes.payment_method.name}</span>
                         </p>
                         <p>
-                            <b>Importe:</b> <span>$ ${pdfRes.amount} ${pdfRes.currency}</span>
+                            <b>Importe:</b> <span>$ ${pdfRes.monto} ${pdfRes.moneda}</span>
                         </p>
                         <p>
-                            <b>Concepto:</b> <span>${pdfRes.description}</span>
+                            <b>Concepto:</b> <span>${pdfRes.descripcion}</span>
                         </p>
                     </div>
 
@@ -671,7 +668,7 @@
                             <b>Referencia:</b> <span>${pdfRes.payment_method.agreement}</span>
                         </p>
                         <p>
-                            <b>Importe:</b> <span>$${pdfRes.amount} ${pdfRes.currency}</span>
+                            <b>Importe:</b> <span>$${pdfRes.monto} ${pdfRes.moneda}</span>
                         </p>
                     </div>
                 </div><!--
@@ -684,7 +681,7 @@
                     <p class="text-success">
                         <i>Para guardar el formato en PDF da click en el boton "Generar PDF", donde se abrirá una nueva ventana para su impresión o descarga.</i>
                     </p>
-                    <button type="button" onclick="window.open('${pdfRes.pdfSpei}', 'Descargar_Comprobante_de_Pago')" class="btn btn-success btnRounded mt-0">Generar PDF</button>
+                    <button type="button" onclick="window.open('${pdfRes.ligaPDF}', 'Descargar_Comprobante_de_Pago')" class="btn btn-success btnRounded mt-0">Generar PDF</button>
                 </div>`;
               document.getElementById('btnGenSpei').style.display = 'none';
             })
