@@ -148,7 +148,7 @@
 
       EmpresasFactory.revisarRFC(ObjRFC)
         .success(function (result) {
-          if (result[0].Success === 1) {
+          if (result.length > 0 && result[0].Success == 1) {
             $scope.frm.RFC.$invalid = true;
             $scope.frm.RFC.$pristine = false;
             $scope.mensajerfc = result[0].Message;
@@ -199,7 +199,6 @@
             IdFormaPagoPredilecta: $scope.Empresa.IdFormaPagoPredilecta,
             ImportarOrdenes: $scope.Empresa.importarOrdenes
           };
-
           EmpresasFactory.postEmpresaMicrosoft(ObjMicrosoft)
             .success(function () {
               $location.path('/Empresas');
@@ -244,7 +243,7 @@
     $scope.ValidarRFC = function () {
       EmpresasFactory.checkRFC({ RFC: $scope.Empresa.RFC })
         .success(function (result) {
-          if (result[0].Success === 1) {
+          if (result.length == 0 || result[0].Success === 1) {
             for (var i = 0; i < $scope.Empresa.RFC.length; i++) {
               if ($scope.Empresa.RFC[i] == '-' || $scope.Empresa.RFC[i] == ' ' || $scope.Empresa.RFC[i] == '/' || $scope.Empresa.RFC[i] == '.' || $scope.Empresa.RFC[i] == ',') {
                 $scope.frm.RFC.$invalid = true;
@@ -305,7 +304,7 @@
     $scope.ComboRFC = function () {
       EmpresasFactory.checkRFC({ RFC: $scope.Empresa.RFC })
         .success(function (result) {
-          if (result[0].Success === 1) {
+          if (result.length == 0 || result[0].Success === 1) {
             if ($scope.Empresa.TipoRFC == undefined) {
               $scope.frm.RFC.$invalid = true;
               $scope.frm.RFC.$pristine = false;
