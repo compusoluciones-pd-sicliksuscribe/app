@@ -307,9 +307,9 @@
       return $http.post($rootScope.API + 'orders/update-purchase-order', ordenes);
     };
 
-    factory.marcarSP = (idPedido, marcado) => {
+    factory.marcarSP = (idPedido, marcado, promo) => {
       factory.refreshToken();
-      return $http.post($rootScope.API + 'orders/mark-sp', { IdPedido: idPedido, Marcado: marcado });
+      return $http.post($rootScope.API + 'orders/mark-sp', { IdPedido: idPedido, Marcado: marcado, promo });
     };
 
     factory.actualizarFechaInicio = (idContrato, fechaInicio, idEsquemaRenovacion) => {

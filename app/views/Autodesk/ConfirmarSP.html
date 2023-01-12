@@ -40,6 +40,7 @@
                             <li> <label>Usuario final:</label> {{ orden.UsuarioFinal }} </li>
                             <li> <label>CSN usuario final:</label> {{ orden.CSNUF ? orden.CSNUF : 'No registrado' }} </li>
                             <li> <label>Número de contrato:</label> {{ orden.NumeroContrato ? orden.NumeroContrato : 'Nuevo contrato' }} </li>
+                            <li ng-if="orden.Promo"> <span style="font-size: 100%; padding-top: .3em;" class="label label-primary">Promoción: Días adicionales de crédito</span>
                         </ul>
                     </div>
                     <div  class="col-xs-12 col-sm-12 col-md-4 col-lg-4" style="padding-top: 1em;">

@@ -570,9 +570,9 @@
         .catch(() => $scope.ShowToast('No fue posible actualizar el usuario de compra.', 'danger'));
     };
 
-    $scope.marcarSP = async (idPedido, marcado) => {
+    $scope.marcarSP = async (idPedido, marcado, promo = 0) => {
       const { IdPedido } = $scope.PedidoDetalles.find(pedido => pedido.IdPedido === idPedido)
-      await PedidoDetallesFactory.marcarSP(IdPedido, marcado)
+      await PedidoDetallesFactory.marcarSP(IdPedido, marcado, promo)
     };
 
     $scope.abrirModal = (modal, idContrato, idEsquemaRenovacion) => {
