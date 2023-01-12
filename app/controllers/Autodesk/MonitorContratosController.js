@@ -314,9 +314,44 @@
         $scope.ShowToast('Especifica una fecha fin para la extensión del contrato.', 'warning');
       }
     };
+
+    $scope.getContractData = contractNumber => {
+      MonitorContratosFactory.getContractData(contractNumber)
+      .then((result) => {
+        if (result.status = 200) {
+          $scope.contracts = result.data;
+          $scope.EmpresaSelect = result.data[0].final_user_csn
+          $scope.contracts.forEach(contract => {
+            contract.renovacion = contract.contract_end_date;
+            contract.esquemaRenovacion = (contract.contract_term === 'Annual') ? 'Anual' : 'Cada 3 años';
+            contract.etiquetaTermSwitch = (contract.contract_term === '3-Year') ? 'Actualizar periodo a un año' : 'Actualizar periodo a tres años';
+            contract.subscriptions.forEach(subscription => {
+              subscription.MostrarCantidad = false;
+              if (subscription.product_line === PREMIUM) subscription.is_premium = true;
+              if (!subscription.subs_ready || subscription.siclick_status) contract.termSwitchStatus = true;
+              if (subscription.deployment === 'S') {
+                subscription.implantacion = 'Single-user';
+              } else if (subscription.deployment === 'N') {
+                subscription.implantacion = 'Multi-user';
+              } else if ( subscription.deployment === 'A') {
+                subscription.implantacion = 'Hosted';
+              } else {
+                subscription.implantacion = 'Import Subscription';
+              }
+            });
+          });
+        }
+        if (result.data.length > 0) {
+          $scope.vacio = 1;
+        } else {
+          $scope.vacio = 0;
+        }
+      });
+    };
   };
 
   MonitorContratosController.$inject = ['$scope', '$log', '$cookies', '$location', '$uibModal', '$filter', 'MonitorContratosFactory'];
 
   angular.module('marketplace').controller('MonitorContratosController', MonitorContratosController);
 }());
+  
