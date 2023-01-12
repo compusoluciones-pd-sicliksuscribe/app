@@ -605,7 +605,7 @@
                         <p>
                             <b>Descripción de compra:</b>
                             <br>
-                            <span>${pdfRes.description}</span>
+                            <span>${pdfRes.descripcion}</span>
                         </p>
                     </div>
                     
@@ -684,6 +684,7 @@
                     <button type="button" onclick="window.open('${pdfRes.ligaPDF}', 'Descargar_Comprobante_de_Pago')" class="btn btn-success btnRounded mt-0">Generar PDF</button>
                 </div>`;
               document.getElementById('btnGenSpei').style.display = 'none';
+              document.getElementById('divPedidos').style.display = 'none';
             })
             .error(function (data, status, headers, config) {
               const error = !data.message ? 'Ocurrió un error al procesar la solicitud. Intentalo de nuevo.' : data.message;
