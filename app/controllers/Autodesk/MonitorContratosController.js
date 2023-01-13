@@ -61,15 +61,24 @@
         });
     };
 
-    const renewContract = function (contractData) {
+    const renewContract = function (contractData) {//aqui trabajo quitar redireccion al carrito mostrar mensaje de pedido en carrito
+      const contract = $scope.contracts.find(contract => contract.contract_number === contractData.Contrato);
       MonitorContratosFactory.renewContract(contractData)
         .then(result => {
           if (result.data.success) {
             $scope.ShowToast(result.data.message, 'success');
+            $scope.ShowToast('El pedido ya se encuentra en su carrito', 'success');
+            contract.subscriptions.forEach(subscription => {
+              contractData.Suscripciones.forEach(suscripcion => {
+               if (suscripcion.subscription_reference_number === subscription.subscription_reference_number) {
+                subscription.siclick_status = true;
+                subscription.forRenewal = false;
+               };
+              })
+            });
             $scope.ActualizarMenu();
             $scope.addPulseCart();
-            setTimeout($scope.removePulseCart, 9000);
-            $location.path('/Carrito');
+            setTimeout($scope.removePulseCart, 4000);
           } else $scope.ShowToast(result.data.message, 'danger');
         })
         .catch(result => {
