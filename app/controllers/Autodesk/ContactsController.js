@@ -9,7 +9,16 @@
         .then(Empresas => ($scope.selectEmpresas = Empresas.data));
 
     $scope.getContacts = () => UsuariosFactory.getUsuariosContacto($scope.empresaSelect)
-        .then(result => ($scope.contacts = result.data.data));
+        .then(result => {
+          $scope.paramSearch = null;
+          $scope.contacts = result.data.data;
+        });
+
+    $scope.getContactSearch = param => UsuariosFactory.getContactSearch(param)
+        .then(result => {
+          $scope.contacts = result.data;
+        }
+      );
 
     $scope.openModalInsert = () => $('#modalInsert').modal('show');
 

@@ -7,16 +7,18 @@
           </div>
       </div>
 
-      <div class="form-group alert alert-info">
+      <div class="form-group alert alert-info" style="font-size: 1.1em;">
+        <h5><b>IMPORTANTE:</b></h5>
         <p>
-            Los contactos se asignan como <b>contract manager</b> para ordenes de licencias Autodesk.
+            <li>Los contactos se asignan como <b>contract manager</b> para ordenes de licencias Autodesk.</li>
+            <li>Puedes realizar la búsqueda por medio del nombre o el correo electónico del contacto.</li>
         </p>
       </div>
       
       <div class="row">
           <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" style="margin-top: 2em;">
               <div class="form-group has-feedback">
-                  <input type="text" ng-disabled="!empresaSelect" ng-model="contactFilter" class="form-control" size="30" placeholder="Busca un contacto" />
+                  <input type="text" ng-model="paramSearch" class="form-control" size="30" placeholder="Buscar un contacto" ng-keydown="$event.keyCode === 13 && getContactSearch(paramSearch)"/>
                   <i class="form-control-feedback glyphicon glyphicon-search"></i>
               </div>
           </div>
@@ -38,11 +40,13 @@
               
               <table class="table" style="text-align: center;">
                   <tr>
+                    <th ng-show="paramSearch" style="text-align: center;">Cliente</th>
                     <th style="text-align: center;">Nombre</th>
                     <th style="text-align: center;">Correo electrónico</th>
                     <th style="text-align: center;">Acciones</th>
                   </tr>
                   <tr ng-repeat="contact in contacts | filter:contactFilter">
+                    <td ng-show="paramSearch">{{contact.endCustomerName}}</td>
                     <td>{{contact.name}}</td>
                     <td>{{contact.email}}</td>
                     <td> 
