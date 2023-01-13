@@ -3,9 +3,17 @@
 
 
         <div class="form-group row">
-            <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <h2 style="float:left;">Monitor de contratos </h2>
             </div>
+            <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" style="margin-top: 2em;">
+                <br/>
+                <div class="form-group has-feedback">      
+                    <input type="text" ng-model="contractNumber" class="form-control" size="30" placeholder="Busca un contrato" ng-keydown="$event.keyCode === 13 && getContractData(contractNumber)" />
+                    <i class="form-control-feedback glyphicon glyphicon-search"></i>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
             <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
                 <br/>
                 <label for="Cliente">Clientes:</label>
@@ -17,7 +25,7 @@
     
         <br>
         <div ng-show="vacio === 0 && EmpresaSelect != ''">
-            <h4>Aún no cuentas con suscripciones o servicios... </h4>
+            <h4>Sin resultados. </h4>
         </div>
 
         <div ng-hide="vacio === 0 && EmpresaSelect != ''" class="form-group alert alert-info">

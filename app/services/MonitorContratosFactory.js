@@ -46,6 +46,11 @@
       return $http.post($rootScope.API + 'autodesk/trade-in', contractData);
     };
 
+    factory.getContractData = contractNumber => {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'autodesk/get-contract-search-monitor/' + contractNumber)
+    };
+
     return factory;
   };
 
