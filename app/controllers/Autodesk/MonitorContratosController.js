@@ -1,10 +1,12 @@
 (function () {
-  var MonitorContratosController = function ($scope, $log, $cookies, $location, $uibModal, $filter, MonitorContratosFactory) {
+  var MonitorContratosController = function ($scope, $log, $cookies, $location, $uibModal, $filter, MonitorContratosFactory, ContactsFactory) {
     $scope.vacio = 0;
     $scope.Renovar = {};
     $scope.TradeIn = {};
     $scope.SessionCookie = $cookies.getObject('Session');
-    const PREMIUM = 'Premium'
+    const PREMIUM = 'Premium';
+    $scope.contactObject = {};
+    const NUMBER_OF_FIELDS_NECESSARY_TO_INSERTION = 4;
 
     $scope.init = function () {
       MonitorContratosFactory.getEndCustomer()
@@ -366,9 +368,29 @@
         }
       });
     };
-  };
 
-  MonitorContratosController.$inject = ['$scope', '$log', '$cookies', '$location', '$uibModal', '$filter', 'MonitorContratosFactory'];
+    $scope.openModalInsert = EmpresaSelect => {
+      $scope.contactObject.finalUserCsn = EmpresaSelect;
+      $('#modalInsert').modal('show');
+    };
+
+    $scope.insertContact = contact => {
+      if (!contact || Object.keys(contact).length < NUMBER_OF_FIELDS_NECESSARY_TO_INSERTION) $scope.ShowToast('Llena todos los campos del formulario.', 'info'); 
+      else {
+        ContactsFactory.insertContact(contact)
+        .then(async result => {
+          $('#modalInsert').modal('hide');
+          $scope.contactObject = {};
+          $scope.ShowToast(result.data.message, 'success');
+          getContactUsers(contact.finalUserCsn);
+        })
+        .catch(() => $scope.ShowToast('No se pudo agregar el contacto.', 'danger'));
+      }
+    };
+  };
+  
+
+  MonitorContratosController.$inject = ['$scope', '$log', '$cookies', '$location', '$uibModal', '$filter', 'MonitorContratosFactory', 'ContactsFactory'];
 
   angular.module('marketplace').controller('MonitorContratosController', MonitorContratosController);
 }());

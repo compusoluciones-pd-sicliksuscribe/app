@@ -153,7 +153,9 @@
                         </div>
                         <div class="modal-body">
                             <div class="form-group has-feedback">
-                                <label for="Contacto">*Contacto </label>
+                                <label for="Contacto">*Contacto </label><a ng-click="openModalInsert(EmpresaSelect)" class="form-group" title="Nuevo contacto" ng-show=" SessionCookie.IdTipoAcceso === 2 || SessionCookie.IdTipoAcceso === 10" style="background-blend-mode: initial">
+                                    <strong>(Añadir contacto) &nbsp;</strong><span class="glyphicon glyphicon-plus"> </span>
+                                </a>
                                 <select name="Renovar" id="Renovar" class="form-control selectOption" ng-model="Renovar.IdUsuarioContacto" ng-options="Contacto.contact_id as Contacto.name + ' ('+ Contacto.email +')' for Contacto in contactos">
                                         <option ng-selected="true" value="">Selecciona un contacto...</option>
                                     </select>
@@ -186,7 +188,9 @@
                         </div>
                         <div class="col-sm-12 col-md-12 col-lg-12 modal-body">
                             <div class="col-sm-12 col-md-12 col-lg-12 form-group has-feedback">
-                                <label >Contacto </label>
+                                <label >Contacto </label><a ng-click="openModalInsert(EmpresaSelect)" class="form-group" title="Nuevo contacto" ng-show=" SessionCookie.IdTipoAcceso === 2 || SessionCookie.IdTipoAcceso === 10" style="background-blend-mode: initial">
+                                    <strong>(Añadir contacto) &nbsp;</strong><span class="glyphicon glyphicon-plus"> </span>
+                                </a>
                                 <select class="form-control selectOption" ng-model="TradeIn.IdUsuarioContacto" ng-options="Contacto.contact_id as Contacto.name + ' ('+ Contacto.email +')' for Contacto in contactos">
                                         <option ng-selected="true" value="">Selecciona un contacto...</option>
                                     </select>
@@ -204,6 +208,44 @@
                     </div>
                 </div>
             </div>
+            <!-- Modal para insertar contactos -->
+            <div id="modalInsert" class="modal fade" tabindex="-2" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="divLoading" data-cargando>
+                        <div class=""><img src="images/ripple.svg" /></div>
+                    </div>  
+                    <div class="row modal-content">
+                        <div class="col-sm-12 col-md-12 col-lg-12 modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Agregar contacto</h4>
+                        </div>
+                        <div class="col-sm-12 col-md-12 col-lg-12 modal-body">
+                            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 form-group has-feedback">
+                                <label for="Cliente">Cliente relacionado:</label>
+                                <select ng-disable="true" class="form-control selectOption" ng-model="contactObject.finalUserCsn" ng-options="Empresa.csn as Empresa.NombreEmpresa for Empresa in selectEmpresas" disabled>
+                                  <option ng-selected="true" value="">Selecciona un cliente</option>
+                                      </select>
+                            </div>
+                            <div class="form-group col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                              <label>Nombres:</label>
+                              <Input type="text" ng-model="contactObject.firstName" class="form-control" ng-pattern="/[a-zA-Z]$/" placeholder="Nombres" size="255" ng-maxlength="45" required>
+                            </div>
+                            <div class="form-group col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                              <label>Apellidos:</label>
+                              <Input type="text" ng-model="contactObject.lastName" class="form-control" ng-pattern="/[a-zA-Z]$/" placeholder="Apellidos" size="255" ng-maxlength="30">
+                            </div>
+                            <div class="form-group col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                              <label>Correo electrónico:</label>
+                              <Input name="CorreoElectronico" type="email" ng-model="contactObject.email" class="form-control" placeholder="Correo electrónico" size="255" ng-maxlength="50" ng-pattern="/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-12 col-lg-12 modal-footer">
+                            <button type="button" class="btn btn-default btn-modal" data-dismiss="modal">Regresar</button>
+                            <button type="button" class="btn btn-primary btn-modal" ng-click="insertContact(contactObject);">Continuar</button>
+                        </div>
+                    </div>
+                </div>
+              </div>
             <!-- Modal de Extencion -->
             <div id="extenderModal{{contract.contract_number}}" class="modal fade in" tabindex="-1" role="dialog">
                 <div class="modal-dialog" role="document">
