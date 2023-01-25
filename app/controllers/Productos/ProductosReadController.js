@@ -21,6 +21,7 @@
     $scope.datosCompletosCustomer = true;
     $scope.microsoftURI = false;
     $scope.cotermMSByUF = null;
+    $scope.MPNMS = null;
     $scope.cotermMSByEschema = null;
     $scope.esquemaRenovacionModelo={};
     $scope.EsquemaRenovacion=[
@@ -102,7 +103,7 @@
             $scope.ShowToast('No se encontraron resultados para la búsqueda.', 'danger');
           }
         });
-
+      ManejoLicencias.GetMicrosoftID($cookies.getObject('Session').IdEmpresa).then(result => {$scope.MPNMS = result.data[0].IdMicrosoftDist});
       TipoCambioFactory.getTipoCambio()
         .success(function (TipoCambio) {
           $scope.TipoCambio = TipoCambio.Dolar;
@@ -165,7 +166,7 @@
     };
 
     const getMSCoterm = function (Producto) {
-      ManejoLicencias.cotermByUF(Producto.IdEmpresaUsuarioFinal)
+      ManejoLicencias.cotermByUF(Producto.IdEmpresaUsuarioFinal,$scope.MPNMS)
         .then(result => result.data ? ($scope.cotermMSByUF = result.data, $scope.generateCotermMSViability(Producto)) : $scope.cotermMSByUF = null, $scope.cotermMSByEschema = null);
     }
 
