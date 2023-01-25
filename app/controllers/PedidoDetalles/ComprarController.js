@@ -584,10 +584,10 @@
             .success(function (pdfRes) {
               
               
-              date = new Date(pdfRes.creation_date);
+              date = new Date(pdfRes.fechaCreacion);
               const dateSpei = new Date(pdfRes.fechaCreacion).getFullYear()+'-' + (date.getMonth()+1) + '-'+date.getDate();
-              const timeSpei = new Date(pdfRes.fechaVencimiento).toLocaleTimeString();
-
+              const timeSpei = new Date(date).toLocaleTimeString();
+              let amount = $scope.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
               let divPdfSPEI = document.getElementById('pdfSPEI');
               divPdfSPEI.style.display = 'block';
               divPdfSPEI.innerHTML = `
@@ -612,7 +612,7 @@
                     <div class="col-sm-6 text-center montoSpei">
                         <div class="total">
                             <p><b>Total a pagar / MXN</b></p>
-                            <span class="montoTotalSpei">$ ${pdfRes.monto}</span>
+                            <span class="montoTotalSpei">$ ${amount}</span>
                         </div>
                     </div>
                 </div>
@@ -638,7 +638,7 @@
                             <b>Referencia:</b> <span>${pdfRes.payment_method.name}</span>
                         </p>
                         <p>
-                            <b>Importe:</b> <span>$ ${pdfRes.monto} ${pdfRes.moneda}</span>
+                            <b>Importe:</b> <span>$ ${amount} ${pdfRes.moneda}</span>
                         </p>
                         <p>
                             <b>Concepto:</b> <span>${pdfRes.descripcion}</span>
@@ -668,7 +668,7 @@
                             <b>Referencia:</b> <span>${pdfRes.payment_method.agreement}</span>
                         </p>
                         <p>
-                            <b>Importe:</b> <span>$${pdfRes.monto} ${pdfRes.moneda}</span>
+                            <b>Importe:</b> <span>$${amount} ${pdfRes.moneda}</span>
                         </p>
                     </div>
                 </div><!--
