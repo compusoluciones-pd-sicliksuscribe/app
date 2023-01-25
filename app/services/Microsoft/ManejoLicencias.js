@@ -9,9 +9,14 @@
         $http.defaults.headers.common['token'] = Session.Token;
       };
   
-      factory.cotermByUF = function (IdEmpresaUsuarioFinal) {
+      factory.cotermByUF = function (IdEmpresaUsuarioFinal,idDis) {
         factory.refreshToken();
-        return $http.get(`${$rootScope.MAPI}subscriptions/coterm/by/${IdEmpresaUsuarioFinal}`);
+        return $http.get(`${$rootScope.MAPI}subscriptions/coterm/by/${idDis}/${IdEmpresaUsuarioFinal}`);
+      };
+
+      factory.GetMicrosoftID = function (IdEmpresaDistribuidor) {
+        factory.refreshToken();
+        return $http.get(`${$rootScope.MAPI}subscriptions/microsoftMPN/by/${IdEmpresaDistribuidor}`);
       };
 
       factory.updateStatusAutoRenew = function ( IdCustomer, IdSubscription, Status, IdPedidoDetalle, Cantidad, CantidadProxima ) {
