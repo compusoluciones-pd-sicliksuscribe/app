@@ -48,7 +48,7 @@
     $scope.INITIAL_ORDER = 1;
     const ADD_SEAT = 2;
 
-    const NUMBER_OF_FIELDS_NECESSARY_TO_INSERTION = 4;
+    const NUMBER_OF_FIELDS_NECESSARY_TO_INSERTION = 5;
     $scope.NEW_CONTRACT = 'Nuevo contrato';
     
     const formatTiers = function (tiers) {
@@ -956,15 +956,24 @@
     }
 
     $scope.insertContact = contact => {
-      if (!contact || Object.keys(contact).length < NUMBER_OF_FIELDS_NECESSARY_TO_INSERTION) $scope.ShowToast('Llena todos los campos del formulario.', 'info'); 
+      if (!contact || (Object.keys(contact).length - 1) < NUMBER_OF_FIELDS_NECESSARY_TO_INSERTION) $scope.ShowToast('Llena todos los campos del formulario.', 'info'); 
       else {
         ContactsFactory.insertContact(contact)
         .then(async result => {
-          $('#modalInsert').modal('hide');
-          $scope.contactObject = {};
-          await $scope.revisarProducto($scope.currentProductAutodesk)
-          $scope.currentProductAutodesk = {};
-          $scope.ShowToast(result.data.message, 'success');
+          if (result.data.success) {
+            $('#modalInsert').modal('hide');
+            $scope.contactObject = {};
+            await $scope.revisarProducto($scope.currentProductAutodesk)
+            $scope.currentProductAutodesk = {};
+            $scope.ShowToast(result.data.message, 'success');
+          } else {
+            const aux = result.data.message.split("'")[1];
+            switch(aux.toString()) {
+              case 'firstName': $scope.ShowToast('Campo no válido: Nombres', WARNING_MSG);break;
+              case 'lastName': $scope.ShowToast('Campo no válido: Apellidos', WARNING_MSG);break;
+              case 'email': $scope.ShowToast('Campo no válido: correo electrónico', WARNING_MSG);break;
+            }
+          }
         })
         .catch(() => $scope.ShowToast('No se pudo agregar el contacto.', 'danger'));
       }

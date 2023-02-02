@@ -18,7 +18,7 @@
       <div class="row">
           <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" style="margin-top: 2em;">
               <div class="form-group has-feedback">
-                  <input type="text" ng-model="paramSearch" class="form-control" size="30" placeholder="Buscar un contacto" ng-keydown="$event.keyCode === 13 && getContactSearch(paramSearch)"/>
+                  <input type="text" ng-model="paramSearch" class="form-control" size="30" placeholder="Buscar un contacto" ng-keydown="clearFilter(); $event.keyCode === 13 && getContactSearch(paramSearch);" .../>
                   <i class="form-control-feedback glyphicon glyphicon-search"></i>
               </div>
           </div>

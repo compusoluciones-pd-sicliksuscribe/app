@@ -6,7 +6,7 @@
     $scope.SessionCookie = $cookies.getObject('Session');
     const PREMIUM = 'Premium';
     $scope.contactObject = {};
-    const NUMBER_OF_FIELDS_NECESSARY_TO_INSERTION = 4;
+    const NUMBER_OF_FIELDS_NECESSARY_TO_INSERTION = 5;
 
     $scope.init = function () {
       MonitorContratosFactory.getEndCustomer()
@@ -178,6 +178,7 @@
         $scope.Renovar.contrato = contract.contract_number;
         $scope.Renovar.suscripciones = subscriptionsForRenewal;
         $('#renovarModal').modal('show');
+        getContactUsers($scope.EmpresaSelect);
       }
     };
 
@@ -208,6 +209,7 @@
         $scope.TradeIn.contrato = contract.contract_number;
         $scope.TradeIn.suscripciones = subscriptionsForTradeIn;
         $('#renovacionTradeIn').modal('show');
+        getContactUsers($scope.EmpresaSelect);
       }
       
     };
@@ -375,14 +377,22 @@
     };
 
     $scope.insertContact = contact => {
-      if (!contact || Object.keys(contact).length < NUMBER_OF_FIELDS_NECESSARY_TO_INSERTION) $scope.ShowToast('Llena todos los campos del formulario.', 'info'); 
+      if (!contact || (Object.keys(contact).length - 1)  < NUMBER_OF_FIELDS_NECESSARY_TO_INSERTION) $scope.ShowToast('Llena todos los campos del formulario.', 'info'); 
       else {
         ContactsFactory.insertContact(contact)
         .then(async result => {
+          if (result.data.success) {
           $('#modalInsert').modal('hide');
           $scope.contactObject = {};
-          $scope.ShowToast(result.data.message, 'success');
-          getContactUsers(contact.finalUserCsn);
+          getContactUsers(contact.finalUserCsn).then(() => $scope.ShowToast(result.data.message, 'success'));
+          } else {
+            const aux = result.data.message.split("'")[1];
+            switch(aux.toString()) {
+              case 'firstName': $scope.ShowToast('Campo no válido: Nombres', WARNING_MSG);break;
+              case 'lastName': $scope.ShowToast('Campo no válido: Apellidos', WARNING_MSG);break;
+              case 'email': $scope.ShowToast('Campo no válido: correo electrónico', WARNING_MSG);break;
+            }
+          }
         })
         .catch(() => $scope.ShowToast('No se pudo agregar el contacto.', 'danger'));
       }
@@ -394,4 +404,3 @@
 
   angular.module('marketplace').controller('MonitorContratosController', MonitorContratosController);
 }());
-  
