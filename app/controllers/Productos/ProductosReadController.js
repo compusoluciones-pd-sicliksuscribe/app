@@ -494,7 +494,7 @@
       const price = product.PorcentajeDescuento > 0 ? product.PrecioDescuento : product.PrecioProrrateo;
       if(product.IdEsquemaRenovacion === $scope.ANUAL_MENSUAL){
       estimatedTotal = product.FlagNC ? ((product.PrecioNormal * 10)/12) : (price * quantity)|| 0.00;
-      } if (product.IdFabricante = $scope.AUTODESK) estimatedTotal = (product.PrecioNormal - (product.PorcentajeDescuento * 0.01 * product.PrecioNormal)) * quantity || 0.00; 
+      } else if (product.IdFabricante === $scope.AUTODESK) estimatedTotal = (product.PrecioNormal - (product.PorcentajeDescuento * 0.01 * product.PrecioNormal)) * quantity || 0.00; 
       else {
         estimatedTotal = price * quantity || 0.00;
       }
