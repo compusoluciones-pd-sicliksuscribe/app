@@ -79,7 +79,14 @@
             $('#modalEdit').modal('hide');
             $scope.contactObjectEdit = {};
             $scope.getContacts().then(() => $scope.ShowToast(result.data.message, SUCCESS_MSG));
-          } else $scope.ShowToast(result.data.message, WARNING_MSG);
+          } else {
+            const aux = result.data.message.split("'")[1];
+            switch(aux.toString()) {
+              case 'firstName': $scope.ShowToast('Campo no válido: Nombres', WARNING_MSG);break;
+              case 'lastName': $scope.ShowToast('Campo no válido: Apellidos', WARNING_MSG);break;
+              case 'email': $scope.ShowToast('Campo no válido: correo electrónico', WARNING_MSG);break;
+            }
+          }
         })
         .catch(() => $scope.ShowToast('No se pudo editar el contacto.', DANGER_MSG));
       }
