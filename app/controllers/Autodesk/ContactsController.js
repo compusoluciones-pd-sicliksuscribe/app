@@ -44,11 +44,11 @@
       if (!contact || (Object.keys(contact).length - 1) < NUMBER_OF_FIELDS_NECESSARY_TO_INSERTION) $scope.ShowToast('Llena todos los campos del formulario.', 'info'); 
       else {
         if  (contact.finalUserCsn = '0') contact.finalUserCsn = null;
+        delete contact.finalUser;
         ContactsFactory.insertContact(contact)
         .then(result => {
           if (result.data.success) {
             $('#modalInsert').modal('hide');
-            delete contact.finalUser;
             $scope.contactObject = {};
             $scope.getContacts().then(() => $scope.ShowToast(result.data.message, SUCCESS_MSG));
           } else {
@@ -65,16 +65,18 @@
     };
 
     $scope.editContact = contact => {
-      contact.finalUserCsn = contact.finalUser.csn;
-      contact.finalUserId = contact.finalUser.IdEmpresa;
+      if (contact.finalUser) {
+        contact.finalUserCsn = contact.finalUser.csn;
+        contact.finalUserId = contact.finalUser.IdEmpresa;
+      }
       if (!contact || (Object.keys(contact).length - 1) < NUMBER_OF_FIELDS_NECESSARY_TO_EDIT) $scope.ShowToast('Llena todos los campos del formulario.', 'info'); 
       else {
         if  (contact.finalUserCsn = '0') contact.finalUserCsn = null;
+        delete contact.finalUser;
         ContactsFactory.editContact(contact)
         .then(result => {
           if (result.data.success) {
             $('#modalEdit').modal('hide');
-            delete contact.finalUser;
             $scope.contactObjectEdit = {};
             $scope.getContacts().then(() => $scope.ShowToast(result.data.message, SUCCESS_MSG));
           } else $scope.ShowToast(result.data.message, WARNING_MSG);
