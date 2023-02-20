@@ -136,6 +136,9 @@
                                 {{Producto.PrecioDescuento | currency: "$" : 2}} {{Producto.MonedaPrecio}}
                                 <b style="color:#68953B;">{{Producto.PorcentajeDescuento}}% Desc.</b>
                             </span>
+                            <span ng-show="Producto.PorcentajeDescuento < 0 && Producto.IdFabricante === 2">
+                                {{(Producto.PrecioNormal - (Producto.PorcentajeDescuento * 0.01 * Producto.PrecioNormal)) | currency: "$" : 2}} {{Producto.MonedaPrecio}}
+                            </span>
 
                             <div ng-show="Producto.tiers">
                                 <label for="" title="nivel">Precios por nivel:</label>

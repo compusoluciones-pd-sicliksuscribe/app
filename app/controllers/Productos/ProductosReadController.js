@@ -20,6 +20,7 @@
     $scope.datosCompletosCustomer = true;
     $scope.microsoftURI = false;
     $scope.cotermMSByUF = null;
+    $scope.MPNMS = null;
     $scope.cotermMSByEschema = null;
     $scope.esquemaRenovacionModelo={};
     $scope.EsquemaRenovacion=[
@@ -107,7 +108,7 @@
             $scope.ShowToast('No se encontraron resultados para la búsqueda.', 'danger');
           }
         });
-
+      ManejoLicencias.GetMicrosoftID($cookies.getObject('Session').IdEmpresa).then(result => {$scope.MPNMS = result.data[0].IdMicrosoftDist});
       TipoCambioFactory.getTipoCambio()
         .success(function (TipoCambio) {
           $scope.TipoCambio = TipoCambio.Dolar;
@@ -170,7 +171,7 @@
     };
 
     const getMSCoterm = function (Producto) {
-      ManejoLicencias.cotermByUF(Producto.IdEmpresaUsuarioFinal)
+      ManejoLicencias.cotermByUF(Producto.IdEmpresaUsuarioFinal,$scope.MPNMS)
         .then(result => result.data ? ($scope.cotermMSByUF = result.data, $scope.generateCotermMSViability(Producto)) : $scope.cotermMSByUF = null, $scope.cotermMSByEschema = null);
     }
 
@@ -474,6 +475,7 @@
     };
 
     $scope.estimateTotal = function (product, quantity) {
+      let estimatedTotal;
       if (product.tiers) {
         return estimateTieredTotal(product.tiers, quantity);
       }
@@ -481,10 +483,10 @@
         return $scope.estimateTotalAnnual(product,quantity);
       }
       const price = product.PorcentajeDescuento > 0 ? product.PrecioDescuento : product.PrecioProrrateo;
-      let estimatedTotal
       if(product.IdEsquemaRenovacion === $scope.ANUAL_MENSUAL){
       estimatedTotal = product.FlagNC ? ((product.PrecioNormal * 10)/12) : (price * quantity)|| 0.00;
-      }else{
+      } else if (product.IdFabricante === $scope.AUTODESK) estimatedTotal = (product.PrecioNormal - (product.PorcentajeDescuento * 0.01 * product.PrecioNormal)) * quantity || 0.00; 
+      else {
         estimatedTotal = price * quantity || 0.00;
       }
       return estimatedTotal;
