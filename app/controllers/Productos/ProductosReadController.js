@@ -80,7 +80,6 @@
         .success(function (Productos) {
           if (Productos.success === 1) {
             $scope.Productos = Productos.data.map(function (item) {
-              console.table(item);
               item.IdPedidoContrato = 0;
               item.TieneContrato = true;
               item.AddSeatMS = false;
