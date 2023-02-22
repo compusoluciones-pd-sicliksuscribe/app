@@ -35,6 +35,10 @@
       {id: 2, esquema: 'Anual' }
 
     ];
+    $scope.EsquemaRenovacionAnual=[
+      {id: 9, esquema: 'Anual con facturación mensual' },
+      {id: 2, esquema: 'Anual' }
+    ];
     $scope.MENSUAL = 1;
     $scope.ANUAL = 2;
     $scope.ANUAL_MENSUAL = 9;
