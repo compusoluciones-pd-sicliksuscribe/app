@@ -1,6 +1,6 @@
 (function () {
   var MonitorContratosController = function ($scope, $log, $cookies, $location, $uibModal, $filter, MonitorContratosFactory, ContactsFactory) {
-    $scope.vacio = 0;
+    $scope.vacio = 1;
     $scope.Renovar = {};
     $scope.TradeIn = {};
     $scope.SessionCookie = $cookies.getObject('Session');
@@ -45,9 +45,9 @@
             });
           }
           if (result.data.data.length > 0) {
-            $scope.vacio = 1;
-          } else {
             $scope.vacio = 0;
+          } else {
+            $scope.vacio = 1;
           }
         })
         .catch(function (result) {
@@ -337,8 +337,9 @@
       }
     };
 
-    $scope.getContractData = contractNumber => {
-      MonitorContratosFactory.getContractData(contractNumber)
+    $scope.getContractData = async contractNumber => {
+      $scope.EmpresaSelect = '';
+      await MonitorContratosFactory.getContractData(contractNumber)
       .then((result) => {
         if (result.status = 200) {
           $scope.contracts = result.data;
@@ -364,9 +365,9 @@
           });
         }
         if (result.data.length > 0) {
-          $scope.vacio = 1;
-        } else {
           $scope.vacio = 0;
+        } else {
+          $scope.vacio = 1;
         }
       });
     };

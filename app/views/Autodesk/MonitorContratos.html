@@ -24,11 +24,11 @@
         </div>
     
         <br>
-        <div ng-show="vacio === 0 && EmpresaSelect != ''">
+        <div ng-show="vacio === 1" style="text-align: center;">
             <h4>Sin resultados. </h4>
         </div>
 
-        <div ng-hide="vacio === 0 && EmpresaSelect != ''" class="form-group alert alert-info" style="font-size: 1.1em;">
+        <div ng-show="vacio === 0 && EmpresaSelect != ''" class="form-group alert alert-info" style="font-size: 1.1em;">
             <h5><b>IMPORTANTE:</b></h5>
             <p>
                 <li>Marca la casilla a la derecha de la serie para involucrarla en el proceso de renovación o trade in.</li>
