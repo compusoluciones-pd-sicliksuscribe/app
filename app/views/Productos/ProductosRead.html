@@ -214,9 +214,11 @@
                                                     <span class="glyphicon glyphicon-user"></span>
                                                 </span>
                                                 <select id="IdEmpresaUsuarioFinal" name="IdEmpresaUsuarioFinal" class="form-control selectOption ufs" ng-model="Producto.IdEmpresaUsuarioFinal"
-                                                    ng-options="Empresa.IdEmpresa as Empresa.NombreEmpresa + ', crédito disponible: ' + (Empresa.CreditoDisponible | currency) + ' pesos.' for Empresa in selectEmpresas"
+                                                    ng-options="Empresa.IdEmpresa as Empresa.NombreEmpresa + '' + Empresa.DominioMicrosoftUF + ', crédito disponible: ' + (Empresa.CreditoDisponible | currency) + ' pesos.' for Empresa in selectEmpresas"
                                                     ng-change="revisarProducto(Producto);" title="Selecciona a un cliente (usuario final) para tu producto"
-                                                    required>
+                                                    required
+                                                    
+                                                    >
                                                     <option ng-selected="true" value="">Selecciona un cliente...</option>
                                                 </select>
                                             </div>
