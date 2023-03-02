@@ -318,11 +318,8 @@
           if (respuesta.success === 1) {
             Producto.IdAccionAutodesk = 1;
             Producto.contratos = respuesta.data;
-            if (Producto.contratos.length >= 1 && Producto.Especializacion !== PREMIUM) Producto.numeroContrato = respuesta.data[0].contract_number;
-            else if (Producto.contratos.length === 0 || Producto.Especializacion === PREMIUM) {
-              Producto.numeroContrato = $scope.NEW_CONTRACT;
-              Producto.sinContacto = true;            
-            }
+            Producto.numeroContrato = $scope.NEW_CONTRACT;
+            Producto.sinContacto = true;            
             Producto.contratos.unshift({contract_number: $scope.NEW_CONTRACT });
             setProtectedRebatePrice(Producto.IdEmpresaUsuarioFinal);
           } else $scope.ShowToast('No pudimos cargar la información de tus contratos, por favor intenta de nuevo más tarde.', 'danger'); 
