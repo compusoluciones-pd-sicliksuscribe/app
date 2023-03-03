@@ -178,8 +178,8 @@
           let mes = `${fechaActual.getMonth() + 1}`;
           if (dia.length < 2) dia = `0${dia}`;
           if (mes.length < 2) mes = `0${mes}`;
-          let formatoFechaActual = `${dia}/${mes}/${fechaActual.getFullYear()}`;
-          let newFechas = fechas.filter(fecha => fecha.FechaFin != formatoFechaActual);
+          const formatoFechaActual = `${dia}/${mes}/${fechaActual.getFullYear()}`;
+          const newFechas = fechas.filter(fecha => fecha.FechaFin != formatoFechaActual);
           $scope.cotermMSByEschema = newFechas;
         }
         if (Producto.Esquema === $scope.ANUAL || Producto.Esquema === $scope.ANUAL_MENSUAL){
