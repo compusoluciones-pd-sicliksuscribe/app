@@ -129,8 +129,8 @@
         var fecha = new Date();
         fecha.setMonth(fecha.getMonth() + 1);
         fecha.setDate(fecha.getDate() - 1);
-        Producto.FechaFinSuscripcion = fecha.getDate() + "/" + (fecha.getMonth() +1)+ "/" + (fecha.getFullYear());
-      }
+          Producto.FechaFinSuscripcion = fecha.getDate() + "/" + (fecha.getMonth() +1)+ "/" + (fecha.getFullYear());
+        }
       Producto.EsquemaRenovacion = 'Mensual';
       Producto.IdEsquemaRenovacion= $scope.MENSUAL; 
     } 
@@ -172,7 +172,15 @@
     $scope.generateCotermMSViability = function (Producto) {
       if($scope.cotermMSByUF.length) { 
         if (Producto.Esquema === $scope.MENSUAL){
-          $scope.cotermMSByEschema = formatDateCoterm($scope.MENSUAL, $scope.cotermMSByUF);
+          const fechas = formatDateCoterm($scope.MENSUAL, $scope.cotermMSByUF);
+          const fechaActual = new Date();
+          let dia = `${fechaActual.getDate()}`;
+          let mes = `${fechaActual.getMonth() + 1}`;
+          if (dia.length < 2) dia = `0${dia}`;
+          if (mes.length < 2) mes = `0${mes}`;
+          let formatoFechaActual = `${dia}/${mes}/${fechaActual.getFullYear()}`;
+          let newFechas = fechas.filter(fecha => fecha.FechaFin != formatoFechaActual);
+          $scope.cotermMSByEschema = newFechas;
         }
         if (Producto.Esquema === $scope.ANUAL || Producto.Esquema === $scope.ANUAL_MENSUAL){
           const annualCoterm = $scope.cotermMSByUF.filter(element => element.IdEsquemaRenovacion === $scope.ANUAL || element.IdEsquemaRenovacion === $scope.ANUAL_MENSUAL);
