@@ -77,8 +77,8 @@
                 <div class="form-group">
                     <div ng-if="pedido.IdFabricante === 2 && pedido.IdAccionAutodesk !== 5"><label><input type="checkbox" ng-model="pedido.SP"
                                 style="margin-right: 1em" disabled>Petición especial (SP)</label></div>
-                    <div ng-if="pedido.IdFabricante === 2"><label><input type="checkbox" ng-model="pedido.Promo"
-                                style="margin-right: 1em" disabled>Promoción: Aplica TC protegido $18</label></div>
+                    <!-- <div ng-if="pedido.IdFabricante === 2"><label><input type="checkbox" ng-model="pedido.Promo"
+                                style="margin-right: 1em" disabled>Promoción: Aplica TC protegido $18</label></div> -->
                     <label>Forma de pago:</label> {{ pedido.Forma }} <br>
                     <label>Tipo de cambio:</label> {{ pedido.TipoCambio | currency: "$":2 }} {{ pedido.MonedaPago }}<br>
                     <label>Subtotal:</label> {{ calcularSubTotal(pedido.IdPedido) | currency }} {{ pedido.MonedaPago }}

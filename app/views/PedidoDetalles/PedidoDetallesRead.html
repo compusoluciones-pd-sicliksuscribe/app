@@ -147,8 +147,8 @@
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3" class="form-group">
                     <div class="form-group">
-                        <div ng-if="pedido.IdFabricante === 2 && pedido.IdAccionAutodesk !== 5"><label tooltip="Marca esta casilla si tu pedido corresponde a una petición especial."><input type="checkbox" ng-model="pedido.SP" ng-change="marcarSP(pedido.IdPedido, pedido.SP, pedido.Promo)" style="margin-right: 1em">Petición especial (SP)</label></div>
-                        <div ng-if="pedido.IdFabricante === 2"><label tooltip="Aplica solo para suscripciones nuevas, pedidos de 4 a 10mil usd."><input type="checkbox" ng-model="pedido.Promo" ng-change="marcarSP(pedido.IdPedido, pedido.SP, pedido.Promo)" style="margin-right: 1em">Promoción: Aplica TC protegido $18  </label></div>
+                        <div ng-if="pedido.IdFabricante === 2"><label tooltip="Marca esta casilla si tu pedido corresponde a una petición especial."><input type="checkbox" ng-model="pedido.SP" ng-change="marcarSP(pedido.IdPedido, pedido.SP, pedido.Promo)" style="margin-right: 1em">Petición especial (SP)</label></div>
+                        <!-- <div ng-if="pedido.IdFabricante === 2"><label tooltip="Aplica solo para suscripciones nuevas, pedidos de 4 a 10mil usd."><input type="checkbox" ng-model="pedido.Promo" ng-change="marcarSP(pedido.IdPedido, pedido.SP, pedido.Promo)" style="margin-right: 1em">Promoción: Aplica TC protegido $18  </label></div> -->
                         <label>Forma de pago:</label> {{ pedido.Forma }} <br>
                         <label>Tipo de cambio:</label> {{ pedido.TipoCambio | currency: "$":2 }} {{ pedido.MonedaPago }}<br>
                         <label>Subtotal:</label> {{ calcularSubTotal(pedido.IdPedido) | currency }} {{ pedido.MonedaPago }} <br>

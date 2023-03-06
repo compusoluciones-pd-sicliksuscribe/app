@@ -217,7 +217,7 @@
                                                     <span class="glyphicon glyphicon-user"></span>
                                                 </span>
                                                 <select id="IdEmpresaUsuarioFinal" name="IdEmpresaUsuarioFinal" class="form-control selectOption ufs" ng-model="Producto.IdEmpresaUsuarioFinal"
-                                                    ng-options="Empresa.IdEmpresa as Empresa.NombreEmpresa + ', crédito disponible: ' + (Empresa.CreditoDisponible | currency) + ' pesos.' for Empresa in selectEmpresas"
+                                                    ng-options="Empresa.IdEmpresa as Empresa.NombreEmpresa + '' + Empresa.DominioMicrosoftUF + ', crédito disponible: ' + (Empresa.CreditoDisponible | currency) + ' pesos.' for Empresa in selectEmpresas"
                                                     ng-change="revisarProducto(Producto);" title="Selecciona a un cliente (usuario final) para tu producto"
                                                     required>
                                                     <option ng-selected="true" value="">Selecciona un cliente...</option>
@@ -269,7 +269,7 @@
                                             <p style="color:red" ng-show="frmPlazo.Cantidad.$error.maxlength">Máximo 2 dígitos</p>
                                             <p style="color:red" ng-show="frmPlazo.Cantidad.$error.min">Mínimo 1</p>
                                             <p style="color:red" ng-show="frmPlazo.Cantidad.$error.max">Máximo 60</p>            
-                                            <div ng-hide="Producto.IdFabricante !== 1 || Producto.IdTipoProducto === 6 || Producto.IdTipoProducto === 3 || !Producto.FlagNC " >
+                                            <div ng-hide="Producto.IdFabricante !== 1 || Producto.IdTipoProducto === 6 || Producto.IdTipoProducto === 3 || !Producto.FlagNC || Producto.AnualMicrosoft " >
                                                 <label for="IdEmpresaUsuarioFinal">* Tipo de renovación</label> (Mensual/Anual/Anual con facturación mensual) 
                                                 <div class="input-group" style="width:100%;" >
                                                         <span class="input-group-addon green white">
@@ -282,7 +282,7 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div ng-hide="Producto.IdFabricante !== 1 || Producto.IdTipoProducto === 6 || Producto.IdTipoProducto === 3 || Producto.FlagNC " >
+                                            <div ng-hide="Producto.IdFabricante !== 1 || Producto.IdTipoProducto === 6 || Producto.IdTipoProducto === 3 || Producto.FlagNC  || Producto.AnualMicrosoft" >
                                                 <label for="IdEmpresaUsuarioFinal">* Tipo de renovación</label> (Mensual/Anual) 
                                                 <div class="input-group" style="width:100%;" >
                                                         <span class="input-group-addon green white">
@@ -290,6 +290,19 @@
                                                         </span>
                                                     <select id="esquemaModelo" name="esquemaModelo" class="form-control selectOption ufs" ng-model="Producto.Esquema"
                                                         ng-options="esquema.id as esquema.esquema for esquema in EsquemaRenovacionLegacy"
+                                                        ng-change="CambiarFechaRenovacion(Producto); generateCotermMSViability(Producto);" title="Selecciona un tipo de renovación para tu producto" ng-required="Producto.IdFabricante === 1 && Producto.IdTipoProducto !== 6 && Producto.IdTipoProducto !== 3">
+                                                        <option ng-selected="true" value="" disabled>Selecciona un tipo de renovación...</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div ng-hide="Producto.IdFabricante !== 1 || Producto.IdTipoProducto === 6 || Producto.IdTipoProducto === 3 || !Producto.AnualMicrosoft " >
+                                                <label for="IdEmpresaUsuarioFinal">* Tipo de renovación</label> (Anual con facturacion mensual/Anual) 
+                                                <div class="input-group" style="width:100%;" >
+                                                        <span class="input-group-addon green white">
+                                                            <span class="glyphicon glyphicon-hourglass"></span>
+                                                        </span>
+                                                    <select id="esquemaModelo" name="esquemaModelo" class="form-control selectOption ufs" ng-model="Producto.Esquema"
+                                                        ng-options="esquema.id as esquema.esquema for esquema in EsquemaRenovacionAnual"
                                                         ng-change="CambiarFechaRenovacion(Producto); generateCotermMSViability(Producto);" title="Selecciona un tipo de renovación para tu producto" ng-required="Producto.IdFabricante === 1 && Producto.IdTipoProducto !== 6 && Producto.IdTipoProducto !== 3">
                                                         <option ng-selected="true" value="" disabled>Selecciona un tipo de renovación...</option>
                                                     </select>

@@ -19,7 +19,7 @@
         return $http.get(`${$rootScope.MAPI}subscriptions/microsoftMPN/by/${IdEmpresaDistribuidor}`);
       };
 
-      factory.updateStatusAutoRenew = function ( IdCustomer, IdSubscription, Status, IdPedidoDetalle, Cantidad, CantidadProxima ) {
+      factory.updateStatusAutoRenew = function ( IdCustomer, IdSubscription, Status, IdPedidoDetalle, Cantidad, CantidadProxima) {
         factory.refreshToken();
         return $http.post(`${$rootScope.MAPI}subscriptions/updateAutoRenewById`, { IdCustomer, IdSubscription, Status, IdPedidoDetalle, Cantidad, CantidadProxima });
       };
