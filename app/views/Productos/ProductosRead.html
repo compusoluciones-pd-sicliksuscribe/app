@@ -319,7 +319,7 @@
                                                     <label><input id="periodoAddSeat" type="checkbox" ng-checked="Producto.periodoAddSeat" ng-true-value="1" ng-false-value="0" ng-model="Producto.periodoAddSeat"> Adicionar a partida activa</label>
                                                 </div>
                                             </div>
-                                            <div ng-hide="Producto.IdFabricante !== 1 || Producto.IdTipoProducto !== 2 || !cotermMSByEschema || cotermMSByEschema.length <= 1 || (Producto.periodoCompleto && !Producto.AddSeatMS) || !Producto.FlagNC || (Producto.periodoAddSeat && Producto.AddSeatMS) " >
+                                            <div ng-hide="Producto.IdFabricante !== 1 || Producto.IdTipoProducto !== 2 || !cotermMSByEschema || cotermMSByEschema.length < 1 || (Producto.periodoCompleto && !Producto.AddSeatMS) || !Producto.FlagNC || (Producto.periodoAddSeat && Producto.AddSeatMS) " >
                                                 <label>* Selecciona una fecha de co-termino disponible</label>
                                                 <div class="input-group" style="width:100%;" >
                                                         <span class="input-group-addon green white">
