@@ -377,6 +377,7 @@
       $scope.guardar = Pedido;
       $scope.form.habilitar = true;
       $scope.$emit('LOAD');
+      const inicio = Pedido.FechaInicio.split('/');
       const hoy = new Date();
       const order = {
         CargoRealizadoProximoPedido: Number(Pedido.CargoRealizadoProximoPedido),
@@ -385,7 +386,7 @@
         ResultadoFabricante1: Detalles.EstatusFabricante,
         IdTipoProducto: Detalles.IdTipoProducto,
         IdPedidoDetalle: Detalles.IdPedidoDetalle,
-        FechaInicio: Pedido.FechaInicio,
+        FechaInicio: inicio[2] + '-' + inicio[1] + '-' + inicio[0],
         FechaFin: hoy.getFullYear() + '-' + (hoy.getUTCMonth() + 1).toString().padStart(2, 0) + '-' + hoy.getDate().toString().padStart(2, 0),
         IdProducto: Detalles.IdProducto,
         IdEsquemaRenovacion: Pedido.IdEsquemaRenovacion,
