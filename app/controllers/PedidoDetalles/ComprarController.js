@@ -29,6 +29,7 @@
       AMEX: 2,
       OTRO: 3
     };
+    $scope.CarritoSpei = 'Carrito';
     const makers = {
       MICROSOFT: 1,
       AUTODESK: 2,
@@ -571,19 +572,16 @@
           OpenPay.setId(Datos.data['0'].opId);
           OpenPay.setApiKey(Datos.data['0'].opPublic);
           OpenPay.setSandboxMode(true);
-
           const charges = {
             amount: $scope.amount,
             currency: $scope.currency,
             description: `Carrito: ${desctriptionOrders.toString()}`,
-            device_session_id: deviceSessionId,
             pedidosAgrupados: $cookies.getObject('pedidosAgrupados'),
-            idCarrito: $scope.pedidos
+            idCarrito: $scope.pedidos,
+            from: $scope.CarritoSpei
           };
           PedidoDetallesFactory.getgenerarPdfSPEI(charges)
             .success(function (pdfRes) {
-              
-              
               date = new Date(pdfRes.fechaCreacion);
               const dateSpei = new Date(pdfRes.fechaCreacion).getFullYear()+'-' + (date.getMonth()+1) + '-'+date.getDate();
               const timeSpei = new Date(date).toLocaleTimeString();

@@ -217,6 +217,11 @@
       return $http.post($rootScope.API + 'orders/pay-width-card', Pedidos);
     };
 
+    factory.payWidthSPEI = function (Pedidos) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'orders/pay-width-spei', Pedidos);
+    };
+
     factory.payWidthCardTuClick = function (Pedidos, currentDistribuidor) {
       factory.refreshToken();
       return $http.post($rootScope.API + 'orders/pay-width-card/tuclick/' + currentDistribuidor, Pedidos);
