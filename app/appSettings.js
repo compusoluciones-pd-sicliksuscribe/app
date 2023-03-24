@@ -16,5 +16,6 @@ angular.module('marketplace')
   // $rootScope.API_PROJECT = 'https://hv5h195n38.execute-api.us-east-1.amazonaws.com/prod/governance';
   // $rootScope.dominio = 'clicksuscribe';
   // $rootScope.secureCookie = true;
-  //$rootScope.SICLIK_REACT_FRONT = 'https://prod.d327d1j2f84eco.amplifyapp.com/';
+  $rootScope.SICLIK_REACT_FRONT = 'https://prod.d327d1j2f84eco.amplifyapp.com/';
+  $rootScope.SICLIK_REACT_FRONT_CLIENTCREDIT = 'https://test23.d3jiwwsovvh86g.amplifyapp.com/';
 });

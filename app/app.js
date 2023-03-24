@@ -327,11 +327,6 @@
         resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 6)) { $location.path('/404'); } } }
       })
 
-      .when('/Clientes', {
-        controller: 'EmpresasXEmpresasReadController', templateUrl: 'app/views/EmpresasXEmpresas/EmpresasXEmpresasRead.html',
-        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 7 || Session.IdTipoAcceso === 10)) { $location.path('/404'); } } }
-      })
-
       .when('/Productos/:Busqueda', {
         controller: 'ProductosReadController', templateUrl: 'app/views/Productos/ProductosRead.html',
         resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 7 || Session.IdTipoAcceso === 10)) { $location.path('/404'); } } }

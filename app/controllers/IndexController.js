@@ -458,6 +458,23 @@
       }
     };
 
+    $scope.misClientes = () => {
+      $scope.SessionCookies = $cookies.getObject('Session');
+      if ($scope.SessionCookie.IdTipoAcceso === 10 || $scope.SessionCookie.IdTipoAcceso === 1 || $scope.SessionCookie.IdTipoAcceso === 2 || $scope.SessionCookie.IdTipoAcceso === 3) {
+        $window.location.href = `${$rootScope.SICLIK_REACT_FRONT_CLIENTCREDIT}?id=${$window.btoa($scope.CaracteresAleatorios(8)+ $window.btoa($window.btoa($scope.SessionCookies.Token))+ $scope.CaracteresAleatorios(5)).replace(/X/g,"Ys")}`;
+      }
+    };
+
+    $scope.CaracteresAleatorios = function (length) {
+      var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      var charactersLength = characters.length;
+      var result = '';
+      for (var i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      }
+      return result;
+    };
+
   };
   function selectNavicon (icon) {
     var link = document.createElement('link');
