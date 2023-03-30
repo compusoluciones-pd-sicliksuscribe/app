@@ -451,7 +451,7 @@
           .success(function (calculations) {
             OpenPay.setId(calculations.totalCharges['0'].opId);
             OpenPay.setApiKey(calculations.totalCharges['0'].opPublic);
-            OpenPay.setSandboxMode(true);
+            OpenPay.setSandboxMode(false);
             const PedidosSeleccionadosParaPagar = $scope.PedidosSeleccionadosParaPagar.map(function(IdPedido){
                 return {'IdPedido':IdPedido};
             });
@@ -604,7 +604,7 @@
                 $scope.currency = Datos.data.moneda;
                 OpenPay.setId(Datos.data.opId);
                 OpenPay.setApiKey(Datos.data.opPublic);
-                OpenPay.setSandboxMode(true);
+                OpenPay.setSandboxMode(false);
                 deviceSessionId = OpenPay.deviceData.setup('payment-form-monitor', 'deviceIdHiddenFieldName');
                 $('#deviceSessionId').val(deviceSessionId);
                 $scope.abreModal();
