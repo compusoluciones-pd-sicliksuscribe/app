@@ -22,8 +22,11 @@
       CREDIT_CARD: 1,
       CS_CREDIT: 2,
       PAYPAL: 3,
-      PREPAY: 4
+      PREPAY: 4,
+      SPEI: 5
     };
+    $scope.Pesos = 'MXN';
+    $scope.MonitorSpei = 'Monitor';
     const creditCardNames = {
       VISA: 'Visa',
       MASTERCARD: 'Mastercard',
@@ -216,6 +219,11 @@
       return IdFormaPago === paymentMethods.PREPAY;
     };
 
+    $scope.isPayingWithSpei = function () {
+      const IdFormaPago = $scope.paymethod;
+      return IdFormaPago === paymentMethods.SPEI;
+    };
+
     const limpiarPedido = () => {
       for (var x = 0; x < $scope.PedidosAgrupados.length; x++) {
         $scope.PedidosObj[$scope.PedidosAgrupados[x][0].IdPedido].Check = false;
@@ -363,6 +371,25 @@
             $scope.ShowToast('No pudimos realizar los cálculos, por favor intenta de nuevo más tarde.', 'danger');
           });
       }
+      if ($scope.PedidosSeleccionadosParaPagar.length !== 0 && document.getElementById('Spei').checked) {
+        PedidoDetallesFactory.monitorCalculationsPrepaid({Pedidos: $scope.PedidosSeleccionadosParaPagar, tipoTarjeta: false}, $scope.Distribuidor.MonedaPago)
+          .success(function (calculations) {
+            if (calculations.OrderTotal) {
+              $scope.Subtotal = calculations.totalCharges[0].subtotalOrders;
+              $scope.Iva = calculations.totalCharges[0].ivaOrders;
+              $scope.Total = calculations.totalCharges[0].totalOrders;
+            } else {
+              $scope.Subtotal = 0;
+              $scope.Iva = 0;
+              $scope.Total = 0;
+            }
+            $scope.ServicioElectronico = 0;
+          })
+          .error(function (data, status, headers, config) {
+            $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+            $scope.ShowToast('No pudimos realizar los cálculos, por favor intenta de nuevo más tarde.', 'danger');
+          });
+      }
       if ($scope.PedidosSeleccionadosParaPagar.length !== 0 && document.getElementById('Tarjeta').checked) {
         if ($cookies.getObject('tipoTarjetaCreditoMonitor') && $scope.PedidosSeleccionadosParaPagar.length !== 0) {
           let tipoTarjeta = $cookies.getObject('tipoTarjetaCreditoMonitor');
@@ -406,6 +433,8 @@
         $scope.pagar();
       } else if (document.getElementById('Prepago').checked) {
         $scope.preparePrePaid();
+      } else if (document.getElementById('Spei').checked) {
+        $scope.pagarSPEI();
       }
     };
 
@@ -414,6 +443,148 @@
       modalPagoMonitor.style.display = 'block';
     };
 
+    $scope.pagarSPEI = function () {
+      if ($scope.PedidosSeleccionadosParaPagar.length > 0) {
+
+
+        PedidoDetallesFactory.monitorCalculationsPrepaid({Pedidos: $scope.PedidosSeleccionadosParaPagar, tipoTarjeta: false}, $scope.Distribuidor.MonedaPago)
+          .success(function (calculations) {
+            OpenPay.setId(calculations.totalCharges['0'].opId);
+            OpenPay.setApiKey(calculations.totalCharges['0'].opPublic);
+            OpenPay.setSandboxMode(false);
+            const PedidosSeleccionadosParaPagar = $scope.PedidosSeleccionadosParaPagar.map(function(IdPedido){
+                return {'IdPedido':IdPedido};
+            });
+            const charges = {
+              amount: parseFloat($scope.Total.toFixed(2)),
+              currency: $scope.Pesos,
+              description: `${$scope.MonitorSpei}: ${$scope.PedidosSeleccionadosParaPagar.toString()}`,
+              pedidosAgrupados: PedidosSeleccionadosParaPagar,
+              idCarrito: `${$scope.PedidosSeleccionadosParaPagar[0]}-${Date.now()}`,
+              from: $scope.MonitorSpei
+            };
+            PedidoDetallesFactory.getgenerarPdfSPEI(charges)
+              .success(function (pdfRes) {
+                let deshabilitarTc = document.getElementById('deshabilitarTc');
+                deshabilitarTc.style.display = 'none';
+                date = new Date(pdfRes.fechaCreacion);
+                const dateSpei = new Date(pdfRes.fechaCreacion).getFullYear()+'-' + (date.getMonth()+1) + '-'+date.getDate();
+                const timeSpei = new Date(date).toLocaleTimeString();
+                let amount = $scope.Total.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                let monitorPdfSPEI = document.getElementById('pdfSPEIMonitor');
+                monitorPdfSPEI.style.display = 'block';
+                monitorPdfSPEI.innerHTML = `
+                      <div class="row tituloSpei text-center">
+                          <h2>Información de pago (SPEI)</h2>
+                      </div>
+                      <p class="text-danger">
+                          <b>*Los pedidos seguirán estando visibles hasta que se complete la transferencia.</b>
+                      </p>
+                  <div class="row pt-5">
+                      <div class="col-sm-6">
+                          <p>
+                            <b>Fecha y Hora:</b>
+                            <br>
+                            <span>${dateSpei} ${timeSpei}</span>
+                          </p>
+              
+                          <p>
+                              <b>Descripción de compra:</b>
+                              <br>
+                              <span>${pdfRes.descripcion}</span>
+                          </p>
+                      </div>
+                      
+                      <div class="col-sm-6 text-center montoSpei">
+                          <div class="total">
+                              <p><b>Total a pagar / MXN</b></p>
+                              <span class="montoTotalSpei">$ ${amount}</span>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <p>
+                          <h3 class="specialBlueText"><b>Como pagar</b></h3>
+                      </p>
+  
+                      <div class="col-sm-6">
+                          <p><b>Desde BBVA</b></p>
+                          <p>
+                              1. Dentro del menú de "Pagar" seleccione la opción
+                              "De Servicios" e ingrese el siguiente "Número de
+                              convenio CIE"
+                          </p>
+                          <p>
+                              <b>Número de convenio CIE:</b> <span>${pdfRes.payment_method.agreement}</span>
+                          </p>
+                          <p>
+                              2. Ingrese los datos de registro para concluir con la operación
+                          </p>
+                          <p>
+                              <b>Referencia:</b> <span>${pdfRes.payment_method.name}</span>
+                          </p>
+                          <p>
+                              <b>Importe:</b> <span>$ ${amount} ${pdfRes.moneda}</span>
+                          </p>
+                          <p>
+                              <b>Concepto:</b> <span>${pdfRes.descripcion}</span>
+                          </p>
+                      </div>
+  
+                      <div class="col-sm-6 pagoNormal">
+                          <p><b>Desde cualquier otro banco</b></p>
+                          <p>
+                              1. Ingresa a la sección de transferencias y pagos o
+                              pagos a otros bancos y proporciona los datos de
+                              la transferencia:
+                          </p>
+                          <p>
+                              <b>Beneficiario:</b> <span>Click suscribe</span>
+                          </p>
+                          <p>
+                              <b>Banco destino:</b> <span>BBVA Bancomer</span>
+                          </p>
+                          <p>
+                              <b>Clabe:</b> <span>${pdfRes.payment_method.clabe}</span>
+                          </p>
+                          <p>
+                              <b>Concepto de pago:</b> <span>${pdfRes.payment_method.name}</span>
+                          </p>
+                          <p>
+                              <b>Referencia:</b> <span>${pdfRes.payment_method.agreement}</span>
+                          </p>
+                          <p>
+                              <b>Importe:</b> <span>$${amount} ${pdfRes.moneda}</span>
+                          </p>
+                      </div>
+                  </div><!--
+                  <div class="row pt-5">
+                      <span class="avisoInfo">
+                          <i>Si tienes dudas comunicate a pruebas openpay al teléfono (331) 281-5145 o al correo pruebas.openpaycs@gmail.com</i>
+                      </span>
+                  </div>-->
+                  <div class="row text-center pt-5 mt-5">
+                      <p class="text-success">
+                          <i>Para guardar el formato en PDF da click en el boton "Generar PDF", donde se abrirá una nueva ventana para su impresión o descarga.</i>
+                      </p>
+                      <button type="button" onclick="window.open('${pdfRes.ligaPDF}', 'Descargar_Comprobante_de_Pago')" class="btn btn-success btnRounded mt-0">Generar PDF</button>
+                  </div>`;
+                document.getElementById('btnSiguiente').style.display = 'none';
+              })
+              .error(function (data, status, headers, config) {
+                const error = !data.message ? 'Ocurrió un error al procesar la solicitud. Intentalo de nuevo.' : data.message;
+                $scope.ShowToast(error, 'danger');
+              });
+
+          })
+          .error(function (data, status, headers, config) {
+            $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+            $scope.ShowToast('No pudimos realizar los cálculos, por favor intenta de nuevo más tarde.', 'danger');
+          });
+      } else {
+        $scope.ShowToast('Selecciona al menos un pedido para pagar.', 'danger');
+      }
+    };
 
     $scope.pagar = function () {
       if ($scope.PedidosSeleccionadosParaPagar.length > 0) {

@@ -854,4 +854,49 @@ option {
   }
 }
 
+.mt-0 {
+  margin-top: 0 !important;
+}
+
+.pt-5 {
+  padding-top: 2em;
+}
+.mt-5 {
+  margin-top: 2em;
+}
+
 /* Media Queries*/
+
+.tituloSpei {
+  background: #00549f;
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.montoSpei {
+  padding: 5px;
+  background: #4c4c4c;
+  color: white;
+  border-radius: 5px;
+}
+
+.montoTotalSpei {
+  font-size: large;
+}
+
+.avisoInfo {
+  color: #db9635 !important;
+}
+
+.btnRounded {
+  border-radius: 5px;
+}
+
+.specialBlueText {
+  color: #4b7bab;
+}
+
+.pagoNormal {
+  background: #db96351a;
+}

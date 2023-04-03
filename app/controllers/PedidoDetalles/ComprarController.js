@@ -15,7 +15,8 @@
       CREDIT_CARD: 1,
       CS_CREDIT: 2,
       PAYPAL: 3,
-      CASH: 4
+      CASH: 4,
+      SPEI: 5
     };
     const creditCardNames = {
       VISA: 'Visa',
@@ -28,6 +29,7 @@
       AMEX: 2,
       OTRO: 3
     };
+    $scope.CarritoSpei = 'Carrito';
     const makers = {
       MICROSOFT: 1,
       AUTODESK: 2,
@@ -58,6 +60,9 @@
           break;
         case paymentMethods.CASH:
           paymentMethod = 'Transferencia';
+          break;
+        case paymentMethods.SPEI:
+          paymentMethod = 'SPEI';
           break;
         default:
           paymentMethod = 'Metodo de pago incorrecto.';
@@ -176,7 +181,7 @@
       return PedidoDetallesFactory.getPedidoDetalles()
         .then(function (result) {
           if (result.data.success) $scope.PedidoDetalles = result.data.data;
-          $scope.PedidoDetalles.forEach(function (elem) {
+          $scope.PedidoDetalles.forEach(function (elem) { 
             elem.Forma = getPaymentMethods(elem.IdFormaPago);
             elem.NombreFabricante = getMakers(elem.IdFabricante);
             elem.Productos.forEach(function (item) {
@@ -551,12 +556,154 @@
         });
     };
 
+    $scope.comprarSPEI = function () {
+      PedidoDetallesFactory.getPrepararSPEI()
+        .success(function (Datos) {
+          $cookies.putObject('pedidosAgrupados', Datos.data['0'].pedidosAgrupados, { secure: $rootScope.secureCookie });
+
+          const desctriptionOrders = $cookies.getObject('pedidosAgrupados').map(function (pedido) {
+            return pedido.IdPedido;
+          });
+
+          $scope.pedidos = Datos.data[0].pedidos;
+          $scope.amount = Datos.data[0].total;
+          $scope.FormatedAmount = String(Datos.data[0].total).replace(/(?<!\..*)(\d)(?=(?:\d{3})+(?:\.|$))/g, '$1,');
+          $scope.currency = Datos.data[0].moneda;
+          OpenPay.setId(Datos.data['0'].opId);
+          OpenPay.setApiKey(Datos.data['0'].opPublic);
+          OpenPay.setSandboxMode(false);
+          const charges = {
+            amount: $scope.amount,
+            currency: $scope.currency,
+            description: `Carrito: ${desctriptionOrders.toString()}`,
+            pedidosAgrupados: $cookies.getObject('pedidosAgrupados'),
+            idCarrito: $scope.pedidos,
+            from: $scope.CarritoSpei
+          };
+          PedidoDetallesFactory.getgenerarPdfSPEI(charges)
+            .success(function (pdfRes) {
+              date = new Date(pdfRes.fechaCreacion);
+              const dateSpei = new Date(pdfRes.fechaCreacion).getFullYear()+'-' + (date.getMonth()+1) + '-'+date.getDate();
+              const timeSpei = new Date(date).toLocaleTimeString();
+              let amount = $scope.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+              let divPdfSPEI = document.getElementById('pdfSPEI');
+              divPdfSPEI.style.display = 'block';
+              divPdfSPEI.innerHTML = `
+                    <div class="row tituloSpei text-center">
+                    <h2>Información de pago (SPEI)</h2>
+                </div>
+                <div class="row pt-5">
+                    <div class="col-sm-6">
+                        <p>
+                          <b>Fecha y Hora:</b>
+                          <br>
+                          <span>${dateSpei} ${timeSpei}</span>
+                        </p>
+            
+                        <p>
+                            <b>Descripción de compra:</b>
+                            <br>
+                            <span>${pdfRes.descripcion}</span>
+                        </p>
+                    </div>
+                    
+                    <div class="col-sm-6 text-center montoSpei">
+                        <div class="total">
+                            <p><b>Total a pagar / MXN</b></p>
+                            <span class="montoTotalSpei">$ ${amount}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <p>
+                        <h3 class="specialBlueText"><b>Como pagar</b></h3>
+                    </p>
+
+                    <div class="col-sm-6">
+                        <p><b>Desde BBVA</b></p>
+                        <p>
+                            1. Dentro del menú de "Pagar" seleccione la opción
+                            "De Servicios" e ingrese el siguiente "Número de
+                            convenio CIE"
+                        </p>
+                        <p>
+                            <b>Número de convenio CIE:</b> <span>${pdfRes.payment_method.agreement}</span>
+                        </p>
+                        <p>
+                            2. Ingrese los datos de registro para concluir con la operación
+                        </p>
+                        <p>
+                            <b>Referencia:</b> <span>${pdfRes.payment_method.name}</span>
+                        </p>
+                        <p>
+                            <b>Importe:</b> <span>$ ${amount} ${pdfRes.moneda}</span>
+                        </p>
+                        <p>
+                            <b>Concepto:</b> <span>${pdfRes.descripcion}</span>
+                        </p>
+                    </div>
+
+                    <div class="col-sm-6 pagoNormal">
+                        <p><b>Desde cualquier otro banco</b></p>
+                        <p>
+                            1. Ingresa a la sección de transferencias y pagos o
+                            pagos a otros bancos y proporciona los datos de
+                            la transferencia:
+                        </p>
+                        <p>
+                            <b>Beneficiario:</b> <span>Click suscribe</span>
+                        </p>
+                        <p>
+                            <b>Banco destino:</b> <span>BBVA Bancomer</span>
+                        </p>
+                        <p>
+                            <b>Clabe:</b> <span>${pdfRes.payment_method.clabe}</span>
+                        </p>
+                        <p>
+                            <b>Concepto de pago:</b> <span>${pdfRes.payment_method.name}</span>
+                        </p>
+                        <p>
+                            <b>Referencia:</b> <span>${pdfRes.payment_method.agreement}</span>
+                        </p>
+                        <p>
+                            <b>Importe:</b> <span>$${amount} ${pdfRes.moneda}</span>
+                        </p>
+                    </div>
+                </div><!--
+                <div class="row pt-5">
+                    <span class="avisoInfo">
+                        <i>Si tienes dudas comunicate a pruebas openpay al teléfono (331) 281-5145 o al correo pruebas.openpaycs@gmail.com</i>
+                    </span>
+                </div>-->
+                <div class="row text-center pt-5 mt-5">
+                    <p class="text-success">
+                        <i>Para guardar el formato en PDF da click en el boton "Generar PDF", donde se abrirá una nueva ventana para su impresión o descarga.</i>
+                    </p>
+                    <button type="button" onclick="window.open('${pdfRes.ligaPDF}', 'Descargar_Comprobante_de_Pago')" class="btn btn-success btnRounded mt-0">Generar PDF</button>
+                </div>`;
+              document.getElementById('btnGenSpei').style.display = 'none';
+              document.getElementById('divPedidos').style.display = 'none';
+            })
+            .error(function (data, status, headers, config) {
+              const error = !data.message ? 'Ocurrió un error al procesar la solicitud. Intentalo de nuevo.' : data.message;
+              $scope.ShowToast(error, 'danger');
+            });
+        })
+        .error(function (data, status, headers, config) {
+          const error = !data.message ? 'Ocurrió un error al procesar la solicitud. Intentalo de nuevo.' : data.message;
+          $scope.ShowToast(error, 'danger');
+        });
+
+
+    }
+
     $scope.Comprar = function () {
       angular.element(document.getElementById('auxScope')).scope().gaComprar($scope.PedidoDetalles, $scope.Distribuidor);
       if ($scope.Distribuidor.IdFormaPagoPredilecta === paymentMethods.CREDIT_CARD) $scope.PagarTarjeta();
       if ($scope.Distribuidor.IdFormaPagoPredilecta === paymentMethods.CS_CREDIT) comprarProductos();
       if ($scope.Distribuidor.IdFormaPagoPredilecta === paymentMethods.CASH) comprarPrePago();
       if ($scope.Distribuidor.IdFormaPagoPredilecta === paymentMethods.PAYPAL) $scope.prepararPaypal();
+      if ($scope.Distribuidor.IdFormaPagoPredilecta === paymentMethods.SPEI) $scope.comprarSPEI();
     };
 
     $scope.CreditCardPayment = function (status, paymentId) {

@@ -14,7 +14,8 @@
       CREDIT_CARD: 1,
       CS_CREDIT: 2,
       PAYPAL: 3,
-      PREPAY: 4
+      PREPAY: 4,
+      SPEI: 5
     };
     const makers = {
       MICROSOFT: 1,
@@ -168,6 +169,7 @@
     };
 
     const validarCarrito = function () {
+      alert($scope.Distribuidor.IdFormaPagoPredilecta + $scope.Distribuidor.IdFormaPagoPredilecta + item.MonedaPago);
       if (parseInt($scope.Distribuidor.IdFormaPagoPredilecta) === 2) {
         return PedidoDetallesFactory.getValidarCarrito()
         .then(function (result) {
@@ -250,7 +252,7 @@
     $scope.init = async () => {
       $scope.CheckCookie();
       await PedidoDetallesFactory.getPrepararCompra(0)
-        .catch(function (result) { error(result.data); });
+        .catch(function (result) { error(result.data);});
       if ($scope.SessionCookie.IdTipoAcceso === 10) getUsuarioCompra();
       getEnterprises()
         .then(getOrderDetails)
@@ -358,6 +360,11 @@
     $scope.isPayWithPrepaid = function () {
       const IdFormaPago = Number($scope.Distribuidor.IdFormaPagoPredilecta);
       return IdFormaPago === paymentMethods.PREPAY;
+    };
+
+    $scope.isPayingWithSPEI = function () {
+      const IdFormaPago = Number($scope.Distribuidor.IdFormaPagoPredilecta);
+      return IdFormaPago === paymentMethods.SPEI;
     };
 
     $scope.hasProtectedExchangeRate = function () {
