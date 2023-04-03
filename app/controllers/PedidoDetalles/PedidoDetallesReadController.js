@@ -169,7 +169,6 @@
     };
 
     const validarCarrito = function () {
-      alert($scope.Distribuidor.IdFormaPagoPredilecta + $scope.Distribuidor.IdFormaPagoPredilecta + item.MonedaPago);
       if (parseInt($scope.Distribuidor.IdFormaPagoPredilecta) === 2) {
         return PedidoDetallesFactory.getValidarCarrito()
         .then(function (result) {
