@@ -97,8 +97,8 @@
     </div>
 
         
-	<div class="form-group row" ng-show="(!(EmpresaSelect === null) || (SessionCookie.IdTipoAcceso === 4 || SessionCookie.IdTipoAcceso === 6)) && !terminos && SessionCookie.IdTipoAcceso !== 10">
-		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="(SessionCookie.IdTipoAcceso === 4 || SessionCookie.IdTipoAcceso === 6) || BuscarProductos.IdFabricante === 1">
+	<div class="form-group row" ng-show="!(EmpresaSelect === null) && !terminos && SessionCookie.IdTipoAcceso !== 10">
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="BuscarProductos.IdFabricante === 1">
 			<div class="alert alert-warning" role="alert">
 				<b class="alert-heading">Nota importante *</b>
 				<p>
