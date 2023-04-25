@@ -11,6 +11,7 @@
       ContractSearchFactory.getResellerCSN()
         .then(result => {
           $scope.resellerCSN = result.data.data.resellerCSN;
+          $scope.resellerId = result.data.data.resellerId;
         });
     };
 
@@ -24,7 +25,7 @@
           .then(result => {
             if (result.data.success === 1 && result.data.data) {
               $scope.contracts = result.data.data;
-              $scope.isAssociated = ($scope.resellerCSN === $scope.contracts[0].resellerCSN && $scope.contracts[0].activeRelation) || ($scope.contracts[0].relation_id);
+              $scope.isAssociated = ($scope.resellerCSN === $scope.contracts[0].resellerCSN && $scope.contracts[0].activeRelation) || ($scope.contracts[0].relation_id === $scope.resellerId);
               $scope.isUFOrContactRegistered = ($scope.contracts[0].uf_id != null && $scope.contracts[0].contact_id != null && $scope.contracts[0].resellerUFRelation != null);
             }
           })
