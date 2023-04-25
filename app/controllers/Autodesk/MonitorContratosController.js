@@ -1,10 +1,12 @@
 (function () {
-  var MonitorContratosController = function ($scope, $log, $cookies, $location, $uibModal, $filter, MonitorContratosFactory, ContactsFactory) {
+  var MonitorContratosController = function ($scope, $log, $cookies, $location, $uibModal, $filter, MonitorContratosFactory, ContactsFactory, UsuariosFactory) {
     $scope.vacio = 1;
     $scope.Renovar = {};
     $scope.TradeIn = {};
     $scope.SessionCookie = $cookies.getObject('Session');
     const PREMIUM = 'Premium';
+    const SUCCESS_MSG = 'success';
+    const WARNING_MSG = 'warning';
     $scope.contactObject = {};
     const NUMBER_OF_FIELDS_NECESSARY_TO_INSERTION = 5;
 
@@ -18,6 +20,12 @@
         });
 
     };
+
+    $scope.getContacts = () => UsuariosFactory.getUsuariosContacto($scope.empresaSelect)
+        .then(result => {
+          $scope.paramSearch = null;
+          $scope.contacts = result.data.data;
+        });
 
     const getContractCustomer = function (customer) {
       MonitorContratosFactory.getContractCustomer(customer)
@@ -373,19 +381,21 @@
     };
 
     $scope.openModalInsert = EmpresaSelect => {
+      const data = $scope.selectEmpresas.filter(empresa => empresa.csn === EmpresaSelect)
+      $scope.contactObject.finalUserId = data[0].IdEmpresa;
       $scope.contactObject.finalUserCsn = EmpresaSelect;
       $('#modalInsert').modal('show');
     };
 
     $scope.insertContact = contact => {
-      if (!contact || (Object.keys(contact).length - 1)  < NUMBER_OF_FIELDS_NECESSARY_TO_INSERTION) $scope.ShowToast('Llena todos los campos del formulario.', 'info'); 
+      if (!contact || (Object.keys(contact).length) < NUMBER_OF_FIELDS_NECESSARY_TO_INSERTION) $scope.ShowToast('Llena todos los campos del formulario.', 'info'); 
       else {
         ContactsFactory.insertContact(contact)
         .then(async result => {
           if (result.data.success) {
           $('#modalInsert').modal('hide');
           $scope.contactObject = {};
-          getContactUsers(contact.finalUserCsn).then(() => $scope.ShowToast(result.data.message, 'success'));
+          $scope.getContacts().then(() => $scope.ShowToast(result.data.message, SUCCESS_MSG));
           } else {
             const aux = result.data.message.split("'")[1];
             switch(aux.toString()) {
@@ -401,7 +411,7 @@
   };
   
 
-  MonitorContratosController.$inject = ['$scope', '$log', '$cookies', '$location', '$uibModal', '$filter', 'MonitorContratosFactory', 'ContactsFactory'];
+  MonitorContratosController.$inject = ['$scope', '$log', '$cookies', '$location', '$uibModal', '$filter', 'MonitorContratosFactory', 'ContactsFactory', 'UsuariosFactory'];
 
   angular.module('marketplace').controller('MonitorContratosController', MonitorContratosController);
 }());

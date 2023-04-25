@@ -55,6 +55,9 @@
 
     const NUMBER_OF_FIELDS_NECESSARY_TO_INSERTION = 5;
     $scope.NEW_CONTRACT = 'Nuevo contrato';
+
+    const DANGER_MSG = 'danger';
+    const WARNING_MSG = 'warning';
     
     const formatTiers = function (tiers) {
       if (tiers) {
@@ -962,12 +965,13 @@
     $scope.openModalInsert = product => {
       $scope.currentProductAutodesk = {};
       $scope.currentProductAutodesk = product;
+      $scope.contactObject.finalUserId = product.IdEmpresaUsuarioFinal
       $scope.contactObject.finalUserCsn = product.csnUF;
       $('#modalInsert').modal('show');
     }
 
     $scope.insertContact = contact => {
-      if (!contact || (Object.keys(contact).length - 1) < NUMBER_OF_FIELDS_NECESSARY_TO_INSERTION) $scope.ShowToast('Llena todos los campos del formulario.', 'info'); 
+      if (!contact || (Object.keys(contact).length) < NUMBER_OF_FIELDS_NECESSARY_TO_INSERTION) $scope.ShowToast('Llena todos los campos del formulario.', 'info'); 
       else {
         ContactsFactory.insertContact(contact)
         .then(async result => {
