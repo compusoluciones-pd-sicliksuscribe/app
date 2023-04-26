@@ -96,6 +96,24 @@
         </div>
     </div>
 
+        
+	<div class="form-group row" ng-show="!(EmpresaSelect === null) && !terminos && SessionCookie.IdTipoAcceso !== 10">
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="BuscarProductos.IdFabricante === 1">
+			<div class="alert alert-warning" role="alert">
+				<b class="alert-heading">Nota importante *</b>
+				<p>
+                    Recuerda que los cambios y ajustes en pedidos de NCE deben de realizarse antes de las 16:30 hrs para que queden en tiempo y forma (esto por los cambios en el horario UTC que realizó el fabricante).
+                </p>
+            </div>
+            <div class="alert alert-danger" role="alert">
+                <b class="alert-heading">Aviso *</b>
+				<p>
+                    A partir del 2 de mayo se iniciará con la migración de todas las cuentas mensuales de legacy a NCE sin excepción. El proceso de migración dependerá de la forma de pago con la que trabajes. Contacta con tu vendedor para más detalle.
+                </p>
+            </div>
+        </div>
+    </div>
+
     <br>
     <div ng-show="Vacio === 0 && EmpresaSelect != ''">
         <h4>Aún no cuentas con suscripciones o servicios... </h4>
