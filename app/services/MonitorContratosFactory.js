@@ -21,9 +21,9 @@
       return $http.get($rootScope.API + 'autodesk/get-contract-customer/' + EndCustomerCSN);
     };
 
-    factory.getUserEndCustomer = (EndCustomerCSN) => {
+    factory.getUserEndCustomer = finalUserId => {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'autodesk/get-userEndCustomer/' + EndCustomerCSN);
+      return $http.get($rootScope.API + 'autodesk/get-userEndCustomer/' + finalUserId);
     };
 
     factory.renewContract = function (contractData) {
