@@ -13,40 +13,17 @@
 <div class="container" ng-swipe-right="" ng-swipe-left="">
     <div class="row">
         <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <h2 style="float:left;">Importación de contratos Autodesk </h2>
+            <h2 style="float:left;">Importación de contratos </h2>
         </div>
     </div>
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 alert alert-info" ng-show = "esDistribuidor">
-            <li type="disc">Aquí puedes consultar la información de tus contratos e importarlos a click suscribe para su procesamiento. La consulta se hace por medio de la fecha fin del contrato que deseas importar.</li>
-            <li type="disc">Si el usuario final relacionado a determinado contrato no está registrado en click aún, puedes registrarlo haciendo clic en el botón <b>Nuevo cliente</b>.</li>
-            <hr style="margin: 0.7em;">
             <li type="disc">Puedes importar contratos de otros mayoristas. Presiona el botón <b>Desde otro mayorista</b> y llena el formulario.</li>
-        </div>
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <h4 style="float:left;">Datos de consulta para obtener información </h4><br>
         </div>
     </div>
     <hr>
     <div class="row">
-        <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3" ng-hide = "esDistribuidor">
-            <label>CSN</label>
-            <input type = "text" name = "CSNdist" placeholder="Escribe el CSN que deseas consultar" class="form-control" ng-model="CSNdist" required/>
-        </div>
-        <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
-            <label>Fecha fin del contrato</label>
-            <Input type="date" name="contractEndDate" class="form-control" ng-model="contractEndDate" required>
-            <div ng-show="false">
-                {{contractEndDateFormat = (contractEndDate | date:'yyyy-MM-dd') }}
-            </div> 
-        </div>
-        <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
-            <button type="submit" style="margin-top: .8em;" ng-click="getSubscriptionData(CSNdist, contractEndDateFormat)" class="btn btn-success " style="background: !important">
-                <span class="glyphicon glyphicon-download-alt"></span>
-                &nbsp;Consultar información
-            </button>
-        </div>
-        <div style="float: right; margin-right: 0; margin-top: .8em;">
+        <div style="margin-right: 0; margin-top: .8em;">
             <button type="submit" style="margin-bottom: .8em;"  data-toggle="modal" data-target="#desdeOtroMayorista" ng-click="importacionDistribuidor()" class="btn btn-success " style="background: !important">
                 <span class="glyphicon glyphicon glyphicon-import"></span>
                 &nbsp;Desde otro mayorista
@@ -60,148 +37,6 @@
     </div>
     <br>
     <br>
-    <div class="container" ng-if="subscriptionData">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Número de contrato</th>
-              <th>Distribuidor</th>
-              <th>Usuario final</th>
-              <th>SKU</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr ng-repeat="subs in subscriptionData | filter:SubsFilter | orderBy:sortBy:reverse" class="repeat-animation">
-              <td>{{subs.contractNumber}}</td>
-              <td>{{subs.reseller.name}}</td>
-              <td>{{subs.endCustomer.name}}</td>
-              <td>
-              <div ng-repeat="subsdetails in subs.details | filter:SKUsFilter" class="repeat-animation">
-              <dl>
-                <dt>{{subsdetails.description}}</dt>
-                <dd>Número de serie: {{subsdetails.serialNumber}}</dd>
-                <dd>Cantidad: {{subsdetails.quantity}}</dd>
-              </dl>
-             </div>
-              </td>
-              </div>
-              <td>
-                <button type="submit" style="float:right; margin: .5em;" ng-click="abrirModal('importarContrato', subs);" class="btn btn-success " style="background: !important">
-                    <span class="glyphicon glyphicon-download-alt"></span>
-                    &nbsp;Importar
-                </button>
-              </td>
-            </tr>      
-          </tbody>
-        </table>
-      </div>
-      <div class="container" ng-show="subscriptionData.length === 0">
-        <h4 style="text-align: center;">Sin resultados</h4>
-    </div>
-    <hr>
-
-    <div id="importarContrato" class="modal fade in" tabindex="-1" role="dialog" >
-        <div class="modal-dialog  modal-sm" role="document">
-            <div class="divLoading" data-cargando>
-                <div class=""><img src="images/ripple.svg" /></div>
-            </div> 
-            <div class="modal-content" style="margin: auto; top: -5em;">
-                <div class="modal-header" >
-                    <button type="button" class="close" ng-click="cerrarModal('importarContrato');" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Importar contrato</h4>
-                </div>
-                <div class="modal-body" style="margin-bottom: 15em;">
-                    <p>Registre aquí la información solicitada para realizar la importación:</p> <hr>
-                   <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-hide="esDistribuidor">
-                            <label>Distribuidor</label>
-                            <input type = "text" name = "distribuidor" placeholder="Escribe el nombre del distribuidor" class="form-control" ng-model="distribuidor" ng-keyup="completarDist(distribuidor)" required/>
-                            <ul class="list-group col-xs-12 col-sm-12 col-md-12 col-lg-12 options-autocomplete" ng-model = "ocultarOpcionesDist" ng-hide = "ocultarOpcionesDist">
-                            <li class="list-group-item item-autocomplete" ng-repeat = "infoDist in filtroDistribuidor track by $index" ng-click = "llenarTextBoxDist(infoDist)">{{infoDist}}</li>
-                            </ul>
-                        </div>
-                        <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <label>Usuario final</label>
-                            <input type = "text" name = "usuarioF" placeholder="Escribe el nombre del usuario final" class="form-control" ng-model="usuarioF" ng-keyup="completarUF(usuarioF)" required/>
-                            <ul class="list-group col-xs-12 col-sm-12 col-md-12 col-lg-12 options-autocomplete" ng-model = "ocultarOpcionesUF" ng-hide = "ocultarOpcionesUF">
-                            <li class="list-group-item item-autocomplete" ng-repeat = "infoUF in filtroUsuarioFinal track by $index" ng-click = "llenarTextBoxUF(infoUF)">{{infoUF}}</li>
-                            </ul>
-                        </div>
-                        <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <label>Esquema renovación</label>
-                             <select name="esquema" class="form-control" ng-model="esquema" ng-options="esquema.Nombre for esquema in esquemasLista" ng-change="definirPeriodo(true)" required>
-                              <option value="" disabled>Esquemas</option> 
-                             </select>
-                        </div>
-                </div>
-                <br>
-                <div  class="modal-footer">
-                    <button type="submit" style="min-width: 1.2em; margin-: 1em;" class="btn .btn-sm btn-success" ng-click="conjuntarInformacion();" ng-disabled = "procesandoImportacion" data-dismiss="modal">{{btnImportar}}</button>
-                    <button type="button" style="min-width: 1.2em;" class="btn btn-danger" ng-click="cerrarModal('importarContrato');" ng-disabled = "procesandoImportacion" data-dismiss="modal">Cancelar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-   
-    <div id="nuevoContacto" class="modal fade in" tabindex="-1" role="dialog" >
-        <div class="modal-dialog" role="document">
-            <div class="modal-content" style="margin: auto;">
-                <div class="modal-header" >
-                    <button type="button" class="close" ng-click="cerrarModal('nuevoContacto');" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Nuevo contacto</h4>
-                </div>
-                <div class="modal-body" style="margin-bottom: 15em;">
-                    <p>Registre aquí la información del nuevo contacto para el usuario final:</p> <hr>
-                        <div class="form-group col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                            <label>Nombre</label>
-                            <Input name="Nombre" type="text" ng-model="Usuario.Nombre" class="form-control" ng-pattern="/[a-zA-Z]$/" placeholder="Nombre" size="255" ng-maxlength="45" required>
-                        </div>
-                        <div class="form-group col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                            <label>Apellido paterno</label>
-                            <Input name="ApellidoPaterno" type="text" ng-model="Usuario.ApellidoPaterno" class="form-control" ng-pattern="/[a-zA-Z]$/" placeholder="Apellido paterno" size="255" ng-maxlength="30">
-                        </div>
-                        <div class="form-group col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                            <label>Apellido materno</label>
-                            <Input name="ApellidoMaterno" type="text" ng-model="Usuario.ApellidoMaterno" class="form-control" ng-pattern="/[a-zA-Z]$/" placeholder="Apellido materno" size="255" ng-maxlength="30" >
-                        </div>
-                        <div class="form-group col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                            <label>Correo electrónico</label>
-                            <Input name="CorreoElectronico" type="email" ng-model="Usuario.CorreoElectronico" class="form-control" placeholder="Correo electrónico" size="255" ng-maxlength="50" ng-pattern="/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/" required>
-                        </div>
-                        <div class="form-group col-xs-6 col-sm-6 col-md-6 col-lg-6" style="margin-bottom: 0em;">
-                            <label>Número celular</label>
-                        </div>
-                        <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2 ">
-                            <input class="form-control" name="Lada" ui-mask="+99" ui-mask-placeholder type="text" ng-model="Usuario.Lada"   placeholder="" size="255" ng-maxlength="255" >
-                        </div>
-                        <div class="form-group col-xs-4 col-sm-4 col-md-4 col-lg-4 ">
-                            <input class="form-control col-xs-3 col-sm-3 col-md-3 col-lg-3" name="Telefono" type="text" ng-model="Usuario.Telefono" ui-mask="(999) 999-9999" ui-mask-placeholder ui-mask-placeholder-char="_" placeholder="" size="255" ng-maxlength="255" required="">
-                        </div>
-
-                        <div class="form-group col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                            <label>Distribuidor</label>
-                            <input type = "text" name = "distribuidorModal" placeholder="Escribe el nombre del distribuidor" class="form-control" ng-model="Usuario.Distribuidor" ng-keyup="completarDistModal(Usuario.Distribuidor)" required/>
-                            <ul class="list-group col-xs-12 col-sm-12 col-md-12 col-lg-12 options-autocomplete" ng-model = "ocultarOpcionesDistModal" ng-hide = "ocultarOpcionesDistModal">
-                            <li class="list-group-item item-autocomplete" ng-repeat = "infoDistModal in filtroDistribuidorModal track by $index" ng-click = "llenarTextBoxDistModal(infoDistModal)">{{infoDistModal}}</li>
-                            </ul>
-                        </div>
-                        <div class="form-group col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                            <label>Empresa usuario final</label>
-                            <Input type="text" name="empresaufModal" placeholder="Escribe el nombre del usuario final" class="form-control" ng-model="Usuario.Empresauf" ng-keyup="completarUFModal(Usuario.Empresauf)" required>
-                                <ul class="list-group col-xs-12 col-sm-12 col-md-12 col-lg-12 options-autocomplete" ng-model = "ocultarOpcionesUFModal" ng-hide = "ocultarOpcionesUFModal">
-                                    <li class="list-group-item item-autocomplete" ng-repeat = "infoUFModal in filtroUsuarioFinalModal track by $index" ng-click = "llenarTextBoxUFModal(infoUFModal)">{{infoUFModal}}</li>
-                                </ul>
-                        </div>
-                    
-                </div>
-                <br>
-                <div  class="modal-footer">
-                    <button type="submit" class="btn btn-success" ng-click="conjuntarInformacionModal()" data-dismiss="modal">Registrar</button>
-                    <button type="button" class="btn btn-danger" ng-click="cerrarModal('nuevoContacto');" data-dismiss="modal">Cancelar</button>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 
 <div id="nuevoUF" class="modal fade in" tabindex="-1" role="dialog" >
@@ -264,7 +99,7 @@
                     </div>
                     <div class="form-group col-xs-4 col-sm-4 col-md-4 col-lg-4">
                         <label>RFC</label>
-                        <Input name="ApellidoMaterno" type="text" ng-model="Empresa.RFC" class="form-control" ng-pattern="/[a-zA-Z]$/" placeholder="RFC" size="255" ng-maxlength="30" >
+                        <Input name="RFC" type="text" ng-model="Empresa.RFC" class="form-control" placeholder="RFC" size="255" ng-keyup="ToUpperCase(Empresa.RFC)">
                     </div>
                     <div class="form-group col-xs-6 col-sm-6 col-md-6 col-lg-6">
                         <label>Correo electrónico</label>
@@ -311,61 +146,72 @@
                 <button type="button" class="close" ng-click="cerrarModal('desdeOtroMayorista');" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Importar contrato desde otro mayorista</h4>
             </div>
-            <div class="modal-body" style="margin-bottom: 26em;">
+            <div class="modal-body" style="margin-bottom:0">
                 <p>Registre a continuación la información del contrato.</p>
-                <hr style="padding-left: 0;" class="col-xs-12 col-sm-12 col-md-12 col-lg-12"> 
-                <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6" ng-hide = "esDistribuidor">
-                    <label>Distribuidor</label>
-                    <input type = "text" placeholder="Escribe el nombre del distribuidor" class="form-control" ng-model="Contrato.Distribuidor" ng-keydown=" estaSeleccionadoDist();" ng-keyup="completarDistModalImportacion(Contrato.Distribuidor);" required/>
-                    <ul class="list-group col-xs-12 col-sm-12 col-md-12 col-lg-12 options-autocomplete" ng-model = "ocultarOpcionesDistModalImportacion" ng-hide = "ocultarOpcionesDistModalImportacion">
-                    <li class="list-group-item item-autocomplete" ng-repeat = "infoDistModalImportacion in filtroDistribuidorModalImportacion track by $index" ng-if="$index < 8" ng-click = "llenarTextBoxDistModalImportacion(infoDistModalImportacion)">{{infoDistModalImportacion}}</li>
-                    </ul>
-                </div>
-                <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                    <label>Usuario final</label>
-                    <Input type="text" placeholder="Escribe el nombre del usuario final" class="form-control" ng-model="Contrato.Empresauf" ng-keydown=" estaSeleccionadoUF();" ng-keyup="completarUFModalImportacion(Contrato.Empresauf)" required>
-                        <ul class="list-group col-xs-12 col-sm-12 col-md-12 col-lg-12  options-autocomplete" ng-model = "ocultarOpcionesUFModalImportacion" ng-hide = "ocultarOpcionesUFModalImportacion">
-                            <li class="list-group-item item-autocomplete" ng-repeat = "infoUFModalImportacion in filtroUsuarioFinalModalImportacion track by $index" ng-if="$index < 8" ng-click = "llenarTextBoxUFModalImportacion(infoUFModalImportacion)">{{infoUFModalImportacion}}</li>
-                        </ul>
-                </div>
-                <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                    <label>Número de contrato</label>
-                    <input type="text" maxlength="12" placeholder="Escribe el número de contrato" ng-model="Contrato.NumeroContrato"  onKeypress="if (event.keyCode < 48 || event.keyCode > 57) event.returnValue = false;" class="form-control" />
-                </div>
-                <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                    <label>Esquema de renovación</label>
-                    <select class="form-control selectOption" ng-model="Contrato.IdEsquemaRenovacion">
-                        <option ng-selected="true" value="" >Selecciona un esquema...</option>
-                        <option value="2">Anual</option>
-                        <option value="4">2 años</option>
-                        <option value="5">3 años</option>
-                    </select>
-                </div>
-                <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                    <label>Fecha fin del contrato</label>
-                    <input type="date" ng-model="Contrato.FechaFin" class="form-control" />
-                </div>
-                <hr style="padding-left: 0;" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                    <div style="padding-left: 0%;" class="form-group col-xs-12 col-sm-12 col-md-8 col-lg-8">
-                        <label>Número de serie</label>
-                        <input type="text" maxlength="12" onKeypress="if ((event.keyCode < 48 && event.keyCode != 45) || event.keyCode > 57) event.returnValue = false; if(event.target.value.indexOf('-')>=0 && event.keyCode === 45) event.preventDefault();" ng-model="numeroSerie" class="form-control" />
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                      1. Datos generales del contrato.
                     </div>
-                    <div style="padding-left: 0%; padding-right: 0%;" class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                        <label>Cantidad</label>
-                        <input type="text" maxlength="3" onKeypress="if (event.keyCode < 48 || event.keyCode > 57) event.returnValue = false;" ng-model="cantidad" class="form-control" />
+                    <div class="panel-body">
+                        <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6" ng-hide = "esDistribuidor">
+                            <label>Distribuidor</label>
+                            <input type = "text" placeholder="Escribe el nombre del distribuidor" class="form-control" ng-model="Contrato.Distribuidor" ng-keydown=" estaSeleccionadoDist();" ng-keyup="completarDistModalImportacion(Contrato.Distribuidor);" required/>
+                            <ul class="list-group col-xs-12 col-sm-12 col-md-12 col-lg-12 options-autocomplete" ng-model = "ocultarOpcionesDistModalImportacion" ng-hide = "ocultarOpcionesDistModalImportacion">
+                            <li class="list-group-item item-autocomplete" ng-repeat = "infoDistModalImportacion in filtroDistribuidorModalImportacion track by $index" ng-if="$index < 8" ng-click = "llenarTextBoxDistModalImportacion(infoDistModalImportacion)">{{infoDistModalImportacion}}</li>
+                            </ul>
+                        </div>
+                        <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            <label>Usuario final</label>
+                            <Input type="text" placeholder="Escribe el nombre del usuario final" class="form-control" ng-model="Contrato.Empresauf" ng-keydown=" estaSeleccionadoUF();" ng-keyup="completarUFModalImportacion(Contrato.Empresauf)" required>
+                                <ul class="list-group col-xs-12 col-sm-12 col-md-12 col-lg-12  options-autocomplete" ng-model = "ocultarOpcionesUFModalImportacion" ng-hide = "ocultarOpcionesUFModalImportacion">
+                                    <li class="list-group-item item-autocomplete" ng-repeat = "infoUFModalImportacion in filtroUsuarioFinalModalImportacion track by $index" ng-if="$index < 8" ng-click = "llenarTextBoxUFModalImportacion(infoUFModalImportacion)">{{infoUFModalImportacion}}</li>
+                                </ul>
+                        </div>
+                        <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            <label>Número de contrato</label>
+                            <input type="text" maxlength="12" placeholder="Escribe el número de contrato" ng-model="Contrato.NumeroContrato"  onKeypress="if (event.keyCode < 48 || event.keyCode > 57) event.returnValue = false;" class="form-control" />
+                        </div>
+                        <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            <label>Esquema de renovación</label>
+                            <select class="form-control selectOption" ng-model="Contrato.IdEsquemaRenovacion">
+                                <option ng-selected="true" value="" >Selecciona un esquema...</option>
+                                <option value="2">Anual</option>
+                                <option value="5">3 años</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            <label>Fecha fin del contrato</label>
+                            <input type="date" ng-model="Contrato.FechaFin" class="form-control" />
+                        </div>
                     </div>
-                    <button class="btn btn-success pull-right" style="min-width: 0em; padding:.6em ;" ng-click="agregarSerie(numeroSerie, cantidad)"><span class="glyphicon glyphicon-plus-sign"></span>&nbsp;Agregar</button>
                 </div>
-                <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                <div style="text-align: center;"><label>Listado de series del contrato y su cantidad</label></div>
-                <div class="" style="margin-top: 0%;" ng-repeat="serie in numerosSerie track by $index">
-                    <button style="float: right;" type="button" class="close" ng-click="quitarSerie($index);" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <p><span class="badge badge-info" style="margin-right: 1em; padding-top: .4em;">{{serie.Cantidad}}</span>
-                    <b>{{serie.NumeroSerie}}</b></p>
-                    <hr style="margin-bottom: 1em; margin-top: .4em;">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                      2. Números de serie asociados al contrato.
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group col-xs-12 col-sm-12 col-md-5 col-lg-5">
+                            <div style="padding-left: 0%;" class="form-group col-xs-12 col-sm-12 col-md-8 col-lg-8">
+                                <label>Número de serie</label>
+                                <input type="text" maxlength="12" onKeypress="if ((event.keyCode < 48 && event.keyCode != 45) || event.keyCode > 57) event.returnValue = false; if(event.target.value.indexOf('-')>=0 && event.keyCode === 45) event.preventDefault();" ng-model="numeroSerie" class="form-control" />
+                            </div>
+                            <div style="padding-left: 0%; padding-right: 0%;" class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                                <label>Cantidad</label>
+                                <input type="text" maxlength="3" onKeypress="if (event.keyCode < 48 || event.keyCode > 57) event.returnValue = false;" ng-model="cantidad" class="form-control" />
+                            </div>
+                            <button class="btn btn-success pull-right" style="min-width: 0em; padding:.6em ;" ng-click="agregarSerie(numeroSerie, cantidad)"><span class="glyphicon glyphicon-plus-sign"></span>&nbsp;Agregar</button> 
+                        </div>
+                        <div class="form-group col-xs-12 col-sm-12 col-md-7 col-lg-7">
+                            <div style="text-align: center;"><label>Listado de series del contrato y su cantidad</label></div>
+                            <div class="" style="margin-top: 0%;" ng-repeat="serie in numerosSerie track by $index">
+                                <button style="float: right;" type="button" class="close" ng-click="quitarSerie($index);" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <p><span class="badge badge-info" style="margin-right: 1em; padding-top: .4em;">{{serie.Cantidad}}</span>
+                                <b>{{serie.NumeroSerie}}</b></p>
+                                <hr style="margin-bottom: 1em; margin-top: .4em;">
+                            </div>
+                        </div> 
+                    </div>
                 </div>
-                </div>    
             </div>
             <div style="border-top: 0;" class="modal-footer">
                 <button type="submit" style="min-width: 0em" class="btn btn-success" ng-click="conjuntarInformacionModalImportacion()" ng-disabled="deshabilitado">Registrar</button>

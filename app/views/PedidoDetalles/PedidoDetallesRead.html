@@ -132,7 +132,7 @@
                         <label>Marca de los productos:</label> {{ pedido.NombreFabricante }} <br>
                         <label ng-if="pedido.IdFabricante === 10">Fecha inicio : {{ pedido.FechaInicio }} </label>
                         <label ng-if="pedido.IdFabricante !== 10">Duración del periodo: del {{ pedido.FechaInicio }} al {{ pedido.FechaFin | date:'yyyy-MM-dd'}}</label>
-                        <br><div ng-if="pedido.IdAccionAutodesk === 1 && pedido.Productos[0].Especializacion !== 'Planes Premium'" style="padding-bottom: .4em;"><a tooltip="Se puede definir una fecha de inicio del contrato de hasta un mes en el futuro." ng-click="abrirModal('inicioFuturoModal', pedido.IdContrato, pedido.IdEsquemaRenovacion)"><span class="glyphicon glyphicon-calendar"> </span> Fecha de inicio futuro</a></div>
+                        <br><div ng-if="pedido.IdAccionAutodesk === 1 " style="padding-bottom: .4em;"><a tooltip="Se puede definir una fecha de inicio del contrato de hasta un mes en el futuro." ng-click="abrirModal('inicioFuturoModal', pedido.IdContrato, pedido.IdEsquemaRenovacion)"><span class="glyphicon glyphicon-calendar"> </span> Fecha de inicio futuro</a></div>
                         <label>Renovación del periodo:</label> {{ pedido.NombreEsquemaRenovacion }}
                         <div ng-if="pedido.IdFabricante === 2">
                             <label>Contrato: </label> {{ pedido.ContratoBaseAutodesk || 'Nuevo' }} <br>
@@ -203,6 +203,9 @@
                     <div class="form-group col-xs-12 col-sm-12 col-md-3 col-lg-3">
                         <div class="form-group">
                             <label for="">Id artículo:</label> {{producto.IdERP}} <br>
+                            <div ng-if="producto.NumeroSerie">
+                                <label for="">Numero de Serie:</label> {{producto.NumeroSerie}} <br>
+                            </div>
                             <label for="">Nombre:</label> {{producto.NombreProducto}} <br>
                             <label for="">Tipo de producto:</label> {{producto.Tipo}} <br>
                         </div>
