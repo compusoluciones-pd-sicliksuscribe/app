@@ -517,7 +517,6 @@
     };
 
     $scope.next = function () {
-      actualizarOrdenesCompra();
       if ($scope.isPayingWithCSCredit()) validarCarrito();
       let next = true;
       if (!$scope.PedidoDetalles || $scope.PedidoDetalles.length === 0) next = false;
@@ -603,6 +602,10 @@
           }
         })
         .catch(() => $scope.ShowToast(result.data.message, 'danger'));
+    };
+
+    $scope.saveOrder = () => {
+      actualizarOrdenesCompra();
     };
   };
 
