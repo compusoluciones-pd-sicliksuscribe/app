@@ -1,5 +1,5 @@
 (function () {
-  var ImportarPedidosAutodeskController = function ($scope, $log, $location, $cookies, $routeParams, ImportarPedidosAutodeskFactory, UsuariosFactory, EstadosFactory, EmpresasFactory, $anchorScroll, lodash) {
+  var ImportarPedidosAutodeskController = function ($scope, $log, $location, $cookies, $routeParams, ImportarPedidosAutodeskFactory, UsuariosFactory, EstadosFactory, EmpresasFactory, $anchorScroll, $window, $rootScope) {
 
     $scope.getSubscriptionData = function (resellerCsn, contractEndDate) {
       if (resellerCsn && contractEndDate) {
@@ -566,10 +566,24 @@
         $scope.Contrato.Empresauf = '';
       }
     };
+
+    $scope.NuevaEmpresa = function () {
+      $scope.SessionCookies = $cookies.getObject('Session');
+      $window.location.href = `${$rootScope.SICLIK_REACT_FRONT}?id=${$window.btoa($scope.CaracteresAleatorios(8)+ $window.btoa($window.btoa($scope.SessionCookies.Token))+ $scope.CaracteresAleatorios(5)).replace(/X/g,"Ys")}`;
+    };
+
+    $scope.CaracteresAleatorios = function (length) {
+      var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      var charactersLength = characters.length;
+      var result = '';
+      for (var i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      }
+      return result;
+    };
   };
 
-  ImportarPedidosAutodeskController.$inject =
-      ['$scope', '$log', '$location', '$cookies', '$routeParams', 'ImportarPedidosAutodeskFactory', 'UsuariosFactory', 'EstadosFactory', 'EmpresasFactory', '$anchorScroll'];
+  ImportarPedidosAutodeskController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'ImportarPedidosAutodeskFactory', 'UsuariosFactory', 'EstadosFactory', 'EmpresasFactory', '$anchorScroll', '$window', '$rootScope'];
 
   angular.module('marketplace').controller('ImportarPedidosAutodeskController', ImportarPedidosAutodeskController);
 }());
