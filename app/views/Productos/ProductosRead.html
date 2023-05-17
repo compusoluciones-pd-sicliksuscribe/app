@@ -207,11 +207,11 @@
                                             </form>
 
                                             <label for="IdEmpresaUsuarioFinal">* ¿Para quiénes son?</label> 
-                                            <a href="#/Empresa" class="form-group" title="Nuevo cliente" ng-show="SessionCookie.IdTipoAcceso === 1 || SessionCookie.IdTipoAcceso === 2 || SessionCookie.IdTipoAcceso === 3 || SessionCookie.IdTipoAcceso === 4 || SessionCookie.IdTipoAcceso === 10" style="background-blend-mode: initial">
+                                            <a ng-click="NuevaEmpresa()" class="form-group" title="Nuevo cliente" ng-show="SessionCookie.IdTipoAcceso === 1 || SessionCookie.IdTipoAcceso === 2 || SessionCookie.IdTipoAcceso === 3 || SessionCookie.IdTipoAcceso === 4 || SessionCookie.IdTipoAcceso === 10" style="background-blend-mode: initial">
                                                 <strong>(Añadir cliente usuario
                                             final) &nbsp;</strong><span class="glyphicon glyphicon-plus"> </span>
                                             </a>
-
+                                            
                                             <div class="input-group">
                                                 <span class="input-group-addon green white">
                                                     <span class="glyphicon glyphicon-user"></span>

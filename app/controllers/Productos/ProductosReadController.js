@@ -1,5 +1,5 @@
 (function () {
-  var ProductosReadController = function ($scope, $log, $location, $cookies, $routeParams, PlanPremiumFactory, ProductosFactory, AmazonDataFactory, FabricantesFactory, TiposProductosFactory, PedidoDetallesFactory, TipoCambioFactory, ProductoGuardadosFactory, EmpresasXEmpresasFactory, UsuariosFactory, ActualizarCSNFactory, $anchorScroll, EmpresasFactory, ManejoLicencias, PedidosFactory) {
+  var ProductosReadController = function ($scope, $log, $location, $cookies, $routeParams, PlanPremiumFactory, ProductosFactory, AmazonDataFactory, FabricantesFactory, TiposProductosFactory, PedidoDetallesFactory, TipoCambioFactory, ProductoGuardadosFactory, EmpresasXEmpresasFactory, UsuariosFactory, ActualizarCSNFactory, $anchorScroll, EmpresasFactory, ManejoLicencias, PedidosFactory, $window, $rootScope) {
     var BusquedaURL = $routeParams.Busqueda;
     const HRWAWRE_EXTRA_EMPOLYEES_GROUPING = 1000;
     $scope.BuscarProductos = {};
@@ -45,13 +45,13 @@
 
     $scope.MICROSOFT = 1;
     $scope.AUTODESK = 2;
-    
+
 
     $scope.esquemaRenovacionModel = {};
 
     const PREMIUM = "Planes Premium";
-    
-    
+
+
     const formatTiers = function (tiers) {
       if (tiers) {
         const lastTierIndex = tiers.length - 1;
@@ -127,7 +127,7 @@
         PedidosFactory.viabilityAddSeatMS(Producto, $scope.SessionCookie.IdEmpresa)
         .success(function (result) {
           Producto.AddSeatMS = result ? true : false;
-        }); 
+        });
       }
     if (Producto.Esquema === $scope.MENSUAL){
       if (Producto.cotermMS) {
@@ -139,8 +139,8 @@
           Producto.FechaFinSuscripcion = fecha.getDate() + "/" + (fecha.getMonth() +1)+ "/" + (fecha.getFullYear());
         }
       Producto.EsquemaRenovacion = 'Mensual';
-      Producto.IdEsquemaRenovacion= $scope.MENSUAL; 
-    } 
+      Producto.IdEsquemaRenovacion= $scope.MENSUAL;
+    }
 
     if (Producto.Esquema === $scope.ANUAL){
       if (Producto.cotermMS) {
@@ -167,8 +167,8 @@
       Producto.IdEsquemaRenovacion= $scope.ANUAL_MENSUAL;
       Producto.PrecioNormalAnual = Producto.FlagNC ? ((Producto.PrecioNormal * 10)/12) : Producto.PrecioNormal  ;
     }
-     
-     return Producto.EsquemaRenovacion; 
+
+     return Producto.EsquemaRenovacion;
     };
 
     const getMSCoterm = function (Producto) {
@@ -177,7 +177,7 @@
     }
 
     $scope.generateCotermMSViability = function (Producto) {
-      if($scope.cotermMSByUF.length) { 
+      if($scope.cotermMSByUF.length) {
         if (Producto.Esquema === $scope.MENSUAL){
           const fechas = formatDateCoterm($scope.MENSUAL, $scope.cotermMSByUF);
           const fechaActual = new Date();
@@ -343,7 +343,7 @@
             setProtectedRebatePrice(Producto.IdEmpresaUsuarioFinal);
           } else {
             $scope.ShowToast('No pudimos cargar la información de tus contratos, por favor intenta de nuevo más tarde.', 'danger');
-          }   
+          }
         })
         .error(function () {
           $scope.ShowToast('No pudimos cargar la información de tus contratos, por favor intenta de nuevo más tarde.', 'danger');
@@ -506,7 +506,7 @@
       const price = product.PorcentajeDescuento > 0 ? product.PrecioDescuento : product.PrecioProrrateo;
       if(product.IdEsquemaRenovacion === $scope.ANUAL_MENSUAL){
       estimatedTotal = product.FlagNC ? ((product.PrecioNormal * 10)/12) : (price * quantity)|| 0.00;
-      } else if (product.IdFabricante === $scope.AUTODESK) estimatedTotal = (product.PrecioNormal - (product.PorcentajeDescuento * 0.01 * product.PrecioNormal)) * quantity || 0.00; 
+      } else if (product.IdFabricante === $scope.AUTODESK) estimatedTotal = (product.PrecioNormal - (product.PorcentajeDescuento * 0.01 * product.PrecioNormal)) * quantity || 0.00;
       else {
         estimatedTotal = price * quantity || 0.00;
       }
@@ -610,7 +610,7 @@
             }
           });
 
-           
+
         }
       })
       .catch(function (error) {
@@ -637,7 +637,7 @@
         }
       } else return false;
     };
-    
+
 
     $scope.previousISVValidate = function (producto) {
       if (producto.IdFabricante !== 6) {
@@ -649,10 +649,10 @@
             $scope.ShowToast('Complete los datos necesario para continuar.', 'danger');
             return false;
           }
-        } 
+        }
         else if (producto.IdFabricante === 7) {
           return validateQuantity(producto);
-        } 
+        }
         else {
           return $scope.AgregarCarrito(producto, producto.Cantidad, producto.IdPedidocontrato);
         }
@@ -934,7 +934,7 @@
           $scope.ShowToast('No se pudo mandar la notificación intente más tarde', 'danger');
         } else {
           $scope.ShowToast('Se envió tu información al distribuidor, pronto se pondrán en contacto para brindar información.', 'success');
-          
+
         }
       })
 
@@ -957,7 +957,7 @@
           $scope.ShowToast('No se pudo mandar la notificación intente más tarde', 'danger');
         } else {
           $scope.ShowToast('Se envió tu información al distribuidor, pronto se pondrán en contacto para brindar información.', 'success');
-          
+
         }
       })
     };
@@ -984,9 +984,26 @@
         });
       }
     }
+
+    $scope.NuevaEmpresa = function () {
+      $scope.SessionCookies = $cookies.getObject('Session');
+      console.log($rootScope.SICLIK_REACT_FRONT);
+      $window.location.href = `${$rootScope.SICLIK_REACT_FRONT}?id=${$window.btoa($scope.CaracteresAleatorios(8)+ $window.btoa($window.btoa($scope.SessionCookies.Token))+ $scope.CaracteresAleatorios(5)).replace(/X/g,"Ys")}`;
+    };
+
+    $scope.CaracteresAleatorios = function (length) {
+      var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      var charactersLength = characters.length;
+      var result = '';
+      for (var i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      }
+      return result;
+    };
+
   };
 
-  ProductosReadController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'PlanPremiumFactory', 'ProductosFactory','AmazonDataFactory', 'FabricantesFactory', 'TiposProductosFactory', 'PedidoDetallesFactory', 'TipoCambioFactory', 'ProductoGuardadosFactory', 'EmpresasXEmpresasFactory', 'UsuariosFactory', 'ActualizarCSNFactory', '$anchorScroll', 'EmpresasFactory', 'ManejoLicencias', 'PedidosFactory'];
+  ProductosReadController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'PlanPremiumFactory', 'ProductosFactory','AmazonDataFactory', 'FabricantesFactory', 'TiposProductosFactory', 'PedidoDetallesFactory', 'TipoCambioFactory', 'ProductoGuardadosFactory', 'EmpresasXEmpresasFactory', 'UsuariosFactory', 'ActualizarCSNFactory', '$anchorScroll', 'EmpresasFactory', 'ManejoLicencias', 'PedidosFactory', '$window', '$rootScope'];
 
   angular.module('marketplace').controller('ProductosReadController', ProductosReadController);
 }());
