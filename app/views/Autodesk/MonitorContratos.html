@@ -1,0 +1,307 @@
+<div ng-app="myApp" ng-controller="MonitorContratosController">
+    <div class="container" ng-swipe-right="" ng-swipe-left="">
+
+
+        <div class="form-group row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <h2 style="float:left;">Monitor de contratos </h2>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" style="margin-top: 2em;">
+                <br/>
+                <div class="form-group has-feedback">      
+                    <input type="text" ng-model="contractNumber" class="form-control" size="30" placeholder="Busca un contrato" ng-keydown="$event.keyCode === 13 && getContractData(contractNumber)" />
+                    <i class="form-control-feedback glyphicon glyphicon-search"></i>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
+            <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                <br/>
+                <label for="Cliente">Clientes:</label>
+                <select id="IdEmpresaUsuarioFinal" name="IdEmpresaUsuarioFinal" class="form-control selectOption" ng-model="EmpresaSelect" ng-options="Empresa.csn as Empresa.NombreEmpresa for Empresa in selectEmpresas" ng-change="ActualizarMonitor();" ng-show="SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 10">
+                    <option ng-selected="true" value="">Selecciona un cliente</option>
+                </select>
+            </div>
+        </div>
+    
+        <br>
+        <div ng-show="vacio === 1" style="text-align: center;">
+            <h4>Sin resultados. </h4>
+        </div>
+
+        <div ng-show="vacio === 0 && EmpresaSelect != ''" class="form-group alert alert-info" style="font-size: 1.1em;">
+            <h5><b>IMPORTANTE:</b></h5>
+            <p>
+                <li>Marca la casilla a la derecha de la serie para involucrarla en el proceso de renovación o trade in.</li>
+                <li>Si la casilla no aparece, entonces la serie no se encuentra dentro del periodo de renovación.</li>
+                <li>También, puedes definir la cantidad de asientos que desees involucrar en la orden, haciendo clic en el icono <span class="glyphicon glyphicon-triangle-bottom"></span> (también disponible solo durante el periodo de renovación).</li>
+            </p>
+        </div>
+        
+        <!-- Detalle pedidos Autodesk -->
+        <div  ng-repeat="contract in contracts | filter:PedidoFilter" style="margin-top: 2em; background-color: rgb(248, 248, 248); padding: 1.8em;">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                    <ul style="list-style-type:none; padding:0%">
+                        <li ng-if="contract.contract_number"> <label for="Contrato">Número de contrato: </label> {{ contract.contract_number }} </li>
+                        <li> <label for="Esquema">Esquema de renovación: </label> {{ contract.esquemaRenovacion }} </li>
+                        <li> <label for="FechaInicio">Duración del contrato: </label> {{ contract.contract_start_date | date:'d/MM/yyyy' }} <label>-</label> {{ contract.contract_end_date | date:'d/MM/yyyy' }} </li>
+                    </ul>
+                </div>
+                <div class="col-xs-12 col-sm-2 col-md-6 col-lg-6">
+                    <button id="Extender" class="pull-right btn btn-monitor-contratos"
+                    ng-click="getExtensionDateModal(contract.contract_end_date, contract.contract_number);">
+                        Extender
+                    </button>
+                    <div ng-show="(contract.subs_ready  && !contract.siclick_status)">
+                        <button id="ActualizarEsquema" class="pull-right btn btn-monitor-contratos "
+                        data-toggle="modal" ng-disabled="(contract.termSwitchStatus)"
+                        ng-click="actualizarEsquema(contract.contract_number, contract.contract_term)">
+                            {{contract.etiquetaTermSwitch}}
+                        </button>
+                        <button id="TradeIn" class="pull-right btn btn-monitor-contratos" 
+                        data-toggle="modal" ng-click="AgregarTradeIn(contract);">
+                            Trade in
+                        </button>
+                        <button id="Renovar" class="pull-right btn btn-monitor-contratos "
+                        data-toggle="modal"
+                        ng-click="AgregarContrato(contract);">
+                            Renovar
+                        </button>
+                    </div>
+                </div> 
+            </div>
+    
+            <table class="table table-hover table-responsive border-left-right-cero">
+                <tr ng-repeat="subscription in contract.subscriptions" class="repeat-animation">
+                    <td>
+    
+                        <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                            <h4><b>{{ subscription.description }}</b></h4>
+                            <ul style="list-style-type:none; padding:0%">
+                                <li> <label for="Serie">Número de serie:</label> {{ subscription.subscription_reference_number }} </li>
+                                <li> <label for="TipoProducto">Tipo de producto:</label> {{ subscription.subscription_type }} </li>
+                                <li ng-if="subscription.siclick_status"> <label for="Estatus">Estatus pedido: </label> Serie Ocupada </li>
+                                <li> <label for="Implantacion">Implantación: </label> {{subscription.implantacion}} </li>
+                                <li ng-if="subscription.deployment === 'N'"> <label for="SwitchType">Switch Type: </label> {{subscription.switch_type}} </li>
+                            </ul>
+                        </div>
+    
+                        <div ng-if="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 10)"
+                             ng-hide="contract.EstatusContrato === 'canceled' || contract.EstatusContrato === 'notRenewed'">
+                            <div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                                <label>Suscripciones: </label> <br>
+                                <div style="margin:0; padding:0;" ng-if="!subscription.subs_ready || subscription.is_premium"> {{ subscription.quantity }} </div>
+                                
+                                <a ng-click="ActualizarCantidad(subscription.subscription_reference_number)" style="text-decoration: none" ng-show="subscription.subs_ready && !subscription.is_premium"> {{ subscription.quantity }} &nbsp;
+                                    <span class="glyphicon glyphicon-triangle-bottom" ng-show="!subscription.MostrarCantidad" ></span>
+                                    <span class="glyphicon glyphicon-triangle-top" ng-show="subscription.MostrarCantidad"></span>
+                                </a>
+                                <br/> 
+                                <div style="margin: 1.2em 0 0 0; padding: 1em 0 0 0;" class="row form-group alert alert-info" ng-show="subscription.MostrarCantidad" >
+                                    <div class="col-xs-6 col-sm-6 col-md-12 col-lg-12">
+                                        <p>Nueva cantidad de asientos:</p>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-12 col-md-8 col-lg-8">
+                                        <input type="number" class="form-control" ng-model="subscription.quantityToUpdate" 
+                                        min="1" max="{{ subscription.quantity }}" ng-keyup="ActualizarPartition(subscription.subscription_reference_number)"
+                                        onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : (event.charCode === 46 || event.charCode >= 48) && event.charCode <= 57"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                            <div>
+                                <label >Fecha Inicio: </label>
+                                <br/> {{ subscription.start_date | date:'d/MM/yyyy' }}
+                            </div>
+                            <br>
+                            <div>
+                                <label >Fecha Fin: </label>
+                                <br/> {{ subscription.end_date | date:'d/MM/yyyy' }}
+                            </div>
+                            
+    
+                            <div ng-if="contract.AutoRenovable" ng-hide="contract.EstatusContrato === 'canceled' || contract.EstatusContrato === 'notRenewed'" >
+                                <label>Fecha límite de cancelación: </label>
+                                <br/> {{ contract.FechaCancelacion  }}
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4" ng-show="(subscription.subs_ready && !subscription.siclick_status)">
+                            <div  style="position: relative; left: 100%;">
+                                <label tooltip="Seleccionar número de serie">
+                                   <input class="ng-pristine ng-untouched ng-valid" ng-model="subscription.forRenewal" type="checkbox" style="transform: scale(1.6);" />
+                                </label>
+                            </div>
+                        </div>
+    
+                    </td>
+                </tr>
+            </table>
+
+            <!--  Modal de Renovacion -->
+            <div id="renovarModal" class="modal fade" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="divLoading" data-cargando>
+                        <div class=""><img src="images/ripple.svg" /></div>
+                    </div>  
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Solicitud de renovación</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group has-feedback">
+                                <label for="Contacto">*Contacto </label><a ng-click="openModalInsert(EmpresaSelect)" class="form-group" title="Nuevo contacto" ng-show=" SessionCookie.IdTipoAcceso === 2 || SessionCookie.IdTipoAcceso === 10" style="background-blend-mode: initial">
+                                    <strong>(Añadir contacto) &nbsp;</strong><span class="glyphicon glyphicon-plus"> </span>
+                                </a>
+                                <select name="Renovar" id="Renovar" class="form-control selectOption" ng-model="Renovar.IdUsuarioContacto" ng-options="Contacto.contact_id as Contacto.name + ' ('+ Contacto.email +')' for Contacto in contactos">
+                                        <option ng-selected="true" value="">Selecciona un contacto...</option>
+                                    </select>
+                            </div>
+                            <br/>
+                            <div class="form-group alert alert-info">
+                                <p>
+                                    Al dar click en <b>Renovar Contrato</b>, se agregarán al carrito de compras todos los productos que estén incluidos en el contrato con el estatus de <b>Aceptado</b> y con la cantidad de renovaciones
+                                    en el campo de <b>Renovación</b>.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default btn-modal" data-dismiss="modal">Regresar</button>
+                            <button type="button" class="btn btn-primary btn-modal" data-dismiss="modal" ng-click="SolicitarRenovacion();">Renovar contrato</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal para trade in -->
+            <div id="renovacionTradeIn" class="modal fade" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="divLoading" data-cargando>
+                        <div class=""><img src="images/ripple.svg" /></div>
+                    </div>  
+                    <div class="row modal-content">
+                        <div class="col-sm-12 col-md-12 col-lg-12 modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Solicitud de renovación trade in</h4>
+                        </div>
+                        <div class="col-sm-12 col-md-12 col-lg-12 modal-body">
+                            <div class="col-sm-12 col-md-12 col-lg-12 form-group has-feedback">
+                                <label >Contacto </label><a ng-click="openModalInsert(EmpresaSelect)" class="form-group" title="Nuevo contacto" ng-show=" SessionCookie.IdTipoAcceso === 2 || SessionCookie.IdTipoAcceso === 10" style="background-blend-mode: initial">
+                                    <strong>(Añadir contacto) &nbsp;</strong><span class="glyphicon glyphicon-plus"> </span>
+                                </a>
+                                <select class="form-control selectOption" ng-model="TradeIn.IdUsuarioContacto" ng-options="Contacto.contact_id as Contacto.name + ' ('+ Contacto.email +')' for Contacto in contactos">
+                                        <option ng-selected="true" value="">Selecciona un contacto...</option>
+                                    </select>
+                            </div>
+                            <div class="col-sm-12 col-md-12 col-lg-12 form-group alert alert-info" style="margin-top: 2em;">
+                                <p>
+                                   Al dar click en <b>Continuar</b>, se agregarán al carrito de compras todos los productos que estén seleccionados para <b>Trade In</b>.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-12 col-lg-12 modal-footer">
+                            <button type="button" class="btn btn-default btn-modal" data-dismiss="modal">Regresar</button>
+                            <button type="button" class="btn btn-primary btn-modal" ng-click="SolicitarRenovacionTradein();">Continuar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal para insertar contactos -->
+            <div id="modalInsert" class="modal fade" tabindex="-2" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="divLoading" data-cargando>
+                        <div class=""><img src="images/ripple.svg" /></div>
+                    </div>  
+                    <div class="row modal-content">
+                        <div class="col-sm-12 col-md-12 col-lg-12 modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Agregar contacto</h4>
+                        </div>
+                        <div class="col-sm-12 col-md-12 col-lg-12 modal-body">
+                            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 form-group has-feedback">
+                                <label for="Cliente">Cliente relacionado:</label>
+                                <select ng-disable="true" class="form-control selectOption" ng-model="contactObject.finalUserCsn" ng-options="Empresa.csn as Empresa.NombreEmpresa for Empresa in selectEmpresas" disabled>
+                                  <option ng-selected="true" value="">Selecciona un cliente</option>
+                                      </select>
+                            </div>
+                            <div class="form-group col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                              <label>Nombres:</label>
+                              <Input type="text" ng-model="contactObject.firstName" class="form-control" ng-pattern="/[a-zA-Z]$/" placeholder="Nombres" size="255" ng-maxlength="45" required>
+                            </div>
+                            <div class="form-group col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                              <label>Apellidos:</label>
+                              <Input type="text" ng-model="contactObject.lastName" class="form-control" ng-pattern="/[a-zA-Z]$/" placeholder="Apellidos" size="255" ng-maxlength="30">
+                            </div>
+                            <div class="form-group col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                              <label>Correo electrónico:</label>
+                              <Input name="CorreoElectronico" type="email" ng-model="contactObject.email" class="form-control" placeholder="Correo electrónico" size="255" ng-maxlength="50" ng-pattern="/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-12 col-lg-12 modal-footer">
+                            <button type="button" class="btn btn-default btn-modal" data-dismiss="modal">Regresar</button>
+                            <button type="button" class="btn btn-primary btn-modal" ng-click="insertContact(contactObject);">Continuar</button>
+                        </div>
+                    </div>
+                </div>
+              </div>
+            <!-- Modal de Extencion -->
+            <div id="extenderModal{{contract.contract_number}}" class="modal fade in" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="divLoading" data-cargando>
+                        <div class=""><img src="images/ripple.svg" /></div>
+                    </div>                
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title"><b>Solicitud de extensión de contrato (co-term)</b></h4>
+                        </div>
+                        <div class="modal-body">
+                            <p class="alert alert-info">
+                                Las extenciones de contrato están destinadas a emparejar la fecha de término entre contratos de un usuario final(UF). 
+                                Podrá seleccionar entre las fechas fin de contratos que terminen en el futuro para este UF.
+                              </p>
+                            <div class="form-group has-feedback col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                            <h5><b>Selecciona la nueva fecha fin para el contrato:</b></h5>
+                                <select id="NvaFechaFin" name="NvaFechaFin" class="form-control selectOption" ng-model="extensionDate" ng-options="opcionExtencion.endDate as (opcionExtencion.contractNumber + ' - ' + opcionExtencion.endDate) for opcionExtencion in opcionesExtencion">
+                                    <option ng-selected="true" value="">Selecciona una nueva fecha fin</option>
+                                </select>
+                            </div>
+                            <br><br><br><br><hr>
+                            <div class="form-group">
+                                <h5><b>Nota:</b></h5>
+                                <p>
+                                  Al dar clic en <b>Extender contrato</b>, se agregarán al carrito de compras todas las series que estén incluidas en el contrato.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" style="padding: .8em 1.4em">Regresar</button> 
+                            <button type="button" class="btn btn-info" ng-click="makeExtension(contract, extensionDate)" style="padding: .8em 1.4em">Extender contrato</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <div id="noExtender" class="modal fade in" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cerrarModal('noExtender')"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title"><b>Solicitud de extensión de contrato (co-term)</b></h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>
+                                No es posible extender este contrato. No se encontraron contratos que terminen en el futuro para el cliente seleccionado.
+                              </p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" style="padding: .8em 1.4em">Aceptar</button> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

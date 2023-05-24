@@ -15,9 +15,9 @@
       return $http.get($rootScope.API + 'autodesk/partitioned-orders');
     };
 
-    factory.confirmarParticion = function (IdPedido) {
+    factory.confirmarParticion = idPedido => {
       factory.refreshToken();
-      return $http.post($rootScope.API + 'autodesk/partition-confirmation', IdPedido);
+      return $http.post($rootScope.API + 'autodesk/partition-confirmation', { IdPedido: idPedido });
     };
 
     return factory;
