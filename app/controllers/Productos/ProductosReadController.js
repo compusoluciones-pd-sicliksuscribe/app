@@ -702,25 +702,19 @@
       }
       if (producto.IdFabricante !== $scope.AUTODESK) {
         if (!nuevoProducto.IdAccionAutodesk) delete nuevoProducto.IdAccionAutodesk;
-        PedidoDetallesFactory.postPedidoDetalle(nuevoProducto)
-        .success(pedidoDetalleResult => {
-          if (pedidoDetalleResult.success === 1) {
-            angular.element(document.getElementById('auxScope')).scope().gaAgregarCarrito(Producto);
-            $scope.ShowToast(edidoDetalleResult.message, 'success');
+        return PedidoDetallesFactory.postPedidoDetalle(nuevoProducto)
+        .then(pedidoDetalleResult => {
+          if (pedidoDetalleResult.data.success) {
+            angular.element(document.getElementById('auxScope')).scope().gaAgregarCarrito(producto);
+            $scope.ShowToast(pedidoDetalleResult.data.message, 'success');
             $scope.ActualizarMenu();
             $scope.addPulseCart();
             setTimeout($scope.removePulseCart, 9000);
           } else {
-            $scope.ShowToast(pedidoDetalleResult.message, 'danger');
+            $scope.ShowToast(pedidoDetalleResult.data.message, 'danger');
           }
         })
-        .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
-
-          $scope.ShowToast('No pudimos agregar este producto a tu carrito de compras, por favor intenta de nuevo más tarde.', 'danger');
-
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
+        .catch(() => $scope.ShowToast('No pudimos agregar este producto a tu carrito de compras, por favor intenta de nuevo más tarde.', 'danger'));
       }
       return postPedidoAutodesk(nuevoProducto);
     };

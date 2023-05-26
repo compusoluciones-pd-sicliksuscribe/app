@@ -12,9 +12,9 @@
     factory.refreshToken();
 
     // Agregar al carrito
-    factory.postPedidoDetalle = function (PedidoDetalle) {
+    factory.postPedidoDetalle = pedidoDetalle => {
       factory.refreshToken();
-      return $http.post($rootScope.API + 'shopping-cart', PedidoDetalle);
+      return $http.post($rootScope.API + 'shopping-cart', pedidoDetalle);
     };
 
     // Agregar al carrito final user
