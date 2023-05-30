@@ -22,6 +22,8 @@
             }
 
             $scope.Empresas = Empresas;
+            $scope.listaAux = $scope.Empresas;
+            pagination();
 
             for (var w = 0; w < $scope.Empresas.length; w++) {
               (function (index) {
@@ -265,6 +267,26 @@
 
       $scope.Tour.init();
       $scope.Tour.start();
+    };
+
+    $scope.filter = () => {
+      $scope.listaAux = $scope.Empresas.filter(function (str) {
+        return str.NombreEmpresa.indexOf($scope.EmpresaFilter) != -1;
+      });
+      pagination();
+    };
+
+    const pagination = () => {
+      $scope.filtered = [];
+      $scope.currentPage = 1;
+      $scope.numPerPage = 10;
+      $scope.maxSize = 5;
+
+      $scope.$watch('currentPage + numPerPage', function () {
+        let begin = (($scope.currentPage - 1) * $scope.numPerPage),
+          end = begin + $scope.numPerPage;
+        $scope.filtered = $scope.listaAux.slice(begin, end);
+      });
     };
   };
 
