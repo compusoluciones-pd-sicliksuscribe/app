@@ -248,6 +248,17 @@
         .catch(result => { error(result.data); });
     };
 
+    const AgregarBudgetAzure = () => {
+      console.log($scope.PedidoDetalles,' entra a agregar budget');  
+      const pedidos = $scope.PedidoDetalles.map((pedido, index) => ({
+        IdUfAzure: pedido.IdEmpresaUsuarioFinal,
+        budget: $scope.orden[index] ? $scope.orden[index] : ($scope.orden[index] === '' ? null : pedido.)
+      }));
+
+      PedidoDetallesFactory.AgregarBudgetAzure(pedidos)
+        .catch(result => { error(result.data); });
+    };
+
     $scope.init = async () => {
       $scope.CheckCookie();
       await PedidoDetallesFactory.getPrepararCompra(0)
@@ -518,6 +529,7 @@
 
     $scope.next = function () {
       actualizarOrdenesCompra();
+      AgregarBudgetAzure();
       if ($scope.isPayingWithCSCredit()) validarCarrito();
       let next = true;
       if (!$scope.PedidoDetalles || $scope.PedidoDetalles.length === 0) next = false;

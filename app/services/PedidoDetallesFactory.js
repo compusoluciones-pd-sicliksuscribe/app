@@ -322,6 +322,10 @@
       return $http.post($rootScope.API + 'orders/update-purchase-order', ordenes);
     };
 
+    factory.AgregarBudgetAzure = ordenes => {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'orders/add-azure-budget', ordenes);
+    };
     factory.marcarSP = (idPedido, marcado, promo) => {
       factory.refreshToken();
       return $http.post($rootScope.API + 'orders/mark-sp', { IdPedido: idPedido, Marcado: marcado, promo });
