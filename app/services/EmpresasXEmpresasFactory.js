@@ -16,7 +16,7 @@
       return $http.get($rootScope.API + 'EmpresasXEmpresas');
     };
 
-     factory.getExchangeRateByIdEmpresa = function (IdEmpresa) {
+    factory.getExchangeRateByIdEmpresa = function (IdEmpresa) {
       factory.refreshToken();
       return $http.get($rootScope.API + 'exchange-rate/' + IdEmpresa);
     };
