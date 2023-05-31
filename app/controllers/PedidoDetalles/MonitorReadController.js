@@ -17,21 +17,14 @@
     const PROCESSING = 'processing';
 
     $scope.init = function () {
+      const getAvailableCredit = 0;
       $scope.CheckCookie();
       FabricantesFactory.getFabricantes()
-        .success(function (Fabricantes) {
-          $scope.selectFabricantes = Fabricantes;
-        })
-        .error(function (data, status, headers, config) {
-          $scope.ShowToast('No pudimos cargar la lista de fabricantes, por favor intenta de nuevo más tarde.', 'danger');
-        });
-      EmpresasXEmpresasFactory.getEmpresasXEmpresas()
-        .success(function (Empresas) {
-          $scope.selectEmpresas = Empresas;
-        })
-        .error(function (data, status, headers, config) {
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
+        .then(fabricantes => $scope.selectFabricantes = fabricantes.data)
+        .catch(() => $scope.ShowToast('No pudimos cargar la lista de fabricantes, por favor intenta de nuevo más tarde.', 'danger'));
+      EmpresasXEmpresasFactory.getClients(getAvailableCredit)
+        .then(empresas => $scope.selectEmpresas = empresas.data)
+        .catch(() => $scope.ShowToast('No pudimos cargar la lista de clientes, por favor intenta de nuevo más tarde.', 'danger'));
 
       if ($cookies.getObject('Session').IdTipoAcceso == 4 || $cookies.getObject('Session').IdTipoAcceso == 5 || $cookies.getObject('Session').IdTipoAcceso == 6) {
         Params.IdEmpresaUsuarioFinal = $cookies.getObject('Session').IdEmpresa;

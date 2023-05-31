@@ -226,43 +226,24 @@
   }
 
     $scope.init = function () {
+      const getAvailableCredit = 1;
       $scope.hayCSNUF = false;
       $scope.CheckCookie();
       FabricantesFactory.getFabricantes()
-        .success(function (Fabricantes) {
-          $scope.selectFabricantes = Fabricantes;
+        .then(fabricantes => {
+          $scope.selectFabricantes = fabricantes.data;
         })
-        .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
-
-          $scope.ShowToast('No pudimos cargar la lista de fabricantes, por favor intenta de nuevo más tarde.', 'danger');
-
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
+        .catch(() => $scope.ShowToast('No pudimos cargar la lista de fabricantes, por favor intenta de nuevo más tarde.', 'danger'));
 
       $scope.validateMPA();
 
       TiposProductosFactory.getTiposProductos()
-        .success(function (TiposProductos) {
-          $scope.selectTiposProductos = TiposProductos;
-        })
-        .error(function (data, status, headers, config) {
-          $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
+        .then(tiposProductos => $scope.selectTiposProductos = tiposProductos.data)
+        .catch(() => $scope.ShowToast('No pudimos cargar la lista de tipos de productos, por favor intenta de nuevo más tarde.', 'danger'));
 
-          $scope.ShowToast('No pudimos cargar la lista de tipos de productos, por favor intenta de nuevo más tarde.', 'danger');
-
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
-
-      EmpresasXEmpresasFactory.getClients()
-        .success(function (Empresas) {
-          $scope.selectEmpresas = Empresas.data;
-        })
-        .error(function (data, status, headers, config) {
-          $scope.ShowToast('No pudimos cargar la información de tus clientes, por favor intenta de nuevo más tarde.', 'danger');
-
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
+      EmpresasXEmpresasFactory.getClients(getAvailableCredit)
+      .then(empresas => $scope.selectEmpresas = empresas.data)
+      .catch(() => $scope.ShowToast('No pudimos cargar la lista de clientes, por favor intenta de nuevo más tarde.', 'danger'));
 
       $scope.BuscarProductos.IdProducto = undefined;
       $scope.BuscarProductos.IdFabricante = $scope.BuscarProductos.IdFabricante;
