@@ -272,8 +272,8 @@
     $scope.abrirModal = function () {
       document.getElementById('avisoModal').style.display = 'block';
       };
-      $scope.cerrarModal = function () {
-        document.getElementById('avisoModal').style.display = 'none';
+      $scope.cerrarModal = function (idModal) {
+        document.getElementById(idModal).style.display = 'none';
       };
 
     $scope.init();
