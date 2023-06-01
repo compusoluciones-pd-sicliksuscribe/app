@@ -24,31 +24,6 @@
             $scope.Empresas = Empresas;
             $scope.listaAux = $scope.Empresas;
             pagination();
-
-            for (var w = 0; w < $scope.Empresas.length; w++) {
-              (function (index) {
-
-                var parametros = { IdEmpresaUsuarioFinal: $scope.Empresas[index].IdEmpresa };
-
-                PedidoDetallesFactory.postWarningCredito(parametros)
-                  .success(function (result) {
-                    if (result) {
-                      if (result.success === 0) {
-                        $scope.Empresas[index].WarningCredito = true;
-
-                        $scope.ShowToast(result.message, 'danger');
-                      }
-                      else {
-                        $scope.Empresas[index].WarningCredito = false;
-                      }
-                    }
-                  })
-                  .error(function (data, status, headers, config) {
-                    $scope.ShowToast('No pudimos cargar tu información, por favor intenta de nuevo más tarde.', 'danger');
-                    $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-                  });
-              }(w));
-            }
           }
         })
         .error(function (data, status, headers, config) {
@@ -286,7 +261,33 @@
         let begin = (($scope.currentPage - 1) * $scope.numPerPage),
           end = begin + $scope.numPerPage;
         $scope.filtered = $scope.listaAux.slice(begin, end);
+        warningCreditoFiltered($scope.filtered);
       });
+    };
+
+    const warningCreditoFiltered = (filtered) =>{
+      for (var w = 0; w < filtered.length; w++) {
+        (function (index) {
+          var parametros = { IdEmpresaUsuarioFinal: filtered[index].IdEmpresa };
+          PedidoDetallesFactory.postWarningCredito(parametros)
+            .success(function (result) {
+              if (result) {
+                if (result.success === 0) {
+                  filtered[index].WarningCredito = true;
+  
+                  $scope.ShowToast(result.message, 'danger');
+                }
+                else {
+                  filtered[index].WarningCredito = false;
+                }
+              }
+            })
+            .error(function (data, status, headers, config) {
+              $scope.ShowToast('No pudimos cargar tu información, por favor intenta de nuevo más tarde.', 'danger');
+              $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+            });
+        }(w));
+      };
     };
   };
 
