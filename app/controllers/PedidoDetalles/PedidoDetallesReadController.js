@@ -252,7 +252,7 @@
       console.log($scope.PedidoDetalles,' entra a agregar budget');  
       const pedidos = $scope.PedidoDetalles.map((pedido, index) => ({
         IdUfAzure: pedido.IdEmpresaUsuarioFinal,
-        budget: $scope.orden[index] ? $scope.orden[index] : ($scope.orden[index] === '' ? null : pedido.)
+        budget: $scope.orden[index] ? $scope.orden[index] : ($scope.orden[index] === '' ? null : null)
       }));
 
       PedidoDetallesFactory.AgregarBudgetAzure(pedidos)
