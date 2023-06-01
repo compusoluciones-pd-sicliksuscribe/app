@@ -46,9 +46,9 @@
       return $http.put($rootScope.API + 'EmpresasXEmpresas', EmpresasXEmpresa);
     };
 
-    factory.getClients = function () {
+    factory.getClients = availableCredit => {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'enterprise/clients');
+      return $http.get($rootScope.API + 'enterprise/clients/' + availableCredit);
     };
 
     factory.getAcceptanceAgreementByClient = function (IdEmpresa) {
