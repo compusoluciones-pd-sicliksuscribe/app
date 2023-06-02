@@ -5,6 +5,7 @@
     const ASSOCIATE_ERROR = 'No fue posible asociar el contrato.';
     const SEARCH_ERROR = 'No fue posible completar la busqueda, intentelo más tarde.';
     const ASSOCIATE_MESSAGE = 'Información importada con éxito.';
+    const OPEN = '5105829903';
 
     $scope.init = () => {
       $scope.contracts = [];
@@ -12,6 +13,7 @@
         .then(result => {
           $scope.resellerCSN = result.data.data.resellerCSN;
           $scope.resellerId = result.data.data.resellerId;
+          $scope.banderaOpen = $scope.resellerCSN !== OPEN;
         });
     };
 
@@ -25,7 +27,7 @@
           .then(result => {
             if (result.data.success === 1 && result.data.data) {
               $scope.contracts = result.data.data;
-              $scope.isAssociated = ($scope.resellerCSN === $scope.contracts[0].resellerCSN && $scope.contracts[0].activeRelation) || ($scope.contracts[0].relation_id === $scope.resellerId);
+              $scope.isAssociated = ($scope.resellerCSN === $scope.contracts[0].resellerCSN && $scope.contracts[0].activeRelation && $scope.banderaOpen) || ($scope.contracts[0].relation_id === $scope.resellerId);
               $scope.isUFOrContactRegistered = ($scope.contracts[0].uf_id != null && $scope.contracts[0].contact_id != null && $scope.contracts[0].resellerUFRelation != null);
             }
           })
