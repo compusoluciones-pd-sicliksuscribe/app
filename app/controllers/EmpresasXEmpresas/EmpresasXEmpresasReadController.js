@@ -246,7 +246,7 @@
 
     $scope.filter = () => {
       $scope.listaAux = $scope.Empresas.filter(function (str) {
-        return str.NombreEmpresa.indexOf($scope.EmpresaFilter) != -1;
+        return str.NombreEmpresa.toLowerCase().indexOf($scope.EmpresaFilter.toLowerCase()) !== -1;
       });
       pagination();
     };
