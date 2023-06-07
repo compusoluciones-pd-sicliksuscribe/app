@@ -82,8 +82,10 @@
     };
 
     const evaluationDeleteMS = function (FechaInicio) {
+      splitDate = FechaInicio.split('/');
+      dateFormat = `${splitDate[2]}/${splitDate[1]}/${splitDate[0]}`;
       const now = new Date();
-      const limitDate = new Date(FechaInicio);
+      const limitDate = new Date(dateFormat);
       limitDate.setDate(limitDate.getDate() + 5);
       return now > limitDate ? false : true;
     }
