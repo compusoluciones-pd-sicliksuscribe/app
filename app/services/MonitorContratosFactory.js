@@ -51,6 +51,11 @@
       return $http.get($rootScope.API + 'autodesk/get-contract-search-monitor/' + contractNumber)
     };
 
+    factory.contractSync = contractNumber => {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'autodesk/contractSync', { contractNumber });
+    };
+
     return factory;
   };
 

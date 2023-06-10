@@ -3,6 +3,7 @@
     $scope.vacio = 1;
     $scope.Renovar = {};
     $scope.TradeIn = {};
+    $scope.ActiveSincronizacion = true;
     $scope.SessionCookie = $cookies.getObject('Session');
     const PREMIUM = 'Premium';
     const SUCCESS_MSG = 'success';
@@ -169,6 +170,7 @@
       let endCustomerCSN = $scope.EmpresaSelect;
       getContractCustomer(endCustomerCSN);
       getContactUsers(endCustomerCSN);
+      $scope.ActiveSincronizacion = true;
     };
 
     $scope.AgregarContrato = function (contract) {
@@ -354,6 +356,7 @@
         if (result.status = 200) {
           $scope.contracts = result.data;
           $scope.EmpresaSelect = result.data[0].final_user_csn
+          $scope.ActiveSincronizacion = $scope.selectEmpresas.some(empresa => empresa.csn === $scope.contracts[0].final_user_csn);
           $scope.contracts.forEach(contract => {
             contract.renovacion = contract.contract_end_date;
             contract.esquemaRenovacion = (contract.contract_term === 'Annual') ? 'Anual' : 'Cada 3 años';
@@ -409,6 +412,19 @@
         })
         .catch(() => $scope.ShowToast('No se pudo agregar el contacto.', 'danger'));
       }
+    };
+
+    $scope.sincronizarContrato = async contractNumber => {
+      if(contractNumber){
+        await MonitorContratosFactory.contractSync(contractNumber)
+        .then(result => {
+          if (result.data.success) {
+            $scope.ShowToast(result.data.message, SUCCESS_MSG)
+            $scope.init();
+            $scope.ActiveSincronizacion = true;
+          } else $scope.ShowToast(result.data.message, 'danger');
+        })
+      } else $scope.ShowToast('Insertar un contrato', 'warning')
     };
   };
   
