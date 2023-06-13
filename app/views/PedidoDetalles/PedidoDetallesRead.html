@@ -18,7 +18,12 @@
         </div>
         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
     </div>
-
+    <div class="row">
+        <div class="alert alert-warning" role="alert">
+            <b>Importante*</b> <br>
+            Las transacciones con SPEI no están disponibles en licencias adicionales o co-términos.
+        </div>
+    </div>
     <br>
     <br>
     <br>
@@ -34,7 +39,7 @@
                 <label for="" class="formaPago">Forma de pago para {{Distribuidor.NombreEmpresa}}: </label>
                 <div class="radio" style="margin-left:20px">
                     <div>
-                        <input type="radio" name="TipoPago" value="2" ng-checked="isPayingWithCSCredit()" ng-model="Distribuidor.IdFormaPagoPredilecta" ng-click="ActualizarFormaPago(2);"> <div style="padding-top: .25em;">Crédito CompuSoluciones</div>
+                        <input type="radio" name="TipoPago" value="2" ng-checked="isPayingWithCSCredit()" ng-model="Distribuidor.IdFormaPagoPredilecta" ng-click="ActualizarFormaPago(2);" id="defaultMethod"> <div style="padding-top: .25em;">Crédito CompuSoluciones</div>
                     </div>
                     <div ng-hide="SessionCookie.IdTipoAcceso === 10">
                         <input type="radio" name="TipoPago" value="1" ng-checked="isPayingWithCreditCard()" ng-disabled="ValidarFormaPago()" ng-model="Distribuidor.IdFormaPagoPredilecta" ng-click="ActualizarFormaPago(1);"> <div style="padding-top: .25em;">Tarjeta bancaria (Solo Pesos MXN)</div>
@@ -42,11 +47,9 @@
                     <div ng-show="!ValidarFormaPago()" ng-hide="SessionCookie.IdTipoAcceso === 10">
                         <input type="radio" name="TipoPago" value="3" ng-checked="isPayingWithPaypal()" ng-disabled="ValidarFormaPago()" ng-model="Distribuidor.IdFormaPagoPredilecta" ng-click="ActualizarFormaPago(3);"> <div style="padding-top: .25em;">Pago Paypal (Solo Pesos MXN)</div>
                     </div>
-                    <div ng-show="!ValidarFormaPago()" ng-hide="SessionCookie.IdTipoAcceso === 10">
+                    <div ng-show="!ValidarFormaPago()" ng-hide="SessionCookie.IdTipoAcceso === 10" id="radioSPEI">
                         <input type="radio" name="TipoPago" value="5" ng-checked="isPayingWithSPEI()" ng-disabled="ValidarFormaPago()" ng-model="Distribuidor.IdFormaPagoPredilecta" ng-click="ActualizarFormaPago(5);"> <div style="padding-top: .25em;">Pago con transferencia bancaria (SPEI)</div>
                     </div>
-
-                    <!-- TRANSFERENCIA -->
                     <div>
                         <input type="radio" name="TipoPago" value="4" ng-checked="isPayWithPrepaid()" ng-model="Distribuidor.IdFormaPagoPredilecta" ng-click="ActualizarFormaPago(4);"> <div style="padding-top: .25em;">Transferencia
                         <label for="" class="SaldoReal"> <b>Tu Saldo es: {{Distribuidor.MonedaPago === 'Pesos' ? Distribuidor.Transferencia : Distribuidor.TransferenciaDolares | currency}}</b> </label></div>
@@ -64,7 +67,7 @@
                 </select>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
-                <div class="form-group" ng-hide="isPayingWithCreditCard() || hasProtectedExchangeRate() || isPayingWithPaypal()">
+                <div class="form-group" ng-hide="isPayingWithCreditCard() || hasProtectedExchangeRate() || isPayingWithPaypal()" id="currencySpei">
                     <label for="" class="">* ¿Con qué moneda quieres pagarlos?</label>
                     <div class="radio" style="margin-left:20px">
                         <div>

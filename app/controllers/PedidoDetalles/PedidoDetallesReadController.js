@@ -10,6 +10,8 @@
     const ON_DEMAND = 3;
     const ELECTRONIC_SERVICE = 74;
     const CREATEORDER = 'CREATEORDER';
+    const ADDSEAT = 'ADDSEAT';
+    const COTERM = 'COTERM';
     const paymentMethods = {
       CREDIT_CARD: 1,
       CS_CREDIT: 2,
@@ -124,6 +126,7 @@
               $scope.actualizarUsuarioCompra();
             }
           }
+          let contAddseatCoterm = 0;
           $scope.PedidoDetalles.forEach(function (elem) {
             $scope.CreditoValido = 1;
             let IdEsquemaRenovacion = elem.IdEsquemaRenovacion;
@@ -135,6 +138,7 @@
               if (item.IdFabricante === 1 && $scope.Distribuidor.NuevoComercioTYC === 0) {$scope.flagTYC ++;}
               if (item.IdFabricante === 1 && elem.Productos[0].NumeroSerie === CREATEORDER && elem.Productos[0].validacion === 0 && IdEsquemaRenovacion !== 8 && elem.Productos[0].Academy === 0 ){$scope.flagLCO += elem.Productos[0].IdPedido +' ';}
               if (item.PrecioUnitario == null) $scope.error = true;
+              if (elem.Productos[0].NumeroSerie == ADDSEAT || elem.Productos[0].NumeroSerie == COTERM) contAddseatCoterm ++;
             });
           });
           if ($scope.error) {
@@ -155,6 +159,11 @@
            }  else {
              $('#btnSiguiente').prop('disabled', false);
            }
+           if (contAddseatCoterm >= 1) {
+            document.getElementById('radioSPEI').style.display = 'none';
+            document.getElementById('currencySpei').style.display = 'none';
+            $scope.Distribuidor.IdFormaPagoPredilecta == paymentMethods.SPEI ? $('#btnSiguiente').prop('disabled', true) : '' ; 
+          }
         })
         .then(function () {
           if ($scope.isPayingWithCSCredit()) validarCarrito();
