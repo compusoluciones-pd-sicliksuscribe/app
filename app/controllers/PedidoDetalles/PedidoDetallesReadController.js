@@ -161,8 +161,10 @@
            }
            if (contAddseatCoterm >= 1) {
             document.getElementById('radioSPEI').style.display = 'none';
-            document.getElementById('currencySpei').style.display = 'none';
-            $scope.Distribuidor.IdFormaPagoPredilecta == paymentMethods.SPEI ? $('#btnSiguiente').prop('disabled', true) : '' ; 
+            if ($scope.Distribuidor.IdFormaPagoPredilecta == paymentMethods.SPEI) {
+              document.getElementById('currencySpei').style.display = 'none';
+              $('#btnSiguiente').prop('disabled', true);
+            }
           }
         })
         .then(function () {
