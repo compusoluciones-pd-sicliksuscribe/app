@@ -9,7 +9,6 @@
 
     $scope.init = function () {
       let empresaActual = '';
-      const availableCredit = 0;
       if (Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 8) empresaActual = { NombreEmpresa: 'CompuSoluciones', IdEmpresa: 1 };
       if (Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 10) empresaActual = { NombreEmpresa: Session.NombreEmpresa, IdEmpresa: Session.IdEmpresa };
       $scope.CheckCookie();
@@ -28,13 +27,13 @@
           });
       }
       if (Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 10) {
-        EmpresasFactory.getClientes(availableCredit)
-          .then(Empresas => {
+        EmpresasFactory.getClientes()
+          .success(function (Empresas) {
             $scope.selectEmpresas = Empresas.data;
             $scope.selectEmpresas.unshift(empresaActual);
             $scope.MostrarUsuariosEmp($scope.empresaSel);
           })
-          .catch(function (data, status, headers, config) {
+          .error(function (data, status, headers, config) {
             $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
           });
       }

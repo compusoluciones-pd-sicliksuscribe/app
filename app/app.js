@@ -14,7 +14,7 @@
       .when('/Contacto', { controller: 'ContactoController', templateUrl: 'app/views/Contactanos.html' })
       .when('/Sugerencias', { controller: 'SugerenciasController', templateUrl: 'app/views/Sugerencias.html' })
       .when('/404', { templateUrl: 'app/views/error.html' })
-      .when('/offline', { templateUrl: 'app/vie11ws/offline.html' })
+      .when('/offline', { templateUrl: 'app/views/offline.html' })
       .when('/Desbloquear/:encryptedObject', { controller: 'DesbloquearCuentaController', templateUrl: 'app/views/Usuarios/DesbloquearCuenta.html' })
       .when('/Navegadores', { controller: 'NavegadoresController', templateUrl: 'app/views/Navegadores.html' })
       .when('/ConfirmarCuenta/:encryptedObject', { controller: 'ConfirmarCuentaController', templateUrl: 'app/views/Usuarios/ConfirmarCuenta.html' })
@@ -644,14 +644,6 @@
         }}
       })
 
-      .when('/MonitorContratos', {
-        templateUrl: 'app/views/Autodesk/MonitorContratos.html',
-        resolve: { 'check': function ($location, $cookies) {
-          var Session = $cookies.getObject('Session');
-          if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 10)) { $location.path('/404'); }
-        }}
-      })
-
       .when('/FacturacionAzure', {
         controller: 'FacturacionController', templateUrl: 'app/views/Facturacion/FacturacionAzure.html',
         resolve: { 'check': function ($location, $cookies) {
@@ -665,22 +657,6 @@
         resolve: { 'check': function ($location, $cookies) {
           var Session = $cookies.getObject('Session');
           if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 8 || Session.IdTipoAcceso === 10)) { $location.path('/404'); }
-        }}
-      })
-
-      .when('/Contactos', {
-        controller: 'ContactsController', templateUrl: 'app/views/Autodesk/Contacts.html',
-        resolve: { 'check': function ($location, $cookies) {
-          var Session = $cookies.getObject('Session');
-          if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 10)) { $location.path('/404'); }
-        }}
-      })
-
-      .when('/BuscarContratos', {
-        controller: 'ContractSearchController', templateUrl: 'app/views/Autodesk/ContractSearch.html',
-        resolve: { 'check': function ($location, $cookies) {
-          var Session = $cookies.getObject('Session');
-          if (!(Session.IdTipoAcceso === 10 || Session.IdTipoAcceso === 2)) { $location.path('/404'); }
         }}
       })
       .otherwise({ redirectTo: '/404' });

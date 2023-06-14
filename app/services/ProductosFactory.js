@@ -52,7 +52,7 @@
 
     factory.getProductContracts = function (idEmpresaUsuarioFinal, idProducto) {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'autodesk/contracts/' + idEmpresaUsuarioFinal + '/product/' + idProducto);
+      return $http.get($rootScope.API + 'autodesk/contacts/' + idEmpresaUsuarioFinal + '/contract/' + idProducto);
     };
 
     factory.getProductExists = function (idEmpresaUsuarioFinal, idProducto, idContrato) {

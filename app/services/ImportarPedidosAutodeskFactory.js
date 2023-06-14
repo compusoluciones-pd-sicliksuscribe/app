@@ -31,6 +31,11 @@
       return $http.get($rootScope.API + 'autodesk/products');
     };
 
+    factory.importarPedido = function (infoPedido) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'autodesk/orders/import', infoPedido);
+    };
+
     factory.getSKUData = function (numeroContrato) {
       factory.refreshToken();
       return $http.get($rootScope.API + 'autodesk/orders/getSKUData/' + numeroContrato);
@@ -39,6 +44,11 @@
     factory.postEmpresa = function (infoEmpresa) {
       factory.refreshToken();
       return $http.post($rootScope.API + 'enterprise/createEnterpriceAltern', infoEmpresa);
+    };
+
+    factory.getSubscriptionData = (resellerCsn, endDate) => {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'autodesk/getSubscriptionData/groupContracts/' + resellerCsn + '/' + endDate);
     };
 
     factory.getCSN = IdEmpresa => {

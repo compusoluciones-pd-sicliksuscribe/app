@@ -12,9 +12,9 @@
     factory.refreshToken();
 
     // Agregar al carrito
-    factory.postPedidoDetalle = pedidoDetalle => {
+    factory.postPedidoDetalle = function (PedidoDetalle) {
       factory.refreshToken();
-      return $http.post($rootScope.API + 'shopping-cart', pedidoDetalle);
+      return $http.post($rootScope.API + 'shopping-cart', PedidoDetalle);
     };
 
     // Agregar al carrito final user
@@ -78,7 +78,7 @@
 
     factory.getOrderPerCustomer = function (customer) {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'monitor/orders-per-customer/' + customer.IdEmpresaUsuarioFinal + '/maker/' + customer.IdFabricante);
+      return $http.get($rootScope.API + 'monitor/orders-per-customer/' + customer.IdEmpresaUsuarioFinal + '/maker/' + customer.IdFabricante + '/type/' + customer.EstatusContrato);
     };
 
     factory.getOrderPerCustomerTuClick = function (customer) {
@@ -105,6 +105,11 @@
     factory.putPedidoDetalleMicrosoft = function (PedidoDetalle) {
       factory.refreshToken();
       return $http.put($rootScope.API + 'orders/update-status', PedidoDetalle);
+    };
+
+    factory.updateProductoAutodesk = function (PedidoDetalle, flag) {
+      factory.refreshToken();
+      return $http.put($rootScope.API + 'autodesk/subscription/update/' + flag, PedidoDetalle);
     };
 
     factory.getContarProductos = function () {
@@ -224,7 +229,7 @@
 
     factory.removeRenew = function (pedido) {
       factory.refreshToken();
-      return $http.delete($rootScope.API + 'shopping-cart/renew/order/' + pedido.IdPedido);
+      return $http.delete($rootScope.API + 'shopping-cart/renew/order/' + pedido.IdPedido + '/end-user/' + pedido.IdEmpresaUsuarioFinal);
     };
 
     factory.preparePayPal = function (params) {
@@ -302,9 +307,9 @@
       return $http.post($rootScope.API + 'autodesk/update-quantity', pedido);
     };
 
-    factory.removeExt = pedido => {
+    factory.removeExt = function (pedido) {
       factory.refreshToken();
-      return $http.delete($rootScope.API + 'shopping-cart/remove-contract-extension/order/' + pedido.IdPedido);
+      return $http.delete($rootScope.API + 'shopping-cart/remove-contract-extension/order/' + pedido.IdPedido + '/end-user/' + pedido.IdEmpresaUsuarioFinal);
     };
 
     factory.actualizarUsuarioCompra = (idPedidos, IdUsuarioCompra) => {
@@ -325,6 +330,11 @@
     factory.actualizarFechaInicio = (idContrato, fechaInicio, idEsquemaRenovacion) => {
       factory.refreshToken();
       return $http.post($rootScope.API + 'orders/update-start-date', { IdContrato: idContrato, FechaInicio: fechaInicio, IdEsquemaRenovacion: idEsquemaRenovacion });
+    };
+
+    factory.actualizarEsquemaRenovacion = (numeroSeries, idEsquemaRenovacion) => {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'autodesk/update-subscriptions', { numeroSeries, idEsquemaRenovacion });
     };
 
     factory.setCreditCardType = (PedidoDetalles, tipoTarjeta) => {

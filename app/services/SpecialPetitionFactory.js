@@ -26,11 +26,6 @@
       return $http.post($rootScope.API + 'autodesk/confirm-sp', {IdPedido: idPedido, CodigoDescuento: codigo, CSNUF: csn});
     };
 
-    factory.deleteSP = orderId => {
-      factory.refreshToken();
-      return $http.delete($rootScope.API + 'autodesk/delete-sp/'+ orderId);
-    };
-
     return factory;
   };
 

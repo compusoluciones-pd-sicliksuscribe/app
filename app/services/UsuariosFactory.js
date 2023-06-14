@@ -82,7 +82,7 @@
       return $http.get($rootScope.API + 'Usuarios/ConfirmarCuenta/' + encryptedObject);
     };
 
-    factory.getUsuariosContacto = idEmpresaUsuarioFinal => {
+    factory.getUsuariosContacto = function (idEmpresaUsuarioFinal) {
       factory.refreshToken();
       return $http.get($rootScope.API + 'users/' + idEmpresaUsuarioFinal);
     };
@@ -138,12 +138,6 @@
       factory.refreshToken();
       return $http.get($rootScope.API + 'super-user/get-administrator-users');
     };
-
-    factory.getContactSearch = param => {
-      factory.refreshToken();
-      return $http.get($rootScope.API + 'contact-search/' + param);
-    };
-
     return factory;
   };
 
