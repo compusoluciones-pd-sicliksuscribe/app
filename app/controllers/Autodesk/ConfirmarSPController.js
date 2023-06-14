@@ -56,15 +56,6 @@
       } else $scope.ShowToast('Coloca un código de descuento.', 'warning');
     };
 
-    $scope.deleteSP = orderId => {
-      SpecialPetitionFactory.deleteSP(orderId)
-        .then(result => {
-          result.data.success ? $scope.ShowToast(result.data.message, 'success') : $scope.ShowToast(result.data.message, 'warning');
-          return result.data.success;
-        })
-        .then(success => { if (success) getSPs(); });
-    };
-
     $scope.init();
   };
 

@@ -152,12 +152,6 @@
     };
 
     $scope.init = function () {
-      var dateNow = new Date();
-      var hour = dateNow.getHours();
-      if (hour >= 16) {
-        let disableSPEI = document.getElementById('monitorSpei');
-        disableSPEI.style.display = 'none';
-      }
       if ($scope.currentPath === '/MonitorPagos') {
         $scope.CheckCookie();
         confirmPayPal();
@@ -481,12 +475,11 @@
                 monitorPdfSPEI.style.display = 'block';
                 monitorPdfSPEI.innerHTML = `
                       <div class="row tituloSpei text-center">
-                        <div class="alert alert-warning" role="alert">
-                            <b>Importante*</b> <br>
-                            *Los pedidos seguirán estando visibles hasta que se complete la transferencia.
-                        </div>
-                        <h2>Información de pago (SPEI)</h2>
+                          <h2>Información de pago (SPEI)</h2>
                       </div>
+                      <p class="text-danger">
+                          <b>*Los pedidos seguirán estando visibles hasta que se complete la transferencia.</b>
+                      </p>
                   <div class="row pt-5">
                       <div class="col-sm-6">
                           <p>

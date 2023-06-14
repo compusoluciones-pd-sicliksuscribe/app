@@ -164,9 +164,9 @@
       return $http.patch($rootScope.API + 'enterprise/update-automatic-payment/' + RealizarCargoProximo);
     };
 
-    factory.getClientes = function (availableCredit) {
+    factory.getClientes = function () {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'enterprise/clients/' + availableCredit);
+      return $http.get($rootScope.API + 'enterprise/clients');
     };
 
     factory.putEmpresa = function (Empresa) {

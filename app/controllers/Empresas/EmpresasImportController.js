@@ -33,7 +33,7 @@
 
     $scope.filter = () => {
       $scope.listaAux = $scope.EmpresasM.filter(function (str) {
-        return str.companyProfile.companyName.toLowerCase().indexOf($scope.EmpresaFilter.toLowerCase()) !== -1;
+        return str.companyProfile.companyName.indexOf($scope.EmpresaFilter) !== -1;
       });
       pagination();
     };

@@ -21,12 +21,6 @@
                 realicen los pagos automáticamente. Los pedidos que se cobraran de manera automática son los que
                 aparecen en este monitor. Si deseas puedes realizar el pago
                 manual y no se cobrará el cargo automático.</p>
-            </div>
-        </div>
-    <div class="row">
-        <div class="alert alert-warning" role="alert">
-            <b>Importante*</b> <br>
-            Las renovaciones con SPEI estarán disponibles diariamente hasta las 16:00 h (UTC-6:00 GDL, CDMX, MTY)
         </div>
     </div>
     <div class="row" ng-show="infoEmpresa.CartaConfirmacion2 === 1">
@@ -107,7 +101,7 @@
 
 
         <div class="form-group">
-            <div class="col-xs-12" id="monitorSpei">
+            <div class="col-xs-12">
                 <input ng-model="paymethod" ng-click="pedidosPorPagar(key);" type="radio" name="payType" id="Spei"
                     value="5" ng-change="ActualizarFormaPago(5);" />  <b class="blueText">Pago con transferencia bancaria (SPEI)</b>
             </div>

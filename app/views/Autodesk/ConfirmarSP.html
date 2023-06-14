@@ -51,13 +51,8 @@
                         <label class="col-xs-5 col-sm-5 col-md-5 col-lg-5" style="padding-top: .6em; margin-left: 0; padding-left: 0;">Código descuento:</label>
                         <input style="max-width: 10em;" class="form-control col-xs-4 col-sm-4 col-md-4 col-lg-4" type="text" ng-model="CodigoDescuento">
                     </div>
-                    <div  class="col-xs-12 col-sm-12 col-md-offset-1 col-lg-offset-1 col-md-2 col-lg-2">
-                        <button  class="btn btn-danger" ng-click="deleteSP(orden.IdPedido)" tooltip="El pedido se retira del listado de peticiones especiales y se procesa con normalidad." style="min-width: 0; float: right;">
-                            Retirar SP
-                        </button>
-                    </div>
-                    <div  class="col-xs-12 col-sm-12 col-md-offset-1 col-lg-offset-1 col-md-2 col-lg-2" style="padding-top: 1em;">
-                        <button  class="btn btn-success" ng-click="confirmarSP(orden.IdPedido, CodigoDescuento, orden.CSNUF)" style="min-width: 0;float: right;">
+                    <div  class="col-xs-12 col-sm-12 col-md-offset-1 col-lg-offset-1 col-md-2 col-lg-2" style="padding-top: 2.6em;">
+                        <button  class="btn btn-success" ng-click="confirmarSP(orden.IdPedido, CodigoDescuento, orden.CSNUF)">
                             Confirmar
                         </button>
                     </div>
