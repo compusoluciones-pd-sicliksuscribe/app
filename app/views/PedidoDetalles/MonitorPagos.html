@@ -180,6 +180,8 @@
                     PedidosObj[key].FechaInicioProximoMS : PedidosObj[key].FechaFin| date:'yyyy-MM-dd'}} -
                     {{PedidosObj[key].FechaFinProximo| date:'yyyy-MM-dd'}}
                     <br>
+                    <label>Esquema de Renovación:</label> {{PedidosObj[key].EsquemaRenovacion}}
+                    <br>
                     <label>Precio renovación: </label> {{obtenerSubTotal(key) | currency}} pesos
                     <a ng-click="mostrarDetalles(key) " style="text-decoration: none">ver detalles
                         <span class="glyphicon glyphicon-triangle-bottom " ng-show="!PedidosObj[key].Mostrar "></span>
