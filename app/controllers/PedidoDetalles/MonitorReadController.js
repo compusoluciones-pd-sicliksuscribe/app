@@ -675,6 +675,21 @@
     });
   }
 
+  $scope.insertAzureBudget = function (IdMicrosoftUF,azureBudget) {
+    const order = {
+      IdMicrosoftUF: IdMicrosoftUF,
+      azureBudget: azureBudget
+    }
+    PedidoDetallesFactory.insertAzureBudget(order.IdMicrosoftUF,order.azureBudget)
+    .then(result => {
+      $scope.ShowToast(result.data.message, 'success');
+    })
+    .catch(result => {
+      $scope.ShowToast(result.data.message, 'danger');
+  });
+}
+
+
     $scope.cerrarModal = modal => {
       document.getElementById(modal).style.display = 'none';
     };
