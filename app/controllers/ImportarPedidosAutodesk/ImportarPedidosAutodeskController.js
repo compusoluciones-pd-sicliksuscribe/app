@@ -298,6 +298,7 @@
           NumeroContrato: $scope.Contrato.NumeroContrato,
           Series: $scope.numerosSerie
         };
+        if(!$scope.ufSeleccionadoModalImportacion.IdAutodeskUF) return $scope.ShowToast("El usuario final no tiene CSN, se agrega en Actualizar CSN cliente", 'danger');
         if (!infoContrato.IdEmpresaDistribuidor || !infoContrato.IdEmpresaUsuarioFinal || !infoContrato.IdEsquemaRenovacion ||
           !infoContrato.NumeroContrato || !infoContrato.FechaFin || infoContrato.Series.length === 0) {
           $scope.ShowToast('Llena todos los campos del formulario', 'info');
