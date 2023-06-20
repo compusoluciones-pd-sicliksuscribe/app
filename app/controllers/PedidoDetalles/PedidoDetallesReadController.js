@@ -159,13 +159,10 @@
            }  else {
              $('#btnSiguiente').prop('disabled', false);
            }
-           if (contAddseatCoterm >= 1) {
-            document.getElementById('radioSPEI').style.display = 'none';
-            if ($scope.Distribuidor.IdFormaPagoPredilecta == paymentMethods.SPEI) {
-              document.getElementById('currencySpei').style.display = 'none';
-              $('#btnSiguiente').prop('disabled', true);
-            }
-          }
+           if (contAddseatCoterm >= 1 && $scope.Distribuidor.IdFormaPagoPredilecta == paymentMethods.SPEI) {
+            document.getElementById('speiWarning').style.display = 'block';
+            $('#btnSiguiente').prop('disabled', true);
+          } else document.getElementById('speiWarning').style.display = 'none';
         })
         .then(function () {
           if ($scope.isPayingWithCSCredit()) validarCarrito();

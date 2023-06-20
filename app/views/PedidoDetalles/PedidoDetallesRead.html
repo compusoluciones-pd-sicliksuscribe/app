@@ -19,7 +19,7 @@
         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
     </div>
     <div class="row">
-        <div class="alert alert-warning" role="alert">
+        <div class="alert alert-warning" role="alert" id="speiWarning">
             <b>Importante*</b> <br>
             Las transacciones con SPEI no están disponibles en licencias adicionales o co-términos.
         </div>
@@ -47,7 +47,7 @@
                     <div ng-show="!ValidarFormaPago()" ng-hide="SessionCookie.IdTipoAcceso === 10">
                         <input type="radio" name="TipoPago" value="3" ng-checked="isPayingWithPaypal()" ng-disabled="ValidarFormaPago()" ng-model="Distribuidor.IdFormaPagoPredilecta" ng-click="ActualizarFormaPago(3);"> <div style="padding-top: .25em;">Pago Paypal (Solo Pesos MXN)</div>
                     </div>
-                    <div ng-show="!ValidarFormaPago()" ng-hide="SessionCookie.IdTipoAcceso === 10" id="radioSPEI">
+                    <div ng-show="!ValidarFormaPago()" ng-hide="SessionCookie.IdTipoAcceso === 10">
                         <input type="radio" name="TipoPago" value="5" ng-checked="isPayingWithSPEI()" ng-disabled="ValidarFormaPago()" ng-model="Distribuidor.IdFormaPagoPredilecta" ng-click="ActualizarFormaPago(5);"> <div style="padding-top: .25em;">Pago con transferencia bancaria (SPEI)</div>
                     </div>
                     <div>
@@ -67,7 +67,7 @@
                 </select>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
-                <div class="form-group" ng-hide="isPayingWithCreditCard() || hasProtectedExchangeRate() || isPayingWithPaypal()" id="currencySpei">
+                <div class="form-group" ng-hide="isPayingWithCreditCard() || hasProtectedExchangeRate() || isPayingWithPaypal()">
                     <label for="" class="">* ¿Con qué moneda quieres pagarlos?</label>
                     <div class="radio" style="margin-left:20px">
                         <div>
