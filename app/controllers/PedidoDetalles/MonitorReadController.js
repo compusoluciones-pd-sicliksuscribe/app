@@ -69,8 +69,6 @@
               pedido.productoNC = result ? true : false;
               });
               pedido.optionDeleteMS = pedido.CancelarPedido === 0 ? false : evaluationDeleteMS(pedido.FechaInicio);
-              pedido.TermSwitch = pedido.EstatusContrato === 'term-switch';
-              pedido.etiquetaTermSwitch = (pedido.IdEsquemaRenovacion == 5) ? 'Actualizar periodo a un año' : 'Actualizar periodo a tres años';
             });
             $scope.Vacio = 1;
           }
@@ -90,10 +88,10 @@
       return now > limitDate ? false : true;
     }
 
-    const pagination = (currentPage = 1) => {
+    const pagination = () => {
       $scope.filtered = [];
-      $scope.currentPage = currentPage;
-      $scope.numPerPage = 4;
+      $scope.currentPage = 1;
+      $scope.numPerPage = 10;
       $scope.maxSize = 5;
 
       $scope.$watch('currentPage + numPerPage', function () {
