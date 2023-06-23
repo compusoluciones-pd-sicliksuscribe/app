@@ -7,7 +7,7 @@
         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
             <label for="Busqueda">&nbsp;</label>
                 <div class="form-group has-feedback">
-                    <input name="Busqueda" type="text" ng-model="EmpresaFilter" class="form-control" size="30" placeholder="Busca un cliente..." />
+                    <input name="Busqueda" type="text" ng-model="EmpresaFilter" class="form-control" size="30" ng-change="filter()" placeholder="Busca un cliente..." />
                     <i class="form-control-feedback glyphicon glyphicon-search"></i>
                 </div>
             
@@ -49,7 +49,7 @@
 
                 <th style="cursor:pointer" ng-click="OrdenarPor('NombreEmpresa')"><b>&nbsp;Nombre <span class="fa fa-sort"></span></b></th>
 
-                <tr ng-repeat="Empresa in Empresas | filter:EmpresaFilter | orderBy:sortBy:reverse" class="repeat-animation">
+                <tr ng-repeat="Empresa in filtered | filter:EmpresaFilter | orderBy:sortBy:reverse" class="repeat-animation">
                     <td>
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
@@ -141,9 +141,13 @@
             
         </div>
     </div>
-    
+
     <b>Número total de clientes:</b> {{ Empresas.length }}.
     
     </div>
-    
+    <div ng-show="filtered.length === 0" style = "text-align:center"><h4>No se encontraron resultados.</h4></div>        
+    <div style="margin: auto; text-align: center;" >
+      <pagination class="pager" ng-model="currentPage" total-items="listaAux.length" max-size="maxSize" boundary-links="true"></pagination>
+      </div>
+  
 </div>
