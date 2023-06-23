@@ -11,7 +11,6 @@
     const SUPER_USER_PURCHASES = 10;
 
     $scope.init = function () {
-      const getAvailableCredit = 0;
       $scope.CheckCookie();
       if (Session.IdTipoAcceso !== 2 || Session.IdTipoAcceso !== 10) {
         TiposAccesosFactory.getTiposAccesos()
@@ -31,11 +30,11 @@
           .error(function (data, status, headers, config) {
             $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
           });
-        EmpresasFactory.getClientes(getAvailableCredit)
-          .then(Empresas => {
+        EmpresasFactory.getClientes()
+          .success(function (Empresas) {
             $scope.selectEmpresas = Empresas.data;
           })
-          .catch(function (data, status, headers, config) {
+          .error(function (data, status, headers, config) {
             $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
           });
       }

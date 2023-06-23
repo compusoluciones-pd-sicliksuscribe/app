@@ -8,23 +8,31 @@
     $scope.orders = false;
     $scope.BuscarProductos = {};
     $scope.Contrato = {};
+    $scope.Contactos = [];
+    $scope.Renovar = {};
+    $scope.Extender = {};
+    $scope.tradeIn = {};
     $scope.terminos = false;
     $scope.SessionCookie = $cookies.getObject('Session');
-    const FAILED = 'FAILED';
-    const FAILED_1 = 'failed';
-    const ERROR = 'error';
-    const ACCEPTED = 'accepted';
-    const PROCESSING = 'processing';
 
     $scope.init = function () {
-      const getAvailableCredit = 0;
+      $scope.procesandoExtension = false;
+      $scope.procesandoExtensionLbl = 'Extender contrato';
       $scope.CheckCookie();
       FabricantesFactory.getFabricantes()
-        .then(fabricantes => $scope.selectFabricantes = fabricantes.data)
-        .catch(() => $scope.ShowToast('No pudimos cargar la lista de fabricantes, por favor intenta de nuevo más tarde.', 'danger'));
-      EmpresasXEmpresasFactory.getClients(getAvailableCredit)
-        .then(empresas => $scope.selectEmpresas = empresas.data)
-        .catch(() => $scope.ShowToast('No pudimos cargar la lista de clientes, por favor intenta de nuevo más tarde.', 'danger'));
+        .success(function (Fabricantes) {
+          $scope.selectFabricantes = Fabricantes;
+        })
+        .error(function (data, status, headers, config) {
+          $scope.ShowToast('No pudimos cargar la lista de fabricantes, por favor intenta de nuevo más tarde.', 'danger');
+        });
+      EmpresasXEmpresasFactory.getEmpresasXEmpresas()
+        .success(function (Empresas) {
+          $scope.selectEmpresas = Empresas;
+        })
+        .error(function (data, status, headers, config) {
+          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+        });
 
       if ($cookies.getObject('Session').IdTipoAcceso == 4 || $cookies.getObject('Session').IdTipoAcceso == 5 || $cookies.getObject('Session').IdTipoAcceso == 6) {
         Params.IdEmpresaUsuarioFinal = $cookies.getObject('Session').IdEmpresa;
@@ -41,28 +49,12 @@
           if (result.status === 204) {
             $scope.Vacio = 0;
             $scope.Pedidos = '';
-            $scope.PedidosBusqueda = '';
           } else if (result.status === 200) {
-            $scope.Pedidos = $scope.PedidosBusqueda = result.data.data;
+            $scope.Pedidos = result.data.data;
             $scope.Pedidos.forEach(pedido => {
               pedido.Detalles.forEach(detalle => {
-                switch(detalle.EstatusFabricante) {
-                  case FAILED:
-                    detalle.failedOrder = true;
-                  break;
-                  case PROCESSING:
-                    detalle.processingOrder = true;
-                  break;
-                  case FAILED_1:
-                    detalle.failedOrder = true;
-                  break;
-                  case ERROR:
-                    detalle.failedOrder = true;
-                  break;
-                  case ACCEPTED:
-                    detalle.acceptedOrder = true;
-                  break;
-                }
+                detalle.NumeroSerie && detalle.EstatusFabricante === 'accepted' && detalle.PedidoAFabricante
+                ? pedido.listoRenovar = 1 : pedido.listoRenovar = 0;
               });
               ProductosFactory.getNCProduct(pedido.Detalles[0].IdErp)
               .success(function (result) {
@@ -72,7 +64,6 @@
             });
             $scope.Vacio = 1;
           }
-          pagination();
         })
         .catch(function (result) {
           $scope.ShowToast(result.data.message, 'danger');
@@ -80,10 +71,8 @@
     };
 
     const evaluationDeleteMS = function (FechaInicio) {
-      splitDate = FechaInicio.split('/');
-      dateFormat = `${splitDate[2]}/${splitDate[1]}/${splitDate[0]}`;
       const now = new Date();
-      const limitDate = new Date(dateFormat);
+      const limitDate = new Date(FechaInicio);
       limitDate.setDate(limitDate.getDate() + 5);
       return now > limitDate ? false : true;
     }
@@ -93,12 +82,57 @@
       $scope.currentPage = 1;
       $scope.numPerPage = 10;
       $scope.maxSize = 5;
+    };
+    
+    const getContactUsers = function () {
+      UsuariosFactory.getUsuariosContacto($scope.EmpresaSelect)
+        .then(result => {
+          $scope.Contactos = result.data.data;
+          $scope.Renovar = {};
+        });
+    };
 
-      $scope.$watch('currentPage + numPerPage', function () {
-        let begin = (($scope.currentPage - 1) * $scope.numPerPage),
-          end = begin + $scope.numPerPage;
-        $scope.filtered = $scope.PedidosBusqueda.slice(begin, end);
-      });
+    const renewContract = function (contractData) {
+      PedidosFactory.renewContract(contractData)
+        .then(result => {
+          if(result.data.success) {
+            $scope.ShowToast(result.data.message, 'success');
+            $scope.ActualizarMenu();
+            $scope.addPulseCart();
+            setTimeout($scope.removePulseCart, 9000);
+            $location.path('/Carrito');
+          } else  $scope.ShowToast(result.data.message, 'danger');
+        })
+        .catch(result => {
+          $scope.ShowToast(result.data.message, 'danger');
+        });
+    };
+
+    const extendContract = contractData => {
+      $scope.procesandoExtension = true;
+      $scope.procesandoExtensionLbl = 'Procesando...';
+      PedidosFactory.extendContract(contractData)
+        .then(result => {
+          $scope.procesandoExtension = false;
+          $scope.procesandoExtensionLbl = 'Extender contrato';
+          $scope.cerrarModal(`extenderModal${contractData.IdContrato}`);
+          $scope.Extender.IdContrato = null;
+          if (result.data.success) {
+            $scope.ShowToast(result.data.message, 'success');
+            $scope.ActualizarMenu();
+            $scope.addPulseCart();
+            $scope.Pedidos.filter(pedido => { if (pedido.IdContrato === contractData.IdContrato) pedido.PorExtender = 1; });
+          } else {
+            $scope.ShowToast(result.data.message, 'danger');
+          }
+        })
+        .catch(result => {
+          $scope.procesandoExtension = false;
+          $scope.procesandoExtensionLbl = 'Extender contrato';
+          $scope.cerrarModal(`extenderModal${contractData.IdContrato}`);
+          $scope.Extender.IdContrato = null;
+          $scope.ShowToast(result.data.message, 'danger');
+        });
     };
 
     $scope.init();
@@ -112,9 +146,11 @@
       if (Params.IdFabricante === 1) {
         $scope.Contrato.tipo = 'all';
       }
+      Params.EstatusContrato = $scope.Contrato.tipo || 'all';
       if (Params.IdFabricante && $scope.EmpresaSelect) {
         getOrderPerCustomer(Params);
-        if (Params.IdFabricante === 2) {
+        if (Params.IdFabricante === 2) { 
+          getContactUsers();
           ActualizarCSNFactory.getUfCSN(Params.IdEmpresaUsuarioFinal)
           .then(result => {
             if (result.data.success) {
@@ -430,6 +466,49 @@
       document.getElementById(modal).style.display = 'none';
     };
 
+    $scope.CancelarPedidoAutodesk = function (Pedido, Detalles) {
+      $scope.Cancelar = true;
+      $scope.guardar = Pedido;
+      $scope.form.habilitar = true;
+      $scope.$emit('LOAD');
+      Pedido.IdPedidoDetalle = Detalles.IdPedidoDetalle;
+      PedidoDetallesFactory.updateProductoAutodesk(Pedido, 0)
+        .success(function (result) {
+          if (result.success === 1) {
+            $scope.ShowToast(result.message, 'success');
+            $scope.$emit('UNLOAD');
+            $scope.Cancelar = false;
+            $scope.ActualizarMonitor();
+            $scope.form.habilitar = false;
+          }
+        })
+        .error(function (error) {
+          $scope.ShowToast(error, 'danger');
+        });
+    };
+
+    $scope.ReanudarPedidoAutodesk = function (Pedido, Detalles) {
+      Pedido.IdPedidoDetalle = Detalles.IdPedidoDetalle;
+      PedidoDetallesFactory.updateProductoAutodesk(Pedido, 1)
+        .success(function (result) {
+          if (!result.success) {
+            $scope.ShowToast(result.message, 'danger');
+          } else {
+            $scope.ShowToast('Suscripción reanudada.', 'success');
+          }
+          $scope.form.habilitar = true;
+          $scope.ActualizarMonitor();
+          $scope.form.habilitar = false;
+        })
+        .catch(function (error) {
+          $scope.ShowToast(error.data.message, 'danger');
+          $log.log('data error: ' + error.data.message + ' status: ' + error.status + ' headers: ' + error.headers + ' config: ' + error.config);
+          $scope.form.habilitar = true;
+          $scope.ActualizarMonitor();
+          $scope.form.habilitar = false;
+        });
+    };
+
     $scope.Reanudar = function (pedido, detalles) {
       const order = {
         CargoRealizadoProximoPedido: Number(pedido.CargoRealizadoProximoPedido),
@@ -493,6 +572,23 @@
       $location.path('/PedidoDetalles');
     };
 
+    $scope.SolicitarRenovacion = function () {
+      if ($scope.Renovar.IdUsuarioContacto) {
+        const payload = {
+          IdContrato: $scope.Renovar.IdContrato,
+          IdEmpresaUsuarioFinal: $scope.EmpresaSelect,
+          IdUsuarioContacto: $scope.Renovar.IdUsuarioContacto
+        };
+        renewContract(payload);
+      } else {
+        $scope.ShowToast('Selecciona un usuario de contacto', 'warning');
+      }
+    };
+
+    $scope.AgregarContrato = function (pedido) {
+      $scope.Renovar.IdContrato = pedido.IdContrato;
+    };
+
     const getTerminos = function (IdEmpresa) {
       EmpresasXEmpresasFactory.getAcceptanceAgreementByClient(IdEmpresa)
         .success(function (result) {
@@ -553,6 +649,23 @@
       $scope.Tour.start();
     };
 
+    $scope.getEndDateContract = (contratoActual, estatusPedidos) => {
+      $scope.estatusPedidos = estatusPedidos;
+      PedidosFactory.getEndDateContract(contratoActual, $cookies.getObject('Session').IdEmpresa, $scope.EmpresaSelect)
+        .then(result => {
+          $scope.OpcionesExtencion = result.data.data.contractDates;
+          $scope.validarModal(contratoActual);
+        })
+        .catch(result => {
+          $scope.ShowToast(result.data.message, 'danger');
+        });
+    };
+
+    $scope.validarModal = contratoActual => {
+      $scope.OpcionesExtencion.length > 0 ? document.getElementById(`extenderModal${contratoActual}`).style.display = 'block'
+      : document.getElementById('noExtender').style.display = 'block';
+    };
+
     $scope.InsertarOrdenCompra = function (idPedido,ordenCompraProxima) {
       const order = {
         IdPedido: idPedido,
@@ -571,13 +684,84 @@
       document.getElementById(modal).style.display = 'none';
     };
 
-    $scope.buscar = pedidoFilter => {
-      let resultados = [];
-      $scope.Pedidos.forEach(pedido => {
-        if (pedido.NumeroContrato.toString().toUpperCase().indexOf(pedidoFilter.toUpperCase()) >= 0) resultados.push(pedido);
-      });
-      $scope.PedidosBusqueda = resultados;
-      pagination();
+    $scope.solicitarExtension = IdContrato => {
+      if ($scope.Extender.IdContrato) {
+        let payload = {
+          IdContrato: IdContrato,
+          IdEmpresaUsuarioFinal: $scope.EmpresaSelect,
+          IdContratoRelacionado: $scope.Extender.IdContrato,
+          EstatusPedidos: $scope.estatusPedidos
+        };
+        extendContract(payload);
+        payload = {};
+        $scope.estatusPedidos = 0;
+      } else {
+        $scope.ShowToast('Especifica una fecha fin para la extensión del contrato.', 'warning');
+      }
+    };
+
+    $scope.actualizarEsquema = (numeroContrato, numeroSeries, idEsquemaRenovacion) => {
+      
+      PedidoDetallesFactory.actualizarEsquemaRenovacion(numeroSeries, idEsquemaRenovacion)
+        .then(result => {
+          if (result.data.statusCode === 400) {
+            $scope.ShowToast(result.data.message, 'danger');
+          } 
+          else {
+            $scope.Pedidos.forEach(pedido => {
+              if (pedido.NumeroContrato === numeroContrato) {
+                pedido.TermSwitch = true;
+                pedido.EstatusContrato = 'term-switch';
+              }
+            });
+            $scope.ShowToast(result.data.message, 'success');
+          }
+        })
+        .catch(result => {
+          $scope.ShowToast(result.data.message, 'danger');
+        });
+    };
+    
+    $scope.agregarInfoTradein = pedido => {
+      $scope.tradeIn.idContrato = pedido.IdContrato;
+      $scope.tradeIn.IdEsquemaRenovacion = pedido.IdEsquemaRenovacion;
+      $scope.tradeIn.detalles = pedido.Detalles;
+    };
+
+    $scope.solicitarRenovacionTradein = () => {
+      let cantidadTradeInRevasada = false;
+      let contadorDetallesEnCero = 0;
+      if ($scope.tradeIn.IdUsuarioContacto && $scope.tradeIn.IdEsquemaRenovacion) {
+        $scope.tradeIn.detalles.forEach(detalle => {
+          if (detalle.cantidadProxTradeIn > detalle.Cantidad) cantidadTradeInRevasada = true;
+          if (detalle.cantidadProxTradeIn == 0 || !detalle.cantidadProxTradeIn) {
+            contadorDetallesEnCero++;
+          }
+        });
+        if (!cantidadTradeInRevasada) {
+          if (contadorDetallesEnCero != $scope.tradeIn.detalles.length) {
+            const contractData = {
+              IdContrato: $scope.tradeIn.idContrato,
+              IdEmpresaUsuarioFinal: $scope.EmpresaSelect,
+              IdUsuarioContacto: $scope.tradeIn.IdUsuarioContacto,
+              IdEsquemaRenovacion: $scope.tradeIn.IdEsquemaRenovacion,
+              Detalles: $scope.tradeIn.detalles
+            };
+            PedidosFactory.renovacionTradein(contractData)
+              .then(result => {
+                $scope.ShowToast(result.data.message, 'success');
+                $scope.ActualizarMenu();
+                $scope.ActualizarMonitor();
+                $scope.addPulseCart();
+                $('#renovacionTradeIn').modal('hide');
+              })
+              .catch(result => {
+                $scope.ShowToast(result.data.message, 'danger');
+                $('#renovacionTradeIn').modal('hide');
+              });
+          } else $scope.ShowToast('Especifique una cantidad para hacer tarde in en al menos una de las series.', 'warning');
+        } else $scope.ShowToast('La cantidad no debe ser mayor a la disponible.', 'warning');
+      } else $scope.ShowToast('Llena todos los campos del formulario.', 'warning');
     };
   
   };
