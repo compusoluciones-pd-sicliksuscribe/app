@@ -1,5 +1,5 @@
 (function () {
-  var ProductosReadController = function ($scope, $log, $location, $cookies, $routeParams, PlanPremiumFactory, ProductosFactory, AmazonDataFactory, FabricantesFactory, TiposProductosFactory, PedidoDetallesFactory, TipoCambioFactory, ProductoGuardadosFactory, EmpresasXEmpresasFactory, UsuariosFactory, ActualizarCSNFactory, $anchorScroll, EmpresasFactory, ManejoLicencias, PedidosFactory, ContactsFactory, $window, $rootScope) {
+  var ProductosReadController = function ($scope, $log, $location, $cookies, $routeParams, PlanPremiumFactory, ProductosFactory, AmazonDataFactory, FabricantesFactory, TiposProductosFactory, PedidoDetallesFactory, TipoCambioFactory, ProductoGuardadosFactory, EmpresasXEmpresasFactory, UsuariosFactory, ActualizarCSNFactory, $anchorScroll, EmpresasFactory, ManejoLicencias, ProductosLegacyAprobados, PedidosFactory, ContactsFactory, $window, $rootScope) {
     var BusquedaURL = $routeParams.Busqueda;
     const HRWAWRE_EXTRA_EMPOLYEES_GROUPING = 1000;
     $scope.BuscarProductos = {};
@@ -33,6 +33,9 @@
       {id: 1, esquema: 'Mensual' },
       {id: 2, esquema: 'Anual' }
 
+    ];
+    $scope.EsquemaRenovacionLegacyLimited=[
+      {id: 2, esquema: 'Anual' }
     ];
     $scope.EsquemaRenovacionAnual=[
       {id: 9, esquema: 'Anual con facturación mensual' },
@@ -75,8 +78,9 @@
       }
       return null;
     };
-    $scope.BuscarProducto = function (ResetPaginado) {
+    $scope.BuscarProducto = async function (ResetPaginado) {
       $scope.Mensaje = 'Buscando...';
+      const productosLegacy = await ProductosLegacyAprobados.getProductos();
       if (ResetPaginado) {
         $scope.Pagina = 0;
         $scope.BuscarProductos.Offset = $scope.Pagina * 6;
@@ -92,6 +96,12 @@
             $scope.Productos = Productos.data.map(function (item) {
               item.IdPedidoContrato = 0;
               item.AddSeatMS = false;
+              if (item.IdFabricante === 1) {
+                const found = productosLegacy.find(producto => producto === item.IdERP.toLowerCase());
+                found ? item.flagLegacy = true : item.flagLegacy = false;
+              } else {
+                item.flagLegacy = false;
+              }
               item.tiers = formatTiers(item.tiers);
                 ProductosFactory.getNCProduct(item.IdERP)
                 .success(function (result) {
@@ -986,7 +996,7 @@
     };
   };
 
-  ProductosReadController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'PlanPremiumFactory', 'ProductosFactory','AmazonDataFactory', 'FabricantesFactory', 'TiposProductosFactory', 'PedidoDetallesFactory', 'TipoCambioFactory', 'ProductoGuardadosFactory', 'EmpresasXEmpresasFactory', 'UsuariosFactory', 'ActualizarCSNFactory', '$anchorScroll', 'EmpresasFactory', 'ManejoLicencias', 'PedidosFactory', 'ContactsFactory', '$window', '$rootScope'];
+  ProductosReadController.$inject = ['$scope', '$log', '$location', '$cookies', '$routeParams', 'PlanPremiumFactory', 'ProductosFactory','AmazonDataFactory', 'FabricantesFactory', 'TiposProductosFactory', 'PedidoDetallesFactory', 'TipoCambioFactory', 'ProductoGuardadosFactory', 'EmpresasXEmpresasFactory', 'UsuariosFactory', 'ActualizarCSNFactory', '$anchorScroll', 'EmpresasFactory', 'ManejoLicencias', 'ProductosLegacyAprobados', 'PedidosFactory', 'ContactsFactory', '$window', '$rootScope'];
 
   angular.module('marketplace').controller('ProductosReadController', ProductosReadController);
 }());
