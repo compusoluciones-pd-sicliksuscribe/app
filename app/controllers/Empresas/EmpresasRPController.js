@@ -37,6 +37,7 @@
               const dateNull = checkDateNull(empresa);
               empresa.FechaActivo = new Date(empresa.FechaActivo);
               empresa.cancelDate = getFechaDisplay(dateNull.cancelDate);
+              empresa.dominio = empresa.DominioMicrosoftUF ? empresa.DominioMicrosoftUF : 'Sin dominio';
               return empresa;
             });
             $scope.Empresas = empresasConFormato;
