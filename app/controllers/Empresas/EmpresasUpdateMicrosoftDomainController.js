@@ -19,7 +19,7 @@
 
       EmpresasFactory.getClientes()
       .success(function (Empresa) {
-        const consultaEmpresa = Empresa.data.filter(function (getEnterprise) {
+        const consultaEmpresa = Empresa.filter(function (getEnterprise) {
           if (getEnterprise.IdEmpresa === Number(IdEmpresa)) {
             $scope.Empresa = getEnterprise;
             return getEnterprise;
