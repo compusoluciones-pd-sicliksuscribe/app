@@ -34,6 +34,7 @@
       EmpresasFactory.getEmpresas()
         .success(function (data) {
           $scope.CreditoDisponible = data[0].Credito;
+          $scope.Saldo = data[0].Saldo;
         })
         .error(function (data, status, headers, config) {
           $scope.ShowToast('No pudimos cargar los datos de tu empresa, por favor intenta de nuevo más tarde', 'danger');
@@ -178,6 +179,14 @@
       }
 
       return $scope.CreditoDisponible - totalAsignado;
+    };
+
+    $scope.totalDebt = () => {
+      var totalAsignado = 0;
+      if ($scope.Empresas) {
+        $scope.Empresas.forEach(uf => { if (uf.Deuda && uf.PorcentajeCredito) totalAsignado += uf.Deuda });
+      }
+      return (totalAsignado += Number($scope.Saldo));
     };
 
     $scope.CreditoRepartido = function () {
