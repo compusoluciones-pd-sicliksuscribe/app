@@ -676,17 +676,22 @@
   }
 
   $scope.insertAzureBudget = function (IdMicrosoftUF,azureBudget) {
-    const order = {
-      IdMicrosoftUF: IdMicrosoftUF,
-      azureBudget: azureBudget
+    if(azureBudget > 0){
+      const order = {
+        IdMicrosoftUF: IdMicrosoftUF,
+        azureBudget: azureBudget
+      }
+      PedidoDetallesFactory.insertAzureBudget(order.IdMicrosoftUF,order.azureBudget)
+      .then(result => {
+        $scope.ShowToast(result.data.message, 'success');
+      })
+      .catch(result => {
+        $scope.ShowToast(result.data.message, 'danger');
+    });
+    }else{
+      $scope.ShowToast('El valor debe ser mayor a cero', 'danger');
     }
-    PedidoDetallesFactory.insertAzureBudget(order.IdMicrosoftUF,order.azureBudget)
-    .then(result => {
-      $scope.ShowToast(result.data.message, 'success');
-    })
-    .catch(result => {
-      $scope.ShowToast(result.data.message, 'danger');
-  });
+
 }
 
 
