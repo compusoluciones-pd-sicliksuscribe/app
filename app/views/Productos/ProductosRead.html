@@ -239,11 +239,14 @@
                                            
                                             <div ng-if="Producto.IdEmpresaUsuarioFinal && Producto.IdFabricante === 2">
                                                 <label for="contrato" >* Contrato</label>
+                                                <p>No se puede añadir asientos a contratos no renovados
+                                                <br>(Contratos deshabilitados, no han sido renovados)
+                                                </p>
                                                 <div class="input-group">
                                                     <span class="input-group-addon green white">
                                                 <span class="glyphicon glyphicon-file"></span>
                                             </span>
-                                            <select id="contrato" name="contrato" class="form-control selectOption ufs" ng-model="Producto.numeroContrato" ng-options="contrato.contract_number as contrato.contract_number for contrato in Producto.contratos"
+                                            <select id="contrato" name="contrato" class="form-control selectOption ufs" ng-model="Producto.numeroContrato" ng-options="contrato.contract_number as contrato.contract_number disable when contrato.disableContract for contrato in Producto.contratos"
                                                 ng-change="contractSetted(Producto)" ng-required="contrato.contract_number !== ''" ng-disabled="Producto.Especializacion === 'Planes Premium'">
                                             </select>
                                         </div>
