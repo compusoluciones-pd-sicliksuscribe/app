@@ -180,15 +180,9 @@
     const validarCarrito = function () {
       if (parseInt($scope.Distribuidor.IdFormaPagoPredilecta) === 2) {
         return PedidoDetallesFactory.getValidarCarrito()
-        .then(function (result) {
-          $scope.datosValidarCarrito = result.data.data;
-          $scope.PedidoDetalles.forEach(function (item) {
-            result.data.data.forEach(function (user) {
-              if (item.IdEmpresaUsuarioFinal === user.IdEmpresaUsuarioFinal && !user.hasCredit) {
-                $scope.CreditoValido = 0;
-                item.hasCredit = 0;
-              }
-            });
+        .then(result => {
+          if (result.data.data.resellerCreditData.availableCredit <= 0) $scope.CreditoValido = 0;
+          $scope.PedidoDetalles.forEach(item => {
             if ($scope.Distribuidor.IdFormaPagoPredilecta === 1 || $scope.Distribuidor.IdFormaPagoPredilecta === 4 && item.MonedaPago !== 'Pesos') {
               $scope.ShowToast('Para pagar con tarjeta bancaria o con Transferencia, es necesario que los pedidos estén en pesos MXN. Actualiza tu forma de pago o cambia de moneda en los pedidos agregándolos una vez más.', 'danger');
             }
@@ -197,7 +191,7 @@
         .catch(function (result) {
           error(result.data);
           $location.path('/Productos');
-        });
+        });             
       }
     };
 

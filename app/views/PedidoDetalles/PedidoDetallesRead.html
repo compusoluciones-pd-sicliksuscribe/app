@@ -24,8 +24,11 @@
             Las transacciones con SPEI no están disponibles en licencias adicionales o co-términos.
         </div>
     </div>
-    <br>
-    <br>
+    <div class="row" ng-show="!CreditoValido">
+        <div class="alert alert-danger" role="alert">
+            <b>Crédito insuficiente para completar la compra.</b> <br>
+        </div>
+    </div>
     <br>
 
     <div ng-show="!(PedidoDetalles.length > 0)">
@@ -174,11 +177,6 @@
 					    </span>
 
                         <br>
-                        <div style="color:red;" ng-show="!pedido.hasCredit && isPayingWithCSCredit()">
-                            <span class="glyphicon glyphicon-warning-sign"></span> <b>Cliente sin crédito suficiente.</b>
-                            <br> * <a href="#/Clientes" class="form-group" title="Aumenta su crédito"> Aumenta su crédito </a>
-                            <br> * Elimina productos de tu carrito.
-                        </div>
 
                         <div ng-show="pedido.IdFabricante === 2 && pedido.IdAccionAutodesk === 4">
                             <a title="Elimina del carrito el pedido de renovación." ng-click="removeRenew(pedido);">
