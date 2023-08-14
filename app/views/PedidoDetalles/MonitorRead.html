@@ -345,9 +345,19 @@
 									REANUDAR <p ng-show="pedido.CargoRealizadoProximoPedido && pedido.IdFormaPagoProxima === 4">Renovación pagada</p>
 								</button>
                             <br> <br>
-                            <input type="text" ng-model="OrdenCompraProxima" ng-show="pedido.IdFabricante === 1 && detalles.Activo === 1 " class="form-control" size="30" placeholder=" Orden de Compra" ng-value="{{'pedido.OrdenCompraProxima'}}" />
+                            <input type="text" ng-model="OrdenCompraProxima" ng-show="pedido.IdFabricante === 1 && detalles.Activo === 1 && pedido.IdEsquemaRenovacion !== 8" class="form-control" size="30" placeholder=" Orden de Compra" ng-value="{{'pedido.OrdenCompraProxima'}}" />
                             <br>
-                            <button class="btn btn-primary" ng-show="pedido.IdFabricante === 1 && detalles.Activo === 1 " ng-disabled="!OrdenCompraProxima"  ng-click="InsertarOrdenCompra(pedido.IdPedido,OrdenCompraProxima)">ACTUALIZAR</button>
+                            <button class="btn btn-primary" ng-show="pedido.IdFabricante === 1 && detalles.Activo === 1  && pedido.IdEsquemaRenovacion !== 8" ng-disabled="!OrdenCompraProxima"  ng-click="InsertarOrdenCompra(pedido.IdPedido,OrdenCompraProxima)">ACTUALIZAR</button>
+                            <div ng-show="pedido.IdFabricante === 1 && detalles.Activo === 1 && pedido.IdEsquemaRenovacion === 8">
+                                <div class="row">
+                                    <div class="form-group col-xs-6 col-sm-12 col-md-12 col-lg-12">
+                                        <label>Limite Mensual de Azure (USD)</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="text" ng-model="azureBudget" ng-disabled="pedido.IdFormaPagoProxima === 4" ng-show="pedido.IdFabricante === 1 && detalles.Activo === 1 && pedido.IdEsquemaRenovacion === 8" class="form-control" size="30" placeholder=" Presupuesto" ng-value="{{'pedido.budget'}}" oninput="this.value = Math.round(this.value);" />
+                            <br>
+                            <button class="btn btn-primary" ng-show="pedido.IdFabricante === 1 && detalles.Activo === 1  && pedido.IdEsquemaRenovacion === 8"  ng-click="insertAzureBudget(pedido.IdMicrosoftUF,azureBudget)">ACTUALIZAR LIMITE</button>
                             <br>
                             <div ng-show="detalles.Mostrar">
                                 <div class="row">
