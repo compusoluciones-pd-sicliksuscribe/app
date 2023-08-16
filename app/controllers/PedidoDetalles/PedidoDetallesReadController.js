@@ -604,6 +604,16 @@
         })
         .catch(() => $scope.ShowToast(result.data.message, 'danger'));
     };
+
+    $scope.cotizarPedido = async (idPedido) => {
+      const { IdPedido } = $scope.PedidoDetalles.find(pedido => pedido.IdPedido === idPedido);
+      await PedidoDetallesFactory.cotizarPedido(IdPedido)
+      .then(getEnterprises())
+      .then(getOrderDetails)
+      .then(ActualizarFormaPago)
+      .then(() => $scope.ActualizarMenu())
+      .catch(function (result) { error(result.data); });
+    };
   };
 
   PedidoDetallesReadController.$inject = ['$scope', '$log', '$location', '$cookies', 'PedidoDetallesFactory', 'TipoCambioFactory', 'EmpresasXEmpresasFactory', 'EmpresasFactory', 'PedidosFactory', 'UsuariosFactory', '$routeParams'];

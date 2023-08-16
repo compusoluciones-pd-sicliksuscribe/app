@@ -347,6 +347,11 @@
       return $http.put($rootScope.API + 'orders/InsertOrdenCompraProxima/', { idPedido: idPedido, ordenCompraProxima: ordenCompraProxima });
     };
 
+    factory.cotizarPedido = (idPedido) => {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'orders/quotationOrder', { IdPedido: idPedido });
+    };
+
     return factory;
   };
 

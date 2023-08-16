@@ -124,6 +124,11 @@
                             <br>
                         </div>
                     </div>
+                    <div class="text-center form-group" ng-if="pedido.IdFabricante === 2 && (SessionCookie.IdTipoAcceso === 2 || SessionCookie.IdTipoAcceso === 9 || SessionCookie.IdTipoAcceso === 10)">
+                        <div style="color:#00549F;">
+                            <a ng-click="cotizarPedido(pedido.IdPedido)"><span class="glyphicon glyphicon-list-alt" style="font-size: 30px"></span><label>Cotizar Pedido</label></a>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
                     <div class="form-group">
