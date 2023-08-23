@@ -18,7 +18,7 @@
     const añoActual = fechaActual.getFullYear();
     const finDeAño = mesActual === 12;
 
-    $scope.ratingClick = (event) => {
+    $scope.ratingClick = event => {
       const starIndex = stars.indexOf(event.target);
       calificacion = starIndex + 1;
       stars.forEach(() => { 
@@ -43,12 +43,12 @@
       else return true;
     };
 
-    $scope.abrirModal = (modal) => {
+    $scope.abrirModal = async modal => {
       if (modal !== 'modalCalificacion') document.getElementById(modal).style.display = 'block';
       else {
         PedidoDetallesFactory.verificarEstatusDeRespuesta(parseInt($scope.Session.IdUsuario))
         .then(response => {
-          const fecha = response.content;
+          const fecha = response.data.content;
           if (fecha === [] || fecha[0]?.Año <= añoActual && fecha[0]?.MesPendiente <= mesActual) {
             document.getElementById(modal).style.display = 'block';
           }
@@ -68,7 +68,7 @@
       })
     )
 
-    $scope.cerrarModal = (modal) => {
+    $scope.cerrarModal = modal => {
       if (modal === 'modalCalificacion') {
         if (calificacion === null) $scope.ShowToast('Por favor ingrese una calificación', 'warning');
         else $scope.guardarCalificacion();
