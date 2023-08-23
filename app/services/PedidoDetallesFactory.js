@@ -337,6 +337,21 @@
       return $http.put($rootScope.API + 'orders/InsertOrdenCompraProxima/', { idPedido: idPedido, ordenCompraProxima: ordenCompraProxima });
     };
 
+    factory.guardarCalificacion = (userId, rating, comment = 'Sin mensaje adjunto') => {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'orders/GuardarEncuesta', { userId: userId, rating: rating, comment: comment });
+    };
+
+    factory.verificarEstatusDeRespuesta = (userId) => {
+      factory.refreshToken();
+      return $http.get($rootScope.API + 'orders/RecuperarUltimoMesDeRespuesta/' + userId);
+    };
+
+    factory.ActualizarEstatusDeRespuesta = (userId, nextMonth, year) => {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'orders/ActualizarMesDeRespuesta', { userId: userId, nextMonth: nextMonth, year: year });
+    };
+    
     return factory;
   };
 

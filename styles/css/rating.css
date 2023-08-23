@@ -1,0 +1,32 @@
+.mdl-title {
+    font-weight: 600;
+}
+
+.mdl-qtn {
+    font-weight: 200;
+    font-size: 16px;
+}
+
+.text-instructions {
+    margin-top: -5px;
+}
+
+.rating {
+    width: 100%;
+    display: flex;
+    padding: 0 100px;
+    justify-content: space-evenly;
+    margin-bottom: 15px;
+}
+
+.star {
+    font-size: 32px;
+    color: rgb(157, 151, 151);
+    transition: color 0.3s;
+    cursor: pointer;
+}
+
+.star:hover,
+.star.checked {
+    color: gold;
+}

@@ -16,19 +16,21 @@
             </ul>
         </div>
     </div>
-        <div class="form-group row" style="position: relative; margin-top: 25px; height: 120px;">
-            <div style="position: absolute; right: 0; ">
-                <p style="display: block"><b>Método de pago:</b> {{orderIdsCookie[0].MetodoPago}}</p>
-                <p ng-if="numeroConfirmacion(orderIdsCookie[0].NumeroConfirmacion)" style="display: block"><b>Código de confirmación:</b> {{orderIdsCookie[0].NumeroConfirmacion}}</p>
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
-                        <div class="form-group">
-                            <button id="mainButton" type="button" ng-click="AceptaPedido()" class="btn btn-primary btn-block">Aceptar</button>
-                        </div>
+    
+    <div class="form-group row" style="position: relative; margin-top: 25px; height: 120px;">
+        <div style="position: absolute; right: 0; ">
+            <p style="display: block"><b>Método de pago:</b> {{orderIdsCookie[0].MetodoPago}}</p>
+            <p ng-if="numeroConfirmacion(orderIdsCookie[0].NumeroConfirmacion)" style="display: block"><b>Código de confirmación:</b> {{orderIdsCookie[0].NumeroConfirmacion}}</p>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                    <div class="form-group">
+                        <button id="mainButton" type="button" ng-click="AceptaPedido()" class="btn btn-primary btn-block">Aceptar</button>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+
     <div id="isValidMPNIDModal" class="modal fade in" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -51,6 +53,45 @@
         </div>
     </div>
 
+    
+    <div id="modalCalificacion" class="modal fade in" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body p-5 ">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="text-center p-5 ">
+                                <h4 class="p-5 mdl-title">Califica tu experiencia</h4>
+                                <hr/>
+                                <p>
+                                    Tu opinión es muy importante para nosotros y nos ayuda a 
+                                    mejorar nuestra plataforma, por favor ayúdanos a responder esta breve encuesta.
+                                </p>
+                                <hr/>
+                                <p class="mdl-qtn">1. ¿Qué tan fácil ha sido tu experiencia utilizando siclick Compusoluciones?</p>
+                                <div class='rating'>
+                                    <i class="bi bi-star-fill star" id="star1" ng-click="ratingClick($event)"></i>
+                                    <i class="bi bi-star-fill star" id="star2" ng-click="ratingClick($event)"></i>
+                                    <i class="bi bi-star-fill star" id="star3" ng-click="ratingClick($event)"></i>
+                                    <i class="bi bi-star-fill star" id="star4" ng-click="ratingClick($event)"></i>
+                                    <i class="bi bi-star-fill star" id="star5" ng-click="ratingClick($event)"></i>
+                                </div>
+                                <p class="mdl-qtn">2. ¿Cuáles son las razones por las que nos das esa calificación?</p>
+                                <textarea rows='4' cols='65' ng-model="ratingComentary" ng-maxlength="250" ng-change=""></textarea>
+                                <hr/>
+                                <div class="col-sm-12">
+                                    <button type="button" class="btn btn-success m-5" ng-click="cerrarModal('modalCalificacion')">
+                                        Calificar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="modalOpenpayConfirma" class="modal fade in" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -62,7 +103,7 @@
                                 <p>Los detalles de la compra se enviaron por correo electrónico.</p>
                                 <i>(En caso de no recibir correo electrónico, favor de contactar a soporte)</i>
                                 <div class="col-sm-12">
-                                    <button type="button" class="btn btn-success m-5" ng-click="cerrarModal('modalOpenpayConfirma')">
+                                    <button type="button" class="btn btn-success m-5" ng-click="cerrarModal('modalOpenpayConfirma'); abrirModal('modalCalificacion')">
                                         Continuar
                                     </button>
                                 </div>
@@ -73,5 +114,6 @@
             </div>
         </div>
     </div>
+
 
 </div>
