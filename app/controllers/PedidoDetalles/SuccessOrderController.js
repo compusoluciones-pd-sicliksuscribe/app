@@ -18,7 +18,7 @@
     const añoActual = fechaActual.getFullYear();
     const finDeAño = mesActual === 12;
 
-    $scope.ratingClick = function (event) {
+    $scope.ratingClick = (event) => {
       const starIndex = stars.indexOf(event.target);
       calificacion = starIndex + 1;
       stars.forEach(() => { 
@@ -43,11 +43,11 @@
       else return true;
     };
 
-    $scope.abrirModal = function (modal) {
+    $scope.abrirModal = (modal) => {
       if (modal !== 'modalCalificacion') document.getElementById(modal).style.display = 'block';
       else {
         PedidoDetallesFactory.verificarEstatusDeRespuesta(parseInt($scope.Session.IdUsuario))
-        .success(response => {
+        .then(response => {
           const fecha = response.content;
           if (fecha === [] || fecha[0]?.Año <= añoActual && fecha[0]?.MesPendiente <= mesActual) {
             document.getElementById(modal).style.display = 'block';
@@ -56,21 +56,19 @@
       }
     };
 
-    $scope.guardarCalificacion = async () => {
-      return (
+    $scope.guardarCalificacion = () => (
         PedidoDetallesFactory.guardarCalificacion($scope.Session.IdUsuario, calificacion, $scope.ratingComentary),
         PedidoDetallesFactory.ActualizarEstatusDeRespuesta($scope.Session.IdUsuario, finDeAño ? 1 : mesActual + 1, finDeAño ? añoActual + 1 : añoActual)
-        )
-      .then( result => {
+      .then(result => {
         if (result.data.success) {
           $scope.ShowToast('Hemos recibido su comentario, muchas gracias.', 'success');
         } else {
           $scope.ShowToast(result.data.message, 'No se ha podido guardar la información')
         }
       })
-    }
+    )
 
-    $scope.cerrarModal = function (modal) {
+    $scope.cerrarModal = (modal) => {
       if (modal === 'modalCalificacion') {
         if (calificacion === null) $scope.ShowToast('Por favor ingrese una calificación', 'warning');
         else $scope.guardarCalificacion();
