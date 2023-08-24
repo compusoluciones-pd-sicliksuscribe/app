@@ -71,6 +71,9 @@
         case paymentMethods.PREPAY:
           paymentMethod = 'Transferencia';
           break;
+        case paymentMethods.SPEI:
+          paymentMethod = 'SPEI';
+          break;
         default:
           paymentMethod = 'Metodo de pago incorrecto.';
       }
