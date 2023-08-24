@@ -57,21 +57,21 @@
       $scope.reverse = !$scope.reverse;
     };
 
-    $scope.BuscarEmpresas = function (busqueda) {
+    $scope.BuscarEmpresas = busqueda => {
       EmpresasFactory.getEmpresa($scope.Empresa.Busqueda)
-        .success(function (Empresas) {
+        .then(Empresas => {
           if (Empresas) {
             try {
-              if (Empresas[0].Success == false || Empresas.length == null || Empresas.length == 'undefined') {
+              if (!Empresas.data.length) {
                 $scope.Empresas = null;
                 $scope.TablaVisible = false;
               } else {
-                $scope.Empresas = Empresas;
+                $scope.Empresas = Empresas.data;
                 if ($scope.Empresas.length > 0) {
                   for (let i = 0; i < $scope.Empresas.length; i++) {
                     EmpresasFactory.getTerminosNuevoComercio($scope.Empresas[i].IdEmpresa)
-                    .success(result => {
-                      result.Firma === 1 ?
+                    .then(result => {
+                      result.data.Firma === 1 ?
                         $scope.Empresas[i].CartaTerminosMicrosoft = 1: 
                         $scope.Empresas[i].CartaTerminosMicrosoft = 0;
                     });
@@ -79,7 +79,6 @@
                   $scope.TablaVisible = true;
                 } else {
                   $scope.Empresas = null;
-
                   $scope.TablaVisible = false;
                 }
               }
@@ -93,10 +92,7 @@
             $scope.TablaVisible = false;
           }
         })
-        .error(function (data, status, headers, config) {
-          $scope.TablaVisible = false;
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
+        .catch(() => $scope.TablaVisible = false);
     };
 
     $scope.ActualizarConfirmacionCarta = function (Empresa) {
