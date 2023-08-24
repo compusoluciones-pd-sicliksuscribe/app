@@ -112,11 +112,6 @@
       return $http.get($rootScope.API + 'PedidoDetalles/ContarProductos');
     };
 
-    factory.postWarningCredito = function (params) {
-      factory.refreshToken();
-      return $http.post($rootScope.API + 'warningCredito', params);
-    };
-
     factory.getPrepararTarjetaCredito = function () {
       factory.refreshToken();
       return $http.post($rootScope.API + 'shopping-cart/credit-card-payments');

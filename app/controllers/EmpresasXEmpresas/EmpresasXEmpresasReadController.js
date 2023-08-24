@@ -6,6 +6,7 @@
     $scope.Cont = 0;
     $scope.form = {};
     $scope.form.habilitar = false;
+    $scope.Saldo = 0;
 
     String.prototype.splice = function (idx, rem, s) {
       return (this.slice(0, idx) + s + this.slice(idx + Math.abs(rem)));
@@ -15,32 +16,21 @@
       $scope.CheckCookie();
 
       EmpresasXEmpresasFactory.getEmpresasXEmpresas()
-        .success(function (Empresas) {
+        .then(Empresas => {
           if (Empresas) {
-            for (var i = 0; i < Empresas.length; i++) {
-              Empresas[i].WarningCredito = false;
-            }
-
-            $scope.Empresas = Empresas;
+            $scope.Empresas = Empresas.data;
             $scope.listaAux = $scope.Empresas;
             pagination();
           }
         })
-        .error(function (data, status, headers, config) {
-          $scope.ShowToast('No pudimos cargar tus clientes, por favor intenta de nuevo más tarde', 'danger');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
+        .catch(() => $scope.ShowToast('No pudimos cargar tus clientes, por favor intenta de nuevo más tarde', 'danger'));
 
       EmpresasFactory.getEmpresas()
-        .success(function (data) {
-          $scope.CreditoDisponible = data[0].Credito;
-          $scope.Saldo = data[0].Saldo;
+        .then(result => {
+          $scope.CreditoDisponible = result.data[0].Credito;
+          $scope.Saldo = Number(result.data[0].Saldo) + Number(result.data[0].VentaPendiente);
         })
-        .error(function (data, status, headers, config) {
-          $scope.ShowToast('No pudimos cargar los datos de tu empresa, por favor intenta de nuevo más tarde', 'danger');
-
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
+        .catch(() => $scope.ShowToast('No pudimos cargar los datos de tu empresa, por favor intenta de nuevo más tarde', 'danger'));
     };
 
     $scope.init();
@@ -110,46 +100,15 @@
       }
 
       EmpresasXEmpresasFactory.putEmpresasXEmpresa(Empresa)
-        .success(function (data) {
-          if (data[0].Success == true) {
-            $scope.ShowToast(data[0].Message, 'success');
-
-            var parametros = { IdEmpresaUsuarioFinal: Empresa.IdEmpresa };
-
-            PedidoDetallesFactory.postWarningCredito(parametros)
-              .success(function (result) {
-                if (result) {
-                  var WarningCredito = false;
-
-                  if (result.success === 0) {
-                    WarningCredito = true;
-                    $scope.ShowToast(result.message, 'danger');
-                  } else {
-                    WarningCredito = false;
-                  }
-
-                  for (var e = 0; e < $scope.Empresas.length; e++) {
-                    if ($scope.Empresas[e].IdEmpresa === Empresa.IdEmpresa) {
-                      $scope.Empresas[e].WarningCredito = WarningCredito;
-                      break;
-                    }
-                  }
-                }
-              })
-              .error(function (data, status, headers, config) {
-                $scope.ShowToast('No pudimos cargar tu información, por favor intenta de nuevo más tarde.', 'danger');
-                $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-              });
-          } else {
-            $scope.ShowToast(data[0].Message, 'danger');
+        .then(result => {
+          if (result.data[0].Success == true) $scope.ShowToast(result.data[0].Message, 'success');
+          else {
+            $scope.ShowToast(result.data[0].Message, 'danger');
 
             $scope.init();
           }
         })
-        .error(function (data, status, headers, config) {
-          $scope.ShowToast('No pudimos actualizar el crédito, por favor intenta de nuevo más tarde', 'danger');
-          $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
+        .catch(() => $scope.ShowToast('No pudimos actualizar el crédito, por favor intenta de nuevo más tarde', 'danger'));
     };
 
     $scope.NuevaEmpresa = function () {
@@ -167,42 +126,17 @@
       return result;
     };
 
-    $scope.PosibilidadCredito = function () {
-      var totalAsignado = 0;
-      if ($scope.Empresas !== undefined) {
-        for (var i = 0; i < $scope.Empresas.length; i++) {
-          var Empresa = $scope.Empresas[i];
-          if (Empresa.PorcentajeCredito != undefined && Empresa.PorcentajeCredito != null) {
-            totalAsignado += Empresa.PorcentajeCredito;
-          }
-        }
-      }
-
-      return $scope.CreditoDisponible - totalAsignado;
+    $scope.totalDebtClick = () => {
+      
+      let totalAsignado = 0;
+      if ($scope.Empresas) $scope.Empresas.forEach(uf => { if (uf.debt) totalAsignado += uf.debt });
+      return totalAsignado;
     };
 
     $scope.totalDebt = () => {
-      var totalAsignado = 0;
-      if ($scope.Empresas) {
-        $scope.Empresas.forEach(uf => { if (uf.Deuda && uf.PorcentajeCredito) totalAsignado += uf.Deuda });
-      }
+      let totalAsignado = 0;
+      if ($scope.Empresas) $scope.Empresas.forEach(uf => { if (uf.debt) totalAsignado += uf.debt });
       return (totalAsignado += Number($scope.Saldo));
-    };
-
-    $scope.CreditoRepartido = function () {
-      var totalAsignado = 0;
-
-      if ($scope.Empresas !== undefined) {
-        for (var i = 0; i < $scope.Empresas.length; i++) {
-          var Empresa = $scope.Empresas[i];
-
-          if (Empresa.PorcentajeCredito != undefined && Empresa.PorcentajeCredito != null) {
-            totalAsignado += Empresa.PorcentajeCredito;
-          }
-        }
-      }
-
-      return totalAsignado;
     };
 
     $scope.IniciarTourClients = function () {
@@ -270,33 +204,7 @@
         let begin = (($scope.currentPage - 1) * $scope.numPerPage),
           end = begin + $scope.numPerPage;
         $scope.filtered = $scope.listaAux.slice(begin, end);
-        warningCreditoFiltered($scope.filtered);
       });
-    };
-
-    const warningCreditoFiltered = (filtered) =>{
-      for (var w = 0; w < filtered.length; w++) {
-        (function (index) {
-          var parametros = { IdEmpresaUsuarioFinal: filtered[index].IdEmpresa };
-          PedidoDetallesFactory.postWarningCredito(parametros)
-            .success(function (result) {
-              if (result) {
-                if (result.success === 0) {
-                  filtered[index].WarningCredito = true;
-  
-                  $scope.ShowToast(result.message, 'danger');
-                }
-                else {
-                  filtered[index].WarningCredito = false;
-                }
-              }
-            })
-            .error(function (data, status, headers, config) {
-              $scope.ShowToast('No pudimos cargar tu información, por favor intenta de nuevo más tarde.', 'danger');
-              $log.log('data error: ' + data.error + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-            });
-        }(w));
-      };
     };
   };
 
