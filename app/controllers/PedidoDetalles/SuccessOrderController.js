@@ -49,7 +49,7 @@
         PedidoDetallesFactory.verificarEstatusDeRespuesta(parseInt($scope.Session.IdUsuario))
         .then(response => {
           const fecha = response.data.content;
-          if (fecha === [] || fecha[0]?.Año <= añoActual && fecha[0]?.MesPendiente <= mesActual) {
+          if (fecha.length === 0 || fecha[0]?.Año < añoActual || fecha[0]?.Año >= añoActual && fecha[0]?.MesPendiente <= mesActual) {
             document.getElementById(modal).style.display = 'block';
           }
         })
@@ -69,12 +69,14 @@
     )
 
     $scope.cerrarModal = modal => {
-      if (modal === 'modalCalificacion') {
-        if (calificacion === null) $scope.ShowToast('Por favor ingrese una calificación', 'warning');
-        else $scope.guardarCalificacion();
+      if (modal === 'modalCalificacion' && calificacion === null) {
+        $scope.ShowToast('Por favor ingrese una calificación', 'warning');
       }
-      document.getElementById(modal).style.display = 'none';
-      $scope.ClearToast();
+      else {
+        if (modal === 'modalCalificacion') $scope.guardarCalificacion();
+        document.getElementById(modal).style.display = 'none';
+        $scope.ClearToast();
+      }
     };
 
     $scope.modalOpenpayConfirma = function () {
