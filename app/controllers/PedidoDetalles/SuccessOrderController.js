@@ -49,7 +49,7 @@
         PedidoDetallesFactory.verificarEstatusDeRespuesta(parseInt($scope.Session.IdUsuario))
         .then(response => {
           const fecha = response.data.content;
-          if (fecha.length === 0 || fecha[0]?.Año < añoActual || fecha[0]?.Año >= añoActual && fecha[0]?.MesPendiente <= mesActual) {
+          if (fecha.length === 0 || fecha[0]?.Año < añoActual || fecha[0]?.Año === añoActual && fecha[0]?.MesPendiente <= mesActual) {
             document.getElementById(modal).style.display = 'block';
           }
         })
