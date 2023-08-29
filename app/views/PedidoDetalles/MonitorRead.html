@@ -338,7 +338,7 @@
                         </div>
                         <div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2" ng-hide="!detalles.Activo || pedido.IdFabricante !== 1 || pedido.IdFormaPagoProxima !== 2 || detalles.IdTipoProducto !== 2 || !detalles.PedidoAFabricante  || !pedido.productoNC">
                             <label class="switchBtn">
-                                <input type="checkbox" ng-checked="pedido.RenovacionNC" ng-model="RenovacionNC" ng-click="actualizarEstatusRenovacion(RenovacionNC, pedido)" >
+                                <input type="checkbox" ng-checked="pedido.RenovacionNC" id="{{ pedido.IdPedido }}" ng-model="RenovacionNC" ng-click="actualizarEstatusRenovacion(RenovacionNC,pedido, detalles)" >
                                 <div class="slide round">Renovación</div>
                             </label>
                         </div>
@@ -417,6 +417,24 @@
                         <div  class="modal-footer">
                             <button type="button" class="btn btn-success" ng-click="CancelarPedido(infoPedido, infoDetalle)" data-dismiss="modal">Acepto</button>
                             <button type="button" class="btn btn-danger" ng-click="cerrarModal('cancelationAlert');Confirmar(infoDetalle.IdPedidoDetalle);" data-dismiss="modal">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="modalRenew" class="modal fade in" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" >
+                        <button type="button" class="close" ng-click="cerrarModal('modalRenew')" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h2 class="modal-title">Aviso</h2>
+                    </div>
+                    <div class="modal-body">
+                        <h3 id="messageRenew"></h3>
+                        <br>
+                        <div  class="modal-footer">
+                            <button type="button" class="btn btn-success" ng-click="cerrarModal('modalRenew')" data-dismiss="modal">Entendido</button>
                         </div>
                     </div>
                 </div>
