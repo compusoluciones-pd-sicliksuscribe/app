@@ -48,11 +48,11 @@
     };
 
     const stars = [
-      document.querySelector('#star1'),
-      document.querySelector('#star2'),
-      document.querySelector('#star3'),
-      document.querySelector('#star4'),
-      document.querySelector('#star5'),
+      document.querySelector('#str1'),
+      document.querySelector('#str2'),
+      document.querySelector('#str3'),
+      document.querySelector('#str4'),
+      document.querySelector('#str5'),
     ];
     
     let calificacion = null;
