@@ -148,7 +148,43 @@
     </div>
     <br>
 
-
+    <div id="modalCalificacion" class="modal fade in" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body p-5 ">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="text-center p-5 ">
+                                <h4 class="p-5 mdl-title">Califica tu experiencia</h4>
+                                <hr/>
+                                <p>
+                                    Tu opinión es muy importante para nosotros y nos ayuda a 
+                                    mejorar nuestra plataforma, por favor ayúdanos a responder esta breve encuesta.
+                                </p>
+                                <hr/>
+                                <p class="mdl-qtn">1. ¿Qué tan fácil ha sido tu experiencia utilizando siclick Compusoluciones?</p>
+                                <div class='rating'>
+                                    <i class="bi bi-star-fill star" id="star1" ng-click="ratingClick($event)"></i>
+                                    <i class="bi bi-star-fill star" id="star2" ng-click="ratingClick($event)"></i>
+                                    <i class="bi bi-star-fill star" id="star3" ng-click="ratingClick($event)"></i>
+                                    <i class="bi bi-star-fill star" id="star4" ng-click="ratingClick($event)"></i>
+                                    <i class="bi bi-star-fill star" id="star5" ng-click="ratingClick($event)"></i>
+                                </div>
+                                <p class="mdl-qtn">2. ¿Cuáles son las razones por las que nos das esa calificación?</p>
+                                <textarea rows='4' cols='65' ng-model="ratingComentary" ng-maxlength="250" ng-change=""></textarea>
+                                <hr/>
+                                <div class="col-sm-12">
+                                    <button type="button" class="btn btn-success m-5" ng-click="cerrarModal('modalCalificacion')">
+                                        Calificar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="container">
         <div class="col-sm-12" id="pdfSPEI" style="display: none;">

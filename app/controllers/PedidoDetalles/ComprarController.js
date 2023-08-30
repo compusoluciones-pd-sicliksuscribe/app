@@ -1,5 +1,6 @@
 (function () {
   var ComprarController = function ($scope, $log, $rootScope, $location, $cookies, PedidoDetallesFactory, TipoCambioFactory, PedidosFactory, EmpresasFactory, $route) {
+    $scope.Session = $cookies.getObject('Session');
     $scope.currentPath = $location.path();
     $scope.PedidoDetalles = {};
     $scope.Distribuidor = {};
@@ -45,6 +46,33 @@
       $scope.ShowToast(!message ? 'Ha ocurrido un error, inténtelo más tarde.' : message, 'danger');
       $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
     };
+
+    const stars = [
+      document.querySelector('#star1'),
+      document.querySelector('#star2'),
+      document.querySelector('#star3'),
+      document.querySelector('#star4'),
+      document.querySelector('#star5'),
+    ];
+    
+    let calificacion = null;
+    const fechaActual = new Date();
+    const mesActual = fechaActual.getMonth() + 1;
+    const añoActual = fechaActual.getFullYear();
+    const finDeAño = mesActual === 12;
+
+    $scope.ratingClick = event => {
+      const starIndex = stars.indexOf(event.target);
+      calificacion = starIndex + 1;
+      stars.forEach(() => { 
+        for (let i = 0; i <= starIndex; i++) {
+          stars[i].classList.add('checked');
+        }
+        for (let i = starIndex + 1; i < stars.length; i++) {
+          stars[i].classList.remove('checked');
+        }
+      })
+    }
 
     const getPaymentMethods = function (id) {
       let paymentMethod = '';
@@ -521,9 +549,41 @@
       printError(getCardError(response.data.error_code));
     };
 
-    $scope.cerrarModal = modal => {
-      document.getElementById(modal).style.display = 'none';
+    $scope.abrirModal = async modal => {
+      if (modal !== 'modalCalificacion') document.getElementById(modal).style.display = 'block';
+      else {
+        PedidoDetallesFactory.verificarEstatusDeRespuesta(parseInt($scope.Session.IdUsuario))
+        .then(response => {
+          const fecha = response.data.content;
+          if (fecha.length === 0 || fecha[0]?.Año < añoActual || fecha[0]?.Año === añoActual && fecha[0]?.MesPendiente <= mesActual) {
+            document.getElementById(modal).style.display = 'block';
+          }
+        })
+      }
     };
+
+    $scope.guardarCalificacion = () => (
+      PedidoDetallesFactory.guardarCalificacion($scope.Session.IdUsuario, calificacion, $scope.ratingComentary),
+      PedidoDetallesFactory.ActualizarEstatusDeRespuesta($scope.Session.IdUsuario, finDeAño ? 1 : mesActual + 1, finDeAño ? añoActual + 1 : añoActual)
+    .then(result => {
+      if (result.data.success) {
+        $scope.ShowToast('Hemos recibido su comentario, muchas gracias.', 'success');
+      } else {
+        $scope.ShowToast(result.data.message, 'No se ha podido guardar la información')
+      }
+    })
+  )
+
+  $scope.cerrarModal = modal => {
+    if (modal === 'modalCalificacion' && calificacion === null) {
+      $scope.ShowToast('Por favor ingrese una calificación', 'warning');
+    }
+    else {
+      if (modal === 'modalCalificacion') $scope.guardarCalificacion();
+      document.getElementById(modal).style.display = 'none';
+      $scope.ClearToast();
+    }
+  };
 
     const getActualSubdomain = function () {
       let subdomain = window.location.href;
@@ -557,6 +617,7 @@
     };
 
     $scope.comprarSPEI = function () {
+      $scope.abrirModal('modalCalificacion');
       PedidoDetallesFactory.getPrepararSPEI()
         .success(function (Datos) {
           $cookies.putObject('pedidosAgrupados', Datos.data['0'].pedidosAgrupados, { secure: $rootScope.secureCookie });
