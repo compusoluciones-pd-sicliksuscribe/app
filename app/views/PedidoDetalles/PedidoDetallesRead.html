@@ -24,11 +24,6 @@
             Las transacciones con SPEI no están disponibles en licencias adicionales o co-términos.
         </div>
     </div>
-    <div class="row" ng-show="!CreditoValido">
-        <div class="alert alert-danger" role="alert">
-            <b>Crédito insuficiente para completar la compra.</b> <br>
-        </div>
-    </div>
     <br>
 
     <div ng-show="!(PedidoDetalles.length > 0)">
@@ -273,6 +268,11 @@
         <div class="form-group row">
             <div class="col-xs-0 col-sm-0 col-md-9 col-lg-9">
             </div>
+            <div class="row" ng-show="!CreditoValido">
+                <div class="alert alert-danger" role="alert" style="text-align: center;">
+                    <b>Crédito insuficiente para completar la compra.</b> <br>
+                </div>
+            </div>
             <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
                 <div class="">
                     <button id="btnSiguiente" type="button" ng-click="next();" class="btn btn-primary btn-block" ng-if="(hasProtectedExchangeRate() && Distribuidor.MonedaPago === 'Pesos'
@@ -309,6 +309,24 @@
                             ng-click="inicioFuturo(Contrato.FechaInicio); cerrarModal('inicioFuturoModal')"
                             ng-disabled="procesandoExtension" style="padding: .8em 1.4em">Aceptar</button>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="noCreditModal" class="modal fade in" tabindex="-1" role="dialog" style="padding-right: 17px;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header red">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                    <h4 class="modal-title white">Aviso importate</h4>
+                </div>
+                <div class="modal-body">
+                    <p style="text-align: center">Has llegado o sobrepasado el límite de tu línea de crédito, por lo que no será posible hacer más compras. Puedes revisar el crédito disponible desde la opción <b>Mis clientes</b>.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" ng-click="cerrarModal('noCreditModal')" data-dismiss="modal">Enterado</button>
                 </div>
             </div>
         </div>

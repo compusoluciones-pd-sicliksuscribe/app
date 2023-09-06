@@ -126,13 +126,6 @@
       return result;
     };
 
-    $scope.totalDebtClick = () => {
-      
-      let totalAsignado = 0;
-      if ($scope.Empresas) $scope.Empresas.forEach(uf => { if (uf.debt) totalAsignado += uf.debt });
-      return totalAsignado;
-    };
-
     $scope.totalDebt = () => {
       let totalAsignado = 0;
       if ($scope.Empresas) $scope.Empresas.forEach(uf => { if (uf.debt) totalAsignado += uf.debt });

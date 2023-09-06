@@ -179,18 +179,19 @@
         });
     };
 
-    const validarCarrito = function () {
+    const validarCarrito = () => {
       if (parseInt($scope.Distribuidor.IdFormaPagoPredilecta) === 2) {
         return PedidoDetallesFactory.getValidarCarrito()
         .then(result => {
           if (result.data.data.resellerCreditData.availableCredit <= 0) $scope.CreditoValido = 0;
+          if (!$scope.CreditoValido) $scope.openNoCreditModal();
           $scope.PedidoDetalles.forEach(item => {
             if ($scope.Distribuidor.IdFormaPagoPredilecta === 1 || $scope.Distribuidor.IdFormaPagoPredilecta === 4 && item.MonedaPago !== 'Pesos') {
               $scope.ShowToast('Para pagar con tarjeta bancaria o con Transferencia, es necesario que los pedidos estén en pesos MXN. Actualiza tu forma de pago o cambia de moneda en los pedidos agregándolos una vez más.', 'danger');
             }
           });
         })
-        .catch(function (result) {
+        .catch(result => {
           error(result.data);
           $location.path('/Productos');
         });             
@@ -591,14 +592,15 @@
       $scope.idEsquemaRenovacion = idEsquemaRenovacion;
     };
 
-    $scope.cerrarModal = (modal) => {
-      document.getElementById(modal).style.display = 'none';
-    };
+    $scope.cerrarModal = modal => document.getElementById(modal).style.display = 'none';
+
+    $scope.openNoCreditModal = () => document.getElementById('noCreditModal').style.display = 'block';
+  
 
     $scope.inicioFuturo = async fechaInicio => {
       PedidoDetallesFactory.actualizarFechaInicio($scope.idContratoInicioFuturo, fechaInicio, $scope.idEsquemaRenovacion)
         .then(async result => {
-          if (result.data.success) {
+          if (result.data.success) {  
             $scope.ShowToast( result.data.message, 'success');
             $scope.Contrato.FechaInicio = undefined;
             await getOrderDetails();
