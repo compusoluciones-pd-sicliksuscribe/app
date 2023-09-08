@@ -614,6 +614,8 @@
     $scope.saveOrder = () => {
       actualizarOrdenesCompra();
     };
+
+    $scope.goToMisClientes = () => $location.path('/Clientes');
   };
 
   PedidoDetallesReadController.$inject = ['$scope', '$log', '$location', '$cookies', 'PedidoDetallesFactory', 'TipoCambioFactory', 'EmpresasXEmpresasFactory', 'EmpresasFactory', 'PedidosFactory', 'UsuariosFactory', '$routeParams'];

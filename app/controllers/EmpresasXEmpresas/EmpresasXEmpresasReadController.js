@@ -199,6 +199,8 @@
         $scope.filtered = $scope.listaAux.slice(begin, end);
       });
     };
+
+    $scope.goToMonitor = () => $location.path('/Monitor');
   };
 
   EmpresasXEmpresasReadController.$inject = ['$scope', '$log', '$location', '$cookies', 'EmpresasXEmpresasFactory', 'EmpresasFactory', 'PedidoDetallesFactory', '$window', '$rootScope'];
