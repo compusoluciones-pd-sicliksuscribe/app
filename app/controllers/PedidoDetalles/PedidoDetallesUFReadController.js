@@ -117,6 +117,9 @@
         .then(function () {
           if ($scope.isPayingWithCSCredit()) validarCarrito();
         })
+        .then(function () {
+          if ($scope.isPayingWithCSCredit()) validarCarrito();
+        })
         .catch(function (result) { error(result.data); });
     };
 

@@ -125,6 +125,17 @@
         })
     }
 
+    $scope.ActualizarAdendumMS = function (Empresa) {
+      var AdendumAzureMSCheck;
+      if (Empresa.AdendumAzure == true || Empresa.AdendumAzure == 1) { AdendumAzureMSCheck = 0; } else { AdendumAzureMSCheck = 1; }
+      var parametros = { IdEmpresa: Empresa.IdEmpresa, AdendumAzure: AdendumAzureMSCheck };
+      console.log(parametros);
+      EmpresasFactory.postActualizarAdendumMS(parametros)
+        .success(function (result) {
+          $scope.ShowToast('Estado de terminos actualizado', 'success');
+        })
+    }
+
     $scope.ActualizarIdNivelDistribuidor = function (Empresa) {
       var parametros = { IdEmpresa: Empresa.IdEmpresa, IdNivelDistribuidor: Empresa.IdNivelDistribuidor };
       EmpresasFactory.putActualizarNivelDistribuidor(parametros)
