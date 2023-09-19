@@ -45,8 +45,7 @@
         .then(function (result) {
           $scope.Distribuidor = result.data[0];
           $scope.Distribuidor.MonedaPago = 'Pesos';
-          $scope.AdendumAzureCheck = $scope.Distribuidor.AdendumAzure
-          console.log($scope.AdendumAzureCheck);
+          $scope.AdendumAzureCheck = $scope.Distribuidor.AdendumAzure;
           EmpresasFactory.getTerminosNuevoComercio($scope.Distribuidor.IdEmpresa)
           .then (function (response){
             $scope.Distribuidor.NuevoComercioTYC = response.data.Firma;
