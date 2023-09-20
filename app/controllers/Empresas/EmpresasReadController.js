@@ -6,6 +6,22 @@
     $scope.cambiaAgente = false;
     $scope.cambiaAgenteAutodesk = false;
 
+    const STATUS_ADENDUM = {
+      TRUE: true,
+      ACCEPTED: 1,
+      DENIED: 0
+    };
+    
+    const ERROR_CODE_AZURE = {
+      ACCEPTED: 'Estado de Adendum actualizado',
+      DENIED: 'No se pudo Actualizar su estado'
+    };
+
+    const IDENTIFIERS = {
+      SUCCESS: 'success',
+      DANGER: 'danger'
+    };
+
     $scope.init = function () {
       $scope.CheckCookie();
       $scope.Empresas = null;
@@ -127,12 +143,14 @@
 
     $scope.ActualizarAdendumMS = function (Empresa) {
       var AdendumAzureMSCheck;
-      if (Empresa.AdendumAzure == true || Empresa.AdendumAzure == 1) { AdendumAzureMSCheck = 0; } else { AdendumAzureMSCheck = 1; }
+      if (Empresa.AdendumAzure == STATUS_ADENDUM.TRUE || Empresa.AdendumAzure == STATUS_ADENDUM.ACCEPTED) { AdendumAzureMSCheck = STATUS_ADENDUM.DENIED; } else { AdendumAzureMSCheck = STATUS_ADENDUM.ACCEPTED; }
       var parametros = { IdEmpresa: Empresa.IdEmpresa, AdendumAzure: AdendumAzureMSCheck };
-      console.log(parametros);
       EmpresasFactory.postActualizarAdendumMS(parametros)
         .success(function (result) {
-          $scope.ShowToast('Estado de terminos actualizado', 'success');
+          $scope.ShowToast(ERROR_CODE_AZURE.ACCEPTED, IDENTIFIERS.SUCCESS);
+        })
+        .error(function(result){
+          $scope.ShowToast(ERROR_CODE_AZURE.DENIED,  IDENTIFIERS.DANGER);
         })
     }
 
