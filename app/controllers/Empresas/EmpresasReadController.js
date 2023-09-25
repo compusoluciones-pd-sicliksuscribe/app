@@ -143,8 +143,8 @@
 
     $scope.ActualizarAdendumMS = function (Empresa) {
       var AdendumAzureMSCheck;
-      if (Empresa.AdendumAzure == STATUS_ADENDUM.TRUE || Empresa.AdendumAzure == STATUS_ADENDUM.ACCEPTED) { AdendumAzureMSCheck = STATUS_ADENDUM.DENIED; } else { AdendumAzureMSCheck = STATUS_ADENDUM.ACCEPTED; }
-      var parametros = { IdEmpresa: Empresa.IdEmpresa, AdendumAzure: AdendumAzureMSCheck };
+      if (Empresa.AcuerdoAzure == STATUS_ADENDUM.TRUE || Empresa.AcuerdoAzure == STATUS_ADENDUM.ACCEPTED) { AdendumAzureMSCheck = STATUS_ADENDUM.DENIED; } else { AdendumAzureMSCheck = STATUS_ADENDUM.ACCEPTED; }
+      var parametros = { IdEmpresa: Empresa.IdEmpresa, AcuerdoAzure: AdendumAzureMSCheck };
       EmpresasFactory.postActualizarAdendumMS(parametros)
         .success(function (result) {
           $scope.ShowToast(ERROR_CODE_AZURE.ACCEPTED, IDENTIFIERS.SUCCESS);

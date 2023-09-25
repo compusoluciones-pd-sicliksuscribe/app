@@ -37,6 +37,10 @@
       SUPER_USUARIO: 10,
     };
 
+    const ErrorMessage = {
+      ERROR_AZURE_ADENDUM: 'Tu carrito no se puede procesar debido que no se ha firmado los T&C de Azure. Para poder continuar contacte con su Agente para firmar lo Terminos o elimine los siguientes pedidos: '
+    }
+
     const error = function (error) {
       $scope.ShowToast(!error ? 'Ha ocurrido un error, inténtelo más tarde.' : error.message, 'danger');
       $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
@@ -47,7 +51,7 @@
         .then(function (result) {
           $scope.Distribuidor = result.data[0];
           $scope.Distribuidor.MonedaPago = 'Pesos';
-          $scope.AdendumAzureCheck = $scope.Distribuidor.AdendumAzure;
+          $scope.AdendumAzureCheck = $scope.Distribuidor.AcuerdoAzure;
           EmpresasFactory.getTerminosNuevoComercio($scope.Distribuidor.IdEmpresa)
           .then (function (response){
             $scope.Distribuidor.NuevoComercioTYC = response.data.Firma;
@@ -167,7 +171,7 @@
             $scope.ShowToast('Tu carrito no se puede procesar por los siguientes pedidos: '+$scope.flagLCO+' debido a politicas de Microsoft. Para poder continuar elimine dicho pedido del carrito', 'danger');
            }else if ($scope.flagAzureAdendum !== '') {
             $('#btnSiguiente').prop(DISABLED, true);
-            $scope.ShowToast(`Tu carrito no se puede procesar por los siguientes pedidos: '${$scope.flagAzureAdendum}' debido que no se ha firmado los T&C de Azure. Para poder continuar elimine dicho pedido del carrito o contacte con su Agente para firmarlo`, DANGER);
+            $scope.ShowToast(`${ErrorMessage.ERROR_AZURE_ADENDUM} ${$scope.flagAzureAdendum}`, DANGER);
            } else {
              $('#btnSiguiente').prop('disabled', false);
            }
