@@ -336,6 +336,12 @@
       factory.refreshToken();
       return $http.put($rootScope.API + 'orders/InsertOrdenCompraProxima/', { idPedido: idPedido, ordenCompraProxima: ordenCompraProxima });
     };
+    
+    factory.insertAzureBudget = (IdUfAzure, budget) => {
+      factory.refreshToken();
+      return $http.put($rootScope.API + 'orders/add-azure-budget/', { IdUfAzure: IdUfAzure, budget: budget });
+    };
+
 
     return factory;
   };

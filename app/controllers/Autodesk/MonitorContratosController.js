@@ -66,8 +66,8 @@
 
     const getContactUsers = function (customer) {
       const data = $scope.selectEmpresas.filter(empresa => empresa.csn === customer)
-      const finalUserId = data[0].IdEmpresa;
-      MonitorContratosFactory.getUserEndCustomer(finalUserId)
+      const { IdEmpresa: finalUserId, csn }= data[0];
+      MonitorContratosFactory.getUserEndCustomer(finalUserId, csn)
         .then(result => {
           $scope.contactos = result.data.data;
           $scope.renovar = {};

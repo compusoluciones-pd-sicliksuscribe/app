@@ -670,7 +670,6 @@
     };
 
     $scope.AgregarCarrito = producto => {
-      console.log(producto);
       let nuevoProducto = {
         IdProducto: producto.IdProducto,
         Cantidad: !producto.Cantidad ? 1 : producto.Cantidad,
@@ -685,7 +684,7 @@
         IdAccionAutodesk: producto.IdFabricante === $scope.AUTODESK ? $scope.INITIAL_ORDER : null,
         IdERP: producto.IdERP,
         Plazo: producto.Plazo,
-        CotermMS: producto.cotermMS && !producto.periodoCompleto ? fortmatDate(producto.cotermMS.FechaFin) : null
+        CotermMS: producto.cotermMS && !producto.periodoCompleto && !producto.periodoAddSeat ? fortmatDate(producto.cotermMS.FechaFin) : null
       };
       if (producto.numeroContrato !== $scope.NEW_CONTRACT) {
         nuevoProducto.IdAccionAutodesk = ADD_SEAT;
