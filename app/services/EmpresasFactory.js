@@ -199,6 +199,11 @@
       return $http.post($rootScope.API + 'Empresas/TerminosNuevoComercio', Empresa);
     };
 
+    factory.postActualizarAdendumMS = function (Empresa) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'Empresas/AdendumAzureMS', Empresa);
+    };
+
     factory.getTerminosNuevoComercio = function (IdEmpresa) {
       factory.refreshToken();
       return $http.get($rootScope.API + 'Empresas/GetTerminosNuevoComercio/' + IdEmpresa);

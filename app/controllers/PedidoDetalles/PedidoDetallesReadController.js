@@ -5,6 +5,7 @@
     $scope.error = false;
     $scope.Distribuidor = {};
     $scope.flagAnnualMensual = '';
+    $scope.flagAzureAdendum = '';
     $scope.flagTYC=0;
     $scope.flagLCO='';
     const ON_DEMAND = 3;
@@ -12,6 +13,8 @@
     const CREATEORDER = 'CREATEORDER';
     const ADDSEAT = 'ADDSEAT';
     const COTERM = 'COTERM';
+    const DANGER = 'danger';
+    const DISABLED = 'diasabled'
     const paymentMethods = {
       CREDIT_CARD: 1,
       CS_CREDIT: 2,
@@ -34,6 +37,10 @@
       SUPER_USUARIO: 10,
     };
 
+    const ErrorMessage = {
+      ERROR_AZURE_ADENDUM: 'Tu carrito no se puede procesar debido que no se ha firmado los T&C de Azure. Para poder continuar contacte con su Agente para firmar lo Terminos o elimine los siguientes pedidos: '
+    }
+
     const error = function (error) {
       $scope.ShowToast(!error ? 'Ha ocurrido un error, inténtelo más tarde.' : error.message, 'danger');
       $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
@@ -44,6 +51,7 @@
         .then(function (result) {
           $scope.Distribuidor = result.data[0];
           $scope.Distribuidor.MonedaPago = 'Pesos';
+          $scope.AdendumAzureCheck = $scope.Distribuidor.AcuerdoAzure;
           EmpresasFactory.getTerminosNuevoComercio($scope.Distribuidor.IdEmpresa)
           .then (function (response){
             $scope.Distribuidor.NuevoComercioTYC = response.data.Firma;
@@ -119,6 +127,7 @@
           $scope.flagAnnualMensual = '';
           $scope.flagTYC = 0;
           $scope.flagLCO = '';
+          $scope.flagAzureAdendum = '';
           $scope.orden = new Array(result.data.data.length);
           $scope.PedidoDetalles = result.data.data;
           if ($scope.PedidoDetalles[0].IdFormaPago === 1) validarTC();
@@ -137,6 +146,7 @@
             elem.Forma = getPaymentMethods(elem.IdFormaPago);
             elem.NombreFabricante = getMakers(elem.IdFabricante);
             elem.Productos.forEach(function (item) {
+              if (item.IdFabricante === 1 && IdEsquemaRenovacion === 8 && $scope.AdendumAzureCheck === 0 ) {`${$scope.flagAzureAdendum +=elem.Productos[0].IdPedido} `;}
               if (item.IdFabricante === 1 && elem.IdEsquemaRenovacion === 9 && elem.IdFormaPago!==2) {$scope.flagAnnualMensual +=elem.Productos[0].IdPedido +' ';}
               if (item.IdFabricante === 1 && $scope.Distribuidor.NuevoComercioTYC === 0) {$scope.flagTYC ++;}
               if (item.IdFabricante === 1 && elem.Productos[0].NumeroSerie === CREATEORDER && elem.Productos[0].validacion === 0 && IdEsquemaRenovacion !== 8 && elem.Productos[0].Academy === 0 ){$scope.flagLCO += elem.Productos[0].IdPedido +' ';}
@@ -146,8 +156,8 @@
           });
           if ($scope.error) {
             $scope.ShowToast('Ocurrió un error al procesar sus productos del carrito. Favor de contactar a soporte de CompuSoluciones.', 'danger');
-          }
-          if (!validate) {
+            }
+            if (!validate) {
             $scope.ValidarFormaPago();
           }
           if ($scope.flagAnnualMensual !== '') {
@@ -159,7 +169,10 @@
            }else if ($scope.flagLCO !== '') {
             $('#btnSiguiente').prop('disabled', true);
             $scope.ShowToast('Tu carrito no se puede procesar por los siguientes pedidos: '+$scope.flagLCO+' debido a politicas de Microsoft. Para poder continuar elimine dicho pedido del carrito', 'danger');
-           }  else {
+           }else if ($scope.flagAzureAdendum !== '') {
+            $('#btnSiguiente').prop(DISABLED, true);
+            $scope.ShowToast(`${ErrorMessage.ERROR_AZURE_ADENDUM} ${$scope.flagAzureAdendum}`, DANGER);
+           } else {
              $('#btnSiguiente').prop('disabled', false);
            }
            if (contAddseatCoterm >= 1 && $scope.Distribuidor.IdFormaPagoPredilecta == paymentMethods.SPEI) {
@@ -506,7 +519,8 @@
         .catch(() => $scope.ShowToast('No fue posible actualizar el usuario de compra.', 'danger'));
       if ($scope.flagAnnualMensual !== '' ||
         $scope.flagTYC >= 1 ||
-        $scope.flagLCO !== '') {
+        $scope.flagLCO !== '' ||
+        $scope.flagAzureAdendum !== '') {
         $('#btnSiguiente').prop('disabled', true);
       } else {
         $('#btnSiguiente').prop('disabled', false);
@@ -518,7 +532,8 @@
       if (!tipoTarjetaCredito ||
         $scope.flagAnnualMensual !== '' ||
         $scope.flagTYC >= 1 ||
-        $scope.flagLCO !== '') {
+        $scope.flagLCO !== ''||
+        $scope.flagAzureAdendum !== '') {
         $('#btnSiguiente').prop('disabled', true);
       } else {
         $scope.tipoTarjeta(tipoTarjetaCredito, false);
