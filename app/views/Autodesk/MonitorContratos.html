@@ -91,6 +91,15 @@
                                 <li ng-if="subscription.siclick_status"> <label for="Estatus">Estatus pedido: </label> Serie Ocupada </li>
                                 <li> <label for="Implantacion">Implantación: </label> {{subscription.implantacion}} </li>
                                 <li ng-if="subscription.deployment === 'N'"> <label for="SwitchType">Switch Type: </label> {{subscription.switch_type}} </li>
+                                <li ng-if="subscription.deployment === 'N' && SessionCookie.IdTipoAcceso == 10 && !subscription.switch_type" style="display: flex; align-items: center;"> <label for="SwitchType" style="margin-right: 10px;">Insertar Switch Type: </label>
+                                    <select class="form-control selectOption" style="width: 45%;" ng-model="SwitchTypeSelect" ng-change="ActualizarSwitchType(SwitchTypeSelect, contract.contract_number, subscription.subscription_reference_number);">
+                                        <option ng-selected="true" value="">Selecciona un tipo</option>
+                                        <option value="MU">MU2SU_MUS</option>
+                                        <option value="M2S">MU2SU_M2S</option>
+                                        <option value="M2SMU">MU2SU_MTS</option>
+                                        <option value="M2SY4">MU2SU_Y4</option>
+                                    </select>
+                                </li>
                             </ul>
                         </div>
     
