@@ -1,5 +1,5 @@
 (function () {
-  var MonitorReadController = function ($scope, $log, $cookies, $location, EmpresasXEmpresasFactory, PedidoDetallesFactory, $uibModal, $filter, FabricantesFactory, PedidosFactory, EmpresasFactory, UsuariosFactory, AmazonDataFactory, ActualizarCSNFactory, ProductosFactory, ManejoLicencias) {
+  var MonitorReadController = function ($scope, $log, $cookies, $location, EmpresasXEmpresasFactory, PedidoDetallesFactory, $uibModal, $filter, FabricantesFactory, PedidosFactory, EmpresasFactory, UsuariosFactory, AmazonDataFactory, ActualizarCSNFactory, ProductosFactory, ManejoLicencias, $window, $rootScope) {
     $scope.EmpresaSelect = 0;
     var Params = {};
     $scope.form = {};
@@ -237,6 +237,27 @@
           $scope.ShowToast('No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde', 'danger');
         });
     };
+
+
+
+    $scope.Upgrades = function (IdCustomer, IdSubscription, IdPedido){
+      $scope.SessionCookies = $cookies.getObject('Session');
+      let p1 = btoa($scope.CaracteresAleatorios(14)+btoa(IdCustomer)+$scope.CaracteresAleatorios(11));
+      let p2 = btoa($scope.CaracteresAleatorios(26)+btoa(IdSubscription)+$scope.CaracteresAleatorios(19));
+      let p3 = btoa($scope.CaracteresAleatorios(22)+btoa($scope.SessionCookies.Token)+$scope.CaracteresAleatorios(30));
+      let p4 = btoa($scope.CaracteresAleatorios(15)+btoa(IdPedido)+$scope.CaracteresAleatorios(12));
+      $window.location.href = `http://localhost:3000/?idCustumer=${p1}&idSubscription=${p2}&idUsuario=${p3}&idPedido=${p4}`;
+    }
+
+    $scope.CaracteresAleatorios =  function (length){
+      var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      var charactersLength = characters.length;
+      var result = '';
+      for (var i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      }
+      return result;
+    }
 
     $scope.ActualizarDetalle = function (pedido, detalles) {
       if (pedido.IdFabricante !== 5 && (detalles.CantidadProxima <= 0 || !detalles.CantidadProxima) && pedido.IdFabricante !== 7) {
@@ -582,7 +603,7 @@
   
   };
 
-  MonitorReadController.$inject = ['$scope', '$log', '$cookies', '$location', 'EmpresasXEmpresasFactory', 'PedidoDetallesFactory', '$uibModal', '$filter', 'FabricantesFactory', 'PedidosFactory', 'EmpresasFactory', 'UsuariosFactory','AmazonDataFactory', 'ActualizarCSNFactory', 'ProductosFactory', 'ManejoLicencias'];
+  MonitorReadController.$inject = ['$scope', '$log', '$cookies', '$location', 'EmpresasXEmpresasFactory', 'PedidoDetallesFactory', '$uibModal', '$filter', 'FabricantesFactory', 'PedidosFactory', 'EmpresasFactory', 'UsuariosFactory','AmazonDataFactory', 'ActualizarCSNFactory', 'ProductosFactory', 'ManejoLicencias','$window'];
 
   angular.module('marketplace').controller('MonitorReadController', MonitorReadController);
 

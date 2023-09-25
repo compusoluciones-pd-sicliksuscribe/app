@@ -185,7 +185,6 @@
                             <div ng-show="(detalles.Activo) && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 10)">
                                 <label ng-hide="pedido.Bloquear || pedido.CargoRealizadoProximoPedido">Próxima forma de pago:</label>
                             </div>
-
                             <form ng-hide="pedido.Bloquear || pedido.CargoRealizadoProximoPedido">
                                 <div class="row" ng-show="detalles.Activo && (SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 10)">
                                     <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
@@ -213,9 +212,8 @@
                                     </div>
                                 </div>
                             </form>
-
+                            <button class="btn btn-info" ng-click= 'Upgrades(detalles.IdCustumer, detalles.IdSubscription, pedido.IdPedido)' ng-disabled= "" ng-if="(SessionCookie.IdTipoAcceso == 2 ||  SessionCookie.IdTipoAcceso == 10)" ng-show="pedido.IdFabricante === 1 && detalles.Activo === 1 && detalles.IdSubscription && detalles.TipoOperacion!='ADDSEAT' && pedido.productoNC " >MEJORAR</button>
                         </div>
-
                         <div class="BajoConsumo" ng-if="detalles.IdTipoProducto === 3">
                             <div ng-if="(SessionCookie.IdTipoAcceso == 2 || SessionCookie.IdTipoAcceso == 3 || SessionCookie.IdTipoAcceso == 10)" class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
                                 <label>Consumo: </label>
@@ -337,10 +335,10 @@
                             </label>
                         </div>
 
-                        <div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                        <div class="form-group col-xs-12 col-sm-12 col-md-2 col-lg-2">                        
                             <button class="btn btn-danger" ng-show="detalles.Activo  && pedido.IdFabricante !== 11" ng-click="Confirmar(detalles.IdPedidoDetalle)" ng-disabled="pedido.CargoRealizadoProximoPedido || (!detalles.PedidoAFabricante || detalles.EstatusFabricante === 'FAILED') || (pedido.IdFabricante === 1 && !pedido.optionDeleteMS && pedido.productoNC)">
 									CANCELAR
-								</button>
+							</button>
                             <button class="btn btn-success" ng-show="!detalles.Activo && pedido.IdFabricante !== 1" ng-click="Reanudar(pedido, detalles)" ng-disabled="pedido.CargoRealizadoProximoPedido || (!detalles.PedidoAFabricante || detalles.EstatusFabricante === 'FAILED')">
 									REANUDAR <p ng-show="pedido.CargoRealizadoProximoPedido && pedido.IdFormaPagoProxima === 4">Renovación pagada</p>
 								</button>
@@ -348,7 +346,7 @@
                             <input type="text" ng-model="OrdenCompraProxima" ng-show="pedido.IdFabricante === 1 && detalles.Activo === 1 " class="form-control" size="30" placeholder=" Orden de Compra" ng-value="{{'pedido.OrdenCompraProxima'}}" />
                             <br>
                             <button class="btn btn-primary" ng-show="pedido.IdFabricante === 1 && detalles.Activo === 1 " ng-disabled="!OrdenCompraProxima"  ng-click="InsertarOrdenCompra(pedido.IdPedido,OrdenCompraProxima)">ACTUALIZAR</button>
-                            <br>
+                           
                             <div ng-show="detalles.Mostrar">
                                 <div class="row">
                                     <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -375,11 +373,12 @@
                                 </div>
                             </div>
                         </div>
-
+                    
                     </div>
                 </td>
             </tr>
         </table>
+    
 
         <div id="cancelationAlert" class="modal fade in" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
