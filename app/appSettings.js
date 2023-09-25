@@ -11,7 +11,7 @@ angular.module('marketplace')
   $rootScope.SICLIK_FRONT = 'http://10.3.112.113:3000/';
   // $rootScope.SICLIK_FRONT = 'https://wwww.siclik.mx/'
   // $rootScope.SICLIK_API = 'https://fargate.siclik.mx:8998/'
-  // $rootScope.API = 'https://pruebas.compusoluciones.com/';
+  // $rootScope.API = 'https://apiclickprod.compusoluciones.com/';
   // $rootScope.MAPI = 'http://microsoft-api.us-east-1.elasticbeanstalk.com/';
   // $rootScope.API_PROJECT = 'https://hv5h195n38.execute-api.us-east-1.amazonaws.com/prod/governance';
   // $rootScope.dominio = 'clicksuscribe';
