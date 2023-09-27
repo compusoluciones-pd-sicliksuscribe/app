@@ -430,9 +430,9 @@
     $scope.ActualizarSwitchType = async (switchType, contractNumber, subscriptionReferenceNumber) => {
       if(switchType){
         const contratos = [... $scope.contracts];
-        await  contratos.forEach(async contrato => {
+        await Promise.all(contratos.map(async contrato => {
           if(contrato.contract_number === contractNumber){
-            await contrato.subscriptions.forEach(async subscription => {
+            await Promise.all(contrato.subscriptions.map(async subscription => {
               if(subscription.subscription_reference_number === subscriptionReferenceNumber){
                 await MonitorContratosFactory.insertSwitchType(subscriptionReferenceNumber, switchType)
                 .then(result => {
@@ -442,9 +442,9 @@
                   } else $scope.ShowToast(result.data.message, 'danger');
                 });
               } 
-            });
+            }));
           }
-        });
+        }));
         $scope.contracts = contratos;
       }
     };
