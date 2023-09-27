@@ -426,6 +426,28 @@
         })
       } else $scope.ShowToast('Insertar un contrato', 'warning')
     };
+
+    $scope.ActualizarSwitchType = async (switchType, contractNumber, subscriptionReferenceNumber) => {
+      if(switchType){
+        const contratos = [... $scope.contracts];
+        await Promise.all(contratos.map(async contrato => {
+          if(contrato.contract_number === contractNumber){
+            await Promise.all(contrato.subscriptions.map(async subscription => {
+              if(subscription.subscription_reference_number === subscriptionReferenceNumber){
+                await MonitorContratosFactory.insertSwitchType(subscriptionReferenceNumber, switchType)
+                .then(result => {
+                  if (result.data.success) {
+                    subscription.switch_type = switchType;
+                    $scope.ShowToast(result.data.message, SUCCESS_MSG)
+                  } else $scope.ShowToast(result.data.message, 'danger');
+                });
+              } 
+            }));
+          }
+        }));
+        $scope.contracts = contratos;
+      }
+    };
   };
   
 

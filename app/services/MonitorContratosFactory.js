@@ -56,6 +56,11 @@
       return $http.post($rootScope.API + 'autodesk/contractSync', { contractNumber });
     };
 
+    factory.insertSwitchType = (subscriptionReferenceNumber, switchType) => {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'autodesk/insertSwitchType', {subscriptionReferenceNumber, switchType});
+    };
+
     return factory;
   };
 
