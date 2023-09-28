@@ -358,25 +358,6 @@
         $scope.Iva = 0;
         $scope.Total = 0;
       }
-      if ($scope.PedidosSeleccionadosParaPagar.length !== 0 && document.getElementById('Prepago').checked) {
-        PedidoDetallesFactory.monitorCalculationsPrepaid({Pedidos: $scope.PedidosSeleccionadosParaPagar, tipoTarjeta: false}, $scope.Distribuidor.MonedaPago)
-          .success(function (calculations) {
-            if (calculations.OrderTotal) {
-              $scope.Subtotal = calculations.totalCharges[0].subtotalOrders;
-              $scope.Iva = calculations.totalCharges[0].ivaOrders;
-              $scope.Total = calculations.totalCharges[0].totalOrders;
-            } else {
-              $scope.Subtotal = 0;
-              $scope.Iva = 0;
-              $scope.Total = 0;
-            }
-            $scope.ServicioElectronico = 0;
-          })
-          .error(function (data, status, headers, config) {
-            $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
-            $scope.ShowToast('No pudimos realizar los cálculos, por favor intenta de nuevo más tarde.', 'danger');
-          });
-      }
       if ($scope.PedidosSeleccionadosParaPagar.length !== 0 && document.getElementById('Spei').checked) {
         PedidoDetallesFactory.monitorCalculationsPrepaid({Pedidos: $scope.PedidosSeleccionadosParaPagar, tipoTarjeta: false}, $scope.Distribuidor.MonedaPago)
           .success(function (calculations) {
@@ -437,8 +418,6 @@
     $scope.checkPayment = function () {
       if (document.getElementById('Tarjeta').checked) {
         $scope.pagar();
-      } else if (document.getElementById('Prepago').checked) {
-        $scope.preparePrePaid();
       } else if (document.getElementById('Spei').checked) {
         $scope.pagarSPEI();
       }
