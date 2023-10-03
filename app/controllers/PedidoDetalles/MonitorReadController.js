@@ -16,6 +16,11 @@
     const ACCEPTED = 'accepted';
     const PROCESSING = 'processing';
 
+    const MODALRENEW = 'modalRenew';
+    const msjDesactivar = 'Se desactivo la renovación automática.';
+    const msjActivar = 'Se activo la renovación automática.';
+    const ErrorRenovar = 'No es posible actualizar el estatus de renovación automática.';
+
     $scope.init = function () {
       const getAvailableCredit = 0;
       $scope.CheckCookie();
@@ -316,15 +321,15 @@
       ManejoLicencias.updateStatusAutoRenew(pedido.IdMicrosoftUF, detalle.IdSubscription, status, detalle.IdPedidoDetalle, detalle.Cantidad, detalle.CantidadProxima)
         .then(function () {
           if (!status) {
-            $scope.modalRenew('modalRenew', 'Se desactivo la renovación automática.');
+            $scope.modalRenew(MODALRENEW, msjDesactivar);
           } else {
-            $scope.modalRenew('modalRenew', 'Se activo la renovación automática.');
+            $scope.modalRenew(MODALRENEW, msjActivar);
           }
         })
         .catch(function () {
           var miCheckbox = document.getElementById(pedido.IdPedido);
           miCheckbox.checked = renovar ? renovar = false : renovar = true;
-          $scope.modalRenew('modalRenew', 'No es posible actualizar el estatus de renovación automática.');
+          $scope.modalRenew(MODALRENEW, ErrorRenovar);
         })
     };
     
