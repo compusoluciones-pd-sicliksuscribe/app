@@ -16,6 +16,11 @@
     const ACCEPTED = 'accepted';
     const PROCESSING = 'processing';
 
+    const MODALRENEW = 'modalRenew';
+    const msjDesactivar = 'Se desactivo la renovación automática.';
+    const msjActivar = 'Se activo la renovación automática.';
+    const ErrorRenovar = 'No es posible actualizar el estatus de renovación automática.';
+
     $scope.init = function () {
       const getAvailableCredit = 0;
       $scope.CheckCookie();
@@ -309,17 +314,30 @@
       return FechaFin;
     };
 
-    $scope.actualizarEstatusRenovacion = function(status, pedido,detalle){
+    $scope.actualizarEstatusRenovacion = function (status, pedido, detalle) {
+      let renovar = false;
+      status ? renovar = true : renovar = false;
+
       ManejoLicencias.updateStatusAutoRenew(pedido.IdMicrosoftUF, detalle.IdSubscription, status, detalle.IdPedidoDetalle, detalle.Cantidad, detalle.CantidadProxima)
-      .then(function () {
-        if (!status) { 
-          $scope.ShowToast('Se desactivo la renovación automática', 'success');
-        } else $scope.ShowToast('Se activo la renovación automática', 'success');
-      })
-      .catch(function () {
-        $scope.ShowToast('No es posible actualizar el estatus de renovación automática', 'danger');
-      })
+        .then(function () {
+          if (!status) {
+            $scope.modalRenew(MODALRENEW, msjDesactivar);
+          } else {
+            $scope.modalRenew(MODALRENEW, msjActivar);
+          }
+        })
+        .catch(function () {
+          var miCheckbox = document.getElementById(pedido.IdPedido);
+          miCheckbox.checked = renovar ? renovar = false : renovar = true;
+          $scope.modalRenew(MODALRENEW, ErrorRenovar);
+        })
     };
+    
+    $scope.modalRenew = (modal, message) => {
+      document.getElementById(modal).style.display = 'block';
+      let messageRenew = document.getElementById("messageRenew");
+      messageRenew.innerHTML = message;
+    }
 
     $scope.CancelarRenovacion = function (pedido, detalles) {
       const params = {
