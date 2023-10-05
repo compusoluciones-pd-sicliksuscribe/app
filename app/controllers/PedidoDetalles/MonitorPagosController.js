@@ -152,6 +152,12 @@
     };
 
     $scope.init = function () {
+      var dateNow = new Date();
+      var hour = dateNow.getHours();
+      if (hour >= 16) {
+        let disableSPEI = document.getElementById('monitorSpei');
+        disableSPEI.style.display = 'none';
+      }
       if ($scope.currentPath === '/MonitorPagos') {
         $scope.CheckCookie();
         confirmPayPal();
@@ -352,25 +358,6 @@
         $scope.Iva = 0;
         $scope.Total = 0;
       }
-      if ($scope.PedidosSeleccionadosParaPagar.length !== 0 && document.getElementById('Prepago').checked) {
-        PedidoDetallesFactory.monitorCalculationsPrepaid({Pedidos: $scope.PedidosSeleccionadosParaPagar, tipoTarjeta: false}, $scope.Distribuidor.MonedaPago)
-          .success(function (calculations) {
-            if (calculations.OrderTotal) {
-              $scope.Subtotal = calculations.totalCharges[0].subtotalOrders;
-              $scope.Iva = calculations.totalCharges[0].ivaOrders;
-              $scope.Total = calculations.totalCharges[0].totalOrders;
-            } else {
-              $scope.Subtotal = 0;
-              $scope.Iva = 0;
-              $scope.Total = 0;
-            }
-            $scope.ServicioElectronico = 0;
-          })
-          .error(function (data, status, headers, config) {
-            $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
-            $scope.ShowToast('No pudimos realizar los cálculos, por favor intenta de nuevo más tarde.', 'danger');
-          });
-      }
       if ($scope.PedidosSeleccionadosParaPagar.length !== 0 && document.getElementById('Spei').checked) {
         PedidoDetallesFactory.monitorCalculationsPrepaid({Pedidos: $scope.PedidosSeleccionadosParaPagar, tipoTarjeta: false}, $scope.Distribuidor.MonedaPago)
           .success(function (calculations) {
@@ -431,8 +418,6 @@
     $scope.checkPayment = function () {
       if (document.getElementById('Tarjeta').checked) {
         $scope.pagar();
-      } else if (document.getElementById('Prepago').checked) {
-        $scope.preparePrePaid();
       } else if (document.getElementById('Spei').checked) {
         $scope.pagarSPEI();
       }
@@ -475,11 +460,12 @@
                 monitorPdfSPEI.style.display = 'block';
                 monitorPdfSPEI.innerHTML = `
                       <div class="row tituloSpei text-center">
-                          <h2>Información de pago (SPEI)</h2>
+                        <div class="alert alert-warning" role="alert">
+                            <b>Importante*</b> <br>
+                            *Los pedidos seguirán estando visibles hasta que se complete la transferencia.
+                        </div>
+                        <h2>Información de pago (SPEI)</h2>
                       </div>
-                      <p class="text-danger">
-                          <b>*Los pedidos seguirán estando visibles hasta que se complete la transferencia.</b>
-                      </p>
                   <div class="row pt-5">
                       <div class="col-sm-6">
                           <p>

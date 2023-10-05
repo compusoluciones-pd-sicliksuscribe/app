@@ -18,7 +18,12 @@
         </div>
         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
     </div>
-
+    <div class="row">
+        <div class="alert alert-warning" role="alert" id="speiWarning">
+            <b>Importante*</b> <br>
+            Las transacciones con SPEI no están disponibles en licencias adicionales o co-términos.
+        </div>
+    </div>
     <br>
     <br>
     <br>
@@ -34,7 +39,7 @@
                 <label for="" class="formaPago">Forma de pago para {{Distribuidor.NombreEmpresa}}: </label>
                 <div class="radio" style="margin-left:20px">
                     <div>
-                        <input type="radio" name="TipoPago" value="2" ng-checked="isPayingWithCSCredit()" ng-model="Distribuidor.IdFormaPagoPredilecta" ng-click="ActualizarFormaPago(2);"> <div style="padding-top: .25em;">Crédito CompuSoluciones</div>
+                        <input type="radio" name="TipoPago" value="2" ng-checked="isPayingWithCSCredit()" ng-model="Distribuidor.IdFormaPagoPredilecta" ng-click="ActualizarFormaPago(2);" id="defaultMethod"> <div style="padding-top: .25em;">Crédito CompuSoluciones</div>
                     </div>
                     <div ng-hide="SessionCookie.IdTipoAcceso === 10">
                         <input type="radio" name="TipoPago" value="1" ng-checked="isPayingWithCreditCard()" ng-disabled="ValidarFormaPago()" ng-model="Distribuidor.IdFormaPagoPredilecta" ng-click="ActualizarFormaPago(1);"> <div style="padding-top: .25em;">Tarjeta bancaria (Solo Pesos MXN)</div>
@@ -45,13 +50,6 @@
                     <div ng-show="!ValidarFormaPago()" ng-hide="SessionCookie.IdTipoAcceso === 10">
                         <input type="radio" name="TipoPago" value="5" ng-checked="isPayingWithSPEI()" ng-disabled="ValidarFormaPago()" ng-model="Distribuidor.IdFormaPagoPredilecta" ng-click="ActualizarFormaPago(5);"> <div style="padding-top: .25em;">Pago con transferencia bancaria (SPEI)</div>
                     </div>
-
-                    <!-- TRANSFERENCIA -->
-                    <div>
-                        <input type="radio" name="TipoPago" value="4" ng-checked="isPayWithPrepaid()" ng-model="Distribuidor.IdFormaPagoPredilecta" ng-click="ActualizarFormaPago(4);"> <div style="padding-top: .25em;">Transferencia
-                        <label for="" class="SaldoReal"> <b>Tu Saldo es: {{Distribuidor.MonedaPago === 'Pesos' ? Distribuidor.Transferencia : Distribuidor.TransferenciaDolares | currency}}</b> </label></div>
-                    </div>
-
                 </div>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3" ng-show="SessionCookie.IdTipoAcceso === 10">
@@ -132,7 +130,7 @@
                         <label>Marca de los productos:</label> {{ pedido.NombreFabricante }} <br>
                         <label ng-if="pedido.IdFabricante === 10">Fecha inicio : {{ pedido.FechaInicio }} </label>
                         <label ng-if="pedido.IdFabricante !== 10">Duración del periodo: del {{ pedido.FechaInicio }} al {{ pedido.FechaFin | date:'yyyy-MM-dd'}}</label>
-                        <br><div ng-if="pedido.IdAccionAutodesk === 1 && pedido.Productos[0].Especializacion !== 'Planes Premium'" style="padding-bottom: .4em;"><a tooltip="Se puede definir una fecha de inicio del contrato de hasta un mes en el futuro." ng-click="abrirModal('inicioFuturoModal', pedido.IdContrato, pedido.IdEsquemaRenovacion)"><span class="glyphicon glyphicon-calendar"> </span> Fecha de inicio futuro</a></div>
+                        <br><div ng-if="pedido.IdAccionAutodesk === 1 " style="padding-bottom: .4em;"><a tooltip="Se puede definir una fecha de inicio del contrato de hasta un mes en el futuro." ng-click="abrirModal('inicioFuturoModal', pedido.IdContrato, pedido.IdEsquemaRenovacion)"><span class="glyphicon glyphicon-calendar"> </span> Fecha de inicio futuro</a></div>
                         <label>Renovación del periodo:</label> {{ pedido.NombreEsquemaRenovacion }}
                         <div ng-if="pedido.IdFabricante === 2">
                             <label>Contrato: </label> {{ pedido.ContratoBaseAutodesk || 'Nuevo' }} <br>
@@ -146,12 +144,12 @@
                         </div>
                     </div>
                     <label tooltip="Ahora puedes incluir un número de orden de compra en tu pedido. El número aparecera en el formato pdf de la factura.">Orden de compra</label>
-                    <input type="text" ng-model="orden[$index]" ng-value="pedido.OrdenCompra" maxlength="50" style="width: 40%; height: 1.9em; margin-bottom: 1em;" class="form-control" size="30" />
+                    <input type="text" ng-model="orden[$index]" ng-value="pedido.OrdenCompra" maxlength="50" style="width: 40%; height: 1.9em; margin-bottom: 1em;" class="form-control" size="30" ng-blur="saveOrder()"/>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3" class="form-group">
                     <div class="form-group">
                         <div ng-if="pedido.IdFabricante === 2"><label tooltip="Marca esta casilla si tu pedido corresponde a una petición especial."><input type="checkbox" ng-model="pedido.SP" ng-change="marcarSP(pedido.IdPedido, pedido.SP, pedido.Promo)" style="margin-right: 1em">Petición especial (SP)</label></div>
-                        <div ng-if="pedido.IdFabricante === 2"><label tooltip="Aplica solo para suscripciones nuevas, pedidos de 4 a 10mil usd."><input type="checkbox" ng-model="pedido.Promo" ng-change="marcarSP(pedido.IdPedido, pedido.SP, pedido.Promo)" style="margin-right: 1em">Promoción: Speed Week</label></div>
+                        <div ng-if="pedido.IdFabricante === 2"><label tooltip="Aplica solo para suscripciones nuevas, pedidos de 4 a 10mil usd."><input type="checkbox" ng-model="pedido.Promo" ng-change="marcarSP(pedido.IdPedido, pedido.SP, pedido.Promo)" style="margin-right: 1em">Promoción septiembre</label></div>
                         <label>Forma de pago:</label> {{ pedido.Forma }} <br>
                         <label>Tipo de cambio:</label> {{ pedido.TipoCambio | currency: "$":2 }} {{ pedido.MonedaPago }}<br>
                         <label>Subtotal:</label> {{ calcularSubTotal(pedido.IdPedido) | currency }} {{ pedido.MonedaPago }} <br>
@@ -203,6 +201,9 @@
                     <div class="form-group col-xs-12 col-sm-12 col-md-3 col-lg-3">
                         <div class="form-group">
                             <label for="">Id artículo:</label> {{producto.IdERP}} <br>
+                            <div ng-if="producto.NumeroSerie">
+                                <label for="">Numero de Serie:</label> {{producto.NumeroSerie}} <br>
+                            </div>
                             <label for="">Nombre:</label> {{producto.NombreProducto}} <br>
                             <label for="">Tipo de producto:</label> {{producto.Tipo}} <br>
                         </div>

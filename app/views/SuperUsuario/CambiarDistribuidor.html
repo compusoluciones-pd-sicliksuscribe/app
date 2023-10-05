@@ -19,7 +19,7 @@
             <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4 pull-right">
                 <div class="input-group"> 
                     <div class="form-group has-feedback">
-                        <input type="text" class="form-control" placeholder="Busca un distribuidor..." ng-model="Empresa.Busqueda" size="255">
+                        <input type="text" class="form-control" placeholder="Busca un distribuidor..." ng-model="Empresa.Busqueda" size="255" ng-keydown="$event.keyCode === 13 && BuscarEmpresas()">
                         <i class="form-control-feedback glyphicon glyphicon-search"></i>
                     </div>
                     <span class="input-group-btn">

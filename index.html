@@ -5,6 +5,9 @@
 <head>
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta http-equiv='cache-control' content='no-cache'>
+	<meta http-equiv='expires' content='0'>
+	<meta http-equiv='pragma' content='no-cache'>
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<meta name="viewport" content="initial-scale=1.0" />
 	<meta name="viewport" content="maximum-scale=1.0" />
@@ -157,6 +160,9 @@
 												<li ng-show="SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 8 || SessionCookie.IdTipoAcceso == 10 || SessionCookie.IdTipoAcceso === 2"><a ng-click="goToPage('ActualizarCSN');">Actualizar CSN cliente</a></li>
 												<li ng-show="SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 8 || SessionCookie.IdTipoAcceso == 10"><a ng-click="goToPage('ConfirmarSP');">Peticiones especiales (SP)</a></li>
 												<li ng-show="SessionCookie.IdTipoAcceso == 1 || SessionCookie.IdTipoAcceso == 8 || SessionCookie.IdTipoAcceso == 10"><a ng-click="goToPage('OpenCSN');">Ordenes para canales open</a></li>
+												<li ng-show="SessionCookie.IdTipoAcceso == 10 || SessionCookie.IdTipoAcceso === 2"><a ng-click="goToPage('MonitorContratos');">Monitor de contratos</a></li>
+												<li ng-show="SessionCookie.IdTipoAcceso == 10 || SessionCookie.IdTipoAcceso === 2"><a ng-click="goToPage('Contactos');">Contactos</a></li>
+												<li ng-show="SessionCookie.IdTipoAcceso == 10 || SessionCookie.IdTipoAcceso === 2"><a ng-click="goToPage('BuscarContratos');">Buscar Contratos</a></li>
 											</ul>
 										</li>
 
@@ -741,8 +747,15 @@
 	<script type="text/javascript" src="app/services/Microsoft/ManejoLicencias.js"></script>
 	<script type="text/javascript" src="app/controllers/Autodesk/OpenCSNController.js"></script>
 	<script type="text/javascript" src="app/services/OpenCSNFactory.js"></script>
+	<script type="text/javascript" src="app/services/Microsoft/ProductosLegacyAprobados.js"></script>
 
 
+	<script type="text/javascript" src="app/controllers/Autodesk/MonitorContratosController.js"></script>
+	<script type="text/javascript" src="app/services/MonitorContratosFactory.js"></script>
+	<script type="text/javascript" src="app/controllers/Autodesk/ContactsController.js"></script>
+	<script type="text/javascript" src="app/services/ContactsFactory.js"></script>
+	<script type="text/javascript" src="app/controllers/Autodesk/ContractSearchController.js"></script>
+	<script type="text/javascript" src="app/services/ContractSearchFactory.js"></script>
 
 	<script src="scripts/tinycolor2-min.js"></script>
 	<script src="scripts/angularjs-color-picker.min.js"></script>

@@ -164,9 +164,9 @@
       return $http.patch($rootScope.API + 'enterprise/update-automatic-payment/' + RealizarCargoProximo);
     };
 
-    factory.getClientes = function () {
+    factory.getClientes = function (availableCredit) {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'enterprise/clients');
+      return $http.get($rootScope.API + 'enterprise/clients/' + availableCredit);
     };
 
     factory.putEmpresa = function (Empresa) {
@@ -197,6 +197,11 @@
     factory.postTerminosNuevoComercio = function (Empresa) {
       factory.refreshToken();
       return $http.post($rootScope.API + 'Empresas/TerminosNuevoComercio', Empresa);
+    };
+
+    factory.postActualizarAdendumMS = function (Empresa) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'Empresas/AdendumAzureMS', Empresa);
     };
 
     factory.getTerminosNuevoComercio = function (IdEmpresa) {
