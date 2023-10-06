@@ -18,6 +18,7 @@
     const ccAmexLength = 15;
     const ccLengthNameMin = 5;
     const ccLengthNameMax = 80;
+    const primerRes = 0;
     const paymentMethods = {
       CREDIT_CARD: 1,
       CS_CREDIT: 2,
@@ -174,7 +175,7 @@
           for (let x = 0; x < $scope.PedidosAgrupados.length; x++) {
             $scope.PedidosObj[$scope.PedidosAgrupados[x][0].IdPedido] = $scope.PedidosAgrupados[x][0];
           }
-          $scope.TipoCambio = ordersToPay.data[0].TipoCambio;
+          $scope.TipoCambio = ordersToPay.TC[primerRes].DolarPagos; 
         })
         .error(function (data, status, headers, config) {
           $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
