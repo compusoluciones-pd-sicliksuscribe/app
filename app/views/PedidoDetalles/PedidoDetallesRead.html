@@ -268,15 +268,15 @@
         <div class="form-group row">
             <div class="col-xs-0 col-sm-0 col-md-9 col-lg-9">
             </div>
-            <div class="row" ng-show="!CreditoValido">
+            <div class="row" ng-show="!CreditoValido || Bloqueado">
                 <div class="alert alert-danger" role="alert" style="text-align: center;">
-                    <b>Crédito insuficiente para completar la compra.</b> <br>
+                    <b>{{mensajeBloqueo}}</b> <br>
                 </div>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
                 <div class="">
                     <button id="btnSiguiente" type="button" ng-click="next();" class="btn btn-primary btn-block" ng-if="(hasProtectedExchangeRate() && Distribuidor.MonedaPago === 'Pesos'
-							|| !hasProtectedExchangeRate()) && !error && ((isPayingWithCSCredit() && CreditoValido) || isPayingWithCreditCard() || isPayingWithPaypal() || isPayWithPrepaid() || isPayingWithSPEI())">
+							|| !hasProtectedExchangeRate()) && !error && ((isPayingWithCSCredit() && CreditoValido && !Bloqueado) || isPayingWithCreditCard() || isPayingWithPaypal() || isPayWithPrepaid() || isPayingWithSPEI())">
             Siguiente
           </button>
                 </div>

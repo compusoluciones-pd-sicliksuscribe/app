@@ -1,6 +1,8 @@
 (function () {
   var PedidoDetallesReadController = function ($scope, $log, $location, $cookies, PedidoDetallesFactory, TipoCambioFactory, EmpresasXEmpresasFactory, EmpresasFactory, PedidosFactory, UsuariosFactory, $routeParams) {
     $scope.CreditoValido = 1;
+    $scope.mensajeBloqueo;
+    $scope.Bloqueado;
     $scope.legacyCSP = 0;
     $scope.error = false;
     $scope.Distribuidor = {};
@@ -183,6 +185,8 @@
       if (parseInt($scope.Distribuidor.IdFormaPagoPredilecta) === 2) {
         return PedidoDetallesFactory.getValidarCarrito()
         .then(result => {
+          $scope.mensajeBloqueo = result.data.data.resellerCreditData.Mensaje;
+          $scope.Bloqueado = result.data.data.resellerCreditData.EstaBloqueado
           if (result.data.data.resellerCreditData.availableCredit <= 0) $scope.CreditoValido = 0;
           if (!$scope.CreditoValido) $scope.openNoCreditModal();
           $scope.PedidoDetalles.forEach(item => {
