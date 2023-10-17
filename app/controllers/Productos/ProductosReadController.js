@@ -948,7 +948,6 @@
 
     $scope.NuevaEmpresa = function () {
       $scope.SessionCookies = $cookies.getObject('Session');
-      console.log($rootScope.SICLIK_REACT_FRONT);
       $window.location.href = `${$rootScope.SICLIK_REACT_FRONT}?id=${$window.btoa($scope.CaracteresAleatorios(8)+ $window.btoa($window.btoa($scope.SessionCookies.Token))+ $scope.CaracteresAleatorios(5)).replace(/X/g,"Ys")}`;
     };
 

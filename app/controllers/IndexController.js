@@ -458,6 +458,21 @@
       }
     };
 
+    $scope.cotizador = () => {
+      $scope.SessionCookies = $cookies.getObject('Session');
+      $window.location.href = `http://localhost:3001/quotation?id=${$window.btoa($scope.CaracteresAleatorios(8)+ $window.btoa($window.btoa($scope.SessionCookies.Token))+ $scope.CaracteresAleatorios(5)).replace(/X/g,"Ys")}`;
+    }
+
+    $scope.CaracteresAleatorios = function (length) {
+      var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      var charactersLength = characters.length;
+      var result = '';
+      for (var i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      }
+      return result;
+    };
+
   };
   function selectNavicon (icon) {
     var link = document.createElement('link');
