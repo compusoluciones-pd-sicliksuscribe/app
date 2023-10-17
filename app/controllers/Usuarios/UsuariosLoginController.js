@@ -118,18 +118,24 @@
     }
 
     $scope.IniciarSesion = function () {
-      $cookies.remove('Session');
-      $cookies.remove('Pedido');
-      $scope.Usuario.IdEmpresa = $scope.currentDistribuidor.IdEmpresa;
-      $scope.SessionCookie = {};
-      UsuariosFactory.postUsuarioIniciarSesion($scope.Usuario)
-        .success(function (result) {
-          return buildToken(result);
-        })
-        .error(function (data, status, headers, config) {
-          $scope.ShowToast('Error al iniciar sesión', 'danger');
-          $log.log('data error: ' + data + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
-        });
+      if(grecaptcha.getResponse() === ""){
+        $scope.ShowToast('Por favor, complete el captcha.', 'danger');
+        }
+      else{
+        $cookies.remove('Session');
+        $cookies.remove('Pedido');
+        $scope.Usuario.IdEmpresa = $scope.currentDistribuidor.IdEmpresa;
+        $scope.SessionCookie = {};
+        UsuariosFactory.postUsuarioIniciarSesion($scope.Usuario)
+          .success(function (result) {
+            return buildToken(result);
+          })
+          .error(function (data, status, headers, config) {
+            $scope.ShowToast('Error al iniciar sesión', 'danger');
+            $log.log('data error: ' + data + ' status: ' + status + ' headers: ' + headers + ' config: ' + config);
+          });
+
+      }
     };
   };
 
