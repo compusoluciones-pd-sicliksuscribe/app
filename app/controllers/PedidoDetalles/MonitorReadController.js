@@ -585,13 +585,13 @@
     });
   }
 
-  $scope.insertAzureBudget = function (IdMicrosoftUF,azureBudget) {
+  $scope.insertAzureBudget = function (IdSubscription,azureBudget) {
     if(azureBudget > 0){
       const order = {
-        IdMicrosoftUF: IdMicrosoftUF,
+        IdSubscription: IdSubscription,
         azureBudget: azureBudget
       }
-      PedidoDetallesFactory.insertAzureBudget(order.IdMicrosoftUF,order.azureBudget)
+      PedidoDetallesFactory.insertAzureBudget(order.IdSubscription,order.azureBudget)
       .then(result => {
         $scope.ShowToast(result.data.message, 'success');
       })
