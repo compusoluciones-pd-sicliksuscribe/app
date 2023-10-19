@@ -80,6 +80,8 @@
                                 style="margin-right: 1em" disabled>Petición especial (SP)</label></div>
                     <div ng-if="pedido.IdFabricante === 2"><label><input type="checkbox" ng-model="pedido.Promo"
                                 style="margin-right: 1em" disabled>Promoción: Descuentos de terror</label></div>
+                    <div ng-if="pedido.IdFabricante === 2"><label><input type="checkbox" ng-model="pedido.Promo2"
+                                style="margin-right: 1em" disabled>Promoción: MY TC 17.3</label></div>
                     <label>Forma de pago:</label> {{ pedido.Forma }} <br>
                     <label>Tipo de cambio:</label> {{ pedido.TipoCambio | currency: "$":2 }} {{ pedido.MonedaPago }}<br>
                     <label>Subtotal:</label> {{ calcularSubTotal(pedido.IdPedido) | currency }} {{ pedido.MonedaPago }}
