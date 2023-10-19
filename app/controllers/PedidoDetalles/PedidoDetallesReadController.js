@@ -603,8 +603,16 @@
 
     $scope.marcarSP = async (idPedido, marcado, promo = false, promo2 = false) => {
       const pedido = $scope.PedidoDetalles.find(pedido => pedido.IdPedido === idPedido)
-      pedido.Promo2 = !promo;
-      pedido.Promo = !promo2;
+      if (promo) {
+        pedido.Promo = true;
+        pedido.Promo2 = false;
+      } else if (promo2) {
+        pedido.Promo = false;
+        pedido.Promo2 = true;
+      } else {
+        pedido.Promo = false;
+        pedido.Promo2 = false;
+      }
       await PedidoDetallesFactory.marcarSP(pedido.IdPedido, marcado, promo, promo2)
     };
 
