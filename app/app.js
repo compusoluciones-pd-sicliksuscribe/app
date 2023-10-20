@@ -322,11 +322,6 @@
         resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 2)) { $location.path('/404'); } } }
       })
 
-      .when('/Empresa/:IdEmpresa', {
-        controller: 'EmpresasUpdateController', templateUrl: 'app/views/Empresas/EmpresasUpdate.html',
-        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 4 || Session.IdTipoAcceso === 6)) { $location.path('/404'); } } }
-      })
-
       .when('/Clientes', {
         controller: 'EmpresasXEmpresasReadController', templateUrl: 'app/views/EmpresasXEmpresas/EmpresasXEmpresasRead.html',
         resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 2 || Session.IdTipoAcceso === 3 || Session.IdTipoAcceso === 7 || Session.IdTipoAcceso === 10)) { $location.path('/404'); } } }
@@ -418,11 +413,6 @@
 
       .when('/Empresas', {
         controller: 'EmpresasReadController', templateUrl: 'app/views/Empresas/EmpresasRead.html',
-        resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 8)) { $location.path('/404'); } } }
-      })
-
-      .when('/Credito/:IdEmpresa', {
-        controller: 'EmpresasCreditoUpdateController', templateUrl: 'app/views/Empresas/EmpresasCreditoUpdate.html',
         resolve: { 'check': function ($location, $cookies) { var Session = $cookies.getObject('Session'); if (!(Session.IdTipoAcceso === 1 || Session.IdTipoAcceso === 8)) { $location.path('/404'); } } }
       })
 

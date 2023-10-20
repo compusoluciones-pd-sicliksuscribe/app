@@ -87,11 +87,6 @@
       return $http.put($rootScope.API + 'Empresas/CambiaMoneda/FinalUser', parametros);
     };
 
-    factory.putEmpresa = function (Empresa) {
-      factory.refreshToken();
-      return $http.put($rootScope.API + 'Empresas', Empresa);
-    };
-
     factory.revisarDominio = function (dominio) {
       factory.refreshToken();
       return $http.get($rootScope.API + 'microsoft/domains/' + dominio);
@@ -167,11 +162,6 @@
     factory.getClientes = function (availableCredit) {
       factory.refreshToken();
       return $http.get($rootScope.API + 'enterprise/clients/' + availableCredit);
-    };
-
-    factory.putEmpresa = function (Empresa) {
-      factory.refreshToken();
-      return $http.put($rootScope.API + 'Empresas', Empresa);
     };
 
     factory.changeDomain = function (enterpriseId, Enterprise) {

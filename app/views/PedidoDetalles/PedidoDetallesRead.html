@@ -25,8 +25,6 @@
         </div>
     </div>
     <br>
-    <br>
-    <br>
 
     <div ng-show="!(PedidoDetalles.length > 0)">
         <h4>No se han agregado productos a tu carrito...</h4>
@@ -170,11 +168,6 @@
 					    </span>
 
                         <br>
-                        <div style="color:red;" ng-show="!pedido.hasCredit && isPayingWithCSCredit()">
-                            <span class="glyphicon glyphicon-warning-sign"></span> <b>Cliente sin crédito suficiente.</b>
-                            <br> * <a href="#/Clientes" class="form-group" title="Aumenta su crédito"> Aumenta su crédito </a>
-                            <br> * Elimina productos de tu carrito.
-                        </div>
 
                         <div ng-show="pedido.IdFabricante === 2 && pedido.IdAccionAutodesk === 4">
                             <a title="Elimina del carrito el pedido de renovación." ng-click="removeRenew(pedido);">
@@ -271,10 +264,15 @@
         <div class="form-group row">
             <div class="col-xs-0 col-sm-0 col-md-9 col-lg-9">
             </div>
+            <div class="row" ng-show="!CreditoValido || Bloqueado">
+                <div class="alert alert-danger" role="alert" style="text-align: center;">
+                    <b>{{mensajeBloqueo}}</b> <br>
+                </div>
+            </div>
             <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
                 <div class="">
                     <button id="btnSiguiente" type="button" ng-click="next();" class="btn btn-primary btn-block" ng-if="(hasProtectedExchangeRate() && Distribuidor.MonedaPago === 'Pesos'
-							|| !hasProtectedExchangeRate()) && !error && ((isPayingWithCSCredit() && CreditoValido) || isPayingWithCreditCard() || isPayingWithPaypal() || isPayWithPrepaid() || isPayingWithSPEI())">
+							|| !hasProtectedExchangeRate()) && !error && ((isPayingWithCSCredit() && CreditoValido && !Bloqueado) || isPayingWithCreditCard() || isPayingWithPaypal() || isPayWithPrepaid() || isPayingWithSPEI())">
             Siguiente
           </button>
                 </div>
@@ -307,6 +305,24 @@
                             ng-click="inicioFuturo(Contrato.FechaInicio); cerrarModal('inicioFuturoModal')"
                             ng-disabled="procesandoExtension" style="padding: .8em 1.4em">Aceptar</button>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="noCreditModal" class="modal fade in" tabindex="-1" role="dialog" style="padding-right: 17px;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header red">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                    <h4 class="modal-title white">Aviso importate</h4>
+                </div>
+                <div class="modal-body">
+                    <p style="text-align: center">Has llegado o sobrepasado el límite de tu línea de crédito, por lo que no será posible hacer más compras. Puedes revisar el detalle de tu crédito desde la opción <b><a ng-click="goToMisClientes()">Mis clientes</a></b>.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" ng-click="cerrarModal('noCreditModal')" data-dismiss="modal">Enterado</button>
                 </div>
             </div>
         </div>
