@@ -33,7 +33,7 @@
 
     factory.getEmpresasMicrosoft = function () {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'microsoft/customers');
+      return $http.get($rootScope.MAPI + 'customer');
     };
 
     factory.getEmpresa = function (IdEmpresa) {
