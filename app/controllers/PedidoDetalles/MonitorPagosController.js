@@ -13,6 +13,7 @@
     $scope.todos = 0;
     $scope.paymethod = 1;
     $scope.creditCardType = 0;
+    $scope.cadReciboSpei = 1;
     let creditCardName = '';
     const ccVisaMcLength = 16;
     const ccAmexLength = 15;
@@ -42,6 +43,7 @@
     let deviceSessionId = '';
     let tokenId = '';
     $scope.meses = [{ nombre: 'Enero', valor: '01' }, { nombre: 'Febrero', valor: '02' }, { nombre: 'Marzo', valor: '03' }, { nombre: 'Abril', valor: '04' }, { nombre: 'Mayo', valor: '05' }, { nombre: 'Junio', valor: '06' }, { nombre: 'Julio', valor: '07' }, { nombre: 'Agosto', valor: '08' }, { nombre: 'Septiembre', valor: '09' }, { nombre: 'Octubre', valor: '10' }, { nombre: 'Noviembre', valor: '11' }, { nombre: 'Diciembre', valor: '12' }];
+    
     const getCardError = (errorCode) => {
       switch (errorCode) {
         case 1001:
@@ -153,12 +155,6 @@
     };
 
     $scope.init = function () {
-      var dateNow = new Date();
-      var hour = dateNow.getHours();
-      if (hour >= 16) {
-        let disableSPEI = document.getElementById('monitorSpei');
-        disableSPEI.style.display = 'none';
-      }
       if ($scope.currentPath === '/MonitorPagos') {
         $scope.CheckCookie();
         confirmPayPal();
@@ -372,6 +368,7 @@
               $scope.Total = 0;
             }
             $scope.ServicioElectronico = 0;
+            $scope.verifyOrdersOutOfTime();
           })
           .error(function (data, status, headers, config) {
             $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
@@ -408,6 +405,38 @@
       }
     };
 
+    $scope.verifyOrdersOutOfTime = () => {
+      $scope.deshabilitados16hrs = [];
+      for (const pedido in $scope.Pedidos) {
+        if (Object.hasOwnProperty.call($scope.Pedidos, pedido)) {
+          const element = $scope.Pedidos[pedido];
+          const fechaUTC = new Date(element.FechaLimitePagoMS);
+          const fechaActual = new Date();
+          fechaActual.setDate(fechaActual.getDate() + $scope.cadReciboSpei);
+          if (fechaUTC.getTime() <= fechaActual.getTime()) {
+            if (!$scope.deshabilitados16hrs.includes(element.IdPedido)) $scope.deshabilitados16hrs.push(element.IdPedido);
+            console.log($scope.deshabilitados16hrs); 
+          }
+        }
+      }
+
+      for (const pedidoSeleccionado in $scope.PedidosSeleccionadosParaPagar) {
+        if (Object.hasOwnProperty.call($scope.PedidosSeleccionadosParaPagar, pedidoSeleccionado)) {
+          const idPedidoSel = $scope.PedidosSeleccionadosParaPagar[pedidoSeleccionado];
+          if (idPedidoSel.includes($scope.deshabilitados16hrs)){
+            let fechaAhora = new Date();
+            let hora = fechaAhora.getHours();
+            let minutos = fechaAhora.getMinutes();
+            if (hora > 16 || (hora === 16 && minutos >= 30)) {
+              $('#btnSiguiente').prop('disabled', true);
+            }
+          } else {
+            $('#btnSiguiente').prop('disabled', false);
+          }
+        }
+      }
+    };
+
     $scope.mostrarDetalles = function (key) {
       if ($scope.PedidosObj[key].Mostrar) {
         $scope.PedidosObj[key].Mostrar = 0;
@@ -437,7 +466,7 @@
           .success(function (calculations) {
             OpenPay.setId(calculations.totalCharges['0'].opId);
             OpenPay.setApiKey(calculations.totalCharges['0'].opPublic);
-            OpenPay.setSandboxMode(false);
+            OpenPay.setSandboxMode(true);
             const PedidosSeleccionadosParaPagar = $scope.PedidosSeleccionadosParaPagar.map(function(IdPedido){
                 return {'IdPedido':IdPedido};
             });
@@ -591,7 +620,7 @@
                 $scope.currency = Datos.data.moneda;
                 OpenPay.setId(Datos.data.opId);
                 OpenPay.setApiKey(Datos.data.opPublic);
-                OpenPay.setSandboxMode(false);
+                OpenPay.setSandboxMode(true);
                 deviceSessionId = OpenPay.deviceData.setup('payment-form-monitor', 'deviceIdHiddenFieldName');
                 $('#deviceSessionId').val(deviceSessionId);
                 $scope.abreModal();
