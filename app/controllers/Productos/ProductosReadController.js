@@ -218,7 +218,8 @@
       dateByEschema.map(function (item) {
         const endDate = new Date(item.FechaFin);
         const nowDate = new Date();
-        if(endDate.getDate()<='27'){
+        let lastDay = new Date(nowDate.getFullYear(), nowDate.getMonth() + 1, 0);
+        if(endDate.getDate()<='27' || endDate.getDate() === lastDay.getDate() ){
         if (endDate.getDate() >= nowDate.getDate()) {
           fechaCoterm.push({ FechaFin: ('0' + endDate.getDate()).slice(-2) + '/' + ('0' + (nowDate.getMonth() + 1)).slice(-2) + "/" + (nowDate.getFullYear())});
         } else fechaCoterm.push({ FechaFin: ('0' + endDate.getDate()).slice(-2) + '/' + ('0' + (nowDate.getMonth() + 2)).slice(-2) + "/" + (nowDate.getFullYear())});
