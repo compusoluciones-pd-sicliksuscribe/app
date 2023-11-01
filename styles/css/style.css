@@ -900,3 +900,12 @@ option {
 .pagoNormal {
   background: #db96351a;
 }
+
+#recaptcha   {
+  max-width: 100%;
+  width: 100%;
+ }
+
+ #recaptcha iframe  {
+  max-width: 100%;
+ }

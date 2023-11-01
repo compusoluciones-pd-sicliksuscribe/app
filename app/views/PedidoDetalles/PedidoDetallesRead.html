@@ -50,11 +50,6 @@
                     <div ng-show="!ValidarFormaPago()" ng-hide="SessionCookie.IdTipoAcceso === 10">
                         <input type="radio" name="TipoPago" value="5" ng-checked="isPayingWithSPEI()" ng-disabled="ValidarFormaPago()" ng-model="Distribuidor.IdFormaPagoPredilecta" ng-click="ActualizarFormaPago(5);"> <div style="padding-top: .25em;">Pago con transferencia bancaria (SPEI)</div>
                     </div>
-                    <div>
-                        <input type="radio" name="TipoPago" value="4" ng-checked="isPayWithPrepaid()" ng-model="Distribuidor.IdFormaPagoPredilecta" ng-click="ActualizarFormaPago(4);"> <div style="padding-top: .25em;">Transferencia
-                        <label for="" class="SaldoReal"> <b>Tu Saldo es: {{Distribuidor.MonedaPago === 'Pesos' ? Distribuidor.Transferencia : Distribuidor.TransferenciaDolares | currency}}</b> </label></div>
-                    </div>
-
                 </div>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3" ng-show="SessionCookie.IdTipoAcceso === 10">
@@ -153,8 +148,9 @@
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3" class="form-group">
                     <div class="form-group">
-                        <div ng-if="pedido.IdFabricante === 2"><label tooltip="Marca esta casilla si tu pedido corresponde a una petición especial."><input type="checkbox" ng-model="pedido.SP" ng-change="marcarSP(pedido.IdPedido, pedido.SP, pedido.Promo)" style="margin-right: 1em">Petición especial (SP)</label></div>
-                        <div ng-if="pedido.IdFabricante === 2"><label tooltip="Aplica solo para suscripciones nuevas, pedidos de 4 a 10mil usd."><input type="checkbox" ng-model="pedido.Promo" ng-change="marcarSP(pedido.IdPedido, pedido.SP, pedido.Promo)" style="margin-right: 1em">Promoción: Speed Week</label></div>
+                        <div ng-if="pedido.IdFabricante === 2"><label tooltip="Marca esta casilla si tu pedido corresponde a una petición especial."><input type="checkbox" ng-model="pedido.SP" ng-change="marcarSP(pedido.IdPedido, pedido.SP, pedido.Promo, pedido.Promo2)" style="margin-right: 1em">Petición especial (SP)</label></div>
+                        <div ng-if="pedido.IdFabricante === 2"><label tooltip="Aplica solo para suscripciones nuevas, pedidos de 4 a 10mil usd."><input type="checkbox" ng-model="pedido.Promo" ng-change="marcarSP(pedido.IdPedido, pedido.SP, pedido.Promo, false)" style="margin-right: 1em">Promoción: Descuentos de terror</label></div>
+                        <div ng-if="pedido.IdFabricante === 2"><label tooltip="Aplica nuevo y renovación, LC se revisa caso por caso, mínimo 11mil usd antes de IVA. No aplica LT. No aplica proyectos Key Account."><input type="checkbox" ng-model="pedido.Promo2" ng-change="marcarSP(pedido.IdPedido, pedido.SP, false, pedido.Promo2)" style="margin-right: 1em">Promoción: MY TC 17.3</label></div>
                         <label>Forma de pago:</label> {{ pedido.Forma }} <br>
                         <label>Tipo de cambio:</label> {{ pedido.TipoCambio | currency: "$":2 }} {{ pedido.MonedaPago }}<br>
                         <label>Subtotal:</label> {{ calcularSubTotal(pedido.IdPedido) | currency }} {{ pedido.MonedaPago }} <br>
@@ -207,7 +203,9 @@
                         <div class="form-group">
                             <label for="">Id artículo:</label> {{producto.IdERP}} <br>
                             <div ng-if="producto.NumeroSerie">
-                                <label for="">Numero de Serie:</label> {{producto.NumeroSerie}} <br>
+                                <label for="">{{producto.IdFabricante === 1 ? "Tipo de compra:" : "Numero de Serie:"}}</label> 
+                                {{producto.NumeroSerie === "CREATEORDER" ? "Orden inicial" : producto.NumeroSerie === "ADDSEAT" ? "Adición a partida activa" : producto.NumeroSerie === "COTERM" ? "Cotérmino" : producto.NumeroSerie}} 
+                                <br>
                             </div>
                             <label for="">Nombre:</label> {{producto.NombreProducto}} <br>
                             <label for="">Tipo de producto:</label> {{producto.Tipo}} <br>
@@ -223,11 +221,6 @@
                             <label ng-hide="pedido.IdFabricante === 10 || pedido.IdFabricante === 2"><label for="">Precio renovación:</label> {{ calculatePriceWithExchangeRate(pedido, producto, 'PrecioRenovacion') | currency}} {{ pedido.MonedaPago }}</label>
 
                         </div>
-                        <div class="form-group" ng-show="producto.IdEsquemaRenovacion === 2 && producto.IdFabricante === 1">
-                            <label for="">{{producto.IdFabricante == 5 && producto.IdTipoProducto !== 4 ? "Empleados:" : "Cantidad:"}}</label> {{ producto.Cantidad }} <br>
-                            <label for="">Precio primer año:</label> {{ (calculatePriceWithExchangeRate(pedido, producto, 'PrecioUnitario') *descuentoAnual)/100 | currency }} {{ pedido.MonedaPago }}
-                        </div>
-
                     </div>
 
                     <div class="form-group col-xs-12 col-sm-12 col-md-3 col-lg-3">

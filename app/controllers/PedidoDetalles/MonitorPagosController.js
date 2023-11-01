@@ -18,6 +18,7 @@
     const ccAmexLength = 15;
     const ccLengthNameMin = 5;
     const ccLengthNameMax = 80;
+    const primerRes = 0;
     const paymentMethods = {
       CREDIT_CARD: 1,
       CS_CREDIT: 2,
@@ -174,7 +175,7 @@
           for (let x = 0; x < $scope.PedidosAgrupados.length; x++) {
             $scope.PedidosObj[$scope.PedidosAgrupados[x][0].IdPedido] = $scope.PedidosAgrupados[x][0];
           }
-          $scope.TipoCambio = ordersToPay.data[0].TipoCambio;
+          $scope.TipoCambio = ordersToPay.TC[primerRes].DolarPagos; 
         })
         .error(function (data, status, headers, config) {
           $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
@@ -358,25 +359,6 @@
         $scope.Iva = 0;
         $scope.Total = 0;
       }
-      if ($scope.PedidosSeleccionadosParaPagar.length !== 0 && document.getElementById('Prepago').checked) {
-        PedidoDetallesFactory.monitorCalculationsPrepaid({Pedidos: $scope.PedidosSeleccionadosParaPagar, tipoTarjeta: false}, $scope.Distribuidor.MonedaPago)
-          .success(function (calculations) {
-            if (calculations.OrderTotal) {
-              $scope.Subtotal = calculations.totalCharges[0].subtotalOrders;
-              $scope.Iva = calculations.totalCharges[0].ivaOrders;
-              $scope.Total = calculations.totalCharges[0].totalOrders;
-            } else {
-              $scope.Subtotal = 0;
-              $scope.Iva = 0;
-              $scope.Total = 0;
-            }
-            $scope.ServicioElectronico = 0;
-          })
-          .error(function (data, status, headers, config) {
-            $scope.Mensaje = 'No pudimos conectarnos a la base de datos, por favor intenta de nuevo más tarde.';
-            $scope.ShowToast('No pudimos realizar los cálculos, por favor intenta de nuevo más tarde.', 'danger');
-          });
-      }
       if ($scope.PedidosSeleccionadosParaPagar.length !== 0 && document.getElementById('Spei').checked) {
         PedidoDetallesFactory.monitorCalculationsPrepaid({Pedidos: $scope.PedidosSeleccionadosParaPagar, tipoTarjeta: false}, $scope.Distribuidor.MonedaPago)
           .success(function (calculations) {
@@ -437,8 +419,6 @@
     $scope.checkPayment = function () {
       if (document.getElementById('Tarjeta').checked) {
         $scope.pagar();
-      } else if (document.getElementById('Prepago').checked) {
-        $scope.preparePrePaid();
       } else if (document.getElementById('Spei').checked) {
         $scope.pagarSPEI();
       }
@@ -567,7 +547,7 @@
                   </div><!--
                   <div class="row pt-5">
                       <span class="avisoInfo">
-                          <i>Si tienes dudas comunicate a pruebas openpay al teléfono (331) 281-5145 o al correo pruebas.openpaycs@gmail.com</i>
+                          <i>Si tienes dudas comunicate a pruebas openpay al correo pruebas.openpaycs@gmail.com</i>
                       </span>
                   </div>-->
                   <div class="row text-center pt-5 mt-5">

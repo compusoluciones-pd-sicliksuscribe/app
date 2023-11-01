@@ -218,7 +218,8 @@
       dateByEschema.map(function (item) {
         const endDate = new Date(item.FechaFin);
         const nowDate = new Date();
-        if(endDate.getDate()<='27'){
+        let lastDay = new Date(nowDate.getFullYear(), nowDate.getMonth() + 1, 0);
+        if(endDate.getDate()<='27' || endDate.getDate() === lastDay.getDate() ){
         if (endDate.getDate() >= nowDate.getDate()) {
           fechaCoterm.push({ FechaFin: ('0' + endDate.getDate()).slice(-2) + '/' + ('0' + (nowDate.getMonth() + 1)).slice(-2) + "/" + (nowDate.getFullYear())});
         } else fechaCoterm.push({ FechaFin: ('0' + endDate.getDate()).slice(-2) + '/' + ('0' + (nowDate.getMonth() + 2)).slice(-2) + "/" + (nowDate.getFullYear())});
@@ -670,7 +671,6 @@
     };
 
     $scope.AgregarCarrito = producto => {
-      console.log(producto);
       let nuevoProducto = {
         IdProducto: producto.IdProducto,
         Cantidad: !producto.Cantidad ? 1 : producto.Cantidad,
@@ -685,7 +685,7 @@
         IdAccionAutodesk: producto.IdFabricante === $scope.AUTODESK ? $scope.INITIAL_ORDER : null,
         IdERP: producto.IdERP,
         Plazo: producto.Plazo,
-        CotermMS: producto.cotermMS && !producto.periodoCompleto ? fortmatDate(producto.cotermMS.FechaFin) : null
+        CotermMS: producto.cotermMS && !producto.periodoCompleto && !producto.periodoAddSeat ? fortmatDate(producto.cotermMS.FechaFin) : null
       };
       if (producto.numeroContrato !== $scope.NEW_CONTRACT) {
         nuevoProducto.IdAccionAutodesk = ADD_SEAT;

@@ -317,9 +317,9 @@
       return $http.post($rootScope.API + 'orders/update-purchase-order', ordenes);
     };
 
-    factory.marcarSP = (idPedido, marcado, promo) => {
+    factory.marcarSP = (idPedido, marcado, promo, promo2) => {
       factory.refreshToken();
-      return $http.post($rootScope.API + 'orders/mark-sp', { IdPedido: idPedido, Marcado: marcado, promo });
+      return $http.post($rootScope.API + 'orders/mark-sp', { IdPedido: idPedido, Marcado: marcado, promo, promo2 });
     };
 
     factory.actualizarFechaInicio = (idContrato, fechaInicio, idEsquemaRenovacion) => {
@@ -336,6 +336,12 @@
       factory.refreshToken();
       return $http.put($rootScope.API + 'orders/InsertOrdenCompraProxima/', { idPedido: idPedido, ordenCompraProxima: ordenCompraProxima });
     };
+    
+    factory.insertAzureBudget = (IdSubscription, budget) => {
+      factory.refreshToken();
+      return $http.put($rootScope.API + 'orders/add-azure-budget/', { IdSubscription: IdSubscription, budget: budget });
+    };
+
 
     factory.guardarCalificacion = (userId, rating, comment = 'Sin mensaje adjunto') => {
       factory.refreshToken();

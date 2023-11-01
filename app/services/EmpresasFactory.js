@@ -33,7 +33,7 @@
 
     factory.getEmpresasMicrosoft = function () {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'microsoft/customers');
+      return $http.get($rootScope.MAPI + 'customer');
     };
 
     factory.getEmpresa = function (IdEmpresa) {
@@ -197,6 +197,11 @@
     factory.postTerminosNuevoComercio = function (Empresa) {
       factory.refreshToken();
       return $http.post($rootScope.API + 'Empresas/TerminosNuevoComercio', Empresa);
+    };
+
+    factory.postActualizarAdendumMS = function (Empresa) {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'Empresas/AdendumAzureMS', Empresa);
     };
 
     factory.getTerminosNuevoComercio = function (IdEmpresa) {

@@ -12,7 +12,8 @@
       CREDIT_CARD: 1,
       CS_CREDIT: 2,
       PAYPAL: 3,
-      PREPAY: 4
+      PREPAY: 4,
+      SPEI: 5
     };
     const makers = {
       MICROSOFT: 1,
@@ -53,6 +54,9 @@
           break;
         case paymentMethods.PREPAY:
           paymentMethod = 'Transferencia';
+          break;
+        case paymentMethods.SPEI:
+          paymentMethod = 'SPEI';
           break;
         default:
           paymentMethod = 'Metodo de pago incorrecto.';

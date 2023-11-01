@@ -66,8 +66,8 @@
 
     const getContactUsers = function (customer) {
       const data = $scope.selectEmpresas.filter(empresa => empresa.csn === customer)
-      const finalUserId = data[0].IdEmpresa;
-      MonitorContratosFactory.getUserEndCustomer(finalUserId)
+      const { IdEmpresa: finalUserId, csn }= data[0];
+      MonitorContratosFactory.getUserEndCustomer(finalUserId, csn)
         .then(result => {
           $scope.contactos = result.data.data;
           $scope.renovar = {};
@@ -425,6 +425,28 @@
           } else $scope.ShowToast(result.data.message, 'danger');
         })
       } else $scope.ShowToast('Insertar un contrato', 'warning')
+    };
+
+    $scope.ActualizarSwitchType = async (switchType, contractNumber, subscriptionReferenceNumber) => {
+      if(switchType){
+        const contratos = [... $scope.contracts];
+        await Promise.all(contratos.map(async contrato => {
+          if(contrato.contract_number === contractNumber){
+            await Promise.all(contrato.subscriptions.map(async subscription => {
+              if(subscription.subscription_reference_number === subscriptionReferenceNumber){
+                await MonitorContratosFactory.insertSwitchType(subscriptionReferenceNumber, switchType)
+                .then(result => {
+                  if (result.data.success) {
+                    subscription.switch_type = switchType;
+                    $scope.ShowToast(result.data.message, SUCCESS_MSG)
+                  } else $scope.ShowToast(result.data.message, 'danger');
+                });
+              } 
+            }));
+          }
+        }));
+        $scope.contracts = contratos;
+      }
     };
   };
   

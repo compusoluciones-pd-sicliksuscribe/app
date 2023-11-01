@@ -21,9 +21,9 @@
       return $http.get($rootScope.API + 'autodesk/get-contract-customer/' + EndCustomerCSN);
     };
 
-    factory.getUserEndCustomer = finalUserId => {
+    factory.getUserEndCustomer = (finalUserId, csn) => {
       factory.refreshToken();
-      return $http.get($rootScope.API + 'autodesk/get-userEndCustomer/' + finalUserId);
+      return $http.get($rootScope.API + 'autodesk/get-userEndCustomer/' + finalUserId + '/' + csn);
     };
 
     factory.renewContract = function (contractData) {
@@ -54,6 +54,11 @@
     factory.contractSync = contractNumber => {
       factory.refreshToken();
       return $http.post($rootScope.API + 'autodesk/contractSync', { contractNumber });
+    };
+
+    factory.insertSwitchType = (subscriptionReferenceNumber, switchType) => {
+      factory.refreshToken();
+      return $http.post($rootScope.API + 'autodesk/insertSwitchType', {subscriptionReferenceNumber, switchType});
     };
 
     return factory;
