@@ -672,7 +672,7 @@
                 </div><!--
                 <div class="row pt-5">
                     <span class="avisoInfo">
-                        <i>Si tienes dudas comunicate a pruebas openpay al teléfono (331) 281-5145 o al correo pruebas.openpaycs@gmail.com</i>
+                        <i>Si tienes dudas comunicate a pruebas openpay al correo pruebas.openpaycs@gmail.com</i>
                     </span>
                 </div>-->
                 <div class="row text-center pt-5 mt-5">
