@@ -203,7 +203,9 @@
                         <div class="form-group">
                             <label for="">Id artículo:</label> {{producto.IdERP}} <br>
                             <div ng-if="producto.NumeroSerie">
-                                <label for="">Numero de Serie:</label> {{producto.NumeroSerie}} <br>
+                                <label for="">{{producto.IdFabricante === 1 ? "Tipo de compra:" : "Numero de Serie:"}}</label> 
+                                {{producto.NumeroSerie === "CREATEORDER" ? "Orden inicial" : producto.NumeroSerie === "ADDSEAT" ? "Adición a partida activa" : producto.NumeroSerie === "COTERM" ? "Cotérmino" : producto.NumeroSerie}} 
+                                <br>
                             </div>
                             <label for="">Nombre:</label> {{producto.NombreProducto}} <br>
                             <label for="">Tipo de producto:</label> {{producto.Tipo}} <br>
@@ -219,11 +221,6 @@
                             <label ng-hide="pedido.IdFabricante === 10 || pedido.IdFabricante === 2"><label for="">Precio renovación:</label> {{ calculatePriceWithExchangeRate(pedido, producto, 'PrecioRenovacion') | currency}} {{ pedido.MonedaPago }}</label>
 
                         </div>
-                        <div class="form-group" ng-show="producto.IdEsquemaRenovacion === 2 && producto.IdFabricante === 1">
-                            <label for="">{{producto.IdFabricante == 5 && producto.IdTipoProducto !== 4 ? "Empleados:" : "Cantidad:"}}</label> {{ producto.Cantidad }} <br>
-                            <label for="">Precio primer año:</label> {{ (calculatePriceWithExchangeRate(pedido, producto, 'PrecioUnitario') *descuentoAnual)/100 | currency }} {{ pedido.MonedaPago }}
-                        </div>
-
                     </div>
 
                     <div class="form-group col-xs-12 col-sm-12 col-md-3 col-lg-3">
